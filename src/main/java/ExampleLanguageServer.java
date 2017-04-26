@@ -15,6 +15,7 @@ import org.languagetool.rules.RuleMatch;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -50,9 +51,13 @@ class ExampleLanguageServer implements LanguageServer, LanguageClientAware {
         return new FullTextDocumentService() {
 
             class TextEditCommand extends Command{
-                public TextEditCommand(String title, Range range) {
+                public TextEditCommand(String title, Range range, TextDocumentItem document) {
                     this.setCommand("cSpell.editText");
-                    this.setArguments(Collections.singletonList(new TextEdit(range, title)));
+                    this.setArguments(
+                        Arrays.asList(
+                            document.getUri(),
+                            document.getVersion(),
+                            Collections.singletonList(new TextEdit(range, title))));
                     this.setTitle(title);
                 }
             }
@@ -75,14 +80,10 @@ class ExampleLanguageServer implements LanguageServer, LanguageClientAware {
                     matches = new ArrayList<>();
                 }
 
-                System.out.println("matches = " + matches + " count = " + matches.size());
-
                 List<RuleMatch> relevant =
                         matches.stream().filter(m -> locationOverlaps(m, params.getRange())).collect(Collectors.toList());
 
-                System.out.println("relevant = " + relevant + " count = " + relevant.size());
-
-                List<TextEditCommand> commands = relevant.stream().flatMap(this::getEditCommands).collect(Collectors.toList());
+                List<TextEditCommand> commands = relevant.stream().flatMap(m -> getEditCommands(m, document)).collect(Collectors.toList());
 
                 System.out.println("commands = " + commands + " count = " + commands.size());
 
@@ -90,9 +91,9 @@ class ExampleLanguageServer implements LanguageServer, LanguageClientAware {
             }
 
             @NotNull
-            private Stream<TextEditCommand> getEditCommands(RuleMatch match) {
+            private Stream<TextEditCommand> getEditCommands(RuleMatch match, TextDocumentItem document) {
                 Range range = matchToDiagnostic(match).getRange();
-                return match.getSuggestedReplacements().stream().map(str -> new TextEditCommand(str, range));
+                return match.getSuggestedReplacements().stream().map(str -> new TextEditCommand(str, range, document));
             }
 
             private boolean locationOverlaps(RuleMatch match, Range range) {
@@ -100,9 +101,6 @@ class ExampleLanguageServer implements LanguageServer, LanguageClientAware {
             }
 
             private boolean overlaps(Range r1, Range r2) {
-                System.out.println("ExampleLanguageServer.overlaps");
-                System.out.println("r1 = " + r1);
-                System.out.println("r2 = " + r2);
                 return r1.getStart().getCharacter() <= r2.getEnd().getCharacter() &&
                         r1.getEnd().getCharacter() >= r2.getStart().getCharacter() &&
                         r1.getStart().getLine() >= r2.getEnd().getLine() &&
