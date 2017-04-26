@@ -10,7 +10,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: org.languagetool:language-all:3.7" level="project" />
-    <orderEntry type="library" name="Gradle: org.eclipse.lsp4j:org.eclipse.lsp4j:0.1.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.eclipse.lsp4j:org.eclipse.lsp4j:0.2.0.M7" level="project" />
     <orderEntry type="library" name="Gradle: org.languagetool:language-en:3.7" level="project" />
     <orderEntry type="library" name="Gradle: org.languagetool:language-fa:3.7" level="project" />
     <orderEntry type="library" name="Gradle: org.languagetool:language-fr:3.7" level="project" />
@@ -40,8 +40,8 @@
     <orderEntry type="library" name="Gradle: org.languagetool:language-ta:3.7" level="project" />
     <orderEntry type="library" name="Gradle: org.languagetool:language-tl:3.7" level="project" />
     <orderEntry type="library" name="Gradle: org.languagetool:language-uk:3.7" level="project" />
-    <orderEntry type="library" name="Gradle: org.eclipse.lsp4j:org.eclipse.lsp4j.generator:0.1.2" level="project" />
-    <orderEntry type="library" name="Gradle: org.eclipse.lsp4j:org.eclipse.lsp4j.jsonrpc:0.1.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.eclipse.lsp4j:org.eclipse.lsp4j.generator:0.2.0.M7" level="project" />
+    <orderEntry type="library" name="Gradle: org.eclipse.lsp4j:org.eclipse.lsp4j.jsonrpc:0.2.0.M7" level="project" />
     <orderEntry type="library" name="Gradle: org.languagetool:languagetool-core:3.7" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.opennlp:opennlp-tools:1.7.2" level="project" />
     <orderEntry type="library" name="Gradle: edu.washington.cs.knowitall:opennlp-tokenize-models:1.5" level="project" />
@@ -57,9 +57,10 @@
     <orderEntry type="library" name="Gradle: org.ioperm:morphology-el:1.0.0" level="project" />
     <orderEntry type="library" name="Gradle: com.github.lucene-gosen:lucene-gosen:ipadic:6.2.1" level="project" />
     <orderEntry type="library" name="Gradle: ua.net.nlp:morfologik-ukrainian-lt:3.7.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.eclipse.xtend:org.eclipse.xtend.lib:2.10.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.eclipse.xtend:org.eclipse.xtend.lib:2.11.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.7" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-lang3:3.5" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:guava:21.0" level="project" />
     <orderEntry type="library" name="Gradle: net.java.dev.jna:jna:4.1.0" level="project" />
     <orderEntry type="library" name="Gradle: org.carrot2:morfologik-fsa:2.1.2" level="project" />
     <orderEntry type="library" name="Gradle: org.carrot2:morfologik-fsa-builders:2.1.2" level="project" />
@@ -75,13 +76,12 @@
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.8.4" level="project" />
     <orderEntry type="library" name="Gradle: commons-lang:commons-lang:2.4" level="project" />
     <orderEntry type="library" name="Gradle: com.ibm.icu:icu4j:56.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.eclipse.xtext:org.eclipse.xtext.xbase.lib:2.10.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.eclipse.xtend:org.eclipse.xtend.lib.macro:2.10.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.eclipse.xtext:org.eclipse.xtext.xbase.lib:2.11.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.eclipse.xtend:org.eclipse.xtend.lib.macro:2.11.0" level="project" />
     <orderEntry type="library" name="Gradle: commons-logging:commons-logging:1.1.1" level="project" />
     <orderEntry type="library" name="Gradle: net.arnx:jsonic:1.2.11" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.6" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.8.0" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.8.4" level="project" />
-    <orderEntry type="library" name="Gradle: com.google.guava:guava:21.0" level="project" />
   </component>
 </module>

@@ -41,7 +41,7 @@ dependencies {
     compile group: 'org.languagetool', name: 'language-all', version: '3.7'
 
     // This dependency is found on compile classpath of this component and consumers.
-    compile group: 'org.eclipse.lsp4j', name: 'org.eclipse.lsp4j', version: '0.1.2'
+    compile group: 'org.eclipse.lsp4j', name: 'org.eclipse.lsp4j', version: '0.2.0.M7'
 }
 
 // Define the main class for the application
