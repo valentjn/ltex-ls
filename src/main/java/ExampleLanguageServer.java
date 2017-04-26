@@ -14,10 +14,7 @@ import org.languagetool.language.AmericanEnglish;
 import org.languagetool.rules.RuleMatch;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -80,24 +77,24 @@ class ExampleLanguageServer implements LanguageServer, LanguageClientAware {
                     matches = new ArrayList<>();
                 }
 
+                int[] lineStartPositions = PositionHelper.getLineStartPositions(document.getText());
+
                 List<RuleMatch> relevant =
-                        matches.stream().filter(m -> locationOverlaps(m, params.getRange())).collect(Collectors.toList());
+                        matches.stream().filter(m -> locationOverlaps(m, params.getRange(), lineStartPositions)).collect(Collectors.toList());
 
-                List<TextEditCommand> commands = relevant.stream().flatMap(m -> getEditCommands(m, document)).collect(Collectors.toList());
-
-                System.out.println("commands = " + commands + " count = " + commands.size());
+                List<TextEditCommand> commands = relevant.stream().flatMap(m -> getEditCommands(m, document, lineStartPositions)).collect(Collectors.toList());
 
                 return CompletableFuture.completedFuture(commands);
             }
 
             @NotNull
-            private Stream<TextEditCommand> getEditCommands(RuleMatch match, TextDocumentItem document) {
-                Range range = matchToDiagnostic(match).getRange();
+            private Stream<TextEditCommand> getEditCommands(RuleMatch match, TextDocumentItem document, int[] lineStartPositions) {
+                Range range = matchToDiagnostic(match, lineStartPositions).getRange();
                 return match.getSuggestedReplacements().stream().map(str -> new TextEditCommand(str, range, document));
             }
 
-            private boolean locationOverlaps(RuleMatch match, Range range) {
-                return overlaps(range, matchToDiagnostic(match).getRange());
+            private boolean locationOverlaps(RuleMatch match, Range range, int[] lineStartPositions) {
+                return overlaps(range, matchToDiagnostic(match, lineStartPositions).getRange());
             }
 
             private boolean overlaps(Range r1, Range r2) {
@@ -123,17 +120,19 @@ class ExampleLanguageServer implements LanguageServer, LanguageClientAware {
                     matches = new ArrayList<>();
                 }
 
-                List<Diagnostic> diagnostics = matches.stream().map(this::matchToDiagnostic).collect(Collectors.toList());
+                int[] lineStartPositions = PositionHelper.getLineStartPositions(document.getText());
+
+                List<Diagnostic> diagnostics = matches.stream().map(match -> matchToDiagnostic(match, lineStartPositions)).collect(Collectors.toList());
 
                 client.publishDiagnostics(new PublishDiagnosticsParams(document.getUri(), diagnostics));
             }
 
-            private Diagnostic matchToDiagnostic(RuleMatch match) {
+            private Diagnostic matchToDiagnostic(RuleMatch match, int[] lineStartPositions) {
                 Diagnostic ret = new Diagnostic();
                 ret.setRange(
                         new Range(
-                                new Position(match.getLine(), match.getColumn()),
-                                new Position(match.getEndLine(), match.getEndColumn())));
+                                PositionHelper.getPosition(match.getFromPos(), lineStartPositions),
+                                PositionHelper.getPosition(match.getToPos(), lineStartPositions)));
                 ret.setSeverity(DiagnosticSeverity.Warning);
                 ret.setSource(String.format("LanguageTool: %s", match.getRule().getDescription()));
                 ret.setMessage(match.getMessage());
