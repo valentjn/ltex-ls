@@ -36,7 +36,8 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
     @Override
     public CompletableFuture<Object> shutdown() {
-        return CompletableFuture.completedFuture(null);
+        // Per https://github.com/eclipse/lsp4j/issues/18
+        return CompletableFuture.completedFuture(new Object());
     }
 
     @Override
