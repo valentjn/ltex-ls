@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class DocumentPositionCalculator {
+class DocumentPositionCalculator {
 
     private final int[] lineStartPositions;
 

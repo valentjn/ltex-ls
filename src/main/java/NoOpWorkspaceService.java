@@ -7,7 +7,7 @@ import org.eclipse.lsp4j.services.WorkspaceService;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-class EmptyWorkspaceService implements WorkspaceService {
+class NoOpWorkspaceService implements WorkspaceService {
     @Override
     public CompletableFuture<List<? extends SymbolInformation>> symbol(WorkspaceSymbolParams params) {
         return null;

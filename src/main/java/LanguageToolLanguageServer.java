@@ -1,20 +1,17 @@
-import org.eclipse.lsp4j.InitializeParams;
-import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.*;
-import org.eclipse.lsp4j.ServerCapabilities;
-import org.eclipse.lsp4j.services.LanguageServer;
-import org.eclipse.lsp4j.services.LanguageClient;
-import org.eclipse.lsp4j.services.LanguageClientAware;
-import org.eclipse.lsp4j.services.TextDocumentService;
-import org.eclipse.lsp4j.services.WorkspaceService;
+import org.eclipse.lsp4j.services.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.languagetool.JLanguageTool;
 import org.languagetool.Language;
-import org.languagetool.language.AmericanEnglish;
+import org.languagetool.Languages;
 import org.languagetool.rules.RuleMatch;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,14 +20,15 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
     private LanguageClient client = null;
 
-    private final Language language = new AmericanEnglish();
+    @Nullable
+    private Language language;
 
     @Override
     public CompletableFuture<InitializeResult> initialize(InitializeParams params) {
-        System.out.println("LanguageToolLanguageServer.initialize");
         ServerCapabilities capabilities = new ServerCapabilities();
         capabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
         capabilities.setCodeActionProvider(true);
+
         return CompletableFuture.completedFuture(new InitializeResult(capabilities));
     }
 
@@ -44,13 +42,14 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     public void exit() {
     }
 
+    HashMap<String, TextDocumentItem> documents = new HashMap<>();
+
     @Override
     public TextDocumentService getTextDocumentService() {
-        return new FullTextDocumentService() {
+        return new FullTextDocumentService(documents) {
 
             @Override
             public CompletableFuture<List<? extends Command>> codeAction(CodeActionParams params) {
-                System.out.println("LanguageToolLanguageServer.codeAction");
                 if (params.getContext().getDiagnostics().isEmpty()) {
                     return CompletableFuture.completedFuture(Collections.emptyList());
                 }
@@ -91,16 +90,23 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
             private void publishIssues(String uri) {
                 TextDocumentItem document = this.documents.get(uri);
-
-                List<RuleMatch> matches = validateDocument(document);
-
-                DocumentPositionCalculator positionCalculator = new DocumentPositionCalculator(document.getText());
-
-                List<Diagnostic> diagnostics = matches.stream().map(match -> createDiagnostic(match, positionCalculator)).collect(Collectors.toList());
-
-                client.publishDiagnostics(new PublishDiagnosticsParams(document.getUri(), diagnostics));
+                LanguageToolLanguageServer.this.publishIssues(document);
             }
         };
+    }
+
+    private void publishIssues(TextDocumentItem document) {
+        List<Diagnostic> diagnostics = getIssues(document);
+
+        client.publishDiagnostics(new PublishDiagnosticsParams(document.getUri(), diagnostics));
+    }
+
+    private List<Diagnostic> getIssues(TextDocumentItem document) {
+        List<RuleMatch> matches = validateDocument(document);
+
+        DocumentPositionCalculator positionCalculator = new DocumentPositionCalculator(document.getText());
+
+        return matches.stream().map(match -> createDiagnostic(match, positionCalculator)).collect(Collectors.toList());
     }
 
     private static boolean locationOverlaps(RuleMatch match, DocumentPositionCalculator positionCalculator, Range range) {
@@ -127,21 +133,51 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     }
 
     private List<RuleMatch> validateDocument(TextDocumentItem document) {
-        JLanguageTool languageTool = new JLanguageTool(language);
-        List<RuleMatch> matches;
-        try {
-            matches = languageTool.check(document.getText());
-        } catch (IOException e) {
-            e.printStackTrace();
-            matches = new ArrayList<>();
+        if (language == null) {
+            return Collections.emptyList();
+        } else {
+            JLanguageTool languageTool = new JLanguageTool(language);
+            try {
+                return languageTool.check(document.getText());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return Collections.emptyList();
+            }
         }
-        return matches;
     }
 
 
     @Override
     public WorkspaceService getWorkspaceService() {
-        return new EmptyWorkspaceService();
+        return new NoOpWorkspaceService() {
+            @Override
+            public void didChangeConfiguration(DidChangeConfigurationParams params) {
+                System.out.println("LanguageToolLanguageServer.didChangeConfiguration");
+                super.didChangeConfiguration(params);
+
+                setLanguage(params.getSettings());
+            }
+        };
+    }
+
+    private void setLanguage(@NotNull Object settingsObject) {
+        Map<String, Object> settings = (Map<String, Object>) settingsObject;
+        Map<String, Object> languageServerExample = (Map<String, Object>) settings.get("languageTool");
+        String shortCode = ((String)languageServerExample.get("language"));
+
+        setLanguage(shortCode);
+    }
+
+    private void setLanguage(String shortCode) {
+        if (Languages.isLanguageSupported(shortCode)) {
+            language = Languages.getLanguageForShortCode(shortCode);
+        }
+        else {
+            System.out.println("ERROR: " + shortCode + " is not a recognized language.  Checking disabled.");
+            language = null;
+        }
+
+        documents.values().forEach(this::publishIssues);
     }
 
     @Override

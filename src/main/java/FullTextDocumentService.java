@@ -1,6 +1,7 @@
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.TextDocumentService;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,16 @@ import java.util.concurrent.CompletableFuture;
  */
 class FullTextDocumentService implements TextDocumentService {
 
-    HashMap<String, TextDocumentItem> documents = new HashMap<>();
+    public FullTextDocumentService(HashMap<String, TextDocumentItem> documents) {
+        this.documents = documents;
+    }
+
+    public FullTextDocumentService() {
+        this.documents = new HashMap<>();
+    }
+
+    @NotNull
+    HashMap<String, TextDocumentItem> documents;
 
     @Override
     public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(TextDocumentPositionParams position) {
