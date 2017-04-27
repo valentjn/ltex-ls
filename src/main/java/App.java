@@ -18,7 +18,7 @@ public class App {
             InputStream in = socket.getInputStream();
             OutputStream out = socket.getOutputStream();
 
-            ExampleLanguageServer server = new ExampleLanguageServer();
+            LanguageToolLanguageServer server = new LanguageToolLanguageServer();
             Launcher<LanguageClient> launcher = LSPLauncher.createServerLauncher(server, in, out);
 
             LanguageClient client = launcher.getRemoteProxy();

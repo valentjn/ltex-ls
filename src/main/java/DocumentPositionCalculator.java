@@ -4,10 +4,20 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class PositionHelper {
+public class DocumentPositionCalculator {
+
+    private final int[] lineStartPositions;
+
+    public DocumentPositionCalculator(String text) {
+        lineStartPositions = getLineStartPositions(text);
+    }
+
+    public Position getPosition(int pos){
+        return getPosition(pos, lineStartPositions);
+    }
 
     @NotNull
-    public static Position getPosition(int pos, int[] lineStarts){
+    private static Position getPosition(int pos, int[] lineStarts){
 
         int line = Arrays.binarySearch(lineStarts, pos);
 
@@ -20,7 +30,7 @@ public class PositionHelper {
     }
 
 
-    public static int[] getLineStartPositions(String text) {
+    private static int[] getLineStartPositions(String text) {
         ArrayList<Integer> lineStartPositions = new ArrayList<>();
         lineStartPositions.add(0);
         for (int i = 0; i < text.length(); i++){
