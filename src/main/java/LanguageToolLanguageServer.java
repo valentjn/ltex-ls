@@ -18,10 +18,33 @@ import java.util.stream.Stream;
 
 class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware {
 
+    HashMap<String, TextDocumentItem> documents = new HashMap<>();
     private LanguageClient client = null;
-
     @Nullable
     private Language language;
+
+    private static boolean locationOverlaps(RuleMatch match, DocumentPositionCalculator positionCalculator, Range range) {
+        return overlaps(range, createDiagnostic(match, positionCalculator).getRange());
+    }
+
+    private static boolean overlaps(Range r1, Range r2) {
+        return r1.getStart().getCharacter() <= r2.getEnd().getCharacter() &&
+                r1.getEnd().getCharacter() >= r2.getStart().getCharacter() &&
+                r1.getStart().getLine() >= r2.getEnd().getLine() &&
+                r1.getEnd().getLine() <= r2.getStart().getLine();
+    }
+
+    private static Diagnostic createDiagnostic(RuleMatch match, DocumentPositionCalculator positionCalculator) {
+        Diagnostic ret = new Diagnostic();
+        ret.setRange(
+                new Range(
+                        positionCalculator.getPosition(match.getFromPos()),
+                        positionCalculator.getPosition(match.getToPos())));
+        ret.setSeverity(DiagnosticSeverity.Warning);
+        ret.setSource(String.format("LanguageTool: %s", match.getRule().getDescription()));
+        ret.setMessage(match.getMessage());
+        return ret;
+    }
 
     @Override
     public CompletableFuture<InitializeResult> initialize(InitializeParams params) {
@@ -41,8 +64,6 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     @Override
     public void exit() {
     }
-
-    HashMap<String, TextDocumentItem> documents = new HashMap<>();
 
     @Override
     public TextDocumentService getTextDocumentService() {
@@ -109,29 +130,6 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         return matches.stream().map(match -> createDiagnostic(match, positionCalculator)).collect(Collectors.toList());
     }
 
-    private static boolean locationOverlaps(RuleMatch match, DocumentPositionCalculator positionCalculator, Range range) {
-        return overlaps(range, createDiagnostic(match, positionCalculator).getRange());
-    }
-
-    private static boolean overlaps(Range r1, Range r2) {
-        return r1.getStart().getCharacter() <= r2.getEnd().getCharacter() &&
-                r1.getEnd().getCharacter() >= r2.getStart().getCharacter() &&
-                r1.getStart().getLine() >= r2.getEnd().getLine() &&
-                r1.getEnd().getLine() <= r2.getStart().getLine();
-    }
-
-    private static Diagnostic createDiagnostic(RuleMatch match, DocumentPositionCalculator positionCalculator) {
-        Diagnostic ret = new Diagnostic();
-        ret.setRange(
-                new Range(
-                        positionCalculator.getPosition(match.getFromPos()),
-                        positionCalculator.getPosition(match.getToPos())));
-        ret.setSeverity(DiagnosticSeverity.Warning);
-        ret.setSource(String.format("LanguageTool: %s", match.getRule().getDescription()));
-        ret.setMessage(match.getMessage());
-        return ret;
-    }
-
     private List<RuleMatch> validateDocument(TextDocumentItem document) {
         if (language == null) {
             return Collections.emptyList();
@@ -152,7 +150,6 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         return new NoOpWorkspaceService() {
             @Override
             public void didChangeConfiguration(DidChangeConfigurationParams params) {
-                System.out.println("LanguageToolLanguageServer.didChangeConfiguration");
                 super.didChangeConfiguration(params);
 
                 setLanguage(params.getSettings());
@@ -163,7 +160,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     private void setLanguage(@NotNull Object settingsObject) {
         Map<String, Object> settings = (Map<String, Object>) settingsObject;
         Map<String, Object> languageServerExample = (Map<String, Object>) settings.get("languageTool");
-        String shortCode = ((String)languageServerExample.get("language"));
+        String shortCode = ((String) languageServerExample.get("language"));
 
         setLanguage(shortCode);
     }
@@ -171,8 +168,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     private void setLanguage(String shortCode) {
         if (Languages.isLanguageSupported(shortCode)) {
             language = Languages.getLanguageForShortCode(shortCode);
-        }
-        else {
+        } else {
             System.out.println("ERROR: " + shortCode + " is not a recognized language.  Checking disabled.");
             language = null;
         }

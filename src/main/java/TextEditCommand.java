@@ -10,10 +10,10 @@ class TextEditCommand extends Command {
     public TextEditCommand(String title, Range range, TextDocumentItem document) {
         this.setCommand("cSpell.editText");
         this.setArguments(
-            Arrays.asList(
-                document.getUri(),
-                document.getVersion(),
-                Collections.singletonList(new TextEdit(range, title))));
+                Arrays.asList(
+                        document.getUri(),
+                        document.getVersion(),
+                        Collections.singletonList(new TextEdit(range, title))));
         this.setTitle(title);
     }
 }

@@ -9,9 +9,12 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * `TextDocumentService` that only supports `TextDocumentSyncKind.Full` updates.
- *  Override members to add functionality.
+ * Override members to add functionality.
  */
 class FullTextDocumentService implements TextDocumentService {
+
+    @NotNull
+    HashMap<String, TextDocumentItem> documents;
 
     public FullTextDocumentService(HashMap<String, TextDocumentItem> documents) {
         this.documents = documents;
@@ -20,9 +23,6 @@ class FullTextDocumentService implements TextDocumentService {
     public FullTextDocumentService() {
         this.documents = new HashMap<>();
     }
-
-    @NotNull
-    HashMap<String, TextDocumentItem> documents;
 
     @Override
     public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(TextDocumentPositionParams position) {
