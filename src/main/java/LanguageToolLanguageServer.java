@@ -75,11 +75,21 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
             }
 
             @Override
+            public void didOpen(DidOpenTextDocumentParams params) {
+                super.didOpen(params);
+
+                publishIssues(params.getTextDocument().getUri());
+            }
+
+            @Override
             public void didChange(DidChangeTextDocumentParams params) {
-                System.out.println("LanguageToolLanguageServer.didChange");
                 super.didChange(params);
 
-                TextDocumentItem document = this.documents.get(params.getTextDocument().getUri());
+                publishIssues(params.getTextDocument().getUri());
+            }
+
+            private void publishIssues(String uri) {
+                TextDocumentItem document = this.documents.get(uri);
 
                 List<RuleMatch> matches = validateDocument(document);
 
