@@ -117,6 +117,7 @@ class FullTextDocumentService implements TextDocumentService {
             }
 
             documents.get(uri).setText(changeEvent.getText());
+            documents.get(uri).setVersion(params.getTextDocument().getVersion());
         }
     }
 
