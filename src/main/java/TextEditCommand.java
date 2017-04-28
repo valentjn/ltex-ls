@@ -1,19 +1,19 @@
-import org.eclipse.lsp4j.Command;
-import org.eclipse.lsp4j.Range;
-import org.eclipse.lsp4j.TextDocumentItem;
-import org.eclipse.lsp4j.TextEdit;
+import org.eclipse.lsp4j.*;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 class TextEditCommand extends Command {
+
+    static final String CommandName = "langugageTool.acceptSuggestion";
+
     public TextEditCommand(String title, Range range, TextDocumentItem document) {
-        this.setCommand("cSpell.editText");
+        this.setCommand(CommandName);
+
+        VersionedTextDocumentIdentifier id = new VersionedTextDocumentIdentifier(document.getVersion());
+        id.setUri(document.getUri());
         this.setArguments(
-                Arrays.asList(
-                        document.getUri(),
-                        document.getVersion(),
-                        Collections.singletonList(new TextEdit(range, title))));
+                Collections.singletonList(
+                        new TextDocumentEdit(id, Collections.singletonList(new TextEdit(range, title)))));
         this.setTitle(title);
     }
 }

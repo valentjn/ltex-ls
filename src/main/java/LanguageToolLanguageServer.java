@@ -8,10 +8,7 @@ import org.languagetool.Languages;
 import org.languagetool.rules.RuleMatch;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -51,7 +48,8 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         ServerCapabilities capabilities = new ServerCapabilities();
         capabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
         capabilities.setCodeActionProvider(true);
-
+        capabilities.setExecuteCommandProvider(
+                new ExecuteCommandOptions(Collections.singletonList(TextEditCommand.CommandName)));
         return CompletableFuture.completedFuture(new InitializeResult(capabilities));
     }
 
@@ -153,6 +151,18 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
                 super.didChangeConfiguration(params);
 
                 setLanguage(params.getSettings());
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
+                if (Objects.equals(params.getCommand(), TextEditCommand.CommandName)) {
+                    return ((CompletableFuture<Object>) (CompletableFuture) client.applyEdit(
+                            new ApplyWorkspaceEditParams(
+                                    new WorkspaceEdit(
+                                            (List<TextDocumentEdit>) (List) params.getArguments()))));
+                }
+                return CompletableFuture.completedFuture(false);
             }
         };
     }
