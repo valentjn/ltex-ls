@@ -52,6 +52,8 @@ dependencies {
 
     // This dependency is found on compile classpath of this component and consumers.
     compile group: 'org.eclipse.lsp4j', name: 'org.eclipse.lsp4j', version: '0.2.0.M7'
+
+    compile 'com.vladsch.flexmark:flexmark-all:0.19.1'
 }
 
 // Define the main class for the application

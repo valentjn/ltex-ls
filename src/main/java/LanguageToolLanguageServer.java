@@ -1,3 +1,6 @@
+import com.vladsch.flexmark.ast.Document;
+import com.vladsch.flexmark.parser.Parser;
+import markdown.AnnotatedTextBuildingVisitor;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.services.*;
 import org.jetbrains.annotations.NotNull;
@@ -133,8 +136,26 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
             return Collections.emptyList();
         } else {
             JLanguageTool languageTool = new JLanguageTool(language);
+
+            String languageId = document.getLanguageId();
             try {
-                return languageTool.check(document.getText());
+                switch (languageId) {
+                    case "plaintext": {
+                        return languageTool.check(document.getText());
+                    }
+                    case "markdown": {
+                        Parser p = Parser.builder().build();
+                        Document mdDocument = (Document) p.parse(document.getText());
+
+                        AnnotatedTextBuildingVisitor builder = new AnnotatedTextBuildingVisitor();
+                        builder.visit(mdDocument);
+
+                        return languageTool.check(builder.getText());
+                    }
+                    default: {
+                        throw new UnsupportedOperationException(String.format("Language, %s, is not supported.", languageId));
+                    }
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 return Collections.emptyList();
