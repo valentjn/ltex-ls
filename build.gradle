@@ -45,8 +45,8 @@ repositories {
 dependencies {
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.0.0-M4'
 
-//    Enabling makes the Gradle plugin work but breaks IDEA
-//    testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.0.0-M4'
+    // Enabling makes the Gradle plugin work but breaks IDEA
+    testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.0.0-M4'
 
     compile group: 'org.languagetool', name: 'language-all', version: '3.7'
 

@@ -17,6 +17,7 @@
     <orderEntry type="library" name="Gradle: org.languagetool:language-en:3.7" level="project" />
     <orderEntry type="library" name="Gradle: org.languagetool:language-fa:3.7" level="project" />
     <orderEntry type="library" name="Gradle: org.languagetool:language-fr:3.7" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.junit.jupiter:junit-jupiter-engine:5.0.0-M4" level="project" />
     <orderEntry type="library" name="Gradle: org.languagetool:language-de:3.7" level="project" />
     <orderEntry type="library" name="Gradle: org.languagetool:language-de-DE-x-simple-language:3.7" level="project" />
     <orderEntry type="library" name="Gradle: org.languagetool:language-pl:3.7" level="project" />
@@ -80,6 +81,7 @@
     <orderEntry type="library" name="Gradle: org.languagetool:languagetool-core:3.7" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.opennlp:opennlp-tools:1.7.2" level="project" />
     <orderEntry type="library" name="Gradle: edu.washington.cs.knowitall:opennlp-tokenize-models:1.5" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.junit.platform:junit-platform-engine:1.0.0-M4" level="project" />
     <orderEntry type="library" name="Gradle: edu.washington.cs.knowitall:opennlp-postag-models:1.5" level="project" />
     <orderEntry type="library" name="Gradle: edu.washington.cs.knowitall:opennlp-chunk-models:1.5" level="project" />
     <orderEntry type="library" name="Gradle: org.languagetool:hunspell-native-libs:2.9" level="project" />
