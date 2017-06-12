@@ -11,7 +11,6 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
         classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M4'
     }
 }
@@ -22,7 +21,6 @@ version '0.0-SNAPSHOT'
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'org.junit.platform.gradle.plugin'
 
 // Apply the application plugin to add support for building an application
@@ -48,7 +46,7 @@ dependencies {
     // Enabling makes the Gradle plugin work but breaks IDEA
     testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.0.0-M4'
 
-    compile group: 'org.languagetool', name: 'language-en', version: '3.7'
+    compile group: 'org.languagetool', name: 'languagetool-core', version: '3.7'
 
     // This dependency is found on compile classpath of this component and consumers.
     compile group: 'org.eclipse.lsp4j', name: 'org.eclipse.lsp4j', version: '0.2.0.M7'
