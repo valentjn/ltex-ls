@@ -132,7 +132,13 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     }
 
     private List<RuleMatch> validateDocument(TextDocumentItem document) {
-        if (language == null) {
+        // This setting is specific to VS Code behavior and maintaining it here
+        // long term is not desirable because other clients may behave differently.
+        // See: https://github.com/Microsoft/vscode/issues/28732
+        String uri = document.getUri();
+        Boolean isSupportedScheme = uri.startsWith("file:") || uri.startsWith("untitled:") ;
+
+        if (language == null || !isSupportedScheme) {
             return Collections.emptyList();
         } else {
             JLanguageTool languageTool = new JLanguageTool(language);
