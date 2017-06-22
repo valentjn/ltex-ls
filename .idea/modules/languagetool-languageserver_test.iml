@@ -11,13 +11,13 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="languagetool-languageserver_main" />
     <orderEntry type="library" name="Gradle: org.languagetool:languagetool-core:3.7" level="project" />
-    <orderEntry type="library" name="Gradle: org.eclipse.lsp4j:org.eclipse.lsp4j:0.2.0.M7" level="project" />
+    <orderEntry type="library" name="Gradle: org.eclipse.lsp4j:org.eclipse.lsp4j:0.2.0" level="project" />
     <orderEntry type="library" name="Gradle: com.vladsch.flexmark:flexmark-all:0.19.1" level="project" />
     <orderEntry type="library" name="Gradle: org.junit.jupiter:junit-jupiter-api:5.0.0-M4" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-lang3:3.5" level="project" />
     <orderEntry type="library" name="Gradle: com.google.guava:guava:21.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.junit.jupiter:junit-jupiter-engine:5.0.0-M4" level="project" />
     <orderEntry type="library" name="Gradle: net.java.dev.jna:jna:4.1.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.junit.jupiter:junit-jupiter-engine:5.0.0-M4" level="project" />
     <orderEntry type="library" name="Gradle: org.carrot2:morfologik-fsa:2.1.2" level="project" />
     <orderEntry type="library" name="Gradle: org.carrot2:morfologik-fsa-builders:2.1.2" level="project" />
     <orderEntry type="library" name="Gradle: org.carrot2:morfologik-speller:2.1.2" level="project" />
@@ -30,8 +30,8 @@
     <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-backward-codecs:5.5.3" level="project" />
     <orderEntry type="library" name="Gradle: edu.berkeley.nlp:berkeleylm:1.1.2" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.8.4" level="project" />
-    <orderEntry type="library" name="Gradle: org.eclipse.lsp4j:org.eclipse.lsp4j.generator:0.2.0.M7" level="project" />
-    <orderEntry type="library" name="Gradle: org.eclipse.lsp4j:org.eclipse.lsp4j.jsonrpc:0.2.0.M7" level="project" />
+    <orderEntry type="library" name="Gradle: org.eclipse.lsp4j:org.eclipse.lsp4j.generator:0.2.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.eclipse.lsp4j:org.eclipse.lsp4j.jsonrpc:0.2.0" level="project" />
     <orderEntry type="library" name="Gradle: com.vladsch.flexmark:flexmark:0.19.1" level="project" />
     <orderEntry type="library" name="Gradle: com.vladsch.flexmark:flexmark-ext-abbreviation:0.19.1" level="project" />
     <orderEntry type="library" name="Gradle: com.vladsch.flexmark:flexmark-ext-anchorlink:0.19.1" level="project" />
@@ -67,8 +67,8 @@
     <orderEntry type="library" name="Gradle: net.arnx:jsonic:1.2.11" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.6" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.8.0" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.junit.platform:junit-platform-engine:1.0.0-M4" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.8.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: org.junit.platform:junit-platform-engine:1.0.0-M4" level="project" />
     <orderEntry type="library" name="Gradle: org.eclipse.xtend:org.eclipse.xtend.lib:2.12.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.7" level="project" />
     <orderEntry type="library" name="Gradle: org.nibor.autolink:autolink:0.6.0" level="project" />
