@@ -11,7 +11,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M4'
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.1'
     }
 }
 
@@ -41,10 +41,10 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.0.0-M4'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.0.0'
 
     // Enabling makes the Gradle plugin work but breaks IDEA
-    testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.0.0-M4'
+    testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.0.0'
 
     compile group: 'org.languagetool', name: 'languagetool-core', version: '3.8'
 
