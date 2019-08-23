@@ -15,7 +15,7 @@ buildscript {
     }
 }
 
-group 'adamvoss'
+group 'valentjn'
 version '0.0-SNAPSHOT'
 
 // Apply the java plugin to add support for Java
