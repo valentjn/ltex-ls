@@ -158,6 +158,9 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
                         return languageTool.check(builder.getText());
                     }
+                    case "latex": {
+                        return languageTool.check(document.getText());
+                    }
                     default: {
                         throw new UnsupportedOperationException(String.format("Language, %s, is not supported.", languageId));
                     }
