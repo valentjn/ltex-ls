@@ -162,7 +162,8 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
             return languageTool.check(document.getText());
           }
           default: {
-            throw new UnsupportedOperationException(String.format("Language, %s, is not supported.", languageId));
+            throw new UnsupportedOperationException(String.format(
+                "Code language \"%s\" is not supported.", languageId));
           }
         }
       } catch (IOException e) {
