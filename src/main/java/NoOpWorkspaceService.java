@@ -8,16 +8,16 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 class NoOpWorkspaceService implements WorkspaceService {
-    @Override
-    public CompletableFuture<List<? extends SymbolInformation>> symbol(WorkspaceSymbolParams params) {
-        return null;
-    }
+  @Override
+  public CompletableFuture<List<? extends SymbolInformation>> symbol(WorkspaceSymbolParams params) {
+    return null;
+  }
 
-    @Override
-    public void didChangeConfiguration(DidChangeConfigurationParams params) {
-    }
+  @Override
+  public void didChangeConfiguration(DidChangeConfigurationParams params) {
+  }
 
-    @Override
-    public void didChangeWatchedFiles(DidChangeWatchedFilesParams params) {
-    }
+  @Override
+  public void didChangeWatchedFiles(DidChangeWatchedFilesParams params) {
+  }
 }
