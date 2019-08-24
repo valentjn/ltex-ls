@@ -183,7 +183,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         setLanguage(params.getSettings());
       }
 
-      @SuppressWarnings("unchecked")
+      @SuppressWarnings({"unchecked", "rawtypes"})
       @Override
       public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
         if (Objects.equals(params.getCommand(), TextEditCommand.CommandName)) {
@@ -197,6 +197,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     };
   }
 
+  @SuppressWarnings("unchecked")
   private void setLanguage(@NotNull Object settingsObject) {
     Map<String, Object> settings = (Map<String, Object>) settingsObject;
     Map<String, Object> languageServerExample = (Map<String, Object>) settings.get("languageTool");
