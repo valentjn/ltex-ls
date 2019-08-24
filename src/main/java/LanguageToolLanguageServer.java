@@ -1,6 +1,5 @@
 import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.parser.Parser;
-import markdown.AnnotatedTextBuildingVisitor;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.services.*;
 import org.jetbrains.annotations.NotNull;
@@ -153,10 +152,11 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
             Parser p = Parser.builder().build();
             Document mdDocument = (Document) p.parse(document.getText());
 
-            AnnotatedTextBuildingVisitor builder = new AnnotatedTextBuildingVisitor();
+            markdown.AnnotatedTextBuilder builder =
+                new markdown.AnnotatedTextBuilder();
             builder.visit(mdDocument);
 
-            return languageTool.check(builder.getText());
+            return languageTool.check(builder.getAnnotatedText());
           }
           case "latex": {
             return languageTool.check(document.getText());

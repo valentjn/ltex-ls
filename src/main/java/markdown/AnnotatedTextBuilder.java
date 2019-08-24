@@ -6,10 +6,10 @@ import com.vladsch.flexmark.ast.Paragraph;
 import com.vladsch.flexmark.ast.Text;
 import com.vladsch.flexmark.util.sequence.BasedSequence;
 import org.languagetool.markup.AnnotatedText;
-import org.languagetool.markup.AnnotatedTextBuilder;
 
-public class AnnotatedTextBuildingVisitor {
-  private AnnotatedTextBuilder builder = new AnnotatedTextBuilder();
+public class AnnotatedTextBuilder {
+  private org.languagetool.markup.AnnotatedTextBuilder builder =
+      new org.languagetool.markup.AnnotatedTextBuilder();
 
   private int idx = 0;
 
@@ -67,7 +67,7 @@ public class AnnotatedTextBuildingVisitor {
     }
   }
 
-  public AnnotatedText getText() {
+  public AnnotatedText getAnnotatedText() {
     return builder.build();
   }
 }

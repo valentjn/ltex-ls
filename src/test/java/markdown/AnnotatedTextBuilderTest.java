@@ -9,7 +9,7 @@ import org.languagetool.markup.AnnotatedText;
 
 import java.io.IOException;
 
-public class AnnotatedTextBuildingVisitorTest {
+public class AnnotatedTextBuilderTest {
     @Test
     void test() throws IOException {
         Parser p = Parser.builder().build();
@@ -18,9 +18,9 @@ public class AnnotatedTextBuildingVisitorTest {
                 "Paragraph with\n" +
                 "multiple lines and [link](example.com)");
 
-        AnnotatedTextBuildingVisitor visitor = new AnnotatedTextBuildingVisitor();
-        visitor.visit((Document) document);
-        AnnotatedText text = visitor.getText();
+        markdown.AnnotatedTextBuilder builder = new markdown.AnnotatedTextBuilder();
+        builder.visit((Document) document);
+        AnnotatedText text = builder.getAnnotatedText();
 
         Assertions.assertEquals("Heading\nParagraph with multiple lines and link", text.getPlainText());
     }
