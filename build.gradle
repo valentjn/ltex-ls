@@ -46,7 +46,7 @@ dependencies {
     // Enabling makes the Gradle plugin work but breaks IDEA
     testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.0.0'
 
-    compile group: 'org.languagetool', name: 'languagetool-core', version: '3.8'
+    compile group: 'org.languagetool', name: 'languagetool-core', version: '4.6'
 
     // This dependency is found on compile classpath of this component and consumers.
     compile group: 'org.eclipse.lsp4j', name: 'org.eclipse.lsp4j', version: '0.2.0'
