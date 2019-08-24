@@ -159,7 +159,9 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
             return languageTool.check(builder.getAnnotatedText());
           }
           case "latex": {
-            return languageTool.check(document.getText());
+            latex.AnnotatedTextBuilder builder = new latex.AnnotatedTextBuilder();
+            builder.addCode(document.getText());
+            return languageTool.check(builder.getAnnotatedText());
           }
           default: {
             throw new UnsupportedOperationException(String.format(
