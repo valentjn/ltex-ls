@@ -33,6 +33,17 @@ public class AnnotatedTextBuilder {
     return (matcher.find() ? matcher.group() : "");
   }
 
+  private String constructDummy() {
+    String dummy;
+
+    if (curMode == Mode.TEXT) {
+      dummy = "Abc" + (pseudoCounter++);
+    } else {
+      dummy = "Abc" + (pseudoCounter++) + lastPunctuation;
+    }
+
+    return dummy;
+  }
 
   public void addCode(String text) {
     Pattern commandPattern = Pattern.compile("^\\\\([^A-Za-z]|([A-Za-z]+))");
@@ -80,7 +91,7 @@ public class AnnotatedTextBuilder {
               } else {
                 modeStack.pop();
                 if (modeStack.isEmpty()) modeStack.push(Mode.TEXT);
-                interpretAs = "Abc" + (pseudoCounter++) + lastPunctuation;
+                interpretAs = constructDummy();
                 keepLastPunctuation = false;
               }
             } else {
@@ -101,7 +112,7 @@ public class AnnotatedTextBuilder {
           } else if (command.equals("\\cite") || command.equals("\\cref") ||
               command.equals("\\Cref") || command.equals("\\includegraphics") ||
               command.equals("\\ref")) {
-            builder.addMarkup(command, "Abc" + (pseudoCounter++));
+            builder.addMarkup(command, constructDummy());
             pos += command.length();
 
             String optionalArgument = matchFromPosition(optionalArgumentPattern);
@@ -125,12 +136,7 @@ public class AnnotatedTextBuilder {
             pos += command.length();
           } else if (command.equals("\\text")) {
             modeStack.push(Mode.TEXT);
-            String interpretAs = "";
-
-            if (curMode == Mode.MATH) {
-              interpretAs = "Abc" + (pseudoCounter++) + lastPunctuation;
-            }
-
+            String interpretAs = ((curMode == Mode.MATH) ? constructDummy() : "");
             builder.addMarkup(command + "{", interpretAs);
             keepLastSpace = interpretAs.isEmpty();
             pos += command.length() + 1;
@@ -163,7 +169,7 @@ public class AnnotatedTextBuilder {
             keepLastSpace = true;
           } else {
             modeStack.pop();
-            builder.addMarkup(curString, "Abc" + (pseudoCounter++) + lastPunctuation);
+            builder.addMarkup(curString, constructDummy());
           }
 
           pos++;
