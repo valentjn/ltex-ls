@@ -39,7 +39,7 @@ public class AnnotatedTextBuilder {
 
     String[] mathEnvironments = {"equation", "equation*", "align", "align*",
         "gather", "gather*", "alignat", "alignat*", "multline", "multline*",
-        "flalign", "flalign*", "split"};
+        "flalign", "flalign*"};
 
     int pos = 0;
     int pseudoCounter = 0;
