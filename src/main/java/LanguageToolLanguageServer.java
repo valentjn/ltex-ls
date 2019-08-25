@@ -40,10 +40,9 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
   private static Diagnostic createDiagnostic(RuleMatch match, DocumentPositionCalculator positionCalculator) {
     Diagnostic ret = new Diagnostic();
-    ret.setRange(
-    new Range(
-    positionCalculator.getPosition(match.getFromPos()),
-    positionCalculator.getPosition(match.getToPos())));
+    ret.setRange(new Range(
+        positionCalculator.getPosition(match.getFromPos()),
+        positionCalculator.getPosition(match.getToPos())));
     ret.setSeverity(DiagnosticSeverity.Warning);
     ret.setSource(String.format("LanguageTool: %s", match.getRule().getDescription()));
     ret.setMessage(match.getMessage());
@@ -56,7 +55,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     capabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
     capabilities.setCodeActionProvider(true);
     capabilities.setExecuteCommandProvider(
-    new ExecuteCommandOptions(Collections.singletonList(TextEditCommand.CommandName)));
+        new ExecuteCommandOptions(Collections.singletonList(TextEditCommand.CommandName)));
     return CompletableFuture.completedFuture(new InitializeResult(capabilities));
   }
 
@@ -129,8 +128,8 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
   private List<Diagnostic> getIssues(TextDocumentItem document) {
     List<RuleMatch> matches = validateDocument(document);
-
-    DocumentPositionCalculator positionCalculator = new DocumentPositionCalculator(document.getText());
+    DocumentPositionCalculator positionCalculator =
+        new DocumentPositionCalculator(document.getText());
 
     return matches.stream().map(match -> createDiagnostic(match, positionCalculator)).collect(Collectors.toList());
   }
@@ -207,9 +206,8 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
       public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
         if (Objects.equals(params.getCommand(), TextEditCommand.CommandName)) {
           return ((CompletableFuture<Object>) (CompletableFuture) client.applyEdit(
-          new ApplyWorkspaceEditParams(
-          new WorkspaceEdit(
-          (List<TextDocumentEdit>) (List) params.getArguments()))));
+              new ApplyWorkspaceEditParams(new WorkspaceEdit(
+              (List<TextDocumentEdit>) (List) params.getArguments()))));
         }
         return CompletableFuture.completedFuture(false);
       }
