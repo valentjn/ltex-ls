@@ -62,14 +62,11 @@ public class AnnotatedTextBuilder {
 
           if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
             builder.addMarkup(command, command.substring(1));
-          } else {
+            pos += command.length();
+          } else if (command.equals("\\begin") || command.equals("\\end")) {
             builder.addMarkup(command);
-            keepLastSpace = true;
-          }
+            pos += command.length();
 
-          pos += command.length();
-
-          if (command.equals("\\begin") || command.equals("\\end")) {
             String argument = matchFromPosition(text, pos, argumentPattern);
             String environment = argument.substring(1, argument.length() - 1);
             String interpretAs = "";
@@ -96,9 +93,23 @@ public class AnnotatedTextBuilder {
             pos += argument.length();
           } else if (command.equals("\\text")) {
             modeStack.push(Mode.TEXT);
-            builder.addMarkup("{");
+            builder.addMarkup(command + "{");
             keepLastSpace = true;
-            pos++;
+            pos += command.length() + 1;
+          } else if (command.equals("\\footnote")) {
+            if (lastSpace.isEmpty()) {
+              builder.addMarkup(command, " ");
+              lastSpace = " ";
+            } else {
+              builder.addMarkup(command);
+            }
+
+            keepLastSpace = true;
+            pos += command.length();
+          } else {
+            builder.addMarkup(command);
+            keepLastSpace = true;
+            pos += command.length();
           }
 
           break;
