@@ -90,6 +90,7 @@ public class AnnotatedTextBuilder {
 
             builder.addMarkup(argument, interpretAs);
             keepLastSpace = interpretAs.isEmpty();
+            keepLastPunctuation = true;
             pos += argument.length();
           } else if (command.equals("\\text")) {
             modeStack.push(Mode.TEXT);
