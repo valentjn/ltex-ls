@@ -7,29 +7,32 @@ import java.util.Stack;
 import java.util.regex.*;
 
 public class AnnotatedTextBuilder {
-  private org.languagetool.markup.AnnotatedTextBuilder builder =
-      new org.languagetool.markup.AnnotatedTextBuilder();
-
-  /*private static String parseCommand(String text, int pos) {
-    for (int i = pos + 2; i < text.length(); i++) {
-      char ch = text.charAt(i);
-      if (!(((ch >= 'A') && (ch <= 'Z')) || ((ch >= 'a') && (ch <= 'z')))) {
-        return text.substring(pos + 1, i);
-      }
-    }
-
-    return text.substring(pos + 1, text.length());
-  }*/
-
-  private static String matchFromPosition(String text, int pos, Pattern pattern) {
-    Matcher matcher = pattern.matcher(text.substring(pos));
-    return (matcher.find() ? matcher.group() : "");
-  }
-
   private enum Mode {
     TEXT,
     MATH,
   }
+
+  private org.languagetool.markup.AnnotatedTextBuilder builder =
+      new org.languagetool.markup.AnnotatedTextBuilder();
+
+  private String text;
+  private int pos;
+  private int pseudoCounter;
+  private String lastPunctuation;
+  private String lastSpace;
+  private Stack<Mode> modeStack;
+
+  private char curChar;
+  private String curString;
+  private Mode curMode;
+  private boolean keepLastPunctuation;
+  private boolean keepLastSpace;
+
+  private String matchFromPosition(Pattern pattern) {
+    Matcher matcher = pattern.matcher(text.substring(pos));
+    return (matcher.find() ? matcher.group() : "");
+  }
+
 
   public void addCode(String text) {
     Pattern commandPattern = Pattern.compile("^\\\\([^A-Za-z]|([A-Za-z]+))");
@@ -42,31 +45,32 @@ public class AnnotatedTextBuilder {
         "gather", "gather*", "alignat", "alignat*", "multline", "multline*",
         "flalign", "flalign*"};
 
-    int pos = 0;
-    int pseudoCounter = 0;
-    String lastPunctuation = "";
-    String lastSpace = "";
+    this.text = text;
+    pos = 0;
+    pseudoCounter = 0;
+    lastPunctuation = "";
+    lastSpace = "";
 
-    Stack<Mode> modeStack = new Stack<Mode>();
+    modeStack = new Stack<Mode>();
     modeStack.push(Mode.TEXT);
 
     while (pos < text.length()) {
-      char curChar = text.charAt(pos);
-      String curString = String.valueOf(curChar);
-      Mode curMode = modeStack.peek();
-      boolean keepLastPunctuation = false;
-      boolean keepLastSpace = false;
+      curChar = text.charAt(pos);
+      curString = String.valueOf(curChar);
+      curMode = modeStack.peek();
+      keepLastPunctuation = false;
+      keepLastSpace = false;
 
       switch (curChar) {
         case '\\': {
-          String command = matchFromPosition(text, pos, commandPattern);
+          String command = matchFromPosition(commandPattern);
 
           if (command.equals("\\begin") || command.equals("\\end")) {
             builder.addMarkup(command);
             keepLastPunctuation = true;
             pos += command.length();
 
-            String argument = matchFromPosition(text, pos, argumentPattern);
+            String argument = matchFromPosition(argumentPattern);
             String environment = argument.substring(1, argument.length() - 1);
             String interpretAs = "";
 
@@ -100,11 +104,11 @@ public class AnnotatedTextBuilder {
             builder.addMarkup(command, "Abc" + (pseudoCounter++));
             pos += command.length();
 
-            String optionalArgument = matchFromPosition(text, pos, optionalArgumentPattern);
+            String optionalArgument = matchFromPosition(optionalArgumentPattern);
             builder.addMarkup(optionalArgument);
             pos += optionalArgument.length();
 
-            String argument = matchFromPosition(text, pos, argumentPattern);
+            String argument = matchFromPosition(argumentPattern);
             builder.addMarkup(argument);
             pos += argument.length();
 
@@ -166,7 +170,7 @@ public class AnnotatedTextBuilder {
           break;
         }
         case '%': {
-          String comment = matchFromPosition(text, pos, commentPattern);
+          String comment = matchFromPosition(commentPattern);
           builder.addMarkup(comment);
           keepLastSpace = true;
           pos += comment.length();
@@ -176,7 +180,7 @@ public class AnnotatedTextBuilder {
         case '\n':
         case '\r':
         case '\t': {
-          String whiteSpace = matchFromPosition(text, pos, whiteSpacePattern);
+          String whiteSpace = matchFromPosition(whiteSpacePattern);
 
           if (curMode == Mode.TEXT) {
             if (lastSpace.isEmpty()) {
