@@ -47,15 +47,16 @@ public class AnnotatedTextBuilder {
     return dummy;
   }
 
-  private void addText(String text) {
-    if (text.isEmpty()) return;
+  private AnnotatedTextBuilder addText(String text) {
+    if (text.isEmpty()) return this;
     builder.addText(text);
     pos += text.length();
     textAdded(text);
+    return this;
   }
 
-  private void addMarkup(String markup) {
-    if (markup.isEmpty()) return;
+  private AnnotatedTextBuilder addMarkup(String markup) {
+    if (markup.isEmpty()) return this;
     builder.addMarkup(markup);
     pos += markup.length();
 
@@ -65,16 +66,19 @@ public class AnnotatedTextBuilder {
       dummyLastSpace = "";
       dummyLastPunctuation = "";
     }
+
+    return this;
   }
 
-  private void addMarkup(String markup, String interpretAs) {
+  private AnnotatedTextBuilder addMarkup(String markup, String interpretAs) {
     if (interpretAs.isEmpty()) {
-      addMarkup(markup);
+      return addMarkup(markup);
     } else {
       builder.addMarkup(markup, interpretAs);
       pos += markup.length();
       preserveDummyLast = false;
       textAdded(interpretAs);
+      return this;
     }
   }
 
@@ -84,7 +88,7 @@ public class AnnotatedTextBuilder {
     lastSpace = ((lastChar == ' ') ? " " : "");
   }
 
-  public void addCode(String text) {
+  public AnnotatedTextBuilder addCode(String text) {
     Pattern commandPattern = Pattern.compile("^\\\\([^A-Za-z]|([A-Za-z]+))");
     Pattern argumentPattern = Pattern.compile("^\\{[^\\}]*?\\}");
     Pattern optionalArgumentPattern = Pattern.compile("^\\[[^\\]]*?\\]");
@@ -284,6 +288,8 @@ public class AnnotatedTextBuilder {
 
       if (!preserveCanInsertSpaceBeforeDummy) canInsertSpaceBeforeDummy = false;
     }
+
+    return this;
   }
 
   public AnnotatedText getAnnotatedText() {
