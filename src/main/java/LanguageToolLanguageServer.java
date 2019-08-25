@@ -16,6 +16,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.logging.*;
 
 class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware {
 
@@ -23,6 +24,8 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   private LanguageClient client = null;
   @Nullable
   private Language language;
+
+  private static final Logger logger = Logger.getLogger("LanguageToolLanguageServer");
 
   private static boolean locationOverlaps(RuleMatch match, DocumentPositionCalculator positionCalculator, Range range) {
     return overlaps(range, createDiagnostic(match, positionCalculator).getRange());
@@ -177,7 +180,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
           }
         }
 
-        System.out.println("Checking the following text via LanguageTool: <" +
+        logger.info("Checking the following text via LanguageTool: <" +
             annotatedText.getPlainText() + ">");
 
         return languageTool.check(annotatedText);
@@ -224,9 +227,10 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
   private void setLanguage(String shortCode) {
     if (Languages.isLanguageSupported(shortCode)) {
+      logger.info("Setting language to \"" + shortCode + "\".");
       language = Languages.getLanguageForShortCode(shortCode);
     } else {
-      System.out.println("ERROR: " + shortCode + " is not a recognized language.  Checking disabled.");
+      logger.warning("ERROR: " + shortCode + " is not a recognized language.  Checking disabled.");
       language = null;
     }
 
