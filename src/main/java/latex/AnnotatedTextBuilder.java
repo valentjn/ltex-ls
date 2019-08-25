@@ -34,6 +34,7 @@ public class AnnotatedTextBuilder {
   public void addCode(String text) {
     Pattern commandPattern = Pattern.compile("^\\\\([^A-Za-z]|([A-Za-z]+))");
     Pattern argumentPattern = Pattern.compile("^\\{[^\\}]*?\\}");
+    Pattern optionalArgumentPattern = Pattern.compile("^\\[[^\\]]*?\\]");
     Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
     Pattern whiteSpacePattern = Pattern.compile("^[ \n\r\t]+(%.*?\n[ \n\r\t]*)?");
 
@@ -92,6 +93,21 @@ public class AnnotatedTextBuilder {
           } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
             builder.addMarkup(command, command.substring(1));
             pos += command.length();
+          } else if (command.equals("\\cite") || command.equals("\\cref") ||
+              command.equals("\\Cref") || command.equals("\\includegraphics") ||
+              command.equals("\\ref")) {
+            builder.addMarkup(command, "Abc" + (pseudoCounter++));
+            pos += command.length();
+
+            String optionalArgument = matchFromPosition(text, pos, optionalArgumentPattern);
+            builder.addMarkup(optionalArgument);
+            pos += optionalArgument.length();
+
+            String argument = matchFromPosition(text, pos, argumentPattern);
+            builder.addMarkup(argument);
+            pos += argument.length();
+
+            keepLastSpace = true;
           } else if (command.equals("\\footnote")) {
             if (lastSpace.isEmpty()) {
               builder.addMarkup(command, " ");
