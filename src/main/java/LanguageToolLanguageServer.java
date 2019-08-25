@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Nullable;
 import org.languagetool.JLanguageTool;
 import org.languagetool.Language;
 import org.languagetool.Languages;
+import org.languagetool.markup.AnnotatedText;
+import org.languagetool.markup.AnnotatedTextBuilder;
 import org.languagetool.rules.RuleMatch;
 
 import java.io.IOException;
@@ -144,9 +146,13 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
       String languageId = document.getLanguageId();
       try {
+        AnnotatedText annotatedText;
+
         switch (languageId) {
           case "plaintext": {
-            return languageTool.check(document.getText());
+            AnnotatedTextBuilder builder = new AnnotatedTextBuilder();
+            annotatedText = builder.addText(document.getText()).build();
+            break;
           }
           case "markdown": {
             Parser p = Parser.builder().build();
@@ -156,18 +162,25 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
                 new markdown.AnnotatedTextBuilder();
             builder.visit(mdDocument);
 
-            return languageTool.check(builder.getAnnotatedText());
+            annotatedText = builder.getAnnotatedText();
+            break;
           }
           case "latex": {
             latex.AnnotatedTextBuilder builder = new latex.AnnotatedTextBuilder();
             builder.addCode(document.getText());
-            return languageTool.check(builder.getAnnotatedText());
+            annotatedText = builder.getAnnotatedText();
+            break;
           }
           default: {
             throw new UnsupportedOperationException(String.format(
                 "Code language \"%s\" is not supported.", languageId));
           }
         }
+
+        System.out.println("Checking the following text via LanguageTool: <" +
+            annotatedText.getPlainText() + ">");
+
+        return languageTool.check(annotatedText);
       } catch (IOException e) {
         e.printStackTrace();
         return Collections.emptyList();
