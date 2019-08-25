@@ -158,10 +158,11 @@ public class AnnotatedTextBuilder {
             if (lastSpace.isEmpty()) {
               builder.addMarkup(whiteSpace, " ");
               lastSpace = " ";
-              keepLastSpace = true;
             } else {
               builder.addMarkup(whiteSpace);
             }
+
+            keepLastSpace = true;
           } else {
             builder.addMarkup(whiteSpace);
             keepLastPunctuation = true;
