@@ -164,10 +164,10 @@ public class AnnotatedTextBuilder {
             }
           } else {
             builder.addMarkup(whiteSpace);
+            keepLastPunctuation = true;
           }
 
           pos += whiteSpace.length();
-          keepLastPunctuation = true;
           break;
         }
         case '`':
