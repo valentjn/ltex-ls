@@ -63,6 +63,7 @@ public class AnnotatedTextBuilder {
 
           if (command.equals("\\begin") || command.equals("\\end")) {
             builder.addMarkup(command);
+            keepLastPunctuation = true;
             pos += command.length();
 
             String argument = matchFromPosition(text, pos, argumentPattern);
@@ -76,6 +77,7 @@ public class AnnotatedTextBuilder {
                 modeStack.pop();
                 if (modeStack.isEmpty()) modeStack.push(Mode.TEXT);
                 interpretAs = "Abc" + (pseudoCounter++) + lastPunctuation;
+                keepLastPunctuation = false;
               }
             } else {
               if (command.equals("\\begin")) {
@@ -88,7 +90,6 @@ public class AnnotatedTextBuilder {
 
             builder.addMarkup(argument, interpretAs);
             keepLastSpace = interpretAs.isEmpty();
-            keepLastPunctuation = true;
             pos += argument.length();
           } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
             builder.addMarkup(command, command.substring(1));
