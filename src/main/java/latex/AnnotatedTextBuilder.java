@@ -121,8 +121,14 @@ public class AnnotatedTextBuilder {
             pos += command.length();
           } else if (command.equals("\\text")) {
             modeStack.push(Mode.TEXT);
-            builder.addMarkup(command + "{");
-            keepLastSpace = true;
+            String interpretAs = "";
+
+            if (curMode == Mode.MATH) {
+              interpretAs = "Abc" + (pseudoCounter++) + lastPunctuation;
+            }
+
+            builder.addMarkup(command + "{", interpretAs);
+            keepLastSpace = interpretAs.isEmpty();
             pos += command.length() + 1;
           } else {
             builder.addMarkup(command);
