@@ -60,10 +60,7 @@ public class AnnotatedTextBuilder {
         case '\\': {
           String command = matchFromPosition(text, pos, commandPattern);
 
-          if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
-            builder.addMarkup(command, command.substring(1));
-            pos += command.length();
-          } else if (command.equals("\\begin") || command.equals("\\end")) {
+          if (command.equals("\\begin") || command.equals("\\end")) {
             builder.addMarkup(command);
             pos += command.length();
 
@@ -92,11 +89,9 @@ public class AnnotatedTextBuilder {
             keepLastSpace = interpretAs.isEmpty();
             keepLastPunctuation = true;
             pos += argument.length();
-          } else if (command.equals("\\text")) {
-            modeStack.push(Mode.TEXT);
-            builder.addMarkup(command + "{");
-            keepLastSpace = true;
-            pos += command.length() + 1;
+          } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
+            builder.addMarkup(command, command.substring(1));
+            pos += command.length();
           } else if (command.equals("\\footnote")) {
             if (lastSpace.isEmpty()) {
               builder.addMarkup(command, " ");
@@ -107,6 +102,11 @@ public class AnnotatedTextBuilder {
 
             keepLastSpace = true;
             pos += command.length();
+          } else if (command.equals("\\text")) {
+            modeStack.push(Mode.TEXT);
+            builder.addMarkup(command + "{");
+            keepLastSpace = true;
+            pos += command.length() + 1;
           } else {
             builder.addMarkup(command);
             keepLastSpace = true;
