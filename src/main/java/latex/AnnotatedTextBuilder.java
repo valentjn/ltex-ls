@@ -171,7 +171,7 @@ public class AnnotatedTextBuilder {
             } else {
               addMarkup(command);
             }
-          } else if (command.equals("\\text")) {
+          } else if (command.equals("\\text") || command.equals("\\intertext")) {
             modeStack.push(Mode.TEXT);
             String interpretAs = ((curMode == Mode.MATH) ? constructDummy() : "");
             addMarkup(command + "{", interpretAs);
