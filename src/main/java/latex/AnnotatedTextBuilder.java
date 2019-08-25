@@ -60,8 +60,7 @@ public class AnnotatedTextBuilder {
         case '\\': {
           String command = matchFromPosition(text, pos, commandPattern);
 
-          if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&") ||
-              command.equals("\\\\")) {
+          if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
             builder.addMarkup(command, command.substring(1));
           } else {
             builder.addMarkup(command);
