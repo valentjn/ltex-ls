@@ -168,7 +168,8 @@ public class AnnotatedTextBuilder {
             addMarkup(command, constructDummy());
             addMarkup(matchFromPosition(optionalArgumentPattern));
             addMarkup(matchFromPosition(argumentPattern));
-          } else if (command.equals("\\hspace") || command.equals("\\vspace")) {
+          } else if (command.equals("\\hspace") || command.equals("\\include") ||
+              command.equals("\\input") || command.equals("\\vspace")) {
             addMarkup(command);
             addMarkup(matchFromPosition(argumentPattern));
           } else if (command.equals("\\footnote")) {
