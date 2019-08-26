@@ -2,6 +2,7 @@ package latex;
 
 import org.languagetool.markup.AnnotatedText;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
 import java.util.regex.*;
@@ -27,6 +28,12 @@ public class AnnotatedTextBuilder {
   private char curChar;
   private String curString;
   private Mode curMode;
+
+  private static ArrayList<CommandSignature> defaultCommandSignatures = parseMagicIgnoreComments(
+      "% VSCode-LT: ignore \\hspace{}\n" +
+      "% VSCode-LT: ignore \\include{}\n" +
+      "% VSCode-LT: ignore \\input{}\n" +
+      "% VSCode-LT: ignore \\vspace{}\n");
 
   private String matchFromPosition(Pattern pattern) {
     Matcher matcher = pattern.matcher(text.substring(pos));
@@ -88,7 +95,47 @@ public class AnnotatedTextBuilder {
     lastSpace = ((lastChar == ' ') ? " " : "");
   }
 
+  private static ArrayList<CommandSignature> parseMagicIgnoreComments(String text) {
+    Pattern startPattern = Pattern.compile(
+        "% *VSCode-LT *: *ignore *(\\\\([^A-Za-z]|([A-Za-z]+)))");
+    Pattern argumentPattern = Pattern.compile("^(\\{\\})|(\\[\\])|(\\(\\))");
+    Matcher startMatcher = startPattern.matcher(text);
+    ArrayList<CommandSignature> result = new ArrayList<CommandSignature>();
+
+    while (startMatcher.find()) {
+      CommandSignature commandSignature = new CommandSignature();
+      commandSignature.name = startMatcher.group(1);
+      int pos = startMatcher.end();
+
+      while (true) {
+        Matcher argumentMatcher = argumentPattern.matcher(text.substring(pos));
+        if (!argumentMatcher.find()) break;
+
+        CommandSignature.ArgumentType argumentType = null;
+
+        if (argumentMatcher.group(1) != null) {
+          argumentType = CommandSignature.ArgumentType.BRACE;
+        } else if (argumentMatcher.group(2) != null) {
+          argumentType = CommandSignature.ArgumentType.BRACKET;
+        } else if (argumentMatcher.group(3) != null) {
+          argumentType = CommandSignature.ArgumentType.PARENTHESIS;
+        }
+
+        commandSignature.argumentTypes.add(argumentType);
+        pos += argumentMatcher.group().length();
+      }
+
+      result.add(commandSignature);
+    }
+
+    return result;
+  }
+
   public AnnotatedTextBuilder addCode(String text) {
+    ArrayList<CommandSignature> commandSignatures =
+        new ArrayList<CommandSignature>(defaultCommandSignatures);
+    commandSignatures.addAll(parseMagicIgnoreComments(text));
+
     Pattern commandPattern = Pattern.compile("^\\\\([^A-Za-z]|([A-Za-z]+))");
     Pattern argumentPattern = Pattern.compile("^\\{[^\\}]*?\\}");
     Pattern optionalArgumentPattern = Pattern.compile("^\\[[^\\]]*?\\]");
@@ -168,10 +215,6 @@ public class AnnotatedTextBuilder {
             addMarkup(command, constructDummy());
             addMarkup(matchFromPosition(optionalArgumentPattern));
             addMarkup(matchFromPosition(argumentPattern));
-          } else if (command.equals("\\hspace") || command.equals("\\include") ||
-              command.equals("\\input") || command.equals("\\vspace")) {
-            addMarkup(command);
-            addMarkup(matchFromPosition(argumentPattern));
           } else if (command.equals("\\footnote")) {
             if (lastSpace.isEmpty()) {
               addMarkup(command, " ");
@@ -184,7 +227,24 @@ public class AnnotatedTextBuilder {
             String interpretAs = ((curMode == Mode.MATH) ? constructDummy() : "");
             addMarkup(command + "{", interpretAs);
           } else {
-            addMarkup(command);
+            String match = "";
+            CommandSignature matchingCommand = null;
+
+            for (CommandSignature commandSignature : commandSignatures) {
+              if (commandSignature.name.equals(command)) {
+                match = commandSignature.matchFromPosition(text, pos);
+                if (!match.isEmpty()) {
+                  matchingCommand = commandSignature;
+                  break;
+                }
+              }
+            }
+
+            if (matchingCommand == null) {
+              addMarkup(command);
+            } else {
+              addMarkup(match);
+            }
           }
 
           break;
