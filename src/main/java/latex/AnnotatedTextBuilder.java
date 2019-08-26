@@ -249,10 +249,11 @@ public class AnnotatedTextBuilder {
 
             for (CommandSignature commandSignature : commandSignatures) {
               if (commandSignature.name.equals(command)) {
-                match = commandSignature.matchFromPosition(text, pos);
-                if (!match.isEmpty()) {
+                String curMatch = commandSignature.matchFromPosition(text, pos);
+
+                if (curMatch.length() > match.length()) {
+                  match = curMatch;
                   matchingCommand = commandSignature;
-                  break;
                 }
               }
             }
