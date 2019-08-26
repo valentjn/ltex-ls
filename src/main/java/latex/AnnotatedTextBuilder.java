@@ -154,6 +154,9 @@ public class AnnotatedTextBuilder {
     Pattern argumentPattern = Pattern.compile("^\\{[^\\}]*?\\}");
     Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
     Pattern whiteSpacePattern = Pattern.compile("^[ \n\r\t]+(%.*?\n[ \n\r\t]*)?");
+    Pattern lengthPattern = Pattern.compile("-?[0-9]*(\\.[0-9]+)?(pt|mm|cm|ex|em|bp|dd|pc|in)");
+    Pattern lengthInBracePattern = Pattern.compile("^\\{" + lengthPattern.pattern() + "\\}");
+    Pattern lengthInBracketPattern = Pattern.compile("^\\[" + lengthPattern.pattern() + "\\]");
 
     String[] mathEnvironments = {"equation", "equation*", "align", "align*",
         "gather", "gather*", "alignat", "alignat*", "multline", "multline*",
@@ -266,8 +269,15 @@ public class AnnotatedTextBuilder {
           break;
         }
         case '{': {
-          modeStack.push(curMode);
-          addMarkup(curString);
+          String length = matchFromPosition(lengthInBracePattern);
+
+          if (!length.isEmpty()) {
+            addMarkup(length);
+          } else {
+            modeStack.push(curMode);
+            addMarkup(curString);
+          }
+
           break;
         }
         case '}': {
@@ -346,6 +356,15 @@ public class AnnotatedTextBuilder {
           }
 
           break;
+        }
+        case '[':
+        {
+          String length = matchFromPosition(lengthInBracketPattern);
+
+          if (!length.isEmpty()) {
+            addMarkup(length);
+            break;
+          }
         }
         default: {
           if (curMode == Mode.TEXT) {
