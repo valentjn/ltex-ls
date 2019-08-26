@@ -30,17 +30,17 @@ public class AnnotatedTextBuilder {
   private Mode curMode;
 
   private static ArrayList<CommandSignature> defaultCommandSignatures = parseMagicIgnoreComments(
-      "% VSCode-LT: dummy \\cite{}\n" +
-      "% VSCode-LT: dummy \\cite[]{}\n" +
-      "% VSCode-LT: dummy \\cref{}\n" +
-      "% VSCode-LT: dummy \\Cref{}\n" +
-      "% VSCode-LT: ignore \\hspace{}\n" +
-      "% VSCode-LT: ignore \\include{}\n" +
-      "% VSCode-LT: dummy \\includegraphics{}\n" +
-      "% VSCode-LT: dummy \\includegraphics[]{}\n" +
-      "% VSCode-LT: ignore \\input{}\n" +
-      "% VSCode-LT: dummy \\ref{}\n" +
-      "% VSCode-LT: ignore \\vspace{}\n");
+      "% VSCode-LT: dummyCommand \\cite{}\n" +
+      "% VSCode-LT: dummyCommand \\cite[]{}\n" +
+      "% VSCode-LT: dummyCommand \\cref{}\n" +
+      "% VSCode-LT: dummyCommand \\Cref{}\n" +
+      "% VSCode-LT: ignoreCommand \\hspace{}\n" +
+      "% VSCode-LT: ignoreCommand \\include{}\n" +
+      "% VSCode-LT: dummyCommand \\includegraphics{}\n" +
+      "% VSCode-LT: dummyCommand \\includegraphics[]{}\n" +
+      "% VSCode-LT: ignoreCommand \\input{}\n" +
+      "% VSCode-LT: dummyCommand \\ref{}\n" +
+      "% VSCode-LT: ignoreCommand \\vspace{}\n");
 
   private String matchFromPosition(Pattern pattern) {
     Matcher matcher = pattern.matcher(text.substring(pos));
@@ -104,7 +104,7 @@ public class AnnotatedTextBuilder {
 
   private static ArrayList<CommandSignature> parseMagicIgnoreComments(String text) {
     Pattern startPattern = Pattern.compile(
-        "% *VSCode-LT *: *(ignore|dummy) *(\\\\([^A-Za-z]|([A-Za-z]+)))");
+        "% *VSCode-LT *: *(ignoreCommand|dummyCommand) *(\\\\([^A-Za-z]|([A-Za-z]+)))");
     Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\])|(\\(\\)))");
     Matcher startMatcher = startPattern.matcher(text);
     ArrayList<CommandSignature> result = new ArrayList<CommandSignature>();
@@ -112,9 +112,9 @@ public class AnnotatedTextBuilder {
     while (startMatcher.find()) {
       CommandSignature commandSignature = new CommandSignature();
 
-      if (startMatcher.group(1).equals("ignore")) {
+      if (startMatcher.group(1).equals("ignoreCommand")) {
         commandSignature.action = CommandSignature.Action.IGNORE;
-      } else if (startMatcher.group(1).equals("dummy")) {
+      } else if (startMatcher.group(1).equals("dummyCommand")) {
         commandSignature.action = CommandSignature.Action.DUMMY;
       }
 
