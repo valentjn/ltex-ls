@@ -30,9 +30,16 @@ public class AnnotatedTextBuilder {
   private Mode curMode;
 
   private static ArrayList<CommandSignature> defaultCommandSignatures = parseMagicIgnoreComments(
+      "% VSCode-LT: dummy \\cite{}\n" +
+      "% VSCode-LT: dummy \\cite[]{}\n" +
+      "% VSCode-LT: dummy \\cref{}\n" +
+      "% VSCode-LT: dummy \\Cref{}\n" +
       "% VSCode-LT: ignore \\hspace{}\n" +
       "% VSCode-LT: ignore \\include{}\n" +
+      "% VSCode-LT: dummy \\includegraphics{}\n" +
+      "% VSCode-LT: dummy \\includegraphics[]{}\n" +
       "% VSCode-LT: ignore \\input{}\n" +
+      "% VSCode-LT: dummy \\ref{}\n" +
       "% VSCode-LT: ignore \\vspace{}\n");
 
   private String matchFromPosition(Pattern pattern) {
@@ -145,7 +152,6 @@ public class AnnotatedTextBuilder {
 
     Pattern commandPattern = Pattern.compile("^\\\\([^A-Za-z]|([A-Za-z]+))");
     Pattern argumentPattern = Pattern.compile("^\\{[^\\}]*?\\}");
-    Pattern optionalArgumentPattern = Pattern.compile("^\\[[^\\]]*?\\]");
     Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
     Pattern whiteSpacePattern = Pattern.compile("^[ \n\r\t]+(%.*?\n[ \n\r\t]*)?");
 
@@ -216,12 +222,6 @@ public class AnnotatedTextBuilder {
               addMarkup(command);
               dummyLastSpace = " ";
             }
-          } else if (command.equals("\\cite") || command.equals("\\cref") ||
-              command.equals("\\Cref") || command.equals("\\includegraphics") ||
-              command.equals("\\ref")) {
-            addMarkup(command, constructDummy());
-            addMarkup(matchFromPosition(optionalArgumentPattern));
-            addMarkup(matchFromPosition(argumentPattern));
           } else if (command.equals("\\footnote")) {
             if (lastSpace.isEmpty()) {
               addMarkup(command, " ");
