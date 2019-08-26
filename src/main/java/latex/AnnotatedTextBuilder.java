@@ -316,10 +316,11 @@ public class AnnotatedTextBuilder {
           break;
         }
         case ' ':
+        case '~':
         case '\n':
         case '\r':
         case '\t': {
-          String whiteSpace = matchFromPosition(whiteSpacePattern);
+          String whiteSpace = ((curChar != '~') ? matchFromPosition(whiteSpacePattern) : curString);
           preserveDummyLast = true;
           preserveCanInsertSpaceBeforeDummy = true;
 
