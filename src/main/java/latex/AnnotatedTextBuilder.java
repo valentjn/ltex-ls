@@ -37,6 +37,7 @@ public class AnnotatedTextBuilder {
       "% VSCode-LT: dummyCommand \\Cref{}\n" +
       "% VSCode-LT: ignoreCommand \\documentclass{}\n" +
       "% VSCode-LT: ignoreCommand \\documentclass[]{}\n" +
+      "% VSCode-LT: dummyCommand \\eqref{}\n" +
       "% VSCode-LT: ignoreCommand \\hspace{}\n" +
       "% VSCode-LT: ignoreCommand \\hspace*{}\n" +
       "% VSCode-LT: ignoreCommand \\include{}\n" +
