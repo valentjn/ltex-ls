@@ -182,7 +182,13 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         logger.info("Checking the following text via LanguageTool: <" +
             annotatedText.getPlainText() + ">");
 
-        return languageTool.check(annotatedText);
+        try {
+          return languageTool.check(annotatedText);
+        } catch (RuntimeException e) {
+          logger.severe("LanguageTool failed: " + e.getMessage());
+          e.printStackTrace();
+          return Collections.emptyList();
+        }
       } catch (IOException e) {
         e.printStackTrace();
         return Collections.emptyList();
