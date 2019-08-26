@@ -40,7 +40,7 @@ public class AnnotatedTextBuilder {
     return (matcher.find() ? matcher.group() : "");
   }
 
-  private String constructDummy() {
+  private String generateDummy() {
     String dummy;
 
     if (curMode == Mode.TEXT) {
@@ -186,7 +186,7 @@ public class AnnotatedTextBuilder {
               } else {
                 modeStack.pop();
                 if (modeStack.isEmpty()) modeStack.push(Mode.TEXT);
-                interpretAs = constructDummy();
+                interpretAs = generateDummy();
               }
             } else {
               if (command.equals("\\begin")) {
@@ -224,7 +224,7 @@ public class AnnotatedTextBuilder {
             }
           } else if (command.equals("\\text") || command.equals("\\intertext")) {
             modeStack.push(Mode.TEXT);
-            String interpretAs = ((curMode == Mode.MATH) ? constructDummy() : "");
+            String interpretAs = ((curMode == Mode.MATH) ? generateDummy() : "");
             addMarkup(command + "{", interpretAs);
           } else {
             String match = "";
@@ -269,7 +269,7 @@ public class AnnotatedTextBuilder {
             preserveCanInsertSpaceBeforeDummy = true;
           } else {
             modeStack.pop();
-            addMarkup(curString, constructDummy());
+            addMarkup(curString, generateDummy());
           }
 
           break;
