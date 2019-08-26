@@ -35,12 +35,14 @@ public class AnnotatedTextBuilder {
       "% VSCode-LT: dummyCommand \\cref{}\n" +
       "% VSCode-LT: dummyCommand \\Cref{}\n" +
       "% VSCode-LT: ignoreCommand \\hspace{}\n" +
+      "% VSCode-LT: ignoreCommand \\hspace*{}\n" +
       "% VSCode-LT: ignoreCommand \\include{}\n" +
       "% VSCode-LT: dummyCommand \\includegraphics{}\n" +
       "% VSCode-LT: dummyCommand \\includegraphics[]{}\n" +
       "% VSCode-LT: ignoreCommand \\input{}\n" +
       "% VSCode-LT: dummyCommand \\ref{}\n" +
-      "% VSCode-LT: ignoreCommand \\vspace{}\n");
+      "% VSCode-LT: ignoreCommand \\vspace{}\n" +
+      "% VSCode-LT: ignoreCommand \\vspace*{}\n");
 
   private String matchFromPosition(Pattern pattern) {
     Matcher matcher = pattern.matcher(text.substring(pos));
@@ -104,7 +106,7 @@ public class AnnotatedTextBuilder {
 
   private static ArrayList<CommandSignature> parseMagicIgnoreComments(String text) {
     Pattern startPattern = Pattern.compile(
-        "% *VSCode-LT *: *(ignoreCommand|dummyCommand) *(\\\\([^A-Za-z]|([A-Za-z]+)))");
+        "% *VSCode-LT *: *(ignoreCommand|dummyCommand) *(\\\\([^A-Za-z]|([A-Za-z]+))\\*?)");
     Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\])|(\\(\\)))");
     Matcher startMatcher = startPattern.matcher(text);
     ArrayList<CommandSignature> result = new ArrayList<CommandSignature>();
@@ -150,7 +152,7 @@ public class AnnotatedTextBuilder {
         new ArrayList<CommandSignature>(defaultCommandSignatures);
     commandSignatures.addAll(parseMagicIgnoreComments(text));
 
-    Pattern commandPattern = Pattern.compile("^\\\\([^A-Za-z]|([A-Za-z]+))");
+    Pattern commandPattern = Pattern.compile("^\\\\(([^A-Za-z]|([A-Za-z]+))\\*?)");
     Pattern argumentPattern = Pattern.compile("^\\{[^\\}]*?\\}");
     Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
     Pattern whiteSpacePattern = Pattern.compile("^[ \n\r\t]+(%.*?\n[ \n\r\t]*)?");
