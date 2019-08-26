@@ -10,8 +10,14 @@ public class CommandSignature {
     PARENTHESIS,
   }
 
+  public enum Action {
+    IGNORE,
+    DUMMY,
+  }
+
   public String name;
   public ArrayList<ArgumentType> argumentTypes = new ArrayList<ArgumentType>();
+  public Action action;
 
   private static String matchFromPosition(String text, int pos, Pattern pattern) {
     Matcher matcher = pattern.matcher(text.substring(pos));

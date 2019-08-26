@@ -97,14 +97,21 @@ public class AnnotatedTextBuilder {
 
   private static ArrayList<CommandSignature> parseMagicIgnoreComments(String text) {
     Pattern startPattern = Pattern.compile(
-        "% *VSCode-LT *: *ignore *(\\\\([^A-Za-z]|([A-Za-z]+)))");
-    Pattern argumentPattern = Pattern.compile("^(\\{\\})|(\\[\\])|(\\(\\))");
+        "% *VSCode-LT *: *(ignore|dummy) *(\\\\([^A-Za-z]|([A-Za-z]+)))");
+    Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\])|(\\(\\)))");
     Matcher startMatcher = startPattern.matcher(text);
     ArrayList<CommandSignature> result = new ArrayList<CommandSignature>();
 
     while (startMatcher.find()) {
       CommandSignature commandSignature = new CommandSignature();
-      commandSignature.name = startMatcher.group(1);
+
+      if (startMatcher.group(1).equals("ignore")) {
+        commandSignature.action = CommandSignature.Action.IGNORE;
+      } else if (startMatcher.group(1).equals("dummy")) {
+        commandSignature.action = CommandSignature.Action.DUMMY;
+      }
+
+      commandSignature.name = startMatcher.group(2);
       int pos = startMatcher.end();
 
       while (true) {
@@ -113,11 +120,11 @@ public class AnnotatedTextBuilder {
 
         CommandSignature.ArgumentType argumentType = null;
 
-        if (argumentMatcher.group(1) != null) {
+        if (argumentMatcher.group(2) != null) {
           argumentType = CommandSignature.ArgumentType.BRACE;
-        } else if (argumentMatcher.group(2) != null) {
-          argumentType = CommandSignature.ArgumentType.BRACKET;
         } else if (argumentMatcher.group(3) != null) {
+          argumentType = CommandSignature.ArgumentType.BRACKET;
+        } else if (argumentMatcher.group(4) != null) {
           argumentType = CommandSignature.ArgumentType.PARENTHESIS;
         }
 
@@ -243,7 +250,16 @@ public class AnnotatedTextBuilder {
             if (matchingCommand == null) {
               addMarkup(command);
             } else {
-              addMarkup(match);
+              switch (matchingCommand.action) {
+                case IGNORE: {
+                  addMarkup(match);
+                  break;
+                }
+                case DUMMY: {
+                  addMarkup(match, generateDummy());
+                  break;
+                }
+              }
             }
           }
 
