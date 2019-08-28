@@ -152,6 +152,10 @@ public class AnnotatedTextBuilder {
     return result;
   }
 
+  private static long countOccurrences(String s, char ch) {
+    return s.chars().filter(x -> x == ch).count();
+  }
+
   public AnnotatedTextBuilder addCode(String text) {
     ArrayList<CommandSignature> commandSignatures =
         new ArrayList<CommandSignature>(defaultCommandSignatures);
@@ -325,11 +329,15 @@ public class AnnotatedTextBuilder {
           preserveCanInsertSpaceBeforeDummy = true;
 
           if (curMode == Mode.TEXT) {
-            if (lastSpace.isEmpty()) {
-              addMarkup(whiteSpace, " ");
-              lastSpace = " ";
+            if (countOccurrences(whiteSpace, '\n') <= 1) {
+              if (lastSpace.isEmpty()) {
+                addMarkup(whiteSpace, " ");
+                lastSpace = " ";
+              } else {
+                addMarkup(whiteSpace);
+              }
             } else {
-              addMarkup(whiteSpace);
+              addMarkup(whiteSpace, "\n\n");
             }
           } else {
             addMarkup(whiteSpace);
