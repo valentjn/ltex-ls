@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.languagetool.JLanguageTool;
 import org.languagetool.Language;
 import org.languagetool.Languages;
+import org.languagetool.ResultCache;
 import org.languagetool.markup.AnnotatedText;
 import org.languagetool.markup.AnnotatedTextBuilder;
 import org.languagetool.rules.RuleMatch;
@@ -13,6 +14,7 @@ import org.languagetool.rules.RuleMatch;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.logging.*;
@@ -21,10 +23,16 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
   HashMap<String, TextDocumentItem> documents = new HashMap<>();
   private LanguageClient client = null;
+
+  private ResultCache resultCache =
+      new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes, TimeUnit.MINUTES);
+
   private String languageShortCode;
   private List<String> dummyCommandPrototypes = null;
   private List<String> ignoreCommandPrototypes = null;
 
+  private static final long resultCacheMaxSize = 10000;
+  private static final int resultCacheExpireAfterMinutes = 10;
   private static final Logger logger = Logger.getLogger("LanguageToolLanguageServer");
 
   private static boolean locationOverlaps(RuleMatch match, DocumentPositionCalculator positionCalculator, Range range) {
@@ -153,7 +161,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     if (language == null || !isSupportedScheme) {
       return Collections.emptyList();
     } else {
-      JLanguageTool languageTool = new JLanguageTool(language);
+      JLanguageTool languageTool = new JLanguageTool(language, resultCache, null);
 
       String codeLanguageId = document.getLanguageId();
       try {
@@ -264,6 +272,8 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     ignoreCommandPrototypes = (List<String>) getSettingFromObject(settings,
         "languageTool.latex.ignoreCommands");
 
+    resultCache = new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes,
+        TimeUnit.MINUTES);
     documents.values().forEach(this::publishIssues);
   }
 
