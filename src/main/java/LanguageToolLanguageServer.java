@@ -3,7 +3,6 @@ import com.vladsch.flexmark.parser.Parser;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.services.*;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.languagetool.JLanguageTool;
 import org.languagetool.Language;
 import org.languagetool.Languages;
@@ -22,8 +21,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
   HashMap<String, TextDocumentItem> documents = new HashMap<>();
   private LanguageClient client = null;
-  @Nullable
-  private Language language;
+  private String languageShortCode;
 
   private static final Logger logger = Logger.getLogger("LanguageToolLanguageServer");
 
@@ -140,17 +138,26 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     // See: https://github.com/Microsoft/vscode/issues/28732
     String uri = document.getUri();
     Boolean isSupportedScheme = uri.startsWith("file:") || uri.startsWith("untitled:") ;
+    Language language;
+
+    if (Languages.isLanguageSupported(languageShortCode)) {
+      language = Languages.getLanguageForShortCode(languageShortCode);
+    } else {
+      logger.warning("ERROR: " + languageShortCode + " is not a recognized language. " +
+                     "Checking disabled.");
+      language = null;
+    }
 
     if (language == null || !isSupportedScheme) {
       return Collections.emptyList();
     } else {
       JLanguageTool languageTool = new JLanguageTool(language);
 
-      String languageId = document.getLanguageId();
+      String codeLanguageId = document.getLanguageId();
       try {
         AnnotatedText annotatedText;
 
-        switch (languageId) {
+        switch (codeLanguageId) {
           case "plaintext": {
             AnnotatedTextBuilder builder = new AnnotatedTextBuilder();
             annotatedText = builder.addText(document.getText()).build();
@@ -175,15 +182,16 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
           }
           default: {
             throw new UnsupportedOperationException(String.format(
-                "Code language \"%s\" is not supported.", languageId));
+                "Code language \"%s\" is not supported.", codeLanguageId));
           }
         }
 
-        logger.info("Checking the following text via LanguageTool: <" +
-            annotatedText.getPlainText() + ">");
+        logger.info("Checking the following text in language \"" + languageShortCode +
+            "\" via LanguageTool: <" + annotatedText.getPlainText() + ">");
 
         try {
-          return languageTool.check(annotatedText);
+          List<RuleMatch> result = languageTool.check(annotatedText);
+          return result;
         } catch (RuntimeException e) {
           logger.severe("LanguageTool failed: " + e.getMessage());
           e.printStackTrace();
@@ -196,15 +204,13 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     }
   }
 
-
   @Override
   public WorkspaceService getWorkspaceService() {
     return new NoOpWorkspaceService() {
       @Override
       public void didChangeConfiguration(DidChangeConfigurationParams params) {
         super.didChangeConfiguration(params);
-
-        setLanguage(params.getSettings());
+        setSettings(params.getSettings());
       }
 
       @SuppressWarnings({"unchecked", "rawtypes"})
@@ -221,22 +227,10 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   }
 
   @SuppressWarnings("unchecked")
-  private void setLanguage(@NotNull Object settingsObject) {
-    Map<String, Object> settings = (Map<String, Object>) settingsObject;
-    Map<String, Object> languageServerExample = (Map<String, Object>) settings.get("languageTool");
-    String shortCode = ((String) languageServerExample.get("language"));
-
-    setLanguage(shortCode);
-  }
-
-  private void setLanguage(String shortCode) {
-    if (Languages.isLanguageSupported(shortCode)) {
-      logger.info("Setting language to \"" + shortCode + "\".");
-      language = Languages.getLanguageForShortCode(shortCode);
-    } else {
-      logger.warning("ERROR: " + shortCode + " is not a recognized language.  Checking disabled.");
-      language = null;
-    }
+  private void setSettings(@NotNull Object settingsObject) {
+    Map<String, Object> settings =
+        (Map<String, Object>) ((Map<String, Object>) settingsObject).get("languageTool");
+    languageShortCode = (String) settings.get("language");
 
     documents.values().forEach(this::publishIssues);
   }
