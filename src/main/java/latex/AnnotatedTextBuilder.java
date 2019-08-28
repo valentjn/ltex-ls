@@ -168,6 +168,8 @@ public class AnnotatedTextBuilder {
     Pattern lengthPattern = Pattern.compile("-?[0-9]*(\\.[0-9]+)?(pt|mm|cm|ex|em|bp|dd|pc|in)");
     Pattern lengthInBracePattern = Pattern.compile("^\\{" + lengthPattern.pattern() + "\\}");
     Pattern lengthInBracketPattern = Pattern.compile("^\\[" + lengthPattern.pattern() + "\\]");
+    Pattern emDashPattern = Pattern.compile("^---");
+    Pattern enDashPattern = Pattern.compile("^--");
 
     String[] mathEnvironments = {"equation", "equation*", "align", "align*",
         "gather", "gather*", "alignat", "alignat*", "multline", "multline*",
@@ -374,8 +376,22 @@ public class AnnotatedTextBuilder {
 
           break;
         }
-        case '[':
-        {
+        case '-': {
+          String emDash = matchFromPosition(emDashPattern);
+
+          if (!emDash.isEmpty()) {
+            addMarkup(emDash, "\u2014");
+            break;
+          } else {
+            String enDash = matchFromPosition(enDashPattern);
+
+            if (!enDash.isEmpty()) {
+              addMarkup(enDash, "\u2013");
+              break;
+            }
+          }
+        }
+        case '[': {
           String length = matchFromPosition(lengthInBracketPattern);
 
           if (!length.isEmpty()) {
