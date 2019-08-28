@@ -49,7 +49,7 @@ dependencies {
     compile group: 'org.languagetool', name: 'languagetool-core', version: '4.6'
 
     // This dependency is found on compile classpath of this component and consumers.
-    compile group: 'org.eclipse.lsp4j', name: 'org.eclipse.lsp4j', version: '0.2.0'
+    compile group: 'org.eclipse.lsp4j', name: 'org.eclipse.lsp4j', version: '0.7.2'
 
     compile 'com.vladsch.flexmark:flexmark-all:0.19.1'
     compile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.1'

@@ -25,7 +25,7 @@ class FullTextDocumentService implements TextDocumentService {
   }
 
   @Override
-  public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(TextDocumentPositionParams position) {
+  public CompletableFuture<Either<List<CompletionItem>, CompletionList>> completion(CompletionParams position) {
     return null;
   }
 
@@ -45,7 +45,7 @@ class FullTextDocumentService implements TextDocumentService {
   }
 
   @Override
-  public CompletableFuture<List<? extends Location>> definition(TextDocumentPositionParams position) {
+  public CompletableFuture<Either<List<? extends Location>,List<? extends LocationLink>>> definition(TextDocumentPositionParams position) {
     return null;
   }
 
@@ -60,12 +60,12 @@ class FullTextDocumentService implements TextDocumentService {
   }
 
   @Override
-  public CompletableFuture<List<? extends SymbolInformation>> documentSymbol(DocumentSymbolParams params) {
+  public CompletableFuture<List<Either<SymbolInformation, DocumentSymbol>>> documentSymbol(DocumentSymbolParams params) {
     return null;
   }
 
   @Override
-  public CompletableFuture<List<? extends Command>> codeAction(CodeActionParams params) {
+  public CompletableFuture<List<Either<Command, CodeAction>>> codeAction(CodeActionParams params) {
     return null;
   }
 

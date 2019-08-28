@@ -9,8 +9,7 @@ class TextEditCommand extends Command {
   public TextEditCommand(String title, Range range, TextDocumentItem document) {
     this.setCommand(CommandName);
 
-    VersionedTextDocumentIdentifier id = new VersionedTextDocumentIdentifier(document.getVersion());
-    id.setUri(document.getUri());
+    VersionedTextDocumentIdentifier id = new VersionedTextDocumentIdentifier(document.getUri(), document.getVersion());
     this.setArguments(
     Collections.singletonList(
     new TextDocumentEdit(id, Collections.singletonList(new TextEdit(range, title)))));

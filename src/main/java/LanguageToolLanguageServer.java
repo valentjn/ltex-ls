@@ -1,6 +1,7 @@
 import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.parser.Parser;
 import org.eclipse.lsp4j.*;
+import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.*;
 import org.jetbrains.annotations.NotNull;
 import org.languagetool.JLanguageTool;
@@ -84,7 +85,8 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     return new FullTextDocumentService(documents) {
 
       @Override
-      public CompletableFuture<List<? extends Command>> codeAction(CodeActionParams params) {
+      public CompletableFuture<List<Either<Command, CodeAction>>> codeAction(
+          CodeActionParams params) {
         if (params.getContext().getDiagnostics().isEmpty()) {
           return CompletableFuture.completedFuture(Collections.emptyList());
         }
@@ -98,15 +100,16 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         Stream<RuleMatch> relevant =
         matches.stream().filter(m -> locationOverlaps(m, positionCalculator, params.getRange()));
 
-        List<TextEditCommand> commands = relevant.flatMap(m -> getEditCommands(m, document, positionCalculator)).collect(Collectors.toList());
+        List<Either<Command, CodeAction>> commands = relevant.flatMap(m -> getEditCommands(m, document, positionCalculator)).collect(Collectors.toList());
 
         return CompletableFuture.completedFuture(commands);
       }
 
       @NotNull
-      private Stream<TextEditCommand> getEditCommands(RuleMatch match, TextDocumentItem document, DocumentPositionCalculator positionCalculator) {
+      private Stream<Either<Command, CodeAction>> getAcceptSuggestionCommands(RuleMatch match,
+          TextDocumentItem document, DocumentPositionCalculator positionCalculator) {
         Range range = createDiagnostic(match, positionCalculator).getRange();
-        return match.getSuggestedReplacements().stream().map(str -> new TextEditCommand(str, range, document));
+        return match.getSuggestedReplacements().stream().map(str -> Either.forLeft(new TextEditCommand(str, range, document)));
       }
 
       @Override
@@ -248,7 +251,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         if (Objects.equals(params.getCommand(), TextEditCommand.CommandName)) {
           return ((CompletableFuture<Object>) (CompletableFuture) client.applyEdit(
               new ApplyWorkspaceEditParams(new WorkspaceEdit(
-              (List<TextDocumentEdit>) (List) params.getArguments()))));
+              (List<Either<TextDocumentEdit, ResourceOperation>>) (List) params.getArguments()))));
         }
         return CompletableFuture.completedFuture(false);
       }
