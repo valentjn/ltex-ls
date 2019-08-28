@@ -22,6 +22,8 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   HashMap<String, TextDocumentItem> documents = new HashMap<>();
   private LanguageClient client = null;
   private String languageShortCode;
+  private List<String> dummyCommandPrototypes = null;
+  private List<String> ignoreCommandPrototypes = null;
 
   private static final Logger logger = Logger.getLogger("LanguageToolLanguageServer");
 
@@ -176,6 +178,21 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
           }
           case "latex": {
             latex.AnnotatedTextBuilder builder = new latex.AnnotatedTextBuilder();
+
+            if (dummyCommandPrototypes != null) {
+              for (String commandPrototype : dummyCommandPrototypes) {
+                builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
+                    latex.CommandSignature.Action.DUMMY));
+              }
+            }
+
+            if (ignoreCommandPrototypes != null) {
+              for (String commandPrototype : ignoreCommandPrototypes) {
+                builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
+                    latex.CommandSignature.Action.IGNORE));
+              }
+            }
+
             builder.addCode(document.getText());
             annotatedText = builder.getAnnotatedText();
             break;
@@ -227,10 +244,25 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   }
 
   @SuppressWarnings("unchecked")
-  private void setSettings(@NotNull Object settingsObject) {
-    Map<String, Object> settings =
-        (Map<String, Object>) ((Map<String, Object>) settingsObject).get("languageTool");
-    languageShortCode = (String) settings.get("language");
+  private static Object getSettingFromObject(@NotNull Object settings, String name) {
+    for (String component : name.split("\\.")) {
+      try {
+        settings = ((Map<String, Object>) settings).get(component);
+      } catch (ClassCastException e) {
+        return null;
+      }
+    }
+
+    return settings;
+  }
+
+  @SuppressWarnings("unchecked")
+  private void setSettings(@NotNull Object settings) {
+    languageShortCode = (String) getSettingFromObject(settings, "languageTool.language");
+    dummyCommandPrototypes = (List<String>) getSettingFromObject(settings,
+        "languageTool.latex.dummyCommands");
+    ignoreCommandPrototypes = (List<String>) getSettingFromObject(settings,
+        "languageTool.latex.ignoreCommands");
 
     documents.values().forEach(this::publishIssues);
   }

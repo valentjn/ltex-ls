@@ -29,26 +29,30 @@ public class AnnotatedTextBuilder {
   private String curString;
   private Mode curMode;
 
-  private static ArrayList<CommandSignature> defaultCommandSignatures = parseMagicIgnoreComments(
-      "% VSCode-LT: ignoreCommand \\bibliography{}\n" +
-      "% VSCode-LT: ignoreCommand \\bibliographystyle{}\n" +
-      "% VSCode-LT: dummyCommand \\cite{}\n" +
-      "% VSCode-LT: dummyCommand \\cite[]{}\n" +
-      "% VSCode-LT: dummyCommand \\cref{}\n" +
-      "% VSCode-LT: dummyCommand \\Cref{}\n" +
-      "% VSCode-LT: ignoreCommand \\documentclass{}\n" +
-      "% VSCode-LT: ignoreCommand \\documentclass[]{}\n" +
-      "% VSCode-LT: dummyCommand \\eqref{}\n" +
-      "% VSCode-LT: ignoreCommand \\hspace{}\n" +
-      "% VSCode-LT: ignoreCommand \\hspace*{}\n" +
-      "% VSCode-LT: ignoreCommand \\include{}\n" +
-      "% VSCode-LT: dummyCommand \\includegraphics{}\n" +
-      "% VSCode-LT: dummyCommand \\includegraphics[]{}\n" +
-      "% VSCode-LT: ignoreCommand \\input{}\n" +
-      "% VSCode-LT: ignoreCommand \\label{}\n" +
-      "% VSCode-LT: dummyCommand \\ref{}\n" +
-      "% VSCode-LT: ignoreCommand \\vspace{}\n" +
-      "% VSCode-LT: ignoreCommand \\vspace*{}\n");
+  private static CommandSignature[] defaultCommandSignatures = {
+    new CommandSignature("\\bibliography{}", CommandSignature.Action.IGNORE),
+    new CommandSignature("\\bibliographystyle{}", CommandSignature.Action.IGNORE),
+    new CommandSignature("\\cite{}", CommandSignature.Action.DUMMY),
+    new CommandSignature("\\cite[]{}", CommandSignature.Action.DUMMY),
+    new CommandSignature("\\cref{}", CommandSignature.Action.DUMMY),
+    new CommandSignature("\\Cref{}", CommandSignature.Action.DUMMY),
+    new CommandSignature("\\documentclass{}", CommandSignature.Action.IGNORE),
+    new CommandSignature("\\documentclass[]{}", CommandSignature.Action.IGNORE),
+    new CommandSignature("\\eqref{}", CommandSignature.Action.DUMMY),
+    new CommandSignature("\\hspace{}", CommandSignature.Action.IGNORE),
+    new CommandSignature("\\hspace*{}", CommandSignature.Action.IGNORE),
+    new CommandSignature("\\include{}", CommandSignature.Action.IGNORE),
+    new CommandSignature("\\includegraphics{}", CommandSignature.Action.DUMMY),
+    new CommandSignature("\\includegraphics[]{}", CommandSignature.Action.DUMMY),
+    new CommandSignature("\\input{}", CommandSignature.Action.IGNORE),
+    new CommandSignature("\\label{}", CommandSignature.Action.IGNORE),
+    new CommandSignature("\\ref{}", CommandSignature.Action.DUMMY),
+    new CommandSignature("\\vspace{}", CommandSignature.Action.IGNORE),
+    new CommandSignature("\\vspace*{}", CommandSignature.Action.IGNORE),
+  };
+
+  public ArrayList<CommandSignature> commandSignatures =
+      new ArrayList<CommandSignature>(Arrays.asList(defaultCommandSignatures));
 
   private String matchFromPosition(Pattern pattern) {
     Matcher matcher = pattern.matcher(text.substring(pos));
@@ -110,58 +114,11 @@ public class AnnotatedTextBuilder {
     lastSpace = ((lastChar == ' ') ? " " : "");
   }
 
-  private static ArrayList<CommandSignature> parseMagicIgnoreComments(String text) {
-    Pattern startPattern = Pattern.compile(
-        "% *VSCode-LT *: *(ignoreCommand|dummyCommand) *(\\\\([^A-Za-z]|([A-Za-z]+))\\*?)");
-    Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\])|(\\(\\)))");
-    Matcher startMatcher = startPattern.matcher(text);
-    ArrayList<CommandSignature> result = new ArrayList<CommandSignature>();
-
-    while (startMatcher.find()) {
-      CommandSignature commandSignature = new CommandSignature();
-
-      if (startMatcher.group(1).equals("ignoreCommand")) {
-        commandSignature.action = CommandSignature.Action.IGNORE;
-      } else if (startMatcher.group(1).equals("dummyCommand")) {
-        commandSignature.action = CommandSignature.Action.DUMMY;
-      }
-
-      commandSignature.name = startMatcher.group(2);
-      int pos = startMatcher.end();
-
-      while (true) {
-        Matcher argumentMatcher = argumentPattern.matcher(text.substring(pos));
-        if (!argumentMatcher.find()) break;
-
-        CommandSignature.ArgumentType argumentType = null;
-
-        if (argumentMatcher.group(2) != null) {
-          argumentType = CommandSignature.ArgumentType.BRACE;
-        } else if (argumentMatcher.group(3) != null) {
-          argumentType = CommandSignature.ArgumentType.BRACKET;
-        } else if (argumentMatcher.group(4) != null) {
-          argumentType = CommandSignature.ArgumentType.PARENTHESIS;
-        }
-
-        commandSignature.argumentTypes.add(argumentType);
-        pos += argumentMatcher.group().length();
-      }
-
-      result.add(commandSignature);
-    }
-
-    return result;
-  }
-
   private static long countOccurrences(String s, char ch) {
     return s.chars().filter(x -> x == ch).count();
   }
 
   public AnnotatedTextBuilder addCode(String text) {
-    ArrayList<CommandSignature> commandSignatures =
-        new ArrayList<CommandSignature>(defaultCommandSignatures);
-    commandSignatures.addAll(parseMagicIgnoreComments(text));
-
     Pattern commandPattern = Pattern.compile("^\\\\(([^A-Za-z]|([A-Za-z]+))\\*?)");
     Pattern argumentPattern = Pattern.compile("^\\{[^\\}]*?\\}");
     Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
