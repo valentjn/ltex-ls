@@ -27,7 +27,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   private ResultCache resultCache =
       new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes, TimeUnit.MINUTES);
 
-  private String languageShortCode;
+  private String languageShortCode = "en-US";
   private List<String> dummyCommandPrototypes = null;
   private List<String> ignoreCommandPrototypes = null;
 
