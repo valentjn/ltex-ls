@@ -7,6 +7,7 @@ import org.languagetool.JLanguageTool;
 import org.languagetool.Language;
 import org.languagetool.Languages;
 import org.languagetool.ResultCache;
+import org.languagetool.UserConfig;
 import org.languagetool.markup.AnnotatedText;
 import org.languagetool.markup.AnnotatedTextBuilder;
 import org.languagetool.rules.RuleMatch;
@@ -27,6 +28,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   private ResultCache resultCache =
       new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes, TimeUnit.MINUTES);
 
+  private List<String> dictionary = null;
   private String languageShortCode = "en-US";
   private List<String> dummyCommandPrototypes = null;
   private List<String> ignoreCommandPrototypes = null;
@@ -161,7 +163,9 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     if (language == null || !isSupportedScheme) {
       return Collections.emptyList();
     } else {
-      JLanguageTool languageTool = new JLanguageTool(language, resultCache, null);
+      UserConfig userConfig = ((dictionary != null) ?
+          new UserConfig(dictionary) : new UserConfig());
+      JLanguageTool languageTool = new JLanguageTool(language, resultCache, userConfig);
 
       String codeLanguageId = document.getLanguageId();
       try {
@@ -266,6 +270,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
   @SuppressWarnings("unchecked")
   private void setSettings(@NotNull Object settings) {
+    dictionary = (List<String>) getSettingFromObject(settings, "languageTool.dictionary");
     languageShortCode = (String) getSettingFromObject(settings, "languageTool.language");
     dummyCommandPrototypes = (List<String>) getSettingFromObject(settings,
         "languageTool.latex.dummyCommands");
