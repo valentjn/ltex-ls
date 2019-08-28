@@ -63,9 +63,9 @@ public class AnnotatedTextBuilder {
     String dummy;
 
     if (curMode == Mode.TEXT) {
-      dummy = "Abc" + (pseudoCounter++);
+      dummy = "Dummy" + (pseudoCounter++);
     } else {
-      dummy = "Abc" + (pseudoCounter++) + dummyLastPunctuation + dummyLastSpace;
+      dummy = "Dummy" + (pseudoCounter++) + dummyLastPunctuation + dummyLastSpace;
     }
 
     dummyLastSpace = "";
