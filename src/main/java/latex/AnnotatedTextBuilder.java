@@ -31,6 +31,7 @@ public class AnnotatedTextBuilder {
 
   private static ArrayList<CommandSignature> defaultCommandSignatures = parseMagicIgnoreComments(
       "% VSCode-LT: ignoreCommand \\bibliography{}\n" +
+      "% VSCode-LT: ignoreCommand \\bibliographystyle{}\n" +
       "% VSCode-LT: dummyCommand \\cite{}\n" +
       "% VSCode-LT: dummyCommand \\cite[]{}\n" +
       "% VSCode-LT: dummyCommand \\cref{}\n" +
