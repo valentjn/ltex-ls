@@ -5,14 +5,10 @@ import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.*;
 import org.jetbrains.annotations.NotNull;
-import org.languagetool.JLanguageTool;
-import org.languagetool.Language;
-import org.languagetool.Languages;
-import org.languagetool.ResultCache;
-import org.languagetool.UserConfig;
-import org.languagetool.markup.AnnotatedText;
+import org.languagetool.*;
+import org.languagetool.markup.*;
 import org.languagetool.markup.AnnotatedTextBuilder;
-import org.languagetool.rules.RuleMatch;
+import org.languagetool.rules.*;
 
 import java.io.IOException;
 import java.util.*;
