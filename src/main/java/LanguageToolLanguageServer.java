@@ -15,7 +15,6 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.logging.*;
 
 class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware {
@@ -33,6 +32,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
   private static final long resultCacheMaxSize = 10000;
   private static final int resultCacheExpireAfterMinutes = 10;
+  private static final String acceptSuggestionCommandName = "languageTool.acceptSuggestion";
   private static final Logger logger = Logger.getLogger("LanguageToolLanguageServer");
 
   private static boolean locationOverlaps(
@@ -63,9 +63,10 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   public CompletableFuture<InitializeResult> initialize(InitializeParams params) {
     ServerCapabilities capabilities = new ServerCapabilities();
     capabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
-    capabilities.setCodeActionProvider(true);
+    capabilities.setCodeActionProvider(
+        new CodeActionOptions(Arrays.asList(CodeActionKind.QuickFix)));
     capabilities.setExecuteCommandProvider(
-        new ExecuteCommandOptions(Collections.singletonList(TextEditCommand.CommandName)));
+        new ExecuteCommandOptions(Collections.singletonList(acceptSuggestionCommandName)));
     return CompletableFuture.completedFuture(new InitializeResult(capabilities));
   }
 
@@ -91,37 +92,49 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         }
 
         TextDocumentItem document = documents.get(params.getTextDocument().getUri());
-
+        VersionedTextDocumentIdentifier textDocument = new VersionedTextDocumentIdentifier(
+            document.getUri(), document.getVersion());
         List<RuleMatch> matches = validateDocument(document);
+        DocumentPositionCalculator positionCalculator =
+            new DocumentPositionCalculator(document.getText());
+        List<Either<Command, CodeAction>> result =
+            new ArrayList<Either<Command, CodeAction>>();
 
-        DocumentPositionCalculator positionCalculator = new DocumentPositionCalculator(document.getText());
+        for (RuleMatch match : matches) {
+          if (locationOverlaps(match, positionCalculator, params.getRange())) {
+            Diagnostic diagnostic = createDiagnostic(match, positionCalculator);
+            Range range = diagnostic.getRange();
 
-        Stream<RuleMatch> relevant =
-        matches.stream().filter(m -> locationOverlaps(m, positionCalculator, params.getRange()));
+            for (String newText : match.getSuggestedReplacements()) {
+              Command command = new Command();
+              command.setCommand(acceptSuggestionCommandName);
+              command.setTitle(newText);
+              command.setArguments(Collections.singletonList(new TextDocumentEdit(
+                  textDocument, Collections.singletonList(new TextEdit(range, newText)))));
 
-        List<Either<Command, CodeAction>> commands = relevant.flatMap(m -> getEditCommands(m, document, positionCalculator)).collect(Collectors.toList());
+              CodeAction codeAction = new CodeAction();
+              codeAction.setTitle(newText);
+              codeAction.setKind(CodeActionKind.QuickFix);
+              codeAction.setDiagnostics(Collections.singletonList(diagnostic));
+              codeAction.setCommand(command);
 
-        return CompletableFuture.completedFuture(commands);
-      }
+              result.add(Either.forRight(codeAction));
+            }
+          }
+        }
 
-      @NotNull
-      private Stream<Either<Command, CodeAction>> getAcceptSuggestionCommands(RuleMatch match,
-          TextDocumentItem document, DocumentPositionCalculator positionCalculator) {
-        Range range = createDiagnostic(match, positionCalculator).getRange();
-        return match.getSuggestedReplacements().stream().map(str -> Either.forLeft(new TextEditCommand(str, range, document)));
+        return CompletableFuture.completedFuture(result);
       }
 
       @Override
       public void didOpen(DidOpenTextDocumentParams params) {
         super.didOpen(params);
-
         publishIssues(params.getTextDocument().getUri());
       }
 
       @Override
       public void didChange(DidChangeTextDocumentParams params) {
         super.didChange(params);
-
         publishIssues(params.getTextDocument().getUri());
       }
 
@@ -248,7 +261,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
       @SuppressWarnings({"unchecked", "rawtypes"})
       @Override
       public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
-        if (Objects.equals(params.getCommand(), TextEditCommand.CommandName)) {
+        if (Objects.equals(params.getCommand(), acceptSuggestionCommandName)) {
           List<Either<TextDocumentEdit, ResourceOperation>> documentChanges = new ArrayList<>();
 
           for (JsonObject json : (List<JsonObject>) (List) params.getArguments()) {
