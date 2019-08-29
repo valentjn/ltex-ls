@@ -38,18 +38,20 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   private static final int resultCacheExpireAfterMinutes = 10;
   private static final Logger logger = Logger.getLogger("LanguageToolLanguageServer");
 
-  private static boolean locationOverlaps(RuleMatch match, DocumentPositionCalculator positionCalculator, Range range) {
+  private static boolean locationOverlaps(
+      RuleMatch match, DocumentPositionCalculator positionCalculator, Range range) {
     return overlaps(range, createDiagnostic(match, positionCalculator).getRange());
   }
 
   private static boolean overlaps(Range r1, Range r2) {
     return r1.getStart().getCharacter() <= r2.getEnd().getCharacter() &&
-    r1.getEnd().getCharacter() >= r2.getStart().getCharacter() &&
-    r1.getStart().getLine() >= r2.getEnd().getLine() &&
-    r1.getEnd().getLine() <= r2.getStart().getLine();
+        r1.getEnd().getCharacter() >= r2.getStart().getCharacter() &&
+        r1.getStart().getLine() >= r2.getEnd().getLine() &&
+        r1.getEnd().getLine() <= r2.getStart().getLine();
   }
 
-  private static Diagnostic createDiagnostic(RuleMatch match, DocumentPositionCalculator positionCalculator) {
+  private static Diagnostic createDiagnostic(
+      RuleMatch match, DocumentPositionCalculator positionCalculator) {
     Diagnostic ret = new Diagnostic();
     ret.setRange(new Range(
         positionCalculator.getPosition(match.getFromPos()),
@@ -144,7 +146,8 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     DocumentPositionCalculator positionCalculator =
         new DocumentPositionCalculator(document.getText());
 
-    return matches.stream().map(match -> createDiagnostic(match, positionCalculator)).collect(Collectors.toList());
+    return matches.stream().map(
+        match -> createDiagnostic(match, positionCalculator)).collect(Collectors.toList());
   }
 
   private List<RuleMatch> validateDocument(TextDocumentItem document) {
