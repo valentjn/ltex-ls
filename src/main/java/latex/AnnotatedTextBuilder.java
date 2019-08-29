@@ -4,6 +4,7 @@ import org.languagetool.markup.AnnotatedText;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 import java.util.regex.*;
 
@@ -51,8 +52,8 @@ public class AnnotatedTextBuilder {
     new CommandSignature("\\vspace*{}", CommandSignature.Action.IGNORE),
   };
 
-  public ArrayList<CommandSignature> commandSignatures =
-      new ArrayList<CommandSignature>(Arrays.asList(defaultCommandSignatures));
+  public List<CommandSignature> commandSignatures =
+      new ArrayList<>(Arrays.asList(defaultCommandSignatures));
 
   private String matchFromPosition(Pattern pattern) {
     Matcher matcher = pattern.matcher(text.substring(pos));
