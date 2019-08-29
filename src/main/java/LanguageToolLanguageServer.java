@@ -55,7 +55,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         positionCalculator.getPosition(match.getToPos())));
     ret.setSeverity(DiagnosticSeverity.Warning);
     ret.setSource("LT - " + match.getRule().getDescription());
-    ret.setMessage(match.getMessage().replaceAll("<suggestion>(.*?)</suggestion>", "\"$1\""));
+    ret.setMessage(match.getMessage().replaceAll("<suggestion>(.*?)</suggestion>", "'$1'"));
     return ret;
   }
 
