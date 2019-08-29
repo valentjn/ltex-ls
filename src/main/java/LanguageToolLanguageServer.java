@@ -1,3 +1,4 @@
+import com.google.gson.*;
 import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.parser.Parser;
 import org.eclipse.lsp4j.*;
@@ -252,9 +253,31 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
       @Override
       public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
         if (Objects.equals(params.getCommand(), TextEditCommand.CommandName)) {
-          return ((CompletableFuture<Object>) (CompletableFuture) client.applyEdit(
-              new ApplyWorkspaceEditParams(new WorkspaceEdit(
-              (List<Either<TextDocumentEdit, ResourceOperation>>) (List) params.getArguments()))));
+          List<Either<TextDocumentEdit, ResourceOperation>> documentChanges = new ArrayList<>();
+
+          for (JsonObject json : (List<JsonObject>) (List) params.getArguments()) {
+            VersionedTextDocumentIdentifier textDocument =
+                new VersionedTextDocumentIdentifier(
+                  json.getAsJsonObject("textDocument").get("uri").getAsString(),
+                  json.getAsJsonObject("textDocument").get("version").getAsInt());
+            List<TextEdit> edits = new ArrayList<>();
+
+            for (JsonElement jsonEdit : json.getAsJsonArray("edits")) {
+              JsonObject jsonRange = jsonEdit.getAsJsonObject().getAsJsonObject("range");
+              Range range = new Range(
+                  new Position(jsonRange.getAsJsonObject("start").get("line").getAsInt(),
+                    jsonRange.getAsJsonObject("start").get("character").getAsInt()),
+                  new Position(jsonRange.getAsJsonObject("end").get("line").getAsInt(),
+                    jsonRange.getAsJsonObject("end").get("character").getAsInt()));
+              String newText = jsonEdit.getAsJsonObject().get("newText").getAsString();
+              edits.add(new TextEdit(range, newText));
+            }
+
+            documentChanges.add(Either.forLeft(new TextDocumentEdit(textDocument, edits)));
+          }
+
+          return (CompletableFuture<Object>) (CompletableFuture) client.applyEdit(
+              new ApplyWorkspaceEditParams(new WorkspaceEdit(documentChanges)));
         }
         return CompletableFuture.completedFuture(false);
       }
