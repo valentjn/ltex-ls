@@ -273,12 +273,17 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
   @SuppressWarnings("unchecked")
   private void setSettings(@NotNull Object settings) {
-    dictionary = (List<String>) getSettingFromObject(settings, "languageTool.dictionary");
-    languageShortCode = (String) getSettingFromObject(settings, "languageTool.language");
-    dummyCommandPrototypes = (List<String>) getSettingFromObject(settings,
+    List<String> dictionary =
+        (List<String>) getSettingFromObject(settings, "languageTool.dictionary");
+    if (dictionary != null) this.dictionary = dictionary;
+    String languageShortCode = (String) getSettingFromObject(settings, "languageTool.language");
+    if (languageShortCode != null) this.languageShortCode = languageShortCode;
+    List<String> dummyCommandPrototypes = (List<String>) getSettingFromObject(settings,
         "languageTool.latex.dummyCommands");
-    ignoreCommandPrototypes = (List<String>) getSettingFromObject(settings,
+    if (dummyCommandPrototypes != null) this.dummyCommandPrototypes = dummyCommandPrototypes;
+    List<String> ignoreCommandPrototypes = (List<String>) getSettingFromObject(settings,
         "languageTool.latex.ignoreCommands");
+    if (ignoreCommandPrototypes != null) this.ignoreCommandPrototypes = ignoreCommandPrototypes;
 
     resultCache = new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes,
         TimeUnit.MINUTES);
