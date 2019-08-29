@@ -255,7 +255,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
       @Override
       public void didChangeConfiguration(DidChangeConfigurationParams params) {
         super.didChangeConfiguration(params);
-        setSettings(params.getSettings());
+        setSettings((JsonObject) params.getSettings());
       }
 
       @SuppressWarnings({"unchecked", "rawtypes"})
@@ -293,32 +293,28 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     };
   }
 
-  @SuppressWarnings("unchecked")
-  private static Object getSettingFromObject(@NotNull Object settings, String name) {
+  private static JsonElement getSettingFromJSON(JsonElement settings, String name) {
     for (String component : name.split("\\.")) {
-      try {
-        settings = ((Map<String, Object>) settings).get(component);
-      } catch (ClassCastException e) {
-        return null;
-      }
+      settings = settings.getAsJsonObject().get(component);
     }
 
     return settings;
   }
 
-  @SuppressWarnings("unchecked")
-  private void setSettings(@NotNull Object settings) {
-    List<String> dictionary =
-        (List<String>) getSettingFromObject(settings, "languageTool.dictionary");
-    if (dictionary != null) this.dictionary = dictionary;
-    String languageShortCode = (String) getSettingFromObject(settings, "languageTool.language");
-    if (languageShortCode != null) this.languageShortCode = languageShortCode;
-    List<String> dummyCommandPrototypes = (List<String>) getSettingFromObject(settings,
-        "languageTool.latex.dummyCommands");
-    if (dummyCommandPrototypes != null) this.dummyCommandPrototypes = dummyCommandPrototypes;
-    List<String> ignoreCommandPrototypes = (List<String>) getSettingFromObject(settings,
-        "languageTool.latex.ignoreCommands");
-    if (ignoreCommandPrototypes != null) this.ignoreCommandPrototypes = ignoreCommandPrototypes;
+  private static List<String> convertJsonArrayToList(JsonArray array) {
+    List<String> result = new ArrayList<>();
+    for (JsonElement element : array) result.add(element.getAsString());
+    return result;
+  }
+
+  private void setSettings(@NotNull JsonElement settings) {
+    dictionary = convertJsonArrayToList(
+        getSettingFromJSON(settings, "languageTool.dictionary").getAsJsonArray());
+    languageShortCode = getSettingFromJSON(settings, "languageTool.language").getAsString();
+    dummyCommandPrototypes = convertJsonArrayToList(
+        getSettingFromJSON(settings, "languageTool.latex.dummyCommands").getAsJsonArray());
+    ignoreCommandPrototypes = convertJsonArrayToList(
+        getSettingFromJSON(settings, "languageTool.latex.ignoreCommands").getAsJsonArray());
 
     resultCache = new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes,
         TimeUnit.MINUTES);
