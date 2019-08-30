@@ -12,7 +12,8 @@ public class AnnotatedTextBuilder {
   private enum Mode {
     TEXT,
     HEADING,
-    MATH,
+    INLINE_MATH,
+    DISPLAY_MATH,
   }
 
   private org.languagetool.markup.AnnotatedTextBuilder builder =
@@ -25,6 +26,7 @@ public class AnnotatedTextBuilder {
   private String lastPunctuation;
   private String dummyLastSpace;
   private String dummyLastPunctuation;
+  private boolean isMathEmpty;
   private boolean preserveDummyLast;
   private Stack<Mode> modeStack;
 
@@ -70,6 +72,11 @@ public class AnnotatedTextBuilder {
 
     if (isTextMode(curMode)) {
       dummy = "Dummy" + (pseudoCounter++);
+    } else if (isMathEmpty) {
+      dummy = "";
+    } else if (curMode == Mode.DISPLAY_MATH) {
+      dummy = ((lastSpace.isEmpty() ? " " : "")) + "Dummy" + (pseudoCounter++) +
+          dummyLastPunctuation + " ";
     } else {
       dummy = "Dummy" + (pseudoCounter++) + dummyLastPunctuation + dummyLastSpace;
     }
@@ -126,7 +133,7 @@ public class AnnotatedTextBuilder {
   }
 
   private static boolean isMathMode(Mode mode) {
-    return (mode == Mode.MATH);
+    return ((mode == Mode.INLINE_MATH) || (mode == Mode.DISPLAY_MATH));
   }
 
   private static boolean isTextMode(Mode mode) {
@@ -155,19 +162,20 @@ public class AnnotatedTextBuilder {
     lastPunctuation = "";
     dummyLastSpace = "";
     dummyLastPunctuation = "";
+    isMathEmpty = true;
     preserveDummyLast = false;
 
     modeStack = new Stack<>();
     modeStack.push(Mode.TEXT);
 
     boolean canInsertSpaceBeforeDummy = false;
-    boolean preserveCanInsertSpaceBeforeDummy = false;
+    boolean isMathCharTrivial = false;
 
     while (pos < text.length()) {
       curChar = text.charAt(pos);
       curString = String.valueOf(curChar);
       curMode = modeStack.peek();
-      preserveCanInsertSpaceBeforeDummy = false;
+      isMathCharTrivial = false;
 
       switch (curChar) {
         case '\\': {
@@ -183,9 +191,9 @@ public class AnnotatedTextBuilder {
 
             if (Arrays.asList(mathEnvironments).contains(environment)) {
               if (command.equals("\\begin")) {
-                modeStack.push(Mode.MATH);
+                modeStack.push(Mode.DISPLAY_MATH);
+                isMathEmpty = true;
                 canInsertSpaceBeforeDummy = true;
-                preserveCanInsertSpaceBeforeDummy = true;
               } else {
                 modeStack.pop();
                 if (modeStack.isEmpty()) modeStack.push(Mode.TEXT);
@@ -200,6 +208,7 @@ public class AnnotatedTextBuilder {
               }
             }
 
+            isMathCharTrivial = true;
             preserveDummyLast = true;
             addMarkup(argument, interpretAs);
           } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
@@ -281,15 +290,17 @@ public class AnnotatedTextBuilder {
           if (modeStack.isEmpty()) modeStack.push(Mode.TEXT);
           addMarkup(curString, interpretAs);
           canInsertSpaceBeforeDummy = true;
-          preserveCanInsertSpaceBeforeDummy = true;
+          if (isTextMode(curMode) && isMathMode(modeStack.peek())) isMathEmpty = true;
+          isMathCharTrivial = true;
           break;
         }
         case '$': {
           if (isTextMode(curMode)) {
-            modeStack.push(Mode.MATH);
+            modeStack.push(Mode.INLINE_MATH);
             addMarkup(curString);
+            isMathEmpty = true;
             canInsertSpaceBeforeDummy = true;
-            preserveCanInsertSpaceBeforeDummy = true;
+            isMathCharTrivial = true;
           } else {
             modeStack.pop();
             if (modeStack.isEmpty()) modeStack.push(Mode.TEXT);
@@ -301,7 +312,7 @@ public class AnnotatedTextBuilder {
         case '%': {
           String comment = matchFromPosition(commentPattern);
           preserveDummyLast = true;
-          preserveCanInsertSpaceBeforeDummy = true;
+          isMathCharTrivial = true;
           addMarkup(comment);
           break;
         }
@@ -312,7 +323,7 @@ public class AnnotatedTextBuilder {
         case '\t': {
           String whiteSpace = ((curChar != '~') ? matchFromPosition(whiteSpacePattern) : curString);
           preserveDummyLast = true;
-          preserveCanInsertSpaceBeforeDummy = true;
+          isMathCharTrivial = true;
 
           if (isTextMode(curMode)) {
             if (whiteSpace.contains("\n\n")) {
@@ -396,7 +407,10 @@ public class AnnotatedTextBuilder {
         }
       }
 
-      if (!preserveCanInsertSpaceBeforeDummy) canInsertSpaceBeforeDummy = false;
+      if (!isMathCharTrivial) {
+        canInsertSpaceBeforeDummy = false;
+        isMathEmpty = false;
+      }
     }
 
     return this;

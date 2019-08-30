@@ -26,5 +26,6 @@ public class AnnotatedTextBuilderTest {
         "\\end{equation*}\n" +
         "Now we argue.\n",
         "Recall that Dummy0 if Dummy1, Dummy2 otherwise. Now we argue. ");
+    assertPlainText("This equals $a^{b}$.\n", "This equals Dummy0. ");
   }
 }
