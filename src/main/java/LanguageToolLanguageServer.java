@@ -106,7 +106,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
             for (String newText : match.getSuggestedReplacements()) {
               CodeAction codeAction = new CodeAction();
-              codeAction.setTitle(newText);
+              codeAction.setTitle("Use '" + newText + "'");
               codeAction.setKind(acceptSuggestionCodeActionKind);
               codeAction.setDiagnostics(Collections.singletonList(diagnostic));
               codeAction.setEdit(new WorkspaceEdit(Collections.singletonList(
