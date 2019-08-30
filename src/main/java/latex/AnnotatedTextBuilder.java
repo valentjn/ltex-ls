@@ -121,10 +121,6 @@ public class AnnotatedTextBuilder {
     lastPunctuation = (isPunctuation(lastChar) ? " " : "");
   }
 
-  private static long countOccurrences(String s, char ch) {
-    return s.chars().filter(x -> x == ch).count();
-  }
-
   private static boolean isPunctuation(char ch) {
     return ((ch == '.') || (ch == ',') || (ch == ':') || (ch == ';'));
   }
@@ -319,15 +315,15 @@ public class AnnotatedTextBuilder {
           preserveCanInsertSpaceBeforeDummy = true;
 
           if (isTextMode(curMode)) {
-            if (countOccurrences(whiteSpace, '\n') <= 1) {
+            if (whiteSpace.contains("\n\n")) {
+              addMarkup(whiteSpace, "\n\n");
+            } else {
               if (lastSpace.isEmpty()) {
                 addMarkup(whiteSpace, " ");
                 lastSpace = " ";
               } else {
                 addMarkup(whiteSpace);
               }
-            } else {
-              addMarkup(whiteSpace, "\n\n");
             }
           } else {
             addMarkup(whiteSpace);
