@@ -228,6 +228,9 @@ public class AnnotatedTextBuilder {
             } else {
               addMarkup(command);
             }
+          } else if (command.equals("\\qed")) {
+            preserveDummyLast = true;
+            addMarkup(command);
           } else if (command.equals("\\text") || command.equals("\\intertext")) {
             modeStack.push(Mode.TEXT);
             String interpretAs = (isMathMode(curMode) ? generateDummy() : "");

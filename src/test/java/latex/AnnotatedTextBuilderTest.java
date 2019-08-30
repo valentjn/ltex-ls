@@ -27,5 +27,11 @@ public class AnnotatedTextBuilderTest {
         "Now we argue.\n",
         "Recall that Dummy0 if Dummy1, Dummy2 otherwise. Now we argue. ");
     assertPlainText("This equals $a^{b}$.\n", "This equals Dummy0. ");
+    assertPlainText(
+        "This is the proof:\n" +
+        "\\begin{equation}\n" +
+        "    a^2 + b^2 = c^2.\\quad\\qed\n" +
+        "\\end{equation}\n",
+        "This is the proof: Dummy0. ");
   }
 }
