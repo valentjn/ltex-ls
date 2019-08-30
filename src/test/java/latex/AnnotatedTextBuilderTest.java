@@ -16,6 +16,13 @@ public class AnnotatedTextBuilderTest {
 
   @Test
   void testTextMode() {
+    assertPlainText(
+        "We can do\n" +
+        "\\begin{itemize}\n" +
+        "  \\item this or\n" +
+        "  \\item that.\n" +
+        "\\end{itemize}\n",
+        "We can do this or that. ");
     assertPlainText("This is good\\dots No, it isn't.\n", "This is good... No, it isn't. ");
   }
 
@@ -38,5 +45,14 @@ public class AnnotatedTextBuilderTest {
         "    a^2 + b^2 = c^2.\\quad\\qed\n" +
         "\\end{equation}\n",
         "This is the proof: Dummy0. ");
+    assertPlainText(
+        "This equals\n" +
+        "\\begin{equation}\n" +
+        "  \\begin{split}\n" +
+        "    abcdef.\n" +
+        "  \\end{split}\n" +
+        "\\end{equation}\n" +
+        "This is the next sentence.\n",
+        "This equals Dummy0. This is the next sentence. ");
   }
 }
