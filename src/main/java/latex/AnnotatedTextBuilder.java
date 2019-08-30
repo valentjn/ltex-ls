@@ -226,7 +226,6 @@ public class AnnotatedTextBuilder {
           } else if (command.equals("\\footnote")) {
             if (lastSpace.isEmpty()) {
               addMarkup(command, " ");
-              lastSpace = " ";
             } else {
               addMarkup(command);
             }
@@ -336,7 +335,6 @@ public class AnnotatedTextBuilder {
             } else {
               if (lastSpace.isEmpty()) {
                 addMarkup(whiteSpace, " ");
-                lastSpace = " ";
               } else {
                 addMarkup(whiteSpace);
               }
