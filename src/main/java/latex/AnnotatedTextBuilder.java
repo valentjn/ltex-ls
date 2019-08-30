@@ -282,6 +282,7 @@ public class AnnotatedTextBuilder {
           String interpretAs = "";
           if ((curMode == Mode.HEADING) && lastPunctuation.isEmpty()) interpretAs = ".";
           modeStack.pop();
+          if (modeStack.isEmpty()) modeStack.push(Mode.TEXT);
           addMarkup(curString, interpretAs);
           canInsertSpaceBeforeDummy = true;
           preserveCanInsertSpaceBeforeDummy = true;
@@ -295,6 +296,7 @@ public class AnnotatedTextBuilder {
             preserveCanInsertSpaceBeforeDummy = true;
           } else {
             modeStack.pop();
+            if (modeStack.isEmpty()) modeStack.push(Mode.TEXT);
             addMarkup(curString, generateDummy());
           }
 
