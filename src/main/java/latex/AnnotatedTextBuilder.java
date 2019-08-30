@@ -231,16 +231,16 @@ public class AnnotatedTextBuilder {
           } else if (command.equals("\\qed")) {
             preserveDummyLast = true;
             addMarkup(command);
-          } else if (command.equals("\\text") || command.equals("\\intertext")) {
-            modeStack.push(Mode.TEXT);
-            String interpretAs = (isMathMode(curMode) ? generateDummy() : "");
-            addMarkup(command + "{", interpretAs);
           } else if (command.equals("\\part") || command.equals("\\chapter") ||
               command.equals("\\section") || command.equals("\\subsection") ||
               command.equals("\\subsubsection") || command.equals("\\paragraph") ||
               command.equals("\\subparagraph")) {
             modeStack.push(Mode.HEADING);
             addMarkup(command + "{");
+          } else if (command.equals("\\text") || command.equals("\\intertext")) {
+            modeStack.push(Mode.TEXT);
+            String interpretAs = (isMathMode(curMode) ? generateDummy() : "");
+            addMarkup(command + "{", interpretAs);
           } else {
             String match = "";
             CommandSignature matchingCommand = null;
