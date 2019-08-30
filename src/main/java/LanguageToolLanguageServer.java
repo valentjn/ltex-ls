@@ -225,8 +225,10 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
           }
         }
 
+        String logText = annotatedText.getPlainText();
+        logText = ((logText.length() <= 100) ? logText : logText.substring(0, 100) + "[...]");
         logger.info("Checking the following text in language \"" + languageShortCode +
-            "\" via LanguageTool: <" + annotatedText.getPlainText() + ">");
+            "\" via LanguageTool: <" + logText + ">");
 
         try {
           List<RuleMatch> result = languageTool.check(annotatedText);
