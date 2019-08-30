@@ -224,8 +224,9 @@ public class AnnotatedTextBuilder {
           } else if (command.equals("\\-")) {
             addMarkup(command);
           } else if (command.equals("\\ ") || command.equals("\\,") || command.equals("\\;") ||
-              command.equals("\\\\") || command.equals("\\quad") || command.equals("\\hfill") ||
-              command.equals("\\hspace") || command.equals("\\hspace*")) {
+              command.equals("\\\\") || command.equals("\\quad") || command.equals("\\qquad") ||
+              command.equals("\\hfill") || command.equals("\\hspace") ||
+              command.equals("\\hspace*")) {
             if (command.equals("\\hspace") || command.equals("\\hspace*")) {
               String argument = matchFromPosition(argumentPattern, pos + command.length());
               command += argument;
@@ -251,7 +252,7 @@ public class AnnotatedTextBuilder {
             } else {
               addMarkup(command);
             }
-          } else if (command.equals("\\qed")) {
+          } else if (command.equals("\\notag") || command.equals("\\qed")) {
             preserveDummyLast = true;
             addMarkup(command);
           } else if (command.equals("\\part") || command.equals("\\chapter") ||
@@ -413,6 +414,8 @@ public class AnnotatedTextBuilder {
           String length = matchFromPosition(lengthInBracketPattern);
 
           if (!length.isEmpty()) {
+            isMathCharTrivial = true;
+            preserveDummyLast = true;
             addMarkup(length);
             break;
           }

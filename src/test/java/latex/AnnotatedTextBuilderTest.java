@@ -58,6 +58,12 @@ public class AnnotatedTextBuilderTest {
         "\\end{equation}\n",
         "This is the proof: Dummy0. ");
     assertPlainText(
+        "This is another proof:\n" +
+        "\\begin{equation}\n" +
+        "    a^2 + b^2 = c^2.\\\\[-6.4em]\\qquad\\notag\n" +
+        "\\end{equation}\n",
+        "This is another proof: Dummy0. ");
+    assertPlainText(
         "This equals\n" +
         "\\begin{equation}\n" +
         "  \\begin{split}\n" +
