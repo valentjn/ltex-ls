@@ -323,7 +323,7 @@ public class AnnotatedTextBuilder {
           String comment = matchFromPosition(commentPattern);
           preserveDummyLast = true;
           isMathCharTrivial = true;
-          addMarkup(comment);
+          addMarkup(comment, (comment.contains("\n\n") ? "\n\n" : ""));
           break;
         }
         case ' ':
@@ -339,11 +339,7 @@ public class AnnotatedTextBuilder {
             if (whiteSpace.contains("\n\n")) {
               addMarkup(whiteSpace, "\n\n");
             } else {
-              if (lastSpace.isEmpty()) {
-                addMarkup(whiteSpace, " ");
-              } else {
-                addMarkup(whiteSpace);
-              }
+              addMarkup(whiteSpace, (lastSpace.isEmpty() ? " " : ""));
             }
           } else {
             addMarkup(whiteSpace);
