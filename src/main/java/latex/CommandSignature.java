@@ -1,13 +1,13 @@
 package latex;
 
 import java.util.ArrayList;
+import java.util.Stack;
 import java.util.regex.*;
 
 public class CommandSignature {
   public enum ArgumentType {
     BRACE,
     BRACKET,
-    PARENTHESIS,
   }
 
   public enum Action {
@@ -21,7 +21,7 @@ public class CommandSignature {
 
   public CommandSignature(String commandPrototype, Action action) {
     Pattern commandPattern = Pattern.compile("^\\\\([^A-Za-z]|([A-Za-z]+))\\*?");
-    Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\])|(\\(\\)))");
+    Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\]))");
 
     Matcher commandMatcher = commandPattern.matcher(commandPrototype);
     if (!commandMatcher.find()) return;
@@ -38,8 +38,6 @@ public class CommandSignature {
         argumentType = CommandSignature.ArgumentType.BRACE;
       } else if (argumentMatcher.group(3) != null) {
         argumentType = CommandSignature.ArgumentType.BRACKET;
-      } else if (argumentMatcher.group(4) != null) {
-        argumentType = CommandSignature.ArgumentType.PARENTHESIS;
       }
 
       argumentTypes.add(argumentType);
@@ -54,12 +52,83 @@ public class CommandSignature {
     return (matcher.find() ? matcher.group() : "");
   }
 
+  private static String matchArgumentFromPosition(String text, int pos, ArgumentType argumentType) {
+    int startPos = pos;
+    Stack<ArgumentType> argumentTypeStack = new Stack<>();
+    char openChar = '\0';
+
+    switch (argumentType) {
+      case BRACE: {
+        openChar = '{';
+        break;
+      }
+      case BRACKET: {
+        openChar = '[';
+        break;
+      }
+    }
+
+    if (text.charAt(pos) != openChar) return "";
+    pos++;
+    argumentTypeStack.push(argumentType);
+
+    while (pos < text.length()) {
+      switch (text.charAt(pos)) {
+        case '\\': {
+          if (pos + 1 < text.length()) {
+            char nextChar = text.charAt(pos + 1);
+
+            if ((nextChar == '{') || (nextChar == '[') ||
+                (nextChar == '}') || (nextChar == ']')) {
+              pos++;
+            }
+          }
+
+          break;
+        }
+        case '{': {
+          argumentTypeStack.push(ArgumentType.BRACE);
+          break;
+        }
+        case '[': {
+          argumentTypeStack.push(ArgumentType.BRACKET);
+          break;
+        }
+        case '}': {
+          if (argumentTypeStack.peek() != ArgumentType.BRACE) {
+            return "";
+          } else if (argumentTypeStack.size() == 1) {
+            return ((argumentType == ArgumentType.BRACE) ?
+                text.substring(startPos, pos + 1) : "");
+          } else {
+            argumentTypeStack.pop();
+          }
+
+          break;
+        }
+        case ']': {
+          if (argumentTypeStack.peek() != ArgumentType.BRACKET) {
+            return "";
+          } else if (argumentTypeStack.size() == 1) {
+            return ((argumentType == ArgumentType.BRACKET) ?
+                text.substring(startPos, pos + 1) : "");
+          } else {
+            argumentTypeStack.pop();
+          }
+
+          break;
+        }
+      }
+
+      pos++;
+    }
+
+    return "";
+  }
+
   public String matchFromPosition(String text, int pos) {
     Pattern commandPattern = Pattern.compile("^" + Pattern.quote(name));
     Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
-    Pattern braceArgumentPattern = Pattern.compile("^\\{[^\\}]*?\\}");
-    Pattern bracketArgumentPattern = Pattern.compile("^\\[[^\\]]*?\\]");
-    Pattern parenthesisArgumentPattern = Pattern.compile("^\\([^\\)]*?\\)");
 
     int startPos = pos;
     String match = matchFromPosition(text, pos, commandPattern);
@@ -68,24 +137,8 @@ public class CommandSignature {
     for (ArgumentType argumentType : argumentTypes) {
       match = matchFromPosition(text, pos, commentPattern);
       pos += match.length();
-      Pattern argumentPattern = null;
 
-      switch (argumentType) {
-        case BRACE: {
-          argumentPattern = braceArgumentPattern;
-          break;
-        }
-        case BRACKET: {
-          argumentPattern = bracketArgumentPattern;
-          break;
-        }
-        case PARENTHESIS: {
-          argumentPattern = parenthesisArgumentPattern;
-          break;
-        }
-      }
-
-      match = matchFromPosition(text, pos, argumentPattern);
+      match = matchArgumentFromPosition(text, pos, argumentType);
       if (match.isEmpty()) return "";
       pos += match.length();
     }
