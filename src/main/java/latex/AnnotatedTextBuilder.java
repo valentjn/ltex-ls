@@ -221,6 +221,8 @@ public class AnnotatedTextBuilder {
             addMarkup(argument, interpretAs);
           } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
             addMarkup(command, command.substring(1));
+          } else if (command.equals("\\-")) {
+            addMarkup(command);
           } else if (command.equals("\\ ") || command.equals("\\,") || command.equals("\\;") ||
               command.equals("\\\\") || command.equals("\\quad") || command.equals("\\hfill") ||
               command.equals("\\hspace") || command.equals("\\hspace*")) {

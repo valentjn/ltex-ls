@@ -35,6 +35,7 @@ public class AnnotatedTextBuilderTest {
     assertPlainText("This is a &test.\n", "This is a test. ");
     assertPlainText("You can see this in \\hyperref[alg:abc]{Sec.\\ \\ref*{alg:abc}}.\n",
         "You can see this in Sec. Dummy0. ");
+    assertPlainText("This is a te\\-st.\n", "This is a test. ");
   }
 
   @Test
