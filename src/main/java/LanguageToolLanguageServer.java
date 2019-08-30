@@ -32,7 +32,8 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
   private static final long resultCacheMaxSize = 10000;
   private static final int resultCacheExpireAfterMinutes = 10;
-  private static final String acceptSuggestionCommandName = "languageTool.acceptSuggestion";
+  private static final String acceptSuggestionCodeActionKind =
+      CodeActionKind.QuickFix + ".languageTool.acceptSuggestion";
   private static final Logger logger = Logger.getLogger("LanguageToolLanguageServer");
 
   private static boolean locationOverlaps(
@@ -64,9 +65,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     ServerCapabilities capabilities = new ServerCapabilities();
     capabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
     capabilities.setCodeActionProvider(
-        new CodeActionOptions(Arrays.asList(CodeActionKind.QuickFix)));
-    capabilities.setExecuteCommandProvider(
-        new ExecuteCommandOptions(Collections.singletonList(acceptSuggestionCommandName)));
+        new CodeActionOptions(Arrays.asList(acceptSuggestionCodeActionKind)));
     return CompletableFuture.completedFuture(new InitializeResult(capabilities));
   }
 
@@ -106,18 +105,13 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
             Range range = diagnostic.getRange();
 
             for (String newText : match.getSuggestedReplacements()) {
-              Command command = new Command();
-              command.setCommand(acceptSuggestionCommandName);
-              command.setTitle(newText);
-              command.setArguments(Collections.singletonList(new TextDocumentEdit(
-                  textDocument, Collections.singletonList(new TextEdit(range, newText)))));
-
               CodeAction codeAction = new CodeAction();
               codeAction.setTitle(newText);
-              codeAction.setKind(CodeActionKind.QuickFix);
+              codeAction.setKind(acceptSuggestionCodeActionKind);
               codeAction.setDiagnostics(Collections.singletonList(diagnostic));
-              codeAction.setCommand(command);
-
+              codeAction.setEdit(new WorkspaceEdit(Collections.singletonList(
+                Either.forLeft(new TextDocumentEdit(textDocument,
+                  Collections.singletonList(new TextEdit(range, newText)))))));
               result.add(Either.forRight(codeAction));
             }
           }
@@ -256,39 +250,6 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
       public void didChangeConfiguration(DidChangeConfigurationParams params) {
         super.didChangeConfiguration(params);
         setSettings((JsonObject) params.getSettings());
-      }
-
-      @SuppressWarnings({"unchecked", "rawtypes"})
-      @Override
-      public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
-        if (Objects.equals(params.getCommand(), acceptSuggestionCommandName)) {
-          List<Either<TextDocumentEdit, ResourceOperation>> documentChanges = new ArrayList<>();
-
-          for (JsonObject json : (List<JsonObject>) (List) params.getArguments()) {
-            VersionedTextDocumentIdentifier textDocument =
-                new VersionedTextDocumentIdentifier(
-                  json.getAsJsonObject("textDocument").get("uri").getAsString(),
-                  json.getAsJsonObject("textDocument").get("version").getAsInt());
-            List<TextEdit> edits = new ArrayList<>();
-
-            for (JsonElement jsonEdit : json.getAsJsonArray("edits")) {
-              JsonObject jsonRange = jsonEdit.getAsJsonObject().getAsJsonObject("range");
-              Range range = new Range(
-                  new Position(jsonRange.getAsJsonObject("start").get("line").getAsInt(),
-                    jsonRange.getAsJsonObject("start").get("character").getAsInt()),
-                  new Position(jsonRange.getAsJsonObject("end").get("line").getAsInt(),
-                    jsonRange.getAsJsonObject("end").get("character").getAsInt()));
-              String newText = jsonEdit.getAsJsonObject().get("newText").getAsString();
-              edits.add(new TextEdit(range, newText));
-            }
-
-            documentChanges.add(Either.forLeft(new TextDocumentEdit(textDocument, edits)));
-          }
-
-          return (CompletableFuture<Object>) (CompletableFuture) client.applyEdit(
-              new ApplyWorkspaceEditParams(new WorkspaceEdit(documentChanges)));
-        }
-        return CompletableFuture.completedFuture(false);
       }
     };
   }
