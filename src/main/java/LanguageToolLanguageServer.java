@@ -1,6 +1,8 @@
 import com.google.gson.*;
 import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.Pair;
+
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.*;
@@ -11,6 +13,7 @@ import org.languagetool.markup.AnnotatedTextBuilder;
 import org.languagetool.rules.*;
 
 import java.io.IOException;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -60,6 +63,57 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     return ret;
   }
 
+  @SuppressWarnings("unchecked")
+  private AnnotatedText invertAnnotatedText(AnnotatedText annotatedText) {
+    Field field;
+
+    try {
+      field = annotatedText.getClass().getDeclaredField("mapping");
+    } catch (NoSuchFieldException | SecurityException e) {
+      e.printStackTrace();
+      return null;
+    }
+
+    field.setAccessible(true);
+    Map<Integer, Integer> map;
+
+    try {
+      map = (Map<Integer, Integer>) field.get(annotatedText);
+    } catch (IllegalArgumentException | IllegalAccessException e) {
+      e.printStackTrace();
+      return null;
+    }
+
+    Map<Integer, Integer> inverseMapping = new HashMap<>();
+    Iterator<Map.Entry<Integer, Integer>> it = map.entrySet().iterator();
+
+    while (it.hasNext()) {
+      Map.Entry<Integer, Integer> pair = it.next();
+      inverseMapping.put(pair.getValue(), pair.getKey());
+    }
+
+    Constructor<AnnotatedText> constructor = (Constructor<AnnotatedText>)
+        AnnotatedText.class.getDeclaredConstructors()[0];
+    constructor.setAccessible(true);
+    AnnotatedText inverseAnnotatedText;
+
+    try {
+      inverseAnnotatedText = constructor.newInstance(Collections.emptyList(), inverseMapping,
+          Collections.emptyMap(), Collections.emptyMap());
+    } catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
+        InvocationTargetException e) {
+      e.printStackTrace();
+      return null;
+    }
+
+    return inverseAnnotatedText;
+  }
+
+  private int getPlainTextPositionFor(int originalTextPosition,
+      AnnotatedText inverseAnnotatedText) {
+    return inverseAnnotatedText.getOriginalTextPositionFor(originalTextPosition);
+  }
+
   @Override
   public CompletableFuture<InitializeResult> initialize(InitializeParams params) {
     ServerCapabilities capabilities = new ServerCapabilities();
@@ -96,12 +150,14 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         TextDocumentItem document = documents.get(params.getTextDocument().getUri());
         VersionedTextDocumentIdentifier textDocument = new VersionedTextDocumentIdentifier(
             document.getUri(), document.getVersion());
-        List<RuleMatch> matches = validateDocument(document);
+        Pair<List<RuleMatch>, AnnotatedText> validateResult = validateDocument(document);
         String text = document.getText();
+        String plainText = validateResult.getSecond().getPlainText();
+        AnnotatedText inverseAnnotatedText = null;
         DocumentPositionCalculator positionCalculator = new DocumentPositionCalculator(text);
         List<Either<Command, CodeAction>> result = new ArrayList<Either<Command, CodeAction>>();
 
-        for (RuleMatch match : matches) {
+        for (RuleMatch match : validateResult.getFirst()) {
           if (locationOverlaps(match, positionCalculator, params.getRange())) {
             String ruleId = match.getRule().getId();
             Diagnostic diagnostic = createDiagnostic(match, positionCalculator);
@@ -109,7 +165,13 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
             if (ruleId.startsWith("MORFOLOGIK_") || ruleId.startsWith("HUNSPELL_") ||
                 ruleId.startsWith("GERMAN_SPELLER_")) {
-              String word = text.substring(match.getFromPos(), match.getToPos());
+              if (inverseAnnotatedText == null) {
+                inverseAnnotatedText = invertAnnotatedText(validateResult.getSecond());
+              }
+
+              String word = plainText.substring(
+                  getPlainTextPositionFor(match.getFromPos(), inverseAnnotatedText),
+                  getPlainTextPositionFor(match.getToPos(), inverseAnnotatedText));
               Command command = new Command("Add '" + word + "' to dictionary",
                   addToDictionaryCommandName);
               command.setCommand(addToDictionaryCommandName);
@@ -164,7 +226,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   }
 
   private List<Diagnostic> getIssues(TextDocumentItem document) {
-    List<RuleMatch> matches = validateDocument(document);
+    List<RuleMatch> matches = validateDocument(document).getFirst();
     DocumentPositionCalculator positionCalculator =
         new DocumentPositionCalculator(document.getText());
 
@@ -172,7 +234,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         match -> createDiagnostic(match, positionCalculator)).collect(Collectors.toList());
   }
 
-  private List<RuleMatch> validateDocument(TextDocumentItem document) {
+  private Pair<List<RuleMatch>, AnnotatedText> validateDocument(TextDocumentItem document) {
     // This setting is specific to VS Code behavior and maintaining it here
     // long term is not desirable because other clients may behave differently.
     // See: https://github.com/Microsoft/vscode/issues/28732
@@ -189,76 +251,71 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     }
 
     if (language == null || !isSupportedScheme) {
-      return Collections.emptyList();
+      return new Pair<>(Collections.emptyList(), null);
     } else {
       UserConfig userConfig = ((settings.dictionary != null) ?
           new UserConfig(settings.dictionary) : new UserConfig());
       JLanguageTool languageTool = new JLanguageTool(language, resultCache, userConfig);
 
       String codeLanguageId = document.getLanguageId();
+      AnnotatedText annotatedText;
+
+      switch (codeLanguageId) {
+        case "plaintext": {
+          AnnotatedTextBuilder builder = new AnnotatedTextBuilder();
+          annotatedText = builder.addText(document.getText()).build();
+          break;
+        }
+        case "markdown": {
+          Parser p = Parser.builder().build();
+          Document mdDocument = (Document) p.parse(document.getText());
+
+          markdown.AnnotatedTextBuilder builder =
+              new markdown.AnnotatedTextBuilder();
+          builder.visit(mdDocument);
+
+          annotatedText = builder.getAnnotatedText();
+          break;
+        }
+        case "latex": {
+          latex.AnnotatedTextBuilder builder = new latex.AnnotatedTextBuilder();
+
+          if (settings.dummyCommandPrototypes != null) {
+            for (String commandPrototype : settings.dummyCommandPrototypes) {
+              builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
+                  latex.CommandSignature.Action.DUMMY));
+            }
+          }
+
+          if (settings.ignoreCommandPrototypes != null) {
+            for (String commandPrototype : settings.ignoreCommandPrototypes) {
+              builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
+                  latex.CommandSignature.Action.IGNORE));
+            }
+          }
+
+          builder.addCode(document.getText());
+          annotatedText = builder.getAnnotatedText();
+          break;
+        }
+        default: {
+          throw new UnsupportedOperationException(String.format(
+              "Code language \"%s\" is not supported.", codeLanguageId));
+        }
+      }
+
+      String logText = annotatedText.getPlainText();
+      logText = ((logText.length() <= 100) ? logText : logText.substring(0, 100) + "[...]");
+      logger.info("Checking the following text in language \"" + settings.languageShortCode +
+          "\" via LanguageTool: <" + logText + ">");
+
       try {
-        AnnotatedText annotatedText;
-
-        switch (codeLanguageId) {
-          case "plaintext": {
-            AnnotatedTextBuilder builder = new AnnotatedTextBuilder();
-            annotatedText = builder.addText(document.getText()).build();
-            break;
-          }
-          case "markdown": {
-            Parser p = Parser.builder().build();
-            Document mdDocument = (Document) p.parse(document.getText());
-
-            markdown.AnnotatedTextBuilder builder =
-                new markdown.AnnotatedTextBuilder();
-            builder.visit(mdDocument);
-
-            annotatedText = builder.getAnnotatedText();
-            break;
-          }
-          case "latex": {
-            latex.AnnotatedTextBuilder builder = new latex.AnnotatedTextBuilder();
-
-            if (settings.dummyCommandPrototypes != null) {
-              for (String commandPrototype : settings.dummyCommandPrototypes) {
-                builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
-                    latex.CommandSignature.Action.DUMMY));
-              }
-            }
-
-            if (settings.ignoreCommandPrototypes != null) {
-              for (String commandPrototype : settings.ignoreCommandPrototypes) {
-                builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
-                    latex.CommandSignature.Action.IGNORE));
-              }
-            }
-
-            builder.addCode(document.getText());
-            annotatedText = builder.getAnnotatedText();
-            break;
-          }
-          default: {
-            throw new UnsupportedOperationException(String.format(
-                "Code language \"%s\" is not supported.", codeLanguageId));
-          }
-        }
-
-        String logText = annotatedText.getPlainText();
-        logText = ((logText.length() <= 100) ? logText : logText.substring(0, 100) + "[...]");
-        logger.info("Checking the following text in language \"" + settings.languageShortCode +
-            "\" via LanguageTool: <" + logText + ">");
-
-        try {
-          List<RuleMatch> result = languageTool.check(annotatedText);
-          return result;
-        } catch (RuntimeException e) {
-          logger.severe("LanguageTool failed: " + e.getMessage());
-          e.printStackTrace();
-          return Collections.emptyList();
-        }
-      } catch (IOException e) {
+        List<RuleMatch> result = languageTool.check(annotatedText);
+        return new Pair<>(result, annotatedText);
+      } catch (RuntimeException | IOException e) {
+        logger.severe("LanguageTool failed: " + e.getMessage());
         e.printStackTrace();
-        return Collections.emptyList();
+        return new Pair<>(Collections.emptyList(), annotatedText);
       }
     }
   }
