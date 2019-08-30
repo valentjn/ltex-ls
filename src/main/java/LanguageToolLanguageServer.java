@@ -25,10 +25,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   private ResultCache resultCache =
       new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes, TimeUnit.MINUTES);
 
-  private List<String> dictionary = null;
-  private String languageShortCode = "en-US";
-  private List<String> dummyCommandPrototypes = null;
-  private List<String> ignoreCommandPrototypes = null;
+  private Settings settings = new Settings();
 
   private static final long resultCacheMaxSize = 10000;
   private static final int resultCacheExpireAfterMinutes = 10;
@@ -181,10 +178,10 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     Boolean isSupportedScheme = uri.startsWith("file:") || uri.startsWith("untitled:") ;
     Language language;
 
-    if (Languages.isLanguageSupported(languageShortCode)) {
-      language = Languages.getLanguageForShortCode(languageShortCode);
+    if (Languages.isLanguageSupported(settings.languageShortCode)) {
+      language = Languages.getLanguageForShortCode(settings.languageShortCode);
     } else {
-      logger.warning("ERROR: " + languageShortCode + " is not a recognized language. " +
+      logger.warning("ERROR: " + settings.languageShortCode + " is not a recognized language. " +
                      "Checking disabled.");
       language = null;
     }
@@ -192,8 +189,8 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     if (language == null || !isSupportedScheme) {
       return Collections.emptyList();
     } else {
-      UserConfig userConfig = ((dictionary != null) ?
-          new UserConfig(dictionary) : new UserConfig());
+      UserConfig userConfig = ((settings.dictionary != null) ?
+          new UserConfig(settings.dictionary) : new UserConfig());
       JLanguageTool languageTool = new JLanguageTool(language, resultCache, userConfig);
 
       String codeLanguageId = document.getLanguageId();
@@ -220,15 +217,15 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
           case "latex": {
             latex.AnnotatedTextBuilder builder = new latex.AnnotatedTextBuilder();
 
-            if (dummyCommandPrototypes != null) {
-              for (String commandPrototype : dummyCommandPrototypes) {
+            if (settings.dummyCommandPrototypes != null) {
+              for (String commandPrototype : settings.dummyCommandPrototypes) {
                 builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
                     latex.CommandSignature.Action.DUMMY));
               }
             }
 
-            if (ignoreCommandPrototypes != null) {
-              for (String commandPrototype : ignoreCommandPrototypes) {
+            if (settings.ignoreCommandPrototypes != null) {
+              for (String commandPrototype : settings.ignoreCommandPrototypes) {
                 builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
                     latex.CommandSignature.Action.IGNORE));
               }
@@ -246,7 +243,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
         String logText = annotatedText.getPlainText();
         logText = ((logText.length() <= 100) ? logText : logText.substring(0, 100) + "[...]");
-        logger.info("Checking the following text in language \"" + languageShortCode +
+        logger.info("Checking the following text in language \"" + settings.languageShortCode +
             "\" via LanguageTool: <" + logText + ">");
 
         try {
@@ -286,12 +283,12 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     };
   }
 
-  private static JsonElement getSettingFromJSON(JsonElement settings, String name) {
+  private static JsonElement getSettingFromJSON(JsonElement jsonSettings, String name) {
     for (String component : name.split("\\.")) {
-      settings = settings.getAsJsonObject().get(component);
+      jsonSettings = jsonSettings.getAsJsonObject().get(component);
     }
 
-    return settings;
+    return jsonSettings;
   }
 
   private static List<String> convertJsonArrayToList(JsonArray array) {
@@ -300,22 +297,29 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     return result;
   }
 
-  private void setSettings(@NotNull JsonElement settings) {
-    languageShortCode = getSettingFromJSON(settings, "languageTool.language").getAsString();
-    String languagePrefix = languageShortCode;
+  private void setSettings(@NotNull JsonElement jsonSettings) {
+    Settings oldSettings = (Settings) settings.clone();
+
+    settings.languageShortCode = getSettingFromJSON(jsonSettings, "languageTool.language")
+        .getAsString();
+
+    String languagePrefix = settings.languageShortCode;
     int dashPos = languagePrefix.indexOf("-");
     if (dashPos != -1) languagePrefix = languagePrefix.substring(0, dashPos);
-    dictionary = convertJsonArrayToList(
-        getSettingFromJSON(settings, "languageTool." + languagePrefix + ".dictionary").
+    settings.dictionary = convertJsonArrayToList(
+        getSettingFromJSON(jsonSettings, "languageTool." + languagePrefix + ".dictionary").
         getAsJsonArray());
-    dummyCommandPrototypes = convertJsonArrayToList(
-        getSettingFromJSON(settings, "languageTool.latex.dummyCommands").getAsJsonArray());
-    ignoreCommandPrototypes = convertJsonArrayToList(
-        getSettingFromJSON(settings, "languageTool.latex.ignoreCommands").getAsJsonArray());
 
-    resultCache = new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes,
-        TimeUnit.MINUTES);
-    documents.values().forEach(this::publishIssues);
+    settings.dummyCommandPrototypes = convertJsonArrayToList(
+        getSettingFromJSON(jsonSettings, "languageTool.latex.dummyCommands").getAsJsonArray());
+    settings.ignoreCommandPrototypes = convertJsonArrayToList(
+        getSettingFromJSON(jsonSettings, "languageTool.latex.ignoreCommands").getAsJsonArray());
+
+    if (!settings.equals(oldSettings)) {
+      resultCache = new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes,
+          TimeUnit.MINUTES);
+      documents.values().forEach(this::publishIssues);
+    }
   }
 
   @Override
