@@ -11,6 +11,7 @@ import java.util.regex.*;
 public class AnnotatedTextBuilder {
   private enum Mode {
     TEXT,
+    HEADING,
     MATH,
   }
 
@@ -21,6 +22,7 @@ public class AnnotatedTextBuilder {
   private int pos;
   private int pseudoCounter;
   private String lastSpace;
+  private String lastPunctuation;
   private String dummyLastSpace;
   private String dummyLastPunctuation;
   private boolean preserveDummyLast;
@@ -113,10 +115,15 @@ public class AnnotatedTextBuilder {
     if (text.isEmpty()) return;
     char lastChar = text.charAt(text.length() - 1);
     lastSpace = ((lastChar == ' ') ? " " : "");
+    lastPunctuation = (isPunctuation(lastChar) ? " " : "");
   }
 
   private static long countOccurrences(String s, char ch) {
     return s.chars().filter(x -> x == ch).count();
+  }
+
+  private static boolean isPunctuation(char ch) {
+    return ((ch == '.') || (ch == ',') || (ch == ':') || (ch == ';'));
   }
 
   private static boolean isMathMode(Mode mode) {
@@ -146,6 +153,7 @@ public class AnnotatedTextBuilder {
     pos = 0;
     pseudoCounter = 0;
     lastSpace = "";
+    lastPunctuation = "";
     dummyLastSpace = "";
     dummyLastPunctuation = "";
     preserveDummyLast = false;
@@ -216,6 +224,12 @@ public class AnnotatedTextBuilder {
             modeStack.push(Mode.TEXT);
             String interpretAs = (isMathMode(curMode) ? generateDummy() : "");
             addMarkup(command + "{", interpretAs);
+          } else if (command.equals("\\part") || command.equals("\\chapter") ||
+              command.equals("\\section") || command.equals("\\subsection") ||
+              command.equals("\\subsubsection") || command.equals("\\paragraph") ||
+              command.equals("\\subparagraph")) {
+            modeStack.push(Mode.HEADING);
+            addMarkup(command + "{");
           } else {
             String match = "";
             CommandSignature matchingCommand = null;
@@ -262,8 +276,10 @@ public class AnnotatedTextBuilder {
           break;
         }
         case '}': {
+          String interpretAs = "";
+          if ((curMode == Mode.HEADING) && lastPunctuation.isEmpty()) interpretAs = ".";
           modeStack.pop();
-          addMarkup(curString);
+          addMarkup(curString, interpretAs);
           canInsertSpaceBeforeDummy = true;
           preserveCanInsertSpaceBeforeDummy = true;
           break;
@@ -369,13 +385,10 @@ public class AnnotatedTextBuilder {
         default: {
           if (isTextMode(curMode)) {
             addText(curString);
+            if (isPunctuation(curChar)) lastPunctuation = curString;
           } else {
             addMarkup(curString);
-
-            if ((curChar == '.') || (curChar == ',') || (curChar == ':') ||
-                (curChar == ';')) {
-              dummyLastPunctuation = curString;
-            }
+            if (isPunctuation(curChar)) dummyLastPunctuation = curString;
           }
 
           break;
