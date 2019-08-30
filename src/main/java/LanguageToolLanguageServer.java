@@ -301,9 +301,13 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   }
 
   private void setSettings(@NotNull JsonElement settings) {
-    dictionary = convertJsonArrayToList(
-        getSettingFromJSON(settings, "languageTool.dictionary").getAsJsonArray());
     languageShortCode = getSettingFromJSON(settings, "languageTool.language").getAsString();
+    String languagePrefix = languageShortCode;
+    int dashPos = languagePrefix.indexOf("-");
+    if (dashPos != -1) languagePrefix = languagePrefix.substring(0, dashPos);
+    dictionary = convertJsonArrayToList(
+        getSettingFromJSON(settings, "languageTool." + languagePrefix + ".dictionary").
+        getAsJsonArray());
     dummyCommandPrototypes = convertJsonArrayToList(
         getSettingFromJSON(settings, "languageTool.latex.dummyCommands").getAsJsonArray());
     ignoreCommandPrototypes = convertJsonArrayToList(
