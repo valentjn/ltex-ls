@@ -15,6 +15,11 @@ public class AnnotatedTextBuilderTest {
   }
 
   @Test
+  void testTextMode() {
+    assertPlainText("This is good\\dots No, it isn't.\n", "This is good... No, it isn't. ");
+  }
+
+  @Test
   void testMathMode() {
     assertPlainText(
         "Recall that\n" +

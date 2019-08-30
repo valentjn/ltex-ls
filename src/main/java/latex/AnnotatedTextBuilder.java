@@ -221,6 +221,8 @@ public class AnnotatedTextBuilder {
               addMarkup(command);
               dummyLastSpace = " ";
             }
+          } else if (command.equals("\\dots")) {
+            addMarkup(command, "...");
           } else if (command.equals("\\footnote")) {
             if (lastSpace.isEmpty()) {
               addMarkup(command, " ");
