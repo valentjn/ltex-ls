@@ -214,7 +214,7 @@ public class AnnotatedTextBuilder {
           } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
             addMarkup(command, command.substring(1));
           } else if (command.equals("\\,") || command.equals("\\;") || command.equals("\\\\") ||
-              command.equals("\\quad")) {
+              command.equals("\\quad") || command.equals("\\hfill")) {
             if (isMathMode(curMode) && lastSpace.isEmpty() && canInsertSpaceBeforeDummy) {
               addMarkup(command, " ");
             } else {
