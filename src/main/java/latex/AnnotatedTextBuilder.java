@@ -32,7 +32,7 @@ public class AnnotatedTextBuilder {
   private String curString;
   private Mode curMode;
 
-  private static CommandSignature[] defaultCommandSignatures = {
+  private static final CommandSignature[] defaultCommandSignatures = {
     new CommandSignature("\\bibliography{}", CommandSignature.Action.IGNORE),
     new CommandSignature("\\bibliographystyle{}", CommandSignature.Action.IGNORE),
     new CommandSignature("\\cite{}", CommandSignature.Action.DUMMY),
@@ -158,7 +158,7 @@ public class AnnotatedTextBuilder {
     dummyLastPunctuation = "";
     preserveDummyLast = false;
 
-    modeStack = new Stack<Mode>();
+    modeStack = new Stack<>();
     modeStack.push(Mode.TEXT);
 
     boolean canInsertSpaceBeforeDummy = false;
