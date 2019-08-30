@@ -103,10 +103,12 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
         for (RuleMatch match : matches) {
           if (locationOverlaps(match, positionCalculator, params.getRange())) {
+            String ruleId = match.getRule().getId();
             Diagnostic diagnostic = createDiagnostic(match, positionCalculator);
             Range range = diagnostic.getRange();
 
-            if (match.getRule().getId().startsWith("MORFOLOGIK_RULE_")) {
+            if (ruleId.startsWith("MORFOLOGIK_") || ruleId.startsWith("HUNSPELL_") ||
+                ruleId.startsWith("GERMAN_SPELLER_")) {
               String word = text.substring(match.getFromPos(), match.getToPos());
               Command command = new Command("Add '" + word + "' to dictionary",
                   addToDictionaryCommandName);
