@@ -32,6 +32,8 @@ public class AnnotatedTextBuilderTest {
         "This is a sentence.\n\nThis is another sentence. ");
     assertPlainText("This is a \\textcolor{mittelblau}{test}.\n", "This is a test. ");
     assertPlainText("This is a \\raisebox{-0.5\\height-0.5mm}{test}.\n", "This is a test. ");
+    assertPlainText("You can see this in \\hyperref[alg:abc]{Sec.\\ \\ref*{alg:abc}}.\n",
+        "You can see this in Sec. Dummy0. ");
   }
 
   @Test
