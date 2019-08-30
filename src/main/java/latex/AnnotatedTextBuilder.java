@@ -45,8 +45,6 @@ public class AnnotatedTextBuilder {
     new CommandSignature("\\documentclass[]{}", CommandSignature.Action.IGNORE),
     new CommandSignature("\\draw[]", CommandSignature.Action.IGNORE),
     new CommandSignature("\\eqref{}", CommandSignature.Action.DUMMY),
-    new CommandSignature("\\hspace{}", CommandSignature.Action.IGNORE),
-    new CommandSignature("\\hspace*{}", CommandSignature.Action.IGNORE),
     new CommandSignature("\\hypersetup{}", CommandSignature.Action.IGNORE),
     new CommandSignature("\\hyperref[]", CommandSignature.Action.IGNORE),
     new CommandSignature("\\include{}", CommandSignature.Action.IGNORE),
@@ -69,6 +67,10 @@ public class AnnotatedTextBuilder {
       new ArrayList<>(Arrays.asList(defaultCommandSignatures));
 
   private String matchFromPosition(Pattern pattern) {
+    return matchFromPosition(pattern, pos);
+  }
+
+  private String matchFromPosition(Pattern pattern, int pos) {
     Matcher matcher = pattern.matcher(text.substring(pos));
     return (matcher.find() ? matcher.group() : "");
   }
@@ -219,8 +221,14 @@ public class AnnotatedTextBuilder {
             addMarkup(argument, interpretAs);
           } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
             addMarkup(command, command.substring(1));
-          } else if (command.equals("\\,") || command.equals("\\;") || command.equals("\\\\") ||
-              command.equals("\\quad") || command.equals("\\hfill")) {
+          } else if (command.equals("\\ ") || command.equals("\\,") || command.equals("\\;") ||
+              command.equals("\\\\") || command.equals("\\quad") || command.equals("\\hfill") ||
+              command.equals("\\hspace") || command.equals("\\hspace*")) {
+            if (command.equals("\\hspace") || command.equals("\\hspace*")) {
+              String argument = matchFromPosition(argumentPattern, pos + command.length());
+              command += argument;
+            }
+
             if (isMathMode(curMode) && lastSpace.isEmpty() && canInsertSpaceBeforeDummy) {
               addMarkup(command, " ");
             } else {
@@ -333,11 +341,13 @@ public class AnnotatedTextBuilder {
           break;
         }
         case ' ':
+        case '&':
         case '~':
         case '\n':
         case '\r':
         case '\t': {
-          String whiteSpace = ((curChar != '~') ? matchFromPosition(whiteSpacePattern) : curString);
+          String whiteSpace = (((curChar != '~') && (curChar != '&')) ?
+              matchFromPosition(whiteSpacePattern) : curString);
           preserveDummyLast = true;
           isMathCharTrivial = true;
 

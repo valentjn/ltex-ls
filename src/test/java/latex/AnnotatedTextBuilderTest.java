@@ -32,6 +32,7 @@ public class AnnotatedTextBuilderTest {
         "This is a sentence.\n\nThis is another sentence. ");
     assertPlainText("This is a \\textcolor{mittelblau}{test}.\n", "This is a test. ");
     assertPlainText("This is a \\raisebox{-0.5\\height-0.5mm}{test}.\n", "This is a test. ");
+    assertPlainText("This is a &test.\n", "This is a test. ");
     assertPlainText("You can see this in \\hyperref[alg:abc]{Sec.\\ \\ref*{alg:abc}}.\n",
         "You can see this in Sec. Dummy0. ");
   }
@@ -52,7 +53,7 @@ public class AnnotatedTextBuilderTest {
     assertPlainText(
         "This is the proof:\n" +
         "\\begin{equation}\n" +
-        "    a^2 + b^2 = c^2.\\quad\\qed\n" +
+        "    a^2 + b^2 = c^2\\hspace*{10mm}.\\quad\\qed\n" +
         "\\end{equation}\n",
         "This is the proof: Dummy0. ");
     assertPlainText(
