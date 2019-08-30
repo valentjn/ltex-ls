@@ -213,13 +213,19 @@ public class AnnotatedTextBuilder {
             addMarkup(argument, interpretAs);
           } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
             addMarkup(command, command.substring(1));
-          } else if (command.equals("\\,") || command.equals("\\;") || command.equals("\\quad")) {
+          } else if (command.equals("\\,") || command.equals("\\;") || command.equals("\\\\") ||
+              command.equals("\\quad")) {
             if (isMathMode(curMode) && lastSpace.isEmpty() && canInsertSpaceBeforeDummy) {
               addMarkup(command, " ");
             } else {
               preserveDummyLast = true;
-              addMarkup(command);
-              dummyLastSpace = " ";
+
+              if (isMathMode(curMode)) {
+                addMarkup(command);
+                dummyLastSpace = " ";
+              } else {
+                addMarkup(command, (lastSpace.isEmpty() ? " " : ""));
+              }
             }
           } else if (command.equals("\\dots")) {
             addMarkup(command, "...");

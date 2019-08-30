@@ -24,6 +24,7 @@ public class AnnotatedTextBuilderTest {
         "\\end{itemize}\n",
         "We can do this or that. ");
     assertPlainText("This is good\\dots No, it isn't.\n", "This is good... No, it isn't. ");
+    assertPlainText("This is a test of\\\\line breaks.\n", "This is a test of line breaks. ");
   }
 
   @Test
