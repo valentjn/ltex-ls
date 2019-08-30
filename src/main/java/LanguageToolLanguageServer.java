@@ -34,6 +34,9 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   private static final int resultCacheExpireAfterMinutes = 10;
   private static final String acceptSuggestionCodeActionKind =
       CodeActionKind.QuickFix + ".languageTool.acceptSuggestion";
+  private static final String addToDictionaryCodeActionKind =
+      CodeActionKind.QuickFix + ".languageTool.addToDictionary";
+  private static final String addToDictionaryCommandName = "languageTool.addToDictionary";
   private static final Logger logger = Logger.getLogger("LanguageToolLanguageServer");
 
   private static boolean locationOverlaps(
@@ -65,7 +68,10 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     ServerCapabilities capabilities = new ServerCapabilities();
     capabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
     capabilities.setCodeActionProvider(
-        new CodeActionOptions(Arrays.asList(acceptSuggestionCodeActionKind)));
+        new CodeActionOptions(Arrays.asList(
+          acceptSuggestionCodeActionKind, addToDictionaryCodeActionKind)));
+    capabilities.setExecuteCommandProvider(
+        new ExecuteCommandOptions(Collections.singletonList(addToDictionaryCommandName)));
     return CompletableFuture.completedFuture(new InitializeResult(capabilities));
   }
 
@@ -94,24 +100,37 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         VersionedTextDocumentIdentifier textDocument = new VersionedTextDocumentIdentifier(
             document.getUri(), document.getVersion());
         List<RuleMatch> matches = validateDocument(document);
-        DocumentPositionCalculator positionCalculator =
-            new DocumentPositionCalculator(document.getText());
-        List<Either<Command, CodeAction>> result =
-            new ArrayList<Either<Command, CodeAction>>();
+        String text = document.getText();
+        DocumentPositionCalculator positionCalculator = new DocumentPositionCalculator(text);
+        List<Either<Command, CodeAction>> result = new ArrayList<Either<Command, CodeAction>>();
 
         for (RuleMatch match : matches) {
           if (locationOverlaps(match, positionCalculator, params.getRange())) {
             Diagnostic diagnostic = createDiagnostic(match, positionCalculator);
             Range range = diagnostic.getRange();
 
-            for (String newText : match.getSuggestedReplacements()) {
-              CodeAction codeAction = new CodeAction();
-              codeAction.setTitle("Use '" + newText + "'");
+            if (match.getRule().getId().startsWith("MORFOLOGIK_RULE_")) {
+              String word = text.substring(match.getFromPos(), match.getToPos());
+              Command command = new Command("Add '" + word + "' to dictionary",
+                  addToDictionaryCommandName);
+              command.setCommand(addToDictionaryCommandName);
+              command.setArguments(Arrays.asList(new Object[] { word }));
+
+              CodeAction codeAction = new CodeAction(command.getTitle());
+              codeAction.setKind(addToDictionaryCodeActionKind);
+              codeAction.setDiagnostics(Collections.singletonList(diagnostic));
+              codeAction.setCommand(command);
+              result.add(Either.forRight(codeAction));
+              logger.info(match.getRule().getId());
+            }
+
+            for (String newWord : match.getSuggestedReplacements()) {
+              CodeAction codeAction = new CodeAction("Use '" + newWord + "'");
               codeAction.setKind(acceptSuggestionCodeActionKind);
               codeAction.setDiagnostics(Collections.singletonList(diagnostic));
               codeAction.setEdit(new WorkspaceEdit(Collections.singletonList(
                 Either.forLeft(new TextDocumentEdit(textDocument,
-                  Collections.singletonList(new TextEdit(range, newText)))))));
+                  Collections.singletonList(new TextEdit(range, newWord)))))));
               result.add(Either.forRight(codeAction));
             }
           }
@@ -251,7 +270,18 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
       @Override
       public void didChangeConfiguration(DidChangeConfigurationParams params) {
         super.didChangeConfiguration(params);
-        setSettings((JsonObject) params.getSettings());
+        setSettings((JsonElement) params.getSettings());
+      }
+
+      @Override
+      public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
+        if (Objects.equals(params.getCommand(), addToDictionaryCommandName)) {
+          String word = ((JsonElement) params.getArguments().get(0)).getAsString();
+          client.telemetryEvent(addToDictionaryCommandName + " " + word);
+          return CompletableFuture.completedFuture(true);
+        }
+
+        return CompletableFuture.completedFuture(false);
       }
     };
   }
