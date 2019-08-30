@@ -63,7 +63,7 @@ public class AnnotatedTextBuilder {
   private String generateDummy() {
     String dummy;
 
-    if (curMode == Mode.TEXT) {
+    if (isTextMode(curMode)) {
       dummy = "Dummy" + (pseudoCounter++);
     } else {
       dummy = "Dummy" + (pseudoCounter++) + dummyLastPunctuation + dummyLastSpace;
@@ -117,6 +117,14 @@ public class AnnotatedTextBuilder {
 
   private static long countOccurrences(String s, char ch) {
     return s.chars().filter(x -> x == ch).count();
+  }
+
+  private static boolean isMathMode(Mode mode) {
+    return (mode == Mode.MATH);
+  }
+
+  private static boolean isTextMode(Mode mode) {
+    return !isMathMode(mode);
   }
 
   public AnnotatedTextBuilder addCode(String text) {
@@ -190,7 +198,7 @@ public class AnnotatedTextBuilder {
           } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
             addMarkup(command, command.substring(1));
           } else if (command.equals("\\,") || command.equals("\\;") || command.equals("\\quad")) {
-            if ((curMode == Mode.MATH) && lastSpace.isEmpty() && canInsertSpaceBeforeDummy) {
+            if (isMathMode(curMode) && lastSpace.isEmpty() && canInsertSpaceBeforeDummy) {
               addMarkup(command, " ");
             } else {
               preserveDummyLast = true;
@@ -206,7 +214,7 @@ public class AnnotatedTextBuilder {
             }
           } else if (command.equals("\\text") || command.equals("\\intertext")) {
             modeStack.push(Mode.TEXT);
-            String interpretAs = ((curMode == Mode.MATH) ? generateDummy() : "");
+            String interpretAs = (isMathMode(curMode) ? generateDummy() : "");
             addMarkup(command + "{", interpretAs);
           } else {
             String match = "";
@@ -261,7 +269,7 @@ public class AnnotatedTextBuilder {
           break;
         }
         case '$': {
-          if (curMode == Mode.TEXT) {
+          if (isTextMode(curMode)) {
             modeStack.push(Mode.MATH);
             addMarkup(curString);
             canInsertSpaceBeforeDummy = true;
@@ -289,7 +297,7 @@ public class AnnotatedTextBuilder {
           preserveDummyLast = true;
           preserveCanInsertSpaceBeforeDummy = true;
 
-          if (curMode == Mode.TEXT) {
+          if (isTextMode(curMode)) {
             if (countOccurrences(whiteSpace, '\n') <= 1) {
               if (lastSpace.isEmpty()) {
                 addMarkup(whiteSpace, " ");
@@ -309,7 +317,7 @@ public class AnnotatedTextBuilder {
         case '`':
         case '\'':
         case '"': {
-          if (curMode == Mode.TEXT) {
+          if (isTextMode(curMode)) {
             String quote = "";
             String smartQuote = "";
 
@@ -359,7 +367,7 @@ public class AnnotatedTextBuilder {
           }
         }
         default: {
-          if (curMode == Mode.TEXT) {
+          if (isTextMode(curMode)) {
             addText(curString);
           } else {
             addMarkup(curString);
