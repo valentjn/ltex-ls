@@ -3,6 +3,7 @@ import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.Pair;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.*;
@@ -342,13 +343,24 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         enableEasterEgg(languageTool);
       }
 
-      String logText = annotatedText.getPlainText();
-      logText = ((logText.length() <= 100) ? logText : logText.substring(0, 100) + "[...]");
-      logger.info("Checking the following text in language \"" + settings.languageShortCode +
-          "\" via LanguageTool: <" + logText + ">");
+      {
+        int logTextMaxLength = 100;
+        String logText = annotatedText.getPlainText();
+        String postfix = "";
+
+        if (logText.length() > logTextMaxLength) {
+          logText = logText.substring(0, logTextMaxLength);
+          postfix = "... (truncated to " + logTextMaxLength + " characters)";
+        }
+
+        logger.info("Checking the following text in language \"" + settings.languageShortCode +
+            "\" via LanguageTool: \"" + StringEscapeUtils.escapeJava(logText) + "\"" + postfix);
+      }
 
       try {
         List<RuleMatch> result = languageTool.check(annotatedText);
+        logger.info("Obtained " + result.size() + " rule match" +
+            ((result.size() != 1) ? "es" : ""));
         return new Pair<>(result, annotatedText);
       } catch (RuntimeException | IOException e) {
         logger.severe("LanguageTool failed: " + e.getMessage());
