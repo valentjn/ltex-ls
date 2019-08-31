@@ -6,14 +6,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class App {
   public static void main(String[] args) {
-    System.out.println("App.main");
-
     String port = args[0];
+    Socket socket = null;
+
     try {
-      Socket socket = new Socket("localhost", Integer.parseInt(port));
+      socket = new Socket("localhost", Integer.parseInt(port));
 
       InputStream in = socket.getInputStream();
       OutputStream out = socket.getOutputStream();
@@ -24,9 +26,16 @@ public class App {
       LanguageClient client = launcher.getRemoteProxy();
       server.connect(client);
 
-      launcher.startListening();
-    } catch (IOException e) {
+      Future<Void> listener = launcher.startListening();
+      listener.get();
+    } catch (IOException | InterruptedException | ExecutionException e) {
       e.printStackTrace();
+    } finally {
+      try {
+        socket.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
   }
 }
