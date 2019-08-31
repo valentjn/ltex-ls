@@ -36,6 +36,7 @@ public class AnnotatedTextBuilder {
   private Mode curMode;
 
   private static final CommandSignature[] defaultCommandSignatures = {
+    new CommandSignature("\\addtocontents{}", CommandSignature.Action.IGNORE),
     new CommandSignature("\\bibliography{}", CommandSignature.Action.IGNORE),
     new CommandSignature("\\bibliographystyle{}", CommandSignature.Action.IGNORE),
     new CommandSignature("\\cite{}", CommandSignature.Action.DUMMY),
