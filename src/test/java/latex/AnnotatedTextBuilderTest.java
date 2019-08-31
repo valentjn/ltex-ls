@@ -92,5 +92,17 @@ public class AnnotatedTextBuilderTest {
         "This is a sentence.\n",
         "This is an equation: Dummy0, which proves the theorem. " +
         "This is a sentence. ");
+
+    {
+      AnnotatedText annotatedText = buildAnnotatedText(
+          "This is a test:\n" +
+          "\\begin{equation}\n" +
+          "  \\scalebox{0.92}{$a$}.\n" +
+          "\\end{equation}\n" +
+          "This is a sentence.\n");
+      int start = annotatedText.getOriginalTextPositionFor(29);
+      int end = annotatedText.getOriginalTextPositionFor(31 - 1) + 1;
+      Assertions.assertTrue(start < end, start + " not smaller than " + end);
+    }
   }
 }

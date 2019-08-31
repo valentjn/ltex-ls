@@ -332,7 +332,7 @@ public class AnnotatedTextBuilder {
           break;
         }
         case '$': {
-          if (isMathMode(curMode)) {
+          if (curMode == Mode.INLINE_MATH) {
             popMode();
             addMarkup(curString, generateDummy());
           } else {
