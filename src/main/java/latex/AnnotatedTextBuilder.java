@@ -81,7 +81,11 @@ public class AnnotatedTextBuilder {
     if (isTextMode(curMode)) {
       dummy = "Dummy" + (pseudoCounter++);
     } else if (isMathEmpty) {
-      dummy = "";
+      if (curMode == Mode.DISPLAY_MATH) {
+        dummy = (lastSpace.isEmpty() ? " " : "");
+      } else {
+        dummy = "";
+      }
     } else if (curMode == Mode.DISPLAY_MATH) {
       dummy = ((lastSpace.isEmpty() ? " " : "")) + "Dummy" + (pseudoCounter++) +
           dummyLastPunctuation + " ";

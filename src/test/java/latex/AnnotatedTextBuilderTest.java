@@ -84,5 +84,13 @@ public class AnnotatedTextBuilderTest {
         "\\end{equation}\n" +
         "This is the next sentence.\n",
         "This equals Dummy0. This is the next sentence. ");
+    assertPlainText(
+        "This is an equation:\n" +
+        "\\begin{equation}\n" +
+        "    a^2 + b^2 = c^2,\\qquad\\text{which proves the theorem.}" +
+        "\\end{equation}%\n" +
+        "This is a sentence.\n",
+        "This is an equation: Dummy0, which proves the theorem. " +
+        "This is a sentence. ");
   }
 }
