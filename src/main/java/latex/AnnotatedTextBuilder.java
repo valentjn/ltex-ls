@@ -14,6 +14,7 @@ public class AnnotatedTextBuilder {
     HEADING,
     INLINE_MATH,
     DISPLAY_MATH,
+    TIKZ,
   }
 
   private org.languagetool.markup.AnnotatedTextBuilder builder =
@@ -43,7 +44,6 @@ public class AnnotatedTextBuilder {
     new CommandSignature("\\Cref{}", CommandSignature.Action.DUMMY),
     new CommandSignature("\\documentclass{}", CommandSignature.Action.IGNORE),
     new CommandSignature("\\documentclass[]{}", CommandSignature.Action.IGNORE),
-    new CommandSignature("\\draw[]", CommandSignature.Action.IGNORE),
     new CommandSignature("\\eqref{}", CommandSignature.Action.DUMMY),
     new CommandSignature("\\hypersetup{}", CommandSignature.Action.IGNORE),
     new CommandSignature("\\hyperref[]", CommandSignature.Action.IGNORE),
@@ -51,12 +51,12 @@ public class AnnotatedTextBuilder {
     new CommandSignature("\\includegraphics{}", CommandSignature.Action.IGNORE),
     new CommandSignature("\\includegraphics[]{}", CommandSignature.Action.IGNORE),
     new CommandSignature("\\input{}", CommandSignature.Action.IGNORE),
-    new CommandSignature("\\node[]", CommandSignature.Action.IGNORE),
     new CommandSignature("\\label{}", CommandSignature.Action.IGNORE),
     new CommandSignature("\\raisebox{}", CommandSignature.Action.IGNORE),
     new CommandSignature("\\ref{}", CommandSignature.Action.DUMMY),
     new CommandSignature("\\ref*{}", CommandSignature.Action.DUMMY),
     new CommandSignature("\\textcolor{}", CommandSignature.Action.IGNORE),
+    new CommandSignature("\\tikzset{}", CommandSignature.Action.IGNORE),
     new CommandSignature("\\todo{}", CommandSignature.Action.IGNORE),
     new CommandSignature("\\todo[]{}", CommandSignature.Action.IGNORE),
     new CommandSignature("\\vspace{}", CommandSignature.Action.IGNORE),
@@ -136,6 +136,11 @@ public class AnnotatedTextBuilder {
     lastPunctuation = (isPunctuation(lastChar) ? " " : "");
   }
 
+  private void popMode() {
+    modeStack.pop();
+    if (modeStack.isEmpty()) modeStack.push(Mode.TEXT);
+  }
+
   private static boolean isPunctuation(char ch) {
     return ((ch == '.') || (ch == ',') || (ch == ':') || (ch == ';'));
   }
@@ -144,8 +149,12 @@ public class AnnotatedTextBuilder {
     return ((mode == Mode.INLINE_MATH) || (mode == Mode.DISPLAY_MATH));
   }
 
+  private static boolean isTikzMode(Mode mode) {
+    return (mode == Mode.TIKZ);
+  }
+
   private static boolean isTextMode(Mode mode) {
-    return !isMathMode(mode);
+    return !isMathMode(mode) && !isTikzMode(mode);
   }
 
   public AnnotatedTextBuilder addCode(String text) {
@@ -203,17 +212,15 @@ public class AnnotatedTextBuilder {
                 isMathEmpty = true;
                 canInsertSpaceBeforeDummy = true;
               } else {
-                modeStack.pop();
-                if (modeStack.isEmpty()) modeStack.push(Mode.TEXT);
+                popMode();
                 interpretAs = generateDummy();
               }
+            } else if (environment.equals("tikzpicture")) {
+              if (command.equals("\\begin")) modeStack.push(Mode.TIKZ);
+              else popMode();
             } else {
-              if (command.equals("\\begin")) {
-                modeStack.push(curMode);
-              } else {
-                modeStack.pop();
-                if (modeStack.isEmpty()) modeStack.push(Mode.TEXT);
-              }
+              if (command.equals("\\begin")) modeStack.push(curMode);
+              else popMode();
             }
 
             isMathCharTrivial = true;
@@ -237,7 +244,7 @@ public class AnnotatedTextBuilder {
             } else {
               preserveDummyLast = true;
 
-              if (isMathMode(curMode)) {
+              if (isMathMode(curMode) || isTikzMode(curMode)) {
                 addMarkup(command);
                 dummyLastSpace = " ";
               } else {
@@ -313,8 +320,7 @@ public class AnnotatedTextBuilder {
         case '}': {
           String interpretAs = "";
           if ((curMode == Mode.HEADING) && lastPunctuation.isEmpty()) interpretAs = ".";
-          modeStack.pop();
-          if (modeStack.isEmpty()) modeStack.push(Mode.TEXT);
+          popMode();
           addMarkup(curString, interpretAs);
           canInsertSpaceBeforeDummy = true;
           if (isTextMode(curMode) && isMathMode(modeStack.peek())) isMathEmpty = true;
@@ -322,16 +328,15 @@ public class AnnotatedTextBuilder {
           break;
         }
         case '$': {
-          if (isTextMode(curMode)) {
+          if (isMathMode(curMode)) {
+            popMode();
+            addMarkup(curString, generateDummy());
+          } else {
             modeStack.push(Mode.INLINE_MATH);
             addMarkup(curString);
             isMathEmpty = true;
             canInsertSpaceBeforeDummy = true;
             isMathCharTrivial = true;
-          } else {
-            modeStack.pop();
-            if (modeStack.isEmpty()) modeStack.push(Mode.TEXT);
-            addMarkup(curString, generateDummy());
           }
 
           break;

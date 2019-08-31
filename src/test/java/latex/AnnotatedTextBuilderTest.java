@@ -39,6 +39,18 @@ public class AnnotatedTextBuilderTest {
   }
 
   @Test
+  void testTikzMode() {
+    assertPlainText("This is a \\tikzset{bla}test.\n", "This is a test. ");
+    assertPlainText(
+        "This is a test.\n" +
+        "\\begin{tikzpicture}\n" +
+        "  \\node[color=mittelblau] at (42mm,0mm) {qwerty};\n" +
+        "\\end{tikzpicture}\n" +
+        "This is another sentence.\n",
+        "This is a test. This is another sentence. ");
+  }
+
+  @Test
   void testMathMode() {
     assertPlainText(
         "Recall that\n" +
