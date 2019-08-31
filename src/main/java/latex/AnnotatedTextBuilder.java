@@ -407,15 +407,17 @@ public class AnnotatedTextBuilder {
         case '-': {
           String emDash = matchFromPosition(emDashPattern);
 
-          if (!emDash.isEmpty()) {
-            addMarkup(emDash, "\u2014");
-            break;
-          } else {
-            String enDash = matchFromPosition(enDashPattern);
-
-            if (!enDash.isEmpty()) {
-              addMarkup(enDash, "\u2013");
+          if (isTextMode(curMode)) {
+            if (!emDash.isEmpty()) {
+              addMarkup(emDash, "\u2014");
               break;
+            } else {
+              String enDash = matchFromPosition(enDashPattern);
+
+              if (!enDash.isEmpty()) {
+                addMarkup(enDash, "\u2013");
+                break;
+              }
             }
           }
         }
