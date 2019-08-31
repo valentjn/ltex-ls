@@ -234,6 +234,40 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         match -> createDiagnostic(match, positionCalculator)).collect(Collectors.toList());
   }
 
+  private void enableEasterEgg(JLanguageTool languageTool) {
+    languageTool.addRule(new Rule() {
+      public String getId() { return "bspline"; };
+      public String getDescription() { return "Unknown basis function"; };
+      public RuleMatch[] match(AnalyzedSentence sentence) {
+        List<RuleMatch> matches = new ArrayList<>();
+        for (AnalyzedTokenReadings token : sentence.getTokens()) {
+          if (token.getToken().equalsIgnoreCase("hat")) {
+            matches.add(new RuleMatch(this, sentence, token.getStartPos(), token.getEndPos(),
+                "Unknown basis function. Did you mean <suggestion>B-spline</suggestion>?"));
+          }
+        }
+        return matches.toArray(new RuleMatch[]{});
+      }
+    });
+    languageTool.addRule(new Rule() {
+      public String getId() { return "ungendered"; };
+      public String getDescription() { return "Ungendered variant"; };
+      public RuleMatch[] match(AnalyzedSentence sentence) {
+        List<RuleMatch> matches = new ArrayList<>();
+        for (AnalyzedTokenReadings token : sentence.getTokens()) {
+          String s = token.getToken();
+          if ((s.length() >= 2) &&
+              (s.substring(s.length() - 2, s.length()).equalsIgnoreCase("er"))) {
+            matches.add(new RuleMatch(this, sentence, token.getStartPos(), token.getEndPos(),
+                "Ungendered variant detected. " +
+                "Did you mean <suggestion>" + s + "*in</suggestion>?"));
+          }
+        }
+        return matches.toArray(new RuleMatch[]{});
+      }
+    });
+  }
+
   private Pair<List<RuleMatch>, AnnotatedText> validateDocument(TextDocumentItem document) {
     // This setting is specific to VS Code behavior and maintaining it here
     // long term is not desirable because other clients may behave differently.
@@ -302,6 +336,10 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
           throw new UnsupportedOperationException(String.format(
               "Code language \"%s\" is not supported.", codeLanguageId));
         }
+      }
+
+      if (settings.dictionary.stream().anyMatch("BsPlInEs"::equals)) {
+        enableEasterEgg(languageTool);
       }
 
       String logText = annotatedText.getPlainText();
