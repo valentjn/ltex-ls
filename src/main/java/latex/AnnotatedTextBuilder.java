@@ -91,7 +91,7 @@ public class AnnotatedTextBuilder {
 
   private String text;
   private int pos;
-  private int pseudoCounter;
+  private int dummyCounter;
   private String lastSpace;
   private String lastPunctuation;
   private String dummyLastSpace;
@@ -120,7 +120,7 @@ public class AnnotatedTextBuilder {
     String dummy;
 
     if (isTextMode(curMode)) {
-      dummy = "Dummy" + (pseudoCounter++);
+      dummy = "Dummy" + (dummyCounter++);
     } else if (isMathEmpty) {
       if (curMode == Mode.DISPLAY_MATH) {
         dummy = (lastSpace.isEmpty() ? " " : "");
@@ -128,10 +128,10 @@ public class AnnotatedTextBuilder {
         dummy = "";
       }
     } else if (curMode == Mode.DISPLAY_MATH) {
-      dummy = ((lastSpace.isEmpty() ? " " : "")) + "Dummy" + (pseudoCounter++) +
+      dummy = ((lastSpace.isEmpty() ? " " : "")) + "Dummy" + (dummyCounter++) +
           dummyLastPunctuation + " ";
     } else {
-      dummy = "Dummy" + (pseudoCounter++) + dummyLastPunctuation + dummyLastSpace;
+      dummy = "Dummy" + (dummyCounter++) + dummyLastPunctuation + dummyLastSpace;
     }
 
     dummyLastSpace = "";
@@ -205,7 +205,7 @@ public class AnnotatedTextBuilder {
   public AnnotatedTextBuilder addCode(String text) {
     this.text = text;
     pos = 0;
-    pseudoCounter = 0;
+    dummyCounter = 0;
     lastSpace = "";
     lastPunctuation = "";
     dummyLastSpace = "";
