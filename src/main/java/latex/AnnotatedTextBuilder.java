@@ -177,7 +177,7 @@ public class AnnotatedTextBuilder {
   private void textAdded(String text) {
     if (text.isEmpty()) return;
     char lastChar = text.charAt(text.length() - 1);
-    lastSpace = ((lastChar == ' ') ? " " : "");
+    lastSpace = (((lastChar == ' ') || (lastChar == '\n')) ? " " : "");
     lastPunctuation = (isPunctuation(lastChar) ? " " : "");
   }
 
