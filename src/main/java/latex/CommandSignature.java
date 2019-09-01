@@ -19,6 +19,10 @@ public class CommandSignature {
   public ArrayList<ArgumentType> argumentTypes = new ArrayList<ArgumentType>();
   public Action action = Action.IGNORE;
 
+  public CommandSignature(String commandPrototype) {
+    this(commandPrototype, Action.IGNORE);
+  }
+
   public CommandSignature(String commandPrototype, Action action) {
     Pattern commandPattern = Pattern.compile("^\\\\([^A-Za-z]|([A-Za-z]+))\\*?");
     Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\]))");
