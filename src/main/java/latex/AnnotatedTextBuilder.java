@@ -17,24 +17,6 @@ public class AnnotatedTextBuilder {
     TIKZ,
   }
 
-  private org.languagetool.markup.AnnotatedTextBuilder builder =
-      new org.languagetool.markup.AnnotatedTextBuilder();
-
-  private String text;
-  private int pos;
-  private int pseudoCounter;
-  private String lastSpace;
-  private String lastPunctuation;
-  private String dummyLastSpace;
-  private String dummyLastPunctuation;
-  private boolean isMathEmpty;
-  private boolean preserveDummyLast;
-  private Stack<Mode> modeStack;
-
-  private char curChar;
-  private String curString;
-  private Mode curMode;
-
   private static final CommandSignature[] defaultCommandSignatures = {
     new CommandSignature("\\addtocontents{}"),
     new CommandSignature("\\algnewcommand{}"),
@@ -82,6 +64,45 @@ public class AnnotatedTextBuilder {
     new CommandSignature("\\vspace{}"),
     new CommandSignature("\\vspace*{}"),
   };
+
+  private static final Pattern commandPattern = Pattern.compile(
+      "^\\\\(([^A-Za-z]|([A-Za-z]+))\\*?)");
+  private static final Pattern argumentPattern = Pattern.compile("^\\{[^\\}]*?\\}");
+  private static final Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
+  private static final Pattern whiteSpacePattern = Pattern.compile(
+      "^[ \n\r\t]+(%.*?\n[ \n\r\t]*)?");
+  private static final Pattern lengthPattern = Pattern.compile(
+      "-?[0-9]*(\\.[0-9]+)?(pt|mm|cm|ex|em|bp|dd|pc|in)");
+  private static final Pattern lengthInBracePattern = Pattern.compile(
+      "^\\{" + lengthPattern.pattern() + "\\}");
+  private static final Pattern lengthInBracketPattern = Pattern.compile(
+      "^\\[" + lengthPattern.pattern() + "\\]");
+  private static final Pattern emDashPattern = Pattern.compile("^---");
+  private static final Pattern enDashPattern = Pattern.compile("^--");
+  private static final Pattern umlautCommandPattern = Pattern.compile(
+      "^\\\\\"([AEIOUaeiou]|(\\{([AEIOUaeiou])\\}))");
+
+  private static final String[] mathEnvironments = {"equation", "equation*", "align", "align*",
+      "gather", "gather*", "alignat", "alignat*", "multline", "multline*",
+      "flalign", "flalign*"};
+
+  private org.languagetool.markup.AnnotatedTextBuilder builder =
+      new org.languagetool.markup.AnnotatedTextBuilder();
+
+  private String text;
+  private int pos;
+  private int pseudoCounter;
+  private String lastSpace;
+  private String lastPunctuation;
+  private String dummyLastSpace;
+  private String dummyLastPunctuation;
+  private boolean isMathEmpty;
+  private boolean preserveDummyLast;
+  private Stack<Mode> modeStack;
+
+  private char curChar;
+  private String curString;
+  private Mode curMode;
 
   public List<CommandSignature> commandSignatures =
       new ArrayList<>(Arrays.asList(defaultCommandSignatures));
@@ -182,22 +203,6 @@ public class AnnotatedTextBuilder {
   }
 
   public AnnotatedTextBuilder addCode(String text) {
-    Pattern commandPattern = Pattern.compile("^\\\\(([^A-Za-z]|([A-Za-z]+))\\*?)");
-    Pattern argumentPattern = Pattern.compile("^\\{[^\\}]*?\\}");
-    Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
-    Pattern whiteSpacePattern = Pattern.compile("^[ \n\r\t]+(%.*?\n[ \n\r\t]*)?");
-    Pattern lengthPattern = Pattern.compile("-?[0-9]*(\\.[0-9]+)?(pt|mm|cm|ex|em|bp|dd|pc|in)");
-    Pattern lengthInBracePattern = Pattern.compile("^\\{" + lengthPattern.pattern() + "\\}");
-    Pattern lengthInBracketPattern = Pattern.compile("^\\[" + lengthPattern.pattern() + "\\]");
-    Pattern emDashPattern = Pattern.compile("^---");
-    Pattern enDashPattern = Pattern.compile("^--");
-    Pattern umlautCommandPattern = Pattern.compile(
-        "^\\\\\"([AEIOUaeiou]|(\\{([AEIOUaeiou])\\}))");
-
-    String[] mathEnvironments = {"equation", "equation*", "align", "align*",
-        "gather", "gather*", "alignat", "alignat*", "multline", "multline*",
-        "flalign", "flalign*"};
-
     this.text = text;
     pos = 0;
     pseudoCounter = 0;
