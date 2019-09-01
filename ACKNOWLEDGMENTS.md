@@ -1,12 +1,14 @@
 # Acknowledgments
 
-langaugetool-languageserver uses third-party libraries or other resources that may be distributed under licenses different than itself.
+languagetool-languageserver was originally written by [Adam Voss](https://github.com/adamvoss/languagetool-languageserver).
 
-In the event that we accidentally failed to list a required notice, please bring it to our attention by opening an Issue or Pull Request.
+languagetool-languageserver uses third-party libraries or other resources that may be distributed under licenses different than itself.
+
+In the event that we accidentally failed to list a required notice, please bring it to our attention by opening an issue or pull request.
 
 The attached notices are provided for information only.
 
-## License notice for LanguageTool
+## License Notice for LanguageTool
 
 [LanguageTool](https://github.com/languagetool-org/languagetool) is licensed under the LGPL 2.1 or later
 
@@ -471,7 +473,7 @@ DAMAGES.
                      END OF TERMS AND CONDITIONS
 ```
 
-## License notice for Eclipse LSP4J
+## License Notice for Eclipse LSP4J
 
 [Eclipse LSP4J](https://github.com/eclipse/lsp4j) is licensed under the [Eclipse Distribution License - v 1.0](https://www.eclipse.org/org/documents/edl-v10.php) [(A BSD 3-clause License)](https://opensource.org/licenses/BSD-3-Clause).  It is also available under the [Eclipse Public License v1.0](https://www.eclipse.org/legal/epl-v10.html).
 
@@ -486,12 +488,12 @@ Redistribution and use in source and binary forms, with or without modification,
 
     Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
     Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-    Neither the name of the Eclipse Foundation, Inc. nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission. 
+    Neither the name of the Eclipse Foundation, Inc. nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ```
 
-## License notice for flexmark-java
+## License Notice for flexmark-java
 
 [flexmark-java](https://github.com/vsch/flexmark-java) is licensed under a 2-clause BSD license.
 
