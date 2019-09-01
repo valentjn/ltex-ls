@@ -172,6 +172,8 @@ public class AnnotatedTextBuilder {
     Pattern lengthInBracketPattern = Pattern.compile("^\\[" + lengthPattern.pattern() + "\\]");
     Pattern emDashPattern = Pattern.compile("^---");
     Pattern enDashPattern = Pattern.compile("^--");
+    Pattern umlautCommandPattern = Pattern.compile(
+        "^\\\\\"([AEIOUaeiou]|(\\{([AEIOUaeiou])\\}))");
 
     String[] mathEnvironments = {"equation", "equation*", "align", "align*",
         "gather", "gather*", "alignat", "alignat*", "multline", "multline*",
@@ -233,6 +235,32 @@ public class AnnotatedTextBuilder {
             addMarkup(argument, interpretAs);
           } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
             addMarkup(command, command.substring(1));
+          } else if (command.equals("\\ss")) {
+            addMarkup(command, "\u00df");
+          } else if (command.equals("\\\"")) {
+            String umlautCommand = matchFromPosition(umlautCommandPattern);
+
+            if (!umlautCommand.isEmpty()) {
+              String vowel = ((umlautCommand.length() <= 3) ?
+                  umlautCommand.substring(umlautCommand.length() - 1) :
+                  umlautCommand.substring(3, 4));
+              String interpretAs = "";
+
+              if (vowel.equals("A")) interpretAs = "\u00c4";
+              else if (vowel.equals("E")) interpretAs = "\u00cb";
+              else if (vowel.equals("I")) interpretAs = "\u00cf";
+              else if (vowel.equals("O")) interpretAs = "\u00d6";
+              else if (vowel.equals("U")) interpretAs = "\u00dc";
+              else if (vowel.equals("a")) interpretAs = "\u00e4";
+              else if (vowel.equals("e")) interpretAs = "\u00eb";
+              else if (vowel.equals("i")) interpretAs = "\u00ef";
+              else if (vowel.equals("o")) interpretAs = "\u00f6";
+              else if (vowel.equals("u")) interpretAs = "\u00fc";
+
+              addMarkup(umlautCommand, interpretAs);
+            } else {
+              addMarkup(command);
+            }
           } else if (command.equals("\\-")) {
             addMarkup(command);
           } else if (command.equals("\\ ") || command.equals("\\,") || command.equals("\\;") ||

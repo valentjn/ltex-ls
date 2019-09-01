@@ -36,6 +36,13 @@ public class AnnotatedTextBuilderTest {
     assertPlainText("You can see this in \\hyperref[alg:abc]{Sec.\\ \\ref*{alg:abc}}.\n",
         "You can see this in Sec. Dummy0. ");
     assertPlainText("This is a te\\-st.\n", "This is a test. ");
+    assertPlainText("Ich hei\\ss{}e anders. Das Wasser ist hei\\ss.\n",
+        "Ich hei\u00dfe anders. Das Wasser ist hei\u00df. ");
+    assertPlainText(
+        "\\\"E\\\"in T\\\"ext m\\\"{i}t v\\\"i\\\"{e}l\\\"en " +
+        "\\\"{U}ml\\\"a\\\"{u}t\\\"en.\n",
+        "\u00cb\u00efn T\u00ebxt m\u00eft v\u00ef\u00ebl\u00ebn " +
+        "\u00dcml\u00e4\u00fct\u00ebn. ");
   }
 
   @Test
