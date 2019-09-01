@@ -40,6 +40,31 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   private static final String addToDictionaryCommandName = "ltex.addToDictionary";
   private static final Logger logger = Logger.getLogger("LanguageToolLanguageServer");
 
+  // https://stackoverflow.com/a/23717493
+  private static class DualConsoleHandler extends StreamHandler {
+    private final ConsoleHandler stdErrHandler = new ConsoleHandler();
+
+    public DualConsoleHandler() {
+      super(System.out, new SimpleFormatter());
+    }
+
+    @Override
+    public void publish(LogRecord record) {
+      if (record.getLevel().intValue() <= Level.INFO.intValue()) {
+        super.publish(record);
+        super.flush();
+      } else {
+        stdErrHandler.publish(record);
+        stdErrHandler.flush();
+      }
+    }
+  }
+
+  static {
+    logger.setUseParentHandlers(false);
+    logger.addHandler(new DualConsoleHandler());
+  }
+
   private static boolean locationOverlaps(
       RuleMatch match, DocumentPositionCalculator positionCalculator, Range range) {
     return overlaps(range, createDiagnostic(match, positionCalculator).getRange());
