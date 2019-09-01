@@ -34,10 +34,10 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   private static final long resultCacheMaxSize = 10000;
   private static final int resultCacheExpireAfterMinutes = 10;
   private static final String acceptSuggestionCodeActionKind =
-      CodeActionKind.QuickFix + ".languageTool.acceptSuggestion";
+      CodeActionKind.QuickFix + ".ltex.acceptSuggestion";
   private static final String addToDictionaryCodeActionKind =
-      CodeActionKind.QuickFix + ".languageTool.addToDictionary";
-  private static final String addToDictionaryCommandName = "languageTool.addToDictionary";
+      CodeActionKind.QuickFix + ".ltex.addToDictionary";
+  private static final String addToDictionaryCommandName = "ltex.addToDictionary";
   private static final Logger logger = Logger.getLogger("LanguageToolLanguageServer");
 
   private static boolean locationOverlaps(
@@ -409,20 +409,20 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   private void setSettings(@NotNull JsonElement jsonSettings) {
     Settings oldSettings = (Settings) settings.clone();
 
-    settings.languageShortCode = getSettingFromJSON(jsonSettings, "languageTool.language")
+    settings.languageShortCode = getSettingFromJSON(jsonSettings, "ltex.language")
         .getAsString();
 
     String languagePrefix = settings.languageShortCode;
     int dashPos = languagePrefix.indexOf("-");
     if (dashPos != -1) languagePrefix = languagePrefix.substring(0, dashPos);
     settings.dictionary = convertJsonArrayToList(
-        getSettingFromJSON(jsonSettings, "languageTool." + languagePrefix + ".dictionary").
+        getSettingFromJSON(jsonSettings, "ltex." + languagePrefix + ".dictionary").
         getAsJsonArray());
 
     settings.dummyCommandPrototypes = convertJsonArrayToList(
-        getSettingFromJSON(jsonSettings, "languageTool.latex.dummyCommands").getAsJsonArray());
+        getSettingFromJSON(jsonSettings, "ltex.commands.dummy").getAsJsonArray());
     settings.ignoreCommandPrototypes = convertJsonArrayToList(
-        getSettingFromJSON(jsonSettings, "languageTool.latex.ignoreCommands").getAsJsonArray());
+        getSettingFromJSON(jsonSettings, "ltex.commands.ignore").getAsJsonArray());
 
     if (!settings.equals(oldSettings)) {
       resultCache = new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes,
