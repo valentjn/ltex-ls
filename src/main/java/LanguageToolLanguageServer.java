@@ -34,9 +34,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     }
   }
 
-  private ResultCache resultCache =
-      new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes, TimeUnit.MINUTES);
-
+  private JLanguageTool languageTool;
   private Settings settings = new Settings();
 
   private static final long resultCacheMaxSize = 10000;
@@ -173,7 +171,28 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     logger.info("Setting locale to " + locale.getLanguage() + ".");
     messages = ResourceBundle.getBundle("MessagesBundle", locale);
 
+    reinitialize();
+
     return CompletableFuture.completedFuture(new InitializeResult(capabilities));
+  }
+
+  private void reinitialize() {
+    languageTool = null;
+
+    if (!Languages.isLanguageSupported(settings.getLanguageShortCode())) {
+      logger.severe(settings.getLanguageShortCode() + " is not a recognized language. " +
+          "Leaving LanguageTool uninitialized, checking disabled.");
+      return;
+    }
+
+    Language language = Languages.getLanguageForShortCode(settings.getLanguageShortCode());
+    ResultCache resultCache = new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes,
+        TimeUnit.MINUTES);
+    UserConfig userConfig = ((settings.getDictionary() != null) ?
+        new UserConfig(settings.getDictionary()) : new UserConfig());
+    languageTool = new JLanguageTool(language, resultCache, userConfig);
+
+    documents.values().forEach(this::publishIssues);
   }
 
   @Override
@@ -318,117 +337,100 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   }
 
   private Pair<List<RuleMatch>, AnnotatedText> validateDocument(TextDocumentItem document) {
-    // This setting is specific to VS Code behavior and maintaining it here
-    // long term is not desirable because other clients may behave differently.
-    // See: https://github.com/Microsoft/vscode/issues/28732
-    String uri = document.getUri();
-    Boolean isSupportedScheme = uri.startsWith("file:") || uri.startsWith("untitled:") ;
-    Language language;
-
-    if (Languages.isLanguageSupported(settings.getLanguageShortCode())) {
-      language = Languages.getLanguageForShortCode(settings.getLanguageShortCode());
-    } else {
-      logger.warning("ERROR: " + settings.getLanguageShortCode() +
-          " is not a recognized language. Checking disabled.");
-      language = null;
+    if (languageTool == null) {
+      logger.warning("Skipping check of text, because LanguageTool has not been initialized " +
+          "(see above).");
+      return new Pair<>(Collections.emptyList(), null);
     }
 
-    if (language == null || !isSupportedScheme) {
-      return new Pair<>(Collections.emptyList(), null);
-    } else {
-      UserConfig userConfig = ((settings.getDictionary() != null) ?
-          new UserConfig(settings.getDictionary()) : new UserConfig());
-      JLanguageTool languageTool = new JLanguageTool(language, resultCache, userConfig);
+    String codeLanguageId = document.getLanguageId();
+    AnnotatedText annotatedText;
 
-      String codeLanguageId = document.getLanguageId();
-      AnnotatedText annotatedText;
+    switch (codeLanguageId) {
+      case "plaintext": {
+        AnnotatedTextBuilder builder = new AnnotatedTextBuilder();
+        annotatedText = builder.addText(document.getText()).build();
+        break;
+      }
+      case "markdown": {
+        Parser p = Parser.builder().build();
+        Document mdDocument = (Document) p.parse(document.getText());
 
-      switch (codeLanguageId) {
-        case "plaintext": {
-          AnnotatedTextBuilder builder = new AnnotatedTextBuilder();
-          annotatedText = builder.addText(document.getText()).build();
-          break;
-        }
-        case "markdown": {
-          Parser p = Parser.builder().build();
-          Document mdDocument = (Document) p.parse(document.getText());
+        markdown.AnnotatedTextBuilder builder =
+            new markdown.AnnotatedTextBuilder();
+        builder.visit(mdDocument);
 
-          markdown.AnnotatedTextBuilder builder =
-              new markdown.AnnotatedTextBuilder();
-          builder.visit(mdDocument);
+        annotatedText = builder.getAnnotatedText();
+        break;
+      }
+      case "latex": {
+        latex.AnnotatedTextBuilder builder = new latex.AnnotatedTextBuilder();
 
-          annotatedText = builder.getAnnotatedText();
-          break;
-        }
-        case "latex": {
-          latex.AnnotatedTextBuilder builder = new latex.AnnotatedTextBuilder();
-
-          if (settings.getDummyCommandPrototypes() != null) {
-            for (String commandPrototype : settings.getDummyCommandPrototypes()) {
-              builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
-                  latex.CommandSignature.Action.DUMMY));
-            }
+        if (settings.getDummyCommandPrototypes() != null) {
+          for (String commandPrototype : settings.getDummyCommandPrototypes()) {
+            builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
+                latex.CommandSignature.Action.DUMMY));
           }
+        }
 
-          if (settings.getIgnoreCommandPrototypes() != null) {
-            for (String commandPrototype : settings.getIgnoreCommandPrototypes()) {
-              builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
-                  latex.CommandSignature.Action.IGNORE));
-            }
+        if (settings.getIgnoreCommandPrototypes() != null) {
+          for (String commandPrototype : settings.getIgnoreCommandPrototypes()) {
+            builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
+                latex.CommandSignature.Action.IGNORE));
           }
+        }
 
-          ExecutorService executor = Executors.newCachedThreadPool();
-          Future<Object> future = executor.submit(new Callable<Object>() {
-            public Object call() {
-              builder.addCode(document.getText());
-              return null;
-            }
-          });
-
-          try {
-            future.get(10, TimeUnit.SECONDS);
-          } catch (TimeoutException | InterruptedException | ExecutionException e) {
-            throw new RuntimeException(i18n("latexAnnotatedTextBuilderFailed"), e);
-          } finally {
-            future.cancel(true); // may or may not desire this
+        ExecutorService executor = Executors.newCachedThreadPool();
+        Future<Object> future = executor.submit(new Callable<Object>() {
+          public Object call() {
+            builder.addCode(document.getText());
+            return null;
           }
+        });
 
-          annotatedText = builder.getAnnotatedText();
-          break;
-        }
-        default: {
-          throw new UnsupportedOperationException(i18n("codeLanguageNotSupported", codeLanguageId));
-        }
-      }
-
-      if (settings.getDictionary().stream().anyMatch("BsPlInEs"::equals)) {
-        enableEasterEgg(languageTool);
-      }
-
-      {
-        int logTextMaxLength = 100;
-        String logText = annotatedText.getPlainText();
-        String postfix = "";
-
-        if (logText.length() > logTextMaxLength) {
-          logText = logText.substring(0, logTextMaxLength);
-          postfix = "... (truncated to " + logTextMaxLength + " characters)";
+        try {
+          future.get(10, TimeUnit.SECONDS);
+        } catch (TimeoutException | InterruptedException | ExecutionException e) {
+          throw new RuntimeException(i18n("latexAnnotatedTextBuilderFailed"), e);
+        } finally {
+          future.cancel(true); // may or may not desire this
         }
 
-        logger.info("Checking the following text in language \"" + settings.getLanguageShortCode() +
-            "\" via LanguageTool: \"" + StringEscapeUtils.escapeJava(logText) + "\"" + postfix);
+        annotatedText = builder.getAnnotatedText();
+        break;
+      }
+      default: {
+        throw new UnsupportedOperationException(i18n("codeLanguageNotSupported", codeLanguageId));
+      }
+    }
+
+    if (settings.getDictionary().stream().anyMatch("BsPlInEs"::equals)) {
+      enableEasterEgg(languageTool);
+    }
+
+    {
+      int logTextMaxLength = 100;
+      String logText = annotatedText.getPlainText();
+      String postfix = "";
+
+      if (logText.length() > logTextMaxLength) {
+        logText = logText.substring(0, logTextMaxLength);
+        postfix = "... (truncated to " + logTextMaxLength + " characters)";
       }
 
-      try {
-        List<RuleMatch> result = languageTool.check(annotatedText);
-        logger.info("Obtained " + result.size() + " rule match" +
-            ((result.size() != 1) ? "es" : ""));
-        return new Pair<>(result, annotatedText);
-      } catch (RuntimeException | IOException e) {
-        logger.severe("LanguageTool failed: " + e.getMessage());
-        e.printStackTrace();
-        return new Pair<>(Collections.emptyList(), annotatedText);
-      }
+      logger.info("Checking the following text in language \"" + settings.getLanguageShortCode() +
+          "\" via LanguageTool: \"" + StringEscapeUtils.escapeJava(logText) + "\"" + postfix);
+    }
+
+    try {
+      List<RuleMatch> result = languageTool.check(annotatedText);
+      logger.info("Obtained " + result.size() + " rule match" +
+          ((result.size() != 1) ? "es" : ""));
+      return new Pair<>(result, annotatedText);
+    } catch (RuntimeException | IOException e) {
+      logger.severe("LanguageTool failed: " + e.getMessage());
+      e.printStackTrace();
+      return new Pair<>(Collections.emptyList(), annotatedText);
     }
   }
 
@@ -457,12 +459,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   private void setSettings(JsonElement jsonSettings) {
     Settings oldSettings = (Settings) settings.clone();
     settings.setSettings(jsonSettings);
-
-    if (!settings.equals(oldSettings)) {
-      resultCache = new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes,
-          TimeUnit.MINUTES);
-      documents.values().forEach(this::publishIssues);
-    }
+    if (!settings.equals(oldSettings)) reinitialize();
   }
 
   @Override
