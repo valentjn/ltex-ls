@@ -1,10 +1,11 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.*;
 
 public class Settings {
-  private String languageShortCode = "en-US";
+  private String languageShortCode = null;
   private List<String> dictionary = null;
   private List<String> dummyCommandPrototypes = null;
   private List<String> ignoreCommandPrototypes = null;
@@ -89,19 +90,23 @@ public class Settings {
     return hash;
   }
 
+  private static <T> T getDefault(T obj, T default_) {
+    return ((obj != null) ? obj : default_);
+  }
+
   public String getLanguageShortCode() {
-    return languageShortCode;
+    return getDefault(languageShortCode, "en-US");
   }
 
   public List<String> getDictionary() {
-    return dictionary;
+    return getDefault(dictionary, Collections.emptyList());
   }
 
   public List<String> getDummyCommandPrototypes() {
-    return dummyCommandPrototypes;
+    return getDefault(dummyCommandPrototypes, Collections.emptyList());
   }
 
   public List<String> getIgnoreCommandPrototypes() {
-    return ignoreCommandPrototypes;
+    return getDefault(ignoreCommandPrototypes, Collections.emptyList());
   }
 }

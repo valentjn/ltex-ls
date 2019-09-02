@@ -188,8 +188,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     Language language = Languages.getLanguageForShortCode(settings.getLanguageShortCode());
     ResultCache resultCache = new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes,
         TimeUnit.MINUTES);
-    UserConfig userConfig = ((settings.getDictionary() != null) ?
-        new UserConfig(settings.getDictionary()) : new UserConfig());
+    UserConfig userConfig = new UserConfig(settings.getDictionary());
     languageTool = new JLanguageTool(language, resultCache, userConfig);
 
     documents.values().forEach(this::publishIssues);
@@ -366,18 +365,14 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
       case "latex": {
         latex.AnnotatedTextBuilder builder = new latex.AnnotatedTextBuilder();
 
-        if (settings.getDummyCommandPrototypes() != null) {
-          for (String commandPrototype : settings.getDummyCommandPrototypes()) {
-            builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
-                latex.CommandSignature.Action.DUMMY));
-          }
+        for (String commandPrototype : settings.getDummyCommandPrototypes()) {
+          builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
+              latex.CommandSignature.Action.DUMMY));
         }
 
-        if (settings.getIgnoreCommandPrototypes() != null) {
-          for (String commandPrototype : settings.getIgnoreCommandPrototypes()) {
-            builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
-                latex.CommandSignature.Action.IGNORE));
-          }
+        for (String commandPrototype : settings.getIgnoreCommandPrototypes()) {
+          builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
+              latex.CommandSignature.Action.IGNORE));
         }
 
         ExecutorService executor = Executors.newCachedThreadPool();
