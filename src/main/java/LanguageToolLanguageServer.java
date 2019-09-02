@@ -7,7 +7,6 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.*;
-import org.jetbrains.annotations.NotNull;
 import org.languagetool.*;
 import org.languagetool.markup.*;
 import org.languagetool.markup.AnnotatedTextBuilder;
@@ -326,19 +325,19 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     Boolean isSupportedScheme = uri.startsWith("file:") || uri.startsWith("untitled:") ;
     Language language;
 
-    if (Languages.isLanguageSupported(settings.languageShortCode)) {
-      language = Languages.getLanguageForShortCode(settings.languageShortCode);
+    if (Languages.isLanguageSupported(settings.getLanguageShortCode())) {
+      language = Languages.getLanguageForShortCode(settings.getLanguageShortCode());
     } else {
-      logger.warning("ERROR: " + settings.languageShortCode + " is not a recognized language. " +
-                     "Checking disabled.");
+      logger.warning("ERROR: " + settings.getLanguageShortCode() +
+          " is not a recognized language. Checking disabled.");
       language = null;
     }
 
     if (language == null || !isSupportedScheme) {
       return new Pair<>(Collections.emptyList(), null);
     } else {
-      UserConfig userConfig = ((settings.dictionary != null) ?
-          new UserConfig(settings.dictionary) : new UserConfig());
+      UserConfig userConfig = ((settings.getDictionary() != null) ?
+          new UserConfig(settings.getDictionary()) : new UserConfig());
       JLanguageTool languageTool = new JLanguageTool(language, resultCache, userConfig);
 
       String codeLanguageId = document.getLanguageId();
@@ -364,15 +363,15 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         case "latex": {
           latex.AnnotatedTextBuilder builder = new latex.AnnotatedTextBuilder();
 
-          if (settings.dummyCommandPrototypes != null) {
-            for (String commandPrototype : settings.dummyCommandPrototypes) {
+          if (settings.getDummyCommandPrototypes() != null) {
+            for (String commandPrototype : settings.getDummyCommandPrototypes()) {
               builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
                   latex.CommandSignature.Action.DUMMY));
             }
           }
 
-          if (settings.ignoreCommandPrototypes != null) {
-            for (String commandPrototype : settings.ignoreCommandPrototypes) {
+          if (settings.getIgnoreCommandPrototypes() != null) {
+            for (String commandPrototype : settings.getIgnoreCommandPrototypes()) {
               builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
                   latex.CommandSignature.Action.IGNORE));
             }
@@ -402,7 +401,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         }
       }
 
-      if (settings.dictionary.stream().anyMatch("BsPlInEs"::equals)) {
+      if (settings.getDictionary().stream().anyMatch("BsPlInEs"::equals)) {
         enableEasterEgg(languageTool);
       }
 
@@ -416,7 +415,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
           postfix = "... (truncated to " + logTextMaxLength + " characters)";
         }
 
-        logger.info("Checking the following text in language \"" + settings.languageShortCode +
+        logger.info("Checking the following text in language \"" + settings.getLanguageShortCode() +
             "\" via LanguageTool: \"" + StringEscapeUtils.escapeJava(logText) + "\"" + postfix);
       }
 
@@ -455,37 +454,9 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     };
   }
 
-  private static JsonElement getSettingFromJSON(JsonElement jsonSettings, String name) {
-    for (String component : name.split("\\.")) {
-      jsonSettings = jsonSettings.getAsJsonObject().get(component);
-    }
-
-    return jsonSettings;
-  }
-
-  private static List<String> convertJsonArrayToList(JsonArray array) {
-    List<String> result = new ArrayList<>();
-    for (JsonElement element : array) result.add(element.getAsString());
-    return result;
-  }
-
-  private void setSettings(@NotNull JsonElement jsonSettings) {
+  private void setSettings(JsonElement jsonSettings) {
     Settings oldSettings = (Settings) settings.clone();
-
-    settings.languageShortCode = getSettingFromJSON(jsonSettings, "ltex.language")
-        .getAsString();
-
-    String languagePrefix = settings.languageShortCode;
-    int dashPos = languagePrefix.indexOf("-");
-    if (dashPos != -1) languagePrefix = languagePrefix.substring(0, dashPos);
-    settings.dictionary = convertJsonArrayToList(
-        getSettingFromJSON(jsonSettings, "ltex." + languagePrefix + ".dictionary").
-        getAsJsonArray());
-
-    settings.dummyCommandPrototypes = convertJsonArrayToList(
-        getSettingFromJSON(jsonSettings, "ltex.commands.dummy").getAsJsonArray());
-    settings.ignoreCommandPrototypes = convertJsonArrayToList(
-        getSettingFromJSON(jsonSettings, "ltex.commands.ignore").getAsJsonArray());
+    settings.setSettings(jsonSettings);
 
     if (!settings.equals(oldSettings)) {
       resultCache = new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes,
