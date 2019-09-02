@@ -9,6 +9,9 @@ public class Settings {
   private List<String> dictionary = null;
   private List<String> dummyCommandPrototypes = null;
   private List<String> ignoreCommandPrototypes = null;
+  private String languageModelRulesDirectory = null;
+  private String neuralNetworkModelRulesDirectory = null;
+  private String word2VecModelRulesDirectory = null;
 
   private static JsonElement getSettingFromJSON(JsonElement jsonSettings, String name) {
     for (String component : name.split("\\.")) {
@@ -38,6 +41,13 @@ public class Settings {
         getSettingFromJSON(jsonSettings, "ltex.commands.dummy").getAsJsonArray());
     ignoreCommandPrototypes = convertJsonArrayToList(
         getSettingFromJSON(jsonSettings, "ltex.commands.ignore").getAsJsonArray());
+
+    languageModelRulesDirectory = getSettingFromJSON(
+        jsonSettings, "ltex.additionalRules.languageModel").getAsString();
+    neuralNetworkModelRulesDirectory = getSettingFromJSON(
+        jsonSettings, "ltex.additionalRules.neuralNetworkModel").getAsString();
+    word2VecModelRulesDirectory = getSettingFromJSON(
+        jsonSettings, "ltex.additionalRules.word2VecModel").getAsString();
   }
 
   @Override
@@ -49,6 +59,9 @@ public class Settings {
         new ArrayList<>(dummyCommandPrototypes));
     obj.ignoreCommandPrototypes = ((ignoreCommandPrototypes == null) ? null :
         new ArrayList<>(ignoreCommandPrototypes));
+    obj.languageModelRulesDirectory = languageModelRulesDirectory;
+    obj.neuralNetworkModelRulesDirectory = neuralNetworkModelRulesDirectory;
+    obj.word2VecModelRulesDirectory = word2VecModelRulesDirectory;
     return obj;
   }
 
@@ -77,16 +90,38 @@ public class Settings {
       return false;
     }
 
+    if ((languageModelRulesDirectory == null) ? (other.languageModelRulesDirectory != null) :
+        !languageModelRulesDirectory.equals(other.languageModelRulesDirectory)) {
+      return false;
+    }
+
+    if ((neuralNetworkModelRulesDirectory == null) ?
+        (other.neuralNetworkModelRulesDirectory != null) :
+        !neuralNetworkModelRulesDirectory.equals(other.neuralNetworkModelRulesDirectory)) {
+      return false;
+    }
+
+    if ((word2VecModelRulesDirectory == null) ? (other.word2VecModelRulesDirectory != null) :
+        !word2VecModelRulesDirectory.equals(other.word2VecModelRulesDirectory)) {
+      return false;
+    }
+
     return true;
   }
 
   @Override
   public int hashCode() {
     int hash = 3;
-    hash = 53 * hash + (languageShortCode != null ? languageShortCode.hashCode() : 0);
-    hash = 53 * hash + (dictionary != null ? dictionary.hashCode() : 0);
-    hash = 53 * hash + (dummyCommandPrototypes != null ? dummyCommandPrototypes.hashCode() : 0);
-    hash = 53 * hash + (ignoreCommandPrototypes != null ? ignoreCommandPrototypes.hashCode() : 0);
+    hash = 53 * hash + ((languageShortCode != null) ? languageShortCode.hashCode() : 0);
+    hash = 53 * hash + ((dictionary != null) ? dictionary.hashCode() : 0);
+    hash = 53 * hash + ((dummyCommandPrototypes != null) ? dummyCommandPrototypes.hashCode() : 0);
+    hash = 53 * hash + ((ignoreCommandPrototypes != null) ? ignoreCommandPrototypes.hashCode() : 0);
+    hash = 53 * hash + ((languageModelRulesDirectory != null) ?
+        languageModelRulesDirectory.hashCode() : 0);
+    hash = 53 * hash + ((neuralNetworkModelRulesDirectory != null) ?
+        neuralNetworkModelRulesDirectory.hashCode() : 0);
+    hash = 53 * hash + ((word2VecModelRulesDirectory != null) ?
+        word2VecModelRulesDirectory.hashCode() : 0);
     return hash;
   }
 
@@ -108,5 +143,17 @@ public class Settings {
 
   public List<String> getIgnoreCommandPrototypes() {
     return getDefault(ignoreCommandPrototypes, Collections.emptyList());
+  }
+
+  public String getLanguageModelRulesDirectory() {
+    return getDefault(languageModelRulesDirectory, "");
+  }
+
+  public String getNeuralNetworkModelRulesDirectory() {
+    return getDefault(neuralNetworkModelRulesDirectory, "");
+  }
+
+  public String getWord2VecModelRulesDirectory() {
+    return getDefault(word2VecModelRulesDirectory, "");
   }
 }

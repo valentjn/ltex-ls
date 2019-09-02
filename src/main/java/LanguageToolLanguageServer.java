@@ -12,6 +12,7 @@ import org.languagetool.markup.*;
 import org.languagetool.markup.AnnotatedTextBuilder;
 import org.languagetool.rules.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.*;
 import java.text.MessageFormat;
@@ -190,6 +191,37 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         TimeUnit.MINUTES);
     UserConfig userConfig = new UserConfig(settings.getDictionary());
     languageTool = new JLanguageTool(language, resultCache, userConfig);
+
+    if (!settings.getLanguageModelRulesDirectory().isEmpty()) {
+      try {
+        languageTool.activateLanguageModelRules(new File(settings.getLanguageModelRulesDirectory()));
+      } catch (IOException | RuntimeException e) {
+        logger.warning("Could not load language model rules from \"" +
+            settings.getLanguageModelRulesDirectory() + "\", disabling them: " + e.getMessage());
+        e.printStackTrace();
+      }
+    }
+
+    if (!settings.getNeuralNetworkModelRulesDirectory().isEmpty()) {
+      try {
+        languageTool.activateNeuralNetworkRules(
+            new File(settings.getNeuralNetworkModelRulesDirectory()));
+      } catch (IOException | RuntimeException e) {
+        logger.warning("Could not load neural network model rules from \"" +
+            settings.getNeuralNetworkModelRulesDirectory() + "\", disabling them: " + e.getMessage());
+        e.printStackTrace();
+      }
+    }
+
+    if (!settings.getWord2VecModelRulesDirectory().isEmpty()) {
+      try {
+        languageTool.activateWord2VecModelRules(new File(settings.getWord2VecModelRulesDirectory()));
+      } catch (IOException | RuntimeException e) {
+        logger.warning("Could not load word2vec model rules from \"" +
+            settings.getWord2VecModelRulesDirectory() + "\", disabling them: " + e.getMessage());
+        e.printStackTrace();
+      }
+    }
 
     documents.values().forEach(this::publishIssues);
   }
