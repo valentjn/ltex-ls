@@ -15,6 +15,7 @@ import org.languagetool.rules.*;
 
 import java.io.IOException;
 import java.lang.reflect.*;
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -23,8 +24,17 @@ import java.util.logging.*;
 
 class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware {
 
-  HashMap<String, TextDocumentItem> documents = new HashMap<>();
+  private HashMap<String, TextDocumentItem> documents = new HashMap<>();
   private LanguageClient client = null;
+  private ResourceBundle messages;
+
+  {
+    try {
+      messages = ResourceBundle.getBundle("MessagesBundle", Locale.getDefault());
+    } catch (MissingResourceException e) {
+      messages = ResourceBundle.getBundle("MessagesBundle", Locale.ENGLISH);
+    }
+  }
 
   private ResultCache resultCache =
       new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes, TimeUnit.MINUTES);
@@ -63,6 +73,12 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   static {
     logger.setUseParentHandlers(false);
     logger.addHandler(new DualConsoleHandler());
+  }
+
+  private String i18n(String key, Object... messageArguments) {
+    MessageFormat formatter = new MessageFormat("");
+    formatter.applyPattern(messages.getString(key).replaceAll("'", "''"));
+    return formatter.format(messageArguments);
   }
 
   private static boolean locationOverlaps(
@@ -149,6 +165,16 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
           acceptSuggestionCodeActionKind, addToDictionaryCodeActionKind)));
     capabilities.setExecuteCommandProvider(
         new ExecuteCommandOptions(Collections.singletonList(addToDictionaryCommandName)));
+
+    // Until it is specified in the LSP that the locale is automatically sent with
+    // the initialization request, we have to do that manually.
+    // See https://github.com/microsoft/language-server-protocol/issues/754.
+    JsonObject initializationOptions = (JsonObject) params.getInitializationOptions();
+    String localeLanguage = initializationOptions.get("locale").getAsString();
+    Locale locale = Locale.forLanguageTag(localeLanguage);
+    logger.info("Setting locale as " + locale.getLanguage() + ".");
+    messages = ResourceBundle.getBundle("MessagesBundle", locale);
+
     return CompletableFuture.completedFuture(new InitializeResult(capabilities));
   }
 
@@ -198,7 +224,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
               String word = plainText.substring(
                   getPlainTextPositionFor(match.getFromPos(), inverseAnnotatedText),
                   getPlainTextPositionFor(match.getToPos(), inverseAnnotatedText));
-              Command command = new Command("Add '" + word + "' to dictionary",
+              Command command = new Command(i18n("addWordToDictionary", word),
                   addToDictionaryCommandName);
               command.setCommand(addToDictionaryCommandName);
               command.setArguments(Arrays.asList(new Object[] { word }));
@@ -212,7 +238,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
             }
 
             for (String newWord : match.getSuggestedReplacements()) {
-              CodeAction codeAction = new CodeAction("Use '" + newWord + "'");
+              CodeAction codeAction = new CodeAction(i18n("useWord", newWord));
               codeAction.setKind(acceptSuggestionCodeActionKind);
               codeAction.setDiagnostics(Collections.singletonList(diagnostic));
               codeAction.setEdit(new WorkspaceEdit(Collections.singletonList(
@@ -359,8 +385,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
           break;
         }
         default: {
-          throw new UnsupportedOperationException(String.format(
-              "Code language \"%s\" is not supported.", codeLanguageId));
+          throw new UnsupportedOperationException(i18n("codeLanguageNotSupported", codeLanguageId));
         }
       }
 
