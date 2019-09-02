@@ -233,7 +233,6 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
               codeAction.setDiagnostics(Collections.singletonList(diagnostic));
               codeAction.setCommand(command);
               result.add(Either.forRight(codeAction));
-              logger.info(match.getRule().getId());
             }
 
             for (String newWord : match.getSuggestedReplacements()) {
