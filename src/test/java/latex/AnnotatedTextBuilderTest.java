@@ -99,6 +99,12 @@ public class AnnotatedTextBuilderTest {
         "This is a sentence.\n",
         "This is an equation: Dummy0, which proves the theorem. " +
         "This is a sentence. ");
+    assertPlainText(
+        "This is a test:\n" +
+        "\\begin{equation*}\n" +
+        "  a \\text{,~and} b.\n" +
+        "\\end{equation*}\n",
+        "This is a test: Dummy0, and Dummy1. ");
 
     {
       AnnotatedText annotatedText = buildAnnotatedText(

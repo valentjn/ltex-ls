@@ -10,7 +10,8 @@ import java.util.regex.*;
 
 public class AnnotatedTextBuilder {
   private enum Mode {
-    TEXT,
+    PARAGRAPH_TEXT,
+    INLINE_TEXT,
     HEADING,
     INLINE_MATH,
     DISPLAY_MATH,
@@ -132,7 +133,7 @@ public class AnnotatedTextBuilder {
       }
     } else if (curMode == Mode.DISPLAY_MATH) {
       dummy = ((lastSpace.isEmpty() ? " " : "")) + "Dummy" + (dummyCounter++) +
-          dummyLastPunctuation + " ";
+          dummyLastPunctuation + ((modeStack.peek() == Mode.INLINE_TEXT) ? dummyLastSpace : " ");
     } else {
       dummy = "Dummy" + (dummyCounter++) + dummyLastPunctuation + dummyLastSpace;
     }
@@ -201,7 +202,7 @@ public class AnnotatedTextBuilder {
 
   private void popMode() {
     modeStack.pop();
-    if (modeStack.isEmpty()) modeStack.push(Mode.TEXT);
+    if (modeStack.isEmpty()) modeStack.push(Mode.PARAGRAPH_TEXT);
   }
 
   private static boolean isPunctuation(char ch) {
@@ -247,7 +248,7 @@ public class AnnotatedTextBuilder {
     isMathCharTrivial = false;
 
     modeStack = new Stack<>();
-    modeStack.push(Mode.TEXT);
+    modeStack.push(Mode.PARAGRAPH_TEXT);
 
     while (pos < text.length()) {
       curChar = text.charAt(pos);
@@ -291,8 +292,10 @@ public class AnnotatedTextBuilder {
               command.equals("\\(") || command.equals("\\)")) {
             if (command.equals("\\[")) {
               enterDisplayMath();
+              addMarkup(command);
             } else if (command.equals("\\(")) {
               enterInlineMath();
+              addMarkup(command);
             } else {
               popMode();
               addMarkup(command, generateDummy());
@@ -364,7 +367,7 @@ public class AnnotatedTextBuilder {
             modeStack.push(Mode.HEADING);
             addMarkup(command + "{");
           } else if (command.equals("\\text") || command.equals("\\intertext")) {
-            modeStack.push(Mode.TEXT);
+            modeStack.push(Mode.INLINE_TEXT);
             String interpretAs = (isMathMode(curMode) ? generateDummy() : "");
             addMarkup(command + "{", interpretAs);
           } else {
@@ -471,6 +474,10 @@ public class AnnotatedTextBuilder {
             }
           } else {
             addMarkup(whiteSpace);
+          }
+
+          if ((curChar == '~') || (curChar == '&')) {
+            dummyLastSpace = " ";
           }
 
           break;
