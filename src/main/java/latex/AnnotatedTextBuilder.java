@@ -100,6 +100,7 @@ public class AnnotatedTextBuilder {
   private boolean isMathEmpty;
   private boolean preserveDummyLast;
   private boolean canInsertSpaceBeforeDummy;
+  private boolean isMathCharTrivial;
   private Stack<Mode> modeStack;
 
   private char curChar;
@@ -210,6 +211,13 @@ public class AnnotatedTextBuilder {
     canInsertSpaceBeforeDummy = true;
   }
 
+  private void enterInlineMath() {
+    modeStack.push(Mode.INLINE_MATH);
+    isMathEmpty = true;
+    canInsertSpaceBeforeDummy = true;
+    isMathCharTrivial = true;
+  }
+
   public AnnotatedTextBuilder addCode(String text) {
     this.text = text;
     pos = 0;
@@ -221,11 +229,10 @@ public class AnnotatedTextBuilder {
     isMathEmpty = true;
     preserveDummyLast = false;
     canInsertSpaceBeforeDummy = false;
+    isMathCharTrivial = false;
 
     modeStack = new Stack<>();
     modeStack.push(Mode.TEXT);
-
-    boolean isMathCharTrivial = false;
 
     while (pos < text.length()) {
       curChar = text.charAt(pos);
@@ -265,6 +272,16 @@ public class AnnotatedTextBuilder {
             addMarkup(argument, interpretAs);
           } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
             addMarkup(command, command.substring(1));
+          } else if (command.equals("\\[") || command.equals("\\]") ||
+              command.equals("\\(") || command.equals("\\)")) {
+            if (command.equals("\\[")) {
+              enterDisplayMath();
+            } else if (command.equals("\\(")) {
+              enterInlineMath();
+            } else {
+              popMode();
+              addMarkup(command, generateDummy());
+            }
           } else if (command.equals("\\ss")) {
             addMarkup(command, "\u00df");
           } else if (command.equals("\\\"")) {
@@ -406,11 +423,8 @@ public class AnnotatedTextBuilder {
               popMode();
               addMarkup(curString, generateDummy());
             } else {
-              modeStack.push(Mode.INLINE_MATH);
+              enterInlineMath();
               addMarkup(curString);
-              isMathEmpty = true;
-              canInsertSpaceBeforeDummy = true;
-              isMathCharTrivial = true;
             }
           }
 
