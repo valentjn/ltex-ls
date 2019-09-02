@@ -172,7 +172,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     JsonObject initializationOptions = (JsonObject) params.getInitializationOptions();
     String localeLanguage = initializationOptions.get("locale").getAsString();
     Locale locale = Locale.forLanguageTag(localeLanguage);
-    logger.info("Setting locale as " + locale.getLanguage() + ".");
+    logger.info("Setting locale to " + locale.getLanguage() + ".");
     messages = ResourceBundle.getBundle("MessagesBundle", locale);
 
     return CompletableFuture.completedFuture(new InitializeResult(capabilities));
