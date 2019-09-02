@@ -169,7 +169,22 @@ public class AnnotatedTextBuilder {
     if (interpretAs.isEmpty()) {
       return addMarkup(markup);
     } else {
-      builder.addMarkup(markup, interpretAs);
+      if (markup.length() >= interpretAs.length()) {
+        builder.addMarkup(markup, interpretAs);
+      } else {
+        // LanguageTool's AnnotatedText interpolates/extrapolates linearly between missing plain
+        // text positions in AnnotatedText.getOriginalTextPositionFor, this might lead to the error
+        // "fromPos (x) must be less than toPos (y)" when interpretAs is longer than markup
+        // ==> work around this by first adding interpretAs up to the length of markup,
+        // and then the rest character by character
+        builder.addMarkup(markup, interpretAs.substring(0, markup.length()));
+
+        for (int i = markup.length(); i < interpretAs.length(); i++) {
+          builder.addMarkup("",
+            ((i < interpretAs.length()) ? interpretAs.substring(i, i + 1) : ""));
+        }
+      }
+
       pos += markup.length();
       preserveDummyLast = false;
       textAdded(interpretAs);

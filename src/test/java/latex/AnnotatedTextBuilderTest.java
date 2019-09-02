@@ -111,5 +111,16 @@ public class AnnotatedTextBuilderTest {
       int end = annotatedText.getOriginalTextPositionFor(31 - 1) + 1;
       Assertions.assertTrue(start < end, start + " not smaller than " + end);
     }
+
+    {
+      AnnotatedText annotatedText = buildAnnotatedText(
+          "This is a test:\n" +
+          "\\begin{equation*}\n" +
+          "  a \\text{,~and} b.\n" +
+          "\\end{equation*}\n");
+      int start = annotatedText.getOriginalTextPositionFor(22);
+      int end = annotatedText.getOriginalTextPositionFor(24 - 1) + 1;
+      Assertions.assertTrue(start < end, start + " not smaller than " + end);
+    }
   }
 }
