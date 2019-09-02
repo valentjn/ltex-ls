@@ -17,8 +17,7 @@ import java.io.IOException;
 import java.lang.reflect.*;
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.logging.*;
 
@@ -380,7 +379,22 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
             }
           }
 
-          builder.addCode(document.getText());
+          ExecutorService executor = Executors.newCachedThreadPool();
+          Future<Object> future = executor.submit(new Callable<Object>() {
+            public Object call() {
+              builder.addCode(document.getText());
+              return null;
+            }
+          });
+
+          try {
+            future.get(10, TimeUnit.SECONDS);
+          } catch (TimeoutException | InterruptedException | ExecutionException e) {
+            throw new RuntimeException(i18n("latexAnnotatedTextBuilderFailed"), e);
+          } finally {
+            future.cancel(true); // may or may not desire this
+          }
+
           annotatedText = builder.getAnnotatedText();
           break;
         }
