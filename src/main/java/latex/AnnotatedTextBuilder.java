@@ -81,6 +81,7 @@ public class AnnotatedTextBuilder {
   private static final Pattern enDashPattern = Pattern.compile("^--");
   private static final Pattern umlautCommandPattern = Pattern.compile(
       "^\\\\\"([AEIOUaeiou]|(\\{([AEIOUaeiou])\\}))");
+  private static final Pattern displayMathPattern = Pattern.compile("^\\$\\$");
 
   private static final String[] mathEnvironments = {"equation", "equation*", "align", "align*",
       "gather", "gather*", "alignat", "alignat*", "multline", "multline*",
@@ -98,6 +99,7 @@ public class AnnotatedTextBuilder {
   private String dummyLastPunctuation;
   private boolean isMathEmpty;
   private boolean preserveDummyLast;
+  private boolean canInsertSpaceBeforeDummy;
   private Stack<Mode> modeStack;
 
   private char curChar;
@@ -202,6 +204,12 @@ public class AnnotatedTextBuilder {
     return !isMathMode(mode) && !isTikzMode(mode);
   }
 
+  private void enterDisplayMath() {
+    modeStack.push(Mode.DISPLAY_MATH);
+    isMathEmpty = true;
+    canInsertSpaceBeforeDummy = true;
+  }
+
   public AnnotatedTextBuilder addCode(String text) {
     this.text = text;
     pos = 0;
@@ -212,11 +220,11 @@ public class AnnotatedTextBuilder {
     dummyLastPunctuation = "";
     isMathEmpty = true;
     preserveDummyLast = false;
+    canInsertSpaceBeforeDummy = false;
 
     modeStack = new Stack<>();
     modeStack.push(Mode.TEXT);
 
-    boolean canInsertSpaceBeforeDummy = false;
     boolean isMathCharTrivial = false;
 
     while (pos < text.length()) {
@@ -239,9 +247,7 @@ public class AnnotatedTextBuilder {
 
             if (Arrays.asList(mathEnvironments).contains(environment)) {
               if (command.equals("\\begin")) {
-                modeStack.push(Mode.DISPLAY_MATH);
-                isMathEmpty = true;
-                canInsertSpaceBeforeDummy = true;
+                enterDisplayMath();
               } else {
                 popMode();
                 interpretAs = generateDummy();
@@ -385,15 +391,27 @@ public class AnnotatedTextBuilder {
           break;
         }
         case '$': {
-          if (curMode == Mode.INLINE_MATH) {
-            popMode();
-            addMarkup(curString, generateDummy());
+          String displayMath = matchFromPosition(displayMathPattern);
+
+          if (!displayMath.isEmpty()) {
+            if (curMode == Mode.DISPLAY_MATH) {
+              popMode();
+              addMarkup(displayMath, generateDummy());
+            } else {
+              enterDisplayMath();
+              addMarkup(displayMath);
+            }
           } else {
-            modeStack.push(Mode.INLINE_MATH);
-            addMarkup(curString);
-            isMathEmpty = true;
-            canInsertSpaceBeforeDummy = true;
-            isMathCharTrivial = true;
+            if (curMode == Mode.INLINE_MATH) {
+              popMode();
+              addMarkup(curString, generateDummy());
+            } else {
+              modeStack.push(Mode.INLINE_MATH);
+              addMarkup(curString);
+              isMathEmpty = true;
+              canInsertSpaceBeforeDummy = true;
+              isMathCharTrivial = true;
+            }
           }
 
           break;
