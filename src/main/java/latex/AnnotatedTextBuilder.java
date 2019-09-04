@@ -68,7 +68,7 @@ public class AnnotatedTextBuilder {
   };
 
   private static final Pattern commandPattern = Pattern.compile(
-      "^\\\\(([^A-Za-z]|([A-Za-z]+))\\*?)");
+      "^\\\\(([^A-Za-z]|([A-Za-z@]+))\\*?)");
   private static final Pattern argumentPattern = Pattern.compile("^\\{[^\\}]*?\\}");
   private static final Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
   private static final Pattern whiteSpacePattern = Pattern.compile(
