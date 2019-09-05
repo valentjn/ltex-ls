@@ -20,8 +20,8 @@ public class AnnotatedTextBuilder {
 
   private static final CommandSignature[] defaultCommandSignatures = {
     new CommandSignature("\\addtocontents{}"),
-    new CommandSignature("\\algnewcommand{}"),
-    new CommandSignature("\\algrenewcommand{}"),
+    new CommandSignature("\\algnewcommand{}{}"),
+    new CommandSignature("\\algrenewcommand{}{}"),
     new CommandSignature("\\bibliography{}"),
     new CommandSignature("\\bibliographystyle{}"),
     new CommandSignature("\\cite{}", CommandSignature.Action.DUMMY),
