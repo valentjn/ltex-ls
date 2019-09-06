@@ -80,7 +80,9 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
   private static boolean locationOverlaps(
       RuleMatch match, DocumentPositionCalculator positionCalculator, Range range) {
-    return overlaps(range, createDiagnostic(match, positionCalculator).getRange());
+    return overlaps(range, new Range(
+        positionCalculator.getPosition(match.getFromPos()),
+        positionCalculator.getPosition(match.getToPos())));
   }
 
   private static boolean overlaps(Range r1, Range r2) {
@@ -90,13 +92,13 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         r1.getEnd().getLine() <= r2.getStart().getLine();
   }
 
-  private static Diagnostic createDiagnostic(
+  private Diagnostic createDiagnostic(
       RuleMatch match, DocumentPositionCalculator positionCalculator) {
     Diagnostic ret = new Diagnostic();
     ret.setRange(new Range(
         positionCalculator.getPosition(match.getFromPos()),
         positionCalculator.getPosition(match.getToPos())));
-    ret.setSeverity(DiagnosticSeverity.Warning);
+    ret.setSeverity(settings.getDiagnosticSeverity());
     ret.setSource("LT - " + match.getRule().getDescription());
     ret.setMessage(match.getMessage().replaceAll("<suggestion>(.*?)</suggestion>", "'$1'"));
     return ret;

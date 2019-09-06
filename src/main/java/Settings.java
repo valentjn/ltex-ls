@@ -3,10 +3,12 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.*;
+import org.eclipse.lsp4j.DiagnosticSeverity;
 
 public class Settings {
   private String languageShortCode = null;
   private List<String> dictionary = null;
+  private DiagnosticSeverity diagnosticSeverity = null;
   private List<String> dummyCommandPrototypes = null;
   private List<String> ignoreCommandPrototypes = null;
   private String languageModelRulesDirectory = null;
@@ -37,6 +39,21 @@ public class Settings {
         getSettingFromJSON(jsonSettings, "ltex." + languagePrefix + ".dictionary").
         getAsJsonArray());
 
+    String diagnosticSeverityString =
+        getSettingFromJSON(jsonSettings, "ltex.diagnosticSeverity").getAsString();
+
+    if (diagnosticSeverityString.equals("error")) {
+      diagnosticSeverity = DiagnosticSeverity.Error;
+    } else if (diagnosticSeverityString.equals("warning")) {
+      diagnosticSeverity = DiagnosticSeverity.Warning;
+    } else if (diagnosticSeverityString.equals("information")) {
+      diagnosticSeverity = DiagnosticSeverity.Information;
+    } else if (diagnosticSeverityString.equals("hint")) {
+      diagnosticSeverity = DiagnosticSeverity.Hint;
+    } else {
+      diagnosticSeverity = null;
+    }
+
     dummyCommandPrototypes = convertJsonArrayToList(
         getSettingFromJSON(jsonSettings, "ltex.commands.dummy").getAsJsonArray());
     ignoreCommandPrototypes = convertJsonArrayToList(
@@ -55,6 +72,7 @@ public class Settings {
     Settings obj = new Settings();
     obj.languageShortCode = languageShortCode;
     obj.dictionary = ((dictionary == null) ? null : new ArrayList<>(dictionary));
+    obj.diagnosticSeverity = ((diagnosticSeverity == null) ? null : diagnosticSeverity);
     obj.dummyCommandPrototypes = ((dummyCommandPrototypes == null) ? null :
         new ArrayList<>(dummyCommandPrototypes));
     obj.ignoreCommandPrototypes = ((ignoreCommandPrototypes == null) ? null :
@@ -77,6 +95,11 @@ public class Settings {
 
     if ((dictionary == null) ? (other.dictionary != null) :
         !dictionary.equals(other.dictionary)) {
+      return false;
+    }
+
+    if ((diagnosticSeverity == null) ? (other.diagnosticSeverity != null) :
+        (diagnosticSeverity != other.diagnosticSeverity)) {
       return false;
     }
 
@@ -114,6 +137,7 @@ public class Settings {
     int hash = 3;
     hash = 53 * hash + ((languageShortCode != null) ? languageShortCode.hashCode() : 0);
     hash = 53 * hash + ((dictionary != null) ? dictionary.hashCode() : 0);
+    hash = 53 * hash + ((diagnosticSeverity != null) ? diagnosticSeverity.hashCode() : 0);
     hash = 53 * hash + ((dummyCommandPrototypes != null) ? dummyCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreCommandPrototypes != null) ? ignoreCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((languageModelRulesDirectory != null) ?
@@ -135,6 +159,10 @@ public class Settings {
 
   public List<String> getDictionary() {
     return getDefault(dictionary, Collections.emptyList());
+  }
+
+  public DiagnosticSeverity getDiagnosticSeverity() {
+    return getDefault(diagnosticSeverity, DiagnosticSeverity.Information);
   }
 
   public List<String> getDummyCommandPrototypes() {
