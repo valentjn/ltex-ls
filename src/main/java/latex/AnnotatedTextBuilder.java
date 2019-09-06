@@ -335,6 +335,8 @@ public class AnnotatedTextBuilder {
               popMode();
               addMarkup(command, generateDummy());
             }
+          } else if (command.equals("\\o")) {
+            addMarkup(command, "\u00f8");
           } else if (command.equals("\\ss")) {
             addMarkup(command, "\u00df");
           } else if (command.equals("\\\"")) {
