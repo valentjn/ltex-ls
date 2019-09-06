@@ -1,12 +1,12 @@
 import com.google.gson.*;
 import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.parser.Parser;
-import com.vladsch.flexmark.util.Pair;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.*;
+import org.eclipse.xtext.xbase.lib.Pair;
 import org.languagetool.*;
 import org.languagetool.markup.*;
 import org.languagetool.markup.AnnotatedTextBuilder;
@@ -20,6 +20,8 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.logging.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware {
 
@@ -44,7 +46,10 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
       CodeActionKind.QuickFix + ".ltex.acceptSuggestion";
   private static final String addToDictionaryCodeActionKind =
       CodeActionKind.QuickFix + ".ltex.addToDictionary";
+  private static final String ignoreRuleInSentenceCodeActionKind =
+      CodeActionKind.QuickFix + ".ltex.ignoreRuleInSentence";
   private static final String addToDictionaryCommandName = "ltex.addToDictionary";
+  private static final String ignoreRuleInSentenceCommandName = "ltex.ignoreRuleInSentence";
   private static final Logger logger = Logger.getLogger("LanguageToolLanguageServer");
 
   // https://stackoverflow.com/a/23717493
@@ -161,9 +166,11 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
     capabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
     capabilities.setCodeActionProvider(
         new CodeActionOptions(Arrays.asList(
-          acceptSuggestionCodeActionKind, addToDictionaryCodeActionKind)));
+          acceptSuggestionCodeActionKind, addToDictionaryCodeActionKind,
+          ignoreRuleInSentenceCodeActionKind)));
     capabilities.setExecuteCommandProvider(
-        new ExecuteCommandOptions(Collections.singletonList(addToDictionaryCommandName)));
+        new ExecuteCommandOptions(Arrays.asList(
+          addToDictionaryCommandName, ignoreRuleInSentenceCommandName)));
 
     // Until it is specified in the LSP that the locale is automatically sent with
     // the initialization request, we have to do that manually.
@@ -254,12 +261,12 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
             document.getUri(), document.getVersion());
         Pair<List<RuleMatch>, AnnotatedText> validateResult = validateDocument(document);
         String text = document.getText();
-        String plainText = validateResult.getSecond().getPlainText();
+        String plainText = validateResult.getValue().getPlainText();
         AnnotatedText inverseAnnotatedText = null;
         DocumentPositionCalculator positionCalculator = new DocumentPositionCalculator(text);
         List<Either<Command, CodeAction>> result = new ArrayList<Either<Command, CodeAction>>();
 
-        for (RuleMatch match : validateResult.getFirst()) {
+        for (RuleMatch match : validateResult.getKey()) {
           if (locationOverlaps(match, positionCalculator, params.getRange())) {
             String ruleId = match.getRule().getId();
             Diagnostic diagnostic = createDiagnostic(match, positionCalculator);
@@ -268,7 +275,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
             if (ruleId.startsWith("MORFOLOGIK_") || ruleId.startsWith("HUNSPELL_") ||
                 ruleId.startsWith("GERMAN_SPELLER_")) {
               if (inverseAnnotatedText == null) {
-                inverseAnnotatedText = invertAnnotatedText(validateResult.getSecond());
+                inverseAnnotatedText = invertAnnotatedText(validateResult.getValue());
               }
 
               String word = plainText.substring(
@@ -276,11 +283,39 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
                   getPlainTextPositionFor(match.getToPos(), inverseAnnotatedText));
               Command command = new Command(i18n("addWordToDictionary", word),
                   addToDictionaryCommandName);
-              command.setCommand(addToDictionaryCommandName);
               command.setArguments(Arrays.asList(new Object[] { word }));
 
               CodeAction codeAction = new CodeAction(command.getTitle());
               codeAction.setKind(addToDictionaryCodeActionKind);
+              codeAction.setDiagnostics(Collections.singletonList(diagnostic));
+              codeAction.setCommand(command);
+              result.add(Either.forRight(codeAction));
+            }
+
+            {
+              String sentence = match.getSentence().getText().trim();
+              Matcher matcher = Pattern.compile("Dummy[0-9]+").matcher(sentence);
+              StringBuilder sentencePatternStringBuilder = new StringBuilder();
+              int lastEnd = 0;
+
+              while (matcher.find()) {
+                sentencePatternStringBuilder.append(Pattern.quote(
+                    sentence.substring(lastEnd, matcher.start())));
+                sentencePatternStringBuilder.append("Dummy[0-9]+");
+                lastEnd = matcher.end();
+              }
+
+              if (lastEnd < sentence.length()) {
+                sentencePatternStringBuilder.append(Pattern.quote(sentence.substring(lastEnd)));
+              }
+
+              String sentencePatternString = "^" + sentencePatternStringBuilder.toString() + "$";
+              Command command = new Command(i18n("ignoreInThisSentence"),
+                  ignoreRuleInSentenceCommandName);
+              command.setArguments(Arrays.asList(new Object[] { ruleId, sentencePatternString }));
+
+              CodeAction codeAction = new CodeAction(command.getTitle());
+              codeAction.setKind(ignoreRuleInSentenceCodeActionKind);
               codeAction.setDiagnostics(Collections.singletonList(diagnostic));
               codeAction.setCommand(command);
               result.add(Either.forRight(codeAction));
@@ -327,7 +362,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
   }
 
   private List<Diagnostic> getIssues(TextDocumentItem document) {
-    List<RuleMatch> matches = validateDocument(document).getFirst();
+    List<RuleMatch> matches = validateDocument(document).getKey();
     DocumentPositionCalculator positionCalculator =
         new DocumentPositionCalculator(document.getText());
 
@@ -453,8 +488,36 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
     try {
       List<RuleMatch> result = languageTool.check(annotatedText);
+
       logger.info("Obtained " + result.size() + " rule match" +
           ((result.size() != 1) ? "es" : ""));
+
+      List<Pair<String, Pattern>> ignoreRuleSentencePairs = settings.getIgnoreRuleSentencePairs();
+
+      if (!result.isEmpty() && !ignoreRuleSentencePairs.isEmpty()) {
+        List<RuleMatch> ignoreMatches = new ArrayList<>();
+
+        for (RuleMatch match : result) {
+          String ruleId = match.getRule().getId();
+          String sentence = match.getSentence().getText().trim();
+
+          for (Pair<String, Pattern> pair : ignoreRuleSentencePairs) {
+            if (pair.getKey().equals(ruleId) && pair.getValue().matcher(sentence).find()) {
+              logger.info("Removing ignored rule match with rule \"" + ruleId +
+                  "\" and sentence \"" + sentence + "\"");
+              ignoreMatches.add(match);
+              break;
+            }
+          }
+        }
+
+        if (!ignoreMatches.isEmpty()) {
+          logger.info("Removed " + ignoreMatches.size() + " ignored rule match" +
+              ((ignoreMatches.size() != 1) ? "es" : ""));
+          for (RuleMatch match : ignoreMatches) result.remove(match);
+        }
+      }
+
       return new Pair<>(result, annotatedText);
     } catch (RuntimeException | IOException e) {
       logger.severe("LanguageTool failed: " + e.getMessage());
@@ -477,6 +540,11 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         if (Objects.equals(params.getCommand(), addToDictionaryCommandName)) {
           String word = ((JsonElement) params.getArguments().get(0)).getAsString();
           client.telemetryEvent(addToDictionaryCommandName + " " + word);
+          return CompletableFuture.completedFuture(true);
+        } else if (Objects.equals(params.getCommand(), ignoreRuleInSentenceCommandName)) {
+          String rule = ((JsonElement) params.getArguments().get(0)).getAsString();
+          String sentence = ((JsonElement) params.getArguments().get(1)).getAsString();
+          client.telemetryEvent(ignoreRuleInSentenceCommandName + " " + rule + " " + sentence);
           return CompletableFuture.completedFuture(true);
         }
 

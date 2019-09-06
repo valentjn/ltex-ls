@@ -1,9 +1,11 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import com.google.gson.*;
 import org.eclipse.lsp4j.DiagnosticSeverity;
+import org.eclipse.xtext.xbase.lib.Pair;
 
 public class Settings {
   private String languageShortCode = null;
@@ -11,6 +13,7 @@ public class Settings {
   private DiagnosticSeverity diagnosticSeverity = null;
   private List<String> dummyCommandPrototypes = null;
   private List<String> ignoreCommandPrototypes = null;
+  private List<Pair<String, Pattern>> ignoreRuleSentencePairs = null;
   private String languageModelRulesDirectory = null;
   private String neuralNetworkModelRulesDirectory = null;
   private String word2VecModelRulesDirectory = null;
@@ -59,6 +62,14 @@ public class Settings {
     ignoreCommandPrototypes = convertJsonArrayToList(
         getSettingFromJSON(jsonSettings, "ltex.commands.ignore").getAsJsonArray());
 
+    ignoreRuleSentencePairs = new ArrayList<>();
+    for (JsonElement element :
+        getSettingFromJSON(jsonSettings, "ltex.ignoreRuleInSentence").getAsJsonArray()) {
+      JsonObject elementObject = element.getAsJsonObject();
+      ignoreRuleSentencePairs.add(new Pair<>(elementObject.get("rule").getAsString(),
+          Pattern.compile(elementObject.get("sentence").getAsString())));
+    }
+
     languageModelRulesDirectory = getSettingFromJSON(
         jsonSettings, "ltex.additionalRules.languageModel").getAsString();
     neuralNetworkModelRulesDirectory = getSettingFromJSON(
@@ -77,6 +88,17 @@ public class Settings {
         new ArrayList<>(dummyCommandPrototypes));
     obj.ignoreCommandPrototypes = ((ignoreCommandPrototypes == null) ? null :
         new ArrayList<>(ignoreCommandPrototypes));
+    obj.ignoreRuleSentencePairs = null;
+
+    if (ignoreRuleSentencePairs != null) {
+      obj.ignoreRuleSentencePairs = new ArrayList<>();
+
+      for (Pair<String, Pattern> pair : ignoreRuleSentencePairs) {
+        obj.ignoreRuleSentencePairs.add((pair == null) ? null :
+            new Pair<String, Pattern>(pair.getKey(), pair.getValue()));
+      }
+    }
+
     obj.languageModelRulesDirectory = languageModelRulesDirectory;
     obj.neuralNetworkModelRulesDirectory = neuralNetworkModelRulesDirectory;
     obj.word2VecModelRulesDirectory = word2VecModelRulesDirectory;
@@ -113,6 +135,11 @@ public class Settings {
       return false;
     }
 
+    if ((ignoreRuleSentencePairs == null) ? (other.ignoreRuleSentencePairs != null) :
+        !ignoreRuleSentencePairs.equals(other.ignoreRuleSentencePairs)) {
+      return false;
+    }
+
     if ((languageModelRulesDirectory == null) ? (other.languageModelRulesDirectory != null) :
         !languageModelRulesDirectory.equals(other.languageModelRulesDirectory)) {
       return false;
@@ -140,6 +167,7 @@ public class Settings {
     hash = 53 * hash + ((diagnosticSeverity != null) ? diagnosticSeverity.hashCode() : 0);
     hash = 53 * hash + ((dummyCommandPrototypes != null) ? dummyCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreCommandPrototypes != null) ? ignoreCommandPrototypes.hashCode() : 0);
+    hash = 53 * hash + ((ignoreRuleSentencePairs != null) ? ignoreRuleSentencePairs.hashCode() : 0);
     hash = 53 * hash + ((languageModelRulesDirectory != null) ?
         languageModelRulesDirectory.hashCode() : 0);
     hash = 53 * hash + ((neuralNetworkModelRulesDirectory != null) ?
@@ -171,6 +199,10 @@ public class Settings {
 
   public List<String> getIgnoreCommandPrototypes() {
     return getDefault(ignoreCommandPrototypes, Collections.emptyList());
+  }
+
+  public List<Pair<String, Pattern>> getIgnoreRuleSentencePairs() {
+    return getDefault(ignoreRuleSentencePairs, Collections.emptyList());
   }
 
   public String getLanguageModelRulesDirectory() {
