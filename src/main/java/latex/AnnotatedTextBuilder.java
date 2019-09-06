@@ -27,6 +27,8 @@ public class AnnotatedTextBuilder {
     new CommandSignature("\\algrenewcommand{}{}"),
     new CommandSignature("\\bibliography{}"),
     new CommandSignature("\\bibliographystyle{}"),
+    new CommandSignature("\\captionsetup{}"),
+    new CommandSignature("\\captionsetup[]{}"),
     new CommandSignature("\\cite{}", CommandSignature.Action.DUMMY),
     new CommandSignature("\\cite[]{}", CommandSignature.Action.DUMMY),
     new CommandSignature("\\clearfield{}"),
