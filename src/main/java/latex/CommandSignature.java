@@ -56,7 +56,7 @@ public class CommandSignature {
     return (matcher.find() ? matcher.group() : "");
   }
 
-  private static String matchArgumentFromPosition(String text, int pos, ArgumentType argumentType) {
+  public static String matchArgumentFromPosition(String text, int pos, ArgumentType argumentType) {
     int startPos = pos;
     Stack<ArgumentType> argumentTypeStack = new Stack<>();
     char openChar = '\0';

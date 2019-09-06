@@ -323,6 +323,12 @@ public class AnnotatedTextBuilder {
             isMathCharTrivial = true;
             preserveDummyLast = true;
             addMarkup(argument, interpretAs);
+
+            if (environment.equals("tabular")) {
+              String environmentArgument = CommandSignature.matchArgumentFromPosition(
+                  text, pos, CommandSignature.ArgumentType.BRACE);
+              addMarkup(environmentArgument);
+            }
           } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
             addMarkup(command, command.substring(1));
           } else if (command.equals("\\[") || command.equals("\\]") ||
