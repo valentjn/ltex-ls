@@ -62,6 +62,8 @@ public class AnnotatedTextBuilder {
     new CommandSignature("\\input{}"),
     new CommandSignature("\\KOMAoptions{}"),
     new CommandSignature("\\label{}"),
+    new CommandSignature("\\multicolumn{}{}"),
+    new CommandSignature("\\multirow{}{}"),
     new CommandSignature("\\newcommand{}{}"),
     new CommandSignature("\\newcommand[]{}{}"),
     new CommandSignature("\\newcommand*{}{}"),
