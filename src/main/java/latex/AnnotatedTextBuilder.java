@@ -364,7 +364,7 @@ public class AnnotatedTextBuilder {
 
             if (matcher.find()) {
               String accentCommand = matcher.group(1);
-              String letter = (!matcher.group(3).isEmpty() ? matcher.group(3) : matcher.group(5));
+              String letter = ((matcher.group(3) != null) ? matcher.group(3) : matcher.group(5));
               String interpretAs = "";
 
               switch (accentCommand.charAt(1)) {
@@ -468,7 +468,7 @@ public class AnnotatedTextBuilder {
                 }
               }
 
-              addMarkup(accentCommand, interpretAs);
+              addMarkup(matcher.group(), interpretAs);
             } else {
               addMarkup(command);
             }
@@ -477,7 +477,7 @@ public class AnnotatedTextBuilder {
 
             if (matcher.find()) {
               String accentCommand = matcher.group(1);
-              String letter = (!matcher.group(3).isEmpty() ? matcher.group(3) : matcher.group(4));
+              String letter = ((matcher.group(3) != null) ? matcher.group(3) : matcher.group(4));
               String interpretAs = "";
 
               switch (accentCommand.charAt(1)) {
@@ -495,7 +495,7 @@ public class AnnotatedTextBuilder {
                 }
               }
 
-              addMarkup(accentCommand, interpretAs);
+              addMarkup(matcher.group(), interpretAs);
             } else {
               addMarkup(command);
             }
