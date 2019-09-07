@@ -1,22 +1,11 @@
-buildscript {
-  repositories {
-    jcenter()
-  }
-  dependencies {
-    classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.1'
-  }
+plugins {
+  id 'java'
+  id 'idea'
+  id 'application'
 }
 
 group 'valentjn'
 version '0.0-SNAPSHOT'
-
-// Apply the java plugin to add support for Java
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'org.junit.platform.gradle.plugin'
-
-// Apply the application plugin to add support for building an application
-apply plugin: 'application'
 
 idea {
   module {
@@ -25,10 +14,7 @@ idea {
   }
 }
 
-// In this section you declare where to find the dependencies of your project
 repositories {
-  // Use jcenter for resolving your dependencies.
-  // You can declare any Maven/Ivy/file repository here.
   jcenter()
 }
 
@@ -45,6 +31,10 @@ dependencies {
 
   compile 'com.vladsch.flexmark:flexmark-all:0.19.1'
   compile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.1'
+}
+
+test {
+  useJUnitPlatform()
 }
 
 sourceSets {
