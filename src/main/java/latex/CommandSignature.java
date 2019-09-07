@@ -79,15 +79,7 @@ public class CommandSignature {
     while (pos < text.length()) {
       switch (text.charAt(pos)) {
         case '\\': {
-          if (pos + 1 < text.length()) {
-            char nextChar = text.charAt(pos + 1);
-
-            if ((nextChar == '{') || (nextChar == '[') ||
-                (nextChar == '}') || (nextChar == ']')) {
-              pos++;
-            }
-          }
-
+          if (pos + 1 < text.length()) pos++;
           break;
         }
         case '{': {
