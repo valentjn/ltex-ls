@@ -24,7 +24,7 @@ public class CommandSignature {
   }
 
   public CommandSignature(String commandPrototype, Action action) {
-    Pattern commandPattern = Pattern.compile("^\\\\([^A-Za-z]|([A-Za-z@]+))\\*?");
+    Pattern commandPattern = Pattern.compile("^\\\\([^A-Za-z@]|([A-Za-z@]+))\\*?");
     Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\]))");
 
     Matcher commandMatcher = commandPattern.matcher(commandPrototype);
