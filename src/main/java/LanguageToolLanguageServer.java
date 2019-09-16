@@ -260,6 +260,11 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         VersionedTextDocumentIdentifier textDocument = new VersionedTextDocumentIdentifier(
             document.getUri(), document.getVersion());
         Pair<List<RuleMatch>, AnnotatedText> validateResult = validateDocument(document);
+
+        if (validateResult.getValue() == null) {
+          return CompletableFuture.completedFuture(Collections.emptyList());
+        }
+
         String text = document.getText();
         String plainText = validateResult.getValue().getPlainText();
         AnnotatedText inverseAnnotatedText = null;
