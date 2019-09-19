@@ -54,15 +54,15 @@ public class AnnotatedTextBuilder {
   }
 
   private void processProceedingCharacters(BasedSequence passedOver) {
-    for (char c : passedOver.toString().toCharArray()) {
-      if (c == '\r' || c == '\n') {
+    for (char ch : passedOver.toString().toCharArray()) {
+      if ((ch == '\r') || (ch == '\n')) {
         if (inParagraph) {
           builder.addText(" ");
         } else {
-          builder.addText(new String(new char[]{c}));
+          builder.addText(String.valueOf(ch));
         }
       } else {
-        builder.addMarkup(new String(new char[]{c}));
+        builder.addMarkup(String.valueOf(ch));
       }
     }
   }
