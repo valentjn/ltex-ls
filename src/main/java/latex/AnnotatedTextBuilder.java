@@ -253,7 +253,8 @@ public class AnnotatedTextBuilder {
     return this;
   }
 
-  private AnnotatedTextBuilder addMarkup(String markup, String interpretAs) {
+  private AnnotatedTextBuilder addMarkup(String markup, String interpretAs)
+      throws InterruptedException {
     if (interpretAs.isEmpty()) {
       return addMarkup(markup);
     } else {
@@ -268,6 +269,7 @@ public class AnnotatedTextBuilder {
         builder.addMarkup(markup, interpretAs.substring(0, markup.length()));
 
         for (int i = markup.length(); i < interpretAs.length(); i++) {
+          if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
           builder.addMarkup("",
             ((i < interpretAs.length()) ? interpretAs.substring(i, i + 1) : ""));
         }
@@ -321,7 +323,7 @@ public class AnnotatedTextBuilder {
     isMathCharTrivial = true;
   }
 
-  public AnnotatedTextBuilder addCode(String text) {
+  public AnnotatedTextBuilder addCode(String text) throws InterruptedException {
     this.text = text;
     pos = 0;
     dummyCounter = 0;
@@ -338,6 +340,8 @@ public class AnnotatedTextBuilder {
     modeStack.push(Mode.PARAGRAPH_TEXT);
 
     while (pos < text.length()) {
+      if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
+
       curChar = text.charAt(pos);
       curString = String.valueOf(curChar);
       curMode = modeStack.peek();
@@ -594,6 +598,8 @@ public class AnnotatedTextBuilder {
             CommandSignature matchingCommand = null;
 
             for (CommandSignature commandSignature : commandSignatures) {
+              if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
+
               if (commandSignature.name.equals(command)) {
                 String curMatch = commandSignature.matchFromPosition(text, pos);
 

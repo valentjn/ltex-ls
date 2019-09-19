@@ -46,6 +46,7 @@ public class CommandSignature {
 
       argumentTypes.add(argumentType);
       pos += argumentMatcher.group().length();
+      assert argumentMatcher.group().length() > 0;
     }
 
     this.action = action;
@@ -56,7 +57,8 @@ public class CommandSignature {
     return (matcher.find() ? matcher.group() : "");
   }
 
-  public static String matchArgumentFromPosition(String text, int pos, ArgumentType argumentType) {
+  public static String matchArgumentFromPosition(String text, int pos, ArgumentType argumentType)
+      throws InterruptedException {
     int startPos = pos;
     Stack<ArgumentType> argumentTypeStack = new Stack<>();
     char openChar = '\0';
@@ -77,6 +79,8 @@ public class CommandSignature {
     argumentTypeStack.push(argumentType);
 
     while (pos < text.length()) {
+      if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
+
       switch (text.charAt(pos)) {
         case '\\': {
           if (pos + 1 < text.length()) pos++;
@@ -122,7 +126,7 @@ public class CommandSignature {
     return "";
   }
 
-  public String matchFromPosition(String text, int pos) {
+  public String matchFromPosition(String text, int pos) throws InterruptedException {
     Pattern commandPattern = Pattern.compile("^" + Pattern.quote(name));
     Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
 
@@ -131,6 +135,8 @@ public class CommandSignature {
     pos += match.length();
 
     for (ArgumentType argumentType : argumentTypes) {
+      if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
+
       match = matchFromPosition(text, pos, commentPattern);
       pos += match.length();
 

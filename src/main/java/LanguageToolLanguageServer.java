@@ -451,7 +451,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
 
         ExecutorService executor = Executors.newCachedThreadPool();
         Future<Object> future = executor.submit(new Callable<Object>() {
-          public Object call() {
+          public Object call() throws InterruptedException {
             builder.addCode(document.getText());
             return null;
           }
@@ -462,7 +462,7 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
           throw new RuntimeException(i18n("latexAnnotatedTextBuilderFailed"), e);
         } finally {
-          future.cancel(true); // may or may not desire this
+          future.cancel(true);
         }
 
         annotatedText = builder.getAnnotatedText();

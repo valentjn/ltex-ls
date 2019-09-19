@@ -6,7 +6,12 @@ import org.languagetool.markup.AnnotatedText;
 
 public class AnnotatedTextBuilderTest {
   static AnnotatedText buildAnnotatedText(String code) {
-    return (new latex.AnnotatedTextBuilder()).addCode(code).getAnnotatedText();
+    try {
+      return (new latex.AnnotatedTextBuilder()).addCode(code).getAnnotatedText();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 
   static void assertPlainText(String code, String expectedPlainText) {
