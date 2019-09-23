@@ -19,7 +19,6 @@ import org.languagetool.rules.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.*;
-import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
@@ -31,15 +30,6 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
   private HashMap<String, TextDocumentItem> documents = new HashMap<>();
   private LanguageClient client = null;
-  private ResourceBundle messages;
-
-  {
-    try {
-      messages = ResourceBundle.getBundle("MessagesBundle", Locale.getDefault());
-    } catch (MissingResourceException e) {
-      messages = ResourceBundle.getBundle("MessagesBundle", Locale.ENGLISH);
-    }
-  }
 
   private JLanguageTool languageTool;
   private Settings settings = new Settings();
@@ -79,12 +69,6 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
   static {
     logger.setUseParentHandlers(false);
     logger.addHandler(new DualConsoleHandler());
-  }
-
-  private String i18n(String key, Object... messageArguments) {
-    MessageFormat formatter = new MessageFormat("");
-    formatter.applyPattern(messages.getString(key).replaceAll("'", "''"));
-    return formatter.format(messageArguments);
   }
 
   private static boolean locationOverlaps(
@@ -183,7 +167,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     String localeLanguage = initializationOptions.get("locale").getAsString();
     Locale locale = Locale.forLanguageTag(localeLanguage);
     logger.info("Setting locale to " + locale.getLanguage() + ".");
-    messages = ResourceBundle.getBundle("MessagesBundle", locale);
+    Tools.setLocale(locale);
 
     reinitialize();
 
@@ -290,7 +274,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
               String word = plainText.substring(
                   getPlainTextPositionFor(match.getFromPos(), inverseAnnotatedText),
                   getPlainTextPositionFor(match.getToPos(), inverseAnnotatedText));
-              Command command = new Command(i18n("addWordToDictionary", word),
+              Command command = new Command(Tools.i18n("addWordToDictionary", word),
                   addToDictionaryCommandName);
               command.setArguments(Arrays.asList(new Object[] { word }));
 
@@ -319,7 +303,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
               }
 
               String sentencePatternString = "^" + sentencePatternStringBuilder.toString() + "$";
-              Command command = new Command(i18n("ignoreInThisSentence"),
+              Command command = new Command(Tools.i18n("ignoreInThisSentence"),
                   ignoreRuleInSentenceCommandName);
               command.setArguments(Arrays.asList(new Object[] { ruleId, sentencePatternString }));
 
@@ -331,7 +315,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
             }
 
             for (String newWord : match.getSuggestedReplacements()) {
-              CodeAction codeAction = new CodeAction(i18n("useWord", newWord));
+              CodeAction codeAction = new CodeAction(Tools.i18n("useWord", newWord));
               codeAction.setKind(acceptSuggestionCodeActionKind);
               codeAction.setDiagnostics(Collections.singletonList(diagnostic));
               codeAction.setEdit(new WorkspaceEdit(Collections.singletonList(
@@ -463,7 +447,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
         try {
           future.get(10, TimeUnit.SECONDS);
         } catch (TimeoutException | InterruptedException | ExecutionException e) {
-          throw new RuntimeException(i18n("latexAnnotatedTextBuilderFailed"), e);
+          throw new RuntimeException(Tools.i18n("latexAnnotatedTextBuilderFailed"), e);
         } finally {
           future.cancel(true);
         }
@@ -472,7 +456,8 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
         break;
       }
       default: {
-        throw new UnsupportedOperationException(i18n("codeLanguageNotSupported", codeLanguageId));
+        throw new UnsupportedOperationException(Tools.i18n(
+            "codeLanguageNotSupported", codeLanguageId));
       }
     }
 
