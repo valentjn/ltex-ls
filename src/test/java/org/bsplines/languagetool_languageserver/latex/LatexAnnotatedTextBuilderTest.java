@@ -56,6 +56,13 @@ public class LatexAnnotatedTextBuilderTest {
         "\\\"{U}ml\\\"a\\\"{u}t\\\"en.\n",
         "\u00cb\u00efn T\u00ebxt m\u00eft v\u00ef\u00ebl\u00ebn " +
         "\u00dcml\u00e4\u00fct\u00ebn. ");
+
+    {
+      AnnotatedText annotatedText = buildAnnotatedText("\\cite{Kubota}*{Theorem 3.7}\n");
+      int start = annotatedText.getOriginalTextPositionFor(5);
+      int end = annotatedText.getOriginalTextPositionFor(8 - 1) + 1;
+      Assertions.assertTrue(start < end, start + " not smaller than " + end);
+    }
   }
 
   @Test
