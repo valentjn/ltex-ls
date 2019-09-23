@@ -38,6 +38,11 @@ public class LatexAnnotatedTextBuilderTest {
         "\n" +
         "This is another sentence.\n",
         "This is a sentence.\n\nThis is another sentence. ");
+    assertPlainText(
+        "This is a sentence.%\r\n" +
+        "\r\n" +
+        "This is another sentence.\r\n",
+        "This is a sentence.\n\nThis is another sentence. ");
     assertPlainText("This is a \\textcolor{mittelblau}{test}.\n", "This is a test. ");
     assertPlainText("This is a \\raisebox{-0.5\\height-0.5mm}{test}.\n", "This is a test. ");
     assertPlainText("This is a &test.\n", "This is a test. ");

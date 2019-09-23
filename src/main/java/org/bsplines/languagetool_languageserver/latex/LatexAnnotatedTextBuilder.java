@@ -157,9 +157,10 @@ public class LatexAnnotatedTextBuilder {
   private static final Pattern commandPattern = Pattern.compile(
       "^\\\\(([^A-Za-z@]|([A-Za-z@]+))\\*?)");
   private static final Pattern argumentPattern = Pattern.compile("^\\{[^\\}]*?\\}");
-  private static final Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
+  private static final Pattern commentPattern = Pattern.compile(
+      "^%.*?($|((\n|\r|\r\n)[ \n\r\t]*))");
   private static final Pattern whiteSpacePattern = Pattern.compile(
-      "^[ \n\r\t]+(%.*?\n[ \n\r\t]*)?");
+      "^[ \n\r\t]+(%.*?($|((\n|\r|\r\n)[ \n\r\t]*)))?");
   private static final Pattern lengthPattern = Pattern.compile(
       "-?[0-9]*(\\.[0-9]+)?(pt|mm|cm|ex|em|bp|dd|pc|in)");
   private static final Pattern lengthInBracePattern = Pattern.compile(
@@ -290,7 +291,7 @@ public class LatexAnnotatedTextBuilder {
   private void textAdded(String text) {
     if (text.isEmpty()) return;
     char lastChar = text.charAt(text.length() - 1);
-    lastSpace = (((lastChar == ' ') || (lastChar == '\n')) ? " " : "");
+    lastSpace = (((lastChar == ' ') || (lastChar == '\n') || (lastChar == '\r')) ? " " : "");
     lastPunctuation = (isPunctuation(lastChar) ? " " : "");
   }
 
@@ -338,6 +339,10 @@ public class LatexAnnotatedTextBuilder {
         ", canInsertSpaceBeforeDummy = " + canInsertSpaceBeforeDummy +
         ", isMathCharTrivial = " + isMathCharTrivial + ", modeStack = " + modeStack +
         ", curChar = \"" + curChar + "\", curString = \"" + curString + "\", curMode = " + curMode;
+  }
+
+  private static boolean containsTwoEndsOfLine(String text) {
+    return (text.contains("\n\n") || text.contains("\r\r") || text.contains("\r\n\r\n"));
   }
 
   public LatexAnnotatedTextBuilder addCode(String text) throws InterruptedException {
@@ -704,7 +709,7 @@ public class LatexAnnotatedTextBuilder {
           String comment = matchFromPosition(commentPattern);
           preserveDummyLast = true;
           isMathCharTrivial = true;
-          addMarkup(comment, (comment.contains("\n\n") ? "\n\n" : ""));
+          addMarkup(comment, (containsTwoEndsOfLine(comment) ? "\n\n" : ""));
           break;
         }
         case ' ':
@@ -719,7 +724,7 @@ public class LatexAnnotatedTextBuilder {
           isMathCharTrivial = true;
 
           if (isTextMode(curMode)) {
-            if (whiteSpace.contains("\n\n")) {
+            if (containsTwoEndsOfLine(whiteSpace)) {
               addMarkup(whiteSpace, "\n\n");
             } else {
               addMarkup(whiteSpace, (lastSpace.isEmpty() ? " " : ""));
