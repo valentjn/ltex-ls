@@ -77,6 +77,7 @@ public class LatexAnnotatedTextBuilder {
     new LatexCommandSignature("\\geometry{}"),
     new LatexCommandSignature("\\glsaddstoragekey{}{}{}"),
     new LatexCommandSignature("\\graphicspath{}"),
+    new LatexCommandSignature("\\href{}{}", LatexCommandSignature.Action.DUMMY),
     new LatexCommandSignature("\\hypersetup{}"),
     new LatexCommandSignature("\\hyperref[]"),
     new LatexCommandSignature("\\ifcurrentfield{}"),
