@@ -67,6 +67,7 @@ public class AnnotatedTextBuilder {
     new CommandSignature("\\DisableLigatures{}"),
     new CommandSignature("\\documentclass{}"),
     new CommandSignature("\\documentclass[]{}"),
+    new CommandSignature("\\email{}", CommandSignature.Action.DUMMY),
     new CommandSignature("\\eqref{}", CommandSignature.Action.DUMMY),
     new CommandSignature("\\etocsetnexttocdepth{}"),
     new CommandSignature("\\etocsettocstyle{}{}"),
