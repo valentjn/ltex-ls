@@ -1,8 +1,12 @@
+package org.bsplines.languagetool_languageserver;
+
 import com.google.gson.*;
 import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.parser.Parser;
 
 import org.apache.commons.text.StringEscapeUtils;
+import org.bsplines.languagetool_languageserver.latex.*;
+import org.bsplines.languagetool_languageserver.markdown.*;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.*;
@@ -23,7 +27,7 @@ import java.util.logging.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware {
+public class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware {
 
   private HashMap<String, TextDocumentItem> documents = new HashMap<>();
   private LanguageClient client = null;
@@ -429,24 +433,23 @@ class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware 
         Parser p = Parser.builder().build();
         Document mdDocument = (Document) p.parse(document.getText());
 
-        markdown.AnnotatedTextBuilder builder =
-            new markdown.AnnotatedTextBuilder();
+        MarkdownAnnotatedTextBuilder builder = new MarkdownAnnotatedTextBuilder();
         builder.visit(mdDocument);
 
         annotatedText = builder.getAnnotatedText();
         break;
       }
       case "latex": {
-        latex.AnnotatedTextBuilder builder = new latex.AnnotatedTextBuilder();
+        LatexAnnotatedTextBuilder builder = new LatexAnnotatedTextBuilder();
 
         for (String commandPrototype : settings.getDummyCommandPrototypes()) {
-          builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
-              latex.CommandSignature.Action.DUMMY));
+          builder.commandSignatures.add(new LatexCommandSignature(commandPrototype,
+              LatexCommandSignature.Action.DUMMY));
         }
 
         for (String commandPrototype : settings.getIgnoreCommandPrototypes()) {
-          builder.commandSignatures.add(new latex.CommandSignature(commandPrototype,
-              latex.CommandSignature.Action.IGNORE));
+          builder.commandSignatures.add(new LatexCommandSignature(commandPrototype,
+              LatexCommandSignature.Action.IGNORE));
         }
 
         ExecutorService executor = Executors.newCachedThreadPool();

@@ -1,3 +1,5 @@
+package org.bsplines.languagetool_languageserver;
+
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.DidChangeWatchedFilesParams;
 import org.eclipse.lsp4j.SymbolInformation;

@@ -1,3 +1,5 @@
+package org.bsplines.languagetool_languageserver;
+
 import org.eclipse.lsp4j.Position;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

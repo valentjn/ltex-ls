@@ -1,4 +1,4 @@
-package latex;
+package org.bsplines.languagetool_languageserver.latex;
 
 import org.languagetool.markup.AnnotatedText;
 
@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.regex.*;
 
-public class AnnotatedTextBuilder {
+public class LatexAnnotatedTextBuilder {
   private enum Mode {
     PARAGRAPH_TEXT,
     INLINE_TEXT,
@@ -18,138 +18,138 @@ public class AnnotatedTextBuilder {
     TIKZ,
   }
 
-  private static final CommandSignature[] defaultCommandSignatures = {
-    new CommandSignature("\\addtotheorempostheadhook{}"),
-    new CommandSignature("\\addxcontentsline{}{}{}"),
-    new CommandSignature("\\AtBeginEnvironment{}{}"),
-    new CommandSignature("\\AtEndEnvironment{}{}"),
-    new CommandSignature("\\addbibresource{}"),
-    new CommandSignature("\\addtocontents{}"),
-    new CommandSignature("\\addtocounter{}{}"),
-    new CommandSignature("\\addtokomafont{}{}"),
-    new CommandSignature("\\algdef{}[]{}{}"),
-    new CommandSignature("\\algnewcommand{}{}"),
-    new CommandSignature("\\algrenewcommand{}{}"),
-    new CommandSignature("\\arabic{}", CommandSignature.Action.DUMMY),
-    new CommandSignature("\\bibliography{}"),
-    new CommandSignature("\\bibliographystyle{}"),
-    new CommandSignature("\\captionsetup{}"),
-    new CommandSignature("\\captionsetup[]{}"),
-    new CommandSignature("\\cite{}", CommandSignature.Action.DUMMY),
-    new CommandSignature("\\cite[]{}", CommandSignature.Action.DUMMY),
-    new CommandSignature("\\clearfield{}"),
-    new CommandSignature("\\cref{}", CommandSignature.Action.DUMMY),
-    new CommandSignature("\\Cref{}", CommandSignature.Action.DUMMY),
-    new CommandSignature("\\crefname{}{}{}"),
-    new CommandSignature("\\Crefname{}{}{}"),
-    new CommandSignature("\\DeclareCaptionFormat{}{}"),
-    new CommandSignature("\\DeclareCaptionLabelFormat{}{}"),
-    new CommandSignature("\\DeclareCiteCommand{}{}{}{}{}"),
-    new CommandSignature("\\DeclareCiteCommand{}[]{}{}{}{}"),
-    new CommandSignature("\\DeclareFieldFormat{}{}"),
-    new CommandSignature("\\DeclareFieldFormat[]{}{}"),
-    new CommandSignature("\\DeclareGraphicsExtensions{}"),
-    new CommandSignature("\\DeclareMathOperator{}{}"),
-    new CommandSignature("\\DeclareMathOperator*{}{}"),
-    new CommandSignature("\\DeclareNameAlias{}{}"),
-    new CommandSignature("\\DeclareNewTOC{}"),
-    new CommandSignature("\\DeclareNewTOC[]{}"),
-    new CommandSignature("\\declaretheorem{}"),
-    new CommandSignature("\\declaretheorem[]{}"),
-    new CommandSignature("\\declaretheoremstyle{}"),
-    new CommandSignature("\\declaretheoremstyle[]{}"),
-    new CommandSignature("\\DeclareTOCStyleEntry{}"),
-    new CommandSignature("\\DeclareTOCStyleEntry[]{}{}"),
-    new CommandSignature("\\defbibheading{}{}"),
-    new CommandSignature("\\defbibheading{}[]{}"),
-    new CommandSignature("\\defbibnote{}{}"),
-    new CommandSignature("\\definecolor{}{}{}"),
-    new CommandSignature("\\DisableLigatures{}"),
-    new CommandSignature("\\documentclass{}"),
-    new CommandSignature("\\documentclass[]{}"),
-    new CommandSignature("\\email{}", CommandSignature.Action.DUMMY),
-    new CommandSignature("\\eqref{}", CommandSignature.Action.DUMMY),
-    new CommandSignature("\\etocsetnexttocdepth{}"),
-    new CommandSignature("\\etocsettocstyle{}{}"),
-    new CommandSignature("\\GenericWarning{}{}"),
-    new CommandSignature("\\geometry{}"),
-    new CommandSignature("\\glsaddstoragekey{}{}{}"),
-    new CommandSignature("\\graphicspath{}"),
-    new CommandSignature("\\hypersetup{}"),
-    new CommandSignature("\\hyperref[]"),
-    new CommandSignature("\\ifcurrentfield{}"),
-    new CommandSignature("\\ifentrytype{}"),
-    new CommandSignature("\\iftoggle{}"),
-    new CommandSignature("\\include{}"),
-    new CommandSignature("\\includegraphics{}"),
-    new CommandSignature("\\includegraphics[]{}"),
-    new CommandSignature("\\input{}"),
-    new CommandSignature("\\KOMAoptions{}"),
-    new CommandSignature("\\label{}"),
-    new CommandSignature("\\lettrine{}{}", CommandSignature.Action.DUMMY),
-    new CommandSignature("\\lettrine[]{}{}", CommandSignature.Action.DUMMY),
-    new CommandSignature("\\luadirect{}"),
-    new CommandSignature("\\luaexec{}"),
-    new CommandSignature("\\linespread{}"),
-    new CommandSignature("\\mdfdefinestyle{}{}"),
-    new CommandSignature("\\multicolumn{}{}"),
-    new CommandSignature("\\multirow{}{}"),
-    new CommandSignature("\\newcolumntype{}{}"),
-    new CommandSignature("\\newcommand{}{}"),
-    new CommandSignature("\\newcommand{}[]{}"),
-    new CommandSignature("\\newcommand*{}{}"),
-    new CommandSignature("\\newcommand*{}[]{}"),
-    new CommandSignature("\\newcounter{}"),
-    new CommandSignature("\\newglossaryentry{}{}"),
-    new CommandSignature("\\newglossarystyle{}{}"),
-    new CommandSignature("\\nolinkurl{}", CommandSignature.Action.DUMMY),
-    new CommandSignature("\\PackageWarning{}{}"),
-    new CommandSignature("\\pgfdeclaredecoration{}{}{}"),
-    new CommandSignature("\\pgfmathsetseed{}"),
-    new CommandSignature("\\raisebox{}"),
-    new CommandSignature("\\RedeclareSectionCommand{}"),
-    new CommandSignature("\\RedeclareSectionCommand[]{}"),
-    new CommandSignature("\\RedeclareSectionCommands{}"),
-    new CommandSignature("\\RedeclareSectionCommands[]{}"),
-    new CommandSignature("\\ref{}", CommandSignature.Action.DUMMY),
-    new CommandSignature("\\ref*{}", CommandSignature.Action.DUMMY),
-    new CommandSignature("\\renewbibmacro{}{}"),
-    new CommandSignature("\\renewbibmacro*{}{}"),
-    new CommandSignature("\\renewcommand{}{}"),
-    new CommandSignature("\\renewcommand{}[]{}"),
-    new CommandSignature("\\renewcommand*{}{}"),
-    new CommandSignature("\\renewcommand*{}[]{}"),
-    new CommandSignature("\\setenumerate{}"),
-    new CommandSignature("\\setglossarystyle{}"),
-    new CommandSignature("\\setitemize{}"),
-    new CommandSignature("\\setkomafont{}{}"),
-    new CommandSignature("\\setkomavar{}{}"),
-    new CommandSignature("\\setkomavar{}[]{}"),
-    new CommandSignature("\\setkomavar*{}{}"),
-    new CommandSignature("\\setkomavar*{}[]{}"),
-    new CommandSignature("\\setlist{}"),
-    new CommandSignature("\\@setplength{}{}"),
-    new CommandSignature("\\setstretch{}"),
-    new CommandSignature("\\sisetup{}"),
-    new CommandSignature("\\setcounter{}{}"),
-    new CommandSignature("\\stepcounter{}"),
-    new CommandSignature("\\textcolor{}"),
-    new CommandSignature("\\tikz{}"),
-    new CommandSignature("\\tikzset{}"),
-    new CommandSignature("\\todo{}"),
-    new CommandSignature("\\todo[]{}"),
-    new CommandSignature("\\togglefalse{}"),
-    new CommandSignature("\\toggletrue{}"),
-    new CommandSignature("\\url{}", CommandSignature.Action.DUMMY),
-    new CommandSignature("\\usebibmacro{}"),
-    new CommandSignature("\\usekomafont{}"),
-    new CommandSignature("\\usepackage{}"),
-    new CommandSignature("\\usepackage[]{}"),
-    new CommandSignature("\\usetikzlibrary{}"),
-    new CommandSignature("\\value{}"),
-    new CommandSignature("\\vspace{}"),
-    new CommandSignature("\\vspace*{}"),
-    new CommandSignature("\\WarningFilter{}{}"),
+  private static final LatexCommandSignature[] defaultCommandSignatures = {
+    new LatexCommandSignature("\\addtotheorempostheadhook{}"),
+    new LatexCommandSignature("\\addxcontentsline{}{}{}"),
+    new LatexCommandSignature("\\AtBeginEnvironment{}{}"),
+    new LatexCommandSignature("\\AtEndEnvironment{}{}"),
+    new LatexCommandSignature("\\addbibresource{}"),
+    new LatexCommandSignature("\\addtocontents{}"),
+    new LatexCommandSignature("\\addtocounter{}{}"),
+    new LatexCommandSignature("\\addtokomafont{}{}"),
+    new LatexCommandSignature("\\algdef{}[]{}{}"),
+    new LatexCommandSignature("\\algnewcommand{}{}"),
+    new LatexCommandSignature("\\algrenewcommand{}{}"),
+    new LatexCommandSignature("\\arabic{}", LatexCommandSignature.Action.DUMMY),
+    new LatexCommandSignature("\\bibliography{}"),
+    new LatexCommandSignature("\\bibliographystyle{}"),
+    new LatexCommandSignature("\\captionsetup{}"),
+    new LatexCommandSignature("\\captionsetup[]{}"),
+    new LatexCommandSignature("\\cite{}", LatexCommandSignature.Action.DUMMY),
+    new LatexCommandSignature("\\cite[]{}", LatexCommandSignature.Action.DUMMY),
+    new LatexCommandSignature("\\clearfield{}"),
+    new LatexCommandSignature("\\cref{}", LatexCommandSignature.Action.DUMMY),
+    new LatexCommandSignature("\\Cref{}", LatexCommandSignature.Action.DUMMY),
+    new LatexCommandSignature("\\crefname{}{}{}"),
+    new LatexCommandSignature("\\Crefname{}{}{}"),
+    new LatexCommandSignature("\\DeclareCaptionFormat{}{}"),
+    new LatexCommandSignature("\\DeclareCaptionLabelFormat{}{}"),
+    new LatexCommandSignature("\\DeclareCiteCommand{}{}{}{}{}"),
+    new LatexCommandSignature("\\DeclareCiteCommand{}[]{}{}{}{}"),
+    new LatexCommandSignature("\\DeclareFieldFormat{}{}"),
+    new LatexCommandSignature("\\DeclareFieldFormat[]{}{}"),
+    new LatexCommandSignature("\\DeclareGraphicsExtensions{}"),
+    new LatexCommandSignature("\\DeclareMathOperator{}{}"),
+    new LatexCommandSignature("\\DeclareMathOperator*{}{}"),
+    new LatexCommandSignature("\\DeclareNameAlias{}{}"),
+    new LatexCommandSignature("\\DeclareNewTOC{}"),
+    new LatexCommandSignature("\\DeclareNewTOC[]{}"),
+    new LatexCommandSignature("\\declaretheorem{}"),
+    new LatexCommandSignature("\\declaretheorem[]{}"),
+    new LatexCommandSignature("\\declaretheoremstyle{}"),
+    new LatexCommandSignature("\\declaretheoremstyle[]{}"),
+    new LatexCommandSignature("\\DeclareTOCStyleEntry{}"),
+    new LatexCommandSignature("\\DeclareTOCStyleEntry[]{}{}"),
+    new LatexCommandSignature("\\defbibheading{}{}"),
+    new LatexCommandSignature("\\defbibheading{}[]{}"),
+    new LatexCommandSignature("\\defbibnote{}{}"),
+    new LatexCommandSignature("\\definecolor{}{}{}"),
+    new LatexCommandSignature("\\DisableLigatures{}"),
+    new LatexCommandSignature("\\documentclass{}"),
+    new LatexCommandSignature("\\documentclass[]{}"),
+    new LatexCommandSignature("\\email{}", LatexCommandSignature.Action.DUMMY),
+    new LatexCommandSignature("\\eqref{}", LatexCommandSignature.Action.DUMMY),
+    new LatexCommandSignature("\\etocsetnexttocdepth{}"),
+    new LatexCommandSignature("\\etocsettocstyle{}{}"),
+    new LatexCommandSignature("\\GenericWarning{}{}"),
+    new LatexCommandSignature("\\geometry{}"),
+    new LatexCommandSignature("\\glsaddstoragekey{}{}{}"),
+    new LatexCommandSignature("\\graphicspath{}"),
+    new LatexCommandSignature("\\hypersetup{}"),
+    new LatexCommandSignature("\\hyperref[]"),
+    new LatexCommandSignature("\\ifcurrentfield{}"),
+    new LatexCommandSignature("\\ifentrytype{}"),
+    new LatexCommandSignature("\\iftoggle{}"),
+    new LatexCommandSignature("\\include{}"),
+    new LatexCommandSignature("\\includegraphics{}"),
+    new LatexCommandSignature("\\includegraphics[]{}"),
+    new LatexCommandSignature("\\input{}"),
+    new LatexCommandSignature("\\KOMAoptions{}"),
+    new LatexCommandSignature("\\label{}"),
+    new LatexCommandSignature("\\lettrine{}{}", LatexCommandSignature.Action.DUMMY),
+    new LatexCommandSignature("\\lettrine[]{}{}", LatexCommandSignature.Action.DUMMY),
+    new LatexCommandSignature("\\luadirect{}"),
+    new LatexCommandSignature("\\luaexec{}"),
+    new LatexCommandSignature("\\linespread{}"),
+    new LatexCommandSignature("\\mdfdefinestyle{}{}"),
+    new LatexCommandSignature("\\multicolumn{}{}"),
+    new LatexCommandSignature("\\multirow{}{}"),
+    new LatexCommandSignature("\\newcolumntype{}{}"),
+    new LatexCommandSignature("\\newcommand{}{}"),
+    new LatexCommandSignature("\\newcommand{}[]{}"),
+    new LatexCommandSignature("\\newcommand*{}{}"),
+    new LatexCommandSignature("\\newcommand*{}[]{}"),
+    new LatexCommandSignature("\\newcounter{}"),
+    new LatexCommandSignature("\\newglossaryentry{}{}"),
+    new LatexCommandSignature("\\newglossarystyle{}{}"),
+    new LatexCommandSignature("\\nolinkurl{}", LatexCommandSignature.Action.DUMMY),
+    new LatexCommandSignature("\\PackageWarning{}{}"),
+    new LatexCommandSignature("\\pgfdeclaredecoration{}{}{}"),
+    new LatexCommandSignature("\\pgfmathsetseed{}"),
+    new LatexCommandSignature("\\raisebox{}"),
+    new LatexCommandSignature("\\RedeclareSectionCommand{}"),
+    new LatexCommandSignature("\\RedeclareSectionCommand[]{}"),
+    new LatexCommandSignature("\\RedeclareSectionCommands{}"),
+    new LatexCommandSignature("\\RedeclareSectionCommands[]{}"),
+    new LatexCommandSignature("\\ref{}", LatexCommandSignature.Action.DUMMY),
+    new LatexCommandSignature("\\ref*{}", LatexCommandSignature.Action.DUMMY),
+    new LatexCommandSignature("\\renewbibmacro{}{}"),
+    new LatexCommandSignature("\\renewbibmacro*{}{}"),
+    new LatexCommandSignature("\\renewcommand{}{}"),
+    new LatexCommandSignature("\\renewcommand{}[]{}"),
+    new LatexCommandSignature("\\renewcommand*{}{}"),
+    new LatexCommandSignature("\\renewcommand*{}[]{}"),
+    new LatexCommandSignature("\\setenumerate{}"),
+    new LatexCommandSignature("\\setglossarystyle{}"),
+    new LatexCommandSignature("\\setitemize{}"),
+    new LatexCommandSignature("\\setkomafont{}{}"),
+    new LatexCommandSignature("\\setkomavar{}{}"),
+    new LatexCommandSignature("\\setkomavar{}[]{}"),
+    new LatexCommandSignature("\\setkomavar*{}{}"),
+    new LatexCommandSignature("\\setkomavar*{}[]{}"),
+    new LatexCommandSignature("\\setlist{}"),
+    new LatexCommandSignature("\\@setplength{}{}"),
+    new LatexCommandSignature("\\setstretch{}"),
+    new LatexCommandSignature("\\sisetup{}"),
+    new LatexCommandSignature("\\setcounter{}{}"),
+    new LatexCommandSignature("\\stepcounter{}"),
+    new LatexCommandSignature("\\textcolor{}"),
+    new LatexCommandSignature("\\tikz{}"),
+    new LatexCommandSignature("\\tikzset{}"),
+    new LatexCommandSignature("\\todo{}"),
+    new LatexCommandSignature("\\todo[]{}"),
+    new LatexCommandSignature("\\togglefalse{}"),
+    new LatexCommandSignature("\\toggletrue{}"),
+    new LatexCommandSignature("\\url{}", LatexCommandSignature.Action.DUMMY),
+    new LatexCommandSignature("\\usebibmacro{}"),
+    new LatexCommandSignature("\\usekomafont{}"),
+    new LatexCommandSignature("\\usepackage{}"),
+    new LatexCommandSignature("\\usepackage[]{}"),
+    new LatexCommandSignature("\\usetikzlibrary{}"),
+    new LatexCommandSignature("\\value{}"),
+    new LatexCommandSignature("\\vspace{}"),
+    new LatexCommandSignature("\\vspace*{}"),
+    new LatexCommandSignature("\\WarningFilter{}{}"),
   };
 
   private static final Pattern commandPattern = Pattern.compile(
@@ -197,7 +197,7 @@ public class AnnotatedTextBuilder {
   private String curString;
   private Mode curMode;
 
-  public List<CommandSignature> commandSignatures =
+  public List<LatexCommandSignature> commandSignatures =
       new ArrayList<>(Arrays.asList(defaultCommandSignatures));
 
   private String matchFromPosition(Pattern pattern) {
@@ -232,7 +232,7 @@ public class AnnotatedTextBuilder {
     return dummy;
   }
 
-  private AnnotatedTextBuilder addText(String text) {
+  private LatexAnnotatedTextBuilder addText(String text) {
     if (text.isEmpty()) return this;
     builder.addText(text);
     pos += text.length();
@@ -240,7 +240,7 @@ public class AnnotatedTextBuilder {
     return this;
   }
 
-  private AnnotatedTextBuilder addMarkup(String markup) {
+  private LatexAnnotatedTextBuilder addMarkup(String markup) {
     if (markup.isEmpty()) return this;
     builder.addMarkup(markup);
     pos += markup.length();
@@ -255,7 +255,7 @@ public class AnnotatedTextBuilder {
     return this;
   }
 
-  private AnnotatedTextBuilder addMarkup(String markup, String interpretAs)
+  private LatexAnnotatedTextBuilder addMarkup(String markup, String interpretAs)
       throws InterruptedException {
     if (interpretAs.isEmpty()) {
       return addMarkup(markup);
@@ -325,7 +325,7 @@ public class AnnotatedTextBuilder {
     isMathCharTrivial = true;
   }
 
-  public AnnotatedTextBuilder addCode(String text) throws InterruptedException {
+  public LatexAnnotatedTextBuilder addCode(String text) throws InterruptedException {
     this.text = text;
     pos = 0;
     dummyCounter = 0;
@@ -385,8 +385,8 @@ public class AnnotatedTextBuilder {
             addMarkup(argument, interpretAs);
 
             if (environment.equals("tabular")) {
-              String environmentArgument = CommandSignature.matchArgumentFromPosition(
-                  text, pos, CommandSignature.ArgumentType.BRACE);
+              String environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
+                  text, pos, LatexCommandSignature.ArgumentType.BRACE);
               addMarkup(environmentArgument);
             }
           } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
@@ -604,17 +604,17 @@ public class AnnotatedTextBuilder {
             addMarkup(verbCommand, generateDummy());
           } else {
             String match = "";
-            CommandSignature matchingCommand = null;
+            LatexCommandSignature matchingCommand = null;
 
-            for (CommandSignature commandSignature : commandSignatures) {
+            for (LatexCommandSignature LatexCommandSignature : commandSignatures) {
               if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
 
-              if (commandSignature.name.equals(command)) {
-                String curMatch = commandSignature.matchFromPosition(text, pos);
+              if (LatexCommandSignature.name.equals(command)) {
+                String curMatch = LatexCommandSignature.matchFromPosition(text, pos);
 
                 if (curMatch.length() > match.length()) {
                   match = curMatch;
-                  matchingCommand = commandSignature;
+                  matchingCommand = LatexCommandSignature;
                 }
               }
             }

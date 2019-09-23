@@ -1,4 +1,4 @@
-package markdown;
+package org.bsplines.languagetool_languageserver.markdown;
 
 import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.ast.Node;
@@ -7,7 +7,7 @@ import com.vladsch.flexmark.ast.Text;
 import com.vladsch.flexmark.util.sequence.BasedSequence;
 import org.languagetool.markup.AnnotatedText;
 
-public class AnnotatedTextBuilder {
+public class MarkdownAnnotatedTextBuilder {
   private org.languagetool.markup.AnnotatedTextBuilder builder =
       new org.languagetool.markup.AnnotatedTextBuilder();
 

@@ -1,10 +1,10 @@
-package latex;
+package org.bsplines.languagetool_languageserver.latex;
 
 import java.util.ArrayList;
 import java.util.Stack;
 import java.util.regex.*;
 
-public class CommandSignature {
+public class LatexCommandSignature {
   public enum ArgumentType {
     BRACE,
     BRACKET,
@@ -19,11 +19,11 @@ public class CommandSignature {
   public ArrayList<ArgumentType> argumentTypes = new ArrayList<ArgumentType>();
   public Action action = Action.IGNORE;
 
-  public CommandSignature(String commandPrototype) {
+  public LatexCommandSignature(String commandPrototype) {
     this(commandPrototype, Action.IGNORE);
   }
 
-  public CommandSignature(String commandPrototype, Action action) {
+  public LatexCommandSignature(String commandPrototype, Action action) {
     Pattern commandPattern = Pattern.compile("^\\\\([^A-Za-z@]|([A-Za-z@]+))\\*?");
     Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\]))");
 
@@ -36,12 +36,12 @@ public class CommandSignature {
       Matcher argumentMatcher = argumentPattern.matcher(commandPrototype.substring(pos));
       if (!argumentMatcher.find()) break;
 
-      CommandSignature.ArgumentType argumentType = null;
+      LatexCommandSignature.ArgumentType argumentType = null;
 
       if (argumentMatcher.group(2) != null) {
-        argumentType = CommandSignature.ArgumentType.BRACE;
+        argumentType = LatexCommandSignature.ArgumentType.BRACE;
       } else if (argumentMatcher.group(3) != null) {
-        argumentType = CommandSignature.ArgumentType.BRACKET;
+        argumentType = LatexCommandSignature.ArgumentType.BRACKET;
       }
 
       argumentTypes.add(argumentType);

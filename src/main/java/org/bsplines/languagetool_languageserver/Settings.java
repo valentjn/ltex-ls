@@ -1,3 +1,5 @@
+package org.bsplines.languagetool_languageserver;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

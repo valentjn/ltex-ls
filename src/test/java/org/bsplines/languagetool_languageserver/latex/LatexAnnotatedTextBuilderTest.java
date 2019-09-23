@@ -1,10 +1,10 @@
-package latex;
+package org.bsplines.languagetool_languageserver.latex;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.languagetool.markup.AnnotatedText;
 
-public class AnnotatedTextBuilderTest {
+public class LatexAnnotatedTextBuilderTest {
   static AnnotatedText buildAnnotatedText(String code) {
     try {
       return (new latex.AnnotatedTextBuilder()).addCode(code).getAnnotatedText();

@@ -1,4 +1,4 @@
-package markdown;
+package org.bsplines.languagetool_languageserver.markdown;
 
 import com.vladsch.flexmark.ast.Document;
 import com.vladsch.flexmark.ast.Node;
@@ -9,7 +9,7 @@ import org.languagetool.markup.AnnotatedText;
 
 import java.io.IOException;
 
-public class AnnotatedTextBuilderTest {
+public class MarkdownAnnotatedTextBuilderTest {
     @Test
     void test() throws IOException {
         Parser p = Parser.builder().build();
@@ -18,7 +18,7 @@ public class AnnotatedTextBuilderTest {
                 "Paragraph with\n" +
                 "multiple lines and [link](example.com)");
 
-        markdown.AnnotatedTextBuilder builder = new markdown.AnnotatedTextBuilder();
+        MarkdownAnnotatedTextBuilder builder = new MarkdownAnnotatedTextBuilder();
         builder.visit((Document) document);
         AnnotatedText text = builder.getAnnotatedText();
 

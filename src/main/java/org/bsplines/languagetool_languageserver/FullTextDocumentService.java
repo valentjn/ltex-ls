@@ -1,3 +1,5 @@
+package org.bsplines.languagetool_languageserver;
+
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.TextDocumentService;
