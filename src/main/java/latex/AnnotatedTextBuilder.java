@@ -171,6 +171,7 @@ public class AnnotatedTextBuilder {
   private static final Pattern accentPattern2 = Pattern.compile(
       "^(\\\\[cr])( *([A-Za-z])|\\{([A-Za-z])\\})");
   private static final Pattern displayMathPattern = Pattern.compile("^\\$\\$");
+  private static final Pattern verbCommandPattern = Pattern.compile("^\\\\verb\\*?(.).*?\\1");
 
   private static final String[] mathEnvironments = {"equation", "equation*", "align", "align*",
       "gather", "gather*", "alignat", "alignat*", "multline", "multline*",
@@ -594,6 +595,9 @@ public class AnnotatedTextBuilder {
             modeStack.push(Mode.INLINE_TEXT);
             String interpretAs = (isMathMode(curMode) ? generateDummy() : "");
             addMarkup(command + "{", interpretAs);
+          } else if (command.equals("\\verb")) {
+            String verbCommand = matchFromPosition(verbCommandPattern);
+            addMarkup(verbCommand, generateDummy());
           } else {
             String match = "";
             CommandSignature matchingCommand = null;
