@@ -6,8 +6,11 @@ import org.languagetool.markup.AnnotatedText;
 
 public class LatexAnnotatedTextBuilderTest {
   static AnnotatedText buildAnnotatedText(String code) {
+    LatexAnnotatedTextBuilder builder = new LatexAnnotatedTextBuilder();
+    builder.isInStrictMode = true;
+
     try {
-      return (new latex.AnnotatedTextBuilder()).addCode(code).getAnnotatedText();
+      return builder.addCode(code).getAnnotatedText();
     } catch (InterruptedException e) {
       e.printStackTrace();
       return null;

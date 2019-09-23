@@ -1,5 +1,7 @@
 package org.bsplines.languagetool_languageserver.latex;
 
+import org.apache.commons.text.StringEscapeUtils;
+import org.bsplines.languagetool_languageserver.*;
 import org.languagetool.markup.AnnotatedText;
 
 import java.util.ArrayList;
@@ -199,6 +201,7 @@ public class LatexAnnotatedTextBuilder {
 
   public List<LatexCommandSignature> commandSignatures =
       new ArrayList<>(Arrays.asList(defaultCommandSignatures));
+  public boolean isInStrictMode = false;
 
   private String matchFromPosition(Pattern pattern) {
     return matchFromPosition(pattern, pos);
@@ -325,6 +328,18 @@ public class LatexAnnotatedTextBuilder {
     isMathCharTrivial = true;
   }
 
+  private String getDebugInformation(String text) {
+    String remainingText = StringEscapeUtils.escapeJava(text.substring(pos, Math.min(pos + 100, text.length())));
+    return "Remaining text = \"" + remainingText +
+        "\", pos = " + pos + ", dummyCounter = " + dummyCounter + ", lastSpace = \"" + lastSpace +
+        "\", lastPunctuation = \"" + lastPunctuation + "\", dummyLastSpace = \"" + dummyLastSpace +
+        "\", dummyLastPunctuation = \"" + dummyLastPunctuation +
+        "\", isMathEmpty = " + isMathEmpty + ", preserveDummyLast = " + preserveDummyLast +
+        ", canInsertSpaceBeforeDummy = " + canInsertSpaceBeforeDummy +
+        ", isMathCharTrivial = " + isMathCharTrivial + ", modeStack = " + modeStack +
+        ", curChar = \"" + curChar + "\", curString = \"" + curString + "\", curMode = " + curMode;
+  }
+
   public LatexAnnotatedTextBuilder addCode(String text) throws InterruptedException {
     this.text = text;
     pos = 0;
@@ -341,6 +356,8 @@ public class LatexAnnotatedTextBuilder {
     modeStack = new Stack<>();
     modeStack.push(Mode.PARAGRAPH_TEXT);
 
+    int lastPos = -1;
+
     while (pos < text.length()) {
       if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
 
@@ -348,6 +365,7 @@ public class LatexAnnotatedTextBuilder {
       curString = String.valueOf(curChar);
       curMode = modeStack.peek();
       isMathCharTrivial = false;
+      lastPos = pos;
 
       switch (curChar) {
         case '\\': {
@@ -788,6 +806,17 @@ public class LatexAnnotatedTextBuilder {
       if (!isMathCharTrivial) {
         canInsertSpaceBeforeDummy = false;
         isMathEmpty = false;
+      }
+
+      if (pos == lastPos) {
+        if (isInStrictMode) {
+          throw new RuntimeException(Tools.i18n(
+              "latexAnnotatedTextBuilderInfiniteLoop", getDebugInformation(text)));
+        } else {
+          Tools.logger.warning(Tools.i18n(
+              "latexAnnotatedTextBuilderPreventedInfiniteLoop", getDebugInformation(text)));
+          pos++;
+        }
       }
     }
 
