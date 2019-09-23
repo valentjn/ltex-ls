@@ -2,12 +2,37 @@ package org.bsplines.languagetool_languageserver;
 
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.logging.*;
 
 public class Tools {
   private static ResourceBundle messages = null;
+  public static final Logger logger = Logger.getLogger("org.bsplines.languagetool_languageserver");
+
+  // https://stackoverflow.com/a/23717493
+  private static class DualConsoleHandler extends StreamHandler {
+    private final ConsoleHandler stdErrHandler = new ConsoleHandler();
+
+    public DualConsoleHandler() {
+      super(System.out, new SimpleFormatter());
+    }
+
+    @Override
+    public void publish(LogRecord record) {
+      if (record.getLevel().intValue() <= Level.INFO.intValue()) {
+        super.publish(record);
+        super.flush();
+      } else {
+        stdErrHandler.publish(record);
+        stdErrHandler.flush();
+      }
+    }
+  }
 
   static {
     setDefaultLocale();
+
+    logger.setUseParentHandlers(false);
+    logger.addHandler(new DualConsoleHandler());
   }
 
   public static String i18n(String key, Object... messageArguments) {

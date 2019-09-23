@@ -22,7 +22,6 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
-import java.util.logging.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,32 +43,6 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
       CodeActionKind.QuickFix + ".ltex.ignoreRuleInSentence";
   private static final String addToDictionaryCommandName = "ltex.addToDictionary";
   private static final String ignoreRuleInSentenceCommandName = "ltex.ignoreRuleInSentence";
-  private static final Logger logger = Logger.getLogger("LanguageToolLanguageServer");
-
-  // https://stackoverflow.com/a/23717493
-  private static class DualConsoleHandler extends StreamHandler {
-    private final ConsoleHandler stdErrHandler = new ConsoleHandler();
-
-    public DualConsoleHandler() {
-      super(System.out, new SimpleFormatter());
-    }
-
-    @Override
-    public void publish(LogRecord record) {
-      if (record.getLevel().intValue() <= Level.INFO.intValue()) {
-        super.publish(record);
-        super.flush();
-      } else {
-        stdErrHandler.publish(record);
-        stdErrHandler.flush();
-      }
-    }
-  }
-
-  static {
-    logger.setUseParentHandlers(false);
-    logger.addHandler(new DualConsoleHandler());
-  }
 
   private static boolean locationOverlaps(
       RuleMatch match, DocumentPositionCalculator positionCalculator, Range range) {
@@ -166,7 +139,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     JsonObject initializationOptions = (JsonObject) params.getInitializationOptions();
     String localeLanguage = initializationOptions.get("locale").getAsString();
     Locale locale = Locale.forLanguageTag(localeLanguage);
-    logger.info("Setting locale to " + locale.getLanguage() + ".");
+    Tools.logger.info("Setting locale to " + locale.getLanguage() + ".");
     Tools.setLocale(locale);
 
     reinitialize();
@@ -178,7 +151,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     languageTool = null;
 
     if (!Languages.isLanguageSupported(settings.getLanguageShortCode())) {
-      logger.severe(settings.getLanguageShortCode() + " is not a recognized language. " +
+      Tools.logger.severe(settings.getLanguageShortCode() + " is not a recognized language. " +
           "Leaving LanguageTool uninitialized, checking disabled.");
       return;
     }
@@ -193,7 +166,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
       try {
         languageTool.activateLanguageModelRules(new File(settings.getLanguageModelRulesDirectory()));
       } catch (IOException | RuntimeException e) {
-        logger.warning("Could not load language model rules from \"" +
+        Tools.logger.warning("Could not load language model rules from \"" +
             settings.getLanguageModelRulesDirectory() + "\", disabling them: " + e.getMessage());
         e.printStackTrace();
       }
@@ -204,7 +177,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
         languageTool.activateNeuralNetworkRules(
             new File(settings.getNeuralNetworkModelRulesDirectory()));
       } catch (IOException | RuntimeException e) {
-        logger.warning("Could not load neural network model rules from \"" +
+        Tools.logger.warning("Could not load neural network model rules from \"" +
             settings.getNeuralNetworkModelRulesDirectory() + "\", disabling them: " + e.getMessage());
         e.printStackTrace();
       }
@@ -214,7 +187,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
       try {
         languageTool.activateWord2VecModelRules(new File(settings.getWord2VecModelRulesDirectory()));
       } catch (IOException | RuntimeException e) {
-        logger.warning("Could not load word2vec model rules from \"" +
+        Tools.logger.warning("Could not load word2vec model rules from \"" +
             settings.getWord2VecModelRulesDirectory() + "\", disabling them: " + e.getMessage());
         e.printStackTrace();
       }
@@ -399,8 +372,8 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
   private Pair<List<RuleMatch>, AnnotatedText> validateDocument(TextDocumentItem document) {
     if (languageTool == null) {
-      logger.warning("Skipping check of text, because LanguageTool has not been initialized " +
-          "(see above).");
+      Tools.logger.warning("Skipping check of text, because LanguageTool has not been " +
+          "initialized (see above).");
       return new Pair<>(Collections.emptyList(), null);
     }
 
@@ -475,14 +448,15 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
         postfix = "... (truncated to " + logTextMaxLength + " characters)";
       }
 
-      logger.info("Checking the following text in language \"" + settings.getLanguageShortCode() +
-          "\" via LanguageTool: \"" + StringEscapeUtils.escapeJava(logText) + "\"" + postfix);
+      Tools.logger.info("Checking the following text in language \"" +
+          settings.getLanguageShortCode() + "\" via LanguageTool: \"" +
+          StringEscapeUtils.escapeJava(logText) + "\"" + postfix);
     }
 
     try {
       List<RuleMatch> result = languageTool.check(annotatedText);
 
-      logger.info("Obtained " + result.size() + " rule match" +
+      Tools.logger.info("Obtained " + result.size() + " rule match" +
           ((result.size() != 1) ? "es" : ""));
 
       List<Pair<String, Pattern>> ignoreRuleSentencePairs = settings.getIgnoreRuleSentencePairs();
@@ -496,7 +470,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
           for (Pair<String, Pattern> pair : ignoreRuleSentencePairs) {
             if (pair.getKey().equals(ruleId) && pair.getValue().matcher(sentence).find()) {
-              logger.info("Removing ignored rule match with rule \"" + ruleId +
+              Tools.logger.info("Removing ignored rule match with rule \"" + ruleId +
                   "\" and sentence \"" + sentence + "\"");
               ignoreMatches.add(match);
               break;
@@ -505,7 +479,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
         }
 
         if (!ignoreMatches.isEmpty()) {
-          logger.info("Removed " + ignoreMatches.size() + " ignored rule match" +
+          Tools.logger.info("Removed " + ignoreMatches.size() + " ignored rule match" +
               ((ignoreMatches.size() != 1) ? "es" : ""));
           for (RuleMatch match : ignoreMatches) result.remove(match);
         }
@@ -513,7 +487,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
       return new Pair<>(result, annotatedText);
     } catch (RuntimeException | IOException e) {
-      logger.severe("LanguageTool failed: " + e.getMessage());
+      Tools.logger.severe("LanguageTool failed: " + e.getMessage());
       e.printStackTrace();
       return new Pair<>(Collections.emptyList(), annotatedText);
     }
