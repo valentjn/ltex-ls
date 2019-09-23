@@ -643,7 +643,11 @@ public class LatexAnnotatedTextBuilder {
           } else if (command.equals("\\part") || command.equals("\\chapter") ||
               command.equals("\\section") || command.equals("\\subsection") ||
               command.equals("\\subsubsection") || command.equals("\\paragraph") ||
-              command.equals("\\subparagraph")) {
+              command.equals("\\subparagraph") ||
+              command.equals("\\part*") || command.equals("\\chapter*") ||
+              command.equals("\\section*") || command.equals("\\subsection*") ||
+              command.equals("\\subsubsection*") || command.equals("\\paragraph*") ||
+              command.equals("\\subparagraph*")) {
             modeStack.push(Mode.HEADING);
             addMarkup(command + "{");
           } else if (command.equals("\\text") || command.equals("\\intertext")) {
