@@ -139,7 +139,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     JsonObject initializationOptions = (JsonObject) params.getInitializationOptions();
     String localeLanguage = initializationOptions.get("locale").getAsString();
     Locale locale = Locale.forLanguageTag(localeLanguage);
-    Tools.logger.info("Setting locale to " + locale.getLanguage() + ".");
+    Tools.logger.info(Tools.i18n("settingLocale", locale.getLanguage()));
     Tools.setLocale(locale);
 
     reinitialize();
@@ -151,8 +151,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     languageTool = null;
 
     if (!Languages.isLanguageSupported(settings.getLanguageShortCode())) {
-      Tools.logger.severe(settings.getLanguageShortCode() + " is not a recognized language. " +
-          "Leaving LanguageTool uninitialized, checking disabled.");
+      Tools.logger.severe(Tools.i18n("notARecognizedLanguage", settings.getLanguageShortCode()));
       return;
     }
 
@@ -166,8 +165,8 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
       try {
         languageTool.activateLanguageModelRules(new File(settings.getLanguageModelRulesDirectory()));
       } catch (IOException | RuntimeException e) {
-        Tools.logger.warning("Could not load language model rules from \"" +
-            settings.getLanguageModelRulesDirectory() + "\", disabling them: " + e.getMessage());
+        Tools.logger.warning(Tools.i18n("couldNotLoadLanguageModel",
+            settings.getLanguageModelRulesDirectory(), e.getMessage()));
         e.printStackTrace();
       }
     }
@@ -177,8 +176,8 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
         languageTool.activateNeuralNetworkRules(
             new File(settings.getNeuralNetworkModelRulesDirectory()));
       } catch (IOException | RuntimeException e) {
-        Tools.logger.warning("Could not load neural network model rules from \"" +
-            settings.getNeuralNetworkModelRulesDirectory() + "\", disabling them: " + e.getMessage());
+        Tools.logger.warning(Tools.i18n("couldNotLoadNeuralNetworkModel",
+            settings.getNeuralNetworkModelRulesDirectory(), e.getMessage()));
         e.printStackTrace();
       }
     }
@@ -187,8 +186,8 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
       try {
         languageTool.activateWord2VecModelRules(new File(settings.getWord2VecModelRulesDirectory()));
       } catch (IOException | RuntimeException e) {
-        Tools.logger.warning("Could not load word2vec model rules from \"" +
-            settings.getWord2VecModelRulesDirectory() + "\", disabling them: " + e.getMessage());
+        Tools.logger.warning(Tools.i18n("couldNotLoadWord2VecModel",
+            settings.getWord2VecModelRulesDirectory(), e.getMessage()));
         e.printStackTrace();
       }
     }
@@ -372,8 +371,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
   private Pair<List<RuleMatch>, AnnotatedText> validateDocument(TextDocumentItem document) {
     if (languageTool == null) {
-      Tools.logger.warning("Skipping check of text, because LanguageTool has not been " +
-          "initialized (see above).");
+      Tools.logger.warning(Tools.i18n("skippingTextCheck"));
       return new Pair<>(Collections.emptyList(), null);
     }
 
@@ -445,19 +443,18 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
       if (logText.length() > logTextMaxLength) {
         logText = logText.substring(0, logTextMaxLength);
-        postfix = "... (truncated to " + logTextMaxLength + " characters)";
+        postfix = Tools.i18n("truncatedPostfix", logTextMaxLength);
       }
 
-      Tools.logger.info("Checking the following text in language \"" +
-          settings.getLanguageShortCode() + "\" via LanguageTool: \"" +
-          StringEscapeUtils.escapeJava(logText) + "\"" + postfix);
+      Tools.logger.info(Tools.i18n("checkingText",
+          settings.getLanguageShortCode(), StringEscapeUtils.escapeJava(logText), postfix));
     }
 
     try {
       List<RuleMatch> result = languageTool.check(annotatedText);
 
-      Tools.logger.info("Obtained " + result.size() + " rule match" +
-          ((result.size() != 1) ? "es" : ""));
+      Tools.logger.info((result.size() == 1) ? Tools.i18n("obtainedRuleMatch") :
+          Tools.i18n("obtainedRuleMatches", result.size()));
 
       List<Pair<String, Pattern>> ignoreRuleSentencePairs = settings.getIgnoreRuleSentencePairs();
 
@@ -470,8 +467,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
           for (Pair<String, Pattern> pair : ignoreRuleSentencePairs) {
             if (pair.getKey().equals(ruleId) && pair.getValue().matcher(sentence).find()) {
-              Tools.logger.info("Removing ignored rule match with rule \"" + ruleId +
-                  "\" and sentence \"" + sentence + "\"");
+              Tools.logger.info(Tools.i18n("removingIgnoredRuleMatch", ruleId, sentence));
               ignoreMatches.add(match);
               break;
             }
@@ -479,15 +475,15 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
         }
 
         if (!ignoreMatches.isEmpty()) {
-          Tools.logger.info("Removed " + ignoreMatches.size() + " ignored rule match" +
-              ((ignoreMatches.size() != 1) ? "es" : ""));
+          Tools.logger.info((ignoreMatches.size() == 1) ? Tools.i18n("removedIgnoredRuleMatch") :
+              Tools.i18n("removedIgnoredRuleMatches", ignoreMatches.size()));
           for (RuleMatch match : ignoreMatches) result.remove(match);
         }
       }
 
       return new Pair<>(result, annotatedText);
     } catch (RuntimeException | IOException e) {
-      Tools.logger.severe("LanguageTool failed: " + e.getMessage());
+      Tools.logger.severe(Tools.i18n("languageToolFailed", e.getMessage()));
       e.printStackTrace();
       return new Pair<>(Collections.emptyList(), annotatedText);
     }

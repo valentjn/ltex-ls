@@ -112,10 +112,10 @@ class FullTextDocumentService implements TextDocumentService {
     for (TextDocumentContentChangeEvent changeEvent : params.getContentChanges()) {
       // Will be full update because we specified that is all we support
       if (changeEvent.getRange() != null) {
-        throw new UnsupportedOperationException("Range should be null for full document update.");
+        throw new UnsupportedOperationException(Tools.i18n("rangeShouldBeNull"));
       }
       if (changeEvent.getRangeLength() != null) {
-        throw new UnsupportedOperationException("RangeLength should be null for full document update.");
+        throw new UnsupportedOperationException(Tools.i18n("rangeLengthShouldBeNull"));
       }
 
       documents.get(uri).setText(changeEvent.getText());
