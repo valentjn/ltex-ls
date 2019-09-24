@@ -35,49 +35,89 @@ public class Settings {
   }
 
   public void setSettings(JsonElement jsonSettings) {
-    languageShortCode = getSettingFromJSON(jsonSettings, "ltex.language").getAsString();
+    try {
+      languageShortCode = getSettingFromJSON(jsonSettings, "ltex.language").getAsString();
+    } catch (NullPointerException e) {
+      languageShortCode = null;
+    }
 
-    String languagePrefix = languageShortCode;
-    int dashPos = languagePrefix.indexOf("-");
-    if (dashPos != -1) languagePrefix = languagePrefix.substring(0, dashPos);
-    dictionary = convertJsonArrayToList(
-        getSettingFromJSON(jsonSettings, "ltex." + languagePrefix + ".dictionary").
-        getAsJsonArray());
+    try {
+      String languagePrefix = languageShortCode;
+      int dashPos = languagePrefix.indexOf("-");
+      if (dashPos != -1) languagePrefix = languagePrefix.substring(0, dashPos);
+      dictionary = convertJsonArrayToList(
+          getSettingFromJSON(jsonSettings, "ltex." + languagePrefix + ".dictionary").
+          getAsJsonArray());
+    } catch (NullPointerException e) {
+      dictionary = null;
+    }
 
-    String diagnosticSeverityString =
-        getSettingFromJSON(jsonSettings, "ltex.diagnosticSeverity").getAsString();
+    try {
+      String diagnosticSeverityString =
+          getSettingFromJSON(jsonSettings, "ltex.diagnosticSeverity").getAsString();
 
-    if (diagnosticSeverityString.equals("error")) {
-      diagnosticSeverity = DiagnosticSeverity.Error;
-    } else if (diagnosticSeverityString.equals("warning")) {
-      diagnosticSeverity = DiagnosticSeverity.Warning;
-    } else if (diagnosticSeverityString.equals("information")) {
-      diagnosticSeverity = DiagnosticSeverity.Information;
-    } else if (diagnosticSeverityString.equals("hint")) {
-      diagnosticSeverity = DiagnosticSeverity.Hint;
-    } else {
+      if (diagnosticSeverityString.equals("error")) {
+        diagnosticSeverity = DiagnosticSeverity.Error;
+      } else if (diagnosticSeverityString.equals("warning")) {
+        diagnosticSeverity = DiagnosticSeverity.Warning;
+      } else if (diagnosticSeverityString.equals("information")) {
+        diagnosticSeverity = DiagnosticSeverity.Information;
+      } else if (diagnosticSeverityString.equals("hint")) {
+        diagnosticSeverity = DiagnosticSeverity.Hint;
+      } else {
+        diagnosticSeverity = null;
+      }
+    } catch (NullPointerException e) {
       diagnosticSeverity = null;
     }
 
-    dummyCommandPrototypes = convertJsonArrayToList(
-        getSettingFromJSON(jsonSettings, "ltex.commands.dummy").getAsJsonArray());
-    ignoreCommandPrototypes = convertJsonArrayToList(
-        getSettingFromJSON(jsonSettings, "ltex.commands.ignore").getAsJsonArray());
-
-    ignoreRuleSentencePairs = new ArrayList<>();
-    for (JsonElement element :
-        getSettingFromJSON(jsonSettings, "ltex.ignoreRuleInSentence").getAsJsonArray()) {
-      JsonObject elementObject = element.getAsJsonObject();
-      ignoreRuleSentencePairs.add(new Pair<>(elementObject.get("rule").getAsString(),
-          Pattern.compile(elementObject.get("sentence").getAsString())));
+    try {
+      dummyCommandPrototypes = convertJsonArrayToList(
+          getSettingFromJSON(jsonSettings, "ltex.commands.dummy").getAsJsonArray());
+    } catch (NullPointerException e) {
+      dummyCommandPrototypes = null;
     }
 
-    languageModelRulesDirectory = getSettingFromJSON(
-        jsonSettings, "ltex.additionalRules.languageModel").getAsString();
-    neuralNetworkModelRulesDirectory = getSettingFromJSON(
-        jsonSettings, "ltex.additionalRules.neuralNetworkModel").getAsString();
-    word2VecModelRulesDirectory = getSettingFromJSON(
-        jsonSettings, "ltex.additionalRules.word2VecModel").getAsString();
+    try {
+      ignoreCommandPrototypes = convertJsonArrayToList(
+          getSettingFromJSON(jsonSettings, "ltex.commands.ignore").getAsJsonArray());
+    } catch (NullPointerException e) {
+      ignoreCommandPrototypes = null;
+    }
+
+    try {
+      ignoreRuleSentencePairs = new ArrayList<>();
+
+      for (JsonElement element :
+          getSettingFromJSON(jsonSettings, "ltex.ignoreRuleInSentence").getAsJsonArray()) {
+        JsonObject elementObject = element.getAsJsonObject();
+        ignoreRuleSentencePairs.add(new Pair<>(elementObject.get("rule").getAsString(),
+            Pattern.compile(elementObject.get("sentence").getAsString())));
+      }
+    } catch (NullPointerException e) {
+      ignoreRuleSentencePairs = null;
+    }
+
+    try {
+      languageModelRulesDirectory = getSettingFromJSON(
+          jsonSettings, "ltex.additionalRules.languageModel").getAsString();
+    } catch (NullPointerException e) {
+      languageModelRulesDirectory = null;
+    }
+
+    try {
+      neuralNetworkModelRulesDirectory = getSettingFromJSON(
+          jsonSettings, "ltex.additionalRules.neuralNetworkModel").getAsString();
+    } catch (NullPointerException e) {
+      neuralNetworkModelRulesDirectory = null;
+    }
+
+    try {
+      word2VecModelRulesDirectory = getSettingFromJSON(
+          jsonSettings, "ltex.additionalRules.word2VecModel").getAsString();
+    } catch (NullPointerException e) {
+      word2VecModelRulesDirectory = null;
+    }
   }
 
   @Override
