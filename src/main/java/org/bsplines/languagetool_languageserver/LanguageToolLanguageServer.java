@@ -137,10 +137,13 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     // the initialization request, we have to do that manually.
     // See https://github.com/microsoft/language-server-protocol/issues/754.
     JsonObject initializationOptions = (JsonObject) params.getInitializationOptions();
-    String localeLanguage = initializationOptions.get("locale").getAsString();
-    Locale locale = Locale.forLanguageTag(localeLanguage);
-    Tools.logger.info(Tools.i18n("settingLocale", locale.getLanguage()));
-    Tools.setLocale(locale);
+
+    if (initializationOptions.has("locale")) {
+      String localeLanguage = initializationOptions.get("locale").getAsString();
+      Locale locale = Locale.forLanguageTag(localeLanguage);
+      Tools.logger.info(Tools.i18n("settingLocale", locale.getLanguage()));
+      Tools.setLocale(locale);
+    }
 
     reinitialize();
 
