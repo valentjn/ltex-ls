@@ -209,8 +209,8 @@ public class LatexAnnotatedTextBuilder {
   private static final Pattern verbCommandPattern = Pattern.compile("^\\\\verb\\*?(.).*?\\1");
 
   private static final String[] mathEnvironments = {"align", "align*", "alignat", "alignat*",
-      "displaymath", "equation", "equation*", "flalign", "flalign*", "gather", "gather*", "math",
-      "multline", "multline*"};
+      "displaymath", "eqnarray", "eqnarray*", "equation", "equation*", "flalign", "flalign*",
+      "gather", "gather*", "math", "multline", "multline*"};
 
   private org.languagetool.markup.AnnotatedTextBuilder builder =
       new org.languagetool.markup.AnnotatedTextBuilder();
