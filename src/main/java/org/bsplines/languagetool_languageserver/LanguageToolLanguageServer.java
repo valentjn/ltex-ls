@@ -103,7 +103,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     // See https://github.com/microsoft/language-server-protocol/issues/754.
     JsonObject initializationOptions = (JsonObject) params.getInitializationOptions();
 
-    if (initializationOptions.has("locale")) {
+    if ((initializationOptions != null) && initializationOptions.has("locale")) {
       String localeLanguage = initializationOptions.get("locale").getAsString();
       Locale locale = Locale.forLanguageTag(localeLanguage);
       Tools.logger.info(Tools.i18n("settingLocale", locale.getLanguage()));
