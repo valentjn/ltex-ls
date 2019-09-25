@@ -148,5 +148,15 @@ public class LatexAnnotatedTextBuilderTest {
       int end = annotatedText.getOriginalTextPositionFor(24 - 1) + 1;
       Assertions.assertTrue(start < end, start + " not smaller than " + end);
     }
+
+    {
+      AnnotatedText annotatedText = buildAnnotatedText(
+          "abc. Let $$\\footnote{$a$.}$$\n" +
+          "\n" +
+          "abc\n");
+      int start = annotatedText.getOriginalTextPositionFor(16);
+      int end = annotatedText.getOriginalTextPositionFor(18 - 1) + 1;
+      Assertions.assertTrue(start < end, start + " not smaller than " + end);
+    }
   }
 }
