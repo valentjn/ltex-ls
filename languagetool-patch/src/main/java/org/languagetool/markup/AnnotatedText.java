@@ -46,7 +46,8 @@ public class AnnotatedText {
   private final Map<MetaDataKey, String> metaData;
   private final Map<String, String> customMetaData;
 
-  AnnotatedText(List<TextPart> parts, Map<Integer, Integer> mapping, Map<MetaDataKey, String> metaData, Map<String, String> customMetaData) {
+  public AnnotatedText(List<TextPart> parts, Map<Integer, Integer> mapping,
+      Map<MetaDataKey, String> metaData, Map<String, String> customMetaData) {
     this.parts = Objects.requireNonNull(parts);
     this.mapping = Objects.requireNonNull(mapping);
     this.metaData = Objects.requireNonNull(metaData);
@@ -91,6 +92,10 @@ public class AnnotatedText {
       }
     }
     return sb.toString();
+  }
+
+  public Map<Integer, Integer> getMapping() {
+    return mapping;
   }
 
   /**

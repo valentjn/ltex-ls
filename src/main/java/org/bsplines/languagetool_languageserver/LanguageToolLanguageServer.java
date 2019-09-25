@@ -18,7 +18,6 @@ import org.languagetool.rules.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
@@ -70,50 +69,16 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     return ret;
   }
 
-  @SuppressWarnings("unchecked")
   private AnnotatedText invertAnnotatedText(AnnotatedText annotatedText) {
-    Field field;
-
-    try {
-      field = annotatedText.getClass().getDeclaredField("mapping");
-    } catch (NoSuchFieldException | SecurityException e) {
-      e.printStackTrace();
-      return null;
-    }
-
-    field.setAccessible(true);
-    Map<Integer, Integer> map;
-
-    try {
-      map = (Map<Integer, Integer>) field.get(annotatedText);
-    } catch (IllegalArgumentException | IllegalAccessException e) {
-      e.printStackTrace();
-      return null;
-    }
-
+    Map<Integer, Integer> mapping = annotatedText.getMapping();
     Map<Integer, Integer> inverseMapping = new HashMap<>();
-    Iterator<Map.Entry<Integer, Integer>> it = map.entrySet().iterator();
 
-    while (it.hasNext()) {
-      Map.Entry<Integer, Integer> pair = it.next();
-      inverseMapping.put(pair.getValue(), pair.getKey());
+    for (Map.Entry<Integer, Integer> entry : mapping.entrySet()) {
+      inverseMapping.put(entry.getValue(), entry.getKey());
     }
 
-    Constructor<AnnotatedText> constructor = (Constructor<AnnotatedText>)
-        AnnotatedText.class.getDeclaredConstructors()[0];
-    constructor.setAccessible(true);
-    AnnotatedText inverseAnnotatedText;
-
-    try {
-      inverseAnnotatedText = constructor.newInstance(Collections.emptyList(), inverseMapping,
-          Collections.emptyMap(), Collections.emptyMap());
-    } catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
-        InvocationTargetException e) {
-      e.printStackTrace();
-      return null;
-    }
-
-    return inverseAnnotatedText;
+    return new AnnotatedText(Collections.emptyList(), inverseMapping, Collections.emptyMap(),
+        Collections.emptyMap());
   }
 
   private int getPlainTextPositionFor(int originalTextPosition,
