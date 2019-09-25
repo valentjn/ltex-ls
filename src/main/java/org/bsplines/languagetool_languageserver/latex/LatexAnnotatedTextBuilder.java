@@ -293,26 +293,7 @@ public class LatexAnnotatedTextBuilder {
     if (interpretAs.isEmpty()) {
       return addMarkup(markup);
     } else {
-      // LanguageTool's AnnotatedText interpolates/extrapolates linearly between missing plain
-      // text positions in AnnotatedText.getOriginalTextPositionFor, this might lead to the error
-      // "fromPos (x) must be less than toPos (y)"
-      // ==> work around this by adding strings character by character
-      if (markup.length() >= interpretAs.length()) {
-        builder.addMarkup(markup.substring(0, interpretAs.length()), interpretAs);
-
-        for (int i = interpretAs.length(); i < markup.length(); i++) {
-          if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
-          builder.addMarkup(markup.substring(i, i + 1), "");
-        }
-      } else {
-        builder.addMarkup(markup, interpretAs.substring(0, markup.length()));
-
-        for (int i = markup.length(); i < interpretAs.length(); i++) {
-          if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
-          builder.addMarkup("", interpretAs.substring(i, i + 1));
-        }
-      }
-
+      builder.addMarkup(markup, interpretAs);
       pos += markup.length();
       preserveDummyLast = false;
       textAdded(interpretAs);
