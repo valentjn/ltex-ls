@@ -125,6 +125,10 @@ public class LatexAnnotatedTextBuilderTest {
         "  a \\text{,~and} b.\n" +
         "\\end{equation*}\n",
         "This is a test: Dummy0, and Dummy1. ");
+    assertPlainText(
+        "This is a test: $a = b \\footnote{This is another test: $c$.}$.\n" +
+        "This is the next sentence: $E = mc^2$.\n",
+        "This is a test: Dummy0This is another test: Dummy1.. This is the next sentence: Dummy2. ");
 
     {
       AnnotatedText annotatedText = buildAnnotatedText(

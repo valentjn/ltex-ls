@@ -617,11 +617,10 @@ public class LatexAnnotatedTextBuilder {
           } else if (command.equals("\\dots")) {
             addMarkup(command, "...");
           } else if (command.equals("\\footnote")) {
-            if (lastSpace.isEmpty()) {
-              addMarkup(command, " ");
-            } else {
-              addMarkup(command);
-            }
+            modeStack.push(Mode.INLINE_TEXT);
+            String interpretAs = (isMathMode(curMode) ? generateDummy() :
+                (lastSpace.isEmpty() ? " " : ""));
+            addMarkup(command + "{", interpretAs);
           } else if (command.equals("\\notag") || command.equals("\\qed")) {
             preserveDummyLast = true;
             addMarkup(command);
