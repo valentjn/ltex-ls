@@ -5,3 +5,10 @@
 /.settings/
 /bin/
 /build/
+
+/languagetool-patch/.classpath
+/languagetool-patch/.project
+
+/languagetool-patch/.settings/
+/languagetool-patch/bin/
+/languagetool-patch/build/

@@ -18,7 +18,30 @@ repositories {
   jcenter()
 }
 
+subprojects {
+  apply plugin: 'java'
+}
+
+project(':languagetool-patch') {
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    compile group: 'org.languagetool', name: 'languagetool-core', version: '4.6'
+  }
+
+  sourceSets {
+    main {
+      java.srcDirs = ['src/main/java']
+      java.include 'org/languagetool/**'
+    }
+  }
+}
+
 dependencies {
+  compile project(':languagetool-patch')
+
   testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.1'
 
   // Enabling makes the Gradle plugin work but breaks IDEA

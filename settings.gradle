@@ -16,3 +16,4 @@ include 'services:webservice'
 */
 
 rootProject.name = 'languagetool-languageserver'
+include 'languagetool-patch'
