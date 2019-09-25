@@ -430,10 +430,26 @@ public class LatexAnnotatedTextBuilder {
             preserveDummyLast = true;
             addMarkup(argument, interpretAs);
 
-            if (environment.equals("tabular")) {
-              String environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
-                  text, pos, LatexCommandSignature.ArgumentType.BRACE);
-              addMarkup(environmentArgument);
+            if (command.equals("\\begin")) {
+              while (pos < text.length()) {
+                if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
+
+                String environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
+                    text, pos, LatexCommandSignature.ArgumentType.BRACE);
+
+                if (!environmentArgument.isEmpty()) {
+                  addMarkup(environmentArgument);
+                } else {
+                  environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
+                      text, pos, LatexCommandSignature.ArgumentType.BRACKET);
+
+                  if (!environmentArgument.isEmpty()) {
+                    addMarkup(environmentArgument);
+                  } else {
+                    break;
+                  }
+                }
+              }
             }
           } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
             addMarkup(command, command.substring(1));
