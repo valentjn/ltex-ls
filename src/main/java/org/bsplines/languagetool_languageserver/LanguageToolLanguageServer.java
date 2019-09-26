@@ -339,8 +339,12 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
   private Pair<List<RuleMatch>, AnnotatedText> validateDocument(TextDocumentItem document) {
     if (languageTool == null) {
-      Tools.logger.warning(Tools.i18n("skippingTextCheck"));
-      return new Pair<>(Collections.emptyList(), null);
+      reinitialize();
+
+      if (languageTool == null) {
+        Tools.logger.warning(Tools.i18n("skippingTextCheck"));
+        return new Pair<>(Collections.emptyList(), null);
+      }
     }
 
     String codeLanguageId = document.getLanguageId();
