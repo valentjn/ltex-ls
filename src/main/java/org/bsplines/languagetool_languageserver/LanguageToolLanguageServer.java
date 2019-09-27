@@ -218,6 +218,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
                   addToDictionaryCommandName);
               JsonObject arguments = new JsonObject();
               arguments.addProperty("commandName", addToDictionaryCommandName);
+              arguments.addProperty("uri", document.getUri());
               arguments.addProperty("word", word);
               command.setArguments(Arrays.asList(arguments));
 
@@ -250,6 +251,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
                   ignoreRuleInSentenceCommandName);
               JsonObject arguments = new JsonObject();
               arguments.addProperty("commandName", ignoreRuleInSentenceCommandName);
+              arguments.addProperty("uri", document.getUri());
               arguments.addProperty("ruleId", ruleId);
               arguments.addProperty("sentencePattern", sentencePatternString);
               command.setArguments(Arrays.asList(arguments));
