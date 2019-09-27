@@ -216,7 +216,10 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
                   getPlainTextPositionFor(match.getToPos(), inverseAnnotatedText));
               Command command = new Command(Tools.i18n("addWordToDictionary", word),
                   addToDictionaryCommandName);
-              command.setArguments(Arrays.asList(new Object[] { word }));
+              JsonObject arguments = new JsonObject();
+              arguments.addProperty("commandName", addToDictionaryCommandName);
+              arguments.addProperty("word", word);
+              command.setArguments(Arrays.asList(arguments));
 
               CodeAction codeAction = new CodeAction(command.getTitle());
               codeAction.setKind(addToDictionaryCodeActionKind);
@@ -245,7 +248,11 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
               String sentencePatternString = "^" + sentencePatternStringBuilder.toString() + "$";
               Command command = new Command(Tools.i18n("ignoreInThisSentence"),
                   ignoreRuleInSentenceCommandName);
-              command.setArguments(Arrays.asList(new Object[] { ruleId, sentencePatternString }));
+              JsonObject arguments = new JsonObject();
+              arguments.addProperty("commandName", ignoreRuleInSentenceCommandName);
+              arguments.addProperty("ruleId", ruleId);
+              arguments.addProperty("sentencePattern", sentencePatternString);
+              command.setArguments(Arrays.asList(arguments));
 
               CodeAction codeAction = new CodeAction(command.getTitle());
               codeAction.setKind(ignoreRuleInSentenceCodeActionKind);
@@ -472,18 +479,13 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
       @Override
       public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
-        if (Objects.equals(params.getCommand(), addToDictionaryCommandName)) {
-          String word = ((JsonElement) params.getArguments().get(0)).getAsString();
-          client.telemetryEvent(addToDictionaryCommandName + " " + word);
+        if (params.getCommand().equals(addToDictionaryCommandName) ||
+            params.getCommand().equals(ignoreRuleInSentenceCommandName)) {
+          client.telemetryEvent(params.getArguments().get(0));
           return CompletableFuture.completedFuture(true);
-        } else if (Objects.equals(params.getCommand(), ignoreRuleInSentenceCommandName)) {
-          String rule = ((JsonElement) params.getArguments().get(0)).getAsString();
-          String sentence = ((JsonElement) params.getArguments().get(1)).getAsString();
-          client.telemetryEvent(ignoreRuleInSentenceCommandName + " " + rule + " " + sentence);
-          return CompletableFuture.completedFuture(true);
+        } else {
+          return CompletableFuture.completedFuture(false);
         }
-
-        return CompletableFuture.completedFuture(false);
       }
     };
   }
