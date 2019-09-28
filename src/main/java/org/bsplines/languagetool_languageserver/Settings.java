@@ -42,11 +42,8 @@ public class Settings {
     }
 
     try {
-      String languagePrefix = languageShortCode;
-      int dashPos = languagePrefix.indexOf("-");
-      if (dashPos != -1) languagePrefix = languagePrefix.substring(0, dashPos);
       dictionary = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings, "ltex." + languagePrefix + ".dictionary").
+          getSettingFromJSON(jsonSettings, "ltex." + languageShortCode + ".dictionary").
           getAsJsonArray());
     } catch (NullPointerException e) {
       dictionary = null;
