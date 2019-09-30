@@ -495,7 +495,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
   private void setSettings(JsonElement jsonSettings) {
     Settings oldSettings = (Settings) settings.clone();
     settings.setSettings(jsonSettings);
-    if (!settings.equals(oldSettings)) reinitialize();
+    if (!settings.equals(oldSettings) || (languageTool == null)) reinitialize();
   }
 
   @Override
