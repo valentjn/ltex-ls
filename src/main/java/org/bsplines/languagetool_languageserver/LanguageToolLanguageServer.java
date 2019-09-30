@@ -187,95 +187,100 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
         TextDocumentItem document = documents.get(params.getTextDocument().getUri());
         VersionedTextDocumentIdentifier textDocument = new VersionedTextDocumentIdentifier(
             document.getUri(), document.getVersion());
-        Pair<List<RuleMatch>, AnnotatedText> validateResult = validateDocument(document);
 
-        if (validateResult.getValue() == null) {
-          return CompletableFuture.completedFuture(Collections.emptyList());
-        }
-
-        String text = document.getText();
-        String plainText = validateResult.getValue().getPlainText();
-        AnnotatedText inverseAnnotatedText = null;
-        DocumentPositionCalculator positionCalculator = new DocumentPositionCalculator(text);
-        List<Either<Command, CodeAction>> result = new ArrayList<Either<Command, CodeAction>>();
-
-        for (RuleMatch match : validateResult.getKey()) {
-          if (locationOverlaps(match, positionCalculator, params.getRange())) {
-            String ruleId = match.getRule().getId();
-            Diagnostic diagnostic = createDiagnostic(match, positionCalculator);
-            Range range = diagnostic.getRange();
-
-            if (ruleId.startsWith("MORFOLOGIK_") || ruleId.startsWith("HUNSPELL_") ||
-                ruleId.startsWith("GERMAN_SPELLER_")) {
-              if (inverseAnnotatedText == null) {
-                inverseAnnotatedText = invertAnnotatedText(validateResult.getValue());
+        return validateDocument(document).thenApply(
+            (Pair<List<RuleMatch>, AnnotatedText> validateResult) -> {
+              if (validateResult.getValue() == null) {
+                return Collections.emptyList();
               }
 
-              String word = plainText.substring(
-                  getPlainTextPositionFor(match.getFromPos(), inverseAnnotatedText),
-                  getPlainTextPositionFor(match.getToPos(), inverseAnnotatedText));
-              Command command = new Command(Tools.i18n("addWordToDictionary", word),
-                  addToDictionaryCommandName);
-              JsonObject arguments = new JsonObject();
-              arguments.addProperty("commandName", addToDictionaryCommandName);
-              arguments.addProperty("uri", document.getUri());
-              arguments.addProperty("word", word);
-              command.setArguments(Arrays.asList(arguments));
+              String text = document.getText();
+              String plainText = validateResult.getValue().getPlainText();
+              AnnotatedText inverseAnnotatedText = null;
+              DocumentPositionCalculator positionCalculator = new DocumentPositionCalculator(text);
+              List<Either<Command, CodeAction>> result =
+                  new ArrayList<Either<Command, CodeAction>>();
 
-              CodeAction codeAction = new CodeAction(command.getTitle());
-              codeAction.setKind(addToDictionaryCodeActionKind);
-              codeAction.setDiagnostics(Collections.singletonList(diagnostic));
-              codeAction.setCommand(command);
-              result.add(Either.forRight(codeAction));
-            }
+              for (RuleMatch match : validateResult.getKey()) {
+                if (locationOverlaps(match, positionCalculator, params.getRange())) {
+                  String ruleId = match.getRule().getId();
+                  Diagnostic diagnostic = createDiagnostic(match, positionCalculator);
+                  Range range = diagnostic.getRange();
 
-            {
-              String sentence = match.getSentence().getText().trim();
-              Matcher matcher = Pattern.compile("Dummy[0-9]+").matcher(sentence);
-              StringBuilder sentencePatternStringBuilder = new StringBuilder();
-              int lastEnd = 0;
+                  if (ruleId.startsWith("MORFOLOGIK_") || ruleId.startsWith("HUNSPELL_") ||
+                      ruleId.startsWith("GERMAN_SPELLER_")) {
+                    if (inverseAnnotatedText == null) {
+                      inverseAnnotatedText = invertAnnotatedText(validateResult.getValue());
+                    }
 
-              while (matcher.find()) {
-                sentencePatternStringBuilder.append(Pattern.quote(
-                    sentence.substring(lastEnd, matcher.start())));
-                sentencePatternStringBuilder.append("Dummy[0-9]+");
-                lastEnd = matcher.end();
+                    String word = plainText.substring(
+                        getPlainTextPositionFor(match.getFromPos(), inverseAnnotatedText),
+                        getPlainTextPositionFor(match.getToPos(), inverseAnnotatedText));
+                    Command command = new Command(Tools.i18n("addWordToDictionary", word),
+                        addToDictionaryCommandName);
+                    JsonObject arguments = new JsonObject();
+                    arguments.addProperty("commandName", addToDictionaryCommandName);
+                    arguments.addProperty("uri", document.getUri());
+                    arguments.addProperty("word", word);
+                    command.setArguments(Arrays.asList(arguments));
+
+                    CodeAction codeAction = new CodeAction(command.getTitle());
+                    codeAction.setKind(addToDictionaryCodeActionKind);
+                    codeAction.setDiagnostics(Collections.singletonList(diagnostic));
+                    codeAction.setCommand(command);
+                    result.add(Either.forRight(codeAction));
+                  }
+
+                  {
+                    String sentence = match.getSentence().getText().trim();
+                    Matcher matcher = Pattern.compile("Dummy[0-9]+").matcher(sentence);
+                    StringBuilder sentencePatternStringBuilder = new StringBuilder();
+                    int lastEnd = 0;
+
+                    while (matcher.find()) {
+                      sentencePatternStringBuilder.append(Pattern.quote(
+                          sentence.substring(lastEnd, matcher.start())));
+                      sentencePatternStringBuilder.append("Dummy[0-9]+");
+                      lastEnd = matcher.end();
+                    }
+
+                    if (lastEnd < sentence.length()) {
+                      sentencePatternStringBuilder.append(Pattern.quote(
+                          sentence.substring(lastEnd)));
+                    }
+
+                    String sentencePatternString = "^" + sentencePatternStringBuilder.toString() +
+                        "$";
+                    Command command = new Command(Tools.i18n("ignoreInThisSentence"),
+                        ignoreRuleInSentenceCommandName);
+                    JsonObject arguments = new JsonObject();
+                    arguments.addProperty("commandName", ignoreRuleInSentenceCommandName);
+                    arguments.addProperty("uri", document.getUri());
+                    arguments.addProperty("ruleId", ruleId);
+                    arguments.addProperty("sentencePattern", sentencePatternString);
+                    command.setArguments(Arrays.asList(arguments));
+
+                    CodeAction codeAction = new CodeAction(command.getTitle());
+                    codeAction.setKind(ignoreRuleInSentenceCodeActionKind);
+                    codeAction.setDiagnostics(Collections.singletonList(diagnostic));
+                    codeAction.setCommand(command);
+                    result.add(Either.forRight(codeAction));
+                  }
+
+                  for (String newWord : match.getSuggestedReplacements()) {
+                    CodeAction codeAction = new CodeAction(Tools.i18n("useWord", newWord));
+                    codeAction.setKind(acceptSuggestionCodeActionKind);
+                    codeAction.setDiagnostics(Collections.singletonList(diagnostic));
+                    codeAction.setEdit(new WorkspaceEdit(Collections.singletonList(
+                      Either.forLeft(new TextDocumentEdit(textDocument,
+                        Collections.singletonList(new TextEdit(range, newWord)))))));
+                    result.add(Either.forRight(codeAction));
+                  }
+                }
               }
 
-              if (lastEnd < sentence.length()) {
-                sentencePatternStringBuilder.append(Pattern.quote(sentence.substring(lastEnd)));
-              }
-
-              String sentencePatternString = "^" + sentencePatternStringBuilder.toString() + "$";
-              Command command = new Command(Tools.i18n("ignoreInThisSentence"),
-                  ignoreRuleInSentenceCommandName);
-              JsonObject arguments = new JsonObject();
-              arguments.addProperty("commandName", ignoreRuleInSentenceCommandName);
-              arguments.addProperty("uri", document.getUri());
-              arguments.addProperty("ruleId", ruleId);
-              arguments.addProperty("sentencePattern", sentencePatternString);
-              command.setArguments(Arrays.asList(arguments));
-
-              CodeAction codeAction = new CodeAction(command.getTitle());
-              codeAction.setKind(ignoreRuleInSentenceCodeActionKind);
-              codeAction.setDiagnostics(Collections.singletonList(diagnostic));
-              codeAction.setCommand(command);
-              result.add(Either.forRight(codeAction));
-            }
-
-            for (String newWord : match.getSuggestedReplacements()) {
-              CodeAction codeAction = new CodeAction(Tools.i18n("useWord", newWord));
-              codeAction.setKind(acceptSuggestionCodeActionKind);
-              codeAction.setDiagnostics(Collections.singletonList(diagnostic));
-              codeAction.setEdit(new WorkspaceEdit(Collections.singletonList(
-                Either.forLeft(new TextDocumentEdit(textDocument,
-                  Collections.singletonList(new TextEdit(range, newWord)))))));
-              result.add(Either.forRight(codeAction));
-            }
-          }
-        }
-
-        return CompletableFuture.completedFuture(result);
+              return result;
+            });
       }
 
       @Override
@@ -297,19 +302,24 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     };
   }
 
-  private void publishIssues(TextDocumentItem document) {
-    List<Diagnostic> diagnostics = getIssues(document);
-
-    client.publishDiagnostics(new PublishDiagnosticsParams(document.getUri(), diagnostics));
+  private CompletableFuture<Void> publishIssues(TextDocumentItem document) {
+    return getIssues(document).thenApply(
+        (List<Diagnostic> diagnostics) -> {
+          client.publishDiagnostics(new PublishDiagnosticsParams(document.getUri(), diagnostics));
+          return null;
+        });
   }
 
-  private List<Diagnostic> getIssues(TextDocumentItem document) {
-    List<RuleMatch> matches = validateDocument(document).getKey();
-    DocumentPositionCalculator positionCalculator =
-        new DocumentPositionCalculator(document.getText());
+  private CompletableFuture<List<Diagnostic>> getIssues(TextDocumentItem document) {
+    return validateDocument(document).thenApply(
+        (Pair<List<RuleMatch>, AnnotatedText> validateResult) -> {
+          List<RuleMatch> matches = validateResult.getKey();
+          DocumentPositionCalculator positionCalculator =
+              new DocumentPositionCalculator(document.getText());
 
-    return matches.stream().map(
-        match -> createDiagnostic(match, positionCalculator)).collect(Collectors.toList());
+          return matches.stream().map(
+              match -> createDiagnostic(match, positionCalculator)).collect(Collectors.toList());
+        });
   }
 
   private void enableEasterEgg(JLanguageTool languageTool) {
@@ -346,128 +356,138 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     });
   }
 
-  private Pair<List<RuleMatch>, AnnotatedText> validateDocument(TextDocumentItem document) {
-    if (languageTool == null) {
-      reinitialize();
+  private CompletableFuture<Pair<List<RuleMatch>, AnnotatedText>> validateDocument(
+      TextDocumentItem document) {
+    ConfigurationItem configurationItem = new ConfigurationItem();
+    configurationItem.setSection("ltex");
+    configurationItem.setScopeUri(document.getUri());
+    CompletableFuture<List<Object>> configurationFuture = client.configuration(
+        new ConfigurationParams(Arrays.asList(configurationItem)));
 
-      if (languageTool == null) {
-        Tools.logger.warning(Tools.i18n("skippingTextCheck"));
-        return new Pair<>(Collections.emptyList(), null);
-      }
-    }
+    return configurationFuture.thenApply(
+        (List<Object> configuration) -> {
+          setSettings((JsonElement) configuration.get(0));
 
-    String codeLanguageId = document.getLanguageId();
-    AnnotatedText annotatedText;
-
-    switch (codeLanguageId) {
-      case "plaintext": {
-        AnnotatedTextBuilder builder = new AnnotatedTextBuilder();
-        annotatedText = builder.addText(document.getText()).build();
-        break;
-      }
-      case "markdown": {
-        Parser p = Parser.builder().build();
-        Document mdDocument = (Document) p.parse(document.getText());
-
-        MarkdownAnnotatedTextBuilder builder = new MarkdownAnnotatedTextBuilder();
-        builder.visit(mdDocument);
-
-        annotatedText = builder.getAnnotatedText();
-        break;
-      }
-      case "latex": {
-        LatexAnnotatedTextBuilder builder = new LatexAnnotatedTextBuilder();
-
-        for (String commandPrototype : settings.getDummyCommandPrototypes()) {
-          builder.commandSignatures.add(new LatexCommandSignature(commandPrototype,
-              LatexCommandSignature.Action.DUMMY));
-        }
-
-        for (String commandPrototype : settings.getIgnoreCommandPrototypes()) {
-          builder.commandSignatures.add(new LatexCommandSignature(commandPrototype,
-              LatexCommandSignature.Action.IGNORE));
-        }
-
-        ExecutorService executor = Executors.newCachedThreadPool();
-        Future<Object> future = executor.submit(new Callable<Object>() {
-          public Object call() throws InterruptedException {
-            builder.addCode(document.getText());
-            return null;
+          if (languageTool == null) {
+            Tools.logger.warning(Tools.i18n("skippingTextCheck"));
+            return new Pair<>(Collections.emptyList(), null);
           }
-        });
 
-        try {
-          future.get(10, TimeUnit.SECONDS);
-        } catch (TimeoutException | InterruptedException | ExecutionException e) {
-          throw new RuntimeException(Tools.i18n("latexAnnotatedTextBuilderFailed"), e);
-        } finally {
-          future.cancel(true);
-        }
+          String codeLanguageId = document.getLanguageId();
+          AnnotatedText annotatedText;
 
-        annotatedText = builder.getAnnotatedText();
-        break;
-      }
-      default: {
-        throw new UnsupportedOperationException(Tools.i18n(
-            "codeLanguageNotSupported", codeLanguageId));
-      }
-    }
-
-    if (settings.getDictionary().stream().anyMatch("BsPlInEs"::equals)) {
-      enableEasterEgg(languageTool);
-    }
-
-    {
-      int logTextMaxLength = 100;
-      String logText = annotatedText.getPlainText();
-      String postfix = "";
-
-      if (logText.length() > logTextMaxLength) {
-        logText = logText.substring(0, logTextMaxLength);
-        postfix = Tools.i18n("truncatedPostfix", logTextMaxLength);
-      }
-
-      Tools.logger.info(Tools.i18n("checkingText",
-          settings.getLanguageShortCode(), StringEscapeUtils.escapeJava(logText), postfix));
-    }
-
-    try {
-      List<RuleMatch> result = languageTool.check(annotatedText);
-
-      Tools.logger.info((result.size() == 1) ? Tools.i18n("obtainedRuleMatch") :
-          Tools.i18n("obtainedRuleMatches", result.size()));
-
-      List<Pair<String, Pattern>> ignoreRuleSentencePairs = settings.getIgnoreRuleSentencePairs();
-
-      if (!result.isEmpty() && !ignoreRuleSentencePairs.isEmpty()) {
-        List<RuleMatch> ignoreMatches = new ArrayList<>();
-
-        for (RuleMatch match : result) {
-          String ruleId = match.getRule().getId();
-          String sentence = match.getSentence().getText().trim();
-
-          for (Pair<String, Pattern> pair : ignoreRuleSentencePairs) {
-            if (pair.getKey().equals(ruleId) && pair.getValue().matcher(sentence).find()) {
-              Tools.logger.info(Tools.i18n("removingIgnoredRuleMatch", ruleId, sentence));
-              ignoreMatches.add(match);
+          switch (codeLanguageId) {
+            case "plaintext": {
+              AnnotatedTextBuilder builder = new AnnotatedTextBuilder();
+              annotatedText = builder.addText(document.getText()).build();
               break;
             }
+            case "markdown": {
+              Parser p = Parser.builder().build();
+              Document mdDocument = (Document) p.parse(document.getText());
+
+              MarkdownAnnotatedTextBuilder builder = new MarkdownAnnotatedTextBuilder();
+              builder.visit(mdDocument);
+
+              annotatedText = builder.getAnnotatedText();
+              break;
+            }
+            case "latex": {
+              LatexAnnotatedTextBuilder builder = new LatexAnnotatedTextBuilder();
+
+              for (String commandPrototype : settings.getDummyCommandPrototypes()) {
+                builder.commandSignatures.add(new LatexCommandSignature(commandPrototype,
+                    LatexCommandSignature.Action.DUMMY));
+              }
+
+              for (String commandPrototype : settings.getIgnoreCommandPrototypes()) {
+                builder.commandSignatures.add(new LatexCommandSignature(commandPrototype,
+                    LatexCommandSignature.Action.IGNORE));
+              }
+
+              ExecutorService executor = Executors.newCachedThreadPool();
+              Future<Object> builderFuture = executor.submit(new Callable<Object>() {
+                public Object call() throws InterruptedException {
+                  builder.addCode(document.getText());
+                  return null;
+                }
+              });
+
+              try {
+                builderFuture.get(10, TimeUnit.SECONDS);
+              } catch (TimeoutException | InterruptedException | ExecutionException e) {
+                throw new RuntimeException(Tools.i18n("latexAnnotatedTextBuilderFailed"), e);
+              } finally {
+                builderFuture.cancel(true);
+              }
+
+              annotatedText = builder.getAnnotatedText();
+              break;
+            }
+            default: {
+              throw new UnsupportedOperationException(Tools.i18n(
+                  "codeLanguageNotSupported", codeLanguageId));
+            }
           }
-        }
 
-        if (!ignoreMatches.isEmpty()) {
-          Tools.logger.info((ignoreMatches.size() == 1) ? Tools.i18n("removedIgnoredRuleMatch") :
-              Tools.i18n("removedIgnoredRuleMatches", ignoreMatches.size()));
-          for (RuleMatch match : ignoreMatches) result.remove(match);
-        }
-      }
+          if (settings.getDictionary().stream().anyMatch("BsPlInEs"::equals)) {
+            enableEasterEgg(languageTool);
+          }
 
-      return new Pair<>(result, annotatedText);
-    } catch (RuntimeException | IOException e) {
-      Tools.logger.severe(Tools.i18n("languageToolFailed", e.getMessage()));
-      e.printStackTrace();
-      return new Pair<>(Collections.emptyList(), annotatedText);
-    }
+          {
+            int logTextMaxLength = 100;
+            String logText = annotatedText.getPlainText();
+            String postfix = "";
+
+            if (logText.length() > logTextMaxLength) {
+              logText = logText.substring(0, logTextMaxLength);
+              postfix = Tools.i18n("truncatedPostfix", logTextMaxLength);
+            }
+
+            Tools.logger.info(Tools.i18n("checkingText",
+                settings.getLanguageShortCode(), StringEscapeUtils.escapeJava(logText), postfix));
+          }
+
+          try {
+            List<RuleMatch> result = languageTool.check(annotatedText);
+
+            Tools.logger.info((result.size() == 1) ? Tools.i18n("obtainedRuleMatch") :
+                Tools.i18n("obtainedRuleMatches", result.size()));
+
+            List<Pair<String, Pattern>> ignoreRuleSentencePairs =
+                settings.getIgnoreRuleSentencePairs();
+
+            if (!result.isEmpty() && !ignoreRuleSentencePairs.isEmpty()) {
+              List<RuleMatch> ignoreMatches = new ArrayList<>();
+
+              for (RuleMatch match : result) {
+                String ruleId = match.getRule().getId();
+                String sentence = match.getSentence().getText().trim();
+
+                for (Pair<String, Pattern> pair : ignoreRuleSentencePairs) {
+                  if (pair.getKey().equals(ruleId) && pair.getValue().matcher(sentence).find()) {
+                    Tools.logger.info(Tools.i18n("removingIgnoredRuleMatch", ruleId, sentence));
+                    ignoreMatches.add(match);
+                    break;
+                  }
+                }
+              }
+
+              if (!ignoreMatches.isEmpty()) {
+                Tools.logger.info((ignoreMatches.size() == 1) ?
+                    Tools.i18n("removedIgnoredRuleMatch") :
+                    Tools.i18n("removedIgnoredRuleMatches", ignoreMatches.size()));
+                for (RuleMatch match : ignoreMatches) result.remove(match);
+              }
+            }
+
+            return new Pair<>(result, annotatedText);
+          } catch (RuntimeException | IOException e) {
+            Tools.logger.severe(Tools.i18n("languageToolFailed", e.getMessage()));
+            e.printStackTrace();
+            return new Pair<>(Collections.emptyList(), annotatedText);
+          }
+        });
   }
 
   @Override
