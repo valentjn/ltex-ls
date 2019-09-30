@@ -297,8 +297,15 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
         publishIssues(params.getTextDocument().getUri());
       }
 
+      @Override
+      public void didClose(DidCloseTextDocumentParams params) {
+        super.didClose(params);
+        String uri = params.getTextDocument().getUri();
+        client.publishDiagnostics(new PublishDiagnosticsParams(uri, Collections.emptyList()));
+      }
+
       private void publishIssues(String uri) {
-        TextDocumentItem document = this.documents.get(uri);
+        TextDocumentItem document = documents.get(uri);
         LanguageToolLanguageServer.this.publishIssues(document);
       }
     };
