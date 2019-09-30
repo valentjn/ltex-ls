@@ -131,7 +131,8 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
     if (!settings.getLanguageModelRulesDirectory().isEmpty()) {
       try {
-        languageTool.activateLanguageModelRules(new File(settings.getLanguageModelRulesDirectory()));
+        languageTool.activateLanguageModelRules(
+            new File(settings.getLanguageModelRulesDirectory()));
       } catch (IOException | RuntimeException e) {
         Tools.logger.warning(Tools.i18n("couldNotLoadLanguageModel",
             settings.getLanguageModelRulesDirectory(), e.getMessage()));
@@ -152,7 +153,8 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
     if (!settings.getWord2VecModelRulesDirectory().isEmpty()) {
       try {
-        languageTool.activateWord2VecModelRules(new File(settings.getWord2VecModelRulesDirectory()));
+        languageTool.activateWord2VecModelRules(
+            new File(settings.getWord2VecModelRulesDirectory()));
       } catch (IOException | RuntimeException e) {
         Tools.logger.warning(Tools.i18n("couldNotLoadWord2VecModel",
             settings.getWord2VecModelRulesDirectory(), e.getMessage()));
