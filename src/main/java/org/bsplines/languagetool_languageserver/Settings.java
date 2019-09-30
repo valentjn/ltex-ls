@@ -36,14 +36,14 @@ public class Settings {
 
   public void setSettings(JsonElement jsonSettings) {
     try {
-      languageShortCode = getSettingFromJSON(jsonSettings, "ltex.language").getAsString();
+      languageShortCode = getSettingFromJSON(jsonSettings, "language").getAsString();
     } catch (NullPointerException e) {
       languageShortCode = null;
     }
 
     try {
       dictionary = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings, "ltex." + languageShortCode + ".dictionary").
+          getSettingFromJSON(jsonSettings, languageShortCode + ".dictionary").
           getAsJsonArray());
     } catch (NullPointerException e) {
       dictionary = null;
@@ -51,7 +51,7 @@ public class Settings {
 
     try {
       String diagnosticSeverityString =
-          getSettingFromJSON(jsonSettings, "ltex.diagnosticSeverity").getAsString();
+          getSettingFromJSON(jsonSettings, "diagnosticSeverity").getAsString();
 
       if (diagnosticSeverityString.equals("error")) {
         diagnosticSeverity = DiagnosticSeverity.Error;
@@ -70,14 +70,14 @@ public class Settings {
 
     try {
       dummyCommandPrototypes = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings, "ltex.commands.dummy").getAsJsonArray());
+          getSettingFromJSON(jsonSettings, "commands.dummy").getAsJsonArray());
     } catch (NullPointerException e) {
       dummyCommandPrototypes = null;
     }
 
     try {
       ignoreCommandPrototypes = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings, "ltex.commands.ignore").getAsJsonArray());
+          getSettingFromJSON(jsonSettings, "commands.ignore").getAsJsonArray());
     } catch (NullPointerException e) {
       ignoreCommandPrototypes = null;
     }
@@ -86,7 +86,7 @@ public class Settings {
       ignoreRuleSentencePairs = new ArrayList<>();
 
       for (JsonElement element :
-          getSettingFromJSON(jsonSettings, "ltex.ignoreRuleInSentence").getAsJsonArray()) {
+          getSettingFromJSON(jsonSettings, "ignoreRuleInSentence").getAsJsonArray()) {
         JsonObject elementObject = element.getAsJsonObject();
         ignoreRuleSentencePairs.add(new Pair<>(elementObject.get("rule").getAsString(),
             Pattern.compile(elementObject.get("sentence").getAsString())));
@@ -97,21 +97,21 @@ public class Settings {
 
     try {
       languageModelRulesDirectory = getSettingFromJSON(
-          jsonSettings, "ltex.additionalRules.languageModel").getAsString();
+          jsonSettings, "additionalRules.languageModel").getAsString();
     } catch (NullPointerException e) {
       languageModelRulesDirectory = null;
     }
 
     try {
       neuralNetworkModelRulesDirectory = getSettingFromJSON(
-          jsonSettings, "ltex.additionalRules.neuralNetworkModel").getAsString();
+          jsonSettings, "additionalRules.neuralNetworkModel").getAsString();
     } catch (NullPointerException e) {
       neuralNetworkModelRulesDirectory = null;
     }
 
     try {
       word2VecModelRulesDirectory = getSettingFromJSON(
-          jsonSettings, "ltex.additionalRules.word2VecModel").getAsString();
+          jsonSettings, "additionalRules.word2VecModel").getAsString();
     } catch (NullPointerException e) {
       word2VecModelRulesDirectory = null;
     }

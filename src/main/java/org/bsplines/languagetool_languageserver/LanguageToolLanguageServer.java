@@ -476,7 +476,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
       @Override
       public void didChangeConfiguration(DidChangeConfigurationParams params) {
         super.didChangeConfiguration(params);
-        setSettings((JsonElement) params.getSettings());
+        setSettings(((JsonObject) params.getSettings()).get("ltex"));
       }
 
       @Override
