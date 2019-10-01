@@ -255,7 +255,9 @@ public class LatexAnnotatedTextBuilder {
   private String generateDummy() {
     String dummy;
 
-    if (isTextMode(curMode)) {
+    if (isInsideTikzMode()) {
+      dummy = "";
+    } else if (isTextMode(curMode)) {
       dummy = "Dummy" + (dummyCounter++);
     } else if (isMathEmpty) {
       if (curMode == Mode.DISPLAY_MATH) {
@@ -333,6 +335,14 @@ public class LatexAnnotatedTextBuilder {
 
   private static boolean isTikzMode(Mode mode) {
     return (mode == Mode.TIKZ);
+  }
+
+  private boolean isInsideTikzMode() {
+    for (Mode mode : modeStack) {
+      if (isTikzMode(mode)) return true;
+    }
+
+    return false;
   }
 
   private static boolean isTextMode(Mode mode) {
@@ -452,7 +462,7 @@ public class LatexAnnotatedTextBuilder {
               }
             }
           } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
-            addMarkup(command, command.substring(1));
+            addMarkup(command, (isInsideTikzMode() ? "" : command.substring(1)));
           } else if (command.equals("\\[") || command.equals("\\]") ||
               command.equals("\\(") || command.equals("\\)")) {
             if (command.equals("\\[")) {
@@ -466,15 +476,15 @@ public class LatexAnnotatedTextBuilder {
               addMarkup(command, generateDummy());
             }
           } else if (command.equals("\\AA")) {
-            addMarkup(command, "\u00c5");
+            addMarkup(command, (isInsideTikzMode() ? "" : "\u00c5"));
           } else if (command.equals("\\O")) {
-            addMarkup(command, "\u00d8");
+            addMarkup(command, (isInsideTikzMode() ? "" : "\u00d8"));
           } else if (command.equals("\\aa")) {
-            addMarkup(command, "\u00e5");
+            addMarkup(command, (isInsideTikzMode() ? "" : "\u00e5"));
           } else if (command.equals("\\ss")) {
-            addMarkup(command, "\u00df");
+            addMarkup(command, (isInsideTikzMode() ? "" : "\u00df"));
           } else if (command.equals("\\o")) {
-            addMarkup(command, "\u00f8");
+            addMarkup(command, (isInsideTikzMode() ? "" : "\u00f8"));
           } else if (command.equals("\\`") || command.equals("\\'") || command.equals("\\^") ||
               command.equals("\\~") || command.equals("\\\"") || command.equals("\\=") ||
               command.equals("\\.")) {
@@ -586,7 +596,7 @@ public class LatexAnnotatedTextBuilder {
                 }
               }
 
-              addMarkup(matcher.group(), interpretAs);
+              addMarkup(matcher.group(), (isInsideTikzMode() ? "" : interpretAs));
             } else {
               addMarkup(command);
             }
@@ -613,7 +623,7 @@ public class LatexAnnotatedTextBuilder {
                 }
               }
 
-              addMarkup(matcher.group(), interpretAs);
+              addMarkup(matcher.group(), (isInsideTikzMode() ? "" : interpretAs));
             } else {
               addMarkup(command);
             }
@@ -633,7 +643,7 @@ public class LatexAnnotatedTextBuilder {
             } else {
               preserveDummyLast = true;
 
-              if (isMathMode(curMode) || isTikzMode(curMode)) {
+              if (isMathMode(curMode) || isInsideTikzMode()) {
                 addMarkup(command);
                 dummyLastSpace = " ";
               } else {
@@ -641,7 +651,7 @@ public class LatexAnnotatedTextBuilder {
               }
             }
           } else if (command.equals("\\dots")) {
-            addMarkup(command, "...");
+            addMarkup(command, (isInsideTikzMode() ? "" : "..."));
           } else if (command.equals("\\footnote")) {
             modeStack.push(Mode.INLINE_TEXT);
             String interpretAs = (isMathMode(curMode) ? generateDummy() :

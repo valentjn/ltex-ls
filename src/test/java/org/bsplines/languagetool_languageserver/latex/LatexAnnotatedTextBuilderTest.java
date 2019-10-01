@@ -75,6 +75,13 @@ public class LatexAnnotatedTextBuilderTest {
         "\\end{tikzpicture}\n" +
         "This is another sentence.\n",
         "This is a test. This is another sentence. ");
+    assertPlainText(
+        "This is a test:\n" +
+        "\\begin{tikzpicture}\n" +
+        "  \\node {$\\dots$};\n" +
+        "  \\node {$a$};\n" +
+        "\\end{tikzpicture}\n",
+        "This is a test: ");
   }
 
   @Test
