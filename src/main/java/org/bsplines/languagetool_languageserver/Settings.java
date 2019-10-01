@@ -20,6 +20,13 @@ public class Settings {
   private String neuralNetworkModelRulesDirectory = null;
   private String word2VecModelRulesDirectory = null;
 
+  public Settings() {
+  }
+
+  public Settings(JsonElement jsonSettings) {
+    setSettings(jsonSettings);
+  }
+
   private static JsonElement getSettingFromJSON(JsonElement jsonSettings, String name) {
     for (String component : name.split("\\.")) {
       jsonSettings = jsonSettings.getAsJsonObject().get(component);
