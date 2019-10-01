@@ -654,9 +654,9 @@ public class LatexAnnotatedTextBuilder {
           } else if (command.equals("\\-")) {
             addMarkup(command);
           } else if (command.equals("\\ ") || command.equals("\\,") || command.equals("\\;") ||
-              command.equals("\\\\") || command.equals("\\quad") || command.equals("\\qquad") ||
-              command.equals("\\hfill") || command.equals("\\hspace") ||
-              command.equals("\\hspace*")) {
+              command.equals("\\\\") || command.equals("\\hfill") || command.equals("\\hspace") ||
+              command.equals("\\hspace*") || command.equals("\\quad") ||
+              command.equals("\\qquad") || command.equals("\\newline")) {
             if (command.equals("\\hspace") || command.equals("\\hspace*")) {
               String argument = matchFromPosition(argumentPattern, pos + command.length());
               command += argument;
