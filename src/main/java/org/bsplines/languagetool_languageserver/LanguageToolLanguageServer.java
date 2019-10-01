@@ -29,6 +29,9 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
   private HashMap<String, TextDocumentItem> documents = new HashMap<>();
   private LanguageClient client = null;
 
+  private HashMap<String, JLanguageTool> languageToolMap = new HashMap<>();
+  private HashMap<String, Settings> settingsMap = new HashMap<>();
+
   private JLanguageTool languageTool;
   private Settings settings = new Settings();
 
@@ -111,6 +114,9 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     }
 
     reinitialize();
+    String language = settings.getLanguageShortCode();
+    settingsMap.put(language, settings);
+    languageToolMap.put(language, languageTool);
 
     return CompletableFuture.completedFuture(new InitializeResult(capabilities));
   }
@@ -173,6 +179,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
   @Override
   public void exit() {
+    System.exit(0);
   }
 
   @Override
@@ -522,9 +529,19 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
   }
 
   private void setSettings(JsonElement jsonSettings) {
-    Settings oldSettings = (Settings) settings.clone();
-    settings.setSettings(jsonSettings);
-    if (!settings.equals(oldSettings) || (languageTool == null)) reinitialize();
+    Settings newSettings = new Settings(jsonSettings);
+    String newLanguage = newSettings.getLanguageShortCode();
+    Settings oldSettings = settingsMap.getOrDefault(newLanguage, null);
+
+    if (newSettings.equals(oldSettings)) {
+      settings = oldSettings;
+      languageTool = languageToolMap.get(newLanguage);
+    } else {
+      settingsMap.put(newLanguage, newSettings);
+      settings = newSettings;
+      reinitialize();
+      languageToolMap.put(newLanguage, languageTool);
+    }
   }
 
   @Override
