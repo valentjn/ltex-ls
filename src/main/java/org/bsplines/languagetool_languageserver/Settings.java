@@ -44,7 +44,7 @@ public class Settings {
   public void setSettings(JsonElement jsonSettings) {
     try {
       languageShortCode = getSettingFromJSON(jsonSettings, "language").getAsString();
-    } catch (NullPointerException e) {
+    } catch (NullPointerException | UnsupportedOperationException e) {
       languageShortCode = null;
     }
 
@@ -52,7 +52,7 @@ public class Settings {
       dictionary = convertJsonArrayToList(
           getSettingFromJSON(jsonSettings, languageShortCode + ".dictionary").
           getAsJsonArray());
-    } catch (NullPointerException e) {
+    } catch (NullPointerException | UnsupportedOperationException e) {
       dictionary = null;
     }
 
@@ -71,21 +71,21 @@ public class Settings {
       } else {
         diagnosticSeverity = null;
       }
-    } catch (NullPointerException e) {
+    } catch (NullPointerException | UnsupportedOperationException e) {
       diagnosticSeverity = null;
     }
 
     try {
       dummyCommandPrototypes = convertJsonArrayToList(
           getSettingFromJSON(jsonSettings, "commands.dummy").getAsJsonArray());
-    } catch (NullPointerException e) {
+    } catch (NullPointerException | UnsupportedOperationException e) {
       dummyCommandPrototypes = null;
     }
 
     try {
       ignoreCommandPrototypes = convertJsonArrayToList(
           getSettingFromJSON(jsonSettings, "commands.ignore").getAsJsonArray());
-    } catch (NullPointerException e) {
+    } catch (NullPointerException | UnsupportedOperationException e) {
       ignoreCommandPrototypes = null;
     }
 
@@ -98,28 +98,28 @@ public class Settings {
         ignoreRuleSentencePairs.add(new Pair<>(elementObject.get("rule").getAsString(),
             Pattern.compile(elementObject.get("sentence").getAsString())));
       }
-    } catch (NullPointerException e) {
+    } catch (NullPointerException | UnsupportedOperationException e) {
       ignoreRuleSentencePairs = null;
     }
 
     try {
       languageModelRulesDirectory = getSettingFromJSON(
           jsonSettings, "additionalRules.languageModel").getAsString();
-    } catch (NullPointerException e) {
+    } catch (NullPointerException | UnsupportedOperationException e) {
       languageModelRulesDirectory = null;
     }
 
     try {
       neuralNetworkModelRulesDirectory = getSettingFromJSON(
           jsonSettings, "additionalRules.neuralNetworkModel").getAsString();
-    } catch (NullPointerException e) {
+    } catch (NullPointerException | UnsupportedOperationException e) {
       neuralNetworkModelRulesDirectory = null;
     }
 
     try {
       word2VecModelRulesDirectory = getSettingFromJSON(
           jsonSettings, "additionalRules.word2VecModel").getAsString();
-    } catch (NullPointerException e) {
+    } catch (NullPointerException | UnsupportedOperationException e) {
       word2VecModelRulesDirectory = null;
     }
   }
