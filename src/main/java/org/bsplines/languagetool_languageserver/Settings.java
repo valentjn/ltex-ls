@@ -252,14 +252,14 @@ public class Settings {
   }
 
   public String getLanguageModelRulesDirectory() {
-    return getDefault(languageModelRulesDirectory, "");
+    return getDefault(languageModelRulesDirectory, null);
   }
 
   public String getNeuralNetworkModelRulesDirectory() {
-    return getDefault(neuralNetworkModelRulesDirectory, "");
+    return getDefault(neuralNetworkModelRulesDirectory, null);
   }
 
   public String getWord2VecModelRulesDirectory() {
-    return getDefault(word2VecModelRulesDirectory, "");
+    return getDefault(word2VecModelRulesDirectory, null);
   }
 }

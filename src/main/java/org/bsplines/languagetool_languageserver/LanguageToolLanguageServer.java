@@ -135,7 +135,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     UserConfig userConfig = new UserConfig(settings.getDictionary());
     languageTool = new JLanguageTool(language, resultCache, userConfig);
 
-    if (!settings.getLanguageModelRulesDirectory().isEmpty()) {
+    if (settings.getLanguageModelRulesDirectory() != null) {
       try {
         languageTool.activateLanguageModelRules(
             new File(settings.getLanguageModelRulesDirectory()));
@@ -146,7 +146,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
       }
     }
 
-    if (!settings.getNeuralNetworkModelRulesDirectory().isEmpty()) {
+    if (settings.getNeuralNetworkModelRulesDirectory() != null) {
       try {
         languageTool.activateNeuralNetworkRules(
             new File(settings.getNeuralNetworkModelRulesDirectory()));
@@ -157,7 +157,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
       }
     }
 
-    if (!settings.getWord2VecModelRulesDirectory().isEmpty()) {
+    if (settings.getWord2VecModelRulesDirectory() != null) {
       try {
         languageTool.activateWord2VecModelRules(
             new File(settings.getWord2VecModelRulesDirectory()));
