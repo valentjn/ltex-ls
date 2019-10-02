@@ -145,12 +145,16 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     if (settings.getLanguageModelRulesDirectory() == null) {
       if (motherTongue != null) {
         // from JLanguageTool.activateDefaultFalseFriendRules (which is private)
+        String falseFriendRulePath = JLanguageTool.getDataBroker().getRulesDir() + "/" +
+            JLanguageTool.FALSE_FRIEND_FILE;
+
         try {
           List<AbstractPatternRule> falseFriendRules = languageTool.loadFalseFriendRules(
-              JLanguageTool.getDataBroker().getRulesDir() + "/" + JLanguageTool.FALSE_FRIEND_FILE);
+              falseFriendRulePath);
           for (Rule rule : falseFriendRules) languageTool.addRule(rule);
         } catch (ParserConfigurationException | SAXException | IOException e) {
-          Tools.logger.warning(Tools.i18n("couldNotLoadFalseFriendRules", e.getMessage()));
+          Tools.logger.warning(Tools.i18n("couldNotLoadFalseFriendRules",
+              falseFriendRulePath, e.getMessage()));
           e.printStackTrace();
         }
       }
