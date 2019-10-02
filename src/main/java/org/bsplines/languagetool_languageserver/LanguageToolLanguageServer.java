@@ -15,14 +15,18 @@ import org.languagetool.*;
 import org.languagetool.markup.*;
 import org.languagetool.markup.AnnotatedTextBuilder;
 import org.languagetool.rules.*;
+import org.languagetool.rules.patterns.AbstractPatternRule;
+import org.xml.sax.SAXException;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 public class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware {
 
@@ -138,7 +142,19 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     UserConfig userConfig = new UserConfig(settings.getDictionary());
     languageTool = new JLanguageTool(language, motherTongue, resultCache, userConfig);
 
-    if (settings.getLanguageModelRulesDirectory() != null) {
+    if (settings.getLanguageModelRulesDirectory() == null) {
+      if (motherTongue != null) {
+        // from JLanguageTool.activateDefaultFalseFriendRules (which is private)
+        try {
+          List<AbstractPatternRule> falseFriendRules = languageTool.loadFalseFriendRules(
+              JLanguageTool.getDataBroker().getRulesDir() + "/" + JLanguageTool.FALSE_FRIEND_FILE);
+          for (Rule rule : falseFriendRules) languageTool.addRule(rule);
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+          Tools.logger.warning(Tools.i18n("couldNotLoadFalseFriendRules", e.getMessage()));
+          e.printStackTrace();
+        }
+      }
+    } else {
       try {
         languageTool.activateLanguageModelRules(
             new File(settings.getLanguageModelRulesDirectory()));
