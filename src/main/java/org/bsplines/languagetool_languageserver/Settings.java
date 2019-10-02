@@ -16,6 +16,7 @@ public class Settings {
   private List<String> dummyCommandPrototypes = null;
   private List<String> ignoreCommandPrototypes = null;
   private List<Pair<String, Pattern>> ignoreRuleSentencePairs = null;
+  private String motherTongueShortCode = null;
   private String languageModelRulesDirectory = null;
   private String neuralNetworkModelRulesDirectory = null;
   private String word2VecModelRulesDirectory = null;
@@ -103,6 +104,13 @@ public class Settings {
     }
 
     try {
+      motherTongueShortCode = getSettingFromJSON(
+          jsonSettings, "additionalRules.motherTongue").getAsString();
+    } catch (NullPointerException | UnsupportedOperationException e) {
+      motherTongueShortCode = null;
+    }
+
+    try {
       languageModelRulesDirectory = getSettingFromJSON(
           jsonSettings, "additionalRules.languageModel").getAsString();
     } catch (NullPointerException | UnsupportedOperationException e) {
@@ -145,6 +153,7 @@ public class Settings {
       }
     }
 
+    obj.motherTongueShortCode = motherTongueShortCode;
     obj.languageModelRulesDirectory = languageModelRulesDirectory;
     obj.neuralNetworkModelRulesDirectory = neuralNetworkModelRulesDirectory;
     obj.word2VecModelRulesDirectory = word2VecModelRulesDirectory;
@@ -186,6 +195,11 @@ public class Settings {
       return false;
     }
 
+    if ((motherTongueShortCode == null) ? (other.motherTongueShortCode != null) :
+        !motherTongueShortCode.equals(other.motherTongueShortCode)) {
+      return false;
+    }
+
     if ((languageModelRulesDirectory == null) ? (other.languageModelRulesDirectory != null) :
         !languageModelRulesDirectory.equals(other.languageModelRulesDirectory)) {
       return false;
@@ -214,6 +228,7 @@ public class Settings {
     hash = 53 * hash + ((dummyCommandPrototypes != null) ? dummyCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreCommandPrototypes != null) ? ignoreCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreRuleSentencePairs != null) ? ignoreRuleSentencePairs.hashCode() : 0);
+    hash = 53 * hash + ((motherTongueShortCode != null) ? motherTongueShortCode.hashCode() : 0);
     hash = 53 * hash + ((languageModelRulesDirectory != null) ?
         languageModelRulesDirectory.hashCode() : 0);
     hash = 53 * hash + ((neuralNetworkModelRulesDirectory != null) ?
@@ -249,6 +264,10 @@ public class Settings {
 
   public List<Pair<String, Pattern>> getIgnoreRuleSentencePairs() {
     return getDefault(ignoreRuleSentencePairs, Collections.emptyList());
+  }
+
+  public String getMotherTongueShortCode() {
+    return getDefault(motherTongueShortCode, null);
   }
 
   public String getLanguageModelRulesDirectory() {

@@ -130,10 +130,13 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     }
 
     Language language = Languages.getLanguageForShortCode(settings.getLanguageShortCode());
+    String motherTongueShortCode = settings.getMotherTongueShortCode();
+    Language motherTongue = ((motherTongueShortCode != null) ?
+        Languages.getLanguageForShortCode(motherTongueShortCode) : null);
     ResultCache resultCache = new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes,
         TimeUnit.MINUTES);
     UserConfig userConfig = new UserConfig(settings.getDictionary());
-    languageTool = new JLanguageTool(language, resultCache, userConfig);
+    languageTool = new JLanguageTool(language, motherTongue, resultCache, userConfig);
 
     if (settings.getLanguageModelRulesDirectory() != null) {
       try {
