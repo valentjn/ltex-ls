@@ -190,8 +190,6 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
         e.printStackTrace();
       }
     }
-
-    documents.values().forEach(this::publishIssues);
   }
 
   @Override
@@ -536,6 +534,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
       public void didChangeConfiguration(DidChangeConfigurationParams params) {
         super.didChangeConfiguration(params);
         setSettings(((JsonObject) params.getSettings()).get("ltex"));
+        documents.values().forEach(LanguageToolLanguageServer.this::publishIssues);
       }
 
       @Override
