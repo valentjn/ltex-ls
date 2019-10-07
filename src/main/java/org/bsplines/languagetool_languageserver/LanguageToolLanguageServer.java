@@ -263,7 +263,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
                     result.add(Either.forRight(codeAction));
                   }
 
-                  {
+                  if (match.getSentence() != null) {
                     String sentence = match.getSentence().getText().trim();
                     Matcher matcher = Pattern.compile("Dummy[0-9]+").matcher(sentence);
                     StringBuilder sentencePatternStringBuilder = new StringBuilder();
