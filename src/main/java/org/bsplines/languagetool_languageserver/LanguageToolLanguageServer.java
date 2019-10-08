@@ -498,14 +498,16 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
               List<RuleMatch> ignoreMatches = new ArrayList<>();
 
               for (RuleMatch match : result) {
-                String ruleId = match.getRule().getId();
-                String sentence = match.getSentence().getText().trim();
+                if (match.getSentence() != null) {
+                  String ruleId = match.getRule().getId();
+                  String sentence = match.getSentence().getText().trim();
 
-                for (Pair<String, Pattern> pair : ignoreRuleSentencePairs) {
-                  if (pair.getKey().equals(ruleId) && pair.getValue().matcher(sentence).find()) {
-                    Tools.logger.info(Tools.i18n("removingIgnoredRuleMatch", ruleId, sentence));
-                    ignoreMatches.add(match);
-                    break;
+                  for (Pair<String, Pattern> pair : ignoreRuleSentencePairs) {
+                    if (pair.getKey().equals(ruleId) && pair.getValue().matcher(sentence).find()) {
+                      Tools.logger.info(Tools.i18n("removingIgnoredRuleMatch", ruleId, sentence));
+                      ignoreMatches.add(match);
+                      break;
+                    }
                   }
                 }
               }
