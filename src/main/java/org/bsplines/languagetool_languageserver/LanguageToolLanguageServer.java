@@ -45,9 +45,12 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
       CodeActionKind.QuickFix + ".ltex.acceptSuggestion";
   private static final String addToDictionaryCodeActionKind =
       CodeActionKind.QuickFix + ".ltex.addToDictionary";
+  private static final String disableRuleCodeActionKind =
+      CodeActionKind.QuickFix + ".ltex.disableRule";
   private static final String ignoreRuleInSentenceCodeActionKind =
       CodeActionKind.QuickFix + ".ltex.ignoreRuleInSentence";
   private static final String addToDictionaryCommandName = "ltex.addToDictionary";
+  private static final String disableRuleCommandName = "ltex.disableRule";
   private static final String ignoreRuleInSentenceCommandName = "ltex.ignoreRuleInSentence";
 
   private static boolean locationOverlaps(
@@ -100,10 +103,10 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     capabilities.setCodeActionProvider(
         new CodeActionOptions(Arrays.asList(
           acceptSuggestionCodeActionKind, addToDictionaryCodeActionKind,
-          ignoreRuleInSentenceCodeActionKind)));
+          disableRuleCodeActionKind, ignoreRuleInSentenceCodeActionKind)));
     capabilities.setExecuteCommandProvider(
         new ExecuteCommandOptions(Arrays.asList(
-          addToDictionaryCommandName, ignoreRuleInSentenceCommandName)));
+          addToDictionaryCommandName, disableRuleCommandName, ignoreRuleInSentenceCommandName)));
 
     // Until it is specified in the LSP that the locale is automatically sent with
     // the initialization request, we have to do that manually.
@@ -299,6 +302,22 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
                     CodeAction codeAction = new CodeAction(command.getTitle());
                     codeAction.setKind(ignoreRuleInSentenceCodeActionKind);
+                    codeAction.setDiagnostics(Collections.singletonList(diagnostic));
+                    codeAction.setCommand(command);
+                    result.add(Either.forRight(codeAction));
+                  }
+
+                  {
+                    Command command = new Command(Tools.i18n("disableRule"),
+                        disableRuleCommandName);
+                    JsonObject arguments = new JsonObject();
+                    arguments.addProperty("commandName", disableRuleCommandName);
+                    arguments.addProperty("uri", document.getUri());
+                    arguments.addProperty("ruleId", ruleId);
+                    command.setArguments(Arrays.asList(arguments));
+
+                    CodeAction codeAction = new CodeAction(command.getTitle());
+                    codeAction.setKind(disableRuleCodeActionKind);
                     codeAction.setDiagnostics(Collections.singletonList(diagnostic));
                     codeAction.setCommand(command);
                     result.add(Either.forRight(codeAction));
@@ -549,6 +568,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
       @Override
       public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
         if (params.getCommand().equals(addToDictionaryCommandName) ||
+            params.getCommand().equals(disableRuleCommandName) ||
             params.getCommand().equals(ignoreRuleInSentenceCommandName)) {
           client.telemetryEvent(params.getArguments().get(0));
           return CompletableFuture.completedFuture(true);
