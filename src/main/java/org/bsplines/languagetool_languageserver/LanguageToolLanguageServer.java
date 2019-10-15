@@ -71,7 +71,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
         positionCalculator.getPosition(match.getFromPos()),
         positionCalculator.getPosition(match.getToPos())));
     ret.setSeverity(settings.getDiagnosticSeverity());
-    ret.setSource("LT - " + match.getRule().getDescription());
+    ret.setSource("LTeX - " + match.getRule().getId());
     ret.setMessage(match.getMessage().replaceAll("<suggestion>(.*?)</suggestion>", "'$1'"));
     return ret;
   }
