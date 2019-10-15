@@ -190,6 +190,13 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
         e.printStackTrace();
       }
     }
+
+    // for strange reasons there is no JLanguageTool.enableRules
+    for (String ruleId : settings.getEnabledRules()) {
+      languageTool.enableRule(ruleId);
+    }
+
+    languageTool.disableRules(settings.getDisabledRules());
   }
 
   @Override

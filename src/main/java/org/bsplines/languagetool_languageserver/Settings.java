@@ -13,6 +13,8 @@ public class Settings {
   private String languageShortCode = null;
   private DiagnosticSeverity diagnosticSeverity = null;
   private List<String> dictionary = null;
+  private List<String> disabledRules = null;
+  private List<String> enabledRules = null;
   private List<String> dummyCommandPrototypes = null;
   private List<String> ignoreCommandPrototypes = null;
   private List<Pair<String, Pattern>> ignoreRuleSentencePairs = null;
@@ -77,6 +79,22 @@ public class Settings {
     }
 
     try {
+      disabledRules = convertJsonArrayToList(
+          getSettingFromJSON(jsonSettings, languageShortCode + ".disabledRules").
+          getAsJsonArray());
+    } catch (NullPointerException | UnsupportedOperationException e) {
+      disabledRules = null;
+    }
+
+    try {
+      enabledRules = convertJsonArrayToList(
+          getSettingFromJSON(jsonSettings, languageShortCode + ".enabledRules").
+          getAsJsonArray());
+    } catch (NullPointerException | UnsupportedOperationException e) {
+      enabledRules = null;
+    }
+
+    try {
       dummyCommandPrototypes = convertJsonArrayToList(
           getSettingFromJSON(jsonSettings, "commands.dummy").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException e) {
@@ -138,6 +156,8 @@ public class Settings {
     obj.languageShortCode = languageShortCode;
     obj.diagnosticSeverity = ((diagnosticSeverity == null) ? null : diagnosticSeverity);
     obj.dictionary = ((dictionary == null) ? null : new ArrayList<>(dictionary));
+    obj.disabledRules = ((disabledRules == null) ? null : new ArrayList<>(disabledRules));
+    obj.enabledRules = ((enabledRules == null) ? null : new ArrayList<>(enabledRules));
     obj.dummyCommandPrototypes = ((dummyCommandPrototypes == null) ? null :
         new ArrayList<>(dummyCommandPrototypes));
     obj.ignoreCommandPrototypes = ((ignoreCommandPrototypes == null) ? null :
@@ -177,6 +197,16 @@ public class Settings {
 
     if ((dictionary == null) ? (other.dictionary != null) :
         !dictionary.equals(other.dictionary)) {
+      return false;
+    }
+
+    if ((disabledRules == null) ? (other.disabledRules != null) :
+        !disabledRules.equals(other.disabledRules)) {
+      return false;
+    }
+
+    if ((enabledRules == null) ? (other.enabledRules != null) :
+        !enabledRules.equals(other.enabledRules)) {
       return false;
     }
 
@@ -225,6 +255,8 @@ public class Settings {
     hash = 53 * hash + ((languageShortCode != null) ? languageShortCode.hashCode() : 0);
     hash = 53 * hash + ((diagnosticSeverity != null) ? diagnosticSeverity.hashCode() : 0);
     hash = 53 * hash + ((dictionary != null) ? dictionary.hashCode() : 0);
+    hash = 53 * hash + ((disabledRules != null) ? disabledRules.hashCode() : 0);
+    hash = 53 * hash + ((enabledRules != null) ? enabledRules.hashCode() : 0);
     hash = 53 * hash + ((dummyCommandPrototypes != null) ? dummyCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreCommandPrototypes != null) ? ignoreCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreRuleSentencePairs != null) ? ignoreRuleSentencePairs.hashCode() : 0);
@@ -252,6 +284,14 @@ public class Settings {
 
   public List<String> getDictionary() {
     return getDefault(dictionary, Collections.emptyList());
+  }
+
+  public List<String> getDisabledRules() {
+    return getDefault(disabledRules, Collections.emptyList());
+  }
+
+  public List<String> getEnabledRules() {
+    return getDefault(enabledRules, Collections.emptyList());
   }
 
   public List<String> getDummyCommandPrototypes() {
