@@ -288,7 +288,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
                     String sentencePatternString = "^" + sentencePatternStringBuilder.toString() +
                         "$";
-                    Command command = new Command(Tools.i18n("ignoreInThisSentence"),
+                    Command command = new Command(Tools.i18n("ignoreRuleInThisSentence"),
                         ignoreRuleInSentenceCommandName);
                     JsonObject arguments = new JsonObject();
                     arguments.addProperty("commandName", ignoreRuleInSentenceCommandName);
