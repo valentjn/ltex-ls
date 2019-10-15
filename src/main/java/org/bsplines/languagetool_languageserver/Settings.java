@@ -11,8 +11,8 @@ import org.eclipse.xtext.xbase.lib.Pair;
 
 public class Settings {
   private String languageShortCode = null;
-  private List<String> dictionary = null;
   private DiagnosticSeverity diagnosticSeverity = null;
+  private List<String> dictionary = null;
   private List<String> dummyCommandPrototypes = null;
   private List<String> ignoreCommandPrototypes = null;
   private List<Pair<String, Pattern>> ignoreRuleSentencePairs = null;
@@ -50,14 +50,6 @@ public class Settings {
     }
 
     try {
-      dictionary = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings, languageShortCode + ".dictionary").
-          getAsJsonArray());
-    } catch (NullPointerException | UnsupportedOperationException e) {
-      dictionary = null;
-    }
-
-    try {
       String diagnosticSeverityString =
           getSettingFromJSON(jsonSettings, "diagnosticSeverity").getAsString();
 
@@ -74,6 +66,14 @@ public class Settings {
       }
     } catch (NullPointerException | UnsupportedOperationException e) {
       diagnosticSeverity = null;
+    }
+
+    try {
+      dictionary = convertJsonArrayToList(
+          getSettingFromJSON(jsonSettings, languageShortCode + ".dictionary").
+          getAsJsonArray());
+    } catch (NullPointerException | UnsupportedOperationException e) {
+      dictionary = null;
     }
 
     try {
@@ -136,8 +136,8 @@ public class Settings {
   public Object clone() {
     Settings obj = new Settings();
     obj.languageShortCode = languageShortCode;
-    obj.dictionary = ((dictionary == null) ? null : new ArrayList<>(dictionary));
     obj.diagnosticSeverity = ((diagnosticSeverity == null) ? null : diagnosticSeverity);
+    obj.dictionary = ((dictionary == null) ? null : new ArrayList<>(dictionary));
     obj.dummyCommandPrototypes = ((dummyCommandPrototypes == null) ? null :
         new ArrayList<>(dummyCommandPrototypes));
     obj.ignoreCommandPrototypes = ((ignoreCommandPrototypes == null) ? null :
@@ -170,13 +170,13 @@ public class Settings {
       return false;
     }
 
-    if ((dictionary == null) ? (other.dictionary != null) :
-        !dictionary.equals(other.dictionary)) {
+    if ((diagnosticSeverity == null) ? (other.diagnosticSeverity != null) :
+        (diagnosticSeverity != other.diagnosticSeverity)) {
       return false;
     }
 
-    if ((diagnosticSeverity == null) ? (other.diagnosticSeverity != null) :
-        (diagnosticSeverity != other.diagnosticSeverity)) {
+    if ((dictionary == null) ? (other.dictionary != null) :
+        !dictionary.equals(other.dictionary)) {
       return false;
     }
 
@@ -223,8 +223,8 @@ public class Settings {
   public int hashCode() {
     int hash = 3;
     hash = 53 * hash + ((languageShortCode != null) ? languageShortCode.hashCode() : 0);
-    hash = 53 * hash + ((dictionary != null) ? dictionary.hashCode() : 0);
     hash = 53 * hash + ((diagnosticSeverity != null) ? diagnosticSeverity.hashCode() : 0);
+    hash = 53 * hash + ((dictionary != null) ? dictionary.hashCode() : 0);
     hash = 53 * hash + ((dummyCommandPrototypes != null) ? dummyCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreCommandPrototypes != null) ? ignoreCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreRuleSentencePairs != null) ? ignoreRuleSentencePairs.hashCode() : 0);
@@ -246,12 +246,12 @@ public class Settings {
     return getDefault(languageShortCode, "en-US");
   }
 
-  public List<String> getDictionary() {
-    return getDefault(dictionary, Collections.emptyList());
-  }
-
   public DiagnosticSeverity getDiagnosticSeverity() {
     return getDefault(diagnosticSeverity, DiagnosticSeverity.Information);
+  }
+
+  public List<String> getDictionary() {
+    return getDefault(dictionary, Collections.emptyList());
   }
 
   public List<String> getDummyCommandPrototypes() {
