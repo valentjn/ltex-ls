@@ -17,7 +17,7 @@ public class LatexAnnotatedTextBuilder {
     HEADING,
     INLINE_MATH,
     DISPLAY_MATH,
-    TIKZ,
+    IGNORED_ENVIRONMENT,
   }
 
   private static final LatexCommandSignature[] defaultCommandSignatures = {
@@ -279,7 +279,7 @@ public class LatexAnnotatedTextBuilder {
   private String generateDummy() {
     String dummy;
 
-    if (isInsideTikzMode()) {
+    if (isInsideIgnoredEnvironmentMode()) {
       dummy = "";
     } else if (isTextMode(curMode)) {
       dummy = "Dummy" + (dummyCounter++);
@@ -357,20 +357,20 @@ public class LatexAnnotatedTextBuilder {
     return ((mode == Mode.INLINE_MATH) || (mode == Mode.DISPLAY_MATH));
   }
 
-  private static boolean isTikzMode(Mode mode) {
-    return (mode == Mode.TIKZ);
+  private static boolean isIgnoredEnvironmentMode(Mode mode) {
+    return (mode == Mode.IGNORED_ENVIRONMENT);
   }
 
-  private boolean isInsideTikzMode() {
+  private boolean isInsideIgnoredEnvironmentMode() {
     for (Mode mode : modeStack) {
-      if (isTikzMode(mode)) return true;
+      if (isIgnoredEnvironmentMode(mode)) return true;
     }
 
     return false;
   }
 
   private static boolean isTextMode(Mode mode) {
-    return !isMathMode(mode) && !isTikzMode(mode);
+    return !isMathMode(mode) && !isIgnoredEnvironmentMode(mode);
   }
 
   private void enterDisplayMath() {
@@ -454,7 +454,7 @@ public class LatexAnnotatedTextBuilder {
                 interpretAs = generateDummy();
               }
             } else if (environment.equals("tikzpicture")) {
-              if (command.equals("\\begin")) modeStack.push(Mode.TIKZ);
+              if (command.equals("\\begin")) modeStack.push(Mode.IGNORED_ENVIRONMENT);
               else popMode();
             } else {
               if (command.equals("\\begin")) modeStack.push(curMode);
@@ -487,7 +487,7 @@ public class LatexAnnotatedTextBuilder {
               }
             }
           } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
-            addMarkup(command, (isInsideTikzMode() ? "" : command.substring(1)));
+            addMarkup(command, (isInsideIgnoredEnvironmentMode() ? "" : command.substring(1)));
           } else if (command.equals("\\[") || command.equals("\\]") ||
               command.equals("\\(") || command.equals("\\)")) {
             if (command.equals("\\[")) {
@@ -501,15 +501,15 @@ public class LatexAnnotatedTextBuilder {
               addMarkup(command, generateDummy());
             }
           } else if (command.equals("\\AA")) {
-            addMarkup(command, (isInsideTikzMode() ? "" : "\u00c5"));
+            addMarkup(command, (isInsideIgnoredEnvironmentMode() ? "" : "\u00c5"));
           } else if (command.equals("\\O")) {
-            addMarkup(command, (isInsideTikzMode() ? "" : "\u00d8"));
+            addMarkup(command, (isInsideIgnoredEnvironmentMode() ? "" : "\u00d8"));
           } else if (command.equals("\\aa")) {
-            addMarkup(command, (isInsideTikzMode() ? "" : "\u00e5"));
+            addMarkup(command, (isInsideIgnoredEnvironmentMode() ? "" : "\u00e5"));
           } else if (command.equals("\\ss")) {
-            addMarkup(command, (isInsideTikzMode() ? "" : "\u00df"));
+            addMarkup(command, (isInsideIgnoredEnvironmentMode() ? "" : "\u00df"));
           } else if (command.equals("\\o")) {
-            addMarkup(command, (isInsideTikzMode() ? "" : "\u00f8"));
+            addMarkup(command, (isInsideIgnoredEnvironmentMode() ? "" : "\u00f8"));
           } else if (command.equals("\\`") || command.equals("\\'") || command.equals("\\^") ||
               command.equals("\\~") || command.equals("\\\"") || command.equals("\\=") ||
               command.equals("\\.")) {
@@ -621,7 +621,7 @@ public class LatexAnnotatedTextBuilder {
                 }
               }
 
-              addMarkup(matcher.group(), (isInsideTikzMode() ? "" : interpretAs));
+              addMarkup(matcher.group(), (isInsideIgnoredEnvironmentMode() ? "" : interpretAs));
             } else {
               addMarkup(command);
             }
@@ -648,7 +648,7 @@ public class LatexAnnotatedTextBuilder {
                 }
               }
 
-              addMarkup(matcher.group(), (isInsideTikzMode() ? "" : interpretAs));
+              addMarkup(matcher.group(), (isInsideIgnoredEnvironmentMode() ? "" : interpretAs));
             } else {
               addMarkup(command);
             }
@@ -668,7 +668,7 @@ public class LatexAnnotatedTextBuilder {
             } else {
               preserveDummyLast = true;
 
-              if (isMathMode(curMode) || isInsideTikzMode()) {
+              if (isMathMode(curMode) || isInsideIgnoredEnvironmentMode()) {
                 addMarkup(command);
                 dummyLastSpace = " ";
               } else {
@@ -676,7 +676,7 @@ public class LatexAnnotatedTextBuilder {
               }
             }
           } else if (command.equals("\\dots")) {
-            addMarkup(command, (isInsideTikzMode() ? "" : "..."));
+            addMarkup(command, (isInsideIgnoredEnvironmentMode() ? "" : "..."));
           } else if (command.equals("\\footnote")) {
             modeStack.push(Mode.INLINE_TEXT);
             String interpretAs = (isMathMode(curMode) ? generateDummy() :
