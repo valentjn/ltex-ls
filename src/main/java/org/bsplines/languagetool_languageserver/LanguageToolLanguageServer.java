@@ -468,6 +468,8 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
                     LatexCommandSignature.Action.IGNORE));
               }
 
+              builder.ignoreEnvironments.addAll(settings.getIgnoreEnvironments());
+
               ExecutorService executor = Executors.newCachedThreadPool();
               Future<Object> builderFuture = executor.submit(new Callable<Object>() {
                 public Object call() throws InterruptedException {

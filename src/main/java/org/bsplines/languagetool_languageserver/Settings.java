@@ -17,6 +17,7 @@ public class Settings {
   private List<String> enabledRules = null;
   private List<String> dummyCommandPrototypes = null;
   private List<String> ignoreCommandPrototypes = null;
+  private List<String> ignoreEnvironments = null;
   private List<Pair<String, Pattern>> ignoreRuleSentencePairs = null;
   private String motherTongueShortCode = null;
   private String languageModelRulesDirectory = null;
@@ -109,6 +110,13 @@ public class Settings {
     }
 
     try {
+      ignoreEnvironments = convertJsonArrayToList(
+          getSettingFromJSON(jsonSettings, "environments.ignore").getAsJsonArray());
+    } catch (NullPointerException | UnsupportedOperationException e) {
+      ignoreEnvironments = null;
+    }
+
+    try {
       ignoreRuleSentencePairs = new ArrayList<>();
 
       for (JsonElement element :
@@ -162,6 +170,8 @@ public class Settings {
         new ArrayList<>(dummyCommandPrototypes));
     obj.ignoreCommandPrototypes = ((ignoreCommandPrototypes == null) ? null :
         new ArrayList<>(ignoreCommandPrototypes));
+    obj.ignoreEnvironments = ((ignoreEnvironments == null) ? null :
+        new ArrayList<>(ignoreEnvironments));
     obj.ignoreRuleSentencePairs = null;
 
     if (ignoreRuleSentencePairs != null) {
@@ -220,6 +230,11 @@ public class Settings {
       return false;
     }
 
+    if ((ignoreEnvironments == null) ? (other.ignoreEnvironments != null) :
+        !ignoreEnvironments.equals(other.ignoreEnvironments)) {
+      return false;
+    }
+
     if ((ignoreRuleSentencePairs == null) ? (other.ignoreRuleSentencePairs != null) :
         !ignoreRuleSentencePairs.equals(other.ignoreRuleSentencePairs)) {
       return false;
@@ -259,6 +274,7 @@ public class Settings {
     hash = 53 * hash + ((enabledRules != null) ? enabledRules.hashCode() : 0);
     hash = 53 * hash + ((dummyCommandPrototypes != null) ? dummyCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreCommandPrototypes != null) ? ignoreCommandPrototypes.hashCode() : 0);
+    hash = 53 * hash + ((ignoreEnvironments != null) ? ignoreEnvironments.hashCode() : 0);
     hash = 53 * hash + ((ignoreRuleSentencePairs != null) ? ignoreRuleSentencePairs.hashCode() : 0);
     hash = 53 * hash + ((motherTongueShortCode != null) ? motherTongueShortCode.hashCode() : 0);
     hash = 53 * hash + ((languageModelRulesDirectory != null) ?
@@ -300,6 +316,10 @@ public class Settings {
 
   public List<String> getIgnoreCommandPrototypes() {
     return getDefault(ignoreCommandPrototypes, Collections.emptyList());
+  }
+
+  public List<String> getIgnoreEnvironments() {
+    return getDefault(ignoreEnvironments, Collections.emptyList());
   }
 
   public List<Pair<String, Pattern>> getIgnoreRuleSentencePairs() {
