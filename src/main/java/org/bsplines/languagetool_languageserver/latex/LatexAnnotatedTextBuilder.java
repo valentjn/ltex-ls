@@ -387,7 +387,8 @@ public class LatexAnnotatedTextBuilder {
   }
 
   private String getDebugInformation(String text) {
-    String remainingText = StringEscapeUtils.escapeJava(text.substring(pos, Math.min(pos + 100, text.length())));
+    String remainingText = StringEscapeUtils.escapeJava(
+        text.substring(pos, Math.min(pos + 100, text.length())));
     return "Remaining text = \"" + remainingText +
         "\", pos = " + pos + ", dummyCounter = " + dummyCounter + ", lastSpace = \"" + lastSpace +
         "\", lastPunctuation = \"" + lastPunctuation + "\", dummyLastSpace = \"" + dummyLastSpace +
