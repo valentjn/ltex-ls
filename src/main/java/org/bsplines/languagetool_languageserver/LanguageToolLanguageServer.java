@@ -39,7 +39,6 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
   private JLanguageTool languageTool;
   private Settings settings = new Settings();
 
-  private static final long resultCacheMaxSize = 10000;
   private static final int resultCacheExpireAfterMinutes = 10;
   private static final String acceptSuggestionCodeActionKind =
       CodeActionKind.QuickFix + ".ltex.acceptSuggestion";
@@ -140,8 +139,8 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     String motherTongueShortCode = settings.getMotherTongueShortCode();
     Language motherTongue = ((motherTongueShortCode != null) ?
         Languages.getLanguageForShortCode(motherTongueShortCode) : null);
-    ResultCache resultCache = new ResultCache(resultCacheMaxSize, resultCacheExpireAfterMinutes,
-        TimeUnit.MINUTES);
+    ResultCache resultCache = new ResultCache(settings.getSentenceCacheSize(),
+        resultCacheExpireAfterMinutes, TimeUnit.MINUTES);
     UserConfig userConfig = new UserConfig(settings.getDictionary());
     languageTool = new JLanguageTool(language, motherTongue, resultCache, userConfig);
 
