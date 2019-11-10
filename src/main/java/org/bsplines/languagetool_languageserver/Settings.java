@@ -23,6 +23,9 @@ public class Settings {
   private String languageModelRulesDirectory = null;
   private String neuralNetworkModelRulesDirectory = null;
   private String word2VecModelRulesDirectory = null;
+  private Integer initialJavaHeapSize = null;
+  private Integer maximumJavaHeapSize = null;
+  private Integer sentenceCacheSize = null;
 
   public Settings() {
   }
@@ -156,11 +159,33 @@ public class Settings {
     } catch (NullPointerException | UnsupportedOperationException e) {
       word2VecModelRulesDirectory = null;
     }
+
+    try {
+      initialJavaHeapSize = getSettingFromJSON(
+          jsonSettings, "performance.initialJavaHeapSize").getAsInt();
+    } catch (NullPointerException | UnsupportedOperationException e) {
+      initialJavaHeapSize = null;
+    }
+
+    try {
+      maximumJavaHeapSize = getSettingFromJSON(
+          jsonSettings, "performance.maximumJavaHeapSize").getAsInt();
+    } catch (NullPointerException | UnsupportedOperationException e) {
+      maximumJavaHeapSize = null;
+    }
+
+    try {
+      sentenceCacheSize = getSettingFromJSON(
+          jsonSettings, "performance.sentenceCacheSize").getAsInt();
+    } catch (NullPointerException | UnsupportedOperationException e) {
+      sentenceCacheSize = null;
+    }
   }
 
   @Override
   public Object clone() {
     Settings obj = new Settings();
+
     obj.languageShortCode = languageShortCode;
     obj.diagnosticSeverity = ((diagnosticSeverity == null) ? null : diagnosticSeverity);
     obj.dictionary = ((dictionary == null) ? null : new ArrayList<>(dictionary));
@@ -187,6 +212,10 @@ public class Settings {
     obj.languageModelRulesDirectory = languageModelRulesDirectory;
     obj.neuralNetworkModelRulesDirectory = neuralNetworkModelRulesDirectory;
     obj.word2VecModelRulesDirectory = word2VecModelRulesDirectory;
+    obj.initialJavaHeapSize = initialJavaHeapSize;
+    obj.maximumJavaHeapSize = maximumJavaHeapSize;
+    obj.sentenceCacheSize = sentenceCacheSize;
+
     return obj;
   }
 
@@ -261,12 +290,28 @@ public class Settings {
       return false;
     }
 
+    if ((initialJavaHeapSize == null) ? (other.initialJavaHeapSize != null) :
+        !initialJavaHeapSize.equals(other.initialJavaHeapSize)) {
+      return false;
+    }
+
+    if ((maximumJavaHeapSize == null) ? (other.maximumJavaHeapSize != null) :
+        !maximumJavaHeapSize.equals(other.maximumJavaHeapSize)) {
+      return false;
+    }
+
+    if ((sentenceCacheSize == null) ? (other.sentenceCacheSize != null) :
+        !sentenceCacheSize.equals(other.sentenceCacheSize)) {
+      return false;
+    }
+
     return true;
   }
 
   @Override
   public int hashCode() {
     int hash = 3;
+
     hash = 53 * hash + ((languageShortCode != null) ? languageShortCode.hashCode() : 0);
     hash = 53 * hash + ((diagnosticSeverity != null) ? diagnosticSeverity.hashCode() : 0);
     hash = 53 * hash + ((dictionary != null) ? dictionary.hashCode() : 0);
@@ -283,6 +328,13 @@ public class Settings {
         neuralNetworkModelRulesDirectory.hashCode() : 0);
     hash = 53 * hash + ((word2VecModelRulesDirectory != null) ?
         word2VecModelRulesDirectory.hashCode() : 0);
+    hash = 53 * hash + ((initialJavaHeapSize != null) ?
+        initialJavaHeapSize.hashCode() : 0);
+    hash = 53 * hash + ((maximumJavaHeapSize != null) ?
+        maximumJavaHeapSize.hashCode() : 0);
+    hash = 53 * hash + ((sentenceCacheSize != null) ?
+        sentenceCacheSize.hashCode() : 0);
+
     return hash;
   }
 
@@ -340,5 +392,17 @@ public class Settings {
 
   public String getWord2VecModelRulesDirectory() {
     return getDefault(word2VecModelRulesDirectory, null);
+  }
+
+  public Integer getInitialJavaHeapSize() {
+    return getDefault(initialJavaHeapSize, null);
+  }
+
+  public Integer getMaximumJavaHeapSize() {
+    return getDefault(maximumJavaHeapSize, null);
+  }
+
+  public Integer getSentenceCacheSize() {
+    return getDefault(sentenceCacheSize, 2000);
   }
 }
