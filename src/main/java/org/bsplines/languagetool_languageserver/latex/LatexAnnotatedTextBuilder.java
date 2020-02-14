@@ -688,6 +688,8 @@ public class LatexAnnotatedTextBuilder {
               }
             } else if (command.equals("\\dots")) {
               addMarkup(command, "...");
+            } else if (command.equals("\\euro")) {
+              addMarkup(command, "\u20ac");
             } else if (command.equals("\\footnote")) {
               modeStack.push(Mode.INLINE_TEXT);
               String interpretAs = (isMathMode(curMode) ? generateDummy() :

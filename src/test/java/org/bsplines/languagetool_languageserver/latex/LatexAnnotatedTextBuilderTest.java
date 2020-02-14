@@ -51,6 +51,8 @@ public class LatexAnnotatedTextBuilderTest {
     assertPlainText("This is a te\\-st.\n", "This is a test. ");
     assertPlainText("Ich hei\\ss{}e anders. Das Wasser ist hei\\ss.\n",
         "Ich hei\u00dfe anders. Das Wasser ist hei\u00df. ");
+    assertPlainText("Das macht dann 10 \\euro. Oder vielleicht doch 12~\\euro{}?\n",
+        "Das macht dann 10 \u20ac. Oder vielleicht doch 12 \u20ac? ");
     assertPlainText(
         "\\\"E\\\"in T\\\"ext m\\\"{i}t v\\\"i\\\"{e}l\\\"en " +
         "\\\"{U}ml\\\"a\\\"{u}t\\\"en.\n",
