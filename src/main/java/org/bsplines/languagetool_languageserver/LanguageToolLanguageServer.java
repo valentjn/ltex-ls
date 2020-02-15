@@ -454,8 +454,10 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
               annotatedText = builder.getAnnotatedText();
               break;
             }
-            case "latex": {
+            case "latex":
+            case "rsweave": {
               LatexAnnotatedTextBuilder builder = new LatexAnnotatedTextBuilder();
+              builder.codeLanguageId = codeLanguageId;
 
               for (String commandPrototype : settings.getDummyCommandPrototypes()) {
                 builder.commandSignatures.add(new LatexCommandSignature(commandPrototype,

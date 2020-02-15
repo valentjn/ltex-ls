@@ -6,7 +6,12 @@ import org.languagetool.markup.AnnotatedText;
 
 public class LatexAnnotatedTextBuilderTest {
   static AnnotatedText buildAnnotatedText(String code) {
+    return buildAnnotatedText(code, "latex");
+  }
+
+  static AnnotatedText buildAnnotatedText(String code, String codeLanguageId) {
     LatexAnnotatedTextBuilder builder = new LatexAnnotatedTextBuilder();
+    builder.codeLanguageId = codeLanguageId;
     builder.isInStrictMode = true;
 
     try {
@@ -18,7 +23,11 @@ public class LatexAnnotatedTextBuilderTest {
   }
 
   static void assertPlainText(String code, String expectedPlainText) {
-    AnnotatedText annotatedText = buildAnnotatedText(code);
+    assertPlainText(code, expectedPlainText, "latex");
+  }
+
+  static void assertPlainText(String code, String expectedPlainText, String codeLanguageId) {
+    AnnotatedText annotatedText = buildAnnotatedText(code, codeLanguageId);
     Assertions.assertEquals(expectedPlainText, annotatedText.getPlainText());
   }
 
@@ -171,5 +180,32 @@ public class LatexAnnotatedTextBuilderTest {
       int end = annotatedText.getOriginalTextPositionFor(18 - 1) + 1;
       Assertions.assertTrue(start < end, start + " not smaller than " + end);
     }
+  }
+
+  @Test
+  void testRsweaveMode() {
+    assertPlainText(
+        "\\SweaveOpts{prefix.string=figures}\n" +
+        "This is a first sentence.\n" +
+        "\n" +
+        "<<import-packages, echo=false>>=\n" +
+        "library(tidyverse, quietly = T)\n" +
+        "@\n" +
+        "\n" +
+        "This is a second sentence.\n" +
+        "<<mca-graph, fig=true, echo=false>>=\n" +
+        "plot(1:1000, rnorm(1000))\n" +
+        "@\n",
+        " This is a first sentence.\n\n\n\nThis is a second sentence. ",
+        "rsweave");
+    assertPlainText("<<import-packages>>=\n" +
+        "library(tidyverse)\n" +
+        "@\n",
+        " ",
+        "rsweave");
+    assertPlainText("<<import-packages>>=\n" +
+        "library(tidyverse)\n" +
+        "@\n",
+        "<<import-packages>>= library(tidyverse) @ ");
   }
 }

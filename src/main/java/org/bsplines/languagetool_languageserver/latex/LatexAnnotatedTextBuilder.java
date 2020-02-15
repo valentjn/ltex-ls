@@ -18,6 +18,7 @@ public class LatexAnnotatedTextBuilder {
     INLINE_MATH,
     DISPLAY_MATH,
     IGNORE_ENVIRONMENT,
+    RSWEAVE,
   }
 
   private static final LatexCommandSignature[] defaultCommandSignatures = {
@@ -195,6 +196,9 @@ public class LatexAnnotatedTextBuilder {
     new LatexCommandSignature("\\setstretch{}"),
     new LatexCommandSignature("\\sisetup{}"),
     new LatexCommandSignature("\\stepcounter{}"),
+    new LatexCommandSignature("\\SweaveInput{}"),
+    new LatexCommandSignature("\\SweaveOpts{}"),
+    new LatexCommandSignature("\\SweaveSyntax{}"),
     new LatexCommandSignature("\\TeX", LatexCommandSignature.Action.DUMMY),
     new LatexCommandSignature("\\textcolor{}"),
     new LatexCommandSignature("\\textproc{}", LatexCommandSignature.Action.DUMMY),
@@ -242,6 +246,8 @@ public class LatexAnnotatedTextBuilder {
       "^(\\\\[cr])( *([A-Za-z])|\\{([A-Za-z])\\})");
   private static final Pattern displayMathPattern = Pattern.compile("^\\$\\$");
   private static final Pattern verbCommandPattern = Pattern.compile("^\\\\verb\\*?(.).*?\\1");
+  private static final Pattern rsweaveBeginPattern = Pattern.compile("^<<.*?>>=");
+  private static final Pattern rsweaveEndPattern = Pattern.compile("^@");
 
   private static final String[] mathEnvironments = {"align", "align*", "alignat", "alignat*",
       "displaymath", "eqnarray", "eqnarray*", "equation", "equation*", "flalign", "flalign*",
@@ -272,6 +278,7 @@ public class LatexAnnotatedTextBuilder {
   public List<String> ignoreEnvironments =
       new ArrayList<>(Arrays.asList(defaultIgnoreEnvironments));
   public boolean isInStrictMode = false;
+  public String codeLanguageId = "latex";
 
   private String matchFromPosition(Pattern pattern) {
     return matchFromPosition(pattern, pos);
@@ -365,6 +372,10 @@ public class LatexAnnotatedTextBuilder {
     return (mode == Mode.IGNORE_ENVIRONMENT);
   }
 
+  private static boolean isRsweaveMode(Mode mode) {
+    return (mode == Mode.RSWEAVE);
+  }
+
   private static boolean isTextMode(Mode mode) {
     return !isMathMode(mode) && !isIgnoreEnvironmentMode(mode);
   }
@@ -435,6 +446,15 @@ public class LatexAnnotatedTextBuilder {
         } else {
           popMode();
           addMarkup(ignoreEnvironmentEnd);
+        }
+      } else if (codeLanguageId.equals("rsweave") && isRsweaveMode(curMode)) {
+        String rsweaveEnd = matchFromPosition(rsweaveEndPattern);
+
+        if (rsweaveEnd.isEmpty()) {
+          addMarkup(curString);
+        } else {
+          popMode();
+          addMarkup(rsweaveEnd);
         }
       } else {
         switch (curChar) {
@@ -883,6 +903,17 @@ public class LatexAnnotatedTextBuilder {
               preserveDummyLast = true;
               addMarkup(length);
               break;
+            }
+          }
+          case '<': {
+            if (codeLanguageId.equals("rsweave")) {
+              String rsweaveBegin = matchFromPosition(rsweaveBeginPattern);
+
+              if (!rsweaveBegin.isEmpty()) {
+                modeStack.push(Mode.RSWEAVE);
+                addMarkup(rsweaveBegin);
+                break;
+              }
             }
           }
           default: {
