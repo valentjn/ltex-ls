@@ -52,18 +52,17 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
   private static final String disableRuleCommandName = "ltex.disableRule";
   private static final String ignoreRuleInSentenceCommandName = "ltex.ignoreRuleInSentence";
 
-  private static boolean locationOverlaps(
-      RuleMatch match, DocumentPositionCalculator positionCalculator, Range range) {
-    return overlaps(range, new Range(
-        positionCalculator.getPosition(match.getFromPos()),
-        positionCalculator.getPosition(match.getToPos())));
+  private static boolean matchIntersectsWithRange(RuleMatch match, Range range,
+      DocumentPositionCalculator positionCalculator) {
+    // false iff match is completely before range or completely after range
+    return !(positionLower(positionCalculator.getPosition(match.getToPos()), range.getStart()) ||
+        positionLower(range.getEnd(), positionCalculator.getPosition(match.getFromPos())));
   }
 
-  private static boolean overlaps(Range r1, Range r2) {
-    return r1.getStart().getCharacter() <= r2.getEnd().getCharacter() &&
-        r1.getEnd().getCharacter() >= r2.getStart().getCharacter() &&
-        r1.getStart().getLine() >= r2.getEnd().getLine() &&
-        r1.getEnd().getLine() <= r2.getStart().getLine();
+  private static boolean positionLower(Position position1, Position position2) {
+    return ((position1.getLine() < position2.getLine()) ||
+        ((position1.getLine() == position2.getLine()) &&
+        (position1.getCharacter() < position2.getCharacter())));
   }
 
   private Diagnostic createDiagnostic(
@@ -241,7 +240,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
                   new ArrayList<Either<Command, CodeAction>>();
 
               for (RuleMatch match : validateResult.getKey()) {
-                if (locationOverlaps(match, positionCalculator, params.getRange())) {
+                if (matchIntersectsWithRange(match, params.getRange(), positionCalculator)) {
                   String ruleId = match.getRule().getId();
                   Diagnostic diagnostic = createDiagnostic(match, positionCalculator);
                   Range range = diagnostic.getRange();
