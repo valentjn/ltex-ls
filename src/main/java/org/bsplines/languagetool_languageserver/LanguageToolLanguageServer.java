@@ -234,43 +234,87 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
               String text = document.getText();
               String plainText = validateResult.getValue().getPlainText();
-              AnnotatedText inverseAnnotatedText = null;
               DocumentPositionCalculator positionCalculator = new DocumentPositionCalculator(text);
               List<Either<Command, CodeAction>> result =
                   new ArrayList<Either<Command, CodeAction>>();
 
+              List<RuleMatch> addWordToDictionaryMatches = new ArrayList<>();
+              List<RuleMatch> ignoreRuleInThisSentenceMatches = new ArrayList<>();
+              List<RuleMatch> disableRuleMatches = new ArrayList<>();
+              Map<String, List<RuleMatch>> useWordMatchesMap = new LinkedHashMap<>();
+
               for (RuleMatch match : validateResult.getKey()) {
                 if (matchIntersectsWithRange(match, params.getRange(), positionCalculator)) {
                   String ruleId = match.getRule().getId();
-                  Diagnostic diagnostic = createDiagnostic(match, positionCalculator);
-                  Range range = diagnostic.getRange();
 
                   if (ruleId.startsWith("MORFOLOGIK_") || ruleId.startsWith("HUNSPELL_") ||
                       ruleId.startsWith("GERMAN_SPELLER_")) {
-                    if (inverseAnnotatedText == null) {
-                      inverseAnnotatedText = invertAnnotatedText(validateResult.getValue());
-                    }
-
-                    String word = plainText.substring(
-                        getPlainTextPositionFor(match.getFromPos(), inverseAnnotatedText),
-                        getPlainTextPositionFor(match.getToPos(), inverseAnnotatedText));
-                    Command command = new Command(Tools.i18n("addWordToDictionary", word),
-                        addToDictionaryCommandName);
-                    JsonObject arguments = new JsonObject();
-                    arguments.addProperty("commandName", addToDictionaryCommandName);
-                    arguments.addProperty("uri", document.getUri());
-                    arguments.addProperty("word", word);
-                    command.setArguments(Arrays.asList(arguments));
-
-                    CodeAction codeAction = new CodeAction(command.getTitle());
-                    codeAction.setKind(addToDictionaryCodeActionKind);
-                    codeAction.setDiagnostics(Collections.singletonList(diagnostic));
-                    codeAction.setCommand(command);
-                    result.add(Either.forRight(codeAction));
+                    addWordToDictionaryMatches.add(match);
                   }
 
                   if (match.getSentence() != null) {
-                    String sentence = match.getSentence().getText().trim();
+                    ignoreRuleInThisSentenceMatches.add(match);
+                  }
+
+                  disableRuleMatches.add(match);
+
+                  for (String newWord : match.getSuggestedReplacements()) {
+                    useWordMatchesMap.putIfAbsent(newWord, new ArrayList<>());
+                    useWordMatchesMap.get(newWord).add(match);
+                  }
+                }
+              }
+
+              if (!addWordToDictionaryMatches.isEmpty()) {
+                AnnotatedText inverseAnnotatedText = invertAnnotatedText(validateResult.getValue());
+                List<String> unknownWords = new ArrayList<>();
+                JsonArray unknownWordsJson = new JsonArray();
+                List<Diagnostic> diagnostics = new ArrayList<>();
+
+                for (RuleMatch match : addWordToDictionaryMatches) {
+                  String word = plainText.substring(
+                      getPlainTextPositionFor(match.getFromPos(), inverseAnnotatedText),
+                      getPlainTextPositionFor(match.getToPos(), inverseAnnotatedText));
+
+                  if (!unknownWords.contains(word)) {
+                    unknownWords.add(word);
+                    unknownWordsJson.add(word);
+                  }
+
+                  diagnostics.add(createDiagnostic(match, positionCalculator));
+                }
+
+                Command command = new Command(((unknownWords.size() == 1) ?
+                    Tools.i18n("addWordToDictionary", unknownWords.get(0)) :
+                    Tools.i18n("addAllUnknownWordsInSelectionToDictionary")),
+                    addToDictionaryCommandName);
+                JsonObject arguments = new JsonObject();
+                arguments.addProperty("commandName", addToDictionaryCommandName);
+                arguments.addProperty("uri", document.getUri());
+                arguments.add("word", unknownWordsJson);
+                command.setArguments(Arrays.asList(arguments));
+
+                CodeAction codeAction = new CodeAction(command.getTitle());
+                codeAction.setKind(addToDictionaryCodeActionKind);
+                codeAction.setDiagnostics(diagnostics);
+                codeAction.setCommand(command);
+                result.add(Either.forRight(codeAction));
+              }
+
+              if (!ignoreRuleInThisSentenceMatches.isEmpty()) {
+                List<Pair<String, String>> ruleIdSentencePairs = new ArrayList<>();
+                List<String> ruleIds = new ArrayList<>();
+                JsonArray ruleIdsJson = new JsonArray();
+                List<String> sentencePatternStrings = new ArrayList<>();
+                JsonArray sentencePatternStringsJson = new JsonArray();
+                List<Diagnostic> diagnostics = new ArrayList<>();
+
+                for (RuleMatch match : ignoreRuleInThisSentenceMatches) {
+                  String ruleId = match.getRule().getId();
+                  String sentence = match.getSentence().getText().trim();
+                  Pair<String, String> pair = new Pair<>(ruleId, sentence);
+
+                  if (!ruleIdSentencePairs.contains(pair)) {
                     Matcher matcher = Pattern.compile("Dummy[0-9]+").matcher(sentence);
                     StringBuilder sentencePatternStringBuilder = new StringBuilder();
                     int lastEnd = 0;
@@ -287,50 +331,92 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
                           sentence.substring(lastEnd)));
                     }
 
-                    String sentencePatternString = "^" + sentencePatternStringBuilder.toString() +
-                        "$";
-                    Command command = new Command(Tools.i18n("ignoreRuleInThisSentence"),
-                        ignoreRuleInSentenceCommandName);
-                    JsonObject arguments = new JsonObject();
-                    arguments.addProperty("commandName", ignoreRuleInSentenceCommandName);
-                    arguments.addProperty("uri", document.getUri());
-                    arguments.addProperty("ruleId", ruleId);
-                    arguments.addProperty("sentencePattern", sentencePatternString);
-                    command.setArguments(Arrays.asList(arguments));
-
-                    CodeAction codeAction = new CodeAction(command.getTitle());
-                    codeAction.setKind(ignoreRuleInSentenceCodeActionKind);
-                    codeAction.setDiagnostics(Collections.singletonList(diagnostic));
-                    codeAction.setCommand(command);
-                    result.add(Either.forRight(codeAction));
+                    ruleIdSentencePairs.add(pair);
+                    ruleIds.add(ruleId);
+                    ruleIdsJson.add(ruleId);
+                    String sentencePatternString =
+                        "^" + sentencePatternStringBuilder.toString() + "$";
+                    sentencePatternStrings.add(sentencePatternString);
+                    sentencePatternStringsJson.add(sentencePatternString);
                   }
 
-                  {
-                    Command command = new Command(Tools.i18n("disableRule"),
-                        disableRuleCommandName);
-                    JsonObject arguments = new JsonObject();
-                    arguments.addProperty("commandName", disableRuleCommandName);
-                    arguments.addProperty("uri", document.getUri());
-                    arguments.addProperty("ruleId", ruleId);
-                    command.setArguments(Arrays.asList(arguments));
-
-                    CodeAction codeAction = new CodeAction(command.getTitle());
-                    codeAction.setKind(disableRuleCodeActionKind);
-                    codeAction.setDiagnostics(Collections.singletonList(diagnostic));
-                    codeAction.setCommand(command);
-                    result.add(Either.forRight(codeAction));
-                  }
-
-                  for (String newWord : match.getSuggestedReplacements()) {
-                    CodeAction codeAction = new CodeAction(Tools.i18n("useWord", newWord));
-                    codeAction.setKind(acceptSuggestionCodeActionKind);
-                    codeAction.setDiagnostics(Collections.singletonList(diagnostic));
-                    codeAction.setEdit(new WorkspaceEdit(Collections.singletonList(
-                      Either.forLeft(new TextDocumentEdit(textDocument,
-                        Collections.singletonList(new TextEdit(range, newWord)))))));
-                    result.add(Either.forRight(codeAction));
-                  }
+                  diagnostics.add(createDiagnostic(match, positionCalculator));
                 }
+
+                Command command = new Command(((ruleIdSentencePairs.size() == 1) ?
+                    Tools.i18n("ignoreRuleInThisSentence") :
+                    Tools.i18n("ignoreAllRulesInTheSelectedSentences")),
+                    ignoreRuleInSentenceCommandName);
+                JsonObject arguments = new JsonObject();
+                arguments.addProperty("commandName", ignoreRuleInSentenceCommandName);
+                arguments.addProperty("uri", document.getUri());
+                arguments.add("ruleId", ruleIdsJson);
+                arguments.add("sentencePattern", sentencePatternStringsJson);
+                command.setArguments(Arrays.asList(arguments));
+
+                CodeAction codeAction = new CodeAction(command.getTitle());
+                codeAction.setKind(ignoreRuleInSentenceCodeActionKind);
+                codeAction.setDiagnostics(diagnostics);
+                codeAction.setCommand(command);
+                result.add(Either.forRight(codeAction));
+              }
+
+              if (!disableRuleMatches.isEmpty()) {
+                List<String> ruleIds = new ArrayList<>();
+                JsonArray ruleIdsJson = new JsonArray();
+                List<Diagnostic> diagnostics = new ArrayList<>();
+
+                for (RuleMatch match : disableRuleMatches) {
+                  String ruleId = match.getRule().getId();
+
+                  if (!ruleIds.contains(ruleId)) {
+                    ruleIds.add(ruleId);
+                    ruleIdsJson.add(ruleId);
+                  }
+
+                  diagnostics.add(createDiagnostic(match, positionCalculator));
+                }
+
+                Command command = new Command(((ruleIds.size() == 1) ?
+                    Tools.i18n("disableRule") :
+                    Tools.i18n("disableAllRulesWithMatchesInSelection")),
+                    disableRuleCommandName);
+                JsonObject arguments = new JsonObject();
+                arguments.addProperty("commandName", disableRuleCommandName);
+                arguments.addProperty("uri", document.getUri());
+                arguments.add("ruleId", ruleIdsJson);
+                command.setArguments(Arrays.asList(arguments));
+
+                CodeAction codeAction = new CodeAction(command.getTitle());
+                codeAction.setKind(disableRuleCodeActionKind);
+                codeAction.setDiagnostics(diagnostics);
+                codeAction.setCommand(command);
+                result.add(Either.forRight(codeAction));
+              }
+
+              for (Map.Entry<String, List<RuleMatch>> entry : useWordMatchesMap.entrySet()) {
+                String newWord = entry.getKey();
+                List<RuleMatch> useWordMatches = entry.getValue();
+                List<Diagnostic> diagnostics = new ArrayList<>();
+                List<Either<TextDocumentEdit, ResourceOperation>> documentChanges =
+                    new ArrayList<>();
+
+                for (RuleMatch match : useWordMatches) {
+                  Diagnostic diagnostic = createDiagnostic(match, positionCalculator);
+                  Range range = diagnostic.getRange();
+
+                  diagnostics.add(diagnostic);
+                  documentChanges.add(Either.forLeft(new TextDocumentEdit(textDocument,
+                      Collections.singletonList(new TextEdit(range, newWord)))));
+                }
+
+                CodeAction codeAction = new CodeAction((useWordMatches.size() == 1) ?
+                    Tools.i18n("useWord", newWord) :
+                    Tools.i18n("useWordAllSelectedMatches", newWord));
+                codeAction.setKind(acceptSuggestionCodeActionKind);
+                codeAction.setDiagnostics(diagnostics);
+                codeAction.setEdit(new WorkspaceEdit(documentChanges));
+                result.add(Either.forRight(codeAction));
               }
 
               return result;
