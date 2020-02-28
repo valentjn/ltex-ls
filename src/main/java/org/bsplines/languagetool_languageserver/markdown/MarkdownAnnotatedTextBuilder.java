@@ -1,69 +1,77 @@
 package org.bsplines.languagetool_languageserver.markdown;
 
-import com.vladsch.flexmark.ast.Document;
-import com.vladsch.flexmark.ast.Node;
-import com.vladsch.flexmark.ast.Paragraph;
-import com.vladsch.flexmark.ast.Text;
-import com.vladsch.flexmark.util.sequence.BasedSequence;
+import java.util.Stack;
+import com.vladsch.flexmark.ast.*;
+
 import org.languagetool.markup.AnnotatedText;
 
 public class MarkdownAnnotatedTextBuilder {
   private org.languagetool.markup.AnnotatedTextBuilder builder =
       new org.languagetool.markup.AnnotatedTextBuilder();
 
-  private int idx = 0;
+  private String text;
+  private int pos;
+  private Stack<Class<? extends Node>> nodeStack;
 
-  private boolean inParagraph = false;
-
-  public void visit(Document node) {
-    visitChildren(node);
+  public void visit(Document document) {
+    text = document.getChars().toString();
+    pos = 0;
+    nodeStack = new Stack<>();
+    visitChildren(document);
+    if (pos < text.length()) addMarkup(text.length());
   }
 
-  private void visitChildren(final Node parent) {
-    parent.getChildren().forEach(this::visit);
+  private void visitChildren(final Node node) {
+    node.getChildren().forEach(this::visit);
   }
 
-  private void visit(Node node) {
-    if (node.getClass() == Paragraph.class) {
-      BasedSequence originalText = node.getChars().getBaseSequence();
-      BasedSequence passedOver = originalText.subSequence(idx, node.getStartOffset());
+  private boolean isInParagraph() {
+    return nodeStack.contains(Paragraph.class);
+  }
 
-      if (inParagraph) {
-        throw new UnsupportedOperationException("Nested paragraphs are not supported");
+  private void addMarkup(int newPos) {
+    boolean inParagraph = isInParagraph();
+
+    while (true) {
+      if ((pos >= text.length()) || (pos >= newPos)) break;
+      int curPos = text.indexOf('\r', pos);
+
+      if ((curPos == -1) || (curPos >= newPos)) {
+        curPos = text.indexOf('\n', pos);
+        if ((curPos == -1) || (curPos >= newPos)) break;
       }
 
-      processProceedingCharacters(passedOver);
+      if (curPos > pos) builder.addMarkup(text.substring(pos, curPos));
+      builder.addMarkup(text.substring(curPos, curPos + 1), (inParagraph ? " " : "\n"));
 
-      idx = node.getStartOffset();
+      pos = curPos + 1;
+    }
 
-      inParagraph = true;
-      visitChildren(node);
-      inParagraph = false;
-    } else if (node.getClass() == Text.class) {
-      BasedSequence originalText = node.getChars().getBaseSequence();
-      BasedSequence passedOver = originalText.subSequence(idx, node.getStartOffset());
-
-      processProceedingCharacters(passedOver);
-
-      idx = node.getEndOffset();
-
-      builder.addText(node.getChars().toString());
-    } else {
-      visitChildren(node);
+    if (pos < newPos) {
+      builder.addMarkup(text.substring(pos, newPos));
+      pos = newPos;
     }
   }
 
-  private void processProceedingCharacters(BasedSequence passedOver) {
-    for (char ch : passedOver.toString().toCharArray()) {
-      if ((ch == '\r') || (ch == '\n')) {
-        if (inParagraph) {
-          builder.addText(" ");
-        } else {
-          builder.addText(String.valueOf(ch));
-        }
-      } else {
-        builder.addMarkup(String.valueOf(ch));
+  private void addText(int newPos) {
+    if (pos < newPos) {
+      builder.addText(text.substring(pos, newPos));
+      pos = newPos;
+    }
+  }
+
+  private void visit(Node node) {
+    if (node.getClass() == Text.class) {
+      addMarkup(node.getStartOffset());
+      addText(node.getEndOffset());
+    } else {
+      if (node.getClass() == Paragraph.class) {
+        addMarkup(node.getStartOffset());
       }
+
+      nodeStack.push(node.getClass());
+      visitChildren(node);
+      nodeStack.pop();
     }
   }
 
