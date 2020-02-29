@@ -1,7 +1,9 @@
 package org.bsplines.languagetool_languageserver.markdown;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
-import com.vladsch.flexmark.ast.*;
+
 import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.ast.Node;
 
@@ -13,12 +15,17 @@ public class MarkdownAnnotatedTextBuilder {
 
   private String text;
   private int pos;
-  private Stack<Class<? extends Node>> nodeStack;
+  private int dummyCounter;
+  private Stack<String> nodeTypeStack = new Stack<>();
+
+  public List<String> ignoreNodeTypes = new ArrayList<>();
+  public List<String> dummyNodeTypes = new ArrayList<>();
 
   public void visit(Document document) {
     text = document.getChars().toString();
     pos = 0;
-    nodeStack = new Stack<>();
+    dummyCounter = 0;
+    nodeTypeStack.clear();
     visitChildren(document);
     if (pos < text.length()) addMarkup(text.length());
   }
@@ -27,12 +34,20 @@ public class MarkdownAnnotatedTextBuilder {
     node.getChildren().forEach(this::visit);
   }
 
-  private boolean isInParagraph() {
-    return nodeStack.contains(Paragraph.class);
+  private boolean isInNodeType(String nodeType) {
+    return nodeTypeStack.contains(nodeType);
+  }
+
+  private boolean isInNodeType(List<String> nodeTypes) {
+    for (String nodeType : nodeTypeStack) {
+      if (nodeTypes.contains(nodeType)) return true;
+    }
+
+    return false;
   }
 
   private void addMarkup(int newPos) {
-    boolean inParagraph = isInParagraph();
+    boolean inParagraph = isInNodeType("Paragraph");
 
     while (true) {
       if ((pos >= text.length()) || (pos >= newPos)) break;
@@ -49,31 +64,49 @@ public class MarkdownAnnotatedTextBuilder {
       pos = curPos + 1;
     }
 
-    if (pos < newPos) {
+    if (newPos > pos) {
       builder.addMarkup(text.substring(pos, newPos));
       pos = newPos;
     }
   }
 
   private void addText(int newPos) {
-    if (pos < newPos) {
+    if (newPos > pos) {
       builder.addText(text.substring(pos, newPos));
       pos = newPos;
     }
   }
 
+  private String generateDummy() {
+    return "Dummy" + (dummyCounter++);
+  }
+
   private void visit(Node node) {
-    if (node.getClass() == Text.class) {
+    String nodeType = node.getClass().getSimpleName();
+
+    if (nodeType.equals("Text")) {
+      if (isInNodeType(ignoreNodeTypes)) {
+        addMarkup(node.getEndOffset());
+      } else {
+        addMarkup(node.getStartOffset());
+        addText(node.getEndOffset());
+      }
+    } else if (dummyNodeTypes.contains(nodeType)) {
       addMarkup(node.getStartOffset());
-      addText(node.getEndOffset());
+      int newPos = node.getEndOffset();
+
+      if (newPos > pos) {
+        builder.addMarkup(text.substring(pos, newPos), generateDummy());
+        pos = newPos;
+      }
     } else {
-      if (node.getClass() == Paragraph.class) {
+      if (nodeType.equals("Paragraph")) {
         addMarkup(node.getStartOffset());
       }
 
-      nodeStack.push(node.getClass());
+      nodeTypeStack.push(nodeType);
       visitChildren(node);
-      nodeStack.pop();
+      nodeTypeStack.pop();
     }
   }
 

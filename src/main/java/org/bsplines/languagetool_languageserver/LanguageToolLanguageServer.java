@@ -534,6 +534,9 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
               Document mdDocument = p.parse(document.getText());
 
               MarkdownAnnotatedTextBuilder builder = new MarkdownAnnotatedTextBuilder();
+              builder.dummyNodeTypes.addAll(settings.getDummyMarkdownNodeTypes());
+              builder.ignoreNodeTypes.addAll(settings.getIgnoreMarkdownNodeTypes());
+
               builder.visit(mdDocument);
 
               annotatedText = builder.getAnnotatedText();

@@ -1,6 +1,7 @@
 package org.bsplines.languagetool_languageserver;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -18,6 +19,8 @@ public class Settings {
   private List<String> dummyCommandPrototypes = null;
   private List<String> ignoreCommandPrototypes = null;
   private List<String> ignoreEnvironments = null;
+  private List<String> dummyMarkdownNodeTypes = null;
+  private List<String> ignoreMarkdownNodeTypes = null;
   private List<Pair<String, Pattern>> ignoreRuleSentencePairs = null;
   private String motherTongueShortCode = null;
   private String languageModelRulesDirectory = null;
@@ -120,6 +123,20 @@ public class Settings {
     }
 
     try {
+      dummyMarkdownNodeTypes = convertJsonArrayToList(
+          getSettingFromJSON(jsonSettings, "markdown.dummy").getAsJsonArray());
+    } catch (NullPointerException | UnsupportedOperationException e) {
+      dummyMarkdownNodeTypes = null;
+    }
+
+    try {
+      ignoreMarkdownNodeTypes = convertJsonArrayToList(
+          getSettingFromJSON(jsonSettings, "markdown.ignore").getAsJsonArray());
+    } catch (NullPointerException | UnsupportedOperationException e) {
+      ignoreMarkdownNodeTypes = null;
+    }
+
+    try {
       ignoreRuleSentencePairs = new ArrayList<>();
 
       for (JsonElement element :
@@ -197,6 +214,10 @@ public class Settings {
         new ArrayList<>(ignoreCommandPrototypes));
     obj.ignoreEnvironments = ((ignoreEnvironments == null) ? null :
         new ArrayList<>(ignoreEnvironments));
+    obj.dummyMarkdownNodeTypes = ((dummyMarkdownNodeTypes == null) ? null :
+        new ArrayList<>(dummyMarkdownNodeTypes));
+    obj.ignoreMarkdownNodeTypes = ((ignoreMarkdownNodeTypes == null) ? null :
+        new ArrayList<>(ignoreMarkdownNodeTypes));
     obj.ignoreRuleSentencePairs = null;
 
     if (ignoreRuleSentencePairs != null) {
@@ -264,6 +285,16 @@ public class Settings {
       return false;
     }
 
+    if ((dummyMarkdownNodeTypes == null) ? (other.dummyMarkdownNodeTypes != null) :
+        !dummyMarkdownNodeTypes.equals(other.dummyMarkdownNodeTypes)) {
+      return false;
+    }
+
+    if ((ignoreMarkdownNodeTypes == null) ? (other.ignoreMarkdownNodeTypes != null) :
+        !ignoreMarkdownNodeTypes.equals(other.ignoreMarkdownNodeTypes)) {
+      return false;
+    }
+
     if ((ignoreRuleSentencePairs == null) ? (other.ignoreRuleSentencePairs != null) :
         !ignoreRuleSentencePairs.equals(other.ignoreRuleSentencePairs)) {
       return false;
@@ -320,6 +351,10 @@ public class Settings {
     hash = 53 * hash + ((dummyCommandPrototypes != null) ? dummyCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreCommandPrototypes != null) ? ignoreCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreEnvironments != null) ? ignoreEnvironments.hashCode() : 0);
+    hash = 53 * hash + ((dummyMarkdownNodeTypes != null) ?
+        dummyMarkdownNodeTypes.hashCode() : 0);
+    hash = 53 * hash + ((ignoreMarkdownNodeTypes != null) ?
+        ignoreMarkdownNodeTypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreRuleSentencePairs != null) ? ignoreRuleSentencePairs.hashCode() : 0);
     hash = 53 * hash + ((motherTongueShortCode != null) ? motherTongueShortCode.hashCode() : 0);
     hash = 53 * hash + ((languageModelRulesDirectory != null) ?
@@ -372,6 +407,16 @@ public class Settings {
 
   public List<String> getIgnoreEnvironments() {
     return getDefault(ignoreEnvironments, Collections.emptyList());
+  }
+
+  public List<String> getDummyMarkdownNodeTypes() {
+    return getDefault(dummyMarkdownNodeTypes, Arrays.asList(
+        "AutoLink", "Code"));
+  }
+
+  public List<String> getIgnoreMarkdownNodeTypes() {
+    return getDefault(ignoreMarkdownNodeTypes, Arrays.asList(
+        "CodeBlock", "FencedCodeBlock", "IndentedCodeBlock"));
   }
 
   public List<Pair<String, Pattern>> getIgnoreRuleSentencePairs() {
