@@ -78,11 +78,11 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
   }
 
   private AnnotatedText invertAnnotatedText(AnnotatedText annotatedText) {
-    Map<Integer, Integer> mapping = annotatedText.getMapping();
-    Map<Integer, Integer> inverseMapping = new HashMap<>();
+    List<Map.Entry<Integer, Integer>> mapping = annotatedText.getMapping();
+    List<Map.Entry<Integer, Integer>> inverseMapping = new ArrayList<>();
 
-    for (Map.Entry<Integer, Integer> entry : mapping.entrySet()) {
-      inverseMapping.put(entry.getValue(), entry.getKey());
+    for (Map.Entry<Integer, Integer> entry : mapping) {
+      inverseMapping.add(new AbstractMap.SimpleEntry<>(entry.getValue(), entry.getKey()));
     }
 
     return new AnnotatedText(Collections.emptyList(), inverseMapping, Collections.emptyMap(),

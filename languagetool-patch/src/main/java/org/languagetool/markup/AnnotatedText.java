@@ -20,6 +20,7 @@ package org.languagetool.markup;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -42,11 +43,11 @@ public class AnnotatedText {
   }
 
   private final List<TextPart> parts;
-  private final Map<Integer,Integer> mapping;  // plain text position to original text (with markup) position
+  private final List<Map.Entry<Integer, Integer>> mapping;  // plain text position to original text (with markup) position
   private final Map<MetaDataKey, String> metaData;
   private final Map<String, String> customMetaData;
 
-  public AnnotatedText(List<TextPart> parts, Map<Integer, Integer> mapping,
+  public AnnotatedText(List<TextPart> parts, List<Map.Entry<Integer, Integer>> mapping,
       Map<MetaDataKey, String> metaData, Map<String, String> customMetaData) {
     this.parts = Objects.requireNonNull(parts);
     this.mapping = Objects.requireNonNull(mapping);
@@ -94,7 +95,7 @@ public class AnnotatedText {
     return sb.toString();
   }
 
-  public Map<Integer, Integer> getMapping() {
+  public List<Map.Entry<Integer, Integer>> getMapping() {
     return mapping;
   }
 
@@ -109,25 +110,42 @@ public class AnnotatedText {
       throw new IllegalArgumentException("plainTextPosition must be >= 0: " + plainTextPosition);
     }
 
-    Integer origPosition = mapping.get(plainTextPosition);
+    Map.Entry<Integer, Integer> lowerNeighbor =
+        new AbstractMap.SimpleEntry<>(0, 0);
+    Map.Entry<Integer, Integer> upperNeighbor =
+        new AbstractMap.SimpleEntry<>(Integer.MIN_VALUE, Integer.MIN_VALUE);
 
-    if (origPosition != null) {
-      return origPosition;
-    }
-
-    int lowerNeighbor = Integer.MIN_VALUE;
-    int upperNeighbor = Integer.MAX_VALUE;
-
-    for (Map.Entry<Integer, Integer> entry : mapping.entrySet()) {
-      if ((entry.getKey() < plainTextPosition) && (entry.getKey() > lowerNeighbor)) {
-        lowerNeighbor = entry.getKey();
-      } else if ((entry.getKey() > plainTextPosition) && (entry.getKey() < upperNeighbor)) {
-        upperNeighbor = entry.getKey();
+    for (Map.Entry<Integer, Integer> entry : mapping) {
+      if ((entry.getKey() > upperNeighbor.getKey()) ||
+          ((entry.getKey() == upperNeighbor.getKey()) &&
+           (entry.getValue() > upperNeighbor.getValue()))) {
+        upperNeighbor = entry;
       }
     }
 
-    float t = (float)(plainTextPosition - lowerNeighbor) / (float)(upperNeighbor - lowerNeighbor);
-    return Math.round((1 - t) * mapping.get(lowerNeighbor) + t * mapping.get(upperNeighbor));
+    for (Map.Entry<Integer, Integer> entry : mapping) {
+      if ((entry.getKey() < plainTextPosition) &&
+          ((entry.getKey() > lowerNeighbor.getKey()) ||
+           ((entry.getKey() == lowerNeighbor.getKey()) &&
+            (entry.getValue() > lowerNeighbor.getValue())))) {
+        lowerNeighbor = entry;
+
+      } else if ((entry.getKey() > plainTextPosition) &&
+          ((entry.getKey() < upperNeighbor.getKey()) ||
+           ((entry.getKey() == lowerNeighbor.getKey()) &&
+            (entry.getValue() < lowerNeighbor.getValue())))) {
+        upperNeighbor = entry;
+
+      } else if (entry.getKey() == plainTextPosition) {
+        return entry.getValue();
+      }
+    }
+
+    float t = (float)(plainTextPosition - lowerNeighbor.getKey()) /
+        (float)(upperNeighbor.getKey() - lowerNeighbor.getKey());
+    int result = Math.round((1 - t) * lowerNeighbor.getValue() + t * upperNeighbor.getValue());
+
+    return result;
   }
 
   /**
