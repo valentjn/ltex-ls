@@ -21,6 +21,9 @@ package org.languagetool.markup;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -42,15 +45,27 @@ public class AnnotatedText {
     EmailNumberOfAttachments
   }
 
+  private class MappingEntryComparator implements Comparator<Map.Entry<Integer, Integer>> {
+    @Override
+    public int compare(Map.Entry<Integer, Integer> o1, Map.Entry<Integer, Integer> o2) {
+      int result = o1.getKey().compareTo(o2.getKey());
+      if (result == 0) result = o1.getValue().compareTo(o2.getValue());
+      return result;
+    }
+  }
+
   private final List<TextPart> parts;
   private final List<Map.Entry<Integer, Integer>> mapping;  // plain text position to original text (with markup) position
+  private final MappingEntryComparator mappingEntryComparator;
   private final Map<MetaDataKey, String> metaData;
   private final Map<String, String> customMetaData;
 
   public AnnotatedText(List<TextPart> parts, List<Map.Entry<Integer, Integer>> mapping,
       Map<MetaDataKey, String> metaData, Map<String, String> customMetaData) {
     this.parts = Objects.requireNonNull(parts);
-    this.mapping = Objects.requireNonNull(mapping);
+    this.mapping = copyMapping(Objects.requireNonNull(mapping));
+    this.mappingEntryComparator = new MappingEntryComparator();
+    Collections.sort(this.mapping, this.mappingEntryComparator);
     this.metaData = Objects.requireNonNull(metaData);
     this.customMetaData = Objects.requireNonNull(customMetaData);
   }
@@ -95,8 +110,28 @@ public class AnnotatedText {
     return sb.toString();
   }
 
+  /**
+   * Return a copy of the internal mapping.
+   * @return copy of the internal mapping
+   */
   public List<Map.Entry<Integer, Integer>> getMapping() {
-    return mapping;
+    return copyMapping(mapping);
+  }
+
+  /**
+   * Return a copy of the specified mapping.
+   * @param mapping arbitrary mapping
+   * @return copy of mapping
+   */
+  private static List<Map.Entry<Integer, Integer>> copyMapping(
+      List<Map.Entry<Integer, Integer>> mapping) {
+    List<Map.Entry<Integer, Integer>> result = new ArrayList<>();
+
+    for (Map.Entry<Integer, Integer> entry : mapping) {
+      result.add(new AbstractMap.SimpleEntry<>(entry.getKey(), entry.getValue()));
+    }
+
+    return result;
   }
 
   /**
@@ -108,44 +143,29 @@ public class AnnotatedText {
   public int getOriginalTextPositionFor(int plainTextPosition) {
     if (plainTextPosition < 0) {
       throw new IllegalArgumentException("plainTextPosition must be >= 0: " + plainTextPosition);
+    } else if (mapping.isEmpty()) {
+      throw new IllegalArgumentException("mapping must be non-empty");
+    } else if (mapping.size() == 1) {
+      return mapping.get(0).getValue();
     }
 
-    Map.Entry<Integer, Integer> lowerNeighbor =
-        new AbstractMap.SimpleEntry<>(0, 0);
-    Map.Entry<Integer, Integer> upperNeighbor =
-        new AbstractMap.SimpleEntry<>(Integer.MIN_VALUE, Integer.MIN_VALUE);
+    Map.Entry<Integer, Integer> entry =
+        new AbstractMap.SimpleEntry<>(plainTextPosition, Integer.MAX_VALUE);
+    int i = -Collections.binarySearch(mapping, entry, mappingEntryComparator) - 1;
+    if (i <= 0) i = 1;
+    if (i >= mapping.size()) i = mapping.size() - 1;
 
-    for (Map.Entry<Integer, Integer> entry : mapping) {
-      if ((entry.getKey() > upperNeighbor.getKey()) ||
-          ((entry.getKey() == upperNeighbor.getKey()) &&
-           (entry.getValue() > upperNeighbor.getValue()))) {
-        upperNeighbor = entry;
-      }
+    Map.Entry<Integer, Integer> lowerNeighbor = mapping.get(i - 1);
+    Map.Entry<Integer, Integer> upperNeighbor = mapping.get(i);
+
+    if (lowerNeighbor.getKey() == plainTextPosition) {
+      return lowerNeighbor.getValue();
+    } else {
+      float t = (float)(plainTextPosition - lowerNeighbor.getKey()) /
+          (float)(upperNeighbor.getKey() - lowerNeighbor.getKey());
+      int result = Math.round((1 - t) * lowerNeighbor.getValue() + t * upperNeighbor.getValue());
+      return result;
     }
-
-    for (Map.Entry<Integer, Integer> entry : mapping) {
-      if ((entry.getKey() < plainTextPosition) &&
-          ((entry.getKey() > lowerNeighbor.getKey()) ||
-           ((entry.getKey() == lowerNeighbor.getKey()) &&
-            (entry.getValue() > lowerNeighbor.getValue())))) {
-        lowerNeighbor = entry;
-
-      } else if ((entry.getKey() > plainTextPosition) &&
-          ((entry.getKey() < upperNeighbor.getKey()) ||
-           ((entry.getKey() == lowerNeighbor.getKey()) &&
-            (entry.getValue() < lowerNeighbor.getValue())))) {
-        upperNeighbor = entry;
-
-      } else if (entry.getKey() == plainTextPosition) {
-        return entry.getValue();
-      }
-    }
-
-    float t = (float)(plainTextPosition - lowerNeighbor.getKey()) /
-        (float)(upperNeighbor.getKey() - lowerNeighbor.getKey());
-    int result = Math.round((1 - t) * lowerNeighbor.getValue() + t * upperNeighbor.getValue());
-
-    return result;
   }
 
   /**
