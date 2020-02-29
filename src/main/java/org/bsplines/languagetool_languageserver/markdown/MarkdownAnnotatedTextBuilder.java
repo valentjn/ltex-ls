@@ -2,6 +2,8 @@ package org.bsplines.languagetool_languageserver.markdown;
 
 import java.util.Stack;
 import com.vladsch.flexmark.ast.*;
+import com.vladsch.flexmark.util.ast.Document;
+import com.vladsch.flexmark.util.ast.Node;
 
 import org.languagetool.markup.AnnotatedText;
 

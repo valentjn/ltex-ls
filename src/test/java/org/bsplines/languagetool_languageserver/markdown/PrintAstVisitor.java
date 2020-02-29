@@ -1,6 +1,6 @@
 package org.bsplines.languagetool_languageserver.markdown;
 
-import com.vladsch.flexmark.ast.Node;
+import com.vladsch.flexmark.util.ast.Node;
 
 class PrintAstVisitor {
     public void visit(Node node, int indent) {

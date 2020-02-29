@@ -1,7 +1,7 @@
 package org.bsplines.languagetool_languageserver;
 
 import com.google.gson.*;
-import com.vladsch.flexmark.ast.Document;
+import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.parser.Parser;
 
 import org.apache.commons.text.StringEscapeUtils;
@@ -531,7 +531,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
             }
             case "markdown": {
               Parser p = Parser.builder().build();
-              Document mdDocument = (Document) p.parse(document.getText());
+              Document mdDocument = p.parse(document.getText());
 
               MarkdownAnnotatedTextBuilder builder = new MarkdownAnnotatedTextBuilder();
               builder.visit(mdDocument);
