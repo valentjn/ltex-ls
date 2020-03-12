@@ -1,7 +1,7 @@
 package org.bsplines.languagetool_languageserver.latex;
 
 import org.apache.commons.text.StringEscapeUtils;
-import org.bsplines.languagetool_languageserver.*;
+import org.bsplines.languagetool_languageserver.Tools;
 import org.languagetool.markup.AnnotatedText;
 
 import java.util.ArrayList;
@@ -273,12 +273,13 @@ public class LatexAnnotatedTextBuilder {
   private String curString;
   private Mode curMode;
 
+  public String language = "en-US";
+  public String codeLanguageId = "latex";
   public List<LatexCommandSignature> commandSignatures =
       new ArrayList<>(Arrays.asList(defaultCommandSignatures));
   public List<String> ignoreEnvironments =
       new ArrayList<>(Arrays.asList(defaultIgnoreEnvironments));
   public boolean isInStrictMode = false;
-  public String codeLanguageId = "latex";
 
   private String matchFromPosition(Pattern pattern) {
     return matchFromPosition(pattern, pos);
@@ -293,7 +294,7 @@ public class LatexAnnotatedTextBuilder {
     String dummy;
 
     if (isTextMode(curMode)) {
-      dummy = "Dummy" + (dummyCounter++);
+      dummy = Tools.generateDummy(language, dummyCounter++);
     } else if (isMathEmpty) {
       if (curMode == Mode.DISPLAY_MATH) {
         dummy = (lastSpace.isEmpty() ? " " : "");
@@ -301,10 +302,10 @@ public class LatexAnnotatedTextBuilder {
         dummy = "";
       }
     } else if (curMode == Mode.DISPLAY_MATH) {
-      dummy = ((lastSpace.isEmpty() ? " " : "")) + "Dummy" + (dummyCounter++) +
+      dummy = ((lastSpace.isEmpty() ? " " : "")) + Tools.generateDummy(language, dummyCounter++) +
           dummyLastPunctuation + ((modeStack.peek() == Mode.INLINE_TEXT) ? dummyLastSpace : " ");
     } else {
-      dummy = "Dummy" + (dummyCounter++) + dummyLastPunctuation + dummyLastSpace;
+      dummy = Tools.generateDummy(language, dummyCounter++) + dummyLastPunctuation + dummyLastSpace;
     }
 
     dummyLastSpace = "";

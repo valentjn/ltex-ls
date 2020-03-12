@@ -6,11 +6,12 @@ import org.languagetool.markup.AnnotatedText;
 
 public class LatexAnnotatedTextBuilderTest {
   static AnnotatedText buildAnnotatedText(String code) {
-    return buildAnnotatedText(code, "latex");
+    return buildAnnotatedText(code, "en-US", "latex");
   }
 
-  static AnnotatedText buildAnnotatedText(String code, String codeLanguageId) {
+  static AnnotatedText buildAnnotatedText(String code, String language, String codeLanguageId) {
     LatexAnnotatedTextBuilder builder = new LatexAnnotatedTextBuilder();
+    builder.language = language;
     builder.codeLanguageId = codeLanguageId;
     builder.isInStrictMode = true;
 
@@ -23,11 +24,16 @@ public class LatexAnnotatedTextBuilderTest {
   }
 
   static void assertPlainText(String code, String expectedPlainText) {
-    assertPlainText(code, expectedPlainText, "latex");
+    assertPlainText(code, expectedPlainText, "en-US");
   }
 
-  static void assertPlainText(String code, String expectedPlainText, String codeLanguageId) {
-    AnnotatedText annotatedText = buildAnnotatedText(code, codeLanguageId);
+  static void assertPlainText(String code, String expectedPlainText, String language) {
+    assertPlainText(code, expectedPlainText, language, "latex");
+  }
+
+  static void assertPlainText(String code, String expectedPlainText, String language,
+      String codeLanguageId) {
+    AnnotatedText annotatedText = buildAnnotatedText(code, language, codeLanguageId);
     Assertions.assertEquals(expectedPlainText, annotatedText.getPlainText());
   }
 
@@ -154,6 +160,10 @@ public class LatexAnnotatedTextBuilderTest {
         "This is a test: $a, b, \\dots, c$.\n" +
         "Second sentence: a, b, $\\dots$, c.\n",
         "This is a test: Dummy0. Second sentence: a, b, Dummy1, c. ");
+    assertPlainText(
+        "C'est un test: $E = mc^2$.\n",
+        "C'est un test: Jimmy-0. ",
+        "fr");
 
     {
       AnnotatedText annotatedText = buildAnnotatedText(
@@ -204,12 +214,12 @@ public class LatexAnnotatedTextBuilderTest {
         "plot(1:1000, rnorm(1000))\n" +
         "@\n",
         " This is a first sentence.\n\n\n\nThis is a second sentence. ",
-        "rsweave");
+        "en-US", "rsweave");
     assertPlainText("<<import-packages>>=\n" +
         "library(tidyverse)\n" +
         "@\n",
         " ",
-        "rsweave");
+        "en-US", "rsweave");
     assertPlainText("<<import-packages>>=\n" +
         "library(tidyverse)\n" +
         "@\n",

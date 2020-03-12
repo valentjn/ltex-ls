@@ -534,6 +534,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
               Document mdDocument = p.parse(document.getText());
 
               MarkdownAnnotatedTextBuilder builder = new MarkdownAnnotatedTextBuilder();
+              builder.language = settings.getLanguageShortCode();
               builder.dummyNodeTypes.addAll(settings.getDummyMarkdownNodeTypes());
               builder.ignoreNodeTypes.addAll(settings.getIgnoreMarkdownNodeTypes());
 
@@ -545,6 +546,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
             case "latex":
             case "rsweave": {
               LatexAnnotatedTextBuilder builder = new LatexAnnotatedTextBuilder();
+              builder.language = settings.getLanguageShortCode();
               builder.codeLanguageId = codeLanguageId;
 
               for (String commandPrototype : settings.getDummyCommandPrototypes()) {

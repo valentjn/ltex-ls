@@ -1,7 +1,6 @@
 package org.bsplines.languagetool_languageserver.markdown;
 
 import com.vladsch.flexmark.util.ast.Document;
-import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.parser.Parser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

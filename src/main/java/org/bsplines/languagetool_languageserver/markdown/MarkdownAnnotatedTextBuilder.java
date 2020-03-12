@@ -7,6 +7,7 @@ import java.util.Stack;
 import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.ast.Node;
 
+import org.bsplines.languagetool_languageserver.Tools;
 import org.languagetool.markup.AnnotatedText;
 
 public class MarkdownAnnotatedTextBuilder {
@@ -18,6 +19,7 @@ public class MarkdownAnnotatedTextBuilder {
   private int dummyCounter;
   private Stack<String> nodeTypeStack = new Stack<>();
 
+  public String language = "en-US";
   public List<String> ignoreNodeTypes = new ArrayList<>();
   public List<String> dummyNodeTypes = new ArrayList<>();
 
@@ -78,7 +80,7 @@ public class MarkdownAnnotatedTextBuilder {
   }
 
   private String generateDummy() {
-    return "Dummy" + (dummyCounter++);
+    return Tools.generateDummy(language, dummyCounter++);
   }
 
   private void visit(Node node) {
