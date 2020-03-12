@@ -707,7 +707,8 @@ public class LatexAnnotatedTextBuilder {
                 }
               }
             } else if (command.equals("\\dots")) {
-              addMarkup(command, "...");
+              String interpretAs = (isMathMode(curMode) ? "" : "...");
+              addMarkup(command, interpretAs);
             } else if (command.equals("\\euro")) {
               addMarkup(command, "\u20ac");
             } else if (command.equals("\\footnote")) {

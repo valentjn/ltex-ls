@@ -67,6 +67,9 @@ public class LatexAnnotatedTextBuilderTest {
         "\\\"{U}ml\\\"a\\\"{u}t\\\"en.\n",
         "\u00cb\u00efn T\u00ebxt m\u00eft v\u00ef\u00ebl\u00ebn " +
         "\u00dcml\u00e4\u00fct\u00ebn. ");
+    assertPlainText(
+        "This is a test: a, b, \\dots, c.\n",
+        "This is a test: a, b, ..., c. ");
 
     {
       AnnotatedText annotatedText = buildAnnotatedText("\\cite{Kubota}*{Theorem 3.7}\n");
@@ -147,6 +150,10 @@ public class LatexAnnotatedTextBuilderTest {
         "This is a test: $a = b \\footnote{This is another test: $c$.}$.\n" +
         "This is the next sentence: $E = mc^2$.\n",
         "This is a test: Dummy0This is another test: Dummy1.. This is the next sentence: Dummy2. ");
+    assertPlainText(
+        "This is a test: $a, b, \\dots, c$.\n" +
+        "Second sentence: a, b, $\\dots$, c.\n",
+        "This is a test: Dummy0. Second sentence: a, b, Dummy1, c. ");
 
     {
       AnnotatedText annotatedText = buildAnnotatedText(
