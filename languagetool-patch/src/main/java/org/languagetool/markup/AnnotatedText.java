@@ -54,13 +54,30 @@ public class AnnotatedText {
     }
   }
 
-  private final List<TextPart> parts;
-  private final List<Map.Entry<Integer, Integer>> mapping;  // plain text position to original text (with markup) position
-  private final MappingEntryComparator mappingEntryComparator;
-  private final Map<MetaDataKey, String> metaData;
-  private final Map<String, String> customMetaData;
+  private List<TextPart> parts;
+  private List<Map.Entry<Integer, Integer>> mapping;  // plain text position to original text (with markup) position
+  private MappingEntryComparator mappingEntryComparator;
+  private Map<MetaDataKey, String> metaData;
+  private Map<String, String> customMetaData;
 
   public AnnotatedText(List<TextPart> parts, List<Map.Entry<Integer, Integer>> mapping,
+      Map<MetaDataKey, String> metaData, Map<String, String> customMetaData) {
+    initialize(parts, mapping, metaData, customMetaData);
+  }
+
+  public AnnotatedText(List<TextPart> parts, Map<Integer, MappingValue> mapping,
+      Map<MetaDataKey, String> metaData, Map<String, String> customMetaData) {
+    List<Map.Entry<Integer, Integer>> integerMapping = new ArrayList<>();
+
+    for (Map.Entry<Integer, MappingValue> entry : mapping.entrySet()) {
+      integerMapping.add(new AbstractMap.SimpleEntry<>(
+          entry.getKey(), entry.getValue().getTotalPosition()));
+    }
+
+    initialize(parts, integerMapping, metaData, customMetaData);
+  }
+
+  public void initialize(List<TextPart> parts, List<Map.Entry<Integer, Integer>> mapping,
       Map<MetaDataKey, String> metaData, Map<String, String> customMetaData) {
     this.parts = Objects.requireNonNull(parts);
     this.mapping = copyMapping(Objects.requireNonNull(mapping));
@@ -166,6 +183,17 @@ public class AnnotatedText {
       int result = Math.round((1 - t) * lowerNeighbor.getValue() + t * upperNeighbor.getValue());
       return result;
     }
+  }
+
+  /**
+   * Internally used by LanguageTool to adjust error positions to point to the
+   * original location with markup, even though markup was ignored during text checking.
+   * @param plainTextPosition the position in the plain text (no markup) that was checked
+   * @param isToPos the from/to position needed (ignored)
+   * @return an adjusted position of the same location in the text with markup
+   */
+  public int getOriginalTextPositionFor(int plainTextPosition, boolean isToPos) {
+    return getOriginalTextPositionFor(plainTextPosition);
   }
 
   /**
