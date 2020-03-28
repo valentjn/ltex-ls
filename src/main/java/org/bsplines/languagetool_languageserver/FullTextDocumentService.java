@@ -37,17 +37,17 @@ class FullTextDocumentService implements TextDocumentService {
   }
 
   @Override
-  public CompletableFuture<Hover> hover(TextDocumentPositionParams position) {
+  public CompletableFuture<Hover> hover(HoverParams position) {
     return null;
   }
 
   @Override
-  public CompletableFuture<SignatureHelp> signatureHelp(TextDocumentPositionParams position) {
+  public CompletableFuture<SignatureHelp> signatureHelp(SignatureHelpParams position) {
     return null;
   }
 
   @Override
-  public CompletableFuture<Either<List<? extends Location>,List<? extends LocationLink>>> definition(TextDocumentPositionParams position) {
+  public CompletableFuture<Either<List<? extends Location>,List<? extends LocationLink>>> definition(DefinitionParams position) {
     return null;
   }
 
@@ -57,7 +57,7 @@ class FullTextDocumentService implements TextDocumentService {
   }
 
   @Override
-  public CompletableFuture<List<? extends DocumentHighlight>> documentHighlight(TextDocumentPositionParams position) {
+  public CompletableFuture<List<? extends DocumentHighlight>> documentHighlight(DocumentHighlightParams position) {
     return null;
   }
 
@@ -113,9 +113,6 @@ class FullTextDocumentService implements TextDocumentService {
       // Will be full update because we specified that is all we support
       if (changeEvent.getRange() != null) {
         throw new UnsupportedOperationException(Tools.i18n("rangeShouldBeNull"));
-      }
-      if (changeEvent.getRangeLength() != null) {
-        throw new UnsupportedOperationException(Tools.i18n("rangeLengthShouldBeNull"));
       }
 
       documents.get(uri).setText(changeEvent.getText());
