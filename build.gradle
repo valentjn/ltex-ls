@@ -28,7 +28,7 @@ project(':languagetool-patch') {
   }
 
   dependencies {
-    compile group: 'org.languagetool', name: 'languagetool-core', version: '4.7'
+    compile group: 'org.languagetool', name: 'languagetool-core', version: '4.9'
   }
 
   sourceSets {
@@ -47,7 +47,7 @@ dependencies {
   // Enabling makes the Gradle plugin work but breaks IDEA
   testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.1'
 
-  compile group: 'org.languagetool', name: 'languagetool-core', version: '4.7'
+  compile group: 'org.languagetool', name: 'languagetool-core', version: '4.9'
 
   // This dependency is found on compile classpath of this component and consumers.
   compile group: 'org.eclipse.lsp4j', name: 'org.eclipse.lsp4j', version: '0.7.2'
