@@ -704,7 +704,15 @@ public class LatexAnnotatedTextBuilder {
                   addMarkup(command);
                   dummyLastSpace = " ";
                 } else {
-                  addMarkup(command, (lastSpace.isEmpty() ? " " : ""));
+                  String space = " ";
+
+                  if (!lastSpace.isEmpty()) {
+                    space = "";
+                  } else if (command.equals("\\,")) {
+                    space = "\u202f";
+                  }
+
+                  addMarkup(command, space);
                 }
               }
             } else if (command.equals("\\dots")) {
