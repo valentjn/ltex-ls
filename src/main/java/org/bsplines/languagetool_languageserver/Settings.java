@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import com.google.gson.*;
 import org.eclipse.lsp4j.DiagnosticSeverity;
-import org.eclipse.xtext.xbase.lib.Pair;
 
 public class Settings {
   private String languageShortCode = null;
@@ -21,7 +19,7 @@ public class Settings {
   private List<String> ignoreEnvironments = null;
   private List<String> dummyMarkdownNodeTypes = null;
   private List<String> ignoreMarkdownNodeTypes = null;
-  private List<Pair<String, Pattern>> ignoreRuleSentencePairs = null;
+  private List<IgnoreRuleSentencePair> ignoreRuleSentencePairs = null;
   private String motherTongueShortCode = null;
   private String languageModelRulesDirectory = null;
   private String neuralNetworkModelRulesDirectory = null;
@@ -142,8 +140,8 @@ public class Settings {
       for (JsonElement element :
           getSettingFromJSON(jsonSettings, "ignoreRuleInSentence").getAsJsonArray()) {
         JsonObject elementObject = element.getAsJsonObject();
-        ignoreRuleSentencePairs.add(new Pair<>(elementObject.get("rule").getAsString(),
-            Pattern.compile(elementObject.get("sentence").getAsString())));
+        ignoreRuleSentencePairs.add(new IgnoreRuleSentencePair(
+            elementObject.get("rule").getAsString(), elementObject.get("sentence").getAsString()));
       }
     } catch (NullPointerException | UnsupportedOperationException e) {
       ignoreRuleSentencePairs = null;
@@ -218,17 +216,8 @@ public class Settings {
         new ArrayList<>(dummyMarkdownNodeTypes));
     obj.ignoreMarkdownNodeTypes = ((ignoreMarkdownNodeTypes == null) ? null :
         new ArrayList<>(ignoreMarkdownNodeTypes));
-    obj.ignoreRuleSentencePairs = null;
-
-    if (ignoreRuleSentencePairs != null) {
-      obj.ignoreRuleSentencePairs = new ArrayList<>();
-
-      for (Pair<String, Pattern> pair : ignoreRuleSentencePairs) {
-        obj.ignoreRuleSentencePairs.add((pair == null) ? null :
-            new Pair<String, Pattern>(pair.getKey(), pair.getValue()));
-      }
-    }
-
+    obj.ignoreRuleSentencePairs = ((ignoreRuleSentencePairs == null) ? null :
+        new ArrayList<>(ignoreRuleSentencePairs));
     obj.motherTongueShortCode = motherTongueShortCode;
     obj.languageModelRulesDirectory = languageModelRulesDirectory;
     obj.neuralNetworkModelRulesDirectory = neuralNetworkModelRulesDirectory;
@@ -419,7 +408,7 @@ public class Settings {
         "CodeBlock", "FencedCodeBlock", "IndentedCodeBlock"));
   }
 
-  public List<Pair<String, Pattern>> getIgnoreRuleSentencePairs() {
+  public List<IgnoreRuleSentencePair> getIgnoreRuleSentencePairs() {
     return getDefault(ignoreRuleSentencePairs, Collections.emptyList());
   }
 

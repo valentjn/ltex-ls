@@ -611,7 +611,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
             Tools.logger.info((result.size() == 1) ? Tools.i18n("obtainedRuleMatch") :
                 Tools.i18n("obtainedRuleMatches", result.size()));
 
-            List<Pair<String, Pattern>> ignoreRuleSentencePairs =
+            List<IgnoreRuleSentencePair> ignoreRuleSentencePairs =
                 settings.getIgnoreRuleSentencePairs();
 
             if (!result.isEmpty() && !ignoreRuleSentencePairs.isEmpty()) {
@@ -622,8 +622,9 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
                   String ruleId = match.getRule().getId();
                   String sentence = match.getSentence().getText().trim();
 
-                  for (Pair<String, Pattern> pair : ignoreRuleSentencePairs) {
-                    if (pair.getKey().equals(ruleId) && pair.getValue().matcher(sentence).find()) {
+                  for (IgnoreRuleSentencePair pair : ignoreRuleSentencePairs) {
+                    if (pair.getRuleId().equals(ruleId) &&
+                          pair.getSentencePattern().matcher(sentence).find()) {
                       Tools.logger.info(Tools.i18n("removingIgnoredRuleMatch", ruleId, sentence));
                       ignoreMatches.add(match);
                       break;
