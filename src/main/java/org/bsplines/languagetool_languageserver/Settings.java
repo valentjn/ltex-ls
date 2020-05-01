@@ -138,7 +138,7 @@ public class Settings {
       ignoreRuleSentencePairs = new ArrayList<>();
 
       for (JsonElement element :
-          getSettingFromJSON(jsonSettings, "ignoreRuleInSentence").getAsJsonArray()) {
+            getSettingFromJSON(jsonSettings, "ignoreRuleInSentence").getAsJsonArray()) {
         JsonObject elementObject = element.getAsJsonObject();
         ignoreRuleSentencePairs.add(new IgnoreRuleSentencePair(
             elementObject.get("rule").getAsString(), elementObject.get("sentence").getAsString()));
@@ -232,96 +232,96 @@ public class Settings {
   @Override
   public boolean equals(Object obj) {
     if ((obj == null) || !Settings.class.isAssignableFrom(obj.getClass())) return false;
-    Settings other = (Settings) obj;
+    Settings other = (Settings)obj;
 
     if ((languageShortCode == null) ? (other.languageShortCode != null) :
-        !languageShortCode.equals(other.languageShortCode)) {
+          !languageShortCode.equals(other.languageShortCode)) {
       return false;
     }
 
     if ((diagnosticSeverity == null) ? (other.diagnosticSeverity != null) :
-        (diagnosticSeverity != other.diagnosticSeverity)) {
+          (diagnosticSeverity != other.diagnosticSeverity)) {
       return false;
     }
 
     if ((dictionary == null) ? (other.dictionary != null) :
-        !dictionary.equals(other.dictionary)) {
+          !dictionary.equals(other.dictionary)) {
       return false;
     }
 
     if ((disabledRules == null) ? (other.disabledRules != null) :
-        !disabledRules.equals(other.disabledRules)) {
+          !disabledRules.equals(other.disabledRules)) {
       return false;
     }
 
     if ((enabledRules == null) ? (other.enabledRules != null) :
-        !enabledRules.equals(other.enabledRules)) {
+          !enabledRules.equals(other.enabledRules)) {
       return false;
     }
 
     if ((dummyCommandPrototypes == null) ? (other.dummyCommandPrototypes != null) :
-        !dummyCommandPrototypes.equals(other.dummyCommandPrototypes)) {
+          !dummyCommandPrototypes.equals(other.dummyCommandPrototypes)) {
       return false;
     }
 
     if ((ignoreCommandPrototypes == null) ? (other.ignoreCommandPrototypes != null) :
-        !ignoreCommandPrototypes.equals(other.ignoreCommandPrototypes)) {
+          !ignoreCommandPrototypes.equals(other.ignoreCommandPrototypes)) {
       return false;
     }
 
     if ((ignoreEnvironments == null) ? (other.ignoreEnvironments != null) :
-        !ignoreEnvironments.equals(other.ignoreEnvironments)) {
+          !ignoreEnvironments.equals(other.ignoreEnvironments)) {
       return false;
     }
 
     if ((dummyMarkdownNodeTypes == null) ? (other.dummyMarkdownNodeTypes != null) :
-        !dummyMarkdownNodeTypes.equals(other.dummyMarkdownNodeTypes)) {
+          !dummyMarkdownNodeTypes.equals(other.dummyMarkdownNodeTypes)) {
       return false;
     }
 
     if ((ignoreMarkdownNodeTypes == null) ? (other.ignoreMarkdownNodeTypes != null) :
-        !ignoreMarkdownNodeTypes.equals(other.ignoreMarkdownNodeTypes)) {
+          !ignoreMarkdownNodeTypes.equals(other.ignoreMarkdownNodeTypes)) {
       return false;
     }
 
     if ((ignoreRuleSentencePairs == null) ? (other.ignoreRuleSentencePairs != null) :
-        !ignoreRuleSentencePairs.equals(other.ignoreRuleSentencePairs)) {
+          !ignoreRuleSentencePairs.equals(other.ignoreRuleSentencePairs)) {
       return false;
     }
 
     if ((motherTongueShortCode == null) ? (other.motherTongueShortCode != null) :
-        !motherTongueShortCode.equals(other.motherTongueShortCode)) {
+          !motherTongueShortCode.equals(other.motherTongueShortCode)) {
       return false;
     }
 
     if ((languageModelRulesDirectory == null) ? (other.languageModelRulesDirectory != null) :
-        !languageModelRulesDirectory.equals(other.languageModelRulesDirectory)) {
+          !languageModelRulesDirectory.equals(other.languageModelRulesDirectory)) {
       return false;
     }
 
     if ((neuralNetworkModelRulesDirectory == null) ?
-        (other.neuralNetworkModelRulesDirectory != null) :
-        !neuralNetworkModelRulesDirectory.equals(other.neuralNetworkModelRulesDirectory)) {
+          (other.neuralNetworkModelRulesDirectory != null) :
+          !neuralNetworkModelRulesDirectory.equals(other.neuralNetworkModelRulesDirectory)) {
       return false;
     }
 
     if ((word2VecModelRulesDirectory == null) ? (other.word2VecModelRulesDirectory != null) :
-        !word2VecModelRulesDirectory.equals(other.word2VecModelRulesDirectory)) {
+          !word2VecModelRulesDirectory.equals(other.word2VecModelRulesDirectory)) {
       return false;
     }
 
     if ((initialJavaHeapSize == null) ? (other.initialJavaHeapSize != null) :
-        !initialJavaHeapSize.equals(other.initialJavaHeapSize)) {
+          !initialJavaHeapSize.equals(other.initialJavaHeapSize)) {
       return false;
     }
 
     if ((maximumJavaHeapSize == null) ? (other.maximumJavaHeapSize != null) :
-        !maximumJavaHeapSize.equals(other.maximumJavaHeapSize)) {
+          !maximumJavaHeapSize.equals(other.maximumJavaHeapSize)) {
       return false;
     }
 
     if ((sentenceCacheSize == null) ? (other.sentenceCacheSize != null) :
-        !sentenceCacheSize.equals(other.sentenceCacheSize)) {
+          !sentenceCacheSize.equals(other.sentenceCacheSize)) {
       return false;
     }
 
