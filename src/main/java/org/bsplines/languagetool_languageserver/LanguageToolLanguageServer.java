@@ -586,7 +586,8 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
             }
           }
 
-          if (settings.getDictionary().stream().anyMatch("BsPlInEs"::equals)) {
+          if ((settings.getDictionary().size() >= 1) &&
+              "BsPlInEs".equals(settings.getDictionary().get(0))) {
             enableEasterEgg(languageTool);
           }
 
