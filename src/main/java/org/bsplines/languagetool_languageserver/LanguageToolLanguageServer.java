@@ -574,15 +574,15 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
       @Override
       public void didChangeConfiguration(DidChangeConfigurationParams params) {
         super.didChangeConfiguration(params);
-        setSettings(((JsonObject) params.getSettings()).get("ltex"));
+        setSettings(((JsonObject)params.getSettings()).get("ltex"));
         documents.values().forEach(LanguageToolLanguageServer.this::publishIssues);
       }
 
       @Override
       public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
         if (params.getCommand().equals(addToDictionaryCommandName) ||
-            params.getCommand().equals(disableRuleCommandName) ||
-            params.getCommand().equals(ignoreRuleInSentenceCommandName)) {
+              params.getCommand().equals(disableRuleCommandName) ||
+              params.getCommand().equals(ignoreRuleInSentenceCommandName)) {
           client.telemetryEvent(params.getArguments().get(0));
           return CompletableFuture.completedFuture(true);
         } else {
