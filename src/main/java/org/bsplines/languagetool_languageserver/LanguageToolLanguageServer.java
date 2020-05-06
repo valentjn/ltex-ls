@@ -222,7 +222,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
                 }
               }
 
-              if (!addWordToDictionaryMatches.isEmpty()) {
+              if (!addWordToDictionaryMatches.isEmpty() && settings.getHttpUri().isEmpty()) {
                 AnnotatedText inverseAnnotatedText = invertAnnotatedText(validateResult.getValue());
                 List<String> unknownWords = new ArrayList<>();
                 JsonArray unknownWordsJson = new JsonArray();
