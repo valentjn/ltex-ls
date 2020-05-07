@@ -10,7 +10,6 @@ import org.eclipse.lsp4j.DiagnosticSeverity;
 
 public class Settings {
   private String languageShortCode = null;
-  private String httpUri = null;
   private DiagnosticSeverity diagnosticSeverity = null;
   private List<String> dictionary = null;
   private List<String> disabledRules = null;
@@ -55,12 +54,6 @@ public class Settings {
       languageShortCode = getSettingFromJSON(jsonSettings, "language").getAsString();
     } catch (NullPointerException | UnsupportedOperationException e) {
       languageShortCode = null;
-    }
-
-    try {
-      httpUri = getSettingFromJSON(jsonSettings, "http.uri").getAsString();
-    } catch (NullPointerException | UnsupportedOperationException e) {
-      httpUri = null;
     }
 
     try {
@@ -209,7 +202,6 @@ public class Settings {
     Settings obj = new Settings();
 
     obj.languageShortCode = languageShortCode;
-    obj.httpUri = httpUri;
     obj.diagnosticSeverity = ((diagnosticSeverity == null) ? null : diagnosticSeverity);
     obj.dictionary = ((dictionary == null) ? null : new ArrayList<>(dictionary));
     obj.disabledRules = ((disabledRules == null) ? null : new ArrayList<>(disabledRules));
@@ -244,11 +236,6 @@ public class Settings {
 
     if ((languageShortCode == null) ? (other.languageShortCode != null) :
           !languageShortCode.equals(other.languageShortCode)) {
-      return false;
-    }
-
-    if ((httpUri == null) ? (other.httpUri != null) :
-          !httpUri.equals(other.httpUri)) {
       return false;
     }
 
@@ -346,7 +333,6 @@ public class Settings {
     int hash = 3;
 
     hash = 53 * hash + ((languageShortCode != null) ? languageShortCode.hashCode() : 0);
-    hash = 53 * hash + ((httpUri != null) ? httpUri.hashCode() : 0);
     hash = 53 * hash + ((diagnosticSeverity != null) ? diagnosticSeverity.hashCode() : 0);
     hash = 53 * hash + ((dictionary != null) ? dictionary.hashCode() : 0);
     hash = 53 * hash + ((disabledRules != null) ? disabledRules.hashCode() : 0);
@@ -382,10 +368,6 @@ public class Settings {
 
   public String getLanguageShortCode() {
     return getDefault(languageShortCode, "en-US");
-  }
-
-  public String getHttpUri() {
-    return getDefault(httpUri, "");
   }
 
   public DiagnosticSeverity getDiagnosticSeverity() {

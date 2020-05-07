@@ -152,14 +152,6 @@ public class AnnotatedText {
   }
 
   /**
-   * Return a copy of the parts.
-   * @return copy of the parts
-   */
-  public List<TextPart> getParts() {
-    return parts;
-  }
-
-  /**
    * Internally used by LanguageTool to adjust error positions to point to the
    * original location with markup, even though markup was ignored during text checking.
    * @param plainTextPosition the position in the plain text (no markup) that was checked

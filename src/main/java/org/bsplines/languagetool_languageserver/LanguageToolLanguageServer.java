@@ -119,15 +119,9 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
   }
 
   private void reinitialize() {
-    if (settings.getHttpUri().isEmpty()) {
-      languageToolInterface = new LanguageToolJavaInterface(settings.getLanguageShortCode(),
-          settings.getMotherTongueShortCode(), settings.getSentenceCacheSize(),
-          settings.getDictionary());
-    } else {
-      languageToolInterface = new LanguageToolHttpInterface(settings.getHttpUri(),
-          settings.getLanguageShortCode(),
-          settings.getMotherTongueShortCode());
-    }
+    languageToolInterface = new LanguageToolJavaInterface(settings.getLanguageShortCode(),
+        settings.getMotherTongueShortCode(), settings.getSentenceCacheSize(),
+        settings.getDictionary());
 
     if (!languageToolInterface.isReady()) {
       languageToolInterface = null;

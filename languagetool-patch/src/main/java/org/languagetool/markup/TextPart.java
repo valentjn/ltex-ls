@@ -25,9 +25,9 @@ import java.util.Objects;
  * or markup (to be ignored by LanguageTool).
  * @since 2.3
  */
-public class TextPart {
+class TextPart {
 
-  public enum Type {TEXT, MARKUP, FAKE_CONTENT}
+  enum Type {TEXT, MARKUP, FAKE_CONTENT}
 
   private final String part;
   private final Type typ;
@@ -37,11 +37,11 @@ public class TextPart {
     this.typ = Objects.requireNonNull(typ);
   }
 
-  public String getPart() {
+  String getPart() {
     return part;
   }
 
-  public Type getType() {
+  Type getType() {
     return typ;
   }
 
