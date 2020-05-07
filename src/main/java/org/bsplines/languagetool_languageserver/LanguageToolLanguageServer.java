@@ -5,33 +5,41 @@ import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.parser.Parser;
 
 import org.apache.commons.text.StringEscapeUtils;
-import org.bsplines.languagetool_languageserver.languagetool.*;
 import org.bsplines.languagetool_languageserver.latex.*;
 import org.bsplines.languagetool_languageserver.markdown.*;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.*;
 import org.eclipse.xtext.xbase.lib.Pair;
-import org.languagetool.markup.AnnotatedText;
+import org.languagetool.*;
+import org.languagetool.markup.*;
 import org.languagetool.markup.AnnotatedTextBuilder;
+import org.languagetool.rules.*;
+import org.languagetool.rules.patterns.AbstractPatternRule;
+import org.xml.sax.SAXException;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 public class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware {
 
   private HashMap<String, TextDocumentItem> documents = new HashMap<>();
   private LanguageClient client = null;
 
-  private HashMap<String, LanguageToolInterface> languageToolInterfaceMap = new HashMap<>();
+  private HashMap<String, JLanguageTool> languageToolMap = new HashMap<>();
   private HashMap<String, Settings> settingsMap = new HashMap<>();
 
-  private LanguageToolInterface languageToolInterface;
+  private JLanguageTool languageTool;
   private Settings settings = new Settings();
 
+  private static final int resultCacheExpireAfterMinutes = 10;
   private static final String acceptSuggestionCodeActionKind =
       CodeActionKind.QuickFix + ".ltex.acceptSuggestion";
   private static final String addToDictionaryCodeActionKind =
@@ -44,7 +52,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
   private static final String disableRuleCommandName = "ltex.disableRule";
   private static final String ignoreRuleInSentenceCommandName = "ltex.ignoreRuleInSentence";
 
-  private static boolean matchIntersectsWithRange(LanguageToolRuleMatch match, Range range,
+  private static boolean matchIntersectsWithRange(RuleMatch match, Range range,
       DocumentPositionCalculator positionCalculator) {
     // false iff match is completely before range or completely after range
     return !(positionLower(positionCalculator.getPosition(match.getToPos()), range.getStart()) ||
@@ -58,13 +66,13 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
   }
 
   private Diagnostic createDiagnostic(
-        LanguageToolRuleMatch match, DocumentPositionCalculator positionCalculator) {
+      RuleMatch match, DocumentPositionCalculator positionCalculator) {
     Diagnostic ret = new Diagnostic();
     ret.setRange(new Range(
         positionCalculator.getPosition(match.getFromPos()),
         positionCalculator.getPosition(match.getToPos())));
     ret.setSeverity(settings.getDiagnosticSeverity());
-    ret.setSource("LTeX - " + match.getRuleId());
+    ret.setSource("LTeX - " + match.getRule().getId());
     ret.setMessage(match.getMessage().replaceAll("<suggestion>(.*?)</suggestion>", "'$1'"));
     return ret;
   }
@@ -113,42 +121,83 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
     reinitialize();
     String language = settings.getLanguageShortCode();
     settingsMap.put(language, settings);
-    languageToolInterfaceMap.put(language, languageToolInterface);
+    languageToolMap.put(language, languageTool);
 
     return CompletableFuture.completedFuture(new InitializeResult(capabilities));
   }
 
   private void reinitialize() {
-    languageToolInterface = new LanguageToolJavaInterface(settings.getLanguageShortCode(),
-        settings.getMotherTongueShortCode(), settings.getSentenceCacheSize(),
-        settings.getDictionary());
+    languageTool = null;
 
-    if (!languageToolInterface.isReady()) {
-      languageToolInterface = null;
+    if (!Languages.isLanguageSupported(settings.getLanguageShortCode())) {
+      Tools.logger.severe(Tools.i18n("notARecognizedLanguage", settings.getLanguageShortCode()));
       return;
     }
 
+    Language language = Languages.getLanguageForShortCode(settings.getLanguageShortCode());
+    String motherTongueShortCode = settings.getMotherTongueShortCode();
+    Language motherTongue = ((motherTongueShortCode != null) ?
+        Languages.getLanguageForShortCode(motherTongueShortCode) : null);
+    ResultCache resultCache = new ResultCache(settings.getSentenceCacheSize(),
+        resultCacheExpireAfterMinutes, TimeUnit.MINUTES);
+    UserConfig userConfig = new UserConfig(settings.getDictionary());
+    languageTool = new JLanguageTool(language, motherTongue, resultCache, userConfig);
+
     if (settings.getLanguageModelRulesDirectory() == null) {
-      if (settings.getMotherTongueShortCode() != null) {
-        languageToolInterface.activateDefaultFalseFriendRules();
+      if (motherTongue != null) {
+        // from JLanguageTool.activateDefaultFalseFriendRules (which is private)
+        String falseFriendRulePath = JLanguageTool.getDataBroker().getRulesDir() + "/" +
+            JLanguageTool.FALSE_FRIEND_FILE;
+
+        try {
+          List<AbstractPatternRule> falseFriendRules = languageTool.loadFalseFriendRules(
+              falseFriendRulePath);
+          for (Rule rule : falseFriendRules) languageTool.addRule(rule);
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+          Tools.logger.warning(Tools.i18n("couldNotLoadFalseFriendRules",
+              falseFriendRulePath, e.getMessage()));
+          e.printStackTrace();
+        }
       }
     } else {
-      languageToolInterface.activateLanguageModelRules(
-          settings.getLanguageModelRulesDirectory());
+      try {
+        languageTool.activateLanguageModelRules(
+            new File(settings.getLanguageModelRulesDirectory()));
+      } catch (IOException | RuntimeException e) {
+        Tools.logger.warning(Tools.i18n("couldNotLoadLanguageModel",
+            settings.getLanguageModelRulesDirectory(), e.getMessage()));
+        e.printStackTrace();
+      }
     }
 
     if (settings.getNeuralNetworkModelRulesDirectory() != null) {
-      languageToolInterface.activateNeuralNetworkRules(
-          settings.getNeuralNetworkModelRulesDirectory());
+      try {
+        languageTool.activateNeuralNetworkRules(
+            new File(settings.getNeuralNetworkModelRulesDirectory()));
+      } catch (IOException | RuntimeException e) {
+        Tools.logger.warning(Tools.i18n("couldNotLoadNeuralNetworkModel",
+            settings.getNeuralNetworkModelRulesDirectory(), e.getMessage()));
+        e.printStackTrace();
+      }
     }
 
     if (settings.getWord2VecModelRulesDirectory() != null) {
-      languageToolInterface.activateWord2VecModelRules(
-          settings.getWord2VecModelRulesDirectory());
+      try {
+        languageTool.activateWord2VecModelRules(
+            new File(settings.getWord2VecModelRulesDirectory()));
+      } catch (IOException | RuntimeException e) {
+        Tools.logger.warning(Tools.i18n("couldNotLoadWord2VecModel",
+            settings.getWord2VecModelRulesDirectory(), e.getMessage()));
+        e.printStackTrace();
+      }
     }
 
-    languageToolInterface.enableRules(settings.getEnabledRules());
-    languageToolInterface.disableRules(settings.getDisabledRules());
+    // for strange reasons there is no JLanguageTool.enableRules
+    for (String ruleId : settings.getEnabledRules()) {
+      languageTool.enableRule(ruleId);
+    }
+
+    languageTool.disableRules(settings.getDisabledRules());
   }
 
   @Override
@@ -178,7 +227,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
             document.getUri(), document.getVersion());
 
         return validateDocument(document).thenApply(
-            (Pair<List<LanguageToolRuleMatch>, AnnotatedText> validateResult) -> {
+            (Pair<List<RuleMatch>, AnnotatedText> validateResult) -> {
               if (validateResult.getValue() == null) {
                 return Collections.emptyList();
               }
@@ -189,14 +238,14 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
               List<Either<Command, CodeAction>> result =
                   new ArrayList<Either<Command, CodeAction>>();
 
-              List<LanguageToolRuleMatch> addWordToDictionaryMatches = new ArrayList<>();
-              List<LanguageToolRuleMatch> ignoreRuleInThisSentenceMatches = new ArrayList<>();
-              List<LanguageToolRuleMatch> disableRuleMatches = new ArrayList<>();
-              Map<String, List<LanguageToolRuleMatch>> useWordMatchesMap = new LinkedHashMap<>();
+              List<RuleMatch> addWordToDictionaryMatches = new ArrayList<>();
+              List<RuleMatch> ignoreRuleInThisSentenceMatches = new ArrayList<>();
+              List<RuleMatch> disableRuleMatches = new ArrayList<>();
+              Map<String, List<RuleMatch>> useWordMatchesMap = new LinkedHashMap<>();
 
-              for (LanguageToolRuleMatch match : validateResult.getKey()) {
+              for (RuleMatch match : validateResult.getKey()) {
                 if (matchIntersectsWithRange(match, params.getRange(), positionCalculator)) {
-                  String ruleId = match.getRuleId();
+                  String ruleId = match.getRule().getId();
 
                   if (ruleId.startsWith("MORFOLOGIK_") || ruleId.startsWith("HUNSPELL_") ||
                       ruleId.startsWith("GERMAN_SPELLER_")) {
@@ -222,7 +271,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
                 JsonArray unknownWordsJson = new JsonArray();
                 List<Diagnostic> diagnostics = new ArrayList<>();
 
-                for (LanguageToolRuleMatch match : addWordToDictionaryMatches) {
+                for (RuleMatch match : addWordToDictionaryMatches) {
                   String word = plainText.substring(
                       getPlainTextPositionFor(match.getFromPos(), inverseAnnotatedText),
                       getPlainTextPositionFor(match.getToPos(), inverseAnnotatedText));
@@ -260,9 +309,9 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
                 JsonArray sentencePatternStringsJson = new JsonArray();
                 List<Diagnostic> diagnostics = new ArrayList<>();
 
-                for (LanguageToolRuleMatch match : ignoreRuleInThisSentenceMatches) {
-                  String ruleId = match.getRuleId();
-                  String sentence = match.getSentence().trim();
+                for (RuleMatch match : ignoreRuleInThisSentenceMatches) {
+                  String ruleId = match.getRule().getId();
+                  String sentence = match.getSentence().getText().trim();
                   Pair<String, String> pair = new Pair<>(ruleId, sentence);
 
                   if (!ruleIdSentencePairs.contains(pair)) {
@@ -317,8 +366,8 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
                 JsonArray ruleIdsJson = new JsonArray();
                 List<Diagnostic> diagnostics = new ArrayList<>();
 
-                for (LanguageToolRuleMatch match : disableRuleMatches) {
-                  String ruleId = match.getRuleId();
+                for (RuleMatch match : disableRuleMatches) {
+                  String ruleId = match.getRule().getId();
 
                   if (!ruleIds.contains(ruleId)) {
                     ruleIds.add(ruleId);
@@ -345,15 +394,14 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
                 result.add(Either.forRight(codeAction));
               }
 
-              for (Map.Entry<String, List<LanguageToolRuleMatch>> entry :
-                    useWordMatchesMap.entrySet()) {
+              for (Map.Entry<String, List<RuleMatch>> entry : useWordMatchesMap.entrySet()) {
                 String newWord = entry.getKey();
-                List<LanguageToolRuleMatch> useWordMatches = entry.getValue();
+                List<RuleMatch> useWordMatches = entry.getValue();
                 List<Diagnostic> diagnostics = new ArrayList<>();
                 List<Either<TextDocumentEdit, ResourceOperation>> documentChanges =
                     new ArrayList<>();
 
-                for (LanguageToolRuleMatch match : useWordMatches) {
+                for (RuleMatch match : useWordMatches) {
                   Diagnostic diagnostic = createDiagnostic(match, positionCalculator);
                   Range range = diagnostic.getRange();
 
@@ -411,8 +459,8 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
   private CompletableFuture<List<Diagnostic>> getIssues(TextDocumentItem document) {
     return validateDocument(document).thenApply(
-        (Pair<List<LanguageToolRuleMatch>, AnnotatedText> validateResult) -> {
-          List<LanguageToolRuleMatch> matches = validateResult.getKey();
+        (Pair<List<RuleMatch>, AnnotatedText> validateResult) -> {
+          List<RuleMatch> matches = validateResult.getKey();
           DocumentPositionCalculator positionCalculator =
               new DocumentPositionCalculator(document.getText());
 
@@ -421,7 +469,41 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
         });
   }
 
-  private CompletableFuture<Pair<List<LanguageToolRuleMatch>, AnnotatedText>> validateDocument(
+  private void enableEasterEgg(JLanguageTool languageTool) {
+    languageTool.addRule(new Rule() {
+      public String getId() { return "bspline"; };
+      public String getDescription() { return "Unknown basis function"; };
+      public RuleMatch[] match(AnalyzedSentence sentence) {
+        List<RuleMatch> matches = new ArrayList<>();
+        for (AnalyzedTokenReadings token : sentence.getTokens()) {
+          if (token.getToken().equalsIgnoreCase("hat")) {
+            matches.add(new RuleMatch(this, sentence, token.getStartPos(), token.getEndPos(),
+                "Unknown basis function. Did you mean <suggestion>B-spline</suggestion>?"));
+          }
+        }
+        return matches.toArray(new RuleMatch[]{});
+      }
+    });
+    languageTool.addRule(new Rule() {
+      public String getId() { return "ungendered"; };
+      public String getDescription() { return "Ungendered variant"; };
+      public RuleMatch[] match(AnalyzedSentence sentence) {
+        List<RuleMatch> matches = new ArrayList<>();
+        for (AnalyzedTokenReadings token : sentence.getTokens()) {
+          String s = token.getToken();
+          if ((s.length() >= 2) &&
+              (s.substring(s.length() - 2, s.length()).equalsIgnoreCase("er"))) {
+            matches.add(new RuleMatch(this, sentence, token.getStartPos(), token.getEndPos(),
+                "Ungendered variant detected. " +
+                "Did you mean <suggestion>" + s + "*in</suggestion>?"));
+          }
+        }
+        return matches.toArray(new RuleMatch[]{});
+      }
+    });
+  }
+
+  private CompletableFuture<Pair<List<RuleMatch>, AnnotatedText>> validateDocument(
       TextDocumentItem document) {
     ConfigurationItem configurationItem = new ConfigurationItem();
     configurationItem.setSection("ltex");
@@ -433,7 +515,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
         (List<Object> configuration) -> {
           setSettings((JsonElement) configuration.get(0));
 
-          if (languageToolInterface == null) {
+          if (languageTool == null) {
             Tools.logger.warning(Tools.i18n("skippingTextCheck"));
             return new Pair<>(Collections.emptyList(), null);
           }
@@ -506,7 +588,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
           if ((settings.getDictionary().size() >= 1) &&
               "BsPlInEs".equals(settings.getDictionary().get(0))) {
-            languageToolInterface.enableEasterEgg();
+            enableEasterEgg(languageTool);
           }
 
           {
@@ -524,7 +606,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
           }
 
           try {
-            List<LanguageToolRuleMatch> result = languageToolInterface.check(annotatedText);
+            List<RuleMatch> result = languageTool.check(annotatedText);
 
             Tools.logger.info((result.size() == 1) ? Tools.i18n("obtainedRuleMatch") :
                 Tools.i18n("obtainedRuleMatches", result.size()));
@@ -533,12 +615,12 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
                 settings.getIgnoreRuleSentencePairs();
 
             if (!result.isEmpty() && !ignoreRuleSentencePairs.isEmpty()) {
-              List<LanguageToolRuleMatch> ignoreMatches = new ArrayList<>();
+              List<RuleMatch> ignoreMatches = new ArrayList<>();
 
-              for (LanguageToolRuleMatch match : result) {
+              for (RuleMatch match : result) {
                 if (match.getSentence() != null) {
-                  String ruleId = match.getRuleId();
-                  String sentence = match.getSentence().trim();
+                  String ruleId = match.getRule().getId();
+                  String sentence = match.getSentence().getText().trim();
 
                   for (IgnoreRuleSentencePair pair : ignoreRuleSentencePairs) {
                     if (pair.getRuleId().equals(ruleId) &&
@@ -555,12 +637,12 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
                 Tools.logger.info((ignoreMatches.size() == 1) ?
                     Tools.i18n("removedIgnoredRuleMatch") :
                     Tools.i18n("removedIgnoredRuleMatches", ignoreMatches.size()));
-                for (LanguageToolRuleMatch match : ignoreMatches) result.remove(match);
+                for (RuleMatch match : ignoreMatches) result.remove(match);
               }
             }
 
             return new Pair<>(result, annotatedText);
-          } catch (RuntimeException e) {
+          } catch (RuntimeException | IOException e) {
             Tools.logger.severe(Tools.i18n("languageToolFailed", e.getMessage()));
             e.printStackTrace();
             return new Pair<>(Collections.emptyList(), annotatedText);
@@ -599,12 +681,12 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
     if (newSettings.equals(oldSettings)) {
       settings = oldSettings;
-      languageToolInterface = languageToolInterfaceMap.get(newLanguage);
+      languageTool = languageToolMap.get(newLanguage);
     } else {
       settingsMap.put(newLanguage, newSettings);
       settings = newSettings;
       reinitialize();
-      languageToolInterfaceMap.put(newLanguage, languageToolInterface);
+      languageToolMap.put(newLanguage, languageTool);
     }
   }
 
