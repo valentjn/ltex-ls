@@ -22,7 +22,7 @@ subprojects {
   apply plugin: 'java'
 }
 
-project(':languagetool-patch') {
+project(':ltex-ls-languagetool-patch') {
   repositories {
     jcenter()
   }
@@ -40,7 +40,7 @@ project(':languagetool-patch') {
 }
 
 dependencies {
-  compile project(':languagetool-patch')
+  compile project(':ltex-ls-languagetool-patch')
 
   testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.1'
 

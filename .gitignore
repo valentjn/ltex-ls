@@ -6,9 +6,9 @@
 /bin/
 /build/
 
-/languagetool-patch/.classpath
-/languagetool-patch/.project
+/ltex-ls-languagetool-patch/.classpath
+/ltex-ls-languagetool-patch/.project
 
-/languagetool-patch/.settings/
-/languagetool-patch/bin/
-/languagetool-patch/build/
+/ltex-ls-languagetool-patch/.settings/
+/ltex-ls-languagetool-patch/bin/
+/ltex-ls-languagetool-patch/build/
