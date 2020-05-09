@@ -73,3 +73,9 @@ sourceSets {
 
 // Define the main class for the application
 mainClassName = 'LanguageToolLanguageServerLauncher'
+
+jar {
+  manifest {
+    attributes('Main-Class': 'LanguageToolLanguageServerLauncher')
+  }
+}
