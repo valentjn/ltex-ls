@@ -1,4 +1,4 @@
-package org.bsplines.languagetool_languageserver.markdown;
+package org.bsplines.ltex_ls.markdown;
 
 import com.vladsch.flexmark.util.ast.Node;
 

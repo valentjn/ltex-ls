@@ -1,4 +1,4 @@
-package org.bsplines.languagetool_languageserver;
+package org.bsplines.ltex_ls;
 
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;

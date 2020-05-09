@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/languagetool-languageserver.iml" filepath="$PROJECT_DIR$/.idea/modules/languagetool-languageserver.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/languagetool-languageserver_main.iml" filepath="$PROJECT_DIR$/.idea/modules/languagetool-languageserver_main.iml" group="languagetool-languageserver" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/languagetool-languageserver_test.iml" filepath="$PROJECT_DIR$/.idea/modules/languagetool-languageserver_test.iml" group="languagetool-languageserver" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ltex-ls.iml" filepath="$PROJECT_DIR$/.idea/modules/ltex-ls.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ltex-ls_main.iml" filepath="$PROJECT_DIR$/.idea/modules/ltex-ls_main.iml" group="ltex-ls" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ltex-ls_test.iml" filepath="$PROJECT_DIR$/.idea/modules/ltex-ls_test.iml" group="ltex-ls" />
     </modules>
   </component>
 </project>

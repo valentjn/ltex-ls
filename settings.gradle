@@ -15,5 +15,5 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'languagetool-languageserver'
+rootProject.name = 'ltex-ls'
 include 'languagetool-patch'

@@ -1,8 +1,8 @@
 # Acknowledgments
 
-languagetool-languageserver was originally written by [Adam Voss](https://github.com/adamvoss/languagetool-languageserver).
+The first version of LT<sub>E</sub>X Language Server was written by [Adam Voss](https://github.com/adamvoss/languagetool-languageserver).
 
-languagetool-languageserver uses third-party libraries or other resources that may be distributed under licenses different than itself.
+LT<sub>E</sub>X Language Server uses third-party libraries or other resources that may be distributed under licenses different than itself.
 
 In the event that we accidentally failed to list a required notice, please bring it to our attention by opening an issue or pull request.
 

@@ -1,4 +1,4 @@
-import org.bsplines.languagetool_languageserver.LanguageToolLanguageServer;
+import org.bsplines.ltex_ls.LtexLanguageServer;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
@@ -6,10 +6,10 @@ import org.eclipse.lsp4j.services.LanguageClient;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-public class LanguageToolLanguageServerLauncher {
+public class LtexLanguageServerLauncher {
   public static void main(String[] args) {
     try {
-      LanguageToolLanguageServer server = new LanguageToolLanguageServer();
+      LtexLanguageServer server = new LtexLanguageServer();
       Launcher<LanguageClient> launcher = LSPLauncher.createServerLauncher(
           server, System.in, System.out);
 

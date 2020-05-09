@@ -1,4 +1,4 @@
-package org.bsplines.languagetool_languageserver.latex;
+package org.bsplines.ltex_ls.latex;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

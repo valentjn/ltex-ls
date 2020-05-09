@@ -1,4 +1,4 @@
-package org.bsplines.languagetool_languageserver;
+package org.bsplines.ltex_ls;
 
 import java.text.MessageFormat;
 import java.util.*;
@@ -6,7 +6,7 @@ import java.util.logging.*;
 
 public class Tools {
   private static ResourceBundle messages = null;
-  public static final Logger logger = Logger.getLogger("org.bsplines.languagetool_languageserver");
+  public static final Logger logger = Logger.getLogger("org.bsplines.ltex_ls");
 
   static {
     setDefaultLocale();

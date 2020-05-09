@@ -1,12 +1,12 @@
-package org.bsplines.languagetool_languageserver;
+package org.bsplines.ltex_ls;
 
 import com.google.gson.*;
 import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.parser.Parser;
 
 import org.apache.commons.text.StringEscapeUtils;
-import org.bsplines.languagetool_languageserver.latex.*;
-import org.bsplines.languagetool_languageserver.markdown.*;
+import org.bsplines.ltex_ls.latex.*;
+import org.bsplines.ltex_ls.markdown.*;
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.*;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-public class LanguageToolLanguageServer implements LanguageServer, LanguageClientAware {
+public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
   private HashMap<String, TextDocumentItem> documents = new HashMap<>();
   private LanguageClient client = null;
@@ -444,7 +444,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
 
       private void publishIssues(String uri) {
         TextDocumentItem document = documents.get(uri);
-        LanguageToolLanguageServer.this.publishIssues(document);
+        LtexLanguageServer.this.publishIssues(document);
       }
     };
   }
@@ -657,7 +657,7 @@ public class LanguageToolLanguageServer implements LanguageServer, LanguageClien
       public void didChangeConfiguration(DidChangeConfigurationParams params) {
         super.didChangeConfiguration(params);
         setSettings(((JsonObject) params.getSettings()).get("ltex"));
-        documents.values().forEach(LanguageToolLanguageServer.this::publishIssues);
+        documents.values().forEach(LtexLanguageServer.this::publishIssues);
       }
 
       @Override

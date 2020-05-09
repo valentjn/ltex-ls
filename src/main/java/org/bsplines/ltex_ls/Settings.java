@@ -1,4 +1,4 @@
-package org.bsplines.languagetool_languageserver;
+package org.bsplines.ltex_ls;
 
 import java.util.ArrayList;
 import java.util.Arrays;

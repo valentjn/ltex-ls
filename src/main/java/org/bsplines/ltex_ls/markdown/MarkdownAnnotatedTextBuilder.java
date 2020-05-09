@@ -1,4 +1,4 @@
-package org.bsplines.languagetool_languageserver.markdown;
+package org.bsplines.ltex_ls.markdown;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.Stack;
 import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.ast.Node;
 
-import org.bsplines.languagetool_languageserver.Tools;
+import org.bsplines.ltex_ls.Tools;
 import org.languagetool.markup.AnnotatedText;
 
 public class MarkdownAnnotatedTextBuilder {

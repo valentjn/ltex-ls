@@ -1,7 +1,7 @@
-package org.bsplines.languagetool_languageserver.latex;
+package org.bsplines.ltex_ls.latex;
 
 import org.apache.commons.text.StringEscapeUtils;
-import org.bsplines.languagetool_languageserver.Tools;
+import org.bsplines.ltex_ls.Tools;
 import org.languagetool.markup.AnnotatedText;
 
 import java.util.ArrayList;
