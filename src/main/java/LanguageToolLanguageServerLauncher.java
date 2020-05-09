@@ -10,7 +10,7 @@ import java.net.Socket;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-public class App {
+public class LanguageToolLanguageServerLauncher {
   public static void main(String[] args) {
     String port = args[0];
     Socket socket = null;
