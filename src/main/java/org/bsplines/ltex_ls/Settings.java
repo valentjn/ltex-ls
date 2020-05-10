@@ -10,10 +10,11 @@ import org.eclipse.lsp4j.DiagnosticSeverity;
 
 public class Settings {
   private String languageShortCode = null;
-  private DiagnosticSeverity diagnosticSeverity = null;
   private List<String> dictionary = null;
   private List<String> disabledRules = null;
   private List<String> enabledRules = null;
+  private Integer initialJavaHeapSize = null;
+  private Integer maximumJavaHeapSize = null;
   private List<String> dummyCommandPrototypes = null;
   private List<String> ignoreCommandPrototypes = null;
   private List<String> ignoreEnvironments = null;
@@ -24,9 +25,8 @@ public class Settings {
   private String languageModelRulesDirectory = null;
   private String neuralNetworkModelRulesDirectory = null;
   private String word2VecModelRulesDirectory = null;
-  private Integer initialJavaHeapSize = null;
-  private Integer maximumJavaHeapSize = null;
   private Integer sentenceCacheSize = null;
+  private DiagnosticSeverity diagnosticSeverity = null;
 
   public Settings() {
   }
@@ -57,46 +57,69 @@ public class Settings {
     }
 
     try {
-      String diagnosticSeverityString =
-          getSettingFromJSON(jsonSettings, "diagnosticSeverity").getAsString();
-
-      if (diagnosticSeverityString.equals("error")) {
-        diagnosticSeverity = DiagnosticSeverity.Error;
-      } else if (diagnosticSeverityString.equals("warning")) {
-        diagnosticSeverity = DiagnosticSeverity.Warning;
-      } else if (diagnosticSeverityString.equals("information")) {
-        diagnosticSeverity = DiagnosticSeverity.Information;
-      } else if (diagnosticSeverityString.equals("hint")) {
-        diagnosticSeverity = DiagnosticSeverity.Hint;
-      } else {
-        diagnosticSeverity = null;
-      }
-    } catch (NullPointerException | UnsupportedOperationException e) {
-      diagnosticSeverity = null;
-    }
-
-    try {
       dictionary = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings, languageShortCode + ".dictionary").
-          getAsJsonArray());
+          getSettingFromJSON(jsonSettings,
+          "languageSettings." + languageShortCode + ".dictionary").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException e) {
-      dictionary = null;
+      try {
+        dictionary = convertJsonArrayToList(
+            getSettingFromJSON(jsonSettings,
+            languageShortCode + ".dictionary").getAsJsonArray());
+      } catch (NullPointerException | UnsupportedOperationException e2) {
+        dictionary = null;
+      }
     }
 
     try {
       disabledRules = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings, languageShortCode + ".disabledRules").
-          getAsJsonArray());
+          getSettingFromJSON(jsonSettings,
+          "languageSettings." + languageShortCode + ".disabledRules").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException e) {
-      disabledRules = null;
+      try {
+        disabledRules = convertJsonArrayToList(
+            getSettingFromJSON(jsonSettings,
+            languageShortCode + ".disabledRules").getAsJsonArray());
+      } catch (NullPointerException | UnsupportedOperationException e2) {
+        disabledRules = null;
+      }
     }
 
     try {
       enabledRules = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings, languageShortCode + ".enabledRules").
-          getAsJsonArray());
+          getSettingFromJSON(jsonSettings,
+          "languageSettings." + languageShortCode + ".enabledRules").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException e) {
-      enabledRules = null;
+      try {
+        enabledRules = convertJsonArrayToList(
+            getSettingFromJSON(jsonSettings,
+            languageShortCode + ".enabledRules").getAsJsonArray());
+      } catch (NullPointerException | UnsupportedOperationException e2) {
+        enabledRules = null;
+      }
+    }
+
+    try {
+      initialJavaHeapSize = getSettingFromJSON(
+          jsonSettings, "java.initialHeapSize").getAsInt();
+    } catch (NullPointerException | UnsupportedOperationException e) {
+      try {
+        initialJavaHeapSize = getSettingFromJSON(
+            jsonSettings, "performance.initialJavaHeapSize").getAsInt();
+      } catch (NullPointerException | UnsupportedOperationException e2) {
+        initialJavaHeapSize = null;
+      }
+    }
+
+    try {
+      maximumJavaHeapSize = getSettingFromJSON(
+          jsonSettings, "java.maximumHeapSize").getAsInt();
+    } catch (NullPointerException | UnsupportedOperationException e) {
+      try {
+        maximumJavaHeapSize = getSettingFromJSON(
+            jsonSettings, "performance.maximumJavaHeapSize").getAsInt();
+      } catch (NullPointerException | UnsupportedOperationException e2) {
+        maximumJavaHeapSize = null;
+      }
     }
 
     try {
@@ -176,24 +199,34 @@ public class Settings {
     }
 
     try {
-      initialJavaHeapSize = getSettingFromJSON(
-          jsonSettings, "performance.initialJavaHeapSize").getAsInt();
-    } catch (NullPointerException | UnsupportedOperationException e) {
-      initialJavaHeapSize = null;
-    }
-
-    try {
-      maximumJavaHeapSize = getSettingFromJSON(
-          jsonSettings, "performance.maximumJavaHeapSize").getAsInt();
-    } catch (NullPointerException | UnsupportedOperationException e) {
-      maximumJavaHeapSize = null;
-    }
-
-    try {
       sentenceCacheSize = getSettingFromJSON(
-          jsonSettings, "performance.sentenceCacheSize").getAsInt();
+          jsonSettings, "sentenceCacheSize").getAsInt();
     } catch (NullPointerException | UnsupportedOperationException e) {
-      sentenceCacheSize = null;
+      try {
+        sentenceCacheSize = getSettingFromJSON(
+            jsonSettings, "performance.sentenceCacheSize").getAsInt();
+      } catch (NullPointerException | UnsupportedOperationException e2) {
+        sentenceCacheSize = null;
+      }
+    }
+
+    try {
+      String diagnosticSeverityString =
+          getSettingFromJSON(jsonSettings, "diagnosticSeverity").getAsString();
+
+      if (diagnosticSeverityString.equals("error")) {
+        diagnosticSeverity = DiagnosticSeverity.Error;
+      } else if (diagnosticSeverityString.equals("warning")) {
+        diagnosticSeverity = DiagnosticSeverity.Warning;
+      } else if (diagnosticSeverityString.equals("information")) {
+        diagnosticSeverity = DiagnosticSeverity.Information;
+      } else if (diagnosticSeverityString.equals("hint")) {
+        diagnosticSeverity = DiagnosticSeverity.Hint;
+      } else {
+        diagnosticSeverity = null;
+      }
+    } catch (NullPointerException | UnsupportedOperationException e) {
+      diagnosticSeverity = null;
     }
   }
 
@@ -202,10 +235,11 @@ public class Settings {
     Settings obj = new Settings();
 
     obj.languageShortCode = languageShortCode;
-    obj.diagnosticSeverity = ((diagnosticSeverity == null) ? null : diagnosticSeverity);
     obj.dictionary = ((dictionary == null) ? null : new ArrayList<>(dictionary));
     obj.disabledRules = ((disabledRules == null) ? null : new ArrayList<>(disabledRules));
     obj.enabledRules = ((enabledRules == null) ? null : new ArrayList<>(enabledRules));
+    obj.initialJavaHeapSize = initialJavaHeapSize;
+    obj.maximumJavaHeapSize = maximumJavaHeapSize;
     obj.dummyCommandPrototypes = ((dummyCommandPrototypes == null) ? null :
         new ArrayList<>(dummyCommandPrototypes));
     obj.ignoreCommandPrototypes = ((ignoreCommandPrototypes == null) ? null :
@@ -222,9 +256,8 @@ public class Settings {
     obj.languageModelRulesDirectory = languageModelRulesDirectory;
     obj.neuralNetworkModelRulesDirectory = neuralNetworkModelRulesDirectory;
     obj.word2VecModelRulesDirectory = word2VecModelRulesDirectory;
-    obj.initialJavaHeapSize = initialJavaHeapSize;
-    obj.maximumJavaHeapSize = maximumJavaHeapSize;
     obj.sentenceCacheSize = sentenceCacheSize;
+    obj.diagnosticSeverity = ((diagnosticSeverity == null) ? null : diagnosticSeverity);
 
     return obj;
   }
@@ -236,11 +269,6 @@ public class Settings {
 
     if ((languageShortCode == null) ? (other.languageShortCode != null) :
           !languageShortCode.equals(other.languageShortCode)) {
-      return false;
-    }
-
-    if ((diagnosticSeverity == null) ? (other.diagnosticSeverity != null) :
-          (diagnosticSeverity != other.diagnosticSeverity)) {
       return false;
     }
 
@@ -256,6 +284,16 @@ public class Settings {
 
     if ((enabledRules == null) ? (other.enabledRules != null) :
           !enabledRules.equals(other.enabledRules)) {
+      return false;
+    }
+
+    if ((initialJavaHeapSize == null) ? (other.initialJavaHeapSize != null) :
+          !initialJavaHeapSize.equals(other.initialJavaHeapSize)) {
+      return false;
+    }
+
+    if ((maximumJavaHeapSize == null) ? (other.maximumJavaHeapSize != null) :
+          !maximumJavaHeapSize.equals(other.maximumJavaHeapSize)) {
       return false;
     }
 
@@ -310,18 +348,13 @@ public class Settings {
       return false;
     }
 
-    if ((initialJavaHeapSize == null) ? (other.initialJavaHeapSize != null) :
-          !initialJavaHeapSize.equals(other.initialJavaHeapSize)) {
-      return false;
-    }
-
-    if ((maximumJavaHeapSize == null) ? (other.maximumJavaHeapSize != null) :
-          !maximumJavaHeapSize.equals(other.maximumJavaHeapSize)) {
-      return false;
-    }
-
     if ((sentenceCacheSize == null) ? (other.sentenceCacheSize != null) :
           !sentenceCacheSize.equals(other.sentenceCacheSize)) {
+      return false;
+    }
+
+    if ((diagnosticSeverity == null) ? (other.diagnosticSeverity != null) :
+          (diagnosticSeverity != other.diagnosticSeverity)) {
       return false;
     }
 
@@ -333,10 +366,13 @@ public class Settings {
     int hash = 3;
 
     hash = 53 * hash + ((languageShortCode != null) ? languageShortCode.hashCode() : 0);
-    hash = 53 * hash + ((diagnosticSeverity != null) ? diagnosticSeverity.hashCode() : 0);
     hash = 53 * hash + ((dictionary != null) ? dictionary.hashCode() : 0);
     hash = 53 * hash + ((disabledRules != null) ? disabledRules.hashCode() : 0);
     hash = 53 * hash + ((enabledRules != null) ? enabledRules.hashCode() : 0);
+    hash = 53 * hash + ((initialJavaHeapSize != null) ?
+        initialJavaHeapSize.hashCode() : 0);
+    hash = 53 * hash + ((maximumJavaHeapSize != null) ?
+        maximumJavaHeapSize.hashCode() : 0);
     hash = 53 * hash + ((dummyCommandPrototypes != null) ? dummyCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreCommandPrototypes != null) ? ignoreCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreEnvironments != null) ? ignoreEnvironments.hashCode() : 0);
@@ -352,12 +388,9 @@ public class Settings {
         neuralNetworkModelRulesDirectory.hashCode() : 0);
     hash = 53 * hash + ((word2VecModelRulesDirectory != null) ?
         word2VecModelRulesDirectory.hashCode() : 0);
-    hash = 53 * hash + ((initialJavaHeapSize != null) ?
-        initialJavaHeapSize.hashCode() : 0);
-    hash = 53 * hash + ((maximumJavaHeapSize != null) ?
-        maximumJavaHeapSize.hashCode() : 0);
     hash = 53 * hash + ((sentenceCacheSize != null) ?
         sentenceCacheSize.hashCode() : 0);
+    hash = 53 * hash + ((diagnosticSeverity != null) ? diagnosticSeverity.hashCode() : 0);
 
     return hash;
   }
@@ -370,10 +403,6 @@ public class Settings {
     return getDefault(languageShortCode, "en-US");
   }
 
-  public DiagnosticSeverity getDiagnosticSeverity() {
-    return getDefault(diagnosticSeverity, DiagnosticSeverity.Information);
-  }
-
   public List<String> getDictionary() {
     return getDefault(dictionary, Collections.emptyList());
   }
@@ -384,6 +413,14 @@ public class Settings {
 
   public List<String> getEnabledRules() {
     return getDefault(enabledRules, Collections.emptyList());
+  }
+
+  public Integer getInitialJavaHeapSize() {
+    return getDefault(initialJavaHeapSize, null);
+  }
+
+  public Integer getMaximumJavaHeapSize() {
+    return getDefault(maximumJavaHeapSize, null);
   }
 
   public List<String> getDummyCommandPrototypes() {
@@ -428,15 +465,11 @@ public class Settings {
     return getDefault(word2VecModelRulesDirectory, null);
   }
 
-  public Integer getInitialJavaHeapSize() {
-    return getDefault(initialJavaHeapSize, null);
-  }
-
-  public Integer getMaximumJavaHeapSize() {
-    return getDefault(maximumJavaHeapSize, null);
-  }
-
   public Integer getSentenceCacheSize() {
     return getDefault(sentenceCacheSize, 2000);
+  }
+
+  public DiagnosticSeverity getDiagnosticSeverity() {
+    return getDefault(diagnosticSeverity, DiagnosticSeverity.Information);
   }
 }
