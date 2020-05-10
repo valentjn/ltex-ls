@@ -51,6 +51,11 @@ dependencies {
   compile group: 'org.languagetool', name: 'languagetool-core', version: '4.9'
   compile group: 'org.languagetool', name: 'language-all', version: '4.9'
 
+  // prevent "Failed to load class org.slf4j.impl.StaticLoggerBinder",
+  // see http://www.slf4j.org/codes.html#StaticLoggerBinder
+  // (slf4j-api 1.7.25 is a dependency of LanguageTool)
+  compile group: 'org.slf4j', name: 'slf4j-nop', version: '1.7.25'
+
   // Language Server Protocol implementation
   compile group: 'org.eclipse.lsp4j', name: 'org.eclipse.lsp4j', version: '0.9.0'
 
