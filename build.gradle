@@ -47,13 +47,17 @@ dependencies {
   // Enabling makes the Gradle plugin work but breaks IDEA
   testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.1'
 
+  // LanguageTool
   compile group: 'org.languagetool', name: 'languagetool-core', version: '4.9'
   compile group: 'org.languagetool', name: 'language-all', version: '4.9'
 
-  // This dependency is found on compile classpath of this component and consumers.
+  // Language Server Protocol implementation
   compile group: 'org.eclipse.lsp4j', name: 'org.eclipse.lsp4j', version: '0.9.0'
 
+  // Markdown parser
   compile group: 'com.vladsch.flexmark', name: 'flexmark', version: '0.60.2'
+
+  // unit tests
   compile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.1'
 }
 
