@@ -1,28 +1,26 @@
-os: linux
-
-dist: bionic
-
-language: java
-
-jdk:
-  - oraclejdk11
-
-script:
-  - ./gradlew assemble check installDist
-
-before_deploy:
-  - export LTEX_LS_VERSION="$(./gradlew properties --no-daemon --console=plain -q | grep "version:" | awk '{print $2}')"
-  - mv build/install/ltex-ls "build/install/ltex-ls-$LTEX_LS_VERSION"
-  - tar -zcf "build/install/ltex-ls-$LTEX_LS_VERSION.tar.gz" -C build/install "ltex-ls-$LTEX_LS_VERSION"
-
-deploy:
-  provider: releases
-  token:
-    secure: Nko2QCyl3KA/V82aRRoyyOiAvUSGQ30hGpYAfkph/KRYSYwu7EPWMd1FhhBiIaRTCu8fNGpZ4yHvEUVmY7sBYEwSuX7euYzSOuc3zI5quHK/eIfd3livHwrIPlZqIiPCyaTqWn1bFl7IAzpKR5PC/sJvdDZzjsZYHg1EvSLGniLJ6N09ipZsIisOdE+nC/wGA4SWAIK6y+av8BPIzeTaA9V80zdfseWJVsFVGCuWhBBWHzMIl23NtntHij9gM3UznkXHB6NDnntRdNgQ3H/OYSqqjFBPS4wZhIHTCv7QNS5hBan2lxAFH+ahhkJJ/ln3Y9zktwfKMTUghoDTQS5fNVqJ+U4lcpb9+OTEBIb3FS4CuD5SMLK8EZ3HYu5Jx7Hf9jfwdhq0HmAZKYhc0BujKIHyn9LnVZvvdBek/Zi1YpUPMQ8ebk6x0ZPsMcDmsRsTgQw4mw7J+XB+Ot04e9azZgQEmaTu1/BeMfix7lBIV/FvzHM5LcC75ZZeMfdRl/DTbqTrtErqpqS2WbhcEwS6XQN8SeZdqyuB1Su9GSjQyvjtfCYOTwuG6oo3l//mqqPkteJFf/Mu2mjXlxHwhsanL4uDz5QDMOozTYNGT6Rsvq7nhItnY7gHBVivFAu2E3kEohRTyQhxwjVOhsPM01r8tqgCpEBlqvIqaaPen17tIlw=
-  file: build/install/ltex-ls-$LTEX_LS_VERSION.tar.gz
-  # needs to be removed for Travis's dpl v2
-  # see https://blog.travis-ci.com/2019-08-27-deployment-tooling-dpl-v2-preview-release#cleaning-up-the-git-working-directory
-  skip_cleanup: true
-  on:
-    repo: valentjn/ltex-ls
-    tags: true
+{
+  "os": "linux",
+  "dist": "bionic",
+  "language": "java",
+  "jdk": "oraclejdk11",
+  "script": "./gradlew assemble check installDist",
+  "before_deploy": [
+    "export LTEX_LS_VERSION=\"$(./gradlew properties --no-daemon --console=plain -q | grep \"version:\" | awk '{print $2}')\"",
+    "mv build/install/ltex-ls \"build/install/ltex-ls-$LTEX_LS_VERSION\"",
+    "tar -zcf \"build/install/ltex-ls-$LTEX_LS_VERSION.tar.gz\" -C build/install \"ltex-ls-$LTEX_LS_VERSION\""
+  ],
+  "deploy": {
+    "provider": "releases",
+    "token": {
+      "secure": "Nko2QCyl3KA/V82aRRoyyOiAvUSGQ30hGpYAfkph/KRYSYwu7EPWMd1FhhBiIaRTCu8fNGpZ4yHvEUVmY7sBYEwSuX7euYzSOuc3zI5quHK/eIfd3livHwrIPlZqIiPCyaTqWn1bFl7IAzpKR5PC/sJvdDZzjsZYHg1EvSLGniLJ6N09ipZsIisOdE+nC/wGA4SWAIK6y+av8BPIzeTaA9V80zdfseWJVsFVGCuWhBBWHzMIl23NtntHij9gM3UznkXHB6NDnntRdNgQ3H/OYSqqjFBPS4wZhIHTCv7QNS5hBan2lxAFH+ahhkJJ/ln3Y9zktwfKMTUghoDTQS5fNVqJ+U4lcpb9+OTEBIb3FS4CuD5SMLK8EZ3HYu5Jx7Hf9jfwdhq0HmAZKYhc0BujKIHyn9LnVZvvdBek/Zi1YpUPMQ8ebk6x0ZPsMcDmsRsTgQw4mw7J+XB+Ot04e9azZgQEmaTu1/BeMfix7lBIV/FvzHM5LcC75ZZeMfdRl/DTbqTrtErqpqS2WbhcEwS6XQN8SeZdqyuB1Su9GSjQyvjtfCYOTwuG6oo3l//mqqPkteJFf/Mu2mjXlxHwhsanL4uDz5QDMOozTYNGT6Rsvq7nhItnY7gHBVivFAu2E3kEohRTyQhxwjVOhsPM01r8tqgCpEBlqvIqaaPen17tIlw="
+    },
+    "file": "build/install/ltex-ls-$LTEX_LS_VERSION.tar.gz",
+    # needs to be removed for Travis's dpl v2
+    # see https://blog.travis-ci.com/2019-08-27-deployment-tooling-dpl-v2-preview-release#cleaning-up-the-git-working-directory
+    "skip_cleanup": true,
+    "on": {
+      "repo": "valentjn/ltex-ls",
+      "tags": true
+    }
+  }
+}
