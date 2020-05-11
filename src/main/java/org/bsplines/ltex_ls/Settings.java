@@ -13,8 +13,6 @@ public class Settings {
   private List<String> dictionary = null;
   private List<String> disabledRules = null;
   private List<String> enabledRules = null;
-  private Integer initialJavaHeapSize = null;
-  private Integer maximumJavaHeapSize = null;
   private List<String> dummyCommandPrototypes = null;
   private List<String> ignoreCommandPrototypes = null;
   private List<String> ignoreEnvironments = null;
@@ -102,30 +100,6 @@ public class Settings {
           languageShortCode + ".enabledRules").getAsJsonArray());
       if (deprecatedEnabledRules != null) enabledRules.addAll(deprecatedEnabledRules);
     } catch (NullPointerException | UnsupportedOperationException e) {
-    }
-
-    try {
-      initialJavaHeapSize = getSettingFromJSON(
-          jsonSettings, "java.initialHeapSize").getAsInt();
-    } catch (NullPointerException | UnsupportedOperationException e) {
-      try {
-        initialJavaHeapSize = getSettingFromJSON(
-            jsonSettings, "performance.initialJavaHeapSize").getAsInt();
-      } catch (NullPointerException | UnsupportedOperationException e2) {
-        initialJavaHeapSize = null;
-      }
-    }
-
-    try {
-      maximumJavaHeapSize = getSettingFromJSON(
-          jsonSettings, "java.maximumHeapSize").getAsInt();
-    } catch (NullPointerException | UnsupportedOperationException e) {
-      try {
-        maximumJavaHeapSize = getSettingFromJSON(
-            jsonSettings, "performance.maximumJavaHeapSize").getAsInt();
-      } catch (NullPointerException | UnsupportedOperationException e2) {
-        maximumJavaHeapSize = null;
-      }
     }
 
     try {
@@ -244,8 +218,6 @@ public class Settings {
     obj.dictionary = ((dictionary == null) ? null : new ArrayList<>(dictionary));
     obj.disabledRules = ((disabledRules == null) ? null : new ArrayList<>(disabledRules));
     obj.enabledRules = ((enabledRules == null) ? null : new ArrayList<>(enabledRules));
-    obj.initialJavaHeapSize = initialJavaHeapSize;
-    obj.maximumJavaHeapSize = maximumJavaHeapSize;
     obj.dummyCommandPrototypes = ((dummyCommandPrototypes == null) ? null :
         new ArrayList<>(dummyCommandPrototypes));
     obj.ignoreCommandPrototypes = ((ignoreCommandPrototypes == null) ? null :
@@ -290,16 +262,6 @@ public class Settings {
 
     if ((enabledRules == null) ? (other.enabledRules != null) :
           !enabledRules.equals(other.enabledRules)) {
-      return false;
-    }
-
-    if ((initialJavaHeapSize == null) ? (other.initialJavaHeapSize != null) :
-          !initialJavaHeapSize.equals(other.initialJavaHeapSize)) {
-      return false;
-    }
-
-    if ((maximumJavaHeapSize == null) ? (other.maximumJavaHeapSize != null) :
-          !maximumJavaHeapSize.equals(other.maximumJavaHeapSize)) {
       return false;
     }
 
@@ -375,10 +337,6 @@ public class Settings {
     hash = 53 * hash + ((dictionary != null) ? dictionary.hashCode() : 0);
     hash = 53 * hash + ((disabledRules != null) ? disabledRules.hashCode() : 0);
     hash = 53 * hash + ((enabledRules != null) ? enabledRules.hashCode() : 0);
-    hash = 53 * hash + ((initialJavaHeapSize != null) ?
-        initialJavaHeapSize.hashCode() : 0);
-    hash = 53 * hash + ((maximumJavaHeapSize != null) ?
-        maximumJavaHeapSize.hashCode() : 0);
     hash = 53 * hash + ((dummyCommandPrototypes != null) ? dummyCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreCommandPrototypes != null) ? ignoreCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreEnvironments != null) ? ignoreEnvironments.hashCode() : 0);
@@ -419,14 +377,6 @@ public class Settings {
 
   public List<String> getEnabledRules() {
     return getDefault(enabledRules, Collections.emptyList());
-  }
-
-  public Integer getInitialJavaHeapSize() {
-    return getDefault(initialJavaHeapSize, null);
-  }
-
-  public Integer getMaximumJavaHeapSize() {
-    return getDefault(maximumJavaHeapSize, null);
   }
 
   public List<String> getDummyCommandPrototypes() {
