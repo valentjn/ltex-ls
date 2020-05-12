@@ -1,18 +1,10 @@
 plugins {
   id 'java'
-  id 'idea'
   id 'application'
 }
 
 group 'valentjn'
 version '4.9.3'
-
-idea {
-  module {
-    downloadJavadoc = true
-    downloadSources = true
-  }
-}
 
 repositories {
   jcenter()
@@ -43,8 +35,6 @@ dependencies {
   compile project(':ltex-ls-languagetool-patch')
 
   testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.1'
-
-  // Enabling makes the Gradle plugin work but breaks IDEA
   testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.1'
 
   // LanguageTool
