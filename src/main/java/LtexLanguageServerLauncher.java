@@ -8,8 +8,15 @@ import java.util.concurrent.Future;
 
 public class LtexLanguageServerLauncher {
   public static void main(String[] args) {
+    LtexLanguageServer server = new LtexLanguageServer();
+
+    for (String arg : args) {
+      if (arg.equals("--test")) {
+        System.exit(42);
+      }
+    }
+
     try {
-      LtexLanguageServer server = new LtexLanguageServer();
       Launcher<LanguageClient> launcher = LSPLauncher.createServerLauncher(
           server, System.in, System.out);
 
