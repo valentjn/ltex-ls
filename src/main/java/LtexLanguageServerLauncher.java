@@ -27,6 +27,7 @@ public class LtexLanguageServerLauncher {
       listener.get();
     } catch (InterruptedException | ExecutionException e) {
       e.printStackTrace();
+      System.exit(1);
     }
   }
 }
