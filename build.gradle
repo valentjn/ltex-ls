@@ -74,10 +74,11 @@ sourceSets {
 // Define the main class for the application
 mainClassName = 'LtexLanguageServerLauncher'
 
+// set JAR manifest attributes
 jar {
   manifest {
     attributes(
-      'Main-Class': 'LtexLanguageServerLauncher',
+      'Main-Class': mainClassName,
       'Implementation-Version': version,
     )
   }
