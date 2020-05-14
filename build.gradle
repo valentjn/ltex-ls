@@ -83,3 +83,20 @@ jar {
     )
   }
 }
+
+// replace CLASSPATH variable in bin/ scripts to use a wildcard instead of listing all JARs
+// as the resulting command line is too long for Windows (and it's more legible)
+startScripts {
+  doLast {
+    unixScript.text = unixScript.readLines().collect({line ->
+      line = line.replaceAll(~/^CLASSPATH=.*$/) { match ->
+        match = 'CLASSPATH=$APP_HOME/lib/*'
+      }
+    }).join('\n')
+    windowsScript.text = windowsScript.readLines().collect({line ->
+      line = line.replaceAll(~/^set CLASSPATH=.*$/) { match ->
+        match = 'set CLASSPATH=%APP_HOME%\\lib\\*'
+      }
+    }).join('\r\n')
+  }
+}
