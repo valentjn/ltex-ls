@@ -76,6 +76,9 @@ mainClassName = 'LtexLanguageServerLauncher'
 
 jar {
   manifest {
-    attributes('Main-Class': 'LtexLanguageServerLauncher')
+    attributes(
+      'Main-Class': 'LtexLanguageServerLauncher',
+      'Implementation-Version': version,
+    )
   }
 }
