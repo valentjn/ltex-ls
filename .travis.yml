@@ -5,7 +5,7 @@
   "jdk": "oraclejdk11",
   "script": "./gradlew assemble check installDist",
   "before_deploy": [
-    "export LTEX_LS_VERSION=\"$(./gradlew properties --no-daemon --console=plain -q | grep \"version:\" | awk '{print $2}')\"",
+    "export LTEX_LS_VERSION=\"$(build/install/ltex-ls/bin/ltex-ls --version | awk '{print $NF}')\"",
     "mv build/install/ltex-ls \"build/install/ltex-ls-$LTEX_LS_VERSION\"",
     "tar -zcf \"build/install/ltex-ls-$LTEX_LS_VERSION.tar.gz\" -C build/install \"ltex-ls-$LTEX_LS_VERSION\""
   ],
