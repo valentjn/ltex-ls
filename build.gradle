@@ -3,8 +3,10 @@ plugins {
   id('application')
 }
 
-group('valentjn')
-version('4.9.3')
+allprojects {
+  group('valentjn')
+  version('4.9.3')
+}
 
 repositories {
   jcenter()
