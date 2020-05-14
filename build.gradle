@@ -1,17 +1,17 @@
 plugins {
-  id 'java'
-  id 'application'
+  id('java')
+  id('application')
 }
 
-group 'valentjn'
-version '4.9.3'
+group('valentjn')
+version('4.9.3')
 
 repositories {
   jcenter()
 }
 
 subprojects {
-  apply plugin: 'java'
+  apply(plugin: 'java')
 }
 
 project(':ltex-ls-languagetool-patch') {
@@ -20,40 +20,40 @@ project(':ltex-ls-languagetool-patch') {
   }
 
   dependencies {
-    compile group: 'org.languagetool', name: 'languagetool-core', version: '4.9'
+    compile(group: 'org.languagetool', name: 'languagetool-core', version: '4.9')
   }
 
   sourceSets {
     main {
       java.srcDirs = ['src/main/java']
-      java.include 'org/languagetool/**'
+      java.include('org/languagetool/**')
     }
   }
 }
 
 dependencies {
-  compile project(':ltex-ls-languagetool-patch')
+  compile(project(':ltex-ls-languagetool-patch'))
 
-  testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.1'
-  testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.1'
+  testCompile(group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.1')
+  testRuntime(group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.6.1')
 
   // LanguageTool
-  compile group: 'org.languagetool', name: 'languagetool-core', version: '4.9'
-  compile group: 'org.languagetool', name: 'language-all', version: '4.9'
+  compile(group: 'org.languagetool', name: 'languagetool-core', version: '4.9')
+  compile(group: 'org.languagetool', name: 'language-all', version: '4.9')
 
   // prevent "Failed to load class org.slf4j.impl.StaticLoggerBinder",
   // see http://www.slf4j.org/codes.html#StaticLoggerBinder
   // (slf4j-api 1.7.25 is a dependency of LanguageTool)
-  compile group: 'org.slf4j', name: 'slf4j-nop', version: '1.7.25'
+  compile(group: 'org.slf4j', name: 'slf4j-nop', version: '1.7.25')
 
   // Language Server Protocol implementation
-  compile group: 'org.eclipse.lsp4j', name: 'org.eclipse.lsp4j', version: '0.9.0'
+  compile(group: 'org.eclipse.lsp4j', name: 'org.eclipse.lsp4j', version: '0.9.0')
 
   // Markdown parser
-  compile group: 'com.vladsch.flexmark', name: 'flexmark', version: '0.60.2'
+  compile(group: 'com.vladsch.flexmark', name: 'flexmark', version: '0.60.2')
 
   // unit tests
-  compile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.1'
+  compile(group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.1')
 }
 
 test {
