@@ -8,15 +8,16 @@ import java.util.concurrent.Future;
 
 public class LtexLanguageServerLauncher {
   public static void main(String[] args) {
-    LtexLanguageServer server = new LtexLanguageServer();
-
     for (String arg : args) {
-      if (arg.equals("--test")) {
-        System.exit(42);
+      if (arg.equals("--version")) {
+        System.out.println("ltex-ls " +
+            LtexLanguageServer.class.getPackage().getImplementationVersion());
+        System.exit(0);
       }
     }
 
     try {
+      LtexLanguageServer server = new LtexLanguageServer();
       Launcher<LanguageClient> launcher = LSPLauncher.createServerLauncher(
           server, System.in, System.out);
 
@@ -25,6 +26,7 @@ public class LtexLanguageServerLauncher {
 
       Future<Void> listener = launcher.startListening();
       listener.get();
+      System.exit(0);
     } catch (InterruptedException | ExecutionException e) {
       e.printStackTrace();
       System.exit(1);
