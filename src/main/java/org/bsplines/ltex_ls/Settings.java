@@ -9,6 +9,11 @@ import com.google.gson.*;
 import org.eclipse.lsp4j.DiagnosticSeverity;
 
 public class Settings {
+  private static final List<String> defaultDummyMarkdownNodeTypes =
+      Arrays.asList("AutoLink", "Code");
+  private static final List<String> defaultIgnoreMarkdownNodeTypes =
+      Arrays.asList("CodeBlock", "FencedCodeBlock", "IndentedCodeBlock");
+
   private String languageShortCode = null;
   private List<String> dictionary = null;
   private List<String> disabledRules = null;
@@ -393,13 +398,11 @@ public class Settings {
   }
 
   public List<String> getDummyMarkdownNodeTypes() {
-    return getDefault(dummyMarkdownNodeTypes, Arrays.asList(
-        "AutoLink", "Code"));
+    return getDefault(dummyMarkdownNodeTypes, defaultDummyMarkdownNodeTypes);
   }
 
   public List<String> getIgnoreMarkdownNodeTypes() {
-    return getDefault(ignoreMarkdownNodeTypes, Arrays.asList(
-        "CodeBlock", "FencedCodeBlock", "IndentedCodeBlock"));
+    return getDefault(ignoreMarkdownNodeTypes, defaultIgnoreMarkdownNodeTypes);
   }
 
   public List<IgnoreRuleSentencePair> getIgnoreRuleSentencePairs() {
