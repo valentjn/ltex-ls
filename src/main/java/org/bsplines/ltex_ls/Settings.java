@@ -56,49 +56,46 @@ public class Settings {
 
     try {
       dictionary = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings,
-          "languageSettings." + languageShortCode + ".dictionary").getAsJsonArray());
+          getSettingFromJSON(jsonSettings, "dictionary").getAsJsonObject().
+          get(languageShortCode).getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException e) {
       dictionary = Collections.emptyList();
     }
 
     try {
-      List<String> deprecatedDictionary = convertJsonArrayToList(
+      dictionary.addAll(convertJsonArrayToList(
           getSettingFromJSON(jsonSettings,
-          languageShortCode + ".dictionary").getAsJsonArray());
-      if (deprecatedDictionary != null) dictionary.addAll(deprecatedDictionary);
+          languageShortCode + ".dictionary").getAsJsonArray()));
     } catch (NullPointerException | UnsupportedOperationException e) {
     }
 
     try {
       disabledRules = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings,
-          "languageSettings." + languageShortCode + ".disabledRules").getAsJsonArray());
+          getSettingFromJSON(jsonSettings, "disabledRules").getAsJsonObject().
+          get(languageShortCode).getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException e) {
       disabledRules = Collections.emptyList();
     }
 
     try {
-      List<String> deprecatedDisabledRules = convertJsonArrayToList(
+      disabledRules.addAll(convertJsonArrayToList(
           getSettingFromJSON(jsonSettings,
-          languageShortCode + ".disabledRules").getAsJsonArray());
-      if (deprecatedDisabledRules != null) disabledRules.addAll(deprecatedDisabledRules);
+          languageShortCode + ".disabledRules").getAsJsonArray()));
     } catch (NullPointerException | UnsupportedOperationException e) {
     }
 
     try {
       enabledRules = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings,
-          "languageSettings." + languageShortCode + ".enabledRules").getAsJsonArray());
+          getSettingFromJSON(jsonSettings, "enabledRules").getAsJsonObject().
+          get(languageShortCode).getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException e) {
       enabledRules = Collections.emptyList();
     }
 
     try {
-      List<String> deprecatedEnabledRules = convertJsonArrayToList(
+      enabledRules.addAll(convertJsonArrayToList(
           getSettingFromJSON(jsonSettings,
-          languageShortCode + ".enabledRules").getAsJsonArray());
-      if (deprecatedEnabledRules != null) enabledRules.addAll(deprecatedEnabledRules);
+          languageShortCode + ".enabledRules").getAsJsonArray()));
     } catch (NullPointerException | UnsupportedOperationException e) {
     }
 
