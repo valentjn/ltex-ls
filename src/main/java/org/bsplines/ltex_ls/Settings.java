@@ -59,7 +59,7 @@ public class Settings {
           getSettingFromJSON(jsonSettings, "dictionary").getAsJsonObject().
           get(languageShortCode).getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      dictionary = Collections.emptyList();
+      dictionary = new ArrayList<>();
     }
 
     try {
@@ -74,7 +74,7 @@ public class Settings {
           getSettingFromJSON(jsonSettings, "disabledRules").getAsJsonObject().
           get(languageShortCode).getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      disabledRules = Collections.emptyList();
+      disabledRules = new ArrayList<>();
     }
 
     try {
@@ -89,7 +89,7 @@ public class Settings {
           getSettingFromJSON(jsonSettings, "enabledRules").getAsJsonObject().
           get(languageShortCode).getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      enabledRules = Collections.emptyList();
+      enabledRules = new ArrayList<>();
     }
 
     try {
