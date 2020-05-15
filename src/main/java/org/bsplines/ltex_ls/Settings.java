@@ -50,7 +50,7 @@ public class Settings {
   public void setSettings(JsonElement jsonSettings) {
     try {
       languageShortCode = getSettingFromJSON(jsonSettings, "language").getAsString();
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       languageShortCode = null;
     }
 
@@ -58,7 +58,7 @@ public class Settings {
       dictionary = convertJsonArrayToList(
           getSettingFromJSON(jsonSettings, "dictionary").getAsJsonObject().
           get(languageShortCode).getAsJsonArray());
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       dictionary = Collections.emptyList();
     }
 
@@ -66,14 +66,14 @@ public class Settings {
       dictionary.addAll(convertJsonArrayToList(
           getSettingFromJSON(jsonSettings,
           languageShortCode + ".dictionary").getAsJsonArray()));
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
     }
 
     try {
       disabledRules = convertJsonArrayToList(
           getSettingFromJSON(jsonSettings, "disabledRules").getAsJsonObject().
           get(languageShortCode).getAsJsonArray());
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       disabledRules = Collections.emptyList();
     }
 
@@ -81,14 +81,14 @@ public class Settings {
       disabledRules.addAll(convertJsonArrayToList(
           getSettingFromJSON(jsonSettings,
           languageShortCode + ".disabledRules").getAsJsonArray()));
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
     }
 
     try {
       enabledRules = convertJsonArrayToList(
           getSettingFromJSON(jsonSettings, "enabledRules").getAsJsonObject().
           get(languageShortCode).getAsJsonArray());
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       enabledRules = Collections.emptyList();
     }
 
@@ -96,41 +96,41 @@ public class Settings {
       enabledRules.addAll(convertJsonArrayToList(
           getSettingFromJSON(jsonSettings,
           languageShortCode + ".enabledRules").getAsJsonArray()));
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
     }
 
     try {
       dummyCommandPrototypes = convertJsonArrayToList(
           getSettingFromJSON(jsonSettings, "commands.dummy").getAsJsonArray());
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       dummyCommandPrototypes = null;
     }
 
     try {
       ignoreCommandPrototypes = convertJsonArrayToList(
           getSettingFromJSON(jsonSettings, "commands.ignore").getAsJsonArray());
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       ignoreCommandPrototypes = null;
     }
 
     try {
       ignoreEnvironments = convertJsonArrayToList(
           getSettingFromJSON(jsonSettings, "environments.ignore").getAsJsonArray());
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       ignoreEnvironments = null;
     }
 
     try {
       dummyMarkdownNodeTypes = convertJsonArrayToList(
           getSettingFromJSON(jsonSettings, "markdown.dummy").getAsJsonArray());
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       dummyMarkdownNodeTypes = null;
     }
 
     try {
       ignoreMarkdownNodeTypes = convertJsonArrayToList(
           getSettingFromJSON(jsonSettings, "markdown.ignore").getAsJsonArray());
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       ignoreMarkdownNodeTypes = null;
     }
 
@@ -143,46 +143,46 @@ public class Settings {
         ignoreRuleSentencePairs.add(new IgnoreRuleSentencePair(
             elementObject.get("rule").getAsString(), elementObject.get("sentence").getAsString()));
       }
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       ignoreRuleSentencePairs = null;
     }
 
     try {
       motherTongueShortCode = getSettingFromJSON(
           jsonSettings, "additionalRules.motherTongue").getAsString();
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       motherTongueShortCode = null;
     }
 
     try {
       languageModelRulesDirectory = getSettingFromJSON(
           jsonSettings, "additionalRules.languageModel").getAsString();
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       languageModelRulesDirectory = null;
     }
 
     try {
       neuralNetworkModelRulesDirectory = getSettingFromJSON(
           jsonSettings, "additionalRules.neuralNetworkModel").getAsString();
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       neuralNetworkModelRulesDirectory = null;
     }
 
     try {
       word2VecModelRulesDirectory = getSettingFromJSON(
           jsonSettings, "additionalRules.word2VecModel").getAsString();
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       word2VecModelRulesDirectory = null;
     }
 
     try {
       sentenceCacheSize = getSettingFromJSON(
           jsonSettings, "sentenceCacheSize").getAsInt();
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       try {
         sentenceCacheSize = getSettingFromJSON(
             jsonSettings, "performance.sentenceCacheSize").getAsInt();
-      } catch (NullPointerException | UnsupportedOperationException e2) {
+      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e2) {
         sentenceCacheSize = null;
       }
     }
