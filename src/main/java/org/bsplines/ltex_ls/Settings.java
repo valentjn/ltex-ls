@@ -360,6 +360,10 @@ public class Settings {
     return ((obj != null) ? obj : default_);
   }
 
+  private static String getDefault(String obj, String default_) {
+    return (((obj != null) && !obj.isEmpty()) ? obj : default_);
+  }
+
   public String getLanguageShortCode() {
     return getDefault(languageShortCode, "en-US");
   }
