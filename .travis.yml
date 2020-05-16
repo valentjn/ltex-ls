@@ -7,12 +7,12 @@
   "before_deploy": [
     "export LTEX_LS_VERSION=\"$(build/install/ltex-ls/bin/ltex-ls --version | awk '{print $NF}')\"",
     "mv build/install/ltex-ls \"build/install/ltex-ls-$LTEX_LS_VERSION\"",
-    "tar -zcf \"build/install/ltex-ls-$LTEX_LS_VERSION.tar.gz\" -C build/install \"ltex-ls-$LTEX_LS_VERSION\""
+    "tar -zcf \"build/install/ltex-ls-$LTEX_LS_VERSION.tar.gz\" -C build/install \"ltex-ls-$LTEX_LS_VERSION\"",
   ],
   "deploy": {
     "provider": "releases",
     "token": {
-      "secure": "GM8rxr6a3tRUKwe8QG85wctWk3DIHBEfOlMZaXxahF3U7MNM8e01kpkkyUREGdF5/ARD4cknZRYBpkNiLgtEZzR8928OgBe5KRtEEubEjUvVrg0IoII+uCxa+OK3OhYvm31FQFnfSJjHSdxcXlHojUsYXttOI78VxiwdZk907yTHwaiR8jSUcU8lAy73i6wGzSLAeNOkyc6oDbSMMyQdJrS499mCOD2u6sO27Nptun52mbpmwpmHc6X2eKJ0JG2PCCkuCQnoxmfBA/qVCv5yEeQ3X3zfMkrg/Ad7mxmWzSVdJccCKl21v1FaZ6yURAQwvI5yuflf1+LCpRiAU92w/pUhbMAJCc7snOM5iBekdkvTVyYcfUlgI6C5NjST102GTZxvhcPq8cxjxlNi5aFIEhnRJBXNATQ5oHHO6kacm62OGJxkYCKAA4MILGSFLK8YtYrDKneLV98raHHSIa1YH/LKX6I0MbTHQlu1KFAA8YL0mnl8zts9DhUdjLH1YQNakPJSj0wg4vbeHMWHsPxRuufAXTE1eMx/rkETiZmz9fClSB5GJi3cvipbGGT3Kn357fDZ30+aRQJY1p3xcDAXD2xQa8CPFmhBcBTtA+lWj8/VYrtrEjusd4KFzefFsoorpnKAZ3luPK7E/LzANZT4jvEpS9XHPKHFRG+hY+4RGEM="
+      "secure": "GM8rxr6a3tRUKwe8QG85wctWk3DIHBEfOlMZaXxahF3U7MNM8e01kpkkyUREGdF5/ARD4cknZRYBpkNiLgtEZzR8928OgBe5KRtEEubEjUvVrg0IoII+uCxa+OK3OhYvm31FQFnfSJjHSdxcXlHojUsYXttOI78VxiwdZk907yTHwaiR8jSUcU8lAy73i6wGzSLAeNOkyc6oDbSMMyQdJrS499mCOD2u6sO27Nptun52mbpmwpmHc6X2eKJ0JG2PCCkuCQnoxmfBA/qVCv5yEeQ3X3zfMkrg/Ad7mxmWzSVdJccCKl21v1FaZ6yURAQwvI5yuflf1+LCpRiAU92w/pUhbMAJCc7snOM5iBekdkvTVyYcfUlgI6C5NjST102GTZxvhcPq8cxjxlNi5aFIEhnRJBXNATQ5oHHO6kacm62OGJxkYCKAA4MILGSFLK8YtYrDKneLV98raHHSIa1YH/LKX6I0MbTHQlu1KFAA8YL0mnl8zts9DhUdjLH1YQNakPJSj0wg4vbeHMWHsPxRuufAXTE1eMx/rkETiZmz9fClSB5GJi3cvipbGGT3Kn357fDZ30+aRQJY1p3xcDAXD2xQa8CPFmhBcBTtA+lWj8/VYrtrEjusd4KFzefFsoorpnKAZ3luPK7E/LzANZT4jvEpS9XHPKHFRG+hY+4RGEM=",
     },
     "file": "build/install/ltex-ls-$LTEX_LS_VERSION.tar.gz",
     # needs to be removed for Travis's dpl v2
@@ -20,7 +20,7 @@
     "skip_cleanup": true,
     "on": {
       "repo": "valentjn/ltex-ls",
-      "tags": true
-    }
-  }
+      "tags": true,
+    },
+  },
 }
