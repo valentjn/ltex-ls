@@ -102,3 +102,9 @@ startScripts {
     }).join('\r\n')
   }
 }
+
+// use .tar.gz instead of .tar
+tasks.withType(Tar) {
+  compression = Compression.GZIP
+  extension = 'tar.gz'
+}
