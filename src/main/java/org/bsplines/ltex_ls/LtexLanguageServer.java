@@ -248,7 +248,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
                     addToDictionaryCommandName);
                 JsonObject arguments = new JsonObject();
                 arguments.addProperty("type", "command");
-                arguments.addProperty("commandName", addToDictionaryCommandName);
+                arguments.addProperty("command", addToDictionaryCommandName);
                 arguments.addProperty("uri", document.getUri());
                 arguments.add("word", unknownWordsJson);
                 command.setArguments(Arrays.asList(arguments));
@@ -308,7 +308,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
                     ignoreRuleInSentenceCommandName);
                 JsonObject arguments = new JsonObject();
                 arguments.addProperty("type", "command");
-                arguments.addProperty("commandName", ignoreRuleInSentenceCommandName);
+                arguments.addProperty("command", ignoreRuleInSentenceCommandName);
                 arguments.addProperty("uri", document.getUri());
                 arguments.add("ruleId", ruleIdsJson);
                 arguments.add("sentencePattern", sentencePatternStringsJson);
@@ -343,7 +343,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
                     disableRuleCommandName);
                 JsonObject arguments = new JsonObject();
                 arguments.addProperty("type", "command");
-                arguments.addProperty("commandName", disableRuleCommandName);
+                arguments.addProperty("command", disableRuleCommandName);
                 arguments.addProperty("uri", document.getUri());
                 arguments.add("ruleId", ruleIdsJson);
                 command.setArguments(Arrays.asList(arguments));
