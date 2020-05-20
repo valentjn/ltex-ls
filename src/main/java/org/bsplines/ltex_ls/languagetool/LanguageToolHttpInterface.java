@@ -1,17 +1,14 @@
 package org.bsplines.ltex_ls.languagetool;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.http.HttpRequest.BodyPublishers;
-import java.net.http.HttpResponse.BodyHandlers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,12 +17,17 @@ import java.util.Map;
 
 import com.google.gson.*;
 
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.bsplines.ltex_ls.Tools;
 import org.languagetool.markup.AnnotatedText;
 import org.languagetool.markup.TextPart;
 
 public class LanguageToolHttpInterface extends LanguageToolInterface {
-  private HttpClient httpClient = HttpClient.newHttpClient();
   private String languageShortCode;
   private String motherTongueShortCode;
 
@@ -108,35 +110,75 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
     }
 
     String requestBody = builder.toString();
-
-    HttpRequest httpRequest;
-
-    try {
-      httpRequest = HttpRequest.newBuilder(url.toURI()).header("Content-Type", "application/json")
-          .POST(BodyPublishers.ofString(requestBody)).build();
-    } catch (URISyntaxException e) {
-      Tools.logger.severe(Tools.i18n("couldNotParseHttpServerUri", url.toString(), e.getMessage()));
-      e.printStackTrace();
-      return Collections.emptyList();
-    }
-
-    HttpResponse<String> httpResponse;
+    String responseBody;
+    CloseableHttpClient httpClient = HttpClients.createDefault();
 
     try {
-      httpResponse = httpClient.send(httpRequest, BodyHandlers.ofString());
-    } catch (IOException | InterruptedException e) {
-      Tools.logger.severe(Tools.i18n("couldNotSendHttpRequestToLanguageTool", e.getMessage()));
-      e.printStackTrace();
-      return Collections.emptyList();
+      HttpPost httpPost;
+
+      try {
+        httpPost = new HttpPost(url.toURI());
+      } catch (URISyntaxException e) {
+        Tools.logger.severe(Tools.i18n("couldNotParseHttpServerUri", url.toString(), e.getMessage()));
+        e.printStackTrace();
+        return Collections.emptyList();
+      }
+
+      httpPost.setEntity(new StringEntity(requestBody, "application/json"));
+      CloseableHttpResponse httpResponse = null;
+
+      try {
+        httpResponse = httpClient.execute(httpPost);
+      } catch (IOException e) {
+        Tools.logger.severe(Tools.i18n("couldNotSendHttpRequestToLanguageTool", e.getMessage()));
+        e.printStackTrace();
+        return Collections.emptyList();
+      }
+
+      try {
+        int statusCode = httpResponse.getStatusLine().getStatusCode();
+
+        if (statusCode != 200) {
+          Tools.logger.severe(Tools.i18n("languageToolFailed",
+              Tools.i18n("receivedStatusCodeFromLanguageTool", statusCode)));
+          return Collections.emptyList();
+        }
+
+        try {
+          InputStream inputStream = httpResponse.getEntity().getContent();
+          ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+          byte[] buffer = new byte[1024];
+          int length;
+
+          while ((length = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, length);
+          }
+
+          responseBody = outputStream.toString("UTF-8");
+          EntityUtils.consume(httpResponse.getEntity());
+        } catch (IOException e) {
+          Tools.logger.severe(Tools.i18n("couldNotReadHttpResponseFromLanguageTool",
+              e.getMessage()));
+          e.printStackTrace();
+          return Collections.emptyList();
+        }
+      } finally {
+        try {
+          if (httpResponse != null) httpResponse.close();
+        } catch (IOException e) {
+          Tools.logger.warning(Tools.i18n("couldNotCloseHttpResponseForLanguageTool",
+              e.getMessage()));
+        }
+      }
+    } finally {
+      try {
+        httpClient.close();
+      } catch (IOException e) {
+        Tools.logger.warning(Tools.i18n("couldNotCloseHttpClientForLanguageTool", e.getMessage()));
+      }
     }
 
-    if (httpResponse.statusCode() != 200) {
-      Tools.logger.severe(Tools.i18n("languageToolFailed", "Received status code " +
-          httpResponse.statusCode() + " from the LanguageTool HTTP server"));
-      return Collections.emptyList();
-    }
-
-    JsonObject jsonResponse = JsonParser.parseString(httpResponse.body()).getAsJsonObject();
+    JsonObject jsonResponse = JsonParser.parseString(responseBody).getAsJsonObject();
     JsonArray jsonMatches = jsonResponse.get("matches").getAsJsonArray();
     List<LanguageToolRuleMatch> result = new ArrayList<>();
 

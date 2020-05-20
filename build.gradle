@@ -54,6 +54,9 @@ dependencies {
   // Markdown parser
   compile(group: 'com.vladsch.flexmark', name: 'flexmark', version: '0.60.2')
 
+  // HTTP client (can be replaced with java.net.http after upgrading to Java 11)
+  compile(group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.12')
+
   // unit tests
   compile(group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.1')
 }
