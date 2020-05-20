@@ -18,6 +18,7 @@ public class Settings {
   private List<String> dictionary = null;
   private List<String> disabledRules = null;
   private List<String> enabledRules = null;
+  private String languageToolHttpServerUri = null;
   private List<String> dummyCommandPrototypes = null;
   private List<String> ignoreCommandPrototypes = null;
   private List<String> ignoreEnvironments = null;
@@ -102,6 +103,13 @@ public class Settings {
           getSettingFromJSON(jsonSettings,
           languageShortCode + ".enabledRules").getAsJsonArray()));
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+    }
+
+    try {
+      languageToolHttpServerUri = getSettingFromJSON(
+          jsonSettings, "ltex-ls.languageToolHttpServerUri").getAsString();
+    } catch (NullPointerException | UnsupportedOperationException e) {
+      languageToolHttpServerUri = null;
     }
 
     try {
@@ -220,6 +228,7 @@ public class Settings {
     obj.dictionary = ((dictionary == null) ? null : new ArrayList<>(dictionary));
     obj.disabledRules = ((disabledRules == null) ? null : new ArrayList<>(disabledRules));
     obj.enabledRules = ((enabledRules == null) ? null : new ArrayList<>(enabledRules));
+    obj.languageToolHttpServerUri = languageToolHttpServerUri;
     obj.dummyCommandPrototypes = ((dummyCommandPrototypes == null) ? null :
         new ArrayList<>(dummyCommandPrototypes));
     obj.ignoreCommandPrototypes = ((ignoreCommandPrototypes == null) ? null :
@@ -264,6 +273,11 @@ public class Settings {
 
     if ((enabledRules == null) ? (other.enabledRules != null) :
           !enabledRules.equals(other.enabledRules)) {
+      return false;
+    }
+
+    if ((languageToolHttpServerUri == null) ? (other.languageToolHttpServerUri != null) :
+          !languageToolHttpServerUri.equals(other.languageToolHttpServerUri)) {
       return false;
     }
 
@@ -339,6 +353,8 @@ public class Settings {
     hash = 53 * hash + ((dictionary != null) ? dictionary.hashCode() : 0);
     hash = 53 * hash + ((disabledRules != null) ? disabledRules.hashCode() : 0);
     hash = 53 * hash + ((enabledRules != null) ? enabledRules.hashCode() : 0);
+    hash = 53 * hash + ((languageToolHttpServerUri != null) ?
+        languageToolHttpServerUri.hashCode() : 0);
     hash = 53 * hash + ((dummyCommandPrototypes != null) ? dummyCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreCommandPrototypes != null) ? ignoreCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreEnvironments != null) ? ignoreEnvironments.hashCode() : 0);
@@ -383,6 +399,10 @@ public class Settings {
 
   public List<String> getEnabledRules() {
     return getDefault(enabledRules, Collections.emptyList());
+  }
+
+  public String getLanguageToolHttpServerUri() {
+    return getDefault(languageToolHttpServerUri, null);
   }
 
   public List<String> getDummyCommandPrototypes() {

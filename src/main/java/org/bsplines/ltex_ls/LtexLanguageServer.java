@@ -119,9 +119,15 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   }
 
   private void reinitialize() {
-    languageToolInterface = new LanguageToolJavaInterface(settings.getLanguageShortCode(),
-        settings.getMotherTongueShortCode(), settings.getSentenceCacheSize(),
-        settings.getDictionary());
+    if (settings.getLanguageToolHttpServerUri() == null) {
+      languageToolInterface = new LanguageToolJavaInterface(settings.getLanguageShortCode(),
+          settings.getMotherTongueShortCode(), settings.getSentenceCacheSize(),
+          settings.getDictionary());
+    } else {
+      languageToolInterface = new LanguageToolHttpInterface(settings.getLanguageToolHttpServerUri(),
+          settings.getLanguageShortCode(),
+          settings.getMotherTongueShortCode());
+    }
 
     if (!languageToolInterface.isReady()) {
       languageToolInterface = null;
