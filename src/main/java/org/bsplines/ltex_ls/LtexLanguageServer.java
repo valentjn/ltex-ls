@@ -247,6 +247,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
                     Tools.i18n("addAllUnknownWordsInSelectionToDictionary")),
                     addToDictionaryCommandName);
                 JsonObject arguments = new JsonObject();
+                arguments.addProperty("type", "command");
                 arguments.addProperty("commandName", addToDictionaryCommandName);
                 arguments.addProperty("uri", document.getUri());
                 arguments.add("word", unknownWordsJson);
@@ -306,6 +307,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
                     Tools.i18n("ignoreAllRulesInTheSelectedSentences")),
                     ignoreRuleInSentenceCommandName);
                 JsonObject arguments = new JsonObject();
+                arguments.addProperty("type", "command");
                 arguments.addProperty("commandName", ignoreRuleInSentenceCommandName);
                 arguments.addProperty("uri", document.getUri());
                 arguments.add("ruleId", ruleIdsJson);
@@ -340,6 +342,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
                     Tools.i18n("disableAllRulesWithMatchesInSelection")),
                     disableRuleCommandName);
                 JsonObject arguments = new JsonObject();
+                arguments.addProperty("type", "command");
                 arguments.addProperty("commandName", disableRuleCommandName);
                 arguments.addProperty("uri", document.getUri());
                 arguments.add("ruleId", ruleIdsJson);
