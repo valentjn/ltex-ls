@@ -1,7 +1,7 @@
 os: "linux"
 dist: "bionic"
 language: "java"
-jdk: "oraclejdk11"
+jdk: "oraclejdk8"
 install:
   - "sudo apt-get -y install python3-pip"
   - "pip3 install semver"
