@@ -222,7 +222,8 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
                 }
               }
 
-              if (!addWordToDictionaryMatches.isEmpty()) {
+              if (!addWordToDictionaryMatches.isEmpty() &&
+                    settings.getLanguageToolHttpServerUri().isEmpty()) {
                 AnnotatedText inverseAnnotatedText = invertAnnotatedText(validateResult.getValue());
                 List<String> unknownWords = new ArrayList<>();
                 JsonArray unknownWordsJson = new JsonArray();
