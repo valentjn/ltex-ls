@@ -2,6 +2,7 @@ package org.bsplines.ltex_ls.latex;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
 import org.languagetool.markup.AnnotatedText;
 
 public class LatexAnnotatedTextBuilderTest {

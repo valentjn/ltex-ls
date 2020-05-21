@@ -1,6 +1,7 @@
 package org.bsplines.ltex_ls;
 
 import java.text.MessageFormat;
+
 import java.util.*;
 import java.util.logging.*;
 

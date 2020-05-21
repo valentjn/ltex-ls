@@ -1,10 +1,11 @@
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
 import org.bsplines.ltex_ls.LtexLanguageServer;
+
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
-
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 public class LtexLanguageServerLauncher {
   public static void main(String[] args) {

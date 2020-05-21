@@ -1,14 +1,14 @@
 package org.bsplines.ltex_ls.latex;
 
-import org.apache.commons.text.StringEscapeUtils;
-import org.bsplines.ltex_ls.Tools;
-import org.languagetool.markup.AnnotatedText;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 import java.util.regex.*;
+
+import org.apache.commons.text.StringEscapeUtils;
+import org.bsplines.ltex_ls.Tools;
+import org.languagetool.markup.AnnotatedText;
 
 public class LatexAnnotatedTextBuilder {
   private enum Mode {

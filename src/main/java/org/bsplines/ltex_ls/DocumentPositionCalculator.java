@@ -1,6 +1,7 @@
 package org.bsplines.ltex_ls;
 
 import org.eclipse.lsp4j.Position;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

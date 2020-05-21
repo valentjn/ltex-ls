@@ -8,6 +8,7 @@ import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.ast.Node;
 
 import org.bsplines.ltex_ls.Tools;
+
 import org.languagetool.markup.AnnotatedText;
 
 public class MarkdownAnnotatedTextBuilder {

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.*;
+
 import org.eclipse.lsp4j.DiagnosticSeverity;
 
 public class Settings {

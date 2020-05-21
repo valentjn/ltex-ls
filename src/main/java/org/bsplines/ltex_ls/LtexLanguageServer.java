@@ -1,25 +1,30 @@
 package org.bsplines.ltex_ls;
 
-import com.google.gson.*;
-import com.vladsch.flexmark.util.ast.Document;
-import com.vladsch.flexmark.parser.Parser;
-
-import org.apache.commons.text.StringEscapeUtils;
-import org.bsplines.ltex_ls.languagetool.*;
-import org.bsplines.ltex_ls.latex.*;
-import org.bsplines.ltex_ls.markdown.*;
-import org.eclipse.lsp4j.*;
-import org.eclipse.lsp4j.jsonrpc.messages.Either;
-import org.eclipse.lsp4j.services.*;
-import org.eclipse.xtext.xbase.lib.Pair;
-import org.languagetool.markup.AnnotatedText;
-import org.languagetool.markup.AnnotatedTextBuilder;
-
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import com.google.gson.*;
+
+import com.vladsch.flexmark.util.ast.Document;
+import com.vladsch.flexmark.parser.Parser;
+
+import org.apache.commons.text.StringEscapeUtils;
+
+import org.bsplines.ltex_ls.languagetool.*;
+import org.bsplines.ltex_ls.latex.*;
+import org.bsplines.ltex_ls.markdown.*;
+
+import org.eclipse.lsp4j.*;
+import org.eclipse.lsp4j.jsonrpc.messages.Either;
+import org.eclipse.lsp4j.services.*;
+
+import org.eclipse.xtext.xbase.lib.Pair;
+
+import org.languagetool.markup.AnnotatedText;
+import org.languagetool.markup.AnnotatedTextBuilder;
 
 public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   private HashMap<String, TextDocumentItem> documents = new HashMap<>();

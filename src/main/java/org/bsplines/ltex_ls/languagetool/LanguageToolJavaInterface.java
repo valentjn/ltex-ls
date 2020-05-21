@@ -2,6 +2,7 @@ package org.bsplines.ltex_ls.languagetool;
 
 import java.io.File;
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,11 +11,13 @@ import java.util.concurrent.TimeUnit;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.bsplines.ltex_ls.Tools;
+
 import org.languagetool.*;
 import org.languagetool.markup.AnnotatedText;
 import org.languagetool.rules.Rule;
 import org.languagetool.rules.RuleMatch;
 import org.languagetool.rules.patterns.AbstractPatternRule;
+
 import org.xml.sax.SAXException;
 
 public class LanguageToolJavaInterface extends LanguageToolInterface {

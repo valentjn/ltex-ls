@@ -1,13 +1,14 @@
 package org.bsplines.ltex_ls;
 
-import org.eclipse.lsp4j.*;
-import org.eclipse.lsp4j.jsonrpc.messages.Either;
-import org.eclipse.lsp4j.services.TextDocumentService;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+
+import org.eclipse.lsp4j.*;
+import org.eclipse.lsp4j.jsonrpc.messages.Either;
+import org.eclipse.lsp4j.services.TextDocumentService;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
 * `TextDocumentService` that only supports `TextDocumentSyncKind.Full` updates.
