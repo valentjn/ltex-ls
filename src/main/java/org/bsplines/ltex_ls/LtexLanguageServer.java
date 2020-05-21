@@ -2,7 +2,6 @@ package org.bsplines.ltex_ls;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 import com.google.gson.*;
 
@@ -109,25 +108,27 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   }
 
   private CompletableFuture<Void> publishIssues(TextDocumentItem document) {
-    return getIssues(document).thenApply(
-        (List<Diagnostic> diagnostics) -> {
-          languageClient.publishDiagnostics(
-              new PublishDiagnosticsParams(document.getUri(), diagnostics));
-          return null;
-        });
+    return getIssues(document).thenApply((List<Diagnostic> diagnostics) -> {
+      languageClient.publishDiagnostics(new PublishDiagnosticsParams(
+          document.getUri(), diagnostics));
+      return null;
+    });
   }
 
   private CompletableFuture<List<Diagnostic>> getIssues(TextDocumentItem document) {
     return validateDocument(document).thenApply(
-        (Pair<List<LanguageToolRuleMatch>, AnnotatedText> validateResult) -> {
-          List<LanguageToolRuleMatch> matches = validateResult.getKey();
-          DocumentPositionCalculator positionCalculator =
-              new DocumentPositionCalculator(document.getText());
+          (Pair<List<LanguageToolRuleMatch>, AnnotatedText> validateResult) -> {
+      List<LanguageToolRuleMatch> matches = validateResult.getKey();
+      DocumentPositionCalculator positionCalculator =
+          new DocumentPositionCalculator(document.getText());
+      List<Diagnostic> diagnostics = new ArrayList<>();
 
-          return matches.stream()
-              .map(match -> codeActionGenerator.createDiagnostic(match, positionCalculator))
-              .collect(Collectors.toList());
-        });
+      for (LanguageToolRuleMatch match : matches) {
+        diagnostics.add(codeActionGenerator.createDiagnostic(match, positionCalculator));
+      }
+
+      return diagnostics;
+    });
   }
 
   private void sendProgressEvent(String uri, String operation, double progress) {
