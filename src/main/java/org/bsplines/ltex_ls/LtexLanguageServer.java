@@ -28,7 +28,7 @@ import org.languagetool.markup.AnnotatedTextBuilder;
 
 public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   private HashMap<String, TextDocumentItem> documents = new HashMap<>();
-  private LanguageClient client = null;
+  private LanguageClient languageClient = null;
 
   private HashMap<String, LanguageToolInterface> languageToolInterfaceMap = new HashMap<>();
   private HashMap<String, Settings> settingsMap = new HashMap<>();
@@ -207,7 +207,8 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
       public void didClose(DidCloseTextDocumentParams params) {
         super.didClose(params);
         String uri = params.getTextDocument().getUri();
-        client.publishDiagnostics(new PublishDiagnosticsParams(uri, Collections.emptyList()));
+        languageClient.publishDiagnostics(
+            new PublishDiagnosticsParams(uri, Collections.emptyList()));
       }
 
       private void publishIssues(String uri) {
@@ -416,7 +417,8 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   private CompletableFuture<Void> publishIssues(TextDocumentItem document) {
     return getIssues(document).thenApply(
         (List<Diagnostic> diagnostics) -> {
-          client.publishDiagnostics(new PublishDiagnosticsParams(document.getUri(), diagnostics));
+          languageClient.publishDiagnostics(
+              new PublishDiagnosticsParams(document.getUri(), diagnostics));
           return null;
         });
   }
@@ -441,7 +443,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     arguments.addProperty("uri", uri);
     arguments.addProperty("operation", operation);
     arguments.addProperty("progress", progress);
-    client.telemetryEvent(arguments);
+    languageClient.telemetryEvent(arguments);
   }
 
   private CompletableFuture<Pair<List<LanguageToolRuleMatch>, AnnotatedText>> validateDocument(
@@ -449,7 +451,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     ConfigurationItem configurationItem = new ConfigurationItem();
     configurationItem.setSection("ltex");
     configurationItem.setScopeUri(document.getUri());
-    CompletableFuture<List<Object>> configurationFuture = client.configuration(
+    CompletableFuture<List<Object>> configurationFuture = languageClient.configuration(
         new ConfigurationParams(Arrays.asList(configurationItem)));
     sendProgressEvent(document.getUri(), "validateDocument", 0);
 
@@ -613,7 +615,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
         if (params.getCommand().equals(addToDictionaryCommandName) ||
               params.getCommand().equals(disableRuleCommandName) ||
               params.getCommand().equals(ignoreRuleInSentenceCommandName)) {
-          client.telemetryEvent(params.getArguments().get(0));
+          languageClient.telemetryEvent(params.getArguments().get(0));
           return CompletableFuture.completedFuture(true);
         } else {
           return CompletableFuture.completedFuture(false);
@@ -639,7 +641,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   }
 
   @Override
-  public void connect(LanguageClient client) {
-    this.client = client;
+  public void connect(LanguageClient languageClient) {
+    this.languageClient = languageClient;
   }
 }
