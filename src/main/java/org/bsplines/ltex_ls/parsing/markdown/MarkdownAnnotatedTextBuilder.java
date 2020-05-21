@@ -1,4 +1,4 @@
-package org.bsplines.ltex_ls.markdown;
+package org.bsplines.ltex_ls.parsing.markdown;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.Stack;
 
 import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.parser.Parser;
 
 import org.bsplines.ltex_ls.Tools;
 
@@ -24,7 +25,13 @@ public class MarkdownAnnotatedTextBuilder {
   public List<String> ignoreNodeTypes = new ArrayList<>();
   public List<String> dummyNodeTypes = new ArrayList<>();
 
-  public void visit(Document document) {
+  public void addCode(String text) {
+    Parser parser = Parser.builder().build();
+    Document document = parser.parse(text);
+    visit(document);
+  }
+
+  private void visit(Document document) {
     text = document.getChars().toString();
     pos = 0;
     dummyCounter = 0;

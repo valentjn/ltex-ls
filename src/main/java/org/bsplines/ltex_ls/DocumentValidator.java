@@ -3,14 +3,11 @@ package org.bsplines.ltex_ls;
 import java.util.*;
 import java.util.concurrent.*;
 
-import com.vladsch.flexmark.util.ast.Document;
-import com.vladsch.flexmark.parser.Parser;
-
 import org.apache.commons.text.StringEscapeUtils;
 
 import org.bsplines.ltex_ls.languagetool.*;
-import org.bsplines.ltex_ls.latex.*;
-import org.bsplines.ltex_ls.markdown.*;
+import org.bsplines.ltex_ls.parsing.latex.*;
+import org.bsplines.ltex_ls.parsing.markdown.*;
 
 import org.eclipse.lsp4j.TextDocumentItem;
 
@@ -38,16 +35,12 @@ public class DocumentValidator {
         break;
       }
       case "markdown": {
-        Parser p = Parser.builder().build();
-        Document mdDocument = p.parse(document.getText());
-
         MarkdownAnnotatedTextBuilder builder = new MarkdownAnnotatedTextBuilder();
         builder.language = settings.getLanguageShortCode();
         builder.dummyNodeTypes.addAll(settings.getDummyMarkdownNodeTypes());
         builder.ignoreNodeTypes.addAll(settings.getIgnoreMarkdownNodeTypes());
 
-        builder.visit(mdDocument);
-
+        builder.addCode(document.getText());
         annotatedText = builder.getAnnotatedText();
         break;
       }
