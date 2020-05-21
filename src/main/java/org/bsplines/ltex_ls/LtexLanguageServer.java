@@ -69,7 +69,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     return ret;
   }
 
-  private AnnotatedText invertAnnotatedText(AnnotatedText annotatedText) {
+  private static AnnotatedText invertAnnotatedText(AnnotatedText annotatedText) {
     List<Map.Entry<Integer, Integer>> mapping = annotatedText.getMapping();
     List<Map.Entry<Integer, Integer>> inverseMapping = new ArrayList<>();
 
@@ -81,7 +81,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
         Collections.emptyMap());
   }
 
-  private int getPlainTextPositionFor(int originalTextPosition,
+  private static int getPlainTextPositionFor(int originalTextPosition,
       AnnotatedText inverseAnnotatedText) {
     return inverseAnnotatedText.getOriginalTextPositionFor(originalTextPosition);
   }
