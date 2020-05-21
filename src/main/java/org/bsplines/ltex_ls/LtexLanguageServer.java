@@ -16,8 +16,8 @@ import org.eclipse.xtext.xbase.lib.Pair;
 import org.languagetool.markup.AnnotatedText;
 
 public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
+  private HashMap<String, TextDocumentItem> documents = new HashMap<>();
   private LanguageClient languageClient;
-  private HashMap<String, TextDocumentItem> documents;
   private SettingsManager settingsManager;
   private DocumentValidator documentValidator;
   private CodeActionGenerator codeActionGenerator;
@@ -42,7 +42,6 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
       Tools.setLocale(locale);
     }
 
-    documents = new HashMap<>();
     settingsManager = new SettingsManager();
     documentValidator = new DocumentValidator(settingsManager);
     codeActionGenerator = new CodeActionGenerator();
