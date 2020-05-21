@@ -8,14 +8,7 @@ import java.util.stream.Collectors;
 
 import com.google.gson.*;
 
-import com.vladsch.flexmark.util.ast.Document;
-import com.vladsch.flexmark.parser.Parser;
-
-import org.apache.commons.text.StringEscapeUtils;
-
 import org.bsplines.ltex_ls.languagetool.*;
-import org.bsplines.ltex_ls.latex.*;
-import org.bsplines.ltex_ls.markdown.*;
 
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
@@ -24,17 +17,12 @@ import org.eclipse.lsp4j.services.*;
 import org.eclipse.xtext.xbase.lib.Pair;
 
 import org.languagetool.markup.AnnotatedText;
-import org.languagetool.markup.AnnotatedTextBuilder;
 
 public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
-  private HashMap<String, TextDocumentItem> documents = new HashMap<>();
-  private LanguageClient languageClient = null;
-
-  private HashMap<String, LanguageToolInterface> languageToolInterfaceMap = new HashMap<>();
-  private HashMap<String, Settings> settingsMap = new HashMap<>();
-
-  private LanguageToolInterface languageToolInterface;
-  private Settings settings = new Settings();
+  private LanguageClient languageClient;
+  private HashMap<String, TextDocumentItem> documents;
+  private SettingsManager settingsManager;
+  private DocumentValidator documentValidator;
 
   private static final String acceptSuggestionCodeActionKind =
       CodeActionKind.QuickFix + ".ltex.acceptSuggestion";
@@ -67,7 +55,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     ret.setRange(new Range(
         positionCalculator.getPosition(match.getFromPos()),
         positionCalculator.getPosition(match.getToPos())));
-    ret.setSeverity(settings.getDiagnosticSeverity());
+    ret.setSeverity(settingsManager.getSettings().getDiagnosticSeverity());
     ret.setSource("LTeX - " + match.getRuleId());
     ret.setMessage(match.getMessage().replaceAll("<suggestion>(.*?)</suggestion>", "'$1'"));
     return ret;
@@ -114,51 +102,11 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
       Tools.setLocale(locale);
     }
 
-    reinitialize();
-    String language = settings.getLanguageShortCode();
-    settingsMap.put(language, settings);
-    languageToolInterfaceMap.put(language, languageToolInterface);
+    documents = new HashMap<>();
+    settingsManager = new SettingsManager();
+    documentValidator = new DocumentValidator(settingsManager);
 
     return CompletableFuture.completedFuture(new InitializeResult(capabilities));
-  }
-
-  private void reinitialize() {
-    if (settings.getLanguageToolHttpServerUri() == null) {
-      languageToolInterface = new LanguageToolJavaInterface(settings.getLanguageShortCode(),
-          settings.getMotherTongueShortCode(), settings.getSentenceCacheSize(),
-          settings.getDictionary());
-    } else {
-      languageToolInterface = new LanguageToolHttpInterface(settings.getLanguageToolHttpServerUri(),
-          settings.getLanguageShortCode(),
-          settings.getMotherTongueShortCode());
-    }
-
-    if (!languageToolInterface.isReady()) {
-      languageToolInterface = null;
-      return;
-    }
-
-    if (settings.getLanguageModelRulesDirectory() == null) {
-      if (settings.getMotherTongueShortCode() != null) {
-        languageToolInterface.activateDefaultFalseFriendRules();
-      }
-    } else {
-      languageToolInterface.activateLanguageModelRules(
-          settings.getLanguageModelRulesDirectory());
-    }
-
-    if (settings.getNeuralNetworkModelRulesDirectory() != null) {
-      languageToolInterface.activateNeuralNetworkRules(
-          settings.getNeuralNetworkModelRulesDirectory());
-    }
-
-    if (settings.getWord2VecModelRulesDirectory() != null) {
-      languageToolInterface.activateWord2VecModelRules(
-          settings.getWord2VecModelRulesDirectory());
-    }
-
-    languageToolInterface.enableRules(settings.getEnabledRules());
-    languageToolInterface.disableRules(settings.getDisabledRules());
   }
 
   @Override
@@ -259,7 +207,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     }
 
     if (!addWordToDictionaryMatches.isEmpty() &&
-          settings.getLanguageToolHttpServerUri().isEmpty()) {
+          settingsManager.getSettings().getLanguageToolHttpServerUri().isEmpty()) {
       AnnotatedText inverseAnnotatedText = invertAnnotatedText(validateResult.getValue());
       List<String> unknownWords = new ArrayList<>();
       JsonArray unknownWordsJson = new JsonArray();
@@ -457,147 +405,12 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
     return configurationFuture.thenApply((List<Object> configuration) -> {
       try {
-        setSettings((JsonElement) configuration.get(0));
-        return validateDocumentInternal(document);
+        settingsManager.setSettings((JsonElement)configuration.get(0));
+        return documentValidator.validate(document);
       } finally {
         sendProgressEvent(document.getUri(), "validateDocument", 1);
       }
     });
-  }
-
-  private Pair<List<LanguageToolRuleMatch>, AnnotatedText> validateDocumentInternal(
-        TextDocumentItem document) {
-    if (languageToolInterface == null) {
-      Tools.logger.warning(Tools.i18n("skippingTextCheck"));
-      return new Pair<>(Collections.emptyList(), null);
-    }
-
-    String codeLanguageId = document.getLanguageId();
-    AnnotatedText annotatedText;
-
-    switch (codeLanguageId) {
-      case "plaintext": {
-        AnnotatedTextBuilder builder = new AnnotatedTextBuilder();
-        annotatedText = builder.addText(document.getText()).build();
-        break;
-      }
-      case "markdown": {
-        Parser p = Parser.builder().build();
-        Document mdDocument = p.parse(document.getText());
-
-        MarkdownAnnotatedTextBuilder builder = new MarkdownAnnotatedTextBuilder();
-        builder.language = settings.getLanguageShortCode();
-        builder.dummyNodeTypes.addAll(settings.getDummyMarkdownNodeTypes());
-        builder.ignoreNodeTypes.addAll(settings.getIgnoreMarkdownNodeTypes());
-
-        builder.visit(mdDocument);
-
-        annotatedText = builder.getAnnotatedText();
-        break;
-      }
-      case "latex":
-      case "rsweave": {
-        LatexAnnotatedTextBuilder builder = new LatexAnnotatedTextBuilder();
-        builder.language = settings.getLanguageShortCode();
-        builder.codeLanguageId = codeLanguageId;
-
-        for (String commandPrototype : settings.getDummyCommandPrototypes()) {
-          builder.commandSignatures.add(new LatexCommandSignature(commandPrototype,
-              LatexCommandSignature.Action.DUMMY));
-        }
-
-        for (String commandPrototype : settings.getIgnoreCommandPrototypes()) {
-          builder.commandSignatures.add(new LatexCommandSignature(commandPrototype,
-              LatexCommandSignature.Action.IGNORE));
-        }
-
-        builder.ignoreEnvironments.addAll(settings.getIgnoreEnvironments());
-
-        ExecutorService executor = Executors.newCachedThreadPool();
-        Future<Object> builderFuture = executor.submit(new Callable<Object>() {
-          public Object call() throws InterruptedException {
-            builder.addCode(document.getText());
-            return null;
-          }
-        });
-
-        try {
-          builderFuture.get(10, TimeUnit.SECONDS);
-        } catch (TimeoutException | InterruptedException | ExecutionException e) {
-          throw new RuntimeException(Tools.i18n("latexAnnotatedTextBuilderFailed"), e);
-        } finally {
-          builderFuture.cancel(true);
-        }
-
-        annotatedText = builder.getAnnotatedText();
-        break;
-      }
-      default: {
-        throw new UnsupportedOperationException(Tools.i18n(
-            "codeLanguageNotSupported", codeLanguageId));
-      }
-    }
-
-    if ((settings.getDictionary().size() >= 1) &&
-        "BsPlInEs".equals(settings.getDictionary().get(0))) {
-      languageToolInterface.enableEasterEgg();
-    }
-
-    {
-      int logTextMaxLength = 100;
-      String logText = annotatedText.getPlainText();
-      String postfix = "";
-
-      if (logText.length() > logTextMaxLength) {
-        logText = logText.substring(0, logTextMaxLength);
-        postfix = Tools.i18n("truncatedPostfix", logTextMaxLength);
-      }
-
-      Tools.logger.info(Tools.i18n("checkingText",
-          settings.getLanguageShortCode(), StringEscapeUtils.escapeJava(logText), postfix));
-    }
-
-    try {
-      List<LanguageToolRuleMatch> result = languageToolInterface.check(annotatedText);
-
-      Tools.logger.info((result.size() == 1) ? Tools.i18n("obtainedRuleMatch") :
-          Tools.i18n("obtainedRuleMatches", result.size()));
-
-      List<IgnoreRuleSentencePair> ignoreRuleSentencePairs =
-          settings.getIgnoreRuleSentencePairs();
-
-      if (!result.isEmpty() && !ignoreRuleSentencePairs.isEmpty()) {
-        List<LanguageToolRuleMatch> ignoreMatches = new ArrayList<>();
-
-        for (LanguageToolRuleMatch match : result) {
-          if (match.getSentence() == null) continue;
-          String ruleId = match.getRuleId();
-          String sentence = match.getSentence().trim();
-
-          for (IgnoreRuleSentencePair pair : ignoreRuleSentencePairs) {
-            if (pair.getRuleId().equals(ruleId) &&
-                  pair.getSentencePattern().matcher(sentence).find()) {
-              Tools.logger.info(Tools.i18n("removingIgnoredRuleMatch", ruleId, sentence));
-              ignoreMatches.add(match);
-              break;
-            }
-          }
-        }
-
-        if (!ignoreMatches.isEmpty()) {
-          Tools.logger.info((ignoreMatches.size() == 1) ?
-              Tools.i18n("removedIgnoredRuleMatch") :
-              Tools.i18n("removedIgnoredRuleMatches", ignoreMatches.size()));
-          for (LanguageToolRuleMatch match : ignoreMatches) result.remove(match);
-        }
-      }
-
-      return new Pair<>(result, annotatedText);
-    } catch (RuntimeException e) {
-      Tools.logger.severe(Tools.i18n("languageToolFailed", e.getMessage()));
-      e.printStackTrace();
-      return new Pair<>(Collections.emptyList(), annotatedText);
-    }
   }
 
   @Override
@@ -606,7 +419,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
       @Override
       public void didChangeConfiguration(DidChangeConfigurationParams params) {
         super.didChangeConfiguration(params);
-        setSettings(((JsonObject)params.getSettings()).get("ltex"));
+        settingsManager.setSettings(((JsonObject)params.getSettings()).get("ltex"));
         documents.values().forEach(LtexLanguageServer.this::publishIssues);
       }
 
@@ -622,22 +435,6 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
         }
       }
     };
-  }
-
-  private void setSettings(JsonElement jsonSettings) {
-    Settings newSettings = new Settings(jsonSettings);
-    String newLanguage = newSettings.getLanguageShortCode();
-    Settings oldSettings = settingsMap.getOrDefault(newLanguage, null);
-
-    if (newSettings.equals(oldSettings)) {
-      settings = oldSettings;
-      languageToolInterface = languageToolInterfaceMap.get(newLanguage);
-    } else {
-      settingsMap.put(newLanguage, newSettings);
-      settings = newSettings;
-      reinitialize();
-      languageToolInterfaceMap.put(newLanguage, languageToolInterface);
-    }
   }
 
   @Override
