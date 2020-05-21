@@ -6,7 +6,9 @@ install:
   - "sudo apt-get -y install python3-pip"
   - "pip3 install semver"
 script:
-  - "./gradlew assemble check installDist"
+  - "./gradlew assemble check"
+  - "./gradlew jacocoTestReport coveralls"
+  - "./gradlew installDist"
   - "export LTEX_LS_VERSION=\"$(build/install/ltex-ls/bin/ltex-ls --version | awk '{print $NF}')\""
   - "export IS_PRERELEASE=\"$(python3 -c \"import semver; print('1' if semver.VersionInfo.parse('$LTEX_LS_VERSION').prerelease is not None else '0', end='')\")\""
   - "if [[ \"$IS_PRERELEASE\" -eq \"0\" ]]; then echo 'Detected stable release.'; else echo 'Detected prerelease.'; fi"

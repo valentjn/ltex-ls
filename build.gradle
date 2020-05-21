@@ -1,6 +1,8 @@
 plugins {
-  id('java')
-  id('application')
+  id 'java'
+  id 'application'
+  id 'jacoco'
+  id 'com.github.kt3k.coveralls' version '2.10.1'
 }
 
 allprojects {
@@ -63,6 +65,14 @@ dependencies {
 
 test {
   useJUnitPlatform()
+}
+
+// coveralls plugin depends on XML output
+jacocoTestReport {
+  reports {
+    xml.enabled = true
+    html.enabled = true
+  }
 }
 
 sourceSets {
