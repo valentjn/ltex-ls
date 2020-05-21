@@ -26,15 +26,8 @@ public class DocumentValidator {
     this.settingsManager = settingsManager;
   }
 
-  public Pair<List<LanguageToolRuleMatch>, AnnotatedText> validate(TextDocumentItem document) {
+  private AnnotatedText buildAnnotatedText(TextDocumentItem document) {
     Settings settings = settingsManager.getSettings();
-    LanguageToolInterface languageToolInterface = settingsManager.getLanguageToolInterface();
-
-    if (languageToolInterface == null) {
-      Tools.logger.warning(Tools.i18n("skippingTextCheck"));
-      return new Pair<>(Collections.emptyList(), null);
-    }
-
     String codeLanguageId = document.getLanguageId();
     AnnotatedText annotatedText;
 
@@ -101,6 +94,51 @@ public class DocumentValidator {
       }
     }
 
+    return annotatedText;
+  }
+
+  public void removeIgnoredMatches(List<LanguageToolRuleMatch> matches) {
+    Settings settings = settingsManager.getSettings();
+    List<IgnoreRuleSentencePair> ignoreRuleSentencePairs = settings.getIgnoreRuleSentencePairs();
+
+    if (!matches.isEmpty() && !ignoreRuleSentencePairs.isEmpty()) {
+      List<LanguageToolRuleMatch> ignoreMatches = new ArrayList<>();
+
+      for (LanguageToolRuleMatch match : matches) {
+        if (match.getSentence() == null) continue;
+        String ruleId = match.getRuleId();
+        String sentence = match.getSentence().trim();
+
+        for (IgnoreRuleSentencePair pair : ignoreRuleSentencePairs) {
+          if (pair.getRuleId().equals(ruleId) &&
+                pair.getSentencePattern().matcher(sentence).find()) {
+            Tools.logger.info(Tools.i18n("removingIgnoredRuleMatch", ruleId, sentence));
+            ignoreMatches.add(match);
+            break;
+          }
+        }
+      }
+
+      if (!ignoreMatches.isEmpty()) {
+        Tools.logger.info((ignoreMatches.size() == 1) ?
+            Tools.i18n("removedIgnoredRuleMatch") :
+            Tools.i18n("removedIgnoredRuleMatches", ignoreMatches.size()));
+        for (LanguageToolRuleMatch match : ignoreMatches) matches.remove(match);
+      }
+    }
+  }
+
+  public Pair<List<LanguageToolRuleMatch>, AnnotatedText> validate(TextDocumentItem document) {
+    Settings settings = settingsManager.getSettings();
+    LanguageToolInterface languageToolInterface = settingsManager.getLanguageToolInterface();
+
+    if (languageToolInterface == null) {
+      Tools.logger.warning(Tools.i18n("skippingTextCheck"));
+      return new Pair<>(Collections.emptyList(), null);
+    }
+
+    AnnotatedText annotatedText = buildAnnotatedText(document);
+
     if ((settings.getDictionary().size() >= 1) &&
         "BsPlInEs".equals(settings.getDictionary().get(0))) {
       languageToolInterface.enableEasterEgg();
@@ -121,41 +159,11 @@ public class DocumentValidator {
     }
 
     try {
-      List<LanguageToolRuleMatch> result = languageToolInterface.check(annotatedText);
-
-      Tools.logger.info((result.size() == 1) ? Tools.i18n("obtainedRuleMatch") :
-          Tools.i18n("obtainedRuleMatches", result.size()));
-
-      List<IgnoreRuleSentencePair> ignoreRuleSentencePairs =
-          settings.getIgnoreRuleSentencePairs();
-
-      if (!result.isEmpty() && !ignoreRuleSentencePairs.isEmpty()) {
-        List<LanguageToolRuleMatch> ignoreMatches = new ArrayList<>();
-
-        for (LanguageToolRuleMatch match : result) {
-          if (match.getSentence() == null) continue;
-          String ruleId = match.getRuleId();
-          String sentence = match.getSentence().trim();
-
-          for (IgnoreRuleSentencePair pair : ignoreRuleSentencePairs) {
-            if (pair.getRuleId().equals(ruleId) &&
-                  pair.getSentencePattern().matcher(sentence).find()) {
-              Tools.logger.info(Tools.i18n("removingIgnoredRuleMatch", ruleId, sentence));
-              ignoreMatches.add(match);
-              break;
-            }
-          }
-        }
-
-        if (!ignoreMatches.isEmpty()) {
-          Tools.logger.info((ignoreMatches.size() == 1) ?
-              Tools.i18n("removedIgnoredRuleMatch") :
-              Tools.i18n("removedIgnoredRuleMatches", ignoreMatches.size()));
-          for (LanguageToolRuleMatch match : ignoreMatches) result.remove(match);
-        }
-      }
-
-      return new Pair<>(result, annotatedText);
+      List<LanguageToolRuleMatch> matches = languageToolInterface.check(annotatedText);
+      Tools.logger.info((matches.size() == 1) ? Tools.i18n("obtainedRuleMatch") :
+          Tools.i18n("obtainedRuleMatches", matches.size()));
+      removeIgnoredMatches(matches);
+      return new Pair<>(matches, annotatedText);
     } catch (RuntimeException e) {
       Tools.logger.severe(Tools.i18n("languageToolFailed", e.getMessage()));
       e.printStackTrace();
