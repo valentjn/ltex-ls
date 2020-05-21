@@ -10,7 +10,9 @@ script:
   - "./gradlew jacocoTestReport coveralls"
   - "./gradlew installDist"
   - "export LTEX_LS_VERSION=\"$(build/install/ltex-ls/bin/ltex-ls --version | awk '{print $NF}')\""
+  - "if [[ -z \"$LTEX_LS_VERSION\" ]]; then echo 'Error: LTEX_LS_VERSION not set!'; (exit 1); fi"
   - "export IS_PRERELEASE=\"$(python3 -c \"import semver; print('1' if semver.VersionInfo.parse('$LTEX_LS_VERSION').prerelease is not None else '0', end='')\")\""
+  - "if [[ -z \"$IS_PRERELEASE\" ]]; then echo 'Error: IS_PRERELEASE not set!'; (exit 1); fi"
   - "if [[ \"$IS_PRERELEASE\" -eq \"0\" ]]; then echo 'Detected stable release.'; else echo 'Detected prerelease.'; fi"
 deploy:
   - &deployBlock
