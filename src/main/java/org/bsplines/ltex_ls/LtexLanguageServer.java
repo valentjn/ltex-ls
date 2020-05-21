@@ -22,7 +22,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
-
   private HashMap<String, TextDocumentItem> documents = new HashMap<>();
   private LanguageClient client = null;
 
@@ -564,17 +563,16 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
         List<LanguageToolRuleMatch> ignoreMatches = new ArrayList<>();
 
         for (LanguageToolRuleMatch match : result) {
-          if (match.getSentence() != null) {
-            String ruleId = match.getRuleId();
-            String sentence = match.getSentence().trim();
+          if (match.getSentence() == null) continue;
+          String ruleId = match.getRuleId();
+          String sentence = match.getSentence().trim();
 
-            for (IgnoreRuleSentencePair pair : ignoreRuleSentencePairs) {
-              if (pair.getRuleId().equals(ruleId) &&
-                    pair.getSentencePattern().matcher(sentence).find()) {
-                Tools.logger.info(Tools.i18n("removingIgnoredRuleMatch", ruleId, sentence));
-                ignoreMatches.add(match);
-                break;
-              }
+          for (IgnoreRuleSentencePair pair : ignoreRuleSentencePairs) {
+            if (pair.getRuleId().equals(ruleId) &&
+                  pair.getSentencePattern().matcher(sentence).find()) {
+              Tools.logger.info(Tools.i18n("removingIgnoredRuleMatch", ruleId, sentence));
+              ignoreMatches.add(match);
+              break;
             }
           }
         }
