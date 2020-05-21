@@ -58,7 +58,7 @@ dependencies {
   compile(group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.12')
 
   // unit tests
-  compile(group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.1')
+  testCompile(group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.1')
 }
 
 test {
