@@ -123,7 +123,7 @@ public class CodeActionGenerator {
     }
 
     if (!addWordToDictionaryMatches.isEmpty() &&
-          settingsManager.getSettings().getLanguageToolHttpServerUri().isEmpty()) {
+          (settingsManager.getSettings().getLanguageToolHttpServerUri() == null)) {
       AnnotatedText inverseAnnotatedText = invertAnnotatedText(validateResult.getValue());
       List<String> unknownWords = new ArrayList<>();
       JsonArray unknownWordsJson = new JsonArray();
