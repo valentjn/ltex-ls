@@ -30,6 +30,6 @@ public abstract class CodeAnnotatedTextBuilder extends AnnotatedTextBuilder {
     return constructorMap.get(codeLanguageId).apply(codeLanguageId);
   }
 
-  public abstract CodeAnnotatedTextBuilder addCode(String text);
+  public abstract CodeAnnotatedTextBuilder addCode(String code);
   public void setSettings(Settings settings) {}
 }

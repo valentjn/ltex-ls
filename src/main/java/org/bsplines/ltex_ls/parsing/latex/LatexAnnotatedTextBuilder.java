@@ -260,7 +260,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
       "displaymath", "eqnarray", "eqnarray*", "equation", "equation*", "flalign", "flalign*",
       "gather", "gather*", "math", "multline", "multline*"};
 
-  private String text;
+  private String code;
   private int pos;
   private int dummyCounter;
   private String lastSpace;
@@ -294,7 +294,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   }
 
   private String matchFromPosition(Pattern pattern, int pos) {
-    Matcher matcher = pattern.matcher(text.substring(pos));
+    Matcher matcher = pattern.matcher(code.substring(pos));
     return (matcher.find() ? matcher.group() : "");
   }
 
@@ -401,10 +401,10 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     isMathCharTrivial = true;
   }
 
-  private String getDebugInformation(String text) {
-    String remainingText = StringEscapeUtils.escapeJava(
-        text.substring(pos, Math.min(pos + 100, text.length())));
-    return "Remaining text = \"" + remainingText +
+  private String getDebugInformation(String code) {
+    String remainingCode = StringEscapeUtils.escapeJava(
+        code.substring(pos, Math.min(pos + 100, code.length())));
+    return "Remaining code = \"" + remainingCode +
         "\", pos = " + pos + ", dummyCounter = " + dummyCounter + ", lastSpace = \"" + lastSpace +
         "\", lastPunctuation = \"" + lastPunctuation + "\", dummyLastSpace = \"" + dummyLastSpace +
         "\", dummyLastPunctuation = \"" + dummyLastPunctuation +
@@ -418,8 +418,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     return (text.contains("\n\n") || text.contains("\r\r") || text.contains("\r\n\r\n"));
   }
 
-  public LatexAnnotatedTextBuilder addCode(String text) {
-    this.text = text;
+  public LatexAnnotatedTextBuilder addCode(String code) {
+    this.code = code;
     pos = 0;
     dummyCounter = 0;
     lastSpace = "";
@@ -437,8 +437,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     Pattern ignoreEnvironmentEndPattern = null;
     int lastPos = -1;
 
-    while (pos < text.length()) {
-      curChar = text.charAt(pos);
+    while (pos < code.length()) {
+      curChar = code.charAt(pos);
       curString = String.valueOf(curChar);
       curMode = modeStack.peek();
       isMathCharTrivial = false;
@@ -502,15 +502,15 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                 addMarkup(argument, interpretAs);
 
                 if (command.equals("\\begin")) {
-                  while (pos < text.length()) {
+                  while (pos < code.length()) {
                     String environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
-                        text, pos, LatexCommandSignature.ArgumentType.BRACE);
+                        code, pos, LatexCommandSignature.ArgumentType.BRACE);
 
                     if (!environmentArgument.isEmpty()) {
                       addMarkup(environmentArgument);
                     } else {
                       environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
-                          text, pos, LatexCommandSignature.ArgumentType.BRACKET);
+                          code, pos, LatexCommandSignature.ArgumentType.BRACKET);
 
                       if (!environmentArgument.isEmpty()) {
                         addMarkup(environmentArgument);
@@ -548,7 +548,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
             } else if (command.equals("\\`") || command.equals("\\'") || command.equals("\\^") ||
                 command.equals("\\~") || command.equals("\\\"") || command.equals("\\=") ||
                 command.equals("\\.")) {
-              Matcher matcher = accentPattern1.matcher(text.substring(pos));
+              Matcher matcher = accentPattern1.matcher(code.substring(pos));
 
               if (matcher.find()) {
                 String accentCommand = matcher.group(1);
@@ -661,7 +661,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                 addMarkup(command);
               }
             } else if (command.equals("\\c") || command.equals("\\r")) {
-              Matcher matcher = accentPattern2.matcher(text.substring(pos));
+              Matcher matcher = accentPattern2.matcher(code.substring(pos));
 
               if (matcher.find()) {
                 String accentCommand = matcher.group(1);
@@ -754,7 +754,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
 
               for (LatexCommandSignature LatexCommandSignature : commandSignatures) {
                 if (LatexCommandSignature.name.equals(command)) {
-                  String curMatch = LatexCommandSignature.matchFromPosition(text, pos);
+                  String curMatch = LatexCommandSignature.matchFromPosition(code, pos);
 
                   if (curMatch.length() > match.length()) {
                     match = curMatch;
@@ -867,8 +867,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               String quote = "";
               String smartQuote = "";
 
-              if (pos + 1 < text.length()) {
-                quote = text.substring(pos, pos + 2);
+              if (pos + 1 < code.length()) {
+                quote = code.substring(pos, pos + 2);
 
                 if (quote.equals("``") || quote.equals("\"'")) {
                   smartQuote = "\u201c";
@@ -949,10 +949,10 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
       if (pos == lastPos) {
         if (isInStrictMode) {
           throw new RuntimeException(Tools.i18n(
-              "latexAnnotatedTextBuilderInfiniteLoop", getDebugInformation(text)));
+              "latexAnnotatedTextBuilderInfiniteLoop", getDebugInformation(code)));
         } else {
           Tools.logger.warning(Tools.i18n(
-              "latexAnnotatedTextBuilderPreventedInfiniteLoop", getDebugInformation(text)));
+              "latexAnnotatedTextBuilderPreventedInfiniteLoop", getDebugInformation(code)));
           pos++;
         }
       }

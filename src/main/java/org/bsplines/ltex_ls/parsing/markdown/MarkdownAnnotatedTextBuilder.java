@@ -22,9 +22,9 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   public List<String> ignoreNodeTypes = new ArrayList<>();
   public List<String> dummyNodeTypes = new ArrayList<>();
 
-  public MarkdownAnnotatedTextBuilder addCode(String text) {
+  public MarkdownAnnotatedTextBuilder addCode(String code) {
     Parser parser = Parser.builder().build();
-    Document document = parser.parse(text);
+    Document document = parser.parse(code);
     visit(document);
     return this;
   }
