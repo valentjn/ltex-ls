@@ -31,5 +31,6 @@ public abstract class CodeAnnotatedTextBuilder extends AnnotatedTextBuilder {
   }
 
   public abstract CodeAnnotatedTextBuilder addCode(String code);
+
   public void setSettings(Settings settings) {}
 }

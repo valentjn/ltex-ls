@@ -30,8 +30,7 @@ public class SettingsManager {
           settings.getDictionary());
     } else {
       languageToolInterface = new LanguageToolHttpInterface(settings.getLanguageToolHttpServerUri(),
-          settings.getLanguageShortCode(),
-          settings.getMotherTongueShortCode());
+          settings.getLanguageShortCode(), settings.getMotherTongueShortCode());
     }
 
     if (!languageToolInterface.isReady()) {
