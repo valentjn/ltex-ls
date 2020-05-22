@@ -5,13 +5,14 @@ import java.util.*;
 import org.apache.commons.text.StringEscapeUtils;
 
 import org.bsplines.ltex_ls.languagetool.*;
-import org.bsplines.ltex_ls.parsing.CodeAnnotatedTextBuilder;
-
+import org.bsplines.ltex_ls.parsing.*;
 import org.eclipse.lsp4j.TextDocumentItem;
 
 import org.eclipse.xtext.xbase.lib.Pair;
 
 import org.languagetool.markup.AnnotatedText;
+import org.languagetool.markup.AnnotatedText.MetaDataKey;
+import org.languagetool.markup.TextPart;
 
 public class DocumentValidator {
   private SettingsManager settingsManager;
@@ -20,11 +21,86 @@ public class DocumentValidator {
     this.settingsManager = settingsManager;
   }
 
-  private AnnotatedText buildAnnotatedText(TextDocumentItem document) {
-    CodeAnnotatedTextBuilder builder = CodeAnnotatedTextBuilder.create(document.getLanguageId());
-    builder.setSettings(settingsManager.getSettings());
-    builder.addCode(document.getText());
-    return builder.build();
+  private List<CodeFragment> fragmentizeDocument(TextDocumentItem document) {
+    CodeFragmentizer codeFragmentizer = CodeFragmentizer.create(
+        document.getLanguageId(), settingsManager.getSettings());
+    return codeFragmentizer.fragmentize(document.getText());
+  }
+
+  private List<AnnotatedTextFragment> buildAnnotatedTextFragments(
+        List<CodeFragment> codeFragments) {
+    List<AnnotatedTextFragment> annotatedTextFragments = new ArrayList<>();
+
+    for (CodeFragment codeFragment : codeFragments) {
+      CodeAnnotatedTextBuilder builder = CodeAnnotatedTextBuilder.create(
+          codeFragment.getCodeLanguageId());
+      builder.setSettings(codeFragment.getSettings());
+      builder.addCode(codeFragment.getCode());
+      AnnotatedText curAnnotatedText = builder.build();
+      annotatedTextFragments.add(new AnnotatedTextFragment(curAnnotatedText, codeFragment));
+    }
+
+    return annotatedTextFragments;
+  }
+
+  private List<LanguageToolRuleMatch> checkAnnotatedTextFragments(
+        List<AnnotatedTextFragment> annotatedTextFragments) {
+    List<LanguageToolRuleMatch> matches = new ArrayList<>();
+
+    for (AnnotatedTextFragment annotatedTextFragment : annotatedTextFragments) {
+      matches.addAll(checkAnnotatedTextFragment(annotatedTextFragment));
+    }
+
+    return matches;
+  }
+
+  private List<LanguageToolRuleMatch> checkAnnotatedTextFragment(
+        AnnotatedTextFragment annotatedTextFragment) {
+    Settings settings = annotatedTextFragment.getCodeFragment().getSettings();
+    settingsManager.setSettings(settings);
+    LanguageToolInterface languageToolInterface = settingsManager.getLanguageToolInterface();
+
+    if (languageToolInterface == null) {
+      Tools.logger.warning(Tools.i18n("skippingTextCheck"));
+      return Collections.emptyList();
+    } else if ((settings.getDictionary().size() >= 1) &&
+        "BsPlInEs".equals(settings.getDictionary().get(0))) {
+      languageToolInterface.enableEasterEgg();
+    }
+
+    {
+      int logTextMaxLength = 100;
+      String logText = annotatedTextFragment.getAnnotatedText().getPlainText();
+      String postfix = "";
+
+      if (logText.length() > logTextMaxLength) {
+        logText = logText.substring(0, logTextMaxLength);
+        postfix = Tools.i18n("truncatedPostfix", logTextMaxLength);
+      }
+
+      Tools.logger.info(Tools.i18n("checkingText",
+          settings.getLanguageShortCode(), StringEscapeUtils.escapeJava(logText), postfix));
+    }
+
+    List<LanguageToolRuleMatch> matches = Collections.emptyList();
+
+    try {
+      matches = languageToolInterface.check(annotatedTextFragment.getAnnotatedText());
+      Tools.logger.info((matches.size() == 1) ? Tools.i18n("obtainedRuleMatch") :
+          Tools.i18n("obtainedRuleMatches", matches.size()));
+      removeIgnoredMatches(matches);
+    } catch (RuntimeException e) {
+      Tools.logger.severe(Tools.i18n("languageToolFailed", e.getMessage()));
+      e.printStackTrace();
+      return matches;
+    }
+
+    for (LanguageToolRuleMatch match : matches) {
+      match.setFromPos(match.getFromPos() + annotatedTextFragment.getCodeFragment().getFromPos());
+      match.setToPos(match.getToPos() + annotatedTextFragment.getCodeFragment().getFromPos());
+    }
+
+    return matches;
   }
 
   public void removeIgnoredMatches(List<LanguageToolRuleMatch> matches) {
@@ -58,46 +134,45 @@ public class DocumentValidator {
     }
   }
 
-  public Pair<List<LanguageToolRuleMatch>, AnnotatedText> validate(TextDocumentItem document) {
-    Settings settings = settingsManager.getSettings();
-    LanguageToolInterface languageToolInterface = settingsManager.getLanguageToolInterface();
+  private AnnotatedText joinAnnotatedTextFragments(
+        List<AnnotatedTextFragment> annotatedTextFragments) {
+    int plainTextLength = 0;
+    List<TextPart> parts = new ArrayList<>();
+    List<Map.Entry<Integer, Integer>> mapping = new ArrayList<>();
+    Map<MetaDataKey, String> metaData = new HashMap<>();
+    Map<String, String> customMetaData = new HashMap<>();
 
-    if (languageToolInterface == null) {
-      Tools.logger.warning(Tools.i18n("skippingTextCheck"));
-      return new Pair<>(Collections.emptyList(), null);
-    }
+    for (AnnotatedTextFragment annotatedTextFragment : annotatedTextFragments) {
+      AnnotatedText curAnnotatedText = annotatedTextFragment.getAnnotatedText();
+      CodeFragment curCodeFragment = annotatedTextFragment.getCodeFragment();
+      String curPlainText = curAnnotatedText.getPlainText();
 
-    AnnotatedText annotatedText = buildAnnotatedText(document);
-
-    if ((settings.getDictionary().size() >= 1) &&
-        "BsPlInEs".equals(settings.getDictionary().get(0))) {
-      languageToolInterface.enableEasterEgg();
-    }
-
-    {
-      int logTextMaxLength = 100;
-      String logText = annotatedText.getPlainText();
-      String postfix = "";
-
-      if (logText.length() > logTextMaxLength) {
-        logText = logText.substring(0, logTextMaxLength);
-        postfix = Tools.i18n("truncatedPostfix", logTextMaxLength);
+      for (Map.Entry<Integer, Integer> entry : curAnnotatedText.getMapping()) {
+        mapping.add(new AbstractMap.SimpleEntry<>(
+            entry.getKey() + plainTextLength, entry.getValue() + curCodeFragment.getFromPos()));
       }
 
-      Tools.logger.info(Tools.i18n("checkingText",
-          settings.getLanguageShortCode(), StringEscapeUtils.escapeJava(logText), postfix));
+      parts.addAll(curAnnotatedText.getParts());
+      metaData.putAll(curAnnotatedText.getMetaData());
+      customMetaData.putAll(curAnnotatedText.getCustomMetaData());
+      plainTextLength += curPlainText.length();
     }
 
+    return new AnnotatedText(parts, mapping, metaData, customMetaData);
+  }
+
+  public Pair<List<LanguageToolRuleMatch>, AnnotatedText> validate(TextDocumentItem document) {
+    Settings originalSettings = settingsManager.getSettings();
+
     try {
-      List<LanguageToolRuleMatch> matches = languageToolInterface.check(annotatedText);
-      Tools.logger.info((matches.size() == 1) ? Tools.i18n("obtainedRuleMatch") :
-          Tools.i18n("obtainedRuleMatches", matches.size()));
-      removeIgnoredMatches(matches);
+      List<CodeFragment> codeFragments = fragmentizeDocument(document);
+      List<AnnotatedTextFragment> annotatedTextFragments =
+          buildAnnotatedTextFragments(codeFragments);
+      List<LanguageToolRuleMatch> matches = checkAnnotatedTextFragments(annotatedTextFragments);
+      AnnotatedText annotatedText = joinAnnotatedTextFragments(annotatedTextFragments);
       return new Pair<>(matches, annotatedText);
-    } catch (RuntimeException e) {
-      Tools.logger.severe(Tools.i18n("languageToolFailed", e.getMessage()));
-      e.printStackTrace();
-      return new Pair<>(Collections.emptyList(), annotatedText);
+    } finally {
+      settingsManager.setSettings(originalSettings);
     }
   }
 }

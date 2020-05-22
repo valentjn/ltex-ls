@@ -223,4 +223,7 @@ public class AnnotatedText {
     return StringUtils.join(parts, "");
   }
 
+  public Map<MetaDataKey, String> getMetaData() { return metaData; }
+  public Map<String, String> getCustomMetaData() { return customMetaData; }
+
 }

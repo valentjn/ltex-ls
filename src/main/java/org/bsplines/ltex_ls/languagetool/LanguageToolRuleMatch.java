@@ -27,4 +27,7 @@ public class LanguageToolRuleMatch {
   public int getToPos() { return toPos; }
   public String getMessage() { return message; }
   public List<String> getSuggestedReplacements() { return suggestedReplacements; }
+
+  public void setFromPos(int fromPos) { this.fromPos = fromPos; }
+  public void setToPos(int toPos) { this.toPos = toPos; }
 }

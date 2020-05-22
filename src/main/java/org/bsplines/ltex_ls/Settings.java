@@ -453,4 +453,8 @@ public class Settings {
   public DiagnosticSeverity getDiagnosticSeverity() {
     return getDefault(diagnosticSeverity, DiagnosticSeverity.Information);
   }
+
+  public void setLanguageShortCode(String languageShortCode) {
+    this.languageShortCode = languageShortCode;
+  }
 }
