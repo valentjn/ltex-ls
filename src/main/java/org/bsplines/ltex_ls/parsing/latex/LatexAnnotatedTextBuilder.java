@@ -7,10 +7,11 @@ import java.util.Stack;
 import java.util.regex.*;
 
 import org.apache.commons.text.StringEscapeUtils;
+import org.bsplines.ltex_ls.parsing.CodeAnnotatedTextBuilder;
+import org.bsplines.ltex_ls.Settings;
 import org.bsplines.ltex_ls.Tools;
-import org.languagetool.markup.AnnotatedText;
 
-public class LatexAnnotatedTextBuilder {
+public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private enum Mode {
     PARAGRAPH_TEXT,
     INLINE_TEXT,
@@ -259,9 +260,6 @@ public class LatexAnnotatedTextBuilder {
       "displaymath", "eqnarray", "eqnarray*", "equation", "equation*", "flalign", "flalign*",
       "gather", "gather*", "math", "multline", "multline*"};
 
-  private org.languagetool.markup.AnnotatedTextBuilder builder =
-      new org.languagetool.markup.AnnotatedTextBuilder();
-
   private String text;
   private int pos;
   private int dummyCounter;
@@ -286,6 +284,10 @@ public class LatexAnnotatedTextBuilder {
   public List<String> ignoreEnvironments =
       new ArrayList<>(Arrays.asList(defaultIgnoreEnvironments));
   public boolean isInStrictMode = false;
+
+  public LatexAnnotatedTextBuilder(String codeLanguageId) {
+    this.codeLanguageId = codeLanguageId;
+  }
 
   private String matchFromPosition(Pattern pattern) {
     return matchFromPosition(pattern, pos);
@@ -319,17 +321,17 @@ public class LatexAnnotatedTextBuilder {
     return dummy;
   }
 
-  private LatexAnnotatedTextBuilder addText(String text) {
+  public LatexAnnotatedTextBuilder addText(String text) {
     if (text.isEmpty()) return this;
-    builder.addText(text);
+    super.addText(text);
     pos += text.length();
     textAdded(text);
     return this;
   }
 
-  private LatexAnnotatedTextBuilder addMarkup(String markup) {
+  public LatexAnnotatedTextBuilder addMarkup(String markup) {
     if (markup.isEmpty()) return this;
-    builder.addMarkup(markup);
+    super.addMarkup(markup);
     pos += markup.length();
 
     if (preserveDummyLast) {
@@ -342,12 +344,11 @@ public class LatexAnnotatedTextBuilder {
     return this;
   }
 
-  private LatexAnnotatedTextBuilder addMarkup(String markup, String interpretAs)
-      throws InterruptedException {
+  public LatexAnnotatedTextBuilder addMarkup(String markup, String interpretAs) {
     if (interpretAs.isEmpty()) {
       return addMarkup(markup);
     } else {
-      builder.addMarkup(markup, interpretAs);
+      super.addMarkup(markup, interpretAs);
       pos += markup.length();
       preserveDummyLast = false;
       textAdded(interpretAs);
@@ -417,7 +418,7 @@ public class LatexAnnotatedTextBuilder {
     return (text.contains("\n\n") || text.contains("\r\r") || text.contains("\r\n\r\n"));
   }
 
-  public LatexAnnotatedTextBuilder addCode(String text) throws InterruptedException {
+  public LatexAnnotatedTextBuilder addCode(String text) {
     this.text = text;
     pos = 0;
     dummyCounter = 0;
@@ -437,8 +438,6 @@ public class LatexAnnotatedTextBuilder {
     int lastPos = -1;
 
     while (pos < text.length()) {
-      if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
-
       curChar = text.charAt(pos);
       curString = String.valueOf(curChar);
       curMode = modeStack.peek();
@@ -504,8 +503,6 @@ public class LatexAnnotatedTextBuilder {
 
                 if (command.equals("\\begin")) {
                   while (pos < text.length()) {
-                    if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
-
                     String environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
                         text, pos, LatexCommandSignature.ArgumentType.BRACE);
 
@@ -756,8 +753,6 @@ public class LatexAnnotatedTextBuilder {
               LatexCommandSignature matchingCommand = null;
 
               for (LatexCommandSignature LatexCommandSignature : commandSignatures) {
-                if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
-
                 if (LatexCommandSignature.name.equals(command)) {
                   String curMatch = LatexCommandSignature.matchFromPosition(text, pos);
 
@@ -966,7 +961,19 @@ public class LatexAnnotatedTextBuilder {
     return this;
   }
 
-  public AnnotatedText getAnnotatedText() {
-    return builder.build();
+  public void setSettings(Settings settings) {
+    language = settings.getLanguageShortCode();
+
+    for (String commandPrototype : settings.getDummyCommandPrototypes()) {
+      commandSignatures.add(new LatexCommandSignature(commandPrototype,
+          LatexCommandSignature.Action.DUMMY));
+    }
+
+    for (String commandPrototype : settings.getIgnoreCommandPrototypes()) {
+      commandSignatures.add(new LatexCommandSignature(commandPrototype,
+          LatexCommandSignature.Action.IGNORE));
+    }
+
+    ignoreEnvironments.addAll(settings.getIgnoreEnvironments());
   }
 }

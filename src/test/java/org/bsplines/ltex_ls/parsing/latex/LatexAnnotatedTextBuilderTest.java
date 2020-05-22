@@ -11,17 +11,10 @@ public class LatexAnnotatedTextBuilderTest {
   }
 
   static AnnotatedText buildAnnotatedText(String code, String language, String codeLanguageId) {
-    LatexAnnotatedTextBuilder builder = new LatexAnnotatedTextBuilder();
+    LatexAnnotatedTextBuilder builder = new LatexAnnotatedTextBuilder(codeLanguageId);
     builder.language = language;
-    builder.codeLanguageId = codeLanguageId;
     builder.isInStrictMode = true;
-
-    try {
-      return builder.addCode(code).getAnnotatedText();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-      return null;
-    }
+    return builder.addCode(code).build();
   }
 
   static void assertPlainText(String code, String expectedPlainText) {

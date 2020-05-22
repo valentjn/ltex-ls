@@ -8,14 +8,11 @@ import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.parser.Parser;
 
+import org.bsplines.ltex_ls.parsing.CodeAnnotatedTextBuilder;
+import org.bsplines.ltex_ls.Settings;
 import org.bsplines.ltex_ls.Tools;
 
-import org.languagetool.markup.AnnotatedText;
-
-public class MarkdownAnnotatedTextBuilder {
-  private org.languagetool.markup.AnnotatedTextBuilder builder =
-      new org.languagetool.markup.AnnotatedTextBuilder();
-
+public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private String text;
   private int pos;
   private int dummyCounter;
@@ -25,10 +22,11 @@ public class MarkdownAnnotatedTextBuilder {
   public List<String> ignoreNodeTypes = new ArrayList<>();
   public List<String> dummyNodeTypes = new ArrayList<>();
 
-  public void addCode(String text) {
+  public MarkdownAnnotatedTextBuilder addCode(String text) {
     Parser parser = Parser.builder().build();
     Document document = parser.parse(text);
     visit(document);
+    return this;
   }
 
   private void visit(Document document) {
@@ -68,21 +66,21 @@ public class MarkdownAnnotatedTextBuilder {
         if ((curPos == -1) || (curPos >= newPos)) break;
       }
 
-      if (curPos > pos) builder.addMarkup(text.substring(pos, curPos));
-      builder.addMarkup(text.substring(curPos, curPos + 1), (inParagraph ? " " : "\n"));
+      if (curPos > pos) super.addMarkup(text.substring(pos, curPos));
+      super.addMarkup(text.substring(curPos, curPos + 1), (inParagraph ? " " : "\n"));
 
       pos = curPos + 1;
     }
 
     if (newPos > pos) {
-      builder.addMarkup(text.substring(pos, newPos));
+      super.addMarkup(text.substring(pos, newPos));
       pos = newPos;
     }
   }
 
   private void addText(int newPos) {
     if (newPos > pos) {
-      builder.addText(text.substring(pos, newPos));
+      super.addText(text.substring(pos, newPos));
       pos = newPos;
     }
   }
@@ -106,7 +104,7 @@ public class MarkdownAnnotatedTextBuilder {
       int newPos = node.getEndOffset();
 
       if (newPos > pos) {
-        builder.addMarkup(text.substring(pos, newPos), generateDummy());
+        super.addMarkup(text.substring(pos, newPos), generateDummy());
         pos = newPos;
       }
     } else {
@@ -120,7 +118,10 @@ public class MarkdownAnnotatedTextBuilder {
     }
   }
 
-  public AnnotatedText getAnnotatedText() {
-    return builder.build();
+  @Override
+  public void setSettings(Settings settings) {
+    language = settings.getLanguageShortCode();
+    dummyNodeTypes.addAll(settings.getDummyMarkdownNodeTypes());
+    ignoreNodeTypes.addAll(settings.getIgnoreMarkdownNodeTypes());
   }
 }

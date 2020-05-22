@@ -1,20 +1,17 @@
 package org.bsplines.ltex_ls;
 
 import java.util.*;
-import java.util.concurrent.*;
 
 import org.apache.commons.text.StringEscapeUtils;
 
 import org.bsplines.ltex_ls.languagetool.*;
-import org.bsplines.ltex_ls.parsing.latex.*;
-import org.bsplines.ltex_ls.parsing.markdown.*;
+import org.bsplines.ltex_ls.parsing.CodeAnnotatedTextBuilder;
 
 import org.eclipse.lsp4j.TextDocumentItem;
 
 import org.eclipse.xtext.xbase.lib.Pair;
 
 import org.languagetool.markup.AnnotatedText;
-import org.languagetool.markup.AnnotatedTextBuilder;
 
 public class DocumentValidator {
   private SettingsManager settingsManager;
@@ -24,70 +21,10 @@ public class DocumentValidator {
   }
 
   private AnnotatedText buildAnnotatedText(TextDocumentItem document) {
-    Settings settings = settingsManager.getSettings();
-    String codeLanguageId = document.getLanguageId();
-    AnnotatedText annotatedText;
-
-    switch (codeLanguageId) {
-      case "plaintext": {
-        AnnotatedTextBuilder builder = new AnnotatedTextBuilder();
-        annotatedText = builder.addText(document.getText()).build();
-        break;
-      }
-      case "markdown": {
-        MarkdownAnnotatedTextBuilder builder = new MarkdownAnnotatedTextBuilder();
-        builder.language = settings.getLanguageShortCode();
-        builder.dummyNodeTypes.addAll(settings.getDummyMarkdownNodeTypes());
-        builder.ignoreNodeTypes.addAll(settings.getIgnoreMarkdownNodeTypes());
-
-        builder.addCode(document.getText());
-        annotatedText = builder.getAnnotatedText();
-        break;
-      }
-      case "latex":
-      case "rsweave": {
-        LatexAnnotatedTextBuilder builder = new LatexAnnotatedTextBuilder();
-        builder.language = settings.getLanguageShortCode();
-        builder.codeLanguageId = codeLanguageId;
-
-        for (String commandPrototype : settings.getDummyCommandPrototypes()) {
-          builder.commandSignatures.add(new LatexCommandSignature(commandPrototype,
-              LatexCommandSignature.Action.DUMMY));
-        }
-
-        for (String commandPrototype : settings.getIgnoreCommandPrototypes()) {
-          builder.commandSignatures.add(new LatexCommandSignature(commandPrototype,
-              LatexCommandSignature.Action.IGNORE));
-        }
-
-        builder.ignoreEnvironments.addAll(settings.getIgnoreEnvironments());
-
-        ExecutorService executor = Executors.newCachedThreadPool();
-        Future<Object> builderFuture = executor.submit(new Callable<Object>() {
-          public Object call() throws InterruptedException {
-            builder.addCode(document.getText());
-            return null;
-          }
-        });
-
-        try {
-          builderFuture.get(10, TimeUnit.SECONDS);
-        } catch (TimeoutException | InterruptedException | ExecutionException e) {
-          throw new RuntimeException(Tools.i18n("latexAnnotatedTextBuilderFailed"), e);
-        } finally {
-          builderFuture.cancel(true);
-        }
-
-        annotatedText = builder.getAnnotatedText();
-        break;
-      }
-      default: {
-        throw new UnsupportedOperationException(Tools.i18n(
-            "codeLanguageNotSupported", codeLanguageId));
-      }
-    }
-
-    return annotatedText;
+    CodeAnnotatedTextBuilder builder = CodeAnnotatedTextBuilder.create(document.getLanguageId());
+    builder.setSettings(settingsManager.getSettings());
+    builder.addCode(document.getText());
+    return builder.build();
   }
 
   public void removeIgnoredMatches(List<LanguageToolRuleMatch> matches) {

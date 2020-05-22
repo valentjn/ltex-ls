@@ -57,8 +57,7 @@ public class LatexCommandSignature {
     return (matcher.find() ? matcher.group() : "");
   }
 
-  public static String matchArgumentFromPosition(String text, int pos, ArgumentType argumentType)
-      throws InterruptedException {
+  public static String matchArgumentFromPosition(String text, int pos, ArgumentType argumentType) {
     int startPos = pos;
     Stack<ArgumentType> argumentTypeStack = new Stack<>();
     char openChar = '\0';
@@ -79,8 +78,6 @@ public class LatexCommandSignature {
     argumentTypeStack.push(argumentType);
 
     while (pos < text.length()) {
-      if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
-
       switch (text.charAt(pos)) {
         case '\\': {
           if (pos + 1 < text.length()) pos++;
@@ -126,7 +123,7 @@ public class LatexCommandSignature {
     return "";
   }
 
-  public String matchFromPosition(String text, int pos) throws InterruptedException {
+  public String matchFromPosition(String text, int pos) {
     Pattern commandPattern = Pattern.compile("^" + Pattern.quote(name));
     Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
 
@@ -135,8 +132,6 @@ public class LatexCommandSignature {
     pos += match.length();
 
     for (ArgumentType argumentType : argumentTypes) {
-      if (Thread.currentThread().isInterrupted()) throw new InterruptedException();
-
       match = matchFromPosition(text, pos, commentPattern);
       pos += match.length();
 

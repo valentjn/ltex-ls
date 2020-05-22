@@ -14,7 +14,7 @@ public class MarkdownAnnotatedTextBuilderTest {
     builder.addCode("# Heading\n" +
         "Paragraph with\n" +
         "multiple lines and [link](example.com)");
-    AnnotatedText text = builder.getAnnotatedText();
+    AnnotatedText text = builder.build();
 
     Assertions.assertEquals("Heading\nParagraph with multiple lines and link", text.getPlainText());
   }
