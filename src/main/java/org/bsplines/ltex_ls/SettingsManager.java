@@ -24,7 +24,7 @@ public class SettingsManager {
   }
 
   private void reinitializeLanguageToolInterface() {
-    if (settings.getLanguageToolHttpServerUri() == null) {
+    if (settings.getLanguageToolHttpServerUri().isEmpty()) {
       languageToolInterface = new LanguageToolJavaInterface(settings.getLanguageShortCode(),
           settings.getMotherTongueShortCode(), settings.getSentenceCacheSize(),
           settings.getDictionary());
@@ -38,21 +38,21 @@ public class SettingsManager {
       return;
     }
 
-    if (settings.getLanguageModelRulesDirectory() == null) {
-      if (settings.getMotherTongueShortCode() != null) {
-        languageToolInterface.activateDefaultFalseFriendRules();
-      }
-    } else {
+    if (!settings.getLanguageModelRulesDirectory().isEmpty()) {
       languageToolInterface.activateLanguageModelRules(
           settings.getLanguageModelRulesDirectory());
+    } else {
+      if (!settings.getMotherTongueShortCode().isEmpty()) {
+        languageToolInterface.activateDefaultFalseFriendRules();
+      }
     }
 
-    if (settings.getNeuralNetworkModelRulesDirectory() != null) {
+    if (!settings.getNeuralNetworkModelRulesDirectory().isEmpty()) {
       languageToolInterface.activateNeuralNetworkRules(
           settings.getNeuralNetworkModelRulesDirectory());
     }
 
-    if (settings.getWord2VecModelRulesDirectory() != null) {
+    if (!settings.getWord2VecModelRulesDirectory().isEmpty()) {
       languageToolInterface.activateWord2VecModelRules(
           settings.getWord2VecModelRulesDirectory());
     }

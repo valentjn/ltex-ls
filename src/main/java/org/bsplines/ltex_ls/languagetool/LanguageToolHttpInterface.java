@@ -86,10 +86,19 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
 
     Map<String, String> requestEntries = new HashMap<>();
     requestEntries.put("language", languageShortCode);
-    requestEntries.put("motherTongue", motherTongueShortCode);
-    requestEntries.put("enabledRules", String.join(",", enabledRuleIds));
-    requestEntries.put("disabledRules", String.join(",", disabledRuleIds));
     requestEntries.put("data", jsonData.toString());
+
+    if (!motherTongueShortCode.isEmpty()) {
+      requestEntries.put("motherTongue", motherTongueShortCode);
+    }
+
+    if (!enabledRuleIds.isEmpty()) {
+      requestEntries.put("enabledRules", String.join(",", enabledRuleIds));
+    }
+
+    if (!disabledRuleIds.isEmpty()) {
+      requestEntries.put("disabledRules", String.join(",", disabledRuleIds));
+    }
 
     StringBuilder builder = new StringBuilder();
 

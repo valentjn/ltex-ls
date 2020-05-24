@@ -383,7 +383,7 @@ public class Settings {
   }
 
   private static String getDefault(String obj, String default_) {
-    return (((obj != null) && !obj.isEmpty()) ? obj : default_);
+    return ((obj != null) ? obj : default_);
   }
 
   public String getLanguageShortCode() {
@@ -403,7 +403,7 @@ public class Settings {
   }
 
   public String getLanguageToolHttpServerUri() {
-    return getDefault(languageToolHttpServerUri, null);
+    return getDefault(languageToolHttpServerUri, "");
   }
 
   public List<String> getDummyCommandPrototypes() {
@@ -431,19 +431,19 @@ public class Settings {
   }
 
   public String getMotherTongueShortCode() {
-    return getDefault(motherTongueShortCode, null);
+    return getDefault(motherTongueShortCode, "");
   }
 
   public String getLanguageModelRulesDirectory() {
-    return getDefault(languageModelRulesDirectory, null);
+    return getDefault(languageModelRulesDirectory, "");
   }
 
   public String getNeuralNetworkModelRulesDirectory() {
-    return getDefault(neuralNetworkModelRulesDirectory, null);
+    return getDefault(neuralNetworkModelRulesDirectory, "");
   }
 
   public String getWord2VecModelRulesDirectory() {
-    return getDefault(word2VecModelRulesDirectory, null);
+    return getDefault(word2VecModelRulesDirectory, "");
   }
 
   public Integer getSentenceCacheSize() {

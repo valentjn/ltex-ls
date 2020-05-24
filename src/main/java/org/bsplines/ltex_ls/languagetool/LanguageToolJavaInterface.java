@@ -34,7 +34,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     }
 
     Language language = Languages.getLanguageForShortCode(languageShortCode);
-    Language motherTongue = ((motherTongueShortCode != null) ?
+    Language motherTongue = ((!motherTongueShortCode.isEmpty()) ?
         Languages.getLanguageForShortCode(motherTongueShortCode) : null);
     ResultCache resultCache = new ResultCache(sentenceCacheSize,
         resultCacheExpireAfterMinutes, TimeUnit.MINUTES);
