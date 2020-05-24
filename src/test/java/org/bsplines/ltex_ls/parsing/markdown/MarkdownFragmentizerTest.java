@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.bsplines.ltex_ls.Settings;
 import org.bsplines.ltex_ls.parsing.CodeFragment;
+import org.bsplines.ltex_ls.parsing.CodeFragmentizer;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,9 +12,8 @@ import org.junit.jupiter.api.Test;
 public class MarkdownFragmentizerTest {
   @Test
   public void test() {
-    MarkdownFragmentizer markdownFragmentizer =
-        new MarkdownFragmentizer("markdown", new Settings());
-    List<CodeFragment> codeFragments = markdownFragmentizer.fragmentize(
+    CodeFragmentizer fragmentizer = CodeFragmentizer.create("markdown", new Settings());
+    List<CodeFragment> codeFragments = fragmentizer.fragmentize(
         "Sentence 1\n" +
         "\n[comment]: # ltex: language=de-DE\n\nSentence 2\n" +
         "\n[comment]:\t#ltex:\tlanguage=en-US\n\nSentence 3\n");

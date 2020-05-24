@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import org.bsplines.ltex_ls.parsing.CodeAnnotatedTextBuilder;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +24,8 @@ public class MarkdownAnnotatedTextBuilderTest {
 
   private static AnnotatedText buildAnnotatedText(String code,
         List<String> ignoreNodeTypes, List<String> dummyNodeTypes) {
-    MarkdownAnnotatedTextBuilder builder = new MarkdownAnnotatedTextBuilder();
+    MarkdownAnnotatedTextBuilder builder =
+        (MarkdownAnnotatedTextBuilder)CodeAnnotatedTextBuilder.create("markdown");
     builder.ignoreNodeTypes.addAll(ignoreNodeTypes);
     builder.dummyNodeTypes.addAll(dummyNodeTypes);
     return builder.addCode(code).build();

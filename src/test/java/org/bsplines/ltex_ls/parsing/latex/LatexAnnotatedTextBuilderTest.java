@@ -1,5 +1,7 @@
 package org.bsplines.ltex_ls.parsing.latex;
 
+import org.bsplines.ltex_ls.parsing.CodeAnnotatedTextBuilder;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +28,8 @@ public class LatexAnnotatedTextBuilderTest {
 
   private static AnnotatedText buildAnnotatedText(String code, String language,
         String codeLanguageId) {
-    LatexAnnotatedTextBuilder builder = new LatexAnnotatedTextBuilder(codeLanguageId);
+    LatexAnnotatedTextBuilder builder =
+        (LatexAnnotatedTextBuilder)CodeAnnotatedTextBuilder.create(codeLanguageId);
     builder.language = language;
     builder.isInStrictMode = true;
     return builder.addCode(code).build();
