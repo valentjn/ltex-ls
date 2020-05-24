@@ -37,4 +37,14 @@ public class MarkdownFragmentizerTest {
     Assertions.assertEquals(70, codeFragments.get(2).getFromPos());
     Assertions.assertEquals("en-US", codeFragments.get(2).getSettings().getLanguageShortCode());
   }
+
+  @Test
+  public void testWrongSettings() {
+    MarkdownFragmentizer markdownFragmentizer =
+        new MarkdownFragmentizer("markdown", new Settings());
+    Assertions.assertDoesNotThrow(() -> markdownFragmentizer.fragmentize(
+        "Sentence 1\n[comment]: # ltex: languagede-DE\n\nSentence 2\n"));
+    Assertions.assertDoesNotThrow(() -> markdownFragmentizer.fragmentize(
+        "Sentence 1\n[comment]: # ltex: unknownKey=abc\n\nSentence 2\n"));
+  }
 }
