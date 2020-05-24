@@ -6,33 +6,34 @@ import org.junit.jupiter.api.Test;
 import org.languagetool.markup.AnnotatedText;
 
 public class LatexAnnotatedTextBuilderTest {
-  static AnnotatedText buildAnnotatedText(String code) {
+  private static void assertPlainText(String code, String expectedPlainText) {
+    assertPlainText(code, expectedPlainText, "en-US");
+  }
+
+  private static void assertPlainText(String code, String expectedPlainText, String language) {
+    assertPlainText(code, expectedPlainText, language, "latex");
+  }
+
+  private static void assertPlainText(String code, String expectedPlainText, String language,
+      String codeLanguageId) {
+    AnnotatedText annotatedText = buildAnnotatedText(code, language, codeLanguageId);
+    Assertions.assertEquals(expectedPlainText, annotatedText.getPlainText());
+  }
+
+  private static AnnotatedText buildAnnotatedText(String code) {
     return buildAnnotatedText(code, "en-US", "latex");
   }
 
-  static AnnotatedText buildAnnotatedText(String code, String language, String codeLanguageId) {
+  private static AnnotatedText buildAnnotatedText(String code, String language,
+        String codeLanguageId) {
     LatexAnnotatedTextBuilder builder = new LatexAnnotatedTextBuilder(codeLanguageId);
     builder.language = language;
     builder.isInStrictMode = true;
     return builder.addCode(code).build();
   }
 
-  static void assertPlainText(String code, String expectedPlainText) {
-    assertPlainText(code, expectedPlainText, "en-US");
-  }
-
-  static void assertPlainText(String code, String expectedPlainText, String language) {
-    assertPlainText(code, expectedPlainText, language, "latex");
-  }
-
-  static void assertPlainText(String code, String expectedPlainText, String language,
-      String codeLanguageId) {
-    AnnotatedText annotatedText = buildAnnotatedText(code, language, codeLanguageId);
-    Assertions.assertEquals(expectedPlainText, annotatedText.getPlainText());
-  }
-
   @Test
-  void testTextMode() {
+  public void testTextMode() {
     assertPlainText(
         "We can do\n" +
         "\\begin{itemize}\n" +
@@ -80,7 +81,7 @@ public class LatexAnnotatedTextBuilderTest {
   }
 
   @Test
-  void testTikzMode() {
+  public void testTikzMode() {
     assertPlainText("This is a \\tikzset{bla}test.\n", "This is a test. ");
     assertPlainText(
         "This is a test.\n" +
@@ -99,7 +100,7 @@ public class LatexAnnotatedTextBuilderTest {
   }
 
   @Test
-  void testMathMode() {
+  public void testMathMode() {
     assertPlainText(
         "Recall that\n" +
         "\\begin{equation*}\n" +
@@ -194,7 +195,7 @@ public class LatexAnnotatedTextBuilderTest {
   }
 
   @Test
-  void testRsweaveMode() {
+  public void testRsweaveMode() {
     assertPlainText(
         "\\SweaveOpts{prefix.string=figures}\n" +
         "This is a first sentence.\n" +
