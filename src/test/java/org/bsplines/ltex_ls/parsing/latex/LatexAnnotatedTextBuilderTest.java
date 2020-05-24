@@ -171,6 +171,13 @@ public class LatexAnnotatedTextBuilderTest {
         "\\end{equation*}\n",
         "This is a test: Dummy0, and Dummy1. ");
     assertPlainText(
+        "This is a test:\n" +
+        "\\[\n" +
+        "  E = mc^2.\n" +
+        "\\]\n" +
+        "And this is another one: \\(c^2\\).\n",
+        "This is a test: Dummy0. And this is another one: Dummy1. ");
+    assertPlainText(
         "This is a test: $a = b \\footnote{This is another test: $c$.}$.\n" +
         "This is the next sentence: $E = mc^2$.\n",
         "This is a test: Dummy0This is another test: Dummy1.. This is the next sentence: Dummy2. ");
