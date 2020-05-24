@@ -1,15 +1,7 @@
 package org.bsplines.ltex_ls.languagetool;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLEncoder;
-
+import java.io.*;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,11 +12,14 @@ import com.google.gson.*;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+
 import org.bsplines.ltex_ls.Tools;
+
 import org.languagetool.markup.AnnotatedText;
 import org.languagetool.markup.TextPart;
 
@@ -134,7 +129,7 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
         return Collections.emptyList();
       }
 
-      httpPost.setEntity(new StringEntity(requestBody, "application/json"));
+      httpPost.setEntity(new StringEntity(requestBody, ContentType.APPLICATION_JSON));
       CloseableHttpResponse httpResponse = null;
 
       try {
