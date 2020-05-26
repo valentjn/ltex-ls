@@ -391,15 +391,15 @@ public class Settings {
   }
 
   public List<String> getDictionary() {
-    return getDefault(dictionary, Collections.emptyList());
+    return Collections.unmodifiableList(getDefault(dictionary, Collections.emptyList()));
   }
 
   public List<String> getDisabledRules() {
-    return getDefault(disabledRules, Collections.emptyList());
+    return Collections.unmodifiableList(getDefault(disabledRules, Collections.emptyList()));
   }
 
   public List<String> getEnabledRules() {
-    return getDefault(enabledRules, Collections.emptyList());
+    return Collections.unmodifiableList(getDefault(enabledRules, Collections.emptyList()));
   }
 
   public String getLanguageToolHttpServerUri() {
@@ -407,27 +407,33 @@ public class Settings {
   }
 
   public List<String> getDummyCommandPrototypes() {
-    return getDefault(dummyCommandPrototypes, Collections.emptyList());
+    return Collections.unmodifiableList(
+        getDefault(dummyCommandPrototypes, Collections.emptyList()));
   }
 
   public List<String> getIgnoreCommandPrototypes() {
-    return getDefault(ignoreCommandPrototypes, Collections.emptyList());
+    return Collections.unmodifiableList(
+        getDefault(ignoreCommandPrototypes, Collections.emptyList()));
   }
 
   public List<String> getIgnoreEnvironments() {
-    return getDefault(ignoreEnvironments, Collections.emptyList());
+    return Collections.unmodifiableList(
+        getDefault(ignoreEnvironments, Collections.emptyList()));
   }
 
   public List<String> getDummyMarkdownNodeTypes() {
-    return getDefault(dummyMarkdownNodeTypes, defaultDummyMarkdownNodeTypes);
+    return Collections.unmodifiableList(
+        getDefault(dummyMarkdownNodeTypes, defaultDummyMarkdownNodeTypes));
   }
 
   public List<String> getIgnoreMarkdownNodeTypes() {
-    return getDefault(ignoreMarkdownNodeTypes, defaultIgnoreMarkdownNodeTypes);
+    return Collections.unmodifiableList(
+        getDefault(ignoreMarkdownNodeTypes, defaultIgnoreMarkdownNodeTypes));
   }
 
   public List<IgnoreRuleSentencePair> getIgnoreRuleSentencePairs() {
-    return getDefault(ignoreRuleSentencePairs, Collections.emptyList());
+    return Collections.unmodifiableList(
+        getDefault(ignoreRuleSentencePairs, Collections.emptyList()));
   }
 
   public String getMotherTongueShortCode() {
