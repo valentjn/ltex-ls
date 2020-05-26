@@ -39,7 +39,7 @@ public class LatexAnnotatedTextBuilderTest {
   public void testTextMode() {
     assertPlainText(
         "We can do\n" +
-        "\\begin{itemize}[first-test]{second-test}\n" +
+        "\\begin{itemize}[first-{test}]{[second]-test}\n" +
         "  \\item this or\n" +
         "  \\item that.\n" +
         "\\end{itemize}\n",
