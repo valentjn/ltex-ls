@@ -84,13 +84,13 @@ public class CodeActionGenerator {
 
   public List<Either<Command, CodeAction>> generate(
         CodeActionParams params, TextDocumentItem document,
-        Pair<List<LanguageToolRuleMatch>, AnnotatedText> validateResult) {
-    if (validateResult.getValue() == null) return Collections.emptyList();
+        Pair<List<LanguageToolRuleMatch>, AnnotatedText> checkingResult) {
+    if (checkingResult.getValue() == null) return Collections.emptyList();
 
     VersionedTextDocumentIdentifier textDocument = new VersionedTextDocumentIdentifier(
         document.getUri(), document.getVersion());
     String text = document.getText();
-    String plainText = validateResult.getValue().getPlainText();
+    String plainText = checkingResult.getValue().getPlainText();
     DocumentPositionCalculator positionCalculator = new DocumentPositionCalculator(text);
     List<Either<Command, CodeAction>> result =
         new ArrayList<Either<Command, CodeAction>>();
@@ -100,7 +100,7 @@ public class CodeActionGenerator {
     List<LanguageToolRuleMatch> disableRuleMatches = new ArrayList<>();
     Map<String, List<LanguageToolRuleMatch>> useWordMatchesMap = new LinkedHashMap<>();
 
-    for (LanguageToolRuleMatch match : validateResult.getKey()) {
+    for (LanguageToolRuleMatch match : checkingResult.getKey()) {
       if (matchIntersectsWithRange(match, params.getRange(), positionCalculator)) {
         String ruleId = match.getRuleId();
 
@@ -124,7 +124,7 @@ public class CodeActionGenerator {
 
     if (!addWordToDictionaryMatches.isEmpty() &&
           settingsManager.getSettings().getLanguageToolHttpServerUri().isEmpty()) {
-      AnnotatedText inverseAnnotatedText = invertAnnotatedText(validateResult.getValue());
+      AnnotatedText inverseAnnotatedText = invertAnnotatedText(checkingResult.getValue());
       List<String> unknownWords = new ArrayList<>();
       JsonArray unknownWordsJson = new JsonArray();
       List<Diagnostic> diagnostics = new ArrayList<>();

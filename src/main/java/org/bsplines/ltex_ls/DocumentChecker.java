@@ -14,10 +14,10 @@ import org.languagetool.markup.AnnotatedText;
 import org.languagetool.markup.AnnotatedText.MetaDataKey;
 import org.languagetool.markup.TextPart;
 
-public class DocumentValidator {
+public class DocumentChecker {
   private SettingsManager settingsManager;
 
-  public DocumentValidator(SettingsManager settingsManager) {
+  public DocumentChecker(SettingsManager settingsManager) {
     this.settingsManager = settingsManager;
   }
 
@@ -161,7 +161,7 @@ public class DocumentValidator {
     return new AnnotatedText(parts, mapping, metaData, customMetaData);
   }
 
-  public Pair<List<LanguageToolRuleMatch>, AnnotatedText> validate(TextDocumentItem document) {
+  public Pair<List<LanguageToolRuleMatch>, AnnotatedText> check(TextDocumentItem document) {
     Settings originalSettings = settingsManager.getSettings();
 
     try {

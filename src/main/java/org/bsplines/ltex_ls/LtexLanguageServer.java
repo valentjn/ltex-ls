@@ -19,7 +19,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   private HashMap<String, TextDocumentItem> documents = new HashMap<>();
   private LanguageClient languageClient;
   private SettingsManager settingsManager;
-  private DocumentValidator documentValidator;
+  private DocumentChecker documentChecker;
   private CodeActionGenerator codeActionGenerator;
 
   @Override
@@ -43,7 +43,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     }
 
     settingsManager = new SettingsManager();
-    documentValidator = new DocumentValidator(settingsManager);
+    documentChecker = new DocumentChecker(settingsManager);
     codeActionGenerator = new CodeActionGenerator();
 
     return CompletableFuture.completedFuture(new InitializeResult(capabilities));
@@ -73,9 +73,9 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
         TextDocumentItem document = documents.get(params.getTextDocument().getUri());
 
-        return validateDocument(document).thenApply(
-              (Pair<List<LanguageToolRuleMatch>, AnnotatedText> validateResult) -> {
-          return codeActionGenerator.generate(params, document, validateResult);
+        return checkDocument(document).thenApply(
+              (Pair<List<LanguageToolRuleMatch>, AnnotatedText> checkingResult) -> {
+          return codeActionGenerator.generate(params, document, checkingResult);
         });
       }
 
@@ -115,9 +115,9 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   }
 
   private CompletableFuture<List<Diagnostic>> getIssues(TextDocumentItem document) {
-    return validateDocument(document).thenApply(
-          (Pair<List<LanguageToolRuleMatch>, AnnotatedText> validateResult) -> {
-      List<LanguageToolRuleMatch> matches = validateResult.getKey();
+    return checkDocument(document).thenApply(
+          (Pair<List<LanguageToolRuleMatch>, AnnotatedText> checkingResult) -> {
+      List<LanguageToolRuleMatch> matches = checkingResult.getKey();
       DocumentPositionCalculator positionCalculator =
           new DocumentPositionCalculator(document.getText());
       List<Diagnostic> diagnostics = new ArrayList<>();
@@ -141,21 +141,21 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     languageClient.telemetryEvent(arguments);
   }
 
-  private CompletableFuture<Pair<List<LanguageToolRuleMatch>, AnnotatedText>> validateDocument(
+  private CompletableFuture<Pair<List<LanguageToolRuleMatch>, AnnotatedText>> checkDocument(
         TextDocumentItem document) {
     ConfigurationItem configurationItem = new ConfigurationItem();
     configurationItem.setSection("ltex");
     configurationItem.setScopeUri(document.getUri());
     CompletableFuture<List<Object>> configurationFuture = languageClient.configuration(
         new ConfigurationParams(Arrays.asList(configurationItem)));
-    sendProgressEvent(document.getUri(), "validateDocument", 0);
+    sendProgressEvent(document.getUri(), "checkDocument", 0);
 
     return configurationFuture.thenApply((List<Object> configuration) -> {
       try {
         settingsManager.setSettings((JsonElement)configuration.get(0));
-        return documentValidator.validate(document);
+        return documentChecker.check(document);
       } finally {
-        sendProgressEvent(document.getUri(), "validateDocument", 1);
+        sendProgressEvent(document.getUri(), "checkDocument", 1);
       }
     });
   }
