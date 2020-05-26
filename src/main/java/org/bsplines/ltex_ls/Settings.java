@@ -463,4 +463,68 @@ public class Settings {
   public void setLanguageShortCode(String languageShortCode) {
     this.languageShortCode = languageShortCode;
   }
+
+  public void setDictionary(List<String> dictionary) {
+    this.dictionary = new ArrayList<>(dictionary);
+  }
+
+  public void setDisabledRules(List<String> disabledRules) {
+    this.disabledRules = new ArrayList<>(disabledRules);
+  }
+
+  public void setEnabledRules(List<String> enabledRules) {
+    this.enabledRules = new ArrayList<>(enabledRules);
+  }
+
+  public void setLanguageToolHttpServerUri(String languageToolHttpServerUri) {
+    this.languageToolHttpServerUri = languageToolHttpServerUri;
+  }
+
+  public void setDummyCommandPrototypes(List<String> dummyCommandPrototypes) {
+    this.dummyCommandPrototypes = new ArrayList<>(dummyCommandPrototypes);
+  }
+
+  public void setIgnoreCommandPrototypes(List<String> ignoreCommandPrototypes) {
+    this.ignoreCommandPrototypes = new ArrayList<>(ignoreCommandPrototypes);
+  }
+
+  public void setIgnoreEnvironments(List<String> ignoreEnvironments) {
+    this.ignoreEnvironments = new ArrayList<>(ignoreEnvironments);
+  }
+
+  public void setDummyMarkdownNodeTypes(List<String> dummyMarkdownNodeTypes) {
+    this.dummyMarkdownNodeTypes = new ArrayList<>(dummyMarkdownNodeTypes);
+  }
+
+  public void setIgnoreMarkdownNodeTypes(List<String> ignoreMarkdownNodeTypes) {
+    this.ignoreMarkdownNodeTypes = new ArrayList<>(ignoreMarkdownNodeTypes);
+  }
+
+  public void setIgnoreRuleSentencePairs(List<IgnoreRuleSentencePair> ignoreRuleSentencePairs) {
+    this.ignoreRuleSentencePairs = new ArrayList<>(ignoreRuleSentencePairs);
+  }
+
+  public void setMotherTongueShortCode(String motherTongueShortCode) {
+    this.motherTongueShortCode = motherTongueShortCode;
+  }
+
+  public void setLanguageModelRulesDirectory(String languageModelRulesDirectory) {
+    this.languageModelRulesDirectory = languageModelRulesDirectory;
+  }
+
+  public void setNeuralNetworkModelRulesDirectory(String neuralNetworkModelRulesDirectory) {
+    this.neuralNetworkModelRulesDirectory = neuralNetworkModelRulesDirectory;
+  }
+
+  public void setWord2VecModelRulesDirectory(String word2VecModelRulesDirectory) {
+    this.word2VecModelRulesDirectory = word2VecModelRulesDirectory;
+  }
+
+  public void setSentenceCacheSize(Integer sentenceCacheSize) {
+    this.sentenceCacheSize = sentenceCacheSize;
+  }
+
+  public void setDiagnosticSeverity(DiagnosticSeverity diagnosticSeverity) {
+    this.diagnosticSeverity = diagnosticSeverity;
+  }
 }
