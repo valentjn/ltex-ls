@@ -15,26 +15,26 @@ public class MarkdownFragmentizerTest {
     CodeFragmentizer fragmentizer = CodeFragmentizer.create("markdown", new Settings());
     List<CodeFragment> codeFragments = fragmentizer.fragmentize(
         "Sentence 1\n" +
-        "\n[comment]: # ltex: language=de-DE\n\nSentence 2\n" +
-        "\n[comment]:\t#ltex:\tlanguage=en-US\n\nSentence 3\n");
+        "\n[comment]: <> \"ltex: language=de-DE\"\n\nSentence 2\n" +
+        "\n[comment]:\t<>\"ltex:\tlanguage=en-US\"\n\nSentence 3\n");
     Assertions.assertEquals(3, codeFragments.size());
 
     Assertions.assertEquals("markdown", codeFragments.get(0).getCodeLanguageId());
-    Assertions.assertEquals("Sentence 1\n\n[comment]: ",
+    Assertions.assertEquals("Sentence 1\n",
         codeFragments.get(0).getCode());
     Assertions.assertEquals(0, codeFragments.get(0).getFromPos());
     Assertions.assertEquals("en-US", codeFragments.get(0).getSettings().getLanguageShortCode());
 
     Assertions.assertEquals("markdown", codeFragments.get(1).getCodeLanguageId());
-    Assertions.assertEquals("# ltex: language=de-DE\n\nSentence 2\n\n[comment]:\t",
+    Assertions.assertEquals("\n[comment]: <> \"ltex: language=de-DE\"\n\nSentence 2\n",
         codeFragments.get(1).getCode());
-    Assertions.assertEquals(23, codeFragments.get(1).getFromPos());
+    Assertions.assertEquals(11, codeFragments.get(1).getFromPos());
     Assertions.assertEquals("de-DE", codeFragments.get(1).getSettings().getLanguageShortCode());
 
     Assertions.assertEquals("markdown", codeFragments.get(2).getCodeLanguageId());
-    Assertions.assertEquals("#ltex:\tlanguage=en-US\n\nSentence 3\n",
+    Assertions.assertEquals("\n[comment]:\t<>\"ltex:\tlanguage=en-US\"\n\nSentence 3\n",
         codeFragments.get(2).getCode());
-    Assertions.assertEquals(70, codeFragments.get(2).getFromPos());
+    Assertions.assertEquals(61, codeFragments.get(2).getFromPos());
     Assertions.assertEquals("en-US", codeFragments.get(2).getSettings().getLanguageShortCode());
   }
 
@@ -43,8 +43,8 @@ public class MarkdownFragmentizerTest {
     MarkdownFragmentizer markdownFragmentizer =
         new MarkdownFragmentizer("markdown", new Settings());
     Assertions.assertDoesNotThrow(() -> markdownFragmentizer.fragmentize(
-        "Sentence 1\n[comment]: # ltex: languagede-DE\n\nSentence 2\n"));
+        "Sentence 1\n[comment]: <> \"ltex: languagede-DE\"\n\nSentence 2\n"));
     Assertions.assertDoesNotThrow(() -> markdownFragmentizer.fragmentize(
-        "Sentence 1\n[comment]: # ltex: unknownKey=abc\n\nSentence 2\n"));
+        "Sentence 1\n[comment]: <> \"ltex: unknownKey=abc\"\n\nSentence 2\n"));
   }
 }
