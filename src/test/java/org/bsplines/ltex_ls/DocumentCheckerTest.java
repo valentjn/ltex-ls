@@ -27,11 +27,11 @@ public class DocumentCheckerTest {
     codeActionGenerator = new CodeActionGenerator(settingsManager);
   }
 
-  private TextDocumentItem createDocument(String codeLanguageId, String code) {
+  public static TextDocumentItem createDocument(String codeLanguageId, String code) {
     return new TextDocumentItem("untitled:test.txt", codeLanguageId, 1, code);
   }
 
-  private void testMatches(List<LanguageToolRuleMatch> matches, int fromPos1, int toPos1,
+  public static void testMatches(List<LanguageToolRuleMatch> matches, int fromPos1, int toPos1,
         int fromPos2, int toPos2) {
     Assertions.assertEquals(2, matches.size());
 
