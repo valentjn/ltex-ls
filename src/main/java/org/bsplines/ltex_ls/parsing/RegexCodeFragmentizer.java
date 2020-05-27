@@ -13,9 +13,9 @@ public class RegexCodeFragmentizer extends CodeFragmentizer {
 
   private Pattern pattern;
 
-  public RegexCodeFragmentizer(String codeLanguageId, Settings originalSettings, String pattern) {
+  public RegexCodeFragmentizer(String codeLanguageId, Settings originalSettings, Pattern pattern) {
     super(codeLanguageId, originalSettings);
-    this.pattern = Pattern.compile(pattern, Pattern.MULTILINE);
+    this.pattern = pattern;
   }
 
   @Override

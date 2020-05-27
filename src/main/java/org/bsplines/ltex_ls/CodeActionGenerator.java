@@ -35,6 +35,8 @@ public class CodeActionGenerator {
   private static final List<String> commandNames = Arrays.asList(new String[]{
       addToDictionaryCommandName, disableRuleCommandName, ignoreRuleInSentenceCommandName});
   private static final Set<String> commandNamesAsSet = new HashSet<>(commandNames);
+  private static final String dummyPatternStr = "Dummy[0-9]+";
+  private static final Pattern dummyPattern = Pattern.compile(dummyPatternStr);
 
   public CodeActionGenerator(SettingsManager settingsManager) {
     this.settingsManager = settingsManager;
@@ -174,14 +176,14 @@ public class CodeActionGenerator {
         Pair<String, String> pair = new Pair<>(ruleId, sentence);
 
         if (!ruleIdSentencePairs.contains(pair)) {
-          Matcher matcher = Pattern.compile("Dummy[0-9]+").matcher(sentence);
+          Matcher matcher = dummyPattern.matcher(sentence);
           StringBuilder sentencePatternStringBuilder = new StringBuilder();
           int lastEnd = 0;
 
           while (matcher.find()) {
             sentencePatternStringBuilder.append(Pattern.quote(
                 sentence.substring(lastEnd, matcher.start())));
-            sentencePatternStringBuilder.append("Dummy[0-9]+");
+            sentencePatternStringBuilder.append(dummyPatternStr);
             lastEnd = matcher.end();
           }
 
