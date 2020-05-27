@@ -36,8 +36,8 @@ public class CodeActionGenerator {
       addToDictionaryCommandName, disableRuleCommandName, ignoreRuleInSentenceCommandName});
   private static final Set<String> commandNamesAsSet = new HashSet<>(commandNames);
 
-  public CodeActionGenerator() {
-    settingsManager = new SettingsManager();
+  public CodeActionGenerator(SettingsManager settingsManager) {
+    this.settingsManager = settingsManager;
   }
 
   private static boolean matchIntersectsWithRange(LanguageToolRuleMatch match, Range range,

@@ -44,7 +44,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
     settingsManager = new SettingsManager();
     documentChecker = new DocumentChecker(settingsManager);
-    codeActionGenerator = new CodeActionGenerator();
+    codeActionGenerator = new CodeActionGenerator(settingsManager);
 
     return CompletableFuture.completedFuture(new InitializeResult(capabilities));
   }
