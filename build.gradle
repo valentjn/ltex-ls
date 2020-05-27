@@ -61,6 +61,7 @@ dependencies {
 
   // unit tests
   testCompile(group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.6.1')
+  testCompile(group: 'org.languagetool', name: 'languagetool-server', version: '4.9')
 }
 
 test {

@@ -17,13 +17,12 @@ import org.languagetool.markup.AnnotatedText;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class DocumentCheckerTest {
-  private SettingsManager settingsManager;
   private DocumentChecker documentChecker;
   private CodeActionGenerator codeActionGenerator;
 
   @BeforeAll
   public void setUp() {
-    settingsManager = new SettingsManager();
+    SettingsManager settingsManager = new SettingsManager();
     documentChecker = new DocumentChecker(settingsManager);
     codeActionGenerator = new CodeActionGenerator(settingsManager);
   }
