@@ -17,18 +17,28 @@ import org.languagetool.server.HTTPServer;
 @TestInstance(Lifecycle.PER_CLASS)
 public class LanguageToolHttpInterfaceTest {
   private DocumentChecker documentChecker;
+  private Thread serverThread;
 
   @BeforeAll
-  public void setUp() {
-    new Thread(() -> {
+  public void setUp() throws InterruptedException {
+    serverThread = new Thread(() -> {
       HTTPServer.main(new String[]{"--port", "8081", "--allow-origin", "*"});
-    }).start();
+    });
+    serverThread.start();
+
+    // wait until LanguageTool has initialized itself
+    Thread.sleep(5000);
 
     SettingsManager settingsManager = new SettingsManager();
     Settings settings = new Settings();
     settings.setLanguageToolHttpServerUri("http://localhost:8081");
     settingsManager.setSettings(settings);
     documentChecker = new DocumentChecker(settingsManager);
+  }
+
+  @AfterAll
+  public void tearDown() {
+    serverThread.interrupt();
   }
 
   @Test
