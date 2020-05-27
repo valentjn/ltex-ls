@@ -39,9 +39,17 @@ public class DocumentCheckerTest {
     Assertions.assertEquals("This is an test.", matches.get(0).getSentence().trim());
     Assertions.assertEquals(fromPos1, matches.get(0).getFromPos());
     Assertions.assertEquals(toPos1, matches.get(0).getToPos());
-    Assertions.assertEquals("Use <suggestion>a</suggestion> instead of 'an' if the following " +
-        "word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'",
-        matches.get(0).getMessage());
+
+    try {
+      Assertions.assertEquals("Use <suggestion>a</suggestion> instead of 'an' if the following " +
+          "word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'",
+          matches.get(0).getMessage());
+    } catch (AssertionError e) {
+      Assertions.assertEquals("Use \"a\" instead of 'an' if the following " +
+          "word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'",
+          matches.get(0).getMessage());
+    }
+
     Assertions.assertEquals(1, matches.get(0).getSuggestedReplacements().size());
     Assertions.assertEquals("a", matches.get(0).getSuggestedReplacements().get(0));
 
