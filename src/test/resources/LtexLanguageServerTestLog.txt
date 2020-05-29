@@ -1,0 +1,1002 @@
+[Trace - 6:40:09 PM] Sending request 'initialize - (0)'.
+Params: {
+    "processId": 512483,
+    "clientInfo": {
+        "name": "vscode",
+        "version": "1.44.2"
+    },
+    "rootPath": null,
+    "rootUri": null,
+    "capabilities": {
+        "workspace": {
+            "applyEdit": true,
+            "workspaceEdit": {
+                "documentChanges": true,
+                "resourceOperations": [
+                    "create",
+                    "rename",
+                    "delete"
+                ],
+                "failureHandling": "textOnlyTransactional"
+            },
+            "didChangeConfiguration": {
+                "dynamicRegistration": true
+            },
+            "didChangeWatchedFiles": {
+                "dynamicRegistration": true
+            },
+            "symbol": {
+                "dynamicRegistration": true,
+                "symbolKind": {
+                    "valueSet": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11,
+                        12,
+                        13,
+                        14,
+                        15,
+                        16,
+                        17,
+                        18,
+                        19,
+                        20,
+                        21,
+                        22,
+                        23,
+                        24,
+                        25,
+                        26
+                    ]
+                }
+            },
+            "executeCommand": {
+                "dynamicRegistration": true
+            },
+            "configuration": true,
+            "workspaceFolders": true
+        },
+        "textDocument": {
+            "publishDiagnostics": {
+                "relatedInformation": true,
+                "versionSupport": false,
+                "tagSupport": {
+                    "valueSet": [
+                        1,
+                        2
+                    ]
+                }
+            },
+            "synchronization": {
+                "dynamicRegistration": true,
+                "willSave": true,
+                "willSaveWaitUntil": true,
+                "didSave": true
+            },
+            "completion": {
+                "dynamicRegistration": true,
+                "contextSupport": true,
+                "completionItem": {
+                    "snippetSupport": true,
+                    "commitCharactersSupport": true,
+                    "documentationFormat": [
+                        "markdown",
+                        "plaintext"
+                    ],
+                    "deprecatedSupport": true,
+                    "preselectSupport": true,
+                    "tagSupport": {
+                        "valueSet": [
+                            1
+                        ]
+                    }
+                },
+                "completionItemKind": {
+                    "valueSet": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11,
+                        12,
+                        13,
+                        14,
+                        15,
+                        16,
+                        17,
+                        18,
+                        19,
+                        20,
+                        21,
+                        22,
+                        23,
+                        24,
+                        25
+                    ]
+                }
+            },
+            "hover": {
+                "dynamicRegistration": true,
+                "contentFormat": [
+                    "markdown",
+                    "plaintext"
+                ]
+            },
+            "signatureHelp": {
+                "dynamicRegistration": true,
+                "signatureInformation": {
+                    "documentationFormat": [
+                        "markdown",
+                        "plaintext"
+                    ],
+                    "parameterInformation": {
+                        "labelOffsetSupport": true
+                    }
+                },
+                "contextSupport": true
+            },
+            "definition": {
+                "dynamicRegistration": true,
+                "linkSupport": true
+            },
+            "references": {
+                "dynamicRegistration": true
+            },
+            "documentHighlight": {
+                "dynamicRegistration": true
+            },
+            "documentSymbol": {
+                "dynamicRegistration": true,
+                "symbolKind": {
+                    "valueSet": [
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11,
+                        12,
+                        13,
+                        14,
+                        15,
+                        16,
+                        17,
+                        18,
+                        19,
+                        20,
+                        21,
+                        22,
+                        23,
+                        24,
+                        25,
+                        26
+                    ]
+                },
+                "hierarchicalDocumentSymbolSupport": true
+            },
+            "codeAction": {
+                "dynamicRegistration": true,
+                "isPreferredSupport": true,
+                "codeActionLiteralSupport": {
+                    "codeActionKind": {
+                        "valueSet": [
+                            "",
+                            "quickfix",
+                            "refactor",
+                            "refactor.extract",
+                            "refactor.inline",
+                            "refactor.rewrite",
+                            "source",
+                            "source.organizeImports"
+                        ]
+                    }
+                }
+            },
+            "codeLens": {
+                "dynamicRegistration": true
+            },
+            "formatting": {
+                "dynamicRegistration": true
+            },
+            "rangeFormatting": {
+                "dynamicRegistration": true
+            },
+            "onTypeFormatting": {
+                "dynamicRegistration": true
+            },
+            "rename": {
+                "dynamicRegistration": true,
+                "prepareSupport": true
+            },
+            "documentLink": {
+                "dynamicRegistration": true,
+                "tooltipSupport": true
+            },
+            "typeDefinition": {
+                "dynamicRegistration": true,
+                "linkSupport": true
+            },
+            "implementation": {
+                "dynamicRegistration": true,
+                "linkSupport": true
+            },
+            "colorProvider": {
+                "dynamicRegistration": true
+            },
+            "foldingRange": {
+                "dynamicRegistration": true,
+                "rangeLimit": 5000,
+                "lineFoldingOnly": true
+            },
+            "declaration": {
+                "dynamicRegistration": true,
+                "linkSupport": true
+            },
+            "selectionRange": {
+                "dynamicRegistration": true
+            }
+        },
+        "window": {
+            "workDoneProgress": true
+        }
+    },
+    "initializationOptions": {
+        "locale": "en"
+    },
+    "trace": "verbose",
+    "workspaceFolders": null
+}
+
+
+[Trace - 6:40:16 PM] Received response 'initialize - (0)' in 6451ms.
+Result: {
+    "capabilities": {
+        "textDocumentSync": 1,
+        "codeActionProvider": {
+            "codeActionKinds": [
+                "quickfix.ltex.acceptSuggestion",
+                "quickfix.ltex.addToDictionary",
+                "quickfix.ltex.disableRule",
+                "quickfix.ltex.ignoreRuleInSentence"
+            ]
+        },
+        "executeCommandProvider": {
+            "commands": [
+                "ltex.addToDictionary",
+                "ltex.disableRule",
+                "ltex.ignoreRuleInSentence"
+            ]
+        }
+    }
+}
+
+
+[Trace - 6:40:16 PM] Sending notification 'initialized'.
+Params: {}
+
+
+[Trace - 6:40:16 PM] Sending notification 'workspace/didChangeConfiguration'.
+Params: {
+    "settings": {
+        "ltex": {
+            "de": {
+                "dictionary": [],
+                "disabledRules": [],
+                "enabledRules": []
+            },
+            "de-DE": {
+                "dictionary": [],
+                "disabledRules": [],
+                "enabledRules": []
+            },
+            "de-AT": {
+                "dictionary": [],
+                "disabledRules": [],
+                "enabledRules": []
+            },
+            "de-CH": {
+                "dictionary": [],
+                "disabledRules": [],
+                "enabledRules": []
+            },
+            "en": {
+                "dictionary": [],
+                "disabledRules": [],
+                "enabledRules": []
+            },
+            "en-US": {
+                "dictionary": [],
+                "disabledRules": [],
+                "enabledRules": []
+            },
+            "en-GB": {
+                "dictionary": [],
+                "disabledRules": [],
+                "enabledRules": [
+                    "OXFORD_SPELLING_NOUNS"
+                ]
+            },
+            "en-AU": {
+                "dictionary": [],
+                "disabledRules": [],
+                "enabledRules": []
+            },
+            "en-CA": {
+                "dictionary": [],
+                "disabledRules": [],
+                "enabledRules": []
+            },
+            "en-NZ": {
+                "dictionary": [],
+                "disabledRules": [],
+                "enabledRules": []
+            },
+            "en-ZA": {
+                "dictionary": [],
+                "disabledRules": [],
+                "enabledRules": []
+            },
+            "enabled": true,
+            "language": "en-US",
+            "dictionary": {},
+            "disabledRules": {},
+            "enabledRules": {},
+            "ltex-ls": {
+                "path": "/home/valentjn/repos/ltex-ls/build/install/ltex-ls",
+                "languageToolHttpServerUri": ""
+            },
+            "java": {
+                "path": "",
+                "initialHeapSize": 64,
+                "maximumHeapSize": 512
+            },
+            "commands": {
+                "ignore": [
+                    "\\setnumberoftableheaderrows{}",
+                    "\\usenotation{}"
+                ],
+                "dummy": [
+                    "\\ang{}",
+                    "\\bfs",
+                    "\\dagr",
+                    "\\fem",
+                    "\\hftr",
+                    "\\initial[]",
+                    "\\lhs",
+                    "\\pop{}",
+                    "\\rhs",
+                    "\\spd",
+                    "\\texttt{}",
+                    "\\thmref{}",
+                    "\\tiftr",
+                    "\\up"
+                ]
+            },
+            "environments": {
+                "ignore": []
+            },
+            "markdown": {
+                "ignore": [
+                    "CodeBlock",
+                    "FencedCodeBlock",
+                    "IndentedCodeBlock"
+                ],
+                "dummy": [
+                    "AutoLink",
+                    "Code"
+                ]
+            },
+            "ignoreRuleInSentence": [],
+            "configurationTarget": {
+                "addToDictionary": "global",
+                "disableRule": "workspaceFolder",
+                "ignoreRuleInSentence": "workspaceFolder"
+            },
+            "additionalRules": {
+                "motherTongue": "",
+                "languageModel": "",
+                "neuralNetworkModel": "",
+                "word2VecModel": ""
+            },
+            "sentenceCacheSize": 2000,
+            "diagnosticSeverity": "information",
+            "trace": {
+                "server": "verbose"
+            },
+            "javaHome": null,
+            "performance": {
+                "initialJavaHeapSize": 50,
+                "maximumHeapSize": null,
+                "sentenceCacheSize": 1234,
+                "maximumJavaHeapSize": 500
+            },
+            "ar": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "ar-DZ": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "ast-ES": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "be-BY": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "br-FR": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "ca-ES": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "ca-ES-valencia": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "da-DK": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "de-DE-x-simple-language": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "el-GR": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "eo": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "es": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "fa": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "fr": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "ga-IE": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "gl-ES": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "it": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "ja-JP": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "km-KH": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "nl": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "pl-PL": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "pt": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "pt-AO": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "pt-BR": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "pt-MZ": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "pt-PT": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "ro-RO": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "ru-RU": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "sk-SK": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "sl-SI": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "sv": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "ta-IN": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "tl-PH": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "uk-UA": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            },
+            "zh-CN": {
+                "dictionary": [],
+                "enabledRules": [],
+                "disabledRules": []
+            }
+        }
+    }
+}
+
+
+[Trace - 6:40:16 PM] Sending notification 'textDocument/didOpen'.
+Params: {
+    "textDocument": {
+        "uri": "untitled:Untitled-1",
+        "languageId": "latex",
+        "version": 2,
+        "text": "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n"
+    }
+}
+
+
+[Trace - 6:40:16 PM] Received request 'workspace/configuration - (1)'.
+Params: {
+    "items": [
+        {
+            "scopeUri": "untitled:Untitled-1",
+            "section": "ltex"
+        }
+    ]
+}
+
+
+[Trace - 6:40:16 PM] Sending response 'workspace/configuration - (1)'. Processing request took 14ms
+Result: [
+    {
+        "de": {
+            "dictionary": [],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-DE": {
+            "dictionary": [],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-AT": {
+            "dictionary": [],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-CH": {
+            "dictionary": [],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en": {
+            "dictionary": [],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-US": {
+            "dictionary": [],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-GB": {
+            "dictionary": [],
+            "disabledRules": [],
+            "enabledRules": [
+                "OXFORD_SPELLING_NOUNS"
+            ]
+        },
+        "en-AU": {
+            "dictionary": [],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-CA": {
+            "dictionary": [],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-NZ": {
+            "dictionary": [],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-ZA": {
+            "dictionary": [],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "enabled": true,
+        "language": "en-US",
+        "dictionary": {},
+        "disabledRules": {},
+        "enabledRules": {},
+        "ltex-ls": {
+            "path": "/home/valentjn/repos/ltex-ls/build/install/ltex-ls",
+            "languageToolHttpServerUri": ""
+        },
+        "java": {
+            "path": "",
+            "initialHeapSize": 64,
+            "maximumHeapSize": 512
+        },
+        "commands": {
+            "ignore": [
+                "\\setnumberoftableheaderrows{}",
+                "\\usenotation{}"
+            ],
+            "dummy": [
+                "\\ang{}",
+                "\\bfs",
+                "\\dagr",
+                "\\fem",
+                "\\hftr",
+                "\\initial[]",
+                "\\lhs",
+                "\\pop{}",
+                "\\rhs",
+                "\\spd",
+                "\\texttt{}",
+                "\\thmref{}",
+                "\\tiftr",
+                "\\up"
+            ]
+        },
+        "environments": {
+            "ignore": []
+        },
+        "markdown": {
+            "ignore": [
+                "CodeBlock",
+                "FencedCodeBlock",
+                "IndentedCodeBlock"
+            ],
+            "dummy": [
+                "AutoLink",
+                "Code"
+            ]
+        },
+        "ignoreRuleInSentence": [],
+        "configurationTarget": {
+            "addToDictionary": "global",
+            "disableRule": "workspaceFolder",
+            "ignoreRuleInSentence": "workspaceFolder"
+        },
+        "additionalRules": {
+            "motherTongue": "",
+            "languageModel": "",
+            "neuralNetworkModel": "",
+            "word2VecModel": ""
+        },
+        "sentenceCacheSize": 2000,
+        "diagnosticSeverity": "information",
+        "trace": {
+            "server": "verbose"
+        },
+        "javaHome": null,
+        "performance": {
+            "initialJavaHeapSize": 50,
+            "maximumHeapSize": null,
+            "sentenceCacheSize": 1234,
+            "maximumJavaHeapSize": 500
+        },
+        "ar": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ar-DZ": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ast-ES": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "be-BY": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "br-FR": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ca-ES": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ca-ES-valencia": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "da-DK": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "de-DE-x-simple-language": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "el-GR": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "eo": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "es": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "fa": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "fr": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ga-IE": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "gl-ES": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "it": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ja-JP": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "km-KH": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "nl": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pl-PL": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-AO": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-BR": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-MZ": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-PT": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ro-RO": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ru-RU": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sk-SK": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sl-SI": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sv": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ta-IN": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "tl-PH": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "uk-UA": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "zh-CN": {
+            "dictionary": [],
+            "enabledRules": [],
+            "disabledRules": []
+        }
+    }
+]
+
+
+[Trace - 6:40:16 PM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 0.0
+}
+
+
+[Trace - 6:40:36 PM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 1.0
+}
+
+
+[Trace - 6:40:36 PM] Received notification 'textDocument/publishDiagnostics'.
+Params: {
+    "uri": "untitled:Untitled-1",
+    "diagnostics": [
+        {
+            "range": {
+                "start": {
+                    "line": 0,
+                    "character": 8
+                },
+                "end": {
+                    "line": 0,
+                    "character": 10
+                }
+            },
+            "severity": 3,
+            "source": "LTeX - EN_A_VS_AN",
+            "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
+        },
+        {
+            "range": {
+                "start": {
+                    "line": 2,
+                    "character": 9
+                },
+                "end": {
+                    "line": 2,
+                    "character": 26
+                }
+            },
+            "severity": 3,
+            "source": "LTeX - DE_AGREEMENT",
+            "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+        }
+    ]
+}
+
+
