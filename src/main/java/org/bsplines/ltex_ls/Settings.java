@@ -346,38 +346,6 @@ public class Settings {
     return true;
   }
 
-  @Override
-  public int hashCode() {
-    int hash = 3;
-
-    hash = 53 * hash + ((languageShortCode != null) ? languageShortCode.hashCode() : 0);
-    hash = 53 * hash + ((dictionary != null) ? dictionary.hashCode() : 0);
-    hash = 53 * hash + ((disabledRules != null) ? disabledRules.hashCode() : 0);
-    hash = 53 * hash + ((enabledRules != null) ? enabledRules.hashCode() : 0);
-    hash = 53 * hash + ((languageToolHttpServerUri != null) ?
-        languageToolHttpServerUri.hashCode() : 0);
-    hash = 53 * hash + ((dummyCommandPrototypes != null) ? dummyCommandPrototypes.hashCode() : 0);
-    hash = 53 * hash + ((ignoreCommandPrototypes != null) ? ignoreCommandPrototypes.hashCode() : 0);
-    hash = 53 * hash + ((ignoreEnvironments != null) ? ignoreEnvironments.hashCode() : 0);
-    hash = 53 * hash + ((dummyMarkdownNodeTypes != null) ?
-        dummyMarkdownNodeTypes.hashCode() : 0);
-    hash = 53 * hash + ((ignoreMarkdownNodeTypes != null) ?
-        ignoreMarkdownNodeTypes.hashCode() : 0);
-    hash = 53 * hash + ((ignoreRuleSentencePairs != null) ? ignoreRuleSentencePairs.hashCode() : 0);
-    hash = 53 * hash + ((motherTongueShortCode != null) ? motherTongueShortCode.hashCode() : 0);
-    hash = 53 * hash + ((languageModelRulesDirectory != null) ?
-        languageModelRulesDirectory.hashCode() : 0);
-    hash = 53 * hash + ((neuralNetworkModelRulesDirectory != null) ?
-        neuralNetworkModelRulesDirectory.hashCode() : 0);
-    hash = 53 * hash + ((word2VecModelRulesDirectory != null) ?
-        word2VecModelRulesDirectory.hashCode() : 0);
-    hash = 53 * hash + ((sentenceCacheSize != null) ?
-        sentenceCacheSize.hashCode() : 0);
-    hash = 53 * hash + ((diagnosticSeverity != null) ? diagnosticSeverity.hashCode() : 0);
-
-    return hash;
-  }
-
   private static <T> T getDefault(T obj, T default_) {
     return ((obj != null) ? obj : default_);
   }
