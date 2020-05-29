@@ -1,6 +1,25 @@
-[Trace - 6:40:09 PM] Sending request 'initialize - (0)'.
+2020-05-29T17:43:15.019Z Info:
+2020-05-29T17:43:15.019Z Info: ltex.ltex-ls.path set to /home/valentjn/repos/ltex-ls/build/install/ltex-ls.
+2020-05-29T17:43:15.020Z Info:
+2020-05-29T17:43:15.020Z Info: ltex.java.path not set.
+2020-05-29T17:43:15.020Z Info: Using ltex-ls from '/home/valentjn/repos/ltex-ls/build/install/ltex-ls'.
+2020-05-29T17:43:15.020Z Info: Using Java from PATH or JAVA_HOME (may fail if not installed).
+2020-05-29T17:43:15.064Z Info: Testing ltex-ls...
+2020-05-29T17:43:15.083Z Info:   Command: "/home/valentjn/repos/ltex-ls/build/install/ltex-ls/bin/ltex-ls"
+2020-05-29T17:43:15.083Z Info:   Arguments: ["--version"]
+2020-05-29T17:43:15.083Z Info:   env['JAVA_HOME']: undefined
+2020-05-29T17:43:15.083Z Info:   env['LTEX_LS_OPTS']: "-Xms50m -Xmx500m"
+2020-05-29T17:43:16.077Z Info: Test successful!
+2020-05-29T17:43:16.091Z Info:
+2020-05-29T17:43:16.101Z Info: Starting ltex-ls...
+2020-05-29T17:43:16.101Z Info:   Command: "/home/valentjn/repos/ltex-ls/build/install/ltex-ls/bin/ltex-ls"
+2020-05-29T17:43:16.101Z Info:   Arguments: []
+2020-05-29T17:43:16.101Z Info:   env['JAVA_HOME']: undefined
+2020-05-29T17:43:16.101Z Info:   env['LTEX_LS_OPTS']: "-Xms50m -Xmx500m"
+2020-05-29T17:43:16.101Z Info:
+[Trace - 7:43:16 PM] Sending request 'initialize - (0)'.
 Params: {
-    "processId": 512483,
+    "processId": 518123,
     "clientInfo": {
         "name": "vscode",
         "version": "1.44.2"
@@ -267,7 +286,7 @@ Params: {
 }
 
 
-[Trace - 6:40:16 PM] Received response 'initialize - (0)' in 6451ms.
+[Trace - 7:43:23 PM] Received response 'initialize - (0)' in 7657ms.
 Result: {
     "capabilities": {
         "textDocumentSync": 1,
@@ -290,68 +309,68 @@ Result: {
 }
 
 
-[Trace - 6:40:16 PM] Sending notification 'initialized'.
+[Trace - 7:43:23 PM] Sending notification 'initialized'.
 Params: {}
 
 
-[Trace - 6:40:16 PM] Sending notification 'workspace/didChangeConfiguration'.
+[Trace - 7:43:23 PM] Sending notification 'workspace/didChangeConfiguration'.
 Params: {
     "settings": {
         "ltex": {
             "de": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "disabledRules": [],
                 "enabledRules": []
             },
             "de-DE": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "disabledRules": [],
                 "enabledRules": []
             },
             "de-AT": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "disabledRules": [],
                 "enabledRules": []
             },
             "de-CH": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "disabledRules": [],
                 "enabledRules": []
             },
             "en": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "disabledRules": [],
                 "enabledRules": []
             },
             "en-US": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "disabledRules": [],
                 "enabledRules": []
             },
             "en-GB": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "disabledRules": [],
                 "enabledRules": [
                     "OXFORD_SPELLING_NOUNS"
                 ]
             },
             "en-AU": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "disabledRules": [],
                 "enabledRules": []
             },
             "en-CA": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "disabledRules": [],
                 "enabledRules": []
             },
             "en-NZ": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "disabledRules": [],
                 "enabledRules": []
             },
             "en-ZA": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "disabledRules": [],
                 "enabledRules": []
             },
@@ -430,177 +449,177 @@ Params: {
                 "maximumJavaHeapSize": 500
             },
             "ar": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "ar-DZ": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "ast-ES": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "be-BY": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "br-FR": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "ca-ES": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "ca-ES-valencia": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "da-DK": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "de-DE-x-simple-language": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "el-GR": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "eo": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "es": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "fa": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "fr": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "ga-IE": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "gl-ES": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "it": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "ja-JP": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "km-KH": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "nl": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "pl-PL": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "pt": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "pt-AO": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "pt-BR": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "pt-MZ": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "pt-PT": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "ro-RO": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "ru-RU": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "sk-SK": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "sl-SI": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "sv": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "ta-IN": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "tl-PH": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "uk-UA": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             },
             "zh-CN": {
-                "dictionary": [],
+                "dictionary": ["B-splines"],
                 "enabledRules": [],
                 "disabledRules": []
             }
@@ -609,18 +628,18 @@ Params: {
 }
 
 
-[Trace - 6:40:16 PM] Sending notification 'textDocument/didOpen'.
+[Trace - 7:43:23 PM] Sending notification 'textDocument/didOpen'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1",
         "languageId": "latex",
-        "version": 2,
-        "text": "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n"
+        "version": 1,
+        "text": ""
     }
 }
 
 
-[Trace - 6:40:16 PM] Received request 'workspace/configuration - (1)'.
+[Trace - 7:43:24 PM] Received request 'workspace/configuration - (1)'.
 Params: {
     "items": [
         {
@@ -631,63 +650,63 @@ Params: {
 }
 
 
-[Trace - 6:40:16 PM] Sending response 'workspace/configuration - (1)'. Processing request took 14ms
+[Trace - 7:43:24 PM] Sending response 'workspace/configuration - (1)'. Processing request took 11ms
 Result: [
     {
         "de": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "disabledRules": [],
             "enabledRules": []
         },
         "de-DE": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "disabledRules": [],
             "enabledRules": []
         },
         "de-AT": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "disabledRules": [],
             "enabledRules": []
         },
         "de-CH": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "disabledRules": [],
             "enabledRules": []
         },
         "en": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "disabledRules": [],
             "enabledRules": []
         },
         "en-US": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "disabledRules": [],
             "enabledRules": []
         },
         "en-GB": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "disabledRules": [],
             "enabledRules": [
                 "OXFORD_SPELLING_NOUNS"
             ]
         },
         "en-AU": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "disabledRules": [],
             "enabledRules": []
         },
         "en-CA": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "disabledRules": [],
             "enabledRules": []
         },
         "en-NZ": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "disabledRules": [],
             "enabledRules": []
         },
         "en-ZA": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "disabledRules": [],
             "enabledRules": []
         },
@@ -766,177 +785,177 @@ Result: [
             "maximumJavaHeapSize": 500
         },
         "ar": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "ar-DZ": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "ast-ES": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "be-BY": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "br-FR": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "ca-ES": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "ca-ES-valencia": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "da-DK": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "de-DE-x-simple-language": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "el-GR": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "eo": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "es": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "fa": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "fr": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "ga-IE": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "gl-ES": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "it": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "ja-JP": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "km-KH": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "nl": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "pl-PL": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "pt": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "pt-AO": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "pt-BR": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "pt-MZ": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "pt-PT": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "ro-RO": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "ru-RU": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "sk-SK": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "sl-SI": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "sv": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "ta-IN": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "tl-PH": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "uk-UA": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         },
         "zh-CN": {
-            "dictionary": [],
+            "dictionary": ["B-splines"],
             "enabledRules": [],
             "disabledRules": []
         }
@@ -944,7 +963,7 @@ Result: [
 ]
 
 
-[Trace - 6:40:16 PM] Received notification 'telemetry/event'.
+[Trace - 7:43:24 PM] Received notification 'telemetry/event'.
 Params: {
     "type": "progress",
     "uri": "untitled:Untitled-1",
@@ -953,7 +972,7 @@ Params: {
 }
 
 
-[Trace - 6:40:36 PM] Received notification 'telemetry/event'.
+[Trace - 7:43:24 PM] Received notification 'telemetry/event'.
 Params: {
     "type": "progress",
     "uri": "untitled:Untitled-1",
@@ -962,7 +981,391 @@ Params: {
 }
 
 
-[Trace - 6:40:36 PM] Received notification 'textDocument/publishDiagnostics'.
+[Trace - 7:43:24 PM] Received notification 'textDocument/publishDiagnostics'.
+Params: {
+    "uri": "untitled:Untitled-1",
+    "diagnostics": []
+}
+
+
+[Trace - 7:43:28 PM] Sending notification 'textDocument/didChange'.
+Params: {
+    "textDocument": {
+        "uri": "untitled:Untitled-1",
+        "version": 2
+    },
+    "contentChanges": [
+        {
+            "text": "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n"
+        }
+    ]
+}
+
+
+[Trace - 7:43:28 PM] Received request 'workspace/configuration - (2)'.
+Params: {
+    "items": [
+        {
+            "scopeUri": "untitled:Untitled-1",
+            "section": "ltex"
+        }
+    ]
+}
+
+
+[Trace - 7:43:28 PM] Sending response 'workspace/configuration - (2)'. Processing request took 8ms
+Result: [
+    {
+        "de": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-DE": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-AT": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-CH": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-US": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-GB": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": [
+                "OXFORD_SPELLING_NOUNS"
+            ]
+        },
+        "en-AU": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-CA": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-NZ": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-ZA": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "enabled": true,
+        "language": "en-US",
+        "dictionary": {},
+        "disabledRules": {},
+        "enabledRules": {},
+        "ltex-ls": {
+            "path": "/home/valentjn/repos/ltex-ls/build/install/ltex-ls",
+            "languageToolHttpServerUri": ""
+        },
+        "java": {
+            "path": "",
+            "initialHeapSize": 64,
+            "maximumHeapSize": 512
+        },
+        "commands": {
+            "ignore": [
+                "\\setnumberoftableheaderrows{}",
+                "\\usenotation{}"
+            ],
+            "dummy": [
+                "\\ang{}",
+                "\\bfs",
+                "\\dagr",
+                "\\fem",
+                "\\hftr",
+                "\\initial[]",
+                "\\lhs",
+                "\\pop{}",
+                "\\rhs",
+                "\\spd",
+                "\\texttt{}",
+                "\\thmref{}",
+                "\\tiftr",
+                "\\up"
+            ]
+        },
+        "environments": {
+            "ignore": []
+        },
+        "markdown": {
+            "ignore": [
+                "CodeBlock",
+                "FencedCodeBlock",
+                "IndentedCodeBlock"
+            ],
+            "dummy": [
+                "AutoLink",
+                "Code"
+            ]
+        },
+        "ignoreRuleInSentence": [],
+        "configurationTarget": {
+            "addToDictionary": "global",
+            "disableRule": "workspaceFolder",
+            "ignoreRuleInSentence": "workspaceFolder"
+        },
+        "additionalRules": {
+            "motherTongue": "",
+            "languageModel": "",
+            "neuralNetworkModel": "",
+            "word2VecModel": ""
+        },
+        "sentenceCacheSize": 2000,
+        "diagnosticSeverity": "information",
+        "trace": {
+            "server": "verbose"
+        },
+        "javaHome": null,
+        "performance": {
+            "initialJavaHeapSize": 50,
+            "maximumHeapSize": null,
+            "sentenceCacheSize": 1234,
+            "maximumJavaHeapSize": 500
+        },
+        "ar": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ar-DZ": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ast-ES": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "be-BY": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "br-FR": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ca-ES": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ca-ES-valencia": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "da-DK": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "de-DE-x-simple-language": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "el-GR": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "eo": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "es": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "fa": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "fr": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ga-IE": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "gl-ES": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "it": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ja-JP": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "km-KH": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "nl": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pl-PL": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-AO": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-BR": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-MZ": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-PT": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ro-RO": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ru-RU": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sk-SK": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sl-SI": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sv": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ta-IN": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "tl-PH": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "uk-UA": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "zh-CN": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        }
+    }
+]
+
+
+[Trace - 7:43:28 PM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 0.0
+}
+
+
+[Trace - 7:43:30 PM] Sending request 'textDocument/codeAction - (1)'.
+Params: {
+    "textDocument": {
+        "uri": "untitled:Untitled-1"
+    },
+    "range": {
+        "start": {
+            "line": 2,
+            "character": 11
+        },
+        "end": {
+            "line": 2,
+            "character": 11
+        }
+    },
+    "context": {
+        "diagnostics": []
+    }
+}
+
+
+[Trace - 7:43:45 PM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 1.0
+}
+
+
+[Trace - 7:43:45 PM] Received notification 'textDocument/publishDiagnostics'.
 Params: {
     "uri": "untitled:Untitled-1",
     "diagnostics": [
@@ -997,6 +1400,2002 @@ Params: {
             "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
         }
     ]
+}
+
+
+[Trace - 7:43:45 PM] Received response 'textDocument/codeAction - (1)' in 15032ms.
+Result: []
+
+
+[Trace - 7:43:46 PM] Sending request 'textDocument/codeAction - (2)'.
+Params: {
+    "textDocument": {
+        "uri": "untitled:Untitled-1"
+    },
+    "range": {
+        "start": {
+            "line": 2,
+            "character": 11
+        },
+        "end": {
+            "line": 2,
+            "character": 11
+        }
+    },
+    "context": {
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad').",
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT"
+            }
+        ]
+    }
+}
+
+
+[Trace - 7:43:46 PM] Received request 'workspace/configuration - (3)'.
+Params: {
+    "items": [
+        {
+            "scopeUri": "untitled:Untitled-1",
+            "section": "ltex"
+        }
+    ]
+}
+
+
+[Trace - 7:43:46 PM] Sending response 'workspace/configuration - (3)'. Processing request took 12ms
+Result: [
+    {
+        "de": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-DE": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-AT": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-CH": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-US": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-GB": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": [
+                "OXFORD_SPELLING_NOUNS"
+            ]
+        },
+        "en-AU": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-CA": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-NZ": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-ZA": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "enabled": true,
+        "language": "en-US",
+        "dictionary": {},
+        "disabledRules": {},
+        "enabledRules": {},
+        "ltex-ls": {
+            "path": "/home/valentjn/repos/ltex-ls/build/install/ltex-ls",
+            "languageToolHttpServerUri": ""
+        },
+        "java": {
+            "path": "",
+            "initialHeapSize": 64,
+            "maximumHeapSize": 512
+        },
+        "commands": {
+            "ignore": [
+                "\\setnumberoftableheaderrows{}",
+                "\\usenotation{}"
+            ],
+            "dummy": [
+                "\\ang{}",
+                "\\bfs",
+                "\\dagr",
+                "\\fem",
+                "\\hftr",
+                "\\initial[]",
+                "\\lhs",
+                "\\pop{}",
+                "\\rhs",
+                "\\spd",
+                "\\texttt{}",
+                "\\thmref{}",
+                "\\tiftr",
+                "\\up"
+            ]
+        },
+        "environments": {
+            "ignore": []
+        },
+        "markdown": {
+            "ignore": [
+                "CodeBlock",
+                "FencedCodeBlock",
+                "IndentedCodeBlock"
+            ],
+            "dummy": [
+                "AutoLink",
+                "Code"
+            ]
+        },
+        "ignoreRuleInSentence": [],
+        "configurationTarget": {
+            "addToDictionary": "global",
+            "disableRule": "workspaceFolder",
+            "ignoreRuleInSentence": "workspaceFolder"
+        },
+        "additionalRules": {
+            "motherTongue": "",
+            "languageModel": "",
+            "neuralNetworkModel": "",
+            "word2VecModel": ""
+        },
+        "sentenceCacheSize": 2000,
+        "diagnosticSeverity": "information",
+        "trace": {
+            "server": "verbose"
+        },
+        "javaHome": null,
+        "performance": {
+            "initialJavaHeapSize": 50,
+            "maximumHeapSize": null,
+            "sentenceCacheSize": 1234,
+            "maximumJavaHeapSize": 500
+        },
+        "ar": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ar-DZ": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ast-ES": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "be-BY": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "br-FR": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ca-ES": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ca-ES-valencia": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "da-DK": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "de-DE-x-simple-language": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "el-GR": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "eo": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "es": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "fa": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "fr": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ga-IE": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "gl-ES": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "it": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ja-JP": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "km-KH": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "nl": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pl-PL": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-AO": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-BR": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-MZ": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-PT": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ro-RO": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ru-RU": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sk-SK": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sl-SI": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sv": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ta-IN": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "tl-PH": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "uk-UA": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "zh-CN": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        }
+    }
+]
+
+
+[Trace - 7:43:46 PM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 0.0
+}
+
+
+[Trace - 7:43:46 PM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 1.0
+}
+
+
+[Trace - 7:43:46 PM] Received response 'textDocument/codeAction - (2)' in 100ms.
+Result: [
+    {
+        "title": "Ignore rule in this sentence",
+        "kind": "quickfix.ltex.ignoreRuleInSentence",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT",
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+            }
+        ],
+        "command": {
+            "title": "Ignore rule in this sentence",
+            "command": "ltex.ignoreRuleInSentence",
+            "arguments": [
+                {
+                    "type": "command",
+                    "command": "ltex.ignoreRuleInSentence",
+                    "uri": "untitled:Untitled-1",
+                    "ruleId": [
+                        "DE_AGREEMENT"
+                    ],
+                    "sentencePattern": [
+                        "^\\QDies ist eine Test.\\E$"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Disable rule",
+        "kind": "quickfix.ltex.disableRule",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT",
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+            }
+        ],
+        "command": {
+            "title": "Disable rule",
+            "command": "ltex.disableRule",
+            "arguments": [
+                {
+                    "type": "command",
+                    "command": "ltex.disableRule",
+                    "uri": "untitled:Untitled-1",
+                    "ruleId": [
+                        "DE_AGREEMENT"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'ein Test'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT",
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 2,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 9
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 26
+                                }
+                            },
+                            "newText": "ein Test"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'einem Test'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT",
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 2,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 9
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 26
+                                }
+                            },
+                            "newText": "einem Test"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'einen Test'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT",
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 2,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 9
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 26
+                                }
+                            },
+                            "newText": "einen Test"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+]
+
+
+[Trace - 7:43:49 PM] Sending request 'textDocument/codeAction - (3)'.
+Params: {
+    "textDocument": {
+        "uri": "untitled:Untitled-1"
+    },
+    "range": {
+        "start": {
+            "line": 2,
+            "character": 11
+        },
+        "end": {
+            "line": 2,
+            "character": 11
+        }
+    },
+    "context": {
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad').",
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT"
+            }
+        ]
+    }
+}
+
+
+[Trace - 7:43:49 PM] Received request 'workspace/configuration - (4)'.
+Params: {
+    "items": [
+        {
+            "scopeUri": "untitled:Untitled-1",
+            "section": "ltex"
+        }
+    ]
+}
+
+
+[Trace - 7:43:49 PM] Sending response 'workspace/configuration - (4)'. Processing request took 6ms
+Result: [
+    {
+        "de": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-DE": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-AT": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-CH": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-US": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-GB": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": [
+                "OXFORD_SPELLING_NOUNS"
+            ]
+        },
+        "en-AU": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-CA": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-NZ": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-ZA": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "enabled": true,
+        "language": "en-US",
+        "dictionary": {},
+        "disabledRules": {},
+        "enabledRules": {},
+        "ltex-ls": {
+            "path": "/home/valentjn/repos/ltex-ls/build/install/ltex-ls",
+            "languageToolHttpServerUri": ""
+        },
+        "java": {
+            "path": "",
+            "initialHeapSize": 64,
+            "maximumHeapSize": 512
+        },
+        "commands": {
+            "ignore": [
+                "\\setnumberoftableheaderrows{}",
+                "\\usenotation{}"
+            ],
+            "dummy": [
+                "\\ang{}",
+                "\\bfs",
+                "\\dagr",
+                "\\fem",
+                "\\hftr",
+                "\\initial[]",
+                "\\lhs",
+                "\\pop{}",
+                "\\rhs",
+                "\\spd",
+                "\\texttt{}",
+                "\\thmref{}",
+                "\\tiftr",
+                "\\up"
+            ]
+        },
+        "environments": {
+            "ignore": []
+        },
+        "markdown": {
+            "ignore": [
+                "CodeBlock",
+                "FencedCodeBlock",
+                "IndentedCodeBlock"
+            ],
+            "dummy": [
+                "AutoLink",
+                "Code"
+            ]
+        },
+        "ignoreRuleInSentence": [],
+        "configurationTarget": {
+            "addToDictionary": "global",
+            "disableRule": "workspaceFolder",
+            "ignoreRuleInSentence": "workspaceFolder"
+        },
+        "additionalRules": {
+            "motherTongue": "",
+            "languageModel": "",
+            "neuralNetworkModel": "",
+            "word2VecModel": ""
+        },
+        "sentenceCacheSize": 2000,
+        "diagnosticSeverity": "information",
+        "trace": {
+            "server": "verbose"
+        },
+        "javaHome": null,
+        "performance": {
+            "initialJavaHeapSize": 50,
+            "maximumHeapSize": null,
+            "sentenceCacheSize": 1234,
+            "maximumJavaHeapSize": 500
+        },
+        "ar": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ar-DZ": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ast-ES": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "be-BY": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "br-FR": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ca-ES": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ca-ES-valencia": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "da-DK": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "de-DE-x-simple-language": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "el-GR": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "eo": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "es": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "fa": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "fr": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ga-IE": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "gl-ES": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "it": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ja-JP": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "km-KH": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "nl": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pl-PL": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-AO": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-BR": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-MZ": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-PT": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ro-RO": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ru-RU": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sk-SK": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sl-SI": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sv": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ta-IN": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "tl-PH": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "uk-UA": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "zh-CN": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        }
+    }
+]
+
+
+[Trace - 7:43:49 PM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 0.0
+}
+
+
+[Trace - 7:43:49 PM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 1.0
+}
+
+
+[Trace - 7:43:49 PM] Received response 'textDocument/codeAction - (3)' in 27ms.
+Result: [
+    {
+        "title": "Ignore rule in this sentence",
+        "kind": "quickfix.ltex.ignoreRuleInSentence",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT",
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+            }
+        ],
+        "command": {
+            "title": "Ignore rule in this sentence",
+            "command": "ltex.ignoreRuleInSentence",
+            "arguments": [
+                {
+                    "type": "command",
+                    "command": "ltex.ignoreRuleInSentence",
+                    "uri": "untitled:Untitled-1",
+                    "ruleId": [
+                        "DE_AGREEMENT"
+                    ],
+                    "sentencePattern": [
+                        "^\\QDies ist eine Test.\\E$"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Disable rule",
+        "kind": "quickfix.ltex.disableRule",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT",
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+            }
+        ],
+        "command": {
+            "title": "Disable rule",
+            "command": "ltex.disableRule",
+            "arguments": [
+                {
+                    "type": "command",
+                    "command": "ltex.disableRule",
+                    "uri": "untitled:Untitled-1",
+                    "ruleId": [
+                        "DE_AGREEMENT"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'ein Test'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT",
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 2,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 9
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 26
+                                }
+                            },
+                            "newText": "ein Test"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'einem Test'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT",
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 2,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 9
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 26
+                                }
+                            },
+                            "newText": "einem Test"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'einen Test'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT",
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 2,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 9
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 26
+                                }
+                            },
+                            "newText": "einen Test"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+]
+
+
+[Trace - 7:43:51 PM] Sending notification 'textDocument/didChange'.
+Params: {
+    "textDocument": {
+        "uri": "untitled:Untitled-1",
+        "version": 3
+    },
+    "contentChanges": [
+        {
+            "text": "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist ein Test}.\n"
+        }
+    ]
+}
+
+
+[Trace - 7:43:51 PM] Sending request 'textDocument/codeAction - (4)'.
+Params: {
+    "textDocument": {
+        "uri": "untitled:Untitled-1"
+    },
+    "range": {
+        "start": {
+            "line": 2,
+            "character": 11
+        },
+        "end": {
+            "line": 2,
+            "character": 11
+        }
+    },
+    "context": {
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad').",
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT"
+            }
+        ]
+    }
+}
+
+
+[Trace - 7:43:51 PM] Received request 'workspace/configuration - (5)'.
+Params: {
+    "items": [
+        {
+            "scopeUri": "untitled:Untitled-1",
+            "section": "ltex"
+        }
+    ]
+}
+
+
+[Trace - 7:43:51 PM] Sending response 'workspace/configuration - (5)'. Processing request took 7ms
+Result: [
+    {
+        "de": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-DE": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-AT": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-CH": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-US": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-GB": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": [
+                "OXFORD_SPELLING_NOUNS"
+            ]
+        },
+        "en-AU": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-CA": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-NZ": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-ZA": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "enabled": true,
+        "language": "en-US",
+        "dictionary": {},
+        "disabledRules": {},
+        "enabledRules": {},
+        "ltex-ls": {
+            "path": "/home/valentjn/repos/ltex-ls/build/install/ltex-ls",
+            "languageToolHttpServerUri": ""
+        },
+        "java": {
+            "path": "",
+            "initialHeapSize": 64,
+            "maximumHeapSize": 512
+        },
+        "commands": {
+            "ignore": [
+                "\\setnumberoftableheaderrows{}",
+                "\\usenotation{}"
+            ],
+            "dummy": [
+                "\\ang{}",
+                "\\bfs",
+                "\\dagr",
+                "\\fem",
+                "\\hftr",
+                "\\initial[]",
+                "\\lhs",
+                "\\pop{}",
+                "\\rhs",
+                "\\spd",
+                "\\texttt{}",
+                "\\thmref{}",
+                "\\tiftr",
+                "\\up"
+            ]
+        },
+        "environments": {
+            "ignore": []
+        },
+        "markdown": {
+            "ignore": [
+                "CodeBlock",
+                "FencedCodeBlock",
+                "IndentedCodeBlock"
+            ],
+            "dummy": [
+                "AutoLink",
+                "Code"
+            ]
+        },
+        "ignoreRuleInSentence": [],
+        "configurationTarget": {
+            "addToDictionary": "global",
+            "disableRule": "workspaceFolder",
+            "ignoreRuleInSentence": "workspaceFolder"
+        },
+        "additionalRules": {
+            "motherTongue": "",
+            "languageModel": "",
+            "neuralNetworkModel": "",
+            "word2VecModel": ""
+        },
+        "sentenceCacheSize": 2000,
+        "diagnosticSeverity": "information",
+        "trace": {
+            "server": "verbose"
+        },
+        "javaHome": null,
+        "performance": {
+            "initialJavaHeapSize": 50,
+            "maximumHeapSize": null,
+            "sentenceCacheSize": 1234,
+            "maximumJavaHeapSize": 500
+        },
+        "ar": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ar-DZ": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ast-ES": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "be-BY": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "br-FR": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ca-ES": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ca-ES-valencia": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "da-DK": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "de-DE-x-simple-language": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "el-GR": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "eo": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "es": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "fa": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "fr": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ga-IE": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "gl-ES": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "it": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ja-JP": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "km-KH": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "nl": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pl-PL": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-AO": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-BR": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-MZ": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-PT": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ro-RO": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ru-RU": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sk-SK": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sl-SI": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sv": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ta-IN": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "tl-PH": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "uk-UA": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "zh-CN": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        }
+    }
+]
+
+
+[Trace - 7:43:51 PM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 0.0
+}
+
+
+[Trace - 7:43:51 PM] Received request 'workspace/configuration - (6)'.
+Params: {
+    "items": [
+        {
+            "scopeUri": "untitled:Untitled-1",
+            "section": "ltex"
+        }
+    ]
+}
+
+
+[Trace - 7:43:51 PM] Sending response 'workspace/configuration - (6)'. Processing request took 13ms
+Result: [
+    {
+        "de": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-DE": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-AT": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "de-CH": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-US": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-GB": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": [
+                "OXFORD_SPELLING_NOUNS"
+            ]
+        },
+        "en-AU": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-CA": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-NZ": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "en-ZA": {
+            "dictionary": ["B-splines"],
+            "disabledRules": [],
+            "enabledRules": []
+        },
+        "enabled": true,
+        "language": "en-US",
+        "dictionary": {},
+        "disabledRules": {},
+        "enabledRules": {},
+        "ltex-ls": {
+            "path": "/home/valentjn/repos/ltex-ls/build/install/ltex-ls",
+            "languageToolHttpServerUri": ""
+        },
+        "java": {
+            "path": "",
+            "initialHeapSize": 64,
+            "maximumHeapSize": 512
+        },
+        "commands": {
+            "ignore": [
+                "\\setnumberoftableheaderrows{}",
+                "\\usenotation{}"
+            ],
+            "dummy": [
+                "\\ang{}",
+                "\\bfs",
+                "\\dagr",
+                "\\fem",
+                "\\hftr",
+                "\\initial[]",
+                "\\lhs",
+                "\\pop{}",
+                "\\rhs",
+                "\\spd",
+                "\\texttt{}",
+                "\\thmref{}",
+                "\\tiftr",
+                "\\up"
+            ]
+        },
+        "environments": {
+            "ignore": []
+        },
+        "markdown": {
+            "ignore": [
+                "CodeBlock",
+                "FencedCodeBlock",
+                "IndentedCodeBlock"
+            ],
+            "dummy": [
+                "AutoLink",
+                "Code"
+            ]
+        },
+        "ignoreRuleInSentence": [],
+        "configurationTarget": {
+            "addToDictionary": "global",
+            "disableRule": "workspaceFolder",
+            "ignoreRuleInSentence": "workspaceFolder"
+        },
+        "additionalRules": {
+            "motherTongue": "",
+            "languageModel": "",
+            "neuralNetworkModel": "",
+            "word2VecModel": ""
+        },
+        "sentenceCacheSize": 2000,
+        "diagnosticSeverity": "information",
+        "trace": {
+            "server": "verbose"
+        },
+        "javaHome": null,
+        "performance": {
+            "initialJavaHeapSize": 50,
+            "maximumHeapSize": null,
+            "sentenceCacheSize": 1234,
+            "maximumJavaHeapSize": 500
+        },
+        "ar": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ar-DZ": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ast-ES": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "be-BY": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "br-FR": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ca-ES": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ca-ES-valencia": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "da-DK": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "de-DE-x-simple-language": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "el-GR": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "eo": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "es": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "fa": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "fr": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ga-IE": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "gl-ES": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "it": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ja-JP": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "km-KH": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "nl": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pl-PL": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-AO": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-BR": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-MZ": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "pt-PT": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ro-RO": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ru-RU": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sk-SK": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sl-SI": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "sv": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "ta-IN": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "tl-PH": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "uk-UA": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        },
+        "zh-CN": {
+            "dictionary": ["B-splines"],
+            "enabledRules": [],
+            "disabledRules": []
+        }
+    }
+]
+
+
+[Trace - 7:43:51 PM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 0.0
+}
+
+
+[Trace - 7:43:51 PM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 1.0
+}
+
+
+[Trace - 7:43:51 PM] Received notification 'textDocument/publishDiagnostics'.
+Params: {
+    "uri": "untitled:Untitled-1",
+    "diagnostics": [
+        {
+            "range": {
+                "start": {
+                    "line": 0,
+                    "character": 8
+                },
+                "end": {
+                    "line": 0,
+                    "character": 10
+                }
+            },
+            "severity": 3,
+            "source": "LTeX - EN_A_VS_AN",
+            "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
+        }
+    ]
+}
+
+
+[Trace - 7:43:51 PM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 1.0
+}
+
+
+[Trace - 7:43:51 PM] Received response 'textDocument/codeAction - (4)' in 120ms.
+Result: []
+
+
+[Trace - 7:43:51 PM] Sending request 'textDocument/codeAction - (5)'.
+Params: {
+    "textDocument": {
+        "uri": "untitled:Untitled-1"
+    },
+    "range": {
+        "start": {
+            "line": 2,
+            "character": 11
+        },
+        "end": {
+            "line": 2,
+            "character": 11
+        }
+    },
+    "context": {
+        "diagnostics": []
+    }
+}
+
+
+[Trace - 7:43:51 PM] Received response 'textDocument/codeAction - (5)' in 3ms.
+Result: []
+
+
+[Trace - 7:44:09 PM] Sending notification 'textDocument/didClose'.
+Params: {
+    "textDocument": {
+        "uri": "untitled:Untitled-1"
+    }
+}
+
+
+[Trace - 7:44:09 PM] Received notification 'textDocument/publishDiagnostics'.
+Params: {
+    "uri": "untitled:Untitled-1",
+    "diagnostics": []
 }
 
 
