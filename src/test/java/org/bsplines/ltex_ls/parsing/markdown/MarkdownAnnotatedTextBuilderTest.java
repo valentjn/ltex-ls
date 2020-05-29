@@ -35,7 +35,7 @@ public class MarkdownAnnotatedTextBuilderTest {
   }
 
   @Test
-  public void test() throws IOException {
+  public void doTest() throws IOException {
     assertPlainText(
         "# Heading\n" +
         "Paragraph with\n" +

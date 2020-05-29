@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 public class MarkdownFragmentizerTest {
   @Test
-  public void test() {
+  public void doTest() {
     CodeFragmentizer fragmentizer = CodeFragmentizer.create("markdown", new Settings());
     List<CodeFragment> codeFragments = fragmentizer.fragmentize(
         "Sentence 1\n" +

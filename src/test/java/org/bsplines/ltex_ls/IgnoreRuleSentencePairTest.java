@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 public class IgnoreRuleSentencePairTest {
   @Test
-  public void test() {
+  public void doTest() {
     IgnoreRuleSentencePair pair = new IgnoreRuleSentencePair("a", "b");
     Assertions.assertEquals(pair, pair.clone());
     Assertions.assertNotEquals(pair, new IgnoreRuleSentencePair("X", "b"));

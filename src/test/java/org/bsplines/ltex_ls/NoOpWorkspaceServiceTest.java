@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 public class NoOpWorkspaceServiceTest {
   @Test
-  public void test() {
+  public void doTest() {
     NoOpWorkspaceService service = new NoOpWorkspaceService();
     Assertions.assertDoesNotThrow(() -> service.symbol(null));
     Assertions.assertDoesNotThrow(() -> service.didChangeConfiguration(null));

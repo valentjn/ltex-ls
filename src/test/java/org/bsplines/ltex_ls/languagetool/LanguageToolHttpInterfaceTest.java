@@ -42,7 +42,7 @@ public class LanguageToolHttpInterfaceTest {
   }
 
   @Test
-  public void test() {
+  public void doTest() {
     TextDocumentItem document = DocumentCheckerTest.createDocument("latex",
         "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n");
     Pair<List<LanguageToolRuleMatch>, AnnotatedText> checkingResult =

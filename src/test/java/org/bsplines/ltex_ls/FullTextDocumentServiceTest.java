@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 public class FullTextDocumentServiceTest {
   @Test
-  public void test() {
+  public void doTest() {
     FullTextDocumentService service = new FullTextDocumentService(new HashMap<>());
     Assertions.assertDoesNotThrow(() -> new FullTextDocumentService());
 
