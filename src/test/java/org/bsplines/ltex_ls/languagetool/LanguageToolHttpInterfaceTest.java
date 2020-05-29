@@ -16,6 +16,7 @@ import org.languagetool.server.HTTPServer;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class LanguageToolHttpInterfaceTest {
+  private SettingsManager settingsManager;
   private DocumentChecker documentChecker;
   private Thread serverThread;
 
@@ -29,7 +30,7 @@ public class LanguageToolHttpInterfaceTest {
     // wait until LanguageTool has initialized itself
     Thread.sleep(5000);
 
-    SettingsManager settingsManager = new SettingsManager();
+    settingsManager = new SettingsManager();
     Settings settings = new Settings();
     settings.setLanguageToolHttpServerUri("http://localhost:8081");
     settingsManager.setSettings(settings);
@@ -42,11 +43,21 @@ public class LanguageToolHttpInterfaceTest {
   }
 
   @Test
-  public void doTest() {
+  public void testCheck() {
     TextDocumentItem document = DocumentCheckerTest.createDocument("latex",
         "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n");
     Pair<List<LanguageToolRuleMatch>, AnnotatedText> checkingResult =
         documentChecker.check(document);
     DocumentCheckerTest.testMatches(checkingResult.getKey(), 8, 10, 58, 75);
+  }
+
+  @Test
+  public void testOtherMethods() {
+    LanguageToolInterface ltInterface = settingsManager.getLanguageToolInterface();
+    Assertions.assertDoesNotThrow(() -> ltInterface.activateDefaultFalseFriendRules());
+    Assertions.assertDoesNotThrow(() -> ltInterface.activateLanguageModelRules("foobar"));
+    Assertions.assertDoesNotThrow(() -> ltInterface.activateNeuralNetworkRules("foobar"));
+    Assertions.assertDoesNotThrow(() -> ltInterface.activateWord2VecModelRules("foobar"));
+    Assertions.assertDoesNotThrow(() -> ltInterface.enableEasterEgg());
   }
 }
