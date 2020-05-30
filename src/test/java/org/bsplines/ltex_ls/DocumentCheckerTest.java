@@ -16,14 +16,17 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class DocumentCheckerTest {
-  private DocumentChecker documentChecker;
-  private CodeActionGenerator codeActionGenerator;
+  private static Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkDocument(
+        TextDocumentItem document) {
+    return checkDocument(document, null);
+  }
 
-  @BeforeAll
-  public void setUp() {
+  private static Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkDocument(
+        TextDocumentItem document, Settings settings) {
     SettingsManager settingsManager = new SettingsManager();
-    documentChecker = new DocumentChecker(settingsManager);
-    codeActionGenerator = new CodeActionGenerator(settingsManager);
+    if (settings != null) settingsManager.setSettings(settings);
+    DocumentChecker documentChecker = new DocumentChecker(settingsManager);
+    return documentChecker.check(document);
   }
 
   public static TextDocumentItem createDocument(String codeLanguageId, String code) {
@@ -72,14 +75,14 @@ public class DocumentCheckerTest {
 
     document = createDocument("latex",
         "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n");
-    checkingResult = documentChecker.check(document);
+    checkingResult = checkDocument(document);
     testMatches(checkingResult.getKey(), 8, 10, 58, 75);
 
     document = createDocument("latex",
         "This is a qwertyzuiopa\\footnote{This is another qwertyzuiopb.}.\n" +
         "% ltex: language=de-DE\n" +
         "Dies ist ein Qwertyzuiopc\\todo[name]{Dies ist ein weiteres Qwertyzuiopd.}.\n");
-    checkingResult = documentChecker.check(document);
+    checkingResult = checkDocument(document);
     List<LanguageToolRuleMatch> matches = checkingResult.getKey();
     List<AnnotatedTextFragment> annotatedTextFragments = checkingResult.getValue();
 
@@ -134,7 +137,7 @@ public class DocumentCheckerTest {
         "This is an **test.**\n\n[comment]: <> \"LTeX: language=de-DE\"\n\n" +
         "Dies ist eine **Test**.\n");
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
-        documentChecker.check(document);
+        checkDocument(document);
     testMatches(checkingResult.getKey(), 8, 10, 69, 80);
   }
 
@@ -143,12 +146,26 @@ public class DocumentCheckerTest {
     TextDocumentItem document = createDocument("plaintext",
         "This is an unknownword.\n");
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
-        documentChecker.check(document);
+        checkDocument(document);
     CodeActionParams params = new CodeActionParams(new TextDocumentIdentifier(document.getUri()),
         new Range(new Position(0, 0), new Position(100, 0)),
         new CodeActionContext(Collections.emptyList()));
+    SettingsManager settingsManager = new SettingsManager();
+    CodeActionGenerator codeActionGenerator = new CodeActionGenerator(settingsManager);
     List<Either<Command, CodeAction>> result = codeActionGenerator.generate(
         params, document, checkingResult);
     Assertions.assertEquals(4, result.size());
+  }
+
+  @Test
+  public void testIgnoreRuleSentencePairs() {
+    TextDocumentItem document = createDocument("plaintext",
+        "This is an unknownword.\n");
+    Settings settings = new Settings();
+    settings.setIgnoreRuleSentencePairs(Collections.singletonList(
+        new IgnoreRuleSentencePair("MORFOLOGIK_RULE_EN_US", "This is an unknownword\\.")));
+    Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
+        checkDocument(document, settings);
+    Assertions.assertTrue(checkingResult.getKey().isEmpty());
   }
 }
