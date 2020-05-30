@@ -15,18 +15,22 @@ public class LatexCommandSignature {
     DUMMY,
   }
 
+  private static final Pattern commandPattern = Pattern.compile(
+      "^\\\\([^A-Za-z@]|([A-Za-z@]+))\\*?");
+  private static final Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\]))");
+  private static final Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
+
   public String name = "";
   public ArrayList<ArgumentType> argumentTypes = new ArrayList<ArgumentType>();
   public Action action = Action.IGNORE;
+
+  private Pattern thisCommandPattern;
 
   public LatexCommandSignature(String commandPrototype) {
     this(commandPrototype, Action.IGNORE);
   }
 
   public LatexCommandSignature(String commandPrototype, Action action) {
-    Pattern commandPattern = Pattern.compile("^\\\\([^A-Za-z@]|([A-Za-z@]+))\\*?");
-    Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\]))");
-
     Matcher commandMatcher = commandPattern.matcher(commandPrototype);
     if (!commandMatcher.find()) return;
     name = commandMatcher.group();
@@ -50,6 +54,7 @@ public class LatexCommandSignature {
     }
 
     this.action = action;
+    thisCommandPattern = Pattern.compile("^" + Pattern.quote(name));
   }
 
   private static String matchFromPosition(String code, int pos, Pattern pattern) {
@@ -124,11 +129,8 @@ public class LatexCommandSignature {
   }
 
   public String matchFromPosition(String code, int pos) {
-    Pattern commandPattern = Pattern.compile("^" + Pattern.quote(name));
-    Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
-
     int startPos = pos;
-    String match = matchFromPosition(code, pos, commandPattern);
+    String match = matchFromPosition(code, pos, thisCommandPattern);
     pos += match.length();
 
     for (ArgumentType argumentType : argumentTypes) {
