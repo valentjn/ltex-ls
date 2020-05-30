@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.bsplines.ltex_ls.languagetool.LanguageToolRuleMatch;
+import org.bsplines.ltex_ls.parsing.AnnotatedTextFragment;
 
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
@@ -12,8 +13,6 @@ import org.eclipse.xtext.xbase.lib.Pair;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-
-import org.languagetool.markup.AnnotatedText;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class DocumentCheckerTest {
@@ -68,11 +67,65 @@ public class DocumentCheckerTest {
 
   @Test
   public void testLatex() {
-    TextDocumentItem document = createDocument("latex",
+    TextDocumentItem document;
+    Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult;
+
+    document = createDocument("latex",
         "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n");
-    Pair<List<LanguageToolRuleMatch>, AnnotatedText> checkingResult =
-        documentChecker.check(document);
+    checkingResult = documentChecker.check(document);
     testMatches(checkingResult.getKey(), 8, 10, 58, 75);
+
+    document = createDocument("latex",
+        "This is a qwertyzuiopa\\footnote{This is another qwertyzuiopb.}.\n" +
+        "% ltex: language=de-DE\n" +
+        "Dies ist ein Qwertyzuiopc\\todo[name]{Dies ist ein weiteres Qwertyzuiopd.}.\n");
+    checkingResult = documentChecker.check(document);
+    List<LanguageToolRuleMatch> matches = checkingResult.getKey();
+    List<AnnotatedTextFragment> annotatedTextFragments = checkingResult.getValue();
+
+    Assertions.assertEquals(4, matches.size());
+    Assertions.assertEquals(4, annotatedTextFragments.size());
+
+    Assertions.assertEquals("MORFOLOGIK_RULE_EN_US", matches.get(0).getRuleId());
+    Assertions.assertEquals("This is another qwertyzuiopb.", matches.get(0).getSentence());
+    Assertions.assertEquals(48, matches.get(0).getFromPos());
+    Assertions.assertEquals(60, matches.get(0).getToPos());
+
+    Assertions.assertEquals("MORFOLOGIK_RULE_EN_US", matches.get(1).getRuleId());
+    Assertions.assertEquals("This is a qwertyzuiopa. ", matches.get(1).getSentence());
+    Assertions.assertEquals(10, matches.get(1).getFromPos());
+    Assertions.assertEquals(22, matches.get(1).getToPos());
+
+    Assertions.assertEquals("GERMAN_SPELLER_RULE", matches.get(2).getRuleId());
+    Assertions.assertEquals("Dies ist ein weiteres Qwertyzuiopd.", matches.get(2).getSentence());
+    Assertions.assertEquals(146, matches.get(2).getFromPos());
+    Assertions.assertEquals(158, matches.get(2).getToPos());
+
+    Assertions.assertEquals("GERMAN_SPELLER_RULE", matches.get(3).getRuleId());
+    Assertions.assertEquals("Dies ist ein Qwertyzuiopc. ", matches.get(3).getSentence());
+    Assertions.assertEquals(100, matches.get(3).getFromPos());
+    Assertions.assertEquals(112, matches.get(3).getToPos());
+
+    Assertions.assertEquals("This is another qwertyzuiopb.",
+        annotatedTextFragments.get(0).getCodeFragment().getCode());
+    Assertions.assertEquals("This is another qwertyzuiopb.",
+        annotatedTextFragments.get(0).getAnnotatedText().getPlainText());
+
+    Assertions.assertEquals("This is a qwertyzuiopa\\footnote{This is another qwertyzuiopb.}.\n",
+        annotatedTextFragments.get(1).getCodeFragment().getCode());
+    Assertions.assertEquals("This is a qwertyzuiopa. ",
+        annotatedTextFragments.get(1).getAnnotatedText().getPlainText());
+
+    Assertions.assertEquals("Dies ist ein weiteres Qwertyzuiopd.",
+        annotatedTextFragments.get(2).getCodeFragment().getCode());
+    Assertions.assertEquals("Dies ist ein weiteres Qwertyzuiopd.",
+        annotatedTextFragments.get(2).getAnnotatedText().getPlainText());
+
+    Assertions.assertEquals("% ltex: language=de-DE\n" +
+        "Dies ist ein Qwertyzuiopc\\todo[name]{Dies ist ein weiteres Qwertyzuiopd.}.\n",
+        annotatedTextFragments.get(3).getCodeFragment().getCode());
+    Assertions.assertEquals("Dies ist ein Qwertyzuiopc. ",
+        annotatedTextFragments.get(3).getAnnotatedText().getPlainText());
   }
 
   @Test
@@ -80,7 +133,7 @@ public class DocumentCheckerTest {
     TextDocumentItem document = createDocument("markdown",
         "This is an **test.**\n\n[comment]: <> \"LTeX: language=de-DE\"\n\n" +
         "Dies ist eine **Test**.\n");
-    Pair<List<LanguageToolRuleMatch>, AnnotatedText> checkingResult =
+    Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         documentChecker.check(document);
     testMatches(checkingResult.getKey(), 8, 10, 69, 80);
   }
@@ -89,7 +142,7 @@ public class DocumentCheckerTest {
   public void testCodeActionGenerator() {
     TextDocumentItem document = createDocument("plaintext",
         "This is an unknownword.\n");
-    Pair<List<LanguageToolRuleMatch>, AnnotatedText> checkingResult =
+    Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         documentChecker.check(document);
     CodeActionParams params = new CodeActionParams(new TextDocumentIdentifier(document.getUri()),
         new Range(new Position(0, 0), new Position(100, 0)),

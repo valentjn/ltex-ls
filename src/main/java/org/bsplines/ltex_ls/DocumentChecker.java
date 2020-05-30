@@ -11,8 +11,6 @@ import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.xtext.xbase.lib.Pair;
 
 import org.languagetool.markup.AnnotatedText;
-import org.languagetool.markup.AnnotatedText.MetaDataKey;
-import org.languagetool.markup.TextPart;
 
 public class DocumentChecker {
   private SettingsManager settingsManager;
@@ -134,34 +132,8 @@ public class DocumentChecker {
     }
   }
 
-  private AnnotatedText joinAnnotatedTextFragments(
-        List<AnnotatedTextFragment> annotatedTextFragments) {
-    int plainTextLength = 0;
-    List<TextPart> parts = new ArrayList<>();
-    List<Map.Entry<Integer, Integer>> mapping = new ArrayList<>();
-    Map<MetaDataKey, String> metaData = new HashMap<>();
-    Map<String, String> customMetaData = new HashMap<>();
-
-    for (AnnotatedTextFragment annotatedTextFragment : annotatedTextFragments) {
-      AnnotatedText curAnnotatedText = annotatedTextFragment.getAnnotatedText();
-      CodeFragment curCodeFragment = annotatedTextFragment.getCodeFragment();
-      String curPlainText = curAnnotatedText.getPlainText();
-
-      for (Map.Entry<Integer, Integer> entry : curAnnotatedText.getMapping()) {
-        mapping.add(new AbstractMap.SimpleEntry<>(
-            entry.getKey() + plainTextLength, entry.getValue() + curCodeFragment.getFromPos()));
-      }
-
-      parts.addAll(curAnnotatedText.getParts());
-      metaData.putAll(curAnnotatedText.getMetaData());
-      customMetaData.putAll(curAnnotatedText.getCustomMetaData());
-      plainTextLength += curPlainText.length();
-    }
-
-    return new AnnotatedText(parts, mapping, metaData, customMetaData);
-  }
-
-  public Pair<List<LanguageToolRuleMatch>, AnnotatedText> check(TextDocumentItem document) {
+  public Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> check(
+        TextDocumentItem document) {
     Settings originalSettings = settingsManager.getSettings();
 
     try {
@@ -169,8 +141,7 @@ public class DocumentChecker {
       List<AnnotatedTextFragment> annotatedTextFragments =
           buildAnnotatedTextFragments(codeFragments);
       List<LanguageToolRuleMatch> matches = checkAnnotatedTextFragments(annotatedTextFragments);
-      AnnotatedText annotatedText = joinAnnotatedTextFragments(annotatedTextFragments);
-      return new Pair<>(matches, annotatedText);
+      return new Pair<>(matches, annotatedTextFragments);
     } finally {
       settingsManager.setSettings(originalSettings);
     }

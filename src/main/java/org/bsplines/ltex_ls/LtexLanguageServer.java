@@ -6,14 +6,13 @@ import java.util.concurrent.*;
 import com.google.gson.*;
 
 import org.bsplines.ltex_ls.languagetool.*;
+import org.bsplines.ltex_ls.parsing.AnnotatedTextFragment;
 
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.*;
 
 import org.eclipse.xtext.xbase.lib.Pair;
-
-import org.languagetool.markup.AnnotatedText;
 
 public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   private HashMap<String, TextDocumentItem> documents = new HashMap<>();
@@ -74,7 +73,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
         TextDocumentItem document = documents.get(params.getTextDocument().getUri());
 
         return checkDocument(document).thenApply(
-              (Pair<List<LanguageToolRuleMatch>, AnnotatedText> checkingResult) -> {
+              (Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) -> {
           return codeActionGenerator.generate(params, document, checkingResult);
         });
       }
@@ -116,7 +115,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
   private CompletableFuture<List<Diagnostic>> getIssues(TextDocumentItem document) {
     return checkDocument(document).thenApply(
-          (Pair<List<LanguageToolRuleMatch>, AnnotatedText> checkingResult) -> {
+          (Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) -> {
       List<LanguageToolRuleMatch> matches = checkingResult.getKey();
       DocumentPositionCalculator positionCalculator =
           new DocumentPositionCalculator(document.getText());
@@ -141,8 +140,8 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     languageClient.telemetryEvent(arguments);
   }
 
-  private CompletableFuture<Pair<List<LanguageToolRuleMatch>, AnnotatedText>> checkDocument(
-        TextDocumentItem document) {
+  private CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>>
+        checkDocument(TextDocumentItem document) {
     ConfigurationItem configurationItem = new ConfigurationItem();
     configurationItem.setSection("ltex");
     configurationItem.setScopeUri(document.getUri());

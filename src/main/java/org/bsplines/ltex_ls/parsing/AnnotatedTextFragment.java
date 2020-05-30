@@ -1,5 +1,7 @@
 package org.bsplines.ltex_ls.parsing;
 
+import java.util.*;
+
 import org.languagetool.markup.AnnotatedText;
 
 public class AnnotatedTextFragment {
@@ -13,4 +15,16 @@ public class AnnotatedTextFragment {
 
   public AnnotatedText getAnnotatedText() { return annotatedText; }
   public CodeFragment getCodeFragment() { return codeFragment; }
+
+  public AnnotatedText invert() {
+    List<Map.Entry<Integer, Integer>> mapping = annotatedText.getMapping();
+    List<Map.Entry<Integer, Integer>> inverseMapping = new ArrayList<>();
+
+    for (Map.Entry<Integer, Integer> entry : mapping) {
+      inverseMapping.add(new AbstractMap.SimpleEntry<>(entry.getValue(), entry.getKey()));
+    }
+
+    return new AnnotatedText(Collections.emptyList(), inverseMapping, Collections.emptyMap(),
+        Collections.emptyMap());
+  }
 }

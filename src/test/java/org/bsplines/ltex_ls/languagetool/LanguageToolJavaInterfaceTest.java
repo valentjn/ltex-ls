@@ -3,6 +3,7 @@ package org.bsplines.ltex_ls.languagetool;
 import java.util.List;
 
 import org.bsplines.ltex_ls.*;
+import org.bsplines.ltex_ls.parsing.AnnotatedTextFragment;
 
 import org.eclipse.lsp4j.TextDocumentItem;
 
@@ -10,8 +11,6 @@ import org.eclipse.xtext.xbase.lib.Pair;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-
-import org.languagetool.markup.AnnotatedText;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class LanguageToolJavaInterfaceTest {
@@ -28,7 +27,7 @@ public class LanguageToolJavaInterfaceTest {
   public void testCheck() {
     TextDocumentItem document = DocumentCheckerTest.createDocument("latex",
         "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n");
-    Pair<List<LanguageToolRuleMatch>, AnnotatedText> checkingResult =
+    Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         documentChecker.check(document);
     DocumentCheckerTest.testMatches(checkingResult.getKey(), 8, 10, 58, 75);
   }

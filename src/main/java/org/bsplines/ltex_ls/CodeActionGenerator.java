@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import com.google.gson.*;
 
 import org.bsplines.ltex_ls.languagetool.LanguageToolRuleMatch;
+import org.bsplines.ltex_ls.parsing.AnnotatedTextFragment;
 
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
@@ -55,23 +56,6 @@ public class CodeActionGenerator {
         (position1.getCharacter() < position2.getCharacter())));
   }
 
-  private static AnnotatedText invertAnnotatedText(AnnotatedText annotatedText) {
-    List<Map.Entry<Integer, Integer>> mapping = annotatedText.getMapping();
-    List<Map.Entry<Integer, Integer>> inverseMapping = new ArrayList<>();
-
-    for (Map.Entry<Integer, Integer> entry : mapping) {
-      inverseMapping.add(new AbstractMap.SimpleEntry<>(entry.getValue(), entry.getKey()));
-    }
-
-    return new AnnotatedText(Collections.emptyList(), inverseMapping, Collections.emptyMap(),
-        Collections.emptyMap());
-  }
-
-  private static int getPlainTextPositionFor(int originalTextPosition,
-      AnnotatedText inverseAnnotatedText) {
-    return inverseAnnotatedText.getOriginalTextPositionFor(originalTextPosition);
-  }
-
   public Diagnostic createDiagnostic(
         LanguageToolRuleMatch match, DocumentPositionCalculator positionCalculator) {
     Diagnostic ret = new Diagnostic();
@@ -86,13 +70,12 @@ public class CodeActionGenerator {
 
   public List<Either<Command, CodeAction>> generate(
         CodeActionParams params, TextDocumentItem document,
-        Pair<List<LanguageToolRuleMatch>, AnnotatedText> checkingResult) {
+        Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) {
     if (checkingResult.getValue() == null) return Collections.emptyList();
 
     VersionedTextDocumentIdentifier textDocument = new VersionedTextDocumentIdentifier(
         document.getUri(), document.getVersion());
     String text = document.getText();
-    String plainText = checkingResult.getValue().getPlainText();
     DocumentPositionCalculator positionCalculator = new DocumentPositionCalculator(text);
     List<Either<Command, CodeAction>> result =
         new ArrayList<Either<Command, CodeAction>>();
@@ -126,39 +109,8 @@ public class CodeActionGenerator {
 
     if (!addWordToDictionaryMatches.isEmpty() &&
           settingsManager.getSettings().getLanguageToolHttpServerUri().isEmpty()) {
-      AnnotatedText inverseAnnotatedText = invertAnnotatedText(checkingResult.getValue());
-      List<String> unknownWords = new ArrayList<>();
-      JsonArray unknownWordsJson = new JsonArray();
-      List<Diagnostic> diagnostics = new ArrayList<>();
-
-      for (LanguageToolRuleMatch match : addWordToDictionaryMatches) {
-        String word = plainText.substring(
-            getPlainTextPositionFor(match.getFromPos(), inverseAnnotatedText),
-            getPlainTextPositionFor(match.getToPos(), inverseAnnotatedText));
-
-        if (!unknownWords.contains(word)) {
-          unknownWords.add(word);
-          unknownWordsJson.add(word);
-        }
-
-        diagnostics.add(createDiagnostic(match, positionCalculator));
-      }
-
-      Command command = new Command(((unknownWords.size() == 1) ?
-          Tools.i18n("addWordToDictionary", unknownWords.get(0)) :
-          Tools.i18n("addAllUnknownWordsInSelectionToDictionary")),
-          addToDictionaryCommandName);
-      JsonObject arguments = new JsonObject();
-      arguments.addProperty("type", "command");
-      arguments.addProperty("command", addToDictionaryCommandName);
-      arguments.addProperty("uri", document.getUri());
-      arguments.add("word", unknownWordsJson);
-      command.setArguments(Arrays.asList(arguments));
-
-      CodeAction codeAction = new CodeAction(command.getTitle());
-      codeAction.setKind(addToDictionaryCodeActionKind);
-      codeAction.setDiagnostics(diagnostics);
-      codeAction.setCommand(command);
+      CodeAction codeAction = getAddWordToDictionaryCodeAction(document,
+          addWordToDictionaryMatches, checkingResult.getValue(), positionCalculator);
       result.add(Either.forRight(codeAction));
     }
 
@@ -278,6 +230,85 @@ public class CodeActionGenerator {
     }
 
     return result;
+  }
+
+  private static int getPlainTextPositionFor(int originalTextPosition,
+      AnnotatedText inverseAnnotatedText) {
+    return inverseAnnotatedText.getOriginalTextPositionFor(originalTextPosition);
+  }
+
+  private CodeAction getAddWordToDictionaryCodeAction(
+        TextDocumentItem document,
+        List<LanguageToolRuleMatch> addWordToDictionaryMatches,
+        List<AnnotatedTextFragment> annotatedTextFragments,
+        DocumentPositionCalculator positionCalculator) {
+    List<AnnotatedText> invertedAnnotatedTexts = new ArrayList<>();
+    List<String> plainTexts = new ArrayList<>();
+
+    for (int i = 0; i < annotatedTextFragments.size(); i++) {
+      invertedAnnotatedTexts.add(null);
+      plainTexts.add(null);
+    }
+
+    List<String> unknownWords = new ArrayList<>();
+    JsonArray unknownWordsJson = new JsonArray();
+    List<Diagnostic> diagnostics = new ArrayList<>();
+
+    for (LanguageToolRuleMatch match : addWordToDictionaryMatches) {
+      int fragmentIndex = -1;
+
+      for (int i = 0; i < annotatedTextFragments.size(); i++) {
+        if (annotatedTextFragments.get(i).getCodeFragment().contains(match)) {
+          fragmentIndex = i;
+          break;
+        }
+      }
+
+      if (fragmentIndex == -1) {
+        Tools.logger.warning(Tools.i18n("couldNotFindFragmentForUnknownWord"));
+        continue;
+      }
+
+      AnnotatedTextFragment annotatedTextFragment = annotatedTextFragments.get(fragmentIndex);
+
+      if (invertedAnnotatedTexts.get(fragmentIndex) == null) {
+        invertedAnnotatedTexts.set(fragmentIndex, annotatedTextFragment.invert());
+        plainTexts.set(fragmentIndex, annotatedTextFragment.getAnnotatedText().getPlainText());
+      }
+
+      AnnotatedText inverseAnnotatedText = invertedAnnotatedTexts.get(fragmentIndex);
+      String plainText = plainTexts.get(fragmentIndex);
+      int offset = annotatedTextFragment.getCodeFragment().getFromPos();
+
+      String word = plainText.substring(
+          getPlainTextPositionFor(match.getFromPos() - offset, inverseAnnotatedText),
+          getPlainTextPositionFor(match.getToPos() - offset, inverseAnnotatedText));
+
+      if (!unknownWords.contains(word)) {
+        unknownWords.add(word);
+        unknownWordsJson.add(word);
+      }
+
+      diagnostics.add(createDiagnostic(match, positionCalculator));
+    }
+
+    Command command = new Command(((unknownWords.size() == 1) ?
+        Tools.i18n("addWordToDictionary", unknownWords.get(0)) :
+        Tools.i18n("addAllUnknownWordsInSelectionToDictionary")),
+        addToDictionaryCommandName);
+    JsonObject arguments = new JsonObject();
+    arguments.addProperty("type", "command");
+    arguments.addProperty("command", addToDictionaryCommandName);
+    arguments.addProperty("uri", document.getUri());
+    arguments.add("word", unknownWordsJson);
+    command.setArguments(Arrays.asList(arguments));
+
+    CodeAction codeAction = new CodeAction(command.getTitle());
+    codeAction.setKind(addToDictionaryCodeActionKind);
+    codeAction.setDiagnostics(diagnostics);
+    codeAction.setCommand(command);
+
+    return codeAction;
   }
 
   public static List<String> getCodeActions() {

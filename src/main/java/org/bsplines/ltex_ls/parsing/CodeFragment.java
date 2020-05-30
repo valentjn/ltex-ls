@@ -1,6 +1,7 @@
 package org.bsplines.ltex_ls.parsing;
 
 import org.bsplines.ltex_ls.Settings;
+import org.bsplines.ltex_ls.languagetool.LanguageToolRuleMatch;
 
 public class CodeFragment {
   private String codeLanguageId;
@@ -19,4 +20,8 @@ public class CodeFragment {
   public String getCode() { return code; }
   public int getFromPos() { return fromPos; }
   public Settings getSettings() { return settings; }
+
+  public boolean contains(LanguageToolRuleMatch match) {
+    return ((match.getFromPos() >= fromPos) && (match.getToPos() <= fromPos + code.length()));
+  }
 }
