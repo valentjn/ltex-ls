@@ -52,12 +52,12 @@ public class LatexCommandSignature {
     this.action = action;
   }
 
-  private static String matchFromPosition(String text, int pos, Pattern pattern) {
-    Matcher matcher = pattern.matcher(text.substring(pos));
+  private static String matchFromPosition(String code, int pos, Pattern pattern) {
+    Matcher matcher = pattern.matcher(code.substring(pos));
     return (matcher.find() ? matcher.group() : "");
   }
 
-  public static String matchArgumentFromPosition(String text, int pos, ArgumentType argumentType) {
+  public static String matchArgumentFromPosition(String code, int pos, ArgumentType argumentType) {
     int startPos = pos;
     Stack<ArgumentType> argumentTypeStack = new Stack<>();
     char openChar = '\0';
@@ -73,14 +73,14 @@ public class LatexCommandSignature {
       }
     }
 
-    if (text.charAt(pos) != openChar) return "";
+    if (code.charAt(pos) != openChar) return "";
     pos++;
     argumentTypeStack.push(argumentType);
 
-    while (pos < text.length()) {
-      switch (text.charAt(pos)) {
+    while (pos < code.length()) {
+      switch (code.charAt(pos)) {
         case '\\': {
-          if (pos + 1 < text.length()) pos++;
+          if (pos + 1 < code.length()) pos++;
           break;
         }
         case '{': {
@@ -96,7 +96,7 @@ public class LatexCommandSignature {
             return "";
           } else if (argumentTypeStack.size() == 1) {
             return ((argumentType == ArgumentType.BRACE) ?
-                text.substring(startPos, pos + 1) : "");
+                code.substring(startPos, pos + 1) : "");
           } else {
             argumentTypeStack.pop();
           }
@@ -108,7 +108,7 @@ public class LatexCommandSignature {
             return "";
           } else if (argumentTypeStack.size() == 1) {
             return ((argumentType == ArgumentType.BRACKET) ?
-                text.substring(startPos, pos + 1) : "");
+                code.substring(startPos, pos + 1) : "");
           } else {
             argumentTypeStack.pop();
           }
@@ -123,23 +123,23 @@ public class LatexCommandSignature {
     return "";
   }
 
-  public String matchFromPosition(String text, int pos) {
+  public String matchFromPosition(String code, int pos) {
     Pattern commandPattern = Pattern.compile("^" + Pattern.quote(name));
     Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
 
     int startPos = pos;
-    String match = matchFromPosition(text, pos, commandPattern);
+    String match = matchFromPosition(code, pos, commandPattern);
     pos += match.length();
 
     for (ArgumentType argumentType : argumentTypes) {
-      match = matchFromPosition(text, pos, commentPattern);
+      match = matchFromPosition(code, pos, commentPattern);
       pos += match.length();
 
-      match = matchArgumentFromPosition(text, pos, argumentType);
+      match = matchArgumentFromPosition(code, pos, argumentType);
       if (match.isEmpty()) return "";
       pos += match.length();
     }
 
-    return text.substring(startPos, pos);
+    return code.substring(startPos, pos);
   }
 }
