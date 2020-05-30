@@ -43,6 +43,14 @@ public class LanguageToolHttpInterfaceTest {
   }
 
   @Test
+  public void testConstructor() {
+    Assertions.assertTrue(new LanguageToolHttpInterface(
+        "http://localhost:8081/", "en-US", "").isReady());
+    Assertions.assertFalse(new LanguageToolHttpInterface(
+        "http://localhost:80:81/", "en-US", "").isReady());
+  }
+
+  @Test
   public void testCheck() {
     TextDocumentItem document = DocumentCheckerTest.createDocument("latex",
         "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n");
