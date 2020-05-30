@@ -1,8 +1,9 @@
 package org.bsplines.ltex_ls.parsing.latex;
 
-import java.util.ArrayList;
-import java.util.Stack;
+import java.util.*;
 import java.util.regex.*;
+
+import org.eclipse.xtext.xbase.lib.Pair;
 
 public class LatexCommandSignature {
   public enum ArgumentType {
@@ -57,7 +58,7 @@ public class LatexCommandSignature {
     thisCommandPattern = Pattern.compile("^" + Pattern.quote(name));
   }
 
-  private static String matchFromPosition(String code, int fromPos, Pattern pattern) {
+  private static String matchPatternFromPosition(String code, int fromPos, Pattern pattern) {
     Matcher matcher = pattern.matcher(code.substring(fromPos));
     return (matcher.find() ? matcher.group() : "");
   }
@@ -129,20 +130,32 @@ public class LatexCommandSignature {
     return "";
   }
 
+  public List<Pair<Integer, Integer>> matchArgumentsFromPosition(String code, int fromPos) {
+    List<Pair<Integer, Integer>> arguments = new ArrayList<>();
+    int toPos = matchFromPosition(code, fromPos, arguments);
+    return ((toPos > -1) ? arguments : null);
+  }
+
   public String matchFromPosition(String code, int fromPos) {
+    int toPos = matchFromPosition(code, fromPos, null);
+    return ((toPos > -1) ? code.substring(fromPos, toPos) : "");
+  }
+
+  private int matchFromPosition(String code, int fromPos, List<Pair<Integer, Integer>> arguments) {
     int pos = fromPos;
-    String match = matchFromPosition(code, pos, thisCommandPattern);
+    String match = matchPatternFromPosition(code, pos, thisCommandPattern);
     pos += match.length();
 
     for (ArgumentType argumentType : argumentTypes) {
-      match = matchFromPosition(code, pos, commentPattern);
+      match = matchPatternFromPosition(code, pos, commentPattern);
       pos += match.length();
 
       match = matchArgumentFromPosition(code, pos, argumentType);
-      if (match.isEmpty()) return "";
+      if (match.isEmpty()) return -1;
+      if (arguments != null) arguments.add(new Pair<>(pos, pos + match.length()));
       pos += match.length();
     }
 
-    return code.substring(fromPos, pos);
+    return pos;
   }
 }
