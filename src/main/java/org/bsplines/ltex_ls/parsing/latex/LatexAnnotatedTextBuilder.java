@@ -102,6 +102,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     new LatexCommandSignature("\\etocsettocstyle{}{}"),
     new LatexCommandSignature("\\floatname{}{}"),
     new LatexCommandSignature("\\floatstyle{}"),
+    new LatexCommandSignature("\\footnote{}"),
+    new LatexCommandSignature("\\footnote[]{}"),
     new LatexCommandSignature("\\foreignlanguage{}{}", LatexCommandSignature.Action.DUMMY),
     new LatexCommandSignature("\\GenericWarning{}{}"),
     new LatexCommandSignature("\\geometry{}"),
@@ -723,11 +725,6 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               addMarkup(command, interpretAs);
             } else if (command.equals("\\euro")) {
               addMarkup(command, "\u20ac");
-            } else if (command.equals("\\footnote")) {
-              modeStack.push(Mode.INLINE_TEXT);
-              String interpretAs = (isMathMode(curMode) ? generateDummy() :
-                  (lastSpace.isEmpty() ? " " : ""));
-              addMarkup(command + "{", interpretAs);
             } else if (command.equals("\\notag") || command.equals("\\qed")) {
               preserveDummyLast = true;
               addMarkup(command);
