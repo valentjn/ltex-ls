@@ -752,13 +752,13 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               String match = "";
               LatexCommandSignature matchingCommand = null;
 
-              for (LatexCommandSignature LatexCommandSignature : commandSignatures) {
-                if (LatexCommandSignature.name.equals(command)) {
-                  String curMatch = LatexCommandSignature.matchFromPosition(code, pos);
+              for (LatexCommandSignature latexCommandSignature : commandSignatures) {
+                if (latexCommandSignature.name.equals(command)) {
+                  String curMatch = latexCommandSignature.matchFromPosition(code, pos);
 
                   if (curMatch.length() > match.length()) {
                     match = curMatch;
-                    matchingCommand = LatexCommandSignature;
+                    matchingCommand = latexCommandSignature;
                   }
                 }
               }
