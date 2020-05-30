@@ -94,6 +94,9 @@ public class LatexAnnotatedTextBuilderTest {
     assertPlainText(
         "This is a test: a, b, \\dots, c.\n",
         "This is a test: a, b, ..., c. ");
+    assertPlainText(
+        "This is a test -- this is another test --- this is the final test.\n",
+        "This is a test \u2013 this is another test \u2014 this is the final test. ");
 
     {
       AnnotatedText annotatedText = buildAnnotatedText("\\cite{Kubota}*{Theorem 3.7}\n");
