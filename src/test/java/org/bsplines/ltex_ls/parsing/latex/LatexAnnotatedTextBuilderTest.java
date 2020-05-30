@@ -100,6 +100,12 @@ public class LatexAnnotatedTextBuilderTest {
     assertPlainText(
         "This ``is'' a \"`test.\"'\n",
         "This \u201cis\u201d a \u201etest.\u201c ");
+    assertPlainText(
+        "\\section{Heading}\n" +
+        "This is a test.\n" +
+        "\\subsection{This is another heading.}\n" +
+        "This is another test.\n",
+        "Heading. This is a test. This is another heading. This is another test. ");
 
     {
       AnnotatedText annotatedText = buildAnnotatedText("\\cite{Kubota}*{Theorem 3.7}\n");
