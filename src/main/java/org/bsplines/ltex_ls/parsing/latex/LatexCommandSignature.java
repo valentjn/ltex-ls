@@ -57,13 +57,14 @@ public class LatexCommandSignature {
     thisCommandPattern = Pattern.compile("^" + Pattern.quote(name));
   }
 
-  private static String matchFromPosition(String code, int pos, Pattern pattern) {
-    Matcher matcher = pattern.matcher(code.substring(pos));
+  private static String matchFromPosition(String code, int fromPos, Pattern pattern) {
+    Matcher matcher = pattern.matcher(code.substring(fromPos));
     return (matcher.find() ? matcher.group() : "");
   }
 
-  public static String matchArgumentFromPosition(String code, int pos, ArgumentType argumentType) {
-    int startPos = pos;
+  public static String matchArgumentFromPosition(
+        String code, int fromPos, ArgumentType argumentType) {
+    int pos = fromPos;
     Stack<ArgumentType> argumentTypeStack = new Stack<>();
     char openChar = '\0';
 
@@ -101,7 +102,7 @@ public class LatexCommandSignature {
             return "";
           } else if (argumentTypeStack.size() == 1) {
             return ((argumentType == ArgumentType.BRACE) ?
-                code.substring(startPos, pos + 1) : "");
+                code.substring(fromPos, pos + 1) : "");
           } else {
             argumentTypeStack.pop();
           }
@@ -113,7 +114,7 @@ public class LatexCommandSignature {
             return "";
           } else if (argumentTypeStack.size() == 1) {
             return ((argumentType == ArgumentType.BRACKET) ?
-                code.substring(startPos, pos + 1) : "");
+                code.substring(fromPos, pos + 1) : "");
           } else {
             argumentTypeStack.pop();
           }
@@ -128,8 +129,8 @@ public class LatexCommandSignature {
     return "";
   }
 
-  public String matchFromPosition(String code, int pos) {
-    int startPos = pos;
+  public String matchFromPosition(String code, int fromPos) {
+    int pos = fromPos;
     String match = matchFromPosition(code, pos, thisCommandPattern);
     pos += match.length();
 
@@ -142,6 +143,6 @@ public class LatexCommandSignature {
       pos += match.length();
     }
 
-    return code.substring(startPos, pos);
+    return code.substring(fromPos, pos);
   }
 }
