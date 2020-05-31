@@ -191,7 +191,7 @@ public class LtexLanguageServerLauncherTest {
     List<Message> messages = new ArrayList<>();
     log = log.trim();
 
-    for (String logMessage : log.split("\\R\\R")) {
+    for (String logMessage : log.split("\r\n\r\n|\n\n")) {
       messages.add(Message.fromLogString(logMessage));
     }
 
