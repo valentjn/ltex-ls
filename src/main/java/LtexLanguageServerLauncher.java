@@ -22,21 +22,15 @@ public class LtexLanguageServerLauncher {
     listener.get();
   }
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InterruptedException, ExecutionException {
     for (String arg : args) {
       if (arg.equals("--version")) {
         System.out.println("ltex-ls " +
             LtexLanguageServer.class.getPackage().getImplementationVersion());
-        System.exit(0);
+        return;
       }
     }
 
-    try {
-      launch(System.in, System.out);
-      System.exit(0);
-    } catch (InterruptedException | ExecutionException e) {
-      e.printStackTrace();
-      System.exit(1);
-    }
+    launch(System.in, System.out);
   }
 }
