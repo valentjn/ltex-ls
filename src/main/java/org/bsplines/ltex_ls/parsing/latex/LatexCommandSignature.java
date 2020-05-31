@@ -112,8 +112,7 @@ public class LatexCommandSignature {
           if (argumentTypeStack.peek() != ArgumentType.BRACE) {
             return "";
           } else if (argumentTypeStack.size() == 1) {
-            return ((argumentType == ArgumentType.BRACE) ?
-                code.substring(fromPos, pos + 1) : "");
+            return code.substring(fromPos, pos + 1);
           } else {
             argumentTypeStack.pop();
           }
@@ -124,8 +123,7 @@ public class LatexCommandSignature {
           if (argumentTypeStack.peek() != ArgumentType.BRACKET) {
             return "";
           } else if (argumentTypeStack.size() == 1) {
-            return ((argumentType == ArgumentType.BRACKET) ?
-                code.substring(fromPos, pos + 1) : "");
+            return code.substring(fromPos, pos + 1);
           } else {
             argumentTypeStack.pop();
           }
