@@ -34,7 +34,7 @@ jobs:
         - "sudo apt-get -y install python3-pip"
         - "pip3 install semver"
       script:
-        - "./gradlew installTar"
+        - "./gradlew installDist distTar"
         - "export LTEX_LS_VERSION=\"$(build/install/ltex-ls/bin/ltex-ls --version | awk '{print $NF}')\""
         - "if [[ -z \"$LTEX_LS_VERSION\" ]]; then echo 'Error: LTEX_LS_VERSION not set!'; (exit 1); fi"
         - "export IS_PRERELEASE=\"$(python3 -c \"import semver; print('1' if semver.VersionInfo.parse('$LTEX_LS_VERSION').prerelease is not None else '0', end='')\")\""
