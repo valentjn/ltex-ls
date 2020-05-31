@@ -66,6 +66,14 @@ dependencies {
 
 test {
   useJUnitPlatform()
+
+  testLogging {
+    events("passed", "skipped", "failed")
+    exceptionFormat("full")
+    showExceptions(true)
+    showCauses(true)
+    showStackTraces(true)
+  }
 }
 
 // coveralls plugin depends on XML output
