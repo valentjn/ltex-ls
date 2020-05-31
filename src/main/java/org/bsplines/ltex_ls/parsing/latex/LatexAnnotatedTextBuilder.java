@@ -1,9 +1,6 @@
 package org.bsplines.ltex_ls.parsing.latex;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 import java.util.regex.*;
 
 import org.apache.commons.text.StringEscapeUtils;
@@ -83,6 +80,18 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
 
   public LatexAnnotatedTextBuilder(String codeLanguageId) {
     this.codeLanguageId = codeLanguageId;
+  }
+
+  private Map<String, List<LatexCommandSignature>> createCommandSignatureMap() {
+    Map<String, List<LatexCommandSignature>> map = new HashMap<>();
+
+    for (LatexCommandSignature commandSignature : commandSignatures) {
+      String commandName = commandSignature.name;
+      if (!map.containsKey(commandName)) map.put(commandName, new ArrayList<>());
+      map.get(commandName).add(commandSignature);
+    }
+
+    return map;
   }
 
   private String matchFromPosition(Pattern pattern) {
@@ -236,6 +245,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     modeStack = new Stack<>();
     modeStack.push(Mode.PARAGRAPH_TEXT);
 
+    Map<String, List<LatexCommandSignature>> commandSignatureMap = createCommandSignatureMap();
     Pattern ignoreEnvironmentEndPattern = null;
     int lastPos = -1;
 
@@ -564,16 +574,20 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               addMarkup(verbCommand, generateDummy());
             } else {
               String match = "";
+              List<LatexCommandSignature> possibleCommandSignatures =
+                  commandSignatureMap.get(command);
               LatexCommandSignature matchingCommand = null;
 
-              for (LatexCommandSignature latexCommandSignature : commandSignatures) {
-                if (latexCommandSignature.name.equals(command)) {
-                  String curMatch = latexCommandSignature.matchFromPosition(code, pos);
+              if (possibleCommandSignatures == null) {
+                possibleCommandSignatures = Collections.emptyList();
+              }
 
-                  if (curMatch.length() > match.length()) {
-                    match = curMatch;
-                    matchingCommand = latexCommandSignature;
-                  }
+              for (LatexCommandSignature latexCommandSignature : possibleCommandSignatures) {
+                String curMatch = latexCommandSignature.matchFromPosition(code, pos);
+
+                if (curMatch.length() > match.length()) {
+                  match = curMatch;
+                  matchingCommand = latexCommandSignature;
                 }
               }
 
