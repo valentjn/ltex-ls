@@ -113,6 +113,11 @@ public class LatexAnnotatedTextBuilderTest {
         "This is a test: Dummy0, Dummy1, Dummy2. " +
         "Dummies shows that this should be plural. " +
         "Dummies proves another error. ");
+    assertPlainText(
+        "This is a test, \\egc an actual test \\eg{} test.\n" +
+        "This is a test, \\iec an actual test \\ie{} test.\n",
+        "This is a test, e.g., an actual test e.g. test. " +
+        "This is a test, i.e., an actual test i.e. test. ");
 
     {
       AnnotatedText annotatedText = buildAnnotatedText("\\cite{Kubota}*{Theorem 3.7}\n");

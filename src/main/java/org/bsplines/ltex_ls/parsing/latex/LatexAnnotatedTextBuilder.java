@@ -841,11 +841,28 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                   addMarkup(command, space);
                 }
               }
-            } else if (command.equals("\\dots")) {
-              String interpretAs = (isMathMode(curMode) ? "" : "...");
+            } else if (command.equals("\\dots") ||
+                  command.equals("\\eg") || command.equals("\\egc") || command.equals("\\euro") ||
+                  command.equals("\\ie") || command.equals("\\iec")) {
+              String interpretAs = "";
+
+              if (!isMathMode(curMode)) {
+                if (command.equals("\\dots")) {
+                  interpretAs = "...";
+                } else if (command.equals("\\eg")) {
+                  interpretAs = "e.g.";
+                } else if (command.equals("\\egc")) {
+                  interpretAs = "e.g.,";
+                } else if (command.equals("\\euro")) {
+                  interpretAs = "\u20ac";
+                } else if (command.equals("\\ie")) {
+                  interpretAs = "i.e.";
+                } else if (command.equals("\\iec")) {
+                  interpretAs = "i.e.,";
+                }
+              }
+
               addMarkup(command, interpretAs);
-            } else if (command.equals("\\euro")) {
-              addMarkup(command, "\u20ac");
             } else if (command.equals("\\notag") || command.equals("\\qed")) {
               preserveDummyLast = true;
               addMarkup(command);
