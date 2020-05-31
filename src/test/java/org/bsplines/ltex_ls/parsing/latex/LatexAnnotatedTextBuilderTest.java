@@ -106,6 +106,13 @@ public class LatexAnnotatedTextBuilderTest {
         "\\subsection{This is another heading.}\n" +
         "This is another test.\n",
         "Heading. This is a test. This is another heading. This is another test. ");
+    assertPlainText(
+        "This is a test: \\cite{test1}, \\cite[a]{test2}, \\cite[a][b]{test3}.\n" +
+        "\\textcites{test1}{test2}{test3} shows that this should be plural.\n" +
+        "\\textcites(a)(b)[c][]{test1}[][d]{test2}[e][f]{test3} proves another error.\n",
+        "This is a test: Dummy0, Dummy1, Dummy2. " +
+        "Dummies shows that this should be plural. " +
+        "Dummies proves another error. ");
 
     {
       AnnotatedText annotatedText = buildAnnotatedText("\\cite{Kubota}*{Theorem 3.7}\n");
