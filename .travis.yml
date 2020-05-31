@@ -24,7 +24,7 @@ jobs:
       install:
         - "choco install openjdk11"
       script:
-        - "cmd.exe //C \"RefreshEnv.cmd & gradlew.bat build\""
+        - "cmd.exe //C \"RefreshEnv.cmd & gradlew.bat build & gradlew.bat --stop\""
     - stage: "coverage"
       script:
         - "./gradlew build jacocoTestReport coveralls"
