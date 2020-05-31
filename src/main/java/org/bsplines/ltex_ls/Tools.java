@@ -33,12 +33,4 @@ public class Tools {
   public static void setLocale(Locale locale) {
     messages = ResourceBundle.getBundle("MessagesBundle", locale);
   }
-
-  public static String generateDummy(String language, int number) {
-    if (language.equalsIgnoreCase("fr")) {
-      return "Jimmy-" + number;
-    } else {
-      return "Dummy" + number;
-    }
-  }
 }

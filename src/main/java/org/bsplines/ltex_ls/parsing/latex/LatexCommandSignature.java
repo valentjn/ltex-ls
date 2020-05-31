@@ -3,6 +3,8 @@ package org.bsplines.ltex_ls.parsing.latex;
 import java.util.*;
 import java.util.regex.*;
 
+import org.bsplines.ltex_ls.parsing.DummyGenerator;
+
 import org.eclipse.xtext.xbase.lib.Pair;
 
 public class LatexCommandSignature {
@@ -24,14 +26,20 @@ public class LatexCommandSignature {
   public String name = "";
   public ArrayList<ArgumentType> argumentTypes = new ArrayList<ArgumentType>();
   public Action action = Action.IGNORE;
+  public DummyGenerator dummyGenerator;
 
   private Pattern thisCommandPattern;
 
   public LatexCommandSignature(String commandPrototype) {
-    this(commandPrototype, Action.IGNORE);
+    this(commandPrototype, Action.IGNORE, null);
   }
 
   public LatexCommandSignature(String commandPrototype, Action action) {
+    this(commandPrototype, action, DummyGenerator.getDefault());
+  }
+
+  public LatexCommandSignature(String commandPrototype, Action action,
+        DummyGenerator dummyGenerator) {
     Matcher commandMatcher = commandPattern.matcher(commandPrototype);
     if (!commandMatcher.find()) return;
     name = commandMatcher.group();
@@ -55,6 +63,8 @@ public class LatexCommandSignature {
     }
 
     this.action = action;
+    this.dummyGenerator = dummyGenerator;
+
     thisCommandPattern = Pattern.compile("^" + Pattern.quote(name));
   }
 

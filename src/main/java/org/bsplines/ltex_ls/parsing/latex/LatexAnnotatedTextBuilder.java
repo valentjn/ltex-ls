@@ -7,9 +7,11 @@ import java.util.Stack;
 import java.util.regex.*;
 
 import org.apache.commons.text.StringEscapeUtils;
-import org.bsplines.ltex_ls.parsing.CodeAnnotatedTextBuilder;
+
 import org.bsplines.ltex_ls.Settings;
 import org.bsplines.ltex_ls.Tools;
+import org.bsplines.ltex_ls.parsing.CodeAnnotatedTextBuilder;
+import org.bsplines.ltex_ls.parsing.DummyGenerator;
 
 public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private enum Mode {
@@ -301,10 +303,14 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   }
 
   private String generateDummy() {
+    return generateDummy(DummyGenerator.getDefault());
+  }
+
+  private String generateDummy(DummyGenerator dummyGenerator) {
     String dummy;
 
     if (isTextMode(curMode)) {
-      dummy = Tools.generateDummy(language, dummyCounter++);
+      dummy = dummyGenerator.generate(language, dummyCounter++);
     } else if (isMathEmpty) {
       if (curMode == Mode.DISPLAY_MATH) {
         dummy = (lastSpace.isEmpty() ? " " : "");
@@ -312,10 +318,12 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
         dummy = "";
       }
     } else if (curMode == Mode.DISPLAY_MATH) {
-      dummy = ((lastSpace.isEmpty() ? " " : "")) + Tools.generateDummy(language, dummyCounter++) +
+      dummy = ((lastSpace.isEmpty() ? " " : "")) +
+          dummyGenerator.generate(language, dummyCounter++) +
           dummyLastPunctuation + ((modeStack.peek() == Mode.INLINE_TEXT) ? dummyLastSpace : " ");
     } else {
-      dummy = Tools.generateDummy(language, dummyCounter++) + dummyLastPunctuation + dummyLastSpace;
+      dummy = dummyGenerator.generate(language, dummyCounter++) + dummyLastPunctuation +
+          dummyLastSpace;
     }
 
     dummyLastSpace = "";
@@ -769,7 +777,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                     break;
                   }
                   case DUMMY: {
-                    addMarkup(match, generateDummy());
+                    addMarkup(match, generateDummy(matchingCommand.dummyGenerator));
                     break;
                   }
                 }

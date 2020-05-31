@@ -8,9 +8,9 @@ import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.parser.Parser;
 
-import org.bsplines.ltex_ls.parsing.CodeAnnotatedTextBuilder;
 import org.bsplines.ltex_ls.Settings;
-import org.bsplines.ltex_ls.Tools;
+import org.bsplines.ltex_ls.parsing.CodeAnnotatedTextBuilder;
+import org.bsplines.ltex_ls.parsing.DummyGenerator;
 
 public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private String text;
@@ -86,7 +86,7 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   }
 
   private String generateDummy() {
-    return Tools.generateDummy(language, dummyCounter++);
+    return DummyGenerator.getDefault().generate(language, dummyCounter++);
   }
 
   private void visit(Node node) {
