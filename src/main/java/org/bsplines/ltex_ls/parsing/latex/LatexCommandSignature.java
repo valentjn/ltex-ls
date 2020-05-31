@@ -11,6 +11,7 @@ public class LatexCommandSignature {
   public enum ArgumentType {
     BRACE,
     BRACKET,
+    PARENTHESIS,
   }
 
   public enum Action {
@@ -20,7 +21,7 @@ public class LatexCommandSignature {
 
   private static final Pattern commandPattern = Pattern.compile(
       "^\\\\([^A-Za-z@]|([A-Za-z@]+))\\*?");
-  private static final Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\]))");
+  private static final Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\])|(\\(\\)))");
   private static final Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
 
   public String name = "";
@@ -55,6 +56,8 @@ public class LatexCommandSignature {
         argumentType = LatexCommandSignature.ArgumentType.BRACE;
       } else if (argumentMatcher.group(3) != null) {
         argumentType = LatexCommandSignature.ArgumentType.BRACKET;
+      } else if (argumentMatcher.group(4) != null) {
+        argumentType = LatexCommandSignature.ArgumentType.PARENTHESIS;
       }
 
       argumentTypes.add(argumentType);
@@ -86,6 +89,10 @@ public class LatexCommandSignature {
       }
       case BRACKET: {
         openChar = '[';
+        break;
+      }
+      case PARENTHESIS: {
+        openChar = '(';
         break;
       }
     }
@@ -126,6 +133,14 @@ public class LatexCommandSignature {
             return code.substring(fromPos, pos + 1);
           } else {
             argumentTypeStack.pop();
+          }
+
+          break;
+        }
+        case ')': {
+          if ((argumentTypeStack.peek() == ArgumentType.PARENTHESIS) &&
+                (argumentTypeStack.size() == 1)) {
+            return code.substring(fromPos, pos + 1);
           }
 
           break;
