@@ -59,8 +59,9 @@ public class DocumentCheckerTest {
     Assertions.assertEquals("Dies ist eine Test.", matches.get(1).getSentence().trim());
     Assertions.assertEquals(fromPos2, matches.get(1).getFromPos());
     Assertions.assertEquals(toPos2, matches.get(1).getToPos());
-    Assertions.assertEquals("M\u00f6glicherweise fehlende grammatische \u00DCbereinstimmung des " +
-        "Genus (m\u00e4nnlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad').",
+    Assertions.assertEquals("M\u00f6glicherweise fehlende grammatische \u00dcbereinstimmung des " +
+        "Genus (m\u00e4nnlich, weiblich, s\u00e4chlich - Beispiel: 'der Fahrrad' statt 'das " +
+        "Fahrrad').",
         matches.get(1).getMessage());
     Assertions.assertEquals(3, matches.get(1).getSuggestedReplacements().size());
     Assertions.assertEquals("ein Test", matches.get(1).getSuggestedReplacements().get(0));
