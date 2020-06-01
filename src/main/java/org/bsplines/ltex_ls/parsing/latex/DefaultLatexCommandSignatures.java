@@ -2,7 +2,7 @@ package org.bsplines.ltex_ls.parsing.latex;
 
 import org.bsplines.ltex_ls.parsing.DummyGenerator;
 
-public class DefaultLatexCommandSignatures {
+class DefaultLatexCommandSignatures {
   private static final LatexCommandSignature[] list = {
         new LatexCommandSignature("\\addbibresource{}"),
         new LatexCommandSignature("\\addtocontents{}"),
