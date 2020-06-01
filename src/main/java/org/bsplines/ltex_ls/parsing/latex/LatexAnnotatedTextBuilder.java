@@ -466,6 +466,9 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                     else if (letter.equals("o")) interpretAs = "\u022f";
                     break;
                   }
+                  default: {
+                    break;
+                  }
                 }
 
                 addMarkup(matcher.group(), interpretAs);
@@ -491,6 +494,9 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                     else if (letter.equals("U")) interpretAs = "\u016e";
                     else if (letter.equals("a")) interpretAs = "\u00e5";
                     else if (letter.equals("u")) interpretAs = "\u016f";
+                    break;
+                  }
+                  default: {
                     break;
                   }
                 }
