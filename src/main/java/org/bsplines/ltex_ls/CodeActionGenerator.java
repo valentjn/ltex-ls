@@ -116,9 +116,7 @@ public class CodeActionGenerator {
 
     if (!ignoreRuleInThisSentenceMatches.isEmpty()) {
       List<Pair<String, String>> ruleIdSentencePairs = new ArrayList<>();
-      List<String> ruleIds = new ArrayList<>();
       JsonArray ruleIdsJson = new JsonArray();
-      List<String> sentencePatternStrings = new ArrayList<>();
       JsonArray sentencePatternStringsJson = new JsonArray();
       List<Diagnostic> diagnostics = new ArrayList<>();
 
@@ -144,10 +142,8 @@ public class CodeActionGenerator {
           }
 
           ruleIdSentencePairs.add(pair);
-          ruleIds.add(ruleId);
           ruleIdsJson.add(ruleId);
           String sentencePatternString = "^" + sentencePatternStringBuilder.toString() + "$";
-          sentencePatternStrings.add(sentencePatternString);
           sentencePatternStringsJson.add(sentencePatternString);
         }
 
