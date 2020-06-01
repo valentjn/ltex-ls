@@ -32,7 +32,7 @@ public class RegexCodeFragmentizer extends CodeFragmentizer {
       Settings lastSettings = curSettings;
       codeFragments.add(new CodeFragment(codeLanguageId, lastCode, lastFromPos, lastSettings));
 
-      curSettings = (Settings)curSettings.clone();
+      curSettings = new Settings(curSettings);
       String settingsLine = matcher.group("settings").trim();
 
       for (String settingsChange : splitSettingsPattern.split(settingsLine)) {

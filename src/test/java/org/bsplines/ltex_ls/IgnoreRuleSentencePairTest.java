@@ -7,7 +7,7 @@ public class IgnoreRuleSentencePairTest {
   @Test
   public void doTest() {
     IgnoreRuleSentencePair pair = new IgnoreRuleSentencePair("a", "b");
-    Assertions.assertEquals(pair, pair.clone());
+    Assertions.assertEquals(pair, new IgnoreRuleSentencePair(pair));
     Assertions.assertNotEquals(pair, new IgnoreRuleSentencePair("X", "b"));
     Assertions.assertNotEquals(pair, new IgnoreRuleSentencePair("a", "X"));
     Assertions.assertDoesNotThrow(() -> pair.hashCode());

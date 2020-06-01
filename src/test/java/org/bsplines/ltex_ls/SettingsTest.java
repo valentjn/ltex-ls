@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 
 public class SettingsTest {
   private static Settings compareSettings(Settings settings, Settings otherSettings) {
-    Assertions.assertTrue(settings.clone().equals(settings));
-    Assertions.assertTrue(settings.equals(settings.clone()));
-    Assertions.assertFalse(otherSettings.equals(settings.clone()));
-    Assertions.assertFalse(settings.equals(otherSettings.clone()));
-    return (Settings)settings.clone();
+    Assertions.assertTrue(new Settings(settings).equals(settings));
+    Assertions.assertTrue(settings.equals(new Settings(settings)));
+    Assertions.assertFalse(otherSettings.equals(new Settings(settings)));
+    Assertions.assertFalse(settings.equals(new Settings(otherSettings)));
+    return new Settings(settings);
   }
 
   @Test

@@ -36,6 +36,32 @@ public class Settings {
   public Settings() {
   }
 
+  public Settings(Settings obj) {
+    this.languageShortCode = obj.languageShortCode;
+    this.dictionary = ((obj.dictionary == null) ? null : new ArrayList<>(obj.dictionary));
+    this.disabledRules = ((obj.disabledRules == null) ? null : new ArrayList<>(obj.disabledRules));
+    this.enabledRules = ((obj.enabledRules == null) ? null : new ArrayList<>(obj.enabledRules));
+    this.languageToolHttpServerUri = obj.languageToolHttpServerUri;
+    this.dummyCommandPrototypes = ((obj.dummyCommandPrototypes == null) ? null :
+        new ArrayList<>(obj.dummyCommandPrototypes));
+    this.ignoreCommandPrototypes = ((obj.ignoreCommandPrototypes == null) ? null :
+        new ArrayList<>(obj.ignoreCommandPrototypes));
+    this.ignoreEnvironments = ((obj.ignoreEnvironments == null) ? null :
+        new ArrayList<>(obj.ignoreEnvironments));
+    this.dummyMarkdownNodeTypes = ((obj.dummyMarkdownNodeTypes == null) ? null :
+        new ArrayList<>(obj.dummyMarkdownNodeTypes));
+    this.ignoreMarkdownNodeTypes = ((obj.ignoreMarkdownNodeTypes == null) ? null :
+        new ArrayList<>(obj.ignoreMarkdownNodeTypes));
+    this.ignoreRuleSentencePairs = ((obj.ignoreRuleSentencePairs == null) ? null :
+        new ArrayList<>(obj.ignoreRuleSentencePairs));
+    this.motherTongueShortCode = obj.motherTongueShortCode;
+    this.languageModelRulesDirectory = obj.languageModelRulesDirectory;
+    this.neuralNetworkModelRulesDirectory = obj.neuralNetworkModelRulesDirectory;
+    this.word2VecModelRulesDirectory = obj.word2VecModelRulesDirectory;
+    this.sentenceCacheSize = obj.sentenceCacheSize;
+    this.diagnosticSeverity = ((obj.diagnosticSeverity == null) ? null : obj.diagnosticSeverity);
+  }
+
   public Settings(JsonElement jsonSettings) {
     setSettings(jsonSettings);
   }
@@ -219,37 +245,6 @@ public class Settings {
     } catch (NullPointerException | UnsupportedOperationException e) {
       diagnosticSeverity = null;
     }
-  }
-
-  @Override
-  public Object clone() {
-    Settings obj = new Settings();
-
-    obj.languageShortCode = languageShortCode;
-    obj.dictionary = ((dictionary == null) ? null : new ArrayList<>(dictionary));
-    obj.disabledRules = ((disabledRules == null) ? null : new ArrayList<>(disabledRules));
-    obj.enabledRules = ((enabledRules == null) ? null : new ArrayList<>(enabledRules));
-    obj.languageToolHttpServerUri = languageToolHttpServerUri;
-    obj.dummyCommandPrototypes = ((dummyCommandPrototypes == null) ? null :
-        new ArrayList<>(dummyCommandPrototypes));
-    obj.ignoreCommandPrototypes = ((ignoreCommandPrototypes == null) ? null :
-        new ArrayList<>(ignoreCommandPrototypes));
-    obj.ignoreEnvironments = ((ignoreEnvironments == null) ? null :
-        new ArrayList<>(ignoreEnvironments));
-    obj.dummyMarkdownNodeTypes = ((dummyMarkdownNodeTypes == null) ? null :
-        new ArrayList<>(dummyMarkdownNodeTypes));
-    obj.ignoreMarkdownNodeTypes = ((ignoreMarkdownNodeTypes == null) ? null :
-        new ArrayList<>(ignoreMarkdownNodeTypes));
-    obj.ignoreRuleSentencePairs = ((ignoreRuleSentencePairs == null) ? null :
-        new ArrayList<>(ignoreRuleSentencePairs));
-    obj.motherTongueShortCode = motherTongueShortCode;
-    obj.languageModelRulesDirectory = languageModelRulesDirectory;
-    obj.neuralNetworkModelRulesDirectory = neuralNetworkModelRulesDirectory;
-    obj.word2VecModelRulesDirectory = word2VecModelRulesDirectory;
-    obj.sentenceCacheSize = sentenceCacheSize;
-    obj.diagnosticSeverity = ((diagnosticSeverity == null) ? null : diagnosticSeverity);
-
-    return obj;
   }
 
   @Override

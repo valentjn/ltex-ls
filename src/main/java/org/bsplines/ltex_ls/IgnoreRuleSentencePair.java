@@ -13,9 +13,8 @@ public class IgnoreRuleSentencePair {
     this.sentencePattern = Pattern.compile(sentenceString);
   }
 
-  @Override
-  public Object clone() {
-    return new IgnoreRuleSentencePair(ruleId, sentenceString);
+  public IgnoreRuleSentencePair(IgnoreRuleSentencePair obj) {
+    this(obj.ruleId, obj.sentenceString);
   }
 
   @Override
