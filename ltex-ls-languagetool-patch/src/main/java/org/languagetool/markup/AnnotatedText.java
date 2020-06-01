@@ -20,6 +20,7 @@ package org.languagetool.markup;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,7 +46,10 @@ public class AnnotatedText {
     EmailNumberOfAttachments
   }
 
-  private class MappingEntryComparator implements Comparator<Map.Entry<Integer, Integer>> {
+  private static class MappingEntryComparator
+        implements Comparator<Map.Entry<Integer, Integer>>, Serializable {
+    private static final long serialVersionUID = 4375747732047541460L;
+
     @Override
     public int compare(Map.Entry<Integer, Integer> o1, Map.Entry<Integer, Integer> o2) {
       int result = o1.getKey().compareTo(o2.getKey());
