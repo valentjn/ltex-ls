@@ -3,19 +3,19 @@ plugins {
   id 'application'
   id 'jacoco'
   id 'com.github.kt3k.coveralls' version '2.10.1'
+  id 'com.github.spotbugs' version '4.2.4'
 }
 
 allprojects {
   group('valentjn')
   version('5.0.0')
+
+  apply(plugin: 'java')
+  apply(plugin: 'com.github.spotbugs')
 }
 
 repositories {
   jcenter()
-}
-
-subprojects {
-  apply(plugin: 'java')
 }
 
 project(':ltex-ls-languagetool-patch') {
