@@ -761,6 +761,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               }
             }
           }
+          // fall through
           case '[': {
             String length = matchFromPosition(lengthInBracketPattern);
 
@@ -771,6 +772,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               break;
             }
           }
+          // fall through
           case '<': {
             if (codeLanguageId.equals("rsweave")) {
               String rsweaveBegin = matchFromPosition(rsweaveBeginPattern);
@@ -782,6 +784,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               }
             }
           }
+          // fall through
           default: {
             if (isTextMode(curMode)) {
               addText(curString);
