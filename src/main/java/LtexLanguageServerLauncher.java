@@ -3,9 +3,8 @@ import java.io.OutputStream;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import org.bsplines.ltex_ls.LtexLanguageServer;
-import org.bsplines.ltex_ls.Tools;
-
+import org.bsplines.ltexls.LtexLanguageServer;
+import org.bsplines.ltexls.Tools;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
