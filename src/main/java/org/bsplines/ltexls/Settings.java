@@ -71,7 +71,7 @@ public class Settings {
     setSettings(jsonSettings);
   }
 
-  private static JsonElement getSettingFromJSON(JsonElement jsonSettings, String name) {
+  private static JsonElement getSettingFromJson(JsonElement jsonSettings, String name) {
     for (String component : name.split("\\.")) {
       jsonSettings = jsonSettings.getAsJsonObject().get(component);
     }
@@ -88,7 +88,7 @@ public class Settings {
   public void setSettings(@UnknownInitialization(Object.class) Settings this,
         JsonElement jsonSettings) {
     try {
-      this.languageShortCode = getSettingFromJSON(jsonSettings, "language").getAsString();
+      this.languageShortCode = getSettingFromJson(jsonSettings, "language").getAsString();
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       this.languageShortCode = null;
     }
@@ -106,49 +106,49 @@ public class Settings {
 
       try {
         dictionary.addAll(convertJsonArrayToList(
-            getSettingFromJSON(jsonSettings, "dictionary").getAsJsonObject()
+            getSettingFromJson(jsonSettings, "dictionary").getAsJsonObject()
             .get(languageShortCode).getAsJsonArray()));
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       }
 
       try {
         dictionary.addAll(convertJsonArrayToList(
-            getSettingFromJSON(jsonSettings,
+            getSettingFromJson(jsonSettings,
             languageShortCode + ".dictionary").getAsJsonArray()));
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       }
 
       try {
         disabledRules.addAll(convertJsonArrayToList(
-            getSettingFromJSON(jsonSettings, "disabledRules").getAsJsonObject()
+            getSettingFromJson(jsonSettings, "disabledRules").getAsJsonObject()
             .get(languageShortCode).getAsJsonArray()));
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       }
 
       try {
         disabledRules.addAll(convertJsonArrayToList(
-            getSettingFromJSON(jsonSettings,
+            getSettingFromJson(jsonSettings,
             languageShortCode + ".disabledRules").getAsJsonArray()));
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       }
 
       try {
         enabledRules.addAll(convertJsonArrayToList(
-            getSettingFromJSON(jsonSettings, "enabledRules").getAsJsonObject()
+            getSettingFromJson(jsonSettings, "enabledRules").getAsJsonObject()
             .get(languageShortCode).getAsJsonArray()));
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       }
 
       try {
         enabledRules.addAll(convertJsonArrayToList(
-            getSettingFromJSON(jsonSettings,
+            getSettingFromJson(jsonSettings,
             languageShortCode + ".enabledRules").getAsJsonArray()));
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       }
     }
 
     try {
-      this.languageToolHttpServerUri = getSettingFromJSON(
+      this.languageToolHttpServerUri = getSettingFromJson(
           jsonSettings, "ltex-ls.languageToolHttpServerUri").getAsString();
     } catch (NullPointerException | UnsupportedOperationException e) {
       this.languageToolHttpServerUri = null;
@@ -156,35 +156,35 @@ public class Settings {
 
     try {
       this.dummyCommandPrototypes = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings, "commands.dummy").getAsJsonArray());
+          getSettingFromJson(jsonSettings, "commands.dummy").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       this.dummyCommandPrototypes = null;
     }
 
     try {
       this.ignoreCommandPrototypes = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings, "commands.ignore").getAsJsonArray());
+          getSettingFromJson(jsonSettings, "commands.ignore").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       this.ignoreCommandPrototypes = null;
     }
 
     try {
       this.ignoreEnvironments = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings, "environments.ignore").getAsJsonArray());
+          getSettingFromJson(jsonSettings, "environments.ignore").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       this.ignoreEnvironments = null;
     }
 
     try {
       this.dummyMarkdownNodeTypes = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings, "markdown.dummy").getAsJsonArray());
+          getSettingFromJson(jsonSettings, "markdown.dummy").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       this.dummyMarkdownNodeTypes = null;
     }
 
     try {
       this.ignoreMarkdownNodeTypes = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings, "markdown.ignore").getAsJsonArray());
+          getSettingFromJson(jsonSettings, "markdown.ignore").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       this.ignoreMarkdownNodeTypes = null;
     }
@@ -196,7 +196,7 @@ public class Settings {
       List<IgnoreRuleSentencePair> ignoreRuleSentencePairs = this.ignoreRuleSentencePairs;
 
       for (JsonElement element :
-            getSettingFromJSON(jsonSettings, "ignoreRuleInSentence").getAsJsonArray()) {
+            getSettingFromJson(jsonSettings, "ignoreRuleInSentence").getAsJsonArray()) {
         JsonObject elementObject = element.getAsJsonObject();
         ignoreRuleSentencePairs.add(new IgnoreRuleSentencePair(
             elementObject.get("rule").getAsString(), elementObject.get("sentence").getAsString()));
@@ -206,39 +206,39 @@ public class Settings {
     }
 
     try {
-      this.motherTongueShortCode = getSettingFromJSON(
+      this.motherTongueShortCode = getSettingFromJson(
           jsonSettings, "additionalRules.motherTongue").getAsString();
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       this.motherTongueShortCode = null;
     }
 
     try {
-      this.languageModelRulesDirectory = getSettingFromJSON(
+      this.languageModelRulesDirectory = getSettingFromJson(
           jsonSettings, "additionalRules.languageModel").getAsString();
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       this.languageModelRulesDirectory = null;
     }
 
     try {
-      this.neuralNetworkModelRulesDirectory = getSettingFromJSON(
+      this.neuralNetworkModelRulesDirectory = getSettingFromJson(
           jsonSettings, "additionalRules.neuralNetworkModel").getAsString();
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       this.neuralNetworkModelRulesDirectory = null;
     }
 
     try {
-      this.word2VecModelRulesDirectory = getSettingFromJSON(
+      this.word2VecModelRulesDirectory = getSettingFromJson(
           jsonSettings, "additionalRules.word2VecModel").getAsString();
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       this.word2VecModelRulesDirectory = null;
     }
 
     try {
-      this.sentenceCacheSize = getSettingFromJSON(
+      this.sentenceCacheSize = getSettingFromJson(
           jsonSettings, "sentenceCacheSize").getAsInt();
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       try {
-        this.sentenceCacheSize = getSettingFromJSON(
+        this.sentenceCacheSize = getSettingFromJson(
             jsonSettings, "performance.sentenceCacheSize").getAsInt();
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e2) {
         this.sentenceCacheSize = null;
@@ -247,7 +247,7 @@ public class Settings {
 
     try {
       String diagnosticSeverityString =
-          getSettingFromJSON(jsonSettings, "diagnosticSeverity").getAsString();
+          getSettingFromJson(jsonSettings, "diagnosticSeverity").getAsString();
 
       if (diagnosticSeverityString.equals("error")) {
         this.diagnosticSeverity = DiagnosticSeverity.Error;
