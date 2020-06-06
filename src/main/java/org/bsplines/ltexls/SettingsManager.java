@@ -1,10 +1,13 @@
 package org.bsplines.ltexls;
 
-import java.util.*;
-
 import com.google.gson.JsonElement;
 
-import org.bsplines.ltexls.languagetool.*;
+import java.util.HashMap;
+
+import org.bsplines.ltexls.languagetool.LanguageToolHttpInterface;
+import org.bsplines.ltexls.languagetool.LanguageToolInterface;
+import org.bsplines.ltexls.languagetool.LanguageToolJavaInterface;
+
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;

@@ -1,10 +1,18 @@
 package org.bsplines.ltexls;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.apache.commons.text.StringEscapeUtils;
-import org.bsplines.ltexls.languagetool.*;
-import org.bsplines.ltexls.parsing.*;
+
+import org.bsplines.ltexls.languagetool.LanguageToolInterface;
+import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
+import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
+import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
+import org.bsplines.ltexls.parsing.CodeFragment;
+import org.bsplines.ltexls.parsing.CodeFragmentizer;
+
 import org.eclipse.lsp4j.TextDocumentItem;
 
 import org.eclipse.xtext.xbase.lib.Pair;

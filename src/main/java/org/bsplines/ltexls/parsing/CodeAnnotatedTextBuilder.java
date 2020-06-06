@@ -1,7 +1,7 @@
 package org.bsplines.ltexls.parsing;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 import org.bsplines.ltexls.Settings;
@@ -9,6 +9,7 @@ import org.bsplines.ltexls.Tools;
 import org.bsplines.ltexls.parsing.latex.LatexAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.markdown.MarkdownAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.plaintext.PlaintextAnnotatedTextBuilder;
+
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.languagetool.markup.AnnotatedTextBuilder;

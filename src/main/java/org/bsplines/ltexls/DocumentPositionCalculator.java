@@ -1,9 +1,9 @@
 package org.bsplines.ltexls;
 
-import org.eclipse.lsp4j.Position;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import org.eclipse.lsp4j.Position;
 
 class DocumentPositionCalculator {
   private final int[] lineStartPositions;

@@ -2,7 +2,9 @@ package org.bsplines.ltexls.languagetool;
 
 import java.util.List;
 
-import org.bsplines.ltexls.*;
+import org.bsplines.ltexls.DocumentChecker;
+import org.bsplines.ltexls.DocumentCheckerTest;
+import org.bsplines.ltexls.SettingsManager;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 
 import org.checkerframework.checker.nullness.NullnessUtil;
@@ -11,7 +13,9 @@ import org.eclipse.lsp4j.TextDocumentItem;
 
 import org.eclipse.xtext.xbase.lib.Pair;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 @TestInstance(Lifecycle.PER_CLASS)

@@ -1,9 +1,9 @@
 package org.bsplines.ltexls;
 
-import java.util.Collections;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import java.util.Collections;
 
 import org.eclipse.lsp4j.DiagnosticSeverity;
 

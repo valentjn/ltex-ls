@@ -1,9 +1,11 @@
 package org.bsplines.ltexls;
 
 import java.text.MessageFormat;
-
-import java.util.*;
-import java.util.logging.*;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Logger;
 
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
