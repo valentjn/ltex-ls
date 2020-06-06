@@ -2,22 +2,17 @@ package org.bsplines.ltex_ls;
 
 import org.eclipse.lsp4j.Position;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
 class DocumentPositionCalculator {
-
   private final int[] lineStartPositions;
 
   public DocumentPositionCalculator(String text) {
     lineStartPositions = getLineStartPositions(text);
   }
 
-  @NotNull
   private static Position getPosition(int pos, int[] lineStarts) {
-
     int line = Arrays.binarySearch(lineStarts, pos);
 
     if (line < 0) {

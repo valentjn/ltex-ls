@@ -5,8 +5,11 @@ import java.text.MessageFormat;
 import java.util.*;
 import java.util.logging.*;
 
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 public class Tools {
-  private static ResourceBundle messages = null;
+  private static @MonotonicNonNull ResourceBundle messages = null;
   public static final Logger logger = Logger.getLogger("org.bsplines.ltex_ls");
 
   static {
@@ -16,10 +19,17 @@ public class Tools {
     logger.addHandler(new ConsoleHandler());
   }
 
-  public static String i18n(String key, Object... messageArguments) {
+  public static String i18n(String key, @Nullable Object... messageArguments) {
+    if (messages == null) return "could not get MessagesBundle";
     MessageFormat formatter = new MessageFormat("");
     formatter.applyPattern(messages.getString(key).replaceAll("'", "''"));
-    return formatter.format(messageArguments);
+    Object[] args = new Object[messageArguments.length];
+
+    for (int i = 0; i < messageArguments.length; i++) {
+      args[i] = ((messageArguments[i] != null) ? messageArguments[i] : "null");
+    }
+
+    return formatter.format(args);
   }
 
   public static void setDefaultLocale() {
@@ -31,6 +41,6 @@ public class Tools {
   }
 
   public static void setLocale(Locale locale) {
-    messages = ResourceBundle.getBundle("MessagesBundle", locale);
+    Tools.messages = ResourceBundle.getBundle("MessagesBundle", locale);
   }
 }

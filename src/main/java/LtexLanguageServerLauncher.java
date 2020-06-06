@@ -4,6 +4,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.bsplines.ltex_ls.LtexLanguageServer;
+import org.bsplines.ltex_ls.Tools;
 
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
@@ -25,8 +26,9 @@ public class LtexLanguageServerLauncher {
   public static void main(String[] args) throws InterruptedException, ExecutionException {
     for (String arg : args) {
       if (arg.equals("--version")) {
-        System.out.println("ltex-ls " +
-            LtexLanguageServer.class.getPackage().getImplementationVersion());
+        Package package_ = LtexLanguageServer.class.getPackage();
+        if (package_ == null) throw new RuntimeException(Tools.i18n("couldNotGetPackage"));
+        System.out.println("ltex-ls " + package_.getImplementationVersion());
         return;
       }
     }

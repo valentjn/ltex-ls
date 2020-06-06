@@ -33,7 +33,14 @@ public class RegexCodeFragmentizer extends CodeFragmentizer {
       codeFragments.add(new CodeFragment(codeLanguageId, lastCode, lastFromPos, lastSettings));
 
       curSettings = new Settings(curSettings);
-      String settingsLine = matcher.group("settings").trim();
+      String settingsLine = matcher.group("settings");
+
+      if (settingsLine == null) {
+        Tools.logger.warning(Tools.i18n("couldNotFindSettingsInMatch"));
+        continue;
+      }
+
+      settingsLine = settingsLine.trim();
 
       for (String settingsChange : splitSettingsPattern.split(settingsLine)) {
         int settingNameLength = settingsChange.indexOf('=');

@@ -5,6 +5,8 @@ import java.util.List;
 import org.bsplines.ltex_ls.*;
 import org.bsplines.ltex_ls.parsing.AnnotatedTextFragment;
 
+import org.checkerframework.checker.nullness.NullnessUtil;
+
 import org.eclipse.lsp4j.TextDocumentItem;
 
 import org.eclipse.xtext.xbase.lib.Pair;
@@ -14,14 +16,8 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class LanguageToolJavaInterfaceTest {
-  private SettingsManager settingsManager;
-  private DocumentChecker documentChecker;
-
-  @BeforeAll
-  public void setUp() throws InterruptedException {
-    settingsManager = new SettingsManager();
-    documentChecker = new DocumentChecker(settingsManager);
-  }
+  private SettingsManager settingsManager = new SettingsManager();
+  private DocumentChecker documentChecker = new DocumentChecker(settingsManager);
 
   @Test
   public void testCheck() {
@@ -35,6 +31,7 @@ public class LanguageToolJavaInterfaceTest {
   @Test
   public void testOtherMethods() {
     LanguageToolInterface ltInterface = settingsManager.getLanguageToolInterface();
+    Assertions.assertNotNull(NullnessUtil.castNonNull(ltInterface));
     Assertions.assertDoesNotThrow(() -> ltInterface.activateDefaultFalseFriendRules());
     Assertions.assertDoesNotThrow(() -> ltInterface.activateLanguageModelRules("foobar"));
     Assertions.assertDoesNotThrow(() -> ltInterface.activateNeuralNetworkRules("foobar"));

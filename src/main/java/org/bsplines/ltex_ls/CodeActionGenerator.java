@@ -9,6 +9,8 @@ import com.google.gson.*;
 import org.bsplines.ltex_ls.languagetool.LanguageToolRuleMatch;
 import org.bsplines.ltex_ls.parsing.AnnotatedTextFragment;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 
@@ -89,8 +91,8 @@ public class CodeActionGenerator {
       if (matchIntersectsWithRange(match, params.getRange(), positionCalculator)) {
         String ruleId = match.getRuleId();
 
-        if (ruleId.startsWith("MORFOLOGIK_") || ruleId.startsWith("HUNSPELL_") ||
-            ruleId.startsWith("GERMAN_SPELLER_")) {
+        if ((ruleId != null) && (ruleId.startsWith("MORFOLOGIK_") ||
+              ruleId.startsWith("HUNSPELL_") || ruleId.startsWith("GERMAN_SPELLER_"))) {
           addWordToDictionaryMatches.add(match);
         }
 
@@ -122,7 +124,9 @@ public class CodeActionGenerator {
 
       for (LanguageToolRuleMatch match : ignoreRuleInThisSentenceMatches) {
         String ruleId = match.getRuleId();
-        String sentence = match.getSentence().trim();
+        String sentence = match.getSentence();
+        if ((ruleId == null) || (sentence == null)) continue;
+        sentence = sentence.trim();
         Pair<String, String> pair = new Pair<>(ruleId, sentence);
 
         if (!ruleIdSentencePairs.contains(pair)) {
@@ -177,7 +181,7 @@ public class CodeActionGenerator {
       for (LanguageToolRuleMatch match : disableRuleMatches) {
         String ruleId = match.getRuleId();
 
-        if (!ruleIds.contains(ruleId)) {
+        if ((ruleId != null) && !ruleIds.contains(ruleId)) {
           ruleIds.add(ruleId);
           ruleIdsJson.add(ruleId);
         }
@@ -238,8 +242,8 @@ public class CodeActionGenerator {
         List<LanguageToolRuleMatch> addWordToDictionaryMatches,
         List<AnnotatedTextFragment> annotatedTextFragments,
         DocumentPositionCalculator positionCalculator) {
-    List<AnnotatedText> invertedAnnotatedTexts = new ArrayList<>();
-    List<String> plainTexts = new ArrayList<>();
+    List<@Nullable AnnotatedText> invertedAnnotatedTexts = new ArrayList<>();
+    List<@Nullable String> plainTexts = new ArrayList<>();
 
     for (int i = 0; i < annotatedTextFragments.size(); i++) {
       invertedAnnotatedTexts.add(null);
@@ -276,6 +280,7 @@ public class CodeActionGenerator {
       String plainText = plainTexts.get(fragmentIndex);
       int offset = annotatedTextFragment.getCodeFragment().getFromPos();
 
+      @SuppressWarnings({"dereference.of.nullable", "argument.type.incompatible"})
       String word = plainText.substring(
           getPlainTextPositionFor(match.getFromPos() - offset, inverseAnnotatedText),
           getPlainTextPositionFor(match.getToPos() - offset, inverseAnnotatedText));

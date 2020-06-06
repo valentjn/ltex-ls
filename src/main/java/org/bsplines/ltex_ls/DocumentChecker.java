@@ -109,9 +109,10 @@ public class DocumentChecker {
       List<LanguageToolRuleMatch> ignoreMatches = new ArrayList<>();
 
       for (LanguageToolRuleMatch match : matches) {
-        if (match.getSentence() == null) continue;
         String ruleId = match.getRuleId();
-        String sentence = match.getSentence().trim();
+        String sentence = match.getSentence();
+        if ((ruleId == null) || (sentence == null)) continue;
+        sentence = sentence.trim();
 
         for (IgnoreRuleSentencePair pair : ignoreRuleSentencePairs) {
           if (pair.getRuleId().equals(ruleId) &&

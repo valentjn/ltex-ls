@@ -14,21 +14,23 @@ public class FullTextDocumentServiceTest {
     FullTextDocumentService service = new FullTextDocumentService(new HashMap<>());
     Assertions.assertDoesNotThrow(() -> new FullTextDocumentService());
 
-    Assertions.assertDoesNotThrow(() -> service.codeAction(null));
-    Assertions.assertDoesNotThrow(() -> service.codeLens(null));
-    Assertions.assertDoesNotThrow(() -> service.completion(null));
-    Assertions.assertDoesNotThrow(() -> service.definition(null));
-    Assertions.assertDoesNotThrow(() -> service.documentHighlight(null));
-    Assertions.assertDoesNotThrow(() -> service.documentSymbol(null));
-    Assertions.assertDoesNotThrow(() -> service.formatting(null));
-    Assertions.assertDoesNotThrow(() -> service.hover(null));
-    Assertions.assertDoesNotThrow(() -> service.onTypeFormatting(null));
-    Assertions.assertDoesNotThrow(() -> service.references(null));
-    Assertions.assertDoesNotThrow(() -> service.rangeFormatting(null));
-    Assertions.assertDoesNotThrow(() -> service.rename(null));
-    Assertions.assertDoesNotThrow(() ->  service.resolveCodeLens(null));
-    Assertions.assertDoesNotThrow(() -> service.resolveCompletionItem(null));
-    Assertions.assertDoesNotThrow(() -> service.signatureHelp(null));
+    Assertions.assertDoesNotThrow(() -> service.codeAction(new CodeActionParams()));
+    Assertions.assertDoesNotThrow(() -> service.codeLens(new CodeLensParams()));
+    Assertions.assertDoesNotThrow(() -> service.completion(new CompletionParams()));
+    Assertions.assertDoesNotThrow(() -> service.definition(new DefinitionParams()));
+    Assertions.assertDoesNotThrow(() -> service.documentHighlight(new DocumentHighlightParams()));
+    Assertions.assertDoesNotThrow(() -> service.documentSymbol(new DocumentSymbolParams()));
+    Assertions.assertDoesNotThrow(() -> service.formatting(new DocumentFormattingParams()));
+    Assertions.assertDoesNotThrow(() -> service.hover(new HoverParams()));
+    Assertions.assertDoesNotThrow(() -> service.onTypeFormatting(
+        new DocumentOnTypeFormattingParams()));
+    Assertions.assertDoesNotThrow(() -> service.references(new ReferenceParams()));
+    Assertions.assertDoesNotThrow(() -> service.rangeFormatting(
+        new DocumentRangeFormattingParams()));
+    Assertions.assertDoesNotThrow(() -> service.rename(new RenameParams()));
+    Assertions.assertDoesNotThrow(() -> service.resolveCodeLens(new CodeLens()));
+    Assertions.assertDoesNotThrow(() -> service.resolveCompletionItem(new CompletionItem()));
+    Assertions.assertDoesNotThrow(() -> service.signatureHelp(new SignatureHelpParams()));
 
     TextDocumentItem document = new TextDocumentItem("untitled:test.txt", "plaintext", 1, "");
     VersionedTextDocumentIdentifier versionedDocument =

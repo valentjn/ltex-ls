@@ -19,6 +19,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import org.bsplines.ltex_ls.Tools;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import org.languagetool.markup.AnnotatedText;
 import org.languagetool.markup.TextPart;
@@ -27,32 +29,35 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
   private String languageShortCode;
   private String motherTongueShortCode;
 
-  private URL url;
-  private List<String> enabledRuleIds = new ArrayList<>();
-  private List<String> disabledRuleIds = new ArrayList<>();
+  private @MonotonicNonNull URL url;
+  private List<String> enabledRuleIds;
+  private List<String> disabledRuleIds;
 
   public LanguageToolHttpInterface(String uri, String languageShortCode,
         String motherTongueShortCode) {
+    this.languageShortCode = languageShortCode;
+    this.motherTongueShortCode = motherTongueShortCode;
+    this.enabledRuleIds = new ArrayList<>();
+    this.disabledRuleIds = new ArrayList<>();
+
     try {
       this.url = new URL(new URL(uri), "v2/check");
     } catch (MalformedURLException e) {
       Tools.logger.severe(Tools.i18n("couldNotParseHttpServerUri", uri, e.getMessage()));
       e.printStackTrace();
-      this.url = null;
-      return;
     }
-
-    this.languageShortCode = languageShortCode;
-    this.motherTongueShortCode = motherTongueShortCode;
   }
 
+  @EnsuresNonNullIf(expression="this.url", result=true)
   @Override
   public boolean isReady() {
-    return (this.url != null);
+    return (url != null);
   }
 
   @Override
   public List<LanguageToolRuleMatch> check(AnnotatedText annotatedText) {
+    if (!isReady()) return Collections.emptyList();
+
     JsonArray jsonDataAnnotation = new JsonArray();
     List<TextPart> parts = annotatedText.getParts();
 
@@ -124,7 +129,8 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
       try {
         httpPost = new HttpPost(url.toURI());
       } catch (URISyntaxException e) {
-        Tools.logger.severe(Tools.i18n("couldNotParseHttpServerUri", url.toString(), e.getMessage()));
+        Tools.logger.severe(Tools.i18n("couldNotParseHttpServerUri", url.toString(),
+            e.getMessage()));
         e.printStackTrace();
         return Collections.emptyList();
       }

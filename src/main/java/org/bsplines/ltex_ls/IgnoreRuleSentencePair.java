@@ -2,6 +2,8 @@ package org.bsplines.ltex_ls;
 
 import java.util.regex.Pattern;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 public class IgnoreRuleSentencePair {
   private final String ruleId;
   private final String sentenceString;
@@ -18,7 +20,7 @@ public class IgnoreRuleSentencePair {
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(@Nullable Object obj) {
     if ((obj == null) || !IgnoreRuleSentencePair.class.isAssignableFrom(obj.getClass())) {
       return false;
     }

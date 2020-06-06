@@ -8,6 +8,8 @@ import com.google.gson.*;
 import org.bsplines.ltex_ls.languagetool.*;
 import org.bsplines.ltex_ls.parsing.AnnotatedTextFragment;
 
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.*;
@@ -16,10 +18,17 @@ import org.eclipse.xtext.xbase.lib.Pair;
 
 public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   private HashMap<String, TextDocumentItem> documents = new HashMap<>();
-  private LanguageClient languageClient;
+  private @MonotonicNonNull LanguageClient languageClient;
   private SettingsManager settingsManager;
   private DocumentChecker documentChecker;
   private CodeActionGenerator codeActionGenerator;
+
+  public LtexLanguageServer() {
+    this.documents = new HashMap<>();
+    this.settingsManager = new SettingsManager();
+    this.documentChecker = new DocumentChecker(settingsManager);
+    this.codeActionGenerator = new CodeActionGenerator(settingsManager);
+  }
 
   @Override
   public CompletableFuture<InitializeResult> initialize(InitializeParams params) {
@@ -40,10 +49,6 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
       Tools.logger.info(Tools.i18n("settingLocale", locale.getLanguage()));
       Tools.setLocale(locale);
     }
-
-    settingsManager = new SettingsManager();
-    documentChecker = new DocumentChecker(settingsManager);
-    codeActionGenerator = new CodeActionGenerator(settingsManager);
 
     return CompletableFuture.completedFuture(new InitializeResult(capabilities));
   }
@@ -70,7 +75,13 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
           return CompletableFuture.completedFuture(Collections.emptyList());
         }
 
-        TextDocumentItem document = documents.get(params.getTextDocument().getUri());
+        String uri = params.getTextDocument().getUri();
+        TextDocumentItem document = documents.get(uri);
+
+        if (document == null) {
+          Tools.logger.warning(Tools.i18n("couldNotFindDocumentWithUri", uri));
+          return CompletableFuture.completedFuture(Collections.emptyList());
+        }
 
         return checkDocument(document).thenApply(
               (Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) -> {
@@ -94,19 +105,26 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
       public void didClose(DidCloseTextDocumentParams params) {
         super.didClose(params);
         String uri = params.getTextDocument().getUri();
+        if (languageClient == null) return;
         languageClient.publishDiagnostics(
             new PublishDiagnosticsParams(uri, Collections.emptyList()));
       }
 
       private void publishIssues(String uri) {
         TextDocumentItem document = documents.get(uri);
-        LtexLanguageServer.this.publishIssues(document);
+
+        if (document != null) {
+          LtexLanguageServer.this.publishIssues(document);
+        } else {
+          Tools.logger.warning(Tools.i18n("couldNotFindDocumentWithUri", uri));
+        }
       }
     };
   }
 
   private CompletableFuture<Void> publishIssues(TextDocumentItem document) {
     return getIssues(document).thenApply((List<Diagnostic> diagnostics) -> {
+      if (languageClient == null) return null;
       languageClient.publishDiagnostics(new PublishDiagnosticsParams(
           document.getUri(), diagnostics));
       return null;
@@ -137,6 +155,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     arguments.addProperty("uri", uri);
     arguments.addProperty("operation", operation);
     arguments.addProperty("progress", progress);
+    if (languageClient == null) return;
     languageClient.telemetryEvent(arguments);
   }
 
@@ -145,6 +164,12 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     ConfigurationItem configurationItem = new ConfigurationItem();
     configurationItem.setSection("ltex");
     configurationItem.setScopeUri(document.getUri());
+
+    if (languageClient == null) {
+      return CompletableFuture.completedFuture(
+          Pair.of(Collections.emptyList(), Collections.emptyList()));
+    }
+
     CompletableFuture<List<Object>> configurationFuture = languageClient.configuration(
         new ConfigurationParams(Arrays.asList(configurationItem)));
     sendProgressEvent(document.getUri(), "checkDocument", 0);
@@ -171,7 +196,8 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
       @Override
       public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
-        if (CodeActionGenerator.getCommandNames().contains(params.getCommand())) {
+        if (CodeActionGenerator.getCommandNames().contains(params.getCommand()) &&
+              (languageClient != null)) {
           languageClient.telemetryEvent(params.getArguments().get(0));
           return CompletableFuture.completedFuture(true);
         } else {

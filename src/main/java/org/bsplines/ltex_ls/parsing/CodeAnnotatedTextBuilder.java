@@ -5,9 +5,12 @@ import java.util.HashMap;
 import java.util.function.Function;
 
 import org.bsplines.ltex_ls.Settings;
+import org.bsplines.ltex_ls.Tools;
 import org.bsplines.ltex_ls.parsing.latex.LatexAnnotatedTextBuilder;
 import org.bsplines.ltex_ls.parsing.markdown.MarkdownAnnotatedTextBuilder;
 import org.bsplines.ltex_ls.parsing.plaintext.PlaintextAnnotatedTextBuilder;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.languagetool.markup.AnnotatedTextBuilder;
 
@@ -27,7 +30,15 @@ public abstract class CodeAnnotatedTextBuilder extends AnnotatedTextBuilder {
   }
 
   public static CodeAnnotatedTextBuilder create(String codeLanguageId) {
-    return constructorMap.get(codeLanguageId).apply(codeLanguageId);
+    @Nullable Function<String, CodeAnnotatedTextBuilder> constructor =
+        constructorMap.get(codeLanguageId);
+
+    if (constructor != null) {
+      return constructor.apply(codeLanguageId);
+    } else {
+      Tools.logger.warning(Tools.i18n("invalidCodeLanguageId", codeLanguageId));
+      return new PlaintextAnnotatedTextBuilder();
+    }
   }
 
   public abstract CodeAnnotatedTextBuilder addCode(String code);

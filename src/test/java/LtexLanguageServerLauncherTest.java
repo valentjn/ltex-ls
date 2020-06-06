@@ -7,23 +7,25 @@ import java.util.regex.Pattern;
 
 import com.google.gson.*;
 
+import org.checkerframework.checker.nullness.NullnessUtil;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class LtexLanguageServerLauncherTest {
-  private Thread launcherThread;
-  private PipedInputStream pipedInputStream;
-  private PipedOutputStream out;
-  private PipedOutputStream pipedOutputStream;
-  private PipedInputStream in;
+  private @MonotonicNonNull Thread launcherThread;
+  private PipedOutputStream out = new PipedOutputStream();
+  private PipedInputStream in = new PipedInputStream();
+  private PipedInputStream pipedInputStream = new PipedInputStream();
+  private PipedOutputStream pipedOutputStream = new PipedOutputStream();
 
   @BeforeAll
   public void setUp() throws InterruptedException, IOException {
-    out = new PipedOutputStream();
-    in = new PipedInputStream();
-    pipedInputStream = new PipedInputStream(out);
-    pipedOutputStream = new PipedOutputStream(in);
+    pipedInputStream.connect(out);
+    pipedOutputStream.connect(in);
 
     launcherThread = new Thread(() -> {
       Assertions.assertDoesNotThrow(() -> LtexLanguageServerLauncher.launch(in, out));
@@ -36,7 +38,7 @@ public class LtexLanguageServerLauncherTest {
 
   @AfterAll
   public void tearDown() throws IOException {
-    launcherThread.interrupt();
+    if (launcherThread != null) launcherThread.interrupt();
     pipedInputStream.close();
     pipedOutputStream.close();
     out.close();
@@ -63,7 +65,8 @@ public class LtexLanguageServerLauncherTest {
         "(?:Params|Result): ");
     private static Pattern headerPattern = Pattern.compile("(\\S+): (.*)\r\n");
 
-    public Message(Source source, Type type, String id, String method, JsonElement params) {
+    public Message(Source source, Type type, @Nullable String id, String method,
+          JsonElement params) {
       this.source = source;
       body = new JsonObject();
       body.addProperty("jsonrpc", "2.0");
@@ -72,11 +75,11 @@ public class LtexLanguageServerLauncherTest {
         body.addProperty("method", method);
         body.add("params", params);
       } else if (type == Type.Request) {
-        body.addProperty("id", id);
+        if (id != null) body.addProperty("id", id);
         body.addProperty("method", method);
         body.add("params", params);
       } else if (type == Type.Response) {
-        body.addProperty("id", id);
+        if (id != null) body.addProperty("id", id);
         body.add("result", params);
       }
     }
@@ -87,6 +90,7 @@ public class LtexLanguageServerLauncherTest {
       Assertions.assertTrue(matcher.find());
 
       String sourceStr = matcher.group(1);
+      Assertions.assertNotNull(NullnessUtil.castNonNull(sourceStr));
       Source source;
 
       if (sourceStr.equals("Sending")) {
@@ -98,6 +102,7 @@ public class LtexLanguageServerLauncherTest {
       }
 
       String typeStr = matcher.group(2);
+      Assertions.assertNotNull(NullnessUtil.castNonNull(typeStr));
       Type type;
 
       if (typeStr.equals("notification")) {
@@ -111,6 +116,7 @@ public class LtexLanguageServerLauncherTest {
       }
 
       String method = matcher.group(3);
+      Assertions.assertNotNull(NullnessUtil.castNonNull(method));
       String id = matcher.group(4);
       String paramsStr = str.substring(matcher.end());
       JsonElement params = JsonParser.parseString(paramsStr);
@@ -119,9 +125,6 @@ public class LtexLanguageServerLauncherTest {
     }
 
     public void sendToServer(OutputStream outputStream) throws IOException {
-
-
-
       String bodyStr = body.toString();
       byte[] bodyBytes = bodyStr.getBytes("utf-8");
       String headerStr = "Content-Length: " + bodyBytes.length + "\r\n\r\n";
@@ -174,9 +177,13 @@ public class LtexLanguageServerLauncherTest {
 
         Matcher matcher = headerPattern.matcher(headerLine);
         Assertions.assertTrue(matcher.matches());
+        String headerName = matcher.group(1);
+        Assertions.assertNotNull(NullnessUtil.castNonNull(headerName));
+        String headerValue = matcher.group(2);
+        Assertions.assertNotNull(NullnessUtil.castNonNull(headerValue));
 
-        if (matcher.group(1).equals("Content-Length")) {
-          contentLength = Integer.parseInt(matcher.group(2));
+        if (headerName.equals("Content-Length")) {
+          contentLength = Integer.parseInt(headerValue);
         }
       }
 

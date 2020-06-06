@@ -4,9 +4,12 @@ import java.util.*;
 import java.util.function.Function;
 
 import org.bsplines.ltex_ls.Settings;
+import org.bsplines.ltex_ls.Tools;
 import org.bsplines.ltex_ls.parsing.latex.LatexFragmentizer;
 import org.bsplines.ltex_ls.parsing.markdown.MarkdownFragmentizer;
 import org.bsplines.ltex_ls.parsing.plaintext.PlaintextFragmentizer;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public abstract class CodeFragmentizer {
   private static Map<String, Function<String, Function<Settings, CodeFragmentizer>>>
@@ -32,7 +35,15 @@ public abstract class CodeFragmentizer {
   }
 
   public static CodeFragmentizer create(String codeLanguageId, Settings originalSettings) {
-    return constructorMap.get(codeLanguageId).apply(codeLanguageId).apply(originalSettings);
+    @Nullable Function<String, Function<Settings, CodeFragmentizer>> constructor =
+        constructorMap.get(codeLanguageId);
+
+    if (constructor != null) {
+      return constructor.apply(codeLanguageId).apply(originalSettings);
+    } else {
+      Tools.logger.warning(Tools.i18n("invalidCodeLanguageId", codeLanguageId));
+      return new PlaintextFragmentizer("plaintext", originalSettings);
+    }
   }
 
   public abstract List<CodeFragment> fragmentize(String code);

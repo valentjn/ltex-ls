@@ -6,6 +6,8 @@ import java.util.List;
 import org.bsplines.ltex_ls.languagetool.LanguageToolRuleMatch;
 import org.bsplines.ltex_ls.parsing.AnnotatedTextFragment;
 
+import org.checkerframework.checker.nullness.NullnessUtil;
+
 import org.eclipse.lsp4j.*;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 
@@ -18,13 +20,13 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 public class DocumentCheckerTest {
   private static Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkDocument(
         TextDocumentItem document) {
-    return checkDocument(document, null);
+    return checkDocument(document, new Settings());
   }
 
   private static Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkDocument(
         TextDocumentItem document, Settings settings) {
     SettingsManager settingsManager = new SettingsManager();
-    if (settings != null) settingsManager.setSettings(settings);
+    settingsManager.setSettings(settings);
     DocumentChecker documentChecker = new DocumentChecker(settingsManager);
     return documentChecker.check(document);
   }
@@ -37,8 +39,9 @@ public class DocumentCheckerTest {
         int fromPos2, int toPos2) {
     Assertions.assertEquals(2, matches.size());
 
-    Assertions.assertEquals("EN_A_VS_AN", matches.get(0).getRuleId());
-    Assertions.assertEquals("This is an test.", matches.get(0).getSentence().trim());
+    Assertions.assertEquals("EN_A_VS_AN", NullnessUtil.castNonNull(matches.get(0).getRuleId()));
+    Assertions.assertEquals("This is an test.",
+        NullnessUtil.castNonNull(matches.get(0).getSentence()).trim());
     Assertions.assertEquals(fromPos1, matches.get(0).getFromPos());
     Assertions.assertEquals(toPos1, matches.get(0).getToPos());
 
@@ -55,8 +58,9 @@ public class DocumentCheckerTest {
     Assertions.assertEquals(1, matches.get(0).getSuggestedReplacements().size());
     Assertions.assertEquals("a", matches.get(0).getSuggestedReplacements().get(0));
 
-    Assertions.assertEquals("DE_AGREEMENT", matches.get(1).getRuleId());
-    Assertions.assertEquals("Dies ist eine Test.", matches.get(1).getSentence().trim());
+    Assertions.assertEquals("DE_AGREEMENT", NullnessUtil.castNonNull(matches.get(1).getRuleId()));
+    Assertions.assertEquals("Dies ist eine Test.",
+        NullnessUtil.castNonNull(matches.get(1).getSentence()).trim());
     Assertions.assertEquals(fromPos2, matches.get(1).getFromPos());
     Assertions.assertEquals(toPos2, matches.get(1).getToPos());
     Assertions.assertEquals("M\u00f6glicherweise fehlende grammatische \u00dcbereinstimmung des " +
@@ -90,23 +94,31 @@ public class DocumentCheckerTest {
     Assertions.assertEquals(4, matches.size());
     Assertions.assertEquals(4, annotatedTextFragments.size());
 
-    Assertions.assertEquals("MORFOLOGIK_RULE_EN_US", matches.get(0).getRuleId());
-    Assertions.assertEquals("This is another qwertyzuiopb.", matches.get(0).getSentence());
+    Assertions.assertEquals("MORFOLOGIK_RULE_EN_US",
+        NullnessUtil.castNonNull(matches.get(0).getRuleId()));
+    Assertions.assertEquals("This is another qwertyzuiopb.",
+        NullnessUtil.castNonNull(matches.get(0).getSentence()));
     Assertions.assertEquals(48, matches.get(0).getFromPos());
     Assertions.assertEquals(60, matches.get(0).getToPos());
 
-    Assertions.assertEquals("MORFOLOGIK_RULE_EN_US", matches.get(1).getRuleId());
-    Assertions.assertEquals("This is a qwertyzuiopa. ", matches.get(1).getSentence());
+    Assertions.assertEquals("MORFOLOGIK_RULE_EN_US",
+        NullnessUtil.castNonNull(matches.get(1).getRuleId()));
+    Assertions.assertEquals("This is a qwertyzuiopa. ",
+        NullnessUtil.castNonNull(matches.get(1).getSentence()));
     Assertions.assertEquals(10, matches.get(1).getFromPos());
     Assertions.assertEquals(22, matches.get(1).getToPos());
 
-    Assertions.assertEquals("GERMAN_SPELLER_RULE", matches.get(2).getRuleId());
-    Assertions.assertEquals("Dies ist ein weiteres Qwertyzuiopd.", matches.get(2).getSentence());
+    Assertions.assertEquals("GERMAN_SPELLER_RULE",
+        NullnessUtil.castNonNull(matches.get(2).getRuleId()));
+    Assertions.assertEquals("Dies ist ein weiteres Qwertyzuiopd.",
+        NullnessUtil.castNonNull(matches.get(2).getSentence()));
     Assertions.assertEquals(146, matches.get(2).getFromPos());
     Assertions.assertEquals(158, matches.get(2).getToPos());
 
-    Assertions.assertEquals("GERMAN_SPELLER_RULE", matches.get(3).getRuleId());
-    Assertions.assertEquals("Dies ist ein Qwertyzuiopc. ", matches.get(3).getSentence());
+    Assertions.assertEquals("GERMAN_SPELLER_RULE",
+        NullnessUtil.castNonNull(matches.get(3).getRuleId()));
+    Assertions.assertEquals("Dies ist ein Qwertyzuiopc. ",
+        NullnessUtil.castNonNull(matches.get(3).getSentence()));
     Assertions.assertEquals(100, matches.get(3).getFromPos());
     Assertions.assertEquals(112, matches.get(3).getToPos());
 

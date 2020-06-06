@@ -13,7 +13,7 @@ import org.bsplines.ltex_ls.parsing.CodeAnnotatedTextBuilder;
 import org.bsplines.ltex_ls.parsing.DummyGenerator;
 
 public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
-  private String text;
+  private String code;
   private int pos;
   private int dummyCounter;
   private Stack<String> nodeTypeStack = new Stack<>();
@@ -21,6 +21,10 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   public String language = "en-US";
   public List<String> ignoreNodeTypes = new ArrayList<>();
   public List<String> dummyNodeTypes = new ArrayList<>();
+
+  public MarkdownAnnotatedTextBuilder() {
+    this.code = "";
+  }
 
   public MarkdownAnnotatedTextBuilder addCode(String code) {
     Parser parser = Parser.builder().build();
@@ -30,12 +34,12 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   }
 
   private void visit(Document document) {
-    text = document.getChars().toString();
-    pos = 0;
-    dummyCounter = 0;
-    nodeTypeStack.clear();
+    this.code = document.getChars().toString();
+    this.pos = 0;
+    this.dummyCounter = 0;
+    this.nodeTypeStack.clear();
     visitChildren(document);
-    if (pos < text.length()) addMarkup(text.length());
+    if (pos < code.length()) addMarkup(code.length());
   }
 
   private void visitChildren(final Node node) {
@@ -58,29 +62,29 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     boolean inParagraph = isInNodeType("Paragraph");
 
     while (true) {
-      if ((pos >= text.length()) || (pos >= newPos)) break;
-      int curPos = text.indexOf('\r', pos);
+      if ((pos >= code.length()) || (pos >= newPos)) break;
+      int curPos = code.indexOf('\r', pos);
 
       if ((curPos == -1) || (curPos >= newPos)) {
-        curPos = text.indexOf('\n', pos);
+        curPos = code.indexOf('\n', pos);
         if ((curPos == -1) || (curPos >= newPos)) break;
       }
 
-      if (curPos > pos) super.addMarkup(text.substring(pos, curPos));
-      super.addMarkup(text.substring(curPos, curPos + 1), (inParagraph ? " " : "\n"));
+      if (curPos > pos) super.addMarkup(code.substring(pos, curPos));
+      super.addMarkup(code.substring(curPos, curPos + 1), (inParagraph ? " " : "\n"));
 
       pos = curPos + 1;
     }
 
     if (newPos > pos) {
-      super.addMarkup(text.substring(pos, newPos));
+      super.addMarkup(code.substring(pos, newPos));
       pos = newPos;
     }
   }
 
   private void addText(int newPos) {
     if (newPos > pos) {
-      super.addText(text.substring(pos, newPos));
+      super.addText(code.substring(pos, newPos));
       pos = newPos;
     }
   }
@@ -104,7 +108,7 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
       int newPos = node.getEndOffset();
 
       if (newPos > pos) {
-        super.addMarkup(text.substring(pos, newPos), generateDummy());
+        super.addMarkup(code.substring(pos, newPos), generateDummy());
         pos = newPos;
       }
     } else {

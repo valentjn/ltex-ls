@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.bsplines.ltex_ls.Tools;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
+import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 
 import org.languagetool.*;
 import org.languagetool.markup.AnnotatedText;
@@ -21,7 +23,7 @@ import org.languagetool.rules.patterns.AbstractPatternRule;
 import org.xml.sax.SAXException;
 
 public class LanguageToolJavaInterface extends LanguageToolInterface {
-  private JLanguageTool languageTool;
+  private @MonotonicNonNull JLanguageTool languageTool;
 
   private static final int resultCacheExpireAfterMinutes = 10;
 
@@ -29,7 +31,6 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
         int sentenceCacheSize, List<String> dictionary) {
     if (!Languages.isLanguageSupported(languageShortCode)) {
       Tools.logger.severe(Tools.i18n("notARecognizedLanguage", languageShortCode));
-      languageTool = null;
       return;
     }
 
@@ -39,9 +40,13 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     ResultCache resultCache = new ResultCache(sentenceCacheSize,
         resultCacheExpireAfterMinutes, TimeUnit.MINUTES);
     UserConfig userConfig = new UserConfig(dictionary);
-    languageTool = new JLanguageTool(language, motherTongue, resultCache, userConfig);
+
+    @SuppressWarnings("argument.type.incompatible")
+    JLanguageTool languageTool = new JLanguageTool(language, motherTongue, resultCache, userConfig);
+    this.languageTool = languageTool;
   }
 
+  @EnsuresNonNullIf(expression="this.languageTool", result=true)
   @Override
   public boolean isReady() {
     return (languageTool != null);
@@ -49,6 +54,11 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
   @Override
   public List<LanguageToolRuleMatch> check(AnnotatedText annotatedText) {
+    if (!isReady()) {
+      Tools.logger.warning(Tools.i18n("skippingTextCheck"));
+      return Collections.emptyList();
+    }
+
     List<RuleMatch> matches;
 
     try {
@@ -77,6 +87,8 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
   @Override
   public void activateDefaultFalseFriendRules() {
+    if (!isReady()) return;
+
     // from JLanguageTool.activateDefaultFalseFriendRules (which is private)
     String falseFriendRulePath = JLanguageTool.getDataBroker().getRulesDir() + "/" +
         JLanguageTool.FALSE_FRIEND_FILE;
@@ -94,6 +106,8 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
   @Override
   public void activateLanguageModelRules(String languageModelRulesDirectory) {
+    if (!isReady()) return;
+
     try {
       languageTool.activateLanguageModelRules(new File(languageModelRulesDirectory));
     } catch (IOException | RuntimeException e) {
@@ -105,6 +119,8 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
   @Override
   public void activateNeuralNetworkRules(String neuralNetworkRulesDirectory) {
+    if (!isReady()) return;
+
     try {
       languageTool.activateNeuralNetworkRules(new File(neuralNetworkRulesDirectory));
     } catch (IOException | RuntimeException e) {
@@ -116,6 +132,8 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
   @Override
   public void activateWord2VecModelRules(String word2vecRulesDirectory) {
+    if (!isReady()) return;
+
     try {
       languageTool.activateWord2VecModelRules(new File(word2vecRulesDirectory));
     } catch (IOException | RuntimeException e) {
@@ -127,6 +145,8 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
   @Override
   public void enableRules(List<String> ruleIds) {
+    if (!isReady()) return;
+
     // for strange reasons there is no JLanguageTool.enableRules
     for (String ruleId : ruleIds) {
       languageTool.enableRule(ruleId);
@@ -135,11 +155,13 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
   @Override
   public void disableRules(List<String> ruleIds) {
+    if (!isReady()) return;
     languageTool.disableRules(ruleIds);
   }
 
   @Override
   public void enableEasterEgg() {
+    if (!isReady()) return;
     languageTool.addRule(new Rule() {
       public String getId() { return "bspline"; };
       public String getDescription() { return "Unknown basis function"; };

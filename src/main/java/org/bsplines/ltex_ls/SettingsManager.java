@@ -6,37 +6,48 @@ import com.google.gson.JsonElement;
 
 import org.bsplines.ltex_ls.languagetool.*;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 public class SettingsManager {
   private HashMap<String, Settings> settingsMap;
-  private HashMap<String, LanguageToolInterface> languageToolInterfaceMap;
+  private HashMap<String, @Nullable LanguageToolInterface> languageToolInterfaceMap;
 
   private Settings settings;
-  private LanguageToolInterface languageToolInterface;
+  private @Nullable LanguageToolInterface languageToolInterface;
 
   public SettingsManager() {
-    settings = new Settings();
     reinitializeLanguageToolInterface();
     String language = settings.getLanguageShortCode();
-    settingsMap = new HashMap<>();
+    this.settingsMap = new HashMap<>();
     settingsMap.put(language, settings);
-    languageToolInterfaceMap = new HashMap<>();
+    this.languageToolInterfaceMap = new HashMap<>();
     languageToolInterfaceMap.put(language, languageToolInterface);
   }
 
-  private void reinitializeLanguageToolInterface() {
+  @EnsuresNonNull("settings")
+  private void reinitializeLanguageToolInterface(
+        @UnknownInitialization(Object.class) SettingsManager this) {
+    if (settings == null) this.settings = new Settings();
+
     if (settings.getLanguageToolHttpServerUri().isEmpty()) {
-      languageToolInterface = new LanguageToolJavaInterface(settings.getLanguageShortCode(),
+      this.languageToolInterface = new LanguageToolJavaInterface(settings.getLanguageShortCode(),
           settings.getMotherTongueShortCode(), settings.getSentenceCacheSize(),
           settings.getDictionary());
     } else {
-      languageToolInterface = new LanguageToolHttpInterface(settings.getLanguageToolHttpServerUri(),
-          settings.getLanguageShortCode(), settings.getMotherTongueShortCode());
+      this.languageToolInterface = new LanguageToolHttpInterface(
+          settings.getLanguageToolHttpServerUri(), settings.getLanguageShortCode(),
+          settings.getMotherTongueShortCode());
     }
 
     if (!languageToolInterface.isReady()) {
-      languageToolInterface = null;
+      this.languageToolInterface = null;
       return;
     }
+
+    // fixes false-positive dereference.of.nullable warnings
+    LanguageToolInterface languageToolInterface = this.languageToolInterface;
 
     if (!settings.getLanguageModelRulesDirectory().isEmpty()) {
       languageToolInterface.activateLanguageModelRules(
@@ -65,7 +76,7 @@ public class SettingsManager {
     return settings;
   }
 
-  public LanguageToolInterface getLanguageToolInterface() {
+  public @Nullable LanguageToolInterface getLanguageToolInterface() {
     return languageToolInterface;
   }
 
@@ -76,14 +87,14 @@ public class SettingsManager {
 
   public void setSettings(Settings newSettings) {
     String newLanguage = newSettings.getLanguageShortCode();
-    Settings oldSettings = settingsMap.getOrDefault(newLanguage, null);
+    @Nullable Settings oldSettings = settingsMap.get(newLanguage);
 
     if (newSettings.equals(oldSettings)) {
-      settings = oldSettings;
-      languageToolInterface = languageToolInterfaceMap.get(newLanguage);
+      this.settings = oldSettings;
+      this.languageToolInterface = languageToolInterfaceMap.get(newLanguage);
     } else {
       settingsMap.put(newLanguage, newSettings);
-      settings = newSettings;
+      this.settings = newSettings;
       reinitializeLanguageToolInterface();
       languageToolInterfaceMap.put(newLanguage, languageToolInterface);
     }

@@ -7,6 +7,9 @@ import java.util.List;
 
 import com.google.gson.*;
 
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import org.eclipse.lsp4j.DiagnosticSeverity;
 
 public class Settings {
@@ -15,23 +18,23 @@ public class Settings {
   private static final List<String> defaultIgnoreMarkdownNodeTypes =
       Arrays.asList("CodeBlock", "FencedCodeBlock", "IndentedCodeBlock");
 
-  private String languageShortCode = null;
-  private List<String> dictionary = null;
-  private List<String> disabledRules = null;
-  private List<String> enabledRules = null;
-  private String languageToolHttpServerUri = null;
-  private List<String> dummyCommandPrototypes = null;
-  private List<String> ignoreCommandPrototypes = null;
-  private List<String> ignoreEnvironments = null;
-  private List<String> dummyMarkdownNodeTypes = null;
-  private List<String> ignoreMarkdownNodeTypes = null;
-  private List<IgnoreRuleSentencePair> ignoreRuleSentencePairs = null;
-  private String motherTongueShortCode = null;
-  private String languageModelRulesDirectory = null;
-  private String neuralNetworkModelRulesDirectory = null;
-  private String word2VecModelRulesDirectory = null;
-  private Integer sentenceCacheSize = null;
-  private DiagnosticSeverity diagnosticSeverity = null;
+  private @Nullable String languageShortCode = null;
+  private @Nullable List<String> dictionary = null;
+  private @Nullable List<String> disabledRules = null;
+  private @Nullable List<String> enabledRules = null;
+  private @Nullable String languageToolHttpServerUri = null;
+  private @Nullable List<String> dummyCommandPrototypes = null;
+  private @Nullable List<String> ignoreCommandPrototypes = null;
+  private @Nullable List<String> ignoreEnvironments = null;
+  private @Nullable List<String> dummyMarkdownNodeTypes = null;
+  private @Nullable List<String> ignoreMarkdownNodeTypes = null;
+  private @Nullable List<IgnoreRuleSentencePair> ignoreRuleSentencePairs = null;
+  private @Nullable String motherTongueShortCode = null;
+  private @Nullable String languageModelRulesDirectory = null;
+  private @Nullable String neuralNetworkModelRulesDirectory = null;
+  private @Nullable String word2VecModelRulesDirectory = null;
+  private @Nullable Integer sentenceCacheSize = null;
+  private @Nullable DiagnosticSeverity diagnosticSeverity = null;
 
   public Settings() {
   }
@@ -80,102 +83,115 @@ public class Settings {
     return result;
   }
 
-  public void setSettings(JsonElement jsonSettings) {
+  public void setSettings(@UnknownInitialization(Object.class) Settings this,
+        JsonElement jsonSettings) {
     try {
-      languageShortCode = getSettingFromJSON(jsonSettings, "language").getAsString();
+      this.languageShortCode = getSettingFromJSON(jsonSettings, "language").getAsString();
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      languageShortCode = null;
+      this.languageShortCode = null;
+    }
+
+    this.dictionary = new ArrayList<>();
+    this.disabledRules = new ArrayList<>();
+    this.enabledRules = new ArrayList<>();
+
+    if (languageShortCode != null) {
+      // fixes false-positive argument.type.incompatible warnings
+      String languageShortCode = this.languageShortCode;
+      List<String> dictionary = this.dictionary;
+      List<String> disabledRules = this.disabledRules;
+      List<String> enabledRules = this.enabledRules;
+
+      try {
+        dictionary.addAll(convertJsonArrayToList(
+            getSettingFromJSON(jsonSettings, "dictionary").getAsJsonObject().
+            get(languageShortCode).getAsJsonArray()));
+      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      }
+
+      try {
+        dictionary.addAll(convertJsonArrayToList(
+            getSettingFromJSON(jsonSettings,
+            languageShortCode + ".dictionary").getAsJsonArray()));
+      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      }
+
+      try {
+        disabledRules.addAll(convertJsonArrayToList(
+            getSettingFromJSON(jsonSettings, "disabledRules").getAsJsonObject().
+            get(languageShortCode).getAsJsonArray()));
+      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      }
+
+      try {
+        disabledRules.addAll(convertJsonArrayToList(
+            getSettingFromJSON(jsonSettings,
+            languageShortCode + ".disabledRules").getAsJsonArray()));
+      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      }
+
+      try {
+        enabledRules.addAll(convertJsonArrayToList(
+            getSettingFromJSON(jsonSettings, "enabledRules").getAsJsonObject().
+            get(languageShortCode).getAsJsonArray()));
+      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      }
+
+      try {
+        enabledRules.addAll(convertJsonArrayToList(
+            getSettingFromJSON(jsonSettings,
+            languageShortCode + ".enabledRules").getAsJsonArray()));
+      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      }
     }
 
     try {
-      dictionary = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings, "dictionary").getAsJsonObject().
-          get(languageShortCode).getAsJsonArray());
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      dictionary = new ArrayList<>();
-    }
-
-    try {
-      dictionary.addAll(convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings,
-          languageShortCode + ".dictionary").getAsJsonArray()));
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-    }
-
-    try {
-      disabledRules = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings, "disabledRules").getAsJsonObject().
-          get(languageShortCode).getAsJsonArray());
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      disabledRules = new ArrayList<>();
-    }
-
-    try {
-      disabledRules.addAll(convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings,
-          languageShortCode + ".disabledRules").getAsJsonArray()));
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-    }
-
-    try {
-      enabledRules = convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings, "enabledRules").getAsJsonObject().
-          get(languageShortCode).getAsJsonArray());
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      enabledRules = new ArrayList<>();
-    }
-
-    try {
-      enabledRules.addAll(convertJsonArrayToList(
-          getSettingFromJSON(jsonSettings,
-          languageShortCode + ".enabledRules").getAsJsonArray()));
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-    }
-
-    try {
-      languageToolHttpServerUri = getSettingFromJSON(
+      this.languageToolHttpServerUri = getSettingFromJSON(
           jsonSettings, "ltex-ls.languageToolHttpServerUri").getAsString();
     } catch (NullPointerException | UnsupportedOperationException e) {
-      languageToolHttpServerUri = null;
+      this.languageToolHttpServerUri = null;
     }
 
     try {
-      dummyCommandPrototypes = convertJsonArrayToList(
+      this.dummyCommandPrototypes = convertJsonArrayToList(
           getSettingFromJSON(jsonSettings, "commands.dummy").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      dummyCommandPrototypes = null;
+      this.dummyCommandPrototypes = null;
     }
 
     try {
-      ignoreCommandPrototypes = convertJsonArrayToList(
+      this.ignoreCommandPrototypes = convertJsonArrayToList(
           getSettingFromJSON(jsonSettings, "commands.ignore").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      ignoreCommandPrototypes = null;
+      this.ignoreCommandPrototypes = null;
     }
 
     try {
-      ignoreEnvironments = convertJsonArrayToList(
+      this.ignoreEnvironments = convertJsonArrayToList(
           getSettingFromJSON(jsonSettings, "environments.ignore").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      ignoreEnvironments = null;
+      this.ignoreEnvironments = null;
     }
 
     try {
-      dummyMarkdownNodeTypes = convertJsonArrayToList(
+      this.dummyMarkdownNodeTypes = convertJsonArrayToList(
           getSettingFromJSON(jsonSettings, "markdown.dummy").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      dummyMarkdownNodeTypes = null;
+      this.dummyMarkdownNodeTypes = null;
     }
 
     try {
-      ignoreMarkdownNodeTypes = convertJsonArrayToList(
+      this.ignoreMarkdownNodeTypes = convertJsonArrayToList(
           getSettingFromJSON(jsonSettings, "markdown.ignore").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      ignoreMarkdownNodeTypes = null;
+      this.ignoreMarkdownNodeTypes = null;
     }
 
     try {
-      ignoreRuleSentencePairs = new ArrayList<>();
+      this.ignoreRuleSentencePairs = new ArrayList<>();
+
+      // fixes false-positive dereference.of.nullable warning
+      List<IgnoreRuleSentencePair> ignoreRuleSentencePairs = this.ignoreRuleSentencePairs;
 
       for (JsonElement element :
             getSettingFromJSON(jsonSettings, "ignoreRuleInSentence").getAsJsonArray()) {
@@ -184,46 +200,46 @@ public class Settings {
             elementObject.get("rule").getAsString(), elementObject.get("sentence").getAsString()));
       }
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      ignoreRuleSentencePairs = null;
+      this.ignoreRuleSentencePairs = null;
     }
 
     try {
-      motherTongueShortCode = getSettingFromJSON(
+      this.motherTongueShortCode = getSettingFromJSON(
           jsonSettings, "additionalRules.motherTongue").getAsString();
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      motherTongueShortCode = null;
+      this.motherTongueShortCode = null;
     }
 
     try {
-      languageModelRulesDirectory = getSettingFromJSON(
+      this.languageModelRulesDirectory = getSettingFromJSON(
           jsonSettings, "additionalRules.languageModel").getAsString();
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      languageModelRulesDirectory = null;
+      this.languageModelRulesDirectory = null;
     }
 
     try {
-      neuralNetworkModelRulesDirectory = getSettingFromJSON(
+      this.neuralNetworkModelRulesDirectory = getSettingFromJSON(
           jsonSettings, "additionalRules.neuralNetworkModel").getAsString();
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      neuralNetworkModelRulesDirectory = null;
+      this.neuralNetworkModelRulesDirectory = null;
     }
 
     try {
-      word2VecModelRulesDirectory = getSettingFromJSON(
+      this.word2VecModelRulesDirectory = getSettingFromJSON(
           jsonSettings, "additionalRules.word2VecModel").getAsString();
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      word2VecModelRulesDirectory = null;
+      this.word2VecModelRulesDirectory = null;
     }
 
     try {
-      sentenceCacheSize = getSettingFromJSON(
+      this.sentenceCacheSize = getSettingFromJSON(
           jsonSettings, "sentenceCacheSize").getAsInt();
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       try {
-        sentenceCacheSize = getSettingFromJSON(
+        this.sentenceCacheSize = getSettingFromJSON(
             jsonSettings, "performance.sentenceCacheSize").getAsInt();
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e2) {
-        sentenceCacheSize = null;
+        this.sentenceCacheSize = null;
       }
     }
 
@@ -232,23 +248,23 @@ public class Settings {
           getSettingFromJSON(jsonSettings, "diagnosticSeverity").getAsString();
 
       if (diagnosticSeverityString.equals("error")) {
-        diagnosticSeverity = DiagnosticSeverity.Error;
+        this.diagnosticSeverity = DiagnosticSeverity.Error;
       } else if (diagnosticSeverityString.equals("warning")) {
-        diagnosticSeverity = DiagnosticSeverity.Warning;
+        this.diagnosticSeverity = DiagnosticSeverity.Warning;
       } else if (diagnosticSeverityString.equals("information")) {
-        diagnosticSeverity = DiagnosticSeverity.Information;
+        this.diagnosticSeverity = DiagnosticSeverity.Information;
       } else if (diagnosticSeverityString.equals("hint")) {
-        diagnosticSeverity = DiagnosticSeverity.Hint;
+        this.diagnosticSeverity = DiagnosticSeverity.Hint;
       } else {
-        diagnosticSeverity = null;
+        this.diagnosticSeverity = null;
       }
     } catch (NullPointerException | UnsupportedOperationException e) {
-      diagnosticSeverity = null;
+      this.diagnosticSeverity = null;
     }
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(@Nullable Object obj) {
     if ((obj == null) || !Settings.class.isAssignableFrom(obj.getClass())) return false;
     Settings other = (Settings)obj;
 
@@ -373,11 +389,7 @@ public class Settings {
     return hash;
   }
 
-  private static <T> T getDefault(T obj, T default_) {
-    return ((obj != null) ? obj : default_);
-  }
-
-  private static String getDefault(String obj, String default_) {
+  private static <T> T getDefault(@Nullable T obj, T default_) {
     return ((obj != null) ? obj : default_);
   }
 

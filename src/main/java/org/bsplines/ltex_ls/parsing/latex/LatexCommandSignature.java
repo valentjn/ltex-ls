@@ -3,7 +3,10 @@ package org.bsplines.ltex_ls.parsing.latex;
 import java.util.*;
 import java.util.regex.*;
 
+import org.bsplines.ltex_ls.Tools;
 import org.bsplines.ltex_ls.parsing.DummyGenerator;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.eclipse.xtext.xbase.lib.Pair;
 
@@ -32,7 +35,7 @@ public class LatexCommandSignature {
   private Pattern thisCommandPattern;
 
   public LatexCommandSignature(String commandPrototype) {
-    this(commandPrototype, Action.IGNORE, null);
+    this(commandPrototype, Action.IGNORE, DummyGenerator.getDefault());
   }
 
   public LatexCommandSignature(String commandPrototype, Action action) {
@@ -41,16 +44,23 @@ public class LatexCommandSignature {
 
   public LatexCommandSignature(String commandPrototype, Action action,
         DummyGenerator dummyGenerator) {
+    this.dummyGenerator = dummyGenerator;
     Matcher commandMatcher = commandPattern.matcher(commandPrototype);
-    if (!commandMatcher.find()) return;
-    name = commandMatcher.group();
+
+    if (!commandMatcher.find()) {
+      Tools.logger.warning(Tools.i18n("invalidCommandPrototype", commandPrototype));
+      this.thisCommandPattern = Pattern.compile(" ^$");
+      return;
+    }
+
+    this.name = commandMatcher.group();
     int pos = commandMatcher.end();
 
     while (true) {
       Matcher argumentMatcher = argumentPattern.matcher(commandPrototype.substring(pos));
       if (!argumentMatcher.find()) break;
 
-      LatexCommandSignature.ArgumentType argumentType = null;
+      LatexCommandSignature.ArgumentType argumentType;
 
       if (argumentMatcher.group(2) != null) {
         argumentType = LatexCommandSignature.ArgumentType.BRACE;
@@ -58,6 +68,8 @@ public class LatexCommandSignature {
         argumentType = LatexCommandSignature.ArgumentType.BRACKET;
       } else if (argumentMatcher.group(4) != null) {
         argumentType = LatexCommandSignature.ArgumentType.PARENTHESIS;
+      } else {
+        argumentType = LatexCommandSignature.ArgumentType.BRACE;
       }
 
       argumentTypes.add(argumentType);
@@ -66,9 +78,7 @@ public class LatexCommandSignature {
     }
 
     this.action = action;
-    this.dummyGenerator = dummyGenerator;
-
-    thisCommandPattern = Pattern.compile("^" + Pattern.quote(name));
+    this.thisCommandPattern = Pattern.compile("^" + Pattern.quote(name));
   }
 
   private static String matchPatternFromPosition(String code, int fromPos, Pattern pattern) {
@@ -153,7 +163,8 @@ public class LatexCommandSignature {
     return "";
   }
 
-  public List<Pair<Integer, Integer>> matchArgumentsFromPosition(String code, int fromPos) {
+  public @Nullable List<Pair<Integer, Integer>> matchArgumentsFromPosition(
+        String code, int fromPos) {
     List<Pair<Integer, Integer>> arguments = new ArrayList<>();
     int toPos = matchFromPosition(code, fromPos, arguments);
     return ((toPos > -1) ? arguments : null);
@@ -164,7 +175,8 @@ public class LatexCommandSignature {
     return ((toPos > -1) ? code.substring(fromPos, toPos) : "");
   }
 
-  private int matchFromPosition(String code, int fromPos, List<Pair<Integer, Integer>> arguments) {
+  private int matchFromPosition(String code, int fromPos,
+        @Nullable List<Pair<Integer, Integer>> arguments) {
     int pos = fromPos;
     String match = matchPatternFromPosition(code, pos, thisCommandPattern);
     pos += match.length();
