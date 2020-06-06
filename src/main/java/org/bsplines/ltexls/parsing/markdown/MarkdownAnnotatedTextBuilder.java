@@ -26,22 +26,6 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     this.code = "";
   }
 
-  public MarkdownAnnotatedTextBuilder addCode(String code) {
-    Parser parser = Parser.builder().build();
-    Document document = parser.parse(code);
-    visit(document);
-    return this;
-  }
-
-  private void visit(Document document) {
-    this.code = document.getChars().toString();
-    this.pos = 0;
-    this.dummyCounter = 0;
-    this.nodeTypeStack.clear();
-    visitChildren(document);
-    if (pos < code.length()) addMarkup(code.length());
-  }
-
   private void visitChildren(final Node node) {
     node.getChildren().forEach(this::visit);
   }
@@ -91,6 +75,22 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
 
   private String generateDummy() {
     return DummyGenerator.getDefault().generate(language, dummyCounter++);
+  }
+
+  public MarkdownAnnotatedTextBuilder addCode(String code) {
+    Parser parser = Parser.builder().build();
+    Document document = parser.parse(code);
+    visit(document);
+    return this;
+  }
+
+  private void visit(Document document) {
+    this.code = document.getChars().toString();
+    this.pos = 0;
+    this.dummyCounter = 0;
+    this.nodeTypeStack.clear();
+    visitChildren(document);
+    if (pos < code.length()) addMarkup(code.length());
   }
 
   private void visit(Node node) {

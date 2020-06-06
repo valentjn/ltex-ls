@@ -12,6 +12,10 @@ class DocumentPositionCalculator {
     lineStartPositions = getLineStartPositions(text);
   }
 
+  public Position getPosition(int pos) {
+    return getPosition(pos, lineStartPositions);
+  }
+
   private static Position getPosition(int pos, int[] lineStarts) {
     int line = Arrays.binarySearch(lineStarts, pos);
 
@@ -41,9 +45,5 @@ class DocumentPositionCalculator {
     }
 
     return lineStartPositions.stream().mapToInt(i -> i).toArray();
-  }
-
-  public Position getPosition(int pos) {
-    return getPosition(pos, lineStartPositions);
   }
 }
