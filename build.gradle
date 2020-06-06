@@ -10,19 +10,15 @@ allprojects {
   group('valentjn')
   version('5.0.0')
 
-  apply(plugin: 'java')
-  apply(plugin: 'com.github.spotbugs')
-}
-
-repositories {
-  jcenter()
-}
-
-project(':ltex-ls-languagetool-patch') {
   repositories {
     jcenter()
   }
 
+  apply(plugin: 'java')
+  apply(plugin: 'com.github.spotbugs')
+}
+
+project(':ltex-ls-languagetool-patch') {
   dependencies {
     compile(group: 'org.languagetool', name: 'languagetool-core', version: '4.9')
   }
