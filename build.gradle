@@ -1,6 +1,7 @@
 plugins {
   id 'java'
   id 'application'
+  id 'checkstyle'
   id 'jacoco'
   id 'com.github.kt3k.coveralls' version '2.10.1'
   id 'com.github.spotbugs' version '4.2.4'
@@ -22,6 +23,13 @@ allprojects {
   spotbugs {
     excludeFilter = file("${rootDir}/.spotbugs-exclude.xml")
   }
+}
+
+// don't use Checkstyle for ltex-ls-languagetool-patch
+checkstyle {
+  configFile = file('.checkstyle.xml')
+  ignoreFailures = false
+  maxWarnings = 0
 }
 
 // don't use Checker Framework for ltex-ls-languagetool-patch
