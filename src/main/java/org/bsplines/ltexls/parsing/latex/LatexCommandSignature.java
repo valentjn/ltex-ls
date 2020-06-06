@@ -151,8 +151,8 @@ public class LatexCommandSignature {
           break;
         }
         case ')': {
-          if ((argumentTypeStack.peek() == ArgumentType.PARENTHESIS) &&
-                (argumentTypeStack.size() == 1)) {
+          if ((argumentTypeStack.peek() == ArgumentType.PARENTHESIS)
+                && (argumentTypeStack.size() == 1)) {
             return code.substring(fromPos, pos + 1);
           }
 

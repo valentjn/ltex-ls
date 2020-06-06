@@ -41,8 +41,8 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     }
 
     Language language = Languages.getLanguageForShortCode(languageShortCode);
-    Language motherTongue = ((!motherTongueShortCode.isEmpty()) ?
-        Languages.getLanguageForShortCode(motherTongueShortCode) : null);
+    Language motherTongue = ((!motherTongueShortCode.isEmpty())
+        ? Languages.getLanguageForShortCode(motherTongueShortCode) : null);
     ResultCache resultCache = new ResultCache(sentenceCacheSize,
         resultCacheExpireAfterMinutes, TimeUnit.MINUTES);
     UserConfig userConfig = new UserConfig(dictionary);
@@ -96,8 +96,8 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     if (!isReady()) return;
 
     // from JLanguageTool.activateDefaultFalseFriendRules (which is private)
-    String falseFriendRulePath = JLanguageTool.getDataBroker().getRulesDir() + "/" +
-        JLanguageTool.FALSE_FRIEND_FILE;
+    String falseFriendRulePath = JLanguageTool.getDataBroker().getRulesDir() + "/"
+        + JLanguageTool.FALSE_FRIEND_FILE;
 
     try {
       List<AbstractPatternRule> falseFriendRules = languageTool.loadFalseFriendRules(
@@ -189,11 +189,11 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
         List<RuleMatch> matches = new ArrayList<>();
         for (AnalyzedTokenReadings token : sentence.getTokens()) {
           String s = token.getToken();
-          if ((s.length() >= 2) &&
-              (s.substring(s.length() - 2, s.length()).equalsIgnoreCase("er"))) {
+          if ((s.length() >= 2)
+                && (s.substring(s.length() - 2, s.length()).equalsIgnoreCase("er"))) {
             matches.add(new RuleMatch(this, sentence, token.getStartPos(), token.getEndPos(),
-                "Ungendered variant detected. " +
-                "Did you mean <suggestion>" + s + "*in</suggestion>?"));
+                "Ungendered variant detected. "
+                + "Did you mean <suggestion>" + s + "*in</suggestion>?"));
           }
         }
         return matches.toArray(new RuleMatch[]{});

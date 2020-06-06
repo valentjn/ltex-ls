@@ -68,14 +68,14 @@ public class CodeActionGenerator {
   private static boolean matchIntersectsWithRange(LanguageToolRuleMatch match, Range range,
       DocumentPositionCalculator positionCalculator) {
     // false iff match is completely before range or completely after range
-    return !(positionLower(positionCalculator.getPosition(match.getToPos()), range.getStart()) ||
-        positionLower(range.getEnd(), positionCalculator.getPosition(match.getFromPos())));
+    return !(positionLower(positionCalculator.getPosition(match.getToPos()), range.getStart())
+        || positionLower(range.getEnd(), positionCalculator.getPosition(match.getFromPos())));
   }
 
   private static boolean positionLower(Position position1, Position position2) {
-    return ((position1.getLine() < position2.getLine()) ||
-        ((position1.getLine() == position2.getLine()) &&
-        (position1.getCharacter() < position2.getCharacter())));
+    return ((position1.getLine() < position2.getLine())
+        || ((position1.getLine() == position2.getLine())
+        && (position1.getCharacter() < position2.getCharacter())));
   }
 
   public Diagnostic createDiagnostic(
@@ -111,8 +111,8 @@ public class CodeActionGenerator {
       if (matchIntersectsWithRange(match, params.getRange(), positionCalculator)) {
         String ruleId = match.getRuleId();
 
-        if ((ruleId != null) && (ruleId.startsWith("MORFOLOGIK_") ||
-              ruleId.startsWith("HUNSPELL_") || ruleId.startsWith("GERMAN_SPELLER_"))) {
+        if ((ruleId != null) && (ruleId.startsWith("MORFOLOGIK_")
+              || ruleId.startsWith("HUNSPELL_") || ruleId.startsWith("GERMAN_SPELLER_"))) {
           addWordToDictionaryMatches.add(match);
         }
 
@@ -129,8 +129,8 @@ public class CodeActionGenerator {
       }
     }
 
-    if (!addWordToDictionaryMatches.isEmpty() &&
-          settingsManager.getSettings().getLanguageToolHttpServerUri().isEmpty()) {
+    if (!addWordToDictionaryMatches.isEmpty()
+          && settingsManager.getSettings().getLanguageToolHttpServerUri().isEmpty()) {
       CodeAction codeAction = getAddWordToDictionaryCodeAction(document,
           addWordToDictionaryMatches, checkingResult.getValue(), positionCalculator);
       result.add(Either.forRight(codeAction));
@@ -174,9 +174,9 @@ public class CodeActionGenerator {
         diagnostics.add(createDiagnostic(match, positionCalculator));
       }
 
-      Command command = new Command(((ruleIdSentencePairs.size() == 1) ?
-          Tools.i18n("ignoreRuleInThisSentence") :
-          Tools.i18n("ignoreAllRulesInTheSelectedSentences")),
+      Command command = new Command(((ruleIdSentencePairs.size() == 1)
+          ? Tools.i18n("ignoreRuleInThisSentence")
+          : Tools.i18n("ignoreAllRulesInTheSelectedSentences")),
           ignoreRuleInSentenceCommandName);
       JsonObject arguments = new JsonObject();
       arguments.addProperty("type", "command");
@@ -209,8 +209,8 @@ public class CodeActionGenerator {
         diagnostics.add(createDiagnostic(match, positionCalculator));
       }
 
-      Command command = new Command(((ruleIds.size() == 1) ?
-          Tools.i18n("disableRule") : Tools.i18n("disableAllRulesWithMatchesInSelection")),
+      Command command = new Command(((ruleIds.size() == 1)
+          ? Tools.i18n("disableRule") : Tools.i18n("disableAllRulesWithMatchesInSelection")),
           disableRuleCommandName);
       JsonObject arguments = new JsonObject();
       arguments.addProperty("type", "command");
@@ -241,8 +241,8 @@ public class CodeActionGenerator {
             Collections.singletonList(new TextEdit(range, newWord)))));
       }
 
-      CodeAction codeAction = new CodeAction((useWordMatches.size() == 1) ?
-          Tools.i18n("useWord", newWord) : Tools.i18n("useWordAllSelectedMatches", newWord));
+      CodeAction codeAction = new CodeAction((useWordMatches.size() == 1)
+          ? Tools.i18n("useWord", newWord) : Tools.i18n("useWordAllSelectedMatches", newWord));
       codeAction.setKind(acceptSuggestionCodeActionKind);
       codeAction.setDiagnostics(diagnostics);
       codeAction.setEdit(new WorkspaceEdit(documentChanges));
@@ -313,9 +313,9 @@ public class CodeActionGenerator {
       diagnostics.add(createDiagnostic(match, positionCalculator));
     }
 
-    Command command = new Command(((unknownWords.size() == 1) ?
-        Tools.i18n("addWordToDictionary", unknownWords.get(0)) :
-        Tools.i18n("addAllUnknownWordsInSelectionToDictionary")),
+    Command command = new Command(((unknownWords.size() == 1)
+        ? Tools.i18n("addWordToDictionary", unknownWords.get(0))
+        : Tools.i18n("addAllUnknownWordsInSelectionToDictionary")),
         addToDictionaryCommandName);
     JsonObject arguments = new JsonObject();
     arguments.addProperty("type", "command");

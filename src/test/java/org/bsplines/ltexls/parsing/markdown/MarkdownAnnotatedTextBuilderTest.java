@@ -37,9 +37,9 @@ public class MarkdownAnnotatedTextBuilderTest {
   @Test
   public void doTest() throws IOException {
     assertPlainText(
-        "# Heading\n" +
-        "Paragraph with\n" +
-        "multiple lines and [link](example.com)\n",
+        "# Heading\n"
+        + "Paragraph with\n"
+        + "multiple lines and [link](example.com)\n",
         "Heading\nParagraph with multiple lines and link\n");
     assertPlainText(
         "This is a test: `inline code`.\n\n```\ncode block\n```\n\nThis is another sentence.\n",

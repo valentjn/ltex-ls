@@ -55,12 +55,12 @@ public class DocumentCheckerTest {
     Assertions.assertEquals(toPos1, matches.get(0).getToPos());
 
     try {
-      Assertions.assertEquals("Use <suggestion>a</suggestion> instead of 'an' if the following " +
-          "word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'",
+      Assertions.assertEquals("Use <suggestion>a</suggestion> instead of 'an' if the following "
+          + "word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'",
           matches.get(0).getMessage());
     } catch (AssertionError e) {
-      Assertions.assertEquals("Use \"a\" instead of 'an' if the following " +
-          "word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'",
+      Assertions.assertEquals("Use \"a\" instead of 'an' if the following "
+          + "word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'",
           matches.get(0).getMessage());
     }
 
@@ -72,9 +72,9 @@ public class DocumentCheckerTest {
         NullnessUtil.castNonNull(matches.get(1).getSentence()).trim());
     Assertions.assertEquals(fromPos2, matches.get(1).getFromPos());
     Assertions.assertEquals(toPos2, matches.get(1).getToPos());
-    Assertions.assertEquals("M\u00f6glicherweise fehlende grammatische \u00dcbereinstimmung des " +
-        "Genus (m\u00e4nnlich, weiblich, s\u00e4chlich - Beispiel: 'der Fahrrad' statt 'das " +
-        "Fahrrad').",
+    Assertions.assertEquals("M\u00f6glicherweise fehlende grammatische \u00dcbereinstimmung des "
+        + "Genus (m\u00e4nnlich, weiblich, s\u00e4chlich - Beispiel: 'der Fahrrad' statt 'das "
+        + "Fahrrad').",
         matches.get(1).getMessage());
     Assertions.assertEquals(3, matches.get(1).getSuggestedReplacements().size());
     Assertions.assertEquals("ein Test", matches.get(1).getSuggestedReplacements().get(0));
@@ -93,9 +93,9 @@ public class DocumentCheckerTest {
     testMatches(checkingResult.getKey(), 8, 10, 58, 75);
 
     document = createDocument("latex",
-        "This is a qwertyzuiopa\\footnote{This is another qwertyzuiopb.}.\n" +
-        "% ltex: language=de-DE\n" +
-        "Dies ist ein Qwertyzuiopc\\todo[name]{Dies ist ein weiteres Qwertyzuiopd.}.\n");
+        "This is a qwertyzuiopa\\footnote{This is another qwertyzuiopb.}.\n"
+        + "% ltex: language=de-DE\n"
+        + "Dies ist ein Qwertyzuiopc\\todo[name]{Dies ist ein weiteres Qwertyzuiopd.}.\n");
     checkingResult = checkDocument(document);
     List<LanguageToolRuleMatch> matches = checkingResult.getKey();
     List<AnnotatedTextFragment> annotatedTextFragments = checkingResult.getValue();
@@ -146,8 +146,8 @@ public class DocumentCheckerTest {
     Assertions.assertEquals("Dies ist ein weiteres Qwertyzuiopd.",
         annotatedTextFragments.get(2).getAnnotatedText().getPlainText());
 
-    Assertions.assertEquals("% ltex: language=de-DE\n" +
-        "Dies ist ein Qwertyzuiopc\\todo[name]{Dies ist ein weiteres Qwertyzuiopd.}.\n",
+    Assertions.assertEquals("% ltex: language=de-DE\n"
+        + "Dies ist ein Qwertyzuiopc\\todo[name]{Dies ist ein weiteres Qwertyzuiopd.}.\n",
         annotatedTextFragments.get(3).getCodeFragment().getCode());
     Assertions.assertEquals("Dies ist ein Qwertyzuiopc. ",
         annotatedTextFragments.get(3).getAnnotatedText().getPlainText());
@@ -156,8 +156,8 @@ public class DocumentCheckerTest {
   @Test
   public void testMarkdown() {
     TextDocumentItem document = createDocument("markdown",
-        "This is an **test.**\n\n[comment]: <> \"LTeX: language=de-DE\"\n\n" +
-        "Dies ist eine **Test**.\n");
+        "This is an **test.**\n\n[comment]: <> \"LTeX: language=de-DE\"\n\n"
+        + "Dies ist eine **Test**.\n");
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         checkDocument(document);
     testMatches(checkingResult.getKey(), 8, 10, 69, 80);

@@ -68,8 +68,8 @@ public class DocumentChecker {
     if (languageToolInterface == null) {
       Tools.logger.warning(Tools.i18n("skippingTextCheck"));
       return Collections.emptyList();
-    } else if ((settings.getDictionary().size() >= 1) &&
-        "BsPlInEs".equals(settings.getDictionary().get(0))) {
+    } else if ((settings.getDictionary().size() >= 1)
+          && "BsPlInEs".equals(settings.getDictionary().get(0))) {
       languageToolInterface.enableEasterEgg();
     }
 
@@ -122,8 +122,8 @@ public class DocumentChecker {
         sentence = sentence.trim();
 
         for (IgnoreRuleSentencePair pair : ignoreRuleSentencePairs) {
-          if (pair.getRuleId().equals(ruleId) &&
-                pair.getSentencePattern().matcher(sentence).find()) {
+          if (pair.getRuleId().equals(ruleId)
+                && pair.getSentencePattern().matcher(sentence).find()) {
             Tools.logger.info(Tools.i18n("removingIgnoredRuleMatch", ruleId, sentence));
             ignoreMatches.add(match);
             break;
@@ -132,9 +132,9 @@ public class DocumentChecker {
       }
 
       if (!ignoreMatches.isEmpty()) {
-        Tools.logger.info((ignoreMatches.size() == 1) ?
-            Tools.i18n("removedIgnoredRuleMatch") :
-            Tools.i18n("removedIgnoredRuleMatches", ignoreMatches.size()));
+        Tools.logger.info((ignoreMatches.size() == 1)
+            ? Tools.i18n("removedIgnoredRuleMatch")
+            : Tools.i18n("removedIgnoredRuleMatches", ignoreMatches.size()));
         for (LanguageToolRuleMatch match : ignoreMatches) matches.remove(match);
       }
     }

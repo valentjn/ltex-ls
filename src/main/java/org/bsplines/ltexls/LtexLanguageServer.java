@@ -224,8 +224,8 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
       @Override
       public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
-        if (CodeActionGenerator.getCommandNames().contains(params.getCommand()) &&
-              (languageClient != null)) {
+        if (CodeActionGenerator.getCommandNames().contains(params.getCommand())
+              && (languageClient != null)) {
           languageClient.telemetryEvent(params.getArguments().get(0));
           return CompletableFuture.completedFuture(true);
         } else {

@@ -13,9 +13,9 @@ public class LatexFragmentizerTest {
   private static void testCodeLanguage(String codeLanguageId) {
     CodeFragmentizer fragmentizer = CodeFragmentizer.create(codeLanguageId, new Settings());
     List<CodeFragment> codeFragments = fragmentizer.fragmentize(
-        "Sentence\\footnote[abc]{Footnote} 1\n" +
-        "\t\t  %\t ltex: language=de-DE\nSentence 2\\todo{Todo note}\n" +
-        "%ltex:\tlanguage=en-US\n\nSentence 3\n");
+        "Sentence\\footnote[abc]{Footnote} 1\n"
+        + "\t\t  %\t ltex: language=de-DE\nSentence 2\\todo{Todo note}\n"
+        + "%ltex:\tlanguage=en-US\n\nSentence 3\n");
     Assertions.assertEquals(5, codeFragments.size());
 
     Assertions.assertEquals(codeLanguageId, codeFragments.get(0).getCodeLanguageId());

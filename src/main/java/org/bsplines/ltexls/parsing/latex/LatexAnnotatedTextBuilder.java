@@ -126,12 +126,12 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
         dummy = "";
       }
     } else if (curMode == Mode.DISPLAY_MATH) {
-      dummy = ((lastSpace.isEmpty() ? " " : "")) +
-          dummyGenerator.generate(language, dummyCounter++) +
-          dummyLastPunctuation + ((modeStack.peek() == Mode.INLINE_TEXT) ? dummyLastSpace : " ");
+      dummy = ((lastSpace.isEmpty() ? " " : ""))
+          + dummyGenerator.generate(language, dummyCounter++)
+          + dummyLastPunctuation + ((modeStack.peek() == Mode.INLINE_TEXT) ? dummyLastSpace : " ");
     } else {
-      dummy = dummyGenerator.generate(language, dummyCounter++) + dummyLastPunctuation +
-          dummyLastSpace;
+      dummy = dummyGenerator.generate(language, dummyCounter++) + dummyLastPunctuation
+          + dummyLastSpace;
     }
 
     dummyLastSpace = "";
@@ -222,14 +222,14 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private String getDebugInformation(String code) {
     String remainingCode = StringEscapeUtils.escapeJava(
         code.substring(pos, Math.min(pos + 100, code.length())));
-    return "Remaining code = \"" + remainingCode +
-        "\", pos = " + pos + ", dummyCounter = " + dummyCounter + ", lastSpace = \"" + lastSpace +
-        "\", lastPunctuation = \"" + lastPunctuation + "\", dummyLastSpace = \"" + dummyLastSpace +
-        "\", dummyLastPunctuation = \"" + dummyLastPunctuation +
-        "\", isMathEmpty = " + isMathEmpty + ", preserveDummyLast = " + preserveDummyLast +
-        ", canInsertSpaceBeforeDummy = " + canInsertSpaceBeforeDummy +
-        ", isMathCharTrivial = " + isMathCharTrivial + ", modeStack = " + modeStack +
-        ", curChar = \"" + curChar + "\", curString = \"" + curString + "\", curMode = " + curMode;
+    return "Remaining code = \"" + remainingCode
+        + "\", pos = " + pos + ", dummyCounter = " + dummyCounter + ", lastSpace = \"" + lastSpace
+        + "\", lastPunctuation = \"" + lastPunctuation + "\", dummyLastSpace = \"" + dummyLastSpace
+        + "\", dummyLastPunctuation = \"" + dummyLastPunctuation
+        + "\", isMathEmpty = " + isMathEmpty + ", preserveDummyLast = " + preserveDummyLast
+        + ", canInsertSpaceBeforeDummy = " + canInsertSpaceBeforeDummy
+        + ", isMathCharTrivial = " + isMathCharTrivial + ", modeStack = " + modeStack
+        + ", curChar = \"" + curChar + "\", curString = \"" + curString + "\", curMode = " + curMode;
   }
 
   private static boolean containsTwoEndsOfLine(String text) {
@@ -310,8 +310,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                   popMode();
                   interpretAs = generateDummy();
                 }
-              } else if (command.equals("\\begin") &&
-                  ignoreEnvironments.contains(environmentName)) {
+              } else if (command.equals("\\begin")
+                    && ignoreEnvironments.contains(environmentName)) {
                 modeStack.push(Mode.IGNORE_ENVIRONMENT);
                 ignoreEnvironmentEndPattern = Pattern.compile(
                     "^\\\\end\\{" + Pattern.quote(environmentName) + "\\}");
@@ -347,8 +347,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               }
             } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
               addMarkup(command, command.substring(1));
-            } else if (command.equals("\\[") || command.equals("\\]") ||
-                command.equals("\\(") || command.equals("\\)")) {
+            } else if (command.equals("\\[") || command.equals("\\]")
+                  || command.equals("\\(") || command.equals("\\)")) {
               if (command.equals("\\[")) {
                 enterDisplayMath();
                 addMarkup(command);
@@ -369,9 +369,9 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               addMarkup(command, "\u00df");
             } else if (command.equals("\\o")) {
               addMarkup(command, "\u00f8");
-            } else if (command.equals("\\`") || command.equals("\\'") || command.equals("\\^") ||
-                command.equals("\\~") || command.equals("\\\"") || command.equals("\\=") ||
-                command.equals("\\.")) {
+            } else if (command.equals("\\`") || command.equals("\\'") || command.equals("\\^")
+                  || command.equals("\\~") || command.equals("\\\"") || command.equals("\\=")
+                  || command.equals("\\.")) {
               Matcher matcher = accentPattern1.matcher(code.substring(pos));
 
               if (matcher.find()) {
@@ -523,10 +523,11 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               }
             } else if (command.equals("\\-")) {
               addMarkup(command);
-            } else if (command.equals("\\ ") || command.equals("\\,") || command.equals("\\;") ||
-                command.equals("\\\\") || command.equals("\\hfill") || command.equals("\\hspace") ||
-                command.equals("\\hspace*") || command.equals("\\quad") ||
-                command.equals("\\qquad") || command.equals("\\newline")) {
+            } else if (command.equals("\\ ") || command.equals("\\,") || command.equals("\\;")
+                  || command.equals("\\\\") || command.equals("\\hfill")
+                  || command.equals("\\hspace") || command.equals("\\hspace*")
+                  || command.equals("\\quad") || command.equals("\\qquad")
+                  || command.equals("\\newline")) {
               if (command.equals("\\hspace") || command.equals("\\hspace*")) {
                 String argument = matchFromPosition(argumentPattern, pos + command.length());
                 command += argument;
@@ -552,9 +553,9 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                   addMarkup(command, space);
                 }
               }
-            } else if (command.equals("\\dots") ||
-                  command.equals("\\eg") || command.equals("\\egc") || command.equals("\\euro") ||
-                  command.equals("\\ie") || command.equals("\\iec")) {
+            } else if (command.equals("\\dots")
+                  || command.equals("\\eg") || command.equals("\\egc") || command.equals("\\euro")
+                  || command.equals("\\ie") || command.equals("\\iec")) {
               String interpretAs = "";
 
               if (!isMathMode(curMode)) {
@@ -577,14 +578,14 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
             } else if (command.equals("\\notag") || command.equals("\\qed")) {
               preserveDummyLast = true;
               addMarkup(command);
-            } else if (command.equals("\\part") || command.equals("\\chapter") ||
-                  command.equals("\\section") || command.equals("\\subsection") ||
-                  command.equals("\\subsubsection") || command.equals("\\paragraph") ||
-                  command.equals("\\subparagraph") ||
-                  command.equals("\\part*") || command.equals("\\chapter*") ||
-                  command.equals("\\section*") || command.equals("\\subsection*") ||
-                  command.equals("\\subsubsection*") || command.equals("\\paragraph*") ||
-                  command.equals("\\subparagraph*")) {
+            } else if (command.equals("\\part") || command.equals("\\chapter")
+                  || command.equals("\\section") || command.equals("\\subsection")
+                  || command.equals("\\subsubsection") || command.equals("\\paragraph")
+                  || command.equals("\\subparagraph")
+                  || command.equals("\\part*") || command.equals("\\chapter*")
+                  || command.equals("\\section*") || command.equals("\\subsection*")
+                  || command.equals("\\subsubsection*") || command.equals("\\paragraph*")
+                  || command.equals("\\subparagraph*")) {
               modeStack.push(Mode.HEADING);
               addMarkup(command + "{");
             } else if (command.equals("\\text") || command.equals("\\intertext")) {
@@ -689,8 +690,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
           case '\n':
           case '\r':
           case '\t': {
-            String whiteSpace = (((curChar != '~') && (curChar != '&')) ?
-                matchFromPosition(whiteSpacePattern) : curString);
+            String whiteSpace = (((curChar != '~') && (curChar != '&'))
+                ? matchFromPosition(whiteSpacePattern) : curString);
             preserveDummyLast = true;
             isMathCharTrivial = true;
 

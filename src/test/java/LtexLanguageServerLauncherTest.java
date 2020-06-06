@@ -73,8 +73,7 @@ public class LtexLanguageServerLauncherTest {
     public JsonObject body;
 
     private static Pattern logPattern = Pattern.compile(
-        "\\[[^\\]]+\\] (\\S+) (\\S+) '([^' ]+)(?: - \\(([^\\)]+)\\))?'.*\\R" +
-        "(?:Params|Result): ");
+        "\\[[^\\]]+\\] (\\S+) (\\S+) '([^' ]+)(?: - \\(([^\\)]+)\\))?'.*\\R(?:Params|Result): ");
     private static Pattern headerPattern = Pattern.compile("(\\S+): (.*)\r\n");
 
     public Message(Source source, Type type, @Nullable String id, String method,

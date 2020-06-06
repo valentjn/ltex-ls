@@ -106,8 +106,8 @@ public class Settings {
 
       try {
         dictionary.addAll(convertJsonArrayToList(
-            getSettingFromJSON(jsonSettings, "dictionary").getAsJsonObject().
-            get(languageShortCode).getAsJsonArray()));
+            getSettingFromJSON(jsonSettings, "dictionary").getAsJsonObject()
+            .get(languageShortCode).getAsJsonArray()));
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       }
 
@@ -120,8 +120,8 @@ public class Settings {
 
       try {
         disabledRules.addAll(convertJsonArrayToList(
-            getSettingFromJSON(jsonSettings, "disabledRules").getAsJsonObject().
-            get(languageShortCode).getAsJsonArray()));
+            getSettingFromJSON(jsonSettings, "disabledRules").getAsJsonObject()
+            .get(languageShortCode).getAsJsonArray()));
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       }
 
@@ -134,8 +134,8 @@ public class Settings {
 
       try {
         enabledRules.addAll(convertJsonArrayToList(
-            getSettingFromJSON(jsonSettings, "enabledRules").getAsJsonObject().
-            get(languageShortCode).getAsJsonArray()));
+            getSettingFromJSON(jsonSettings, "enabledRules").getAsJsonObject()
+            .get(languageShortCode).getAsJsonArray()));
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       }
 
@@ -335,9 +335,9 @@ public class Settings {
       return false;
     }
 
-    if ((neuralNetworkModelRulesDirectory == null) ?
-          (other.neuralNetworkModelRulesDirectory != null) :
-          !neuralNetworkModelRulesDirectory.equals(other.neuralNetworkModelRulesDirectory)) {
+    if ((neuralNetworkModelRulesDirectory == null)
+          ? (other.neuralNetworkModelRulesDirectory != null)
+          : !neuralNetworkModelRulesDirectory.equals(other.neuralNetworkModelRulesDirectory)) {
       return false;
     }
 
@@ -367,25 +367,25 @@ public class Settings {
     hash = 53 * hash + ((dictionary != null) ? dictionary.hashCode() : 0);
     hash = 53 * hash + ((disabledRules != null) ? disabledRules.hashCode() : 0);
     hash = 53 * hash + ((enabledRules != null) ? enabledRules.hashCode() : 0);
-    hash = 53 * hash + ((languageToolHttpServerUri != null) ?
-        languageToolHttpServerUri.hashCode() : 0);
+    hash = 53 * hash + ((languageToolHttpServerUri != null)
+        ? languageToolHttpServerUri.hashCode() : 0);
     hash = 53 * hash + ((dummyCommandPrototypes != null) ? dummyCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreCommandPrototypes != null) ? ignoreCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreEnvironments != null) ? ignoreEnvironments.hashCode() : 0);
-    hash = 53 * hash + ((dummyMarkdownNodeTypes != null) ?
-        dummyMarkdownNodeTypes.hashCode() : 0);
-    hash = 53 * hash + ((ignoreMarkdownNodeTypes != null) ?
-        ignoreMarkdownNodeTypes.hashCode() : 0);
+    hash = 53 * hash + ((dummyMarkdownNodeTypes != null)
+        ? dummyMarkdownNodeTypes.hashCode() : 0);
+    hash = 53 * hash + ((ignoreMarkdownNodeTypes != null)
+        ? ignoreMarkdownNodeTypes.hashCode() : 0);
     hash = 53 * hash + ((ignoreRuleSentencePairs != null) ? ignoreRuleSentencePairs.hashCode() : 0);
     hash = 53 * hash + ((motherTongueShortCode != null) ? motherTongueShortCode.hashCode() : 0);
-    hash = 53 * hash + ((languageModelRulesDirectory != null) ?
-        languageModelRulesDirectory.hashCode() : 0);
-    hash = 53 * hash + ((neuralNetworkModelRulesDirectory != null) ?
-        neuralNetworkModelRulesDirectory.hashCode() : 0);
-    hash = 53 * hash + ((word2VecModelRulesDirectory != null) ?
-        word2VecModelRulesDirectory.hashCode() : 0);
-    hash = 53 * hash + ((sentenceCacheSize != null) ?
-        sentenceCacheSize.hashCode() : 0);
+    hash = 53 * hash + ((languageModelRulesDirectory != null)
+        ? languageModelRulesDirectory.hashCode() : 0);
+    hash = 53 * hash + ((neuralNetworkModelRulesDirectory != null)
+        ? neuralNetworkModelRulesDirectory.hashCode() : 0);
+    hash = 53 * hash + ((word2VecModelRulesDirectory != null)
+        ? word2VecModelRulesDirectory.hashCode() : 0);
+    hash = 53 * hash + ((sentenceCacheSize != null)
+        ? sentenceCacheSize.hashCode() : 0);
     hash = 53 * hash + ((diagnosticSeverity != null) ? diagnosticSeverity.hashCode() : 0);
 
     return hash;
