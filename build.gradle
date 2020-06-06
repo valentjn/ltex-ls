@@ -4,6 +4,7 @@ plugins {
   id 'jacoco'
   id 'com.github.kt3k.coveralls' version '2.10.1'
   id 'com.github.spotbugs' version '4.2.4'
+  id 'org.checkerframework' version '0.5.2'
 }
 
 allprojects {
@@ -16,6 +17,18 @@ allprojects {
 
   apply(plugin: 'java')
   apply(plugin: 'com.github.spotbugs')
+  apply(plugin: 'org.checkerframework')
+
+  spotbugs {
+    excludeFilter = file("${rootDir}/.spotbugs-exclude.xml")
+  }
+}
+
+// don't use Checker Framework for ltex-ls-languagetool-patch
+checkerFramework {
+  checkers = [
+    'org.checkerframework.checker.nullness.NullnessChecker',
+  ]
 }
 
 project(':ltex-ls-languagetool-patch') {

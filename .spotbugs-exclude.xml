@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+  <Match>
+    <Bug pattern="NP_NONNULL_PARAM_VIOLATION,NP_NONNULL_RETURN_VIOLATION,RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
+  </Match>
+</FindBugsFilter>
