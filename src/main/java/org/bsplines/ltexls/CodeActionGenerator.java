@@ -174,16 +174,16 @@ public class CodeActionGenerator {
         diagnostics.add(createDiagnostic(match, positionCalculator));
       }
 
-      Command command = new Command(((ruleIdSentencePairs.size() == 1)
-          ? Tools.i18n("ignoreRuleInThisSentence")
-          : Tools.i18n("ignoreAllRulesInTheSelectedSentences")),
-          ignoreRuleInSentenceCommandName);
       JsonObject arguments = new JsonObject();
       arguments.addProperty("type", "command");
       arguments.addProperty("command", ignoreRuleInSentenceCommandName);
       arguments.addProperty("uri", document.getUri());
       arguments.add("ruleId", ruleIdsJson);
       arguments.add("sentencePattern", sentencePatternStringsJson);
+      Command command = new Command(((ruleIdSentencePairs.size() == 1)
+          ? Tools.i18n("ignoreRuleInThisSentence")
+          : Tools.i18n("ignoreAllRulesInTheSelectedSentences")),
+          ignoreRuleInSentenceCommandName);
       command.setArguments(Arrays.asList(arguments));
 
       CodeAction codeAction = new CodeAction(command.getTitle());
@@ -209,14 +209,14 @@ public class CodeActionGenerator {
         diagnostics.add(createDiagnostic(match, positionCalculator));
       }
 
-      Command command = new Command(((ruleIds.size() == 1)
-          ? Tools.i18n("disableRule") : Tools.i18n("disableAllRulesWithMatchesInSelection")),
-          disableRuleCommandName);
       JsonObject arguments = new JsonObject();
       arguments.addProperty("type", "command");
       arguments.addProperty("command", disableRuleCommandName);
       arguments.addProperty("uri", document.getUri());
       arguments.add("ruleId", ruleIdsJson);
+      Command command = new Command(((ruleIds.size() == 1)
+          ? Tools.i18n("disableRule") : Tools.i18n("disableAllRulesWithMatchesInSelection")),
+          disableRuleCommandName);
       command.setArguments(Arrays.asList(arguments));
 
       CodeAction codeAction = new CodeAction(command.getTitle());
@@ -313,15 +313,15 @@ public class CodeActionGenerator {
       diagnostics.add(createDiagnostic(match, positionCalculator));
     }
 
-    Command command = new Command(((unknownWords.size() == 1)
-        ? Tools.i18n("addWordToDictionary", unknownWords.get(0))
-        : Tools.i18n("addAllUnknownWordsInSelectionToDictionary")),
-        addToDictionaryCommandName);
     JsonObject arguments = new JsonObject();
     arguments.addProperty("type", "command");
     arguments.addProperty("command", addToDictionaryCommandName);
     arguments.addProperty("uri", document.getUri());
     arguments.add("word", unknownWordsJson);
+    Command command = new Command(((unknownWords.size() == 1)
+        ? Tools.i18n("addWordToDictionary", unknownWords.get(0))
+        : Tools.i18n("addAllUnknownWordsInSelectionToDictionary")),
+        addToDictionaryCommandName);
     command.setArguments(Arrays.asList(arguments));
 
     CodeAction codeAction = new CodeAction(command.getTitle());

@@ -92,7 +92,6 @@ public class LatexCommandSignature {
   public static String matchArgumentFromPosition(
         String code, int fromPos, ArgumentType argumentType) {
     int pos = fromPos;
-    Stack<ArgumentType> argumentTypeStack = new Stack<>();
     char openChar = '\0';
 
     switch (argumentType) {
@@ -116,6 +115,8 @@ public class LatexCommandSignature {
 
     if (code.charAt(pos) != openChar) return "";
     pos++;
+
+    Stack<ArgumentType> argumentTypeStack = new Stack<>();
     argumentTypeStack.push(argumentType);
 
     while (pos < code.length()) {
