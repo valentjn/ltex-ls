@@ -38,11 +38,16 @@
             <property name="message"
              value="Consider using special escape sequence instead of octal value or Unicode escaped value."/>
         </module>
-        <module name="AvoidEscapedUnicodeCharacters">
+        <!--
+            ltex-ls: Allowing Unicode characters in code leads to problems with different editors
+            and different platforms (example Travis build under Windows).
+            It's better when code is ASCII-only.
+        -->
+        <!--<module name="AvoidEscapedUnicodeCharacters">
             <property name="allowEscapesForControlCharacters" value="true"/>
             <property name="allowByTailComment" value="true"/>
             <property name="allowNonPrintableEscapes" value="true"/>
-        </module>
+        </module>-->
         <module name="LineLength">
             <property name="max" value="100"/>
             <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
