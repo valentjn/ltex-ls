@@ -51,6 +51,10 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   private DocumentChecker documentChecker;
   private CodeActionGenerator codeActionGenerator;
 
+  /**
+   * Constructor.
+   * Note: The object cannot be used before @c connect() has been called.
+   */
   public LtexLanguageServer() {
     this.documents = new HashMap<>();
     this.settingsManager = new SettingsManager();

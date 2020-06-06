@@ -25,6 +25,11 @@ public class AnnotatedTextFragment {
     return codeFragment;
   }
 
+  /**
+   * Compute the inverse of the annotated text, where plain text and original text switch roles.
+   *
+   * @return inverted annotated text
+   */
   public AnnotatedText invert() {
     List<Map.Entry<Integer, Integer>> mapping = annotatedText.getMapping();
     List<Map.Entry<Integer, Integer>> inverseMapping = new ArrayList<>();

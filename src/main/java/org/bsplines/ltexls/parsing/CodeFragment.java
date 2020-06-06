@@ -9,6 +9,14 @@ public class CodeFragment {
   private int fromPos;
   private Settings settings;
 
+  /**
+   * Constructor.
+   *
+   * @param codeLanguageId ID of the code language
+   * @param code code of the fragment
+   * @param fromPos from position of the fragment (inclusive)
+   * @param settings settings to apply to this fragment
+   */
   public CodeFragment(String codeLanguageId, String code, int fromPos, Settings settings) {
     this.codeLanguageId = codeLanguageId;
     this.code = code;

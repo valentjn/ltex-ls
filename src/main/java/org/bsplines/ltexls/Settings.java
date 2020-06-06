@@ -41,6 +41,11 @@ public class Settings {
   public Settings() {
   }
 
+  /**
+   * Copy constructor.
+   *
+   * @param obj object to copy
+   */
   public Settings(Settings obj) {
     this.languageShortCode = obj.languageShortCode;
     this.dictionary = ((obj.dictionary == null) ? null : new ArrayList<>(obj.dictionary));
@@ -85,6 +90,11 @@ public class Settings {
     return result;
   }
 
+  /**
+   * Set settings from JSON.
+   *
+   * @param jsonSettings JSON settings given by the language server
+   */
   public void setSettings(@UnknownInitialization(Object.class) Settings this,
         JsonElement jsonSettings) {
     try {

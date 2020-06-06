@@ -25,6 +25,12 @@ public class LatexFragmentizer extends CodeFragmentizer {
 
   private RegexCodeFragmentizer commentFragmentizer;
 
+  /**
+   * Constructor.
+   *
+   * @param codeLanguageId ID of the code language
+   * @param originalSettings settings at the beginning of the document
+   */
   public LatexFragmentizer(String codeLanguageId, Settings originalSettings) {
     super(codeLanguageId, originalSettings);
     commentFragmentizer = new RegexCodeFragmentizer(

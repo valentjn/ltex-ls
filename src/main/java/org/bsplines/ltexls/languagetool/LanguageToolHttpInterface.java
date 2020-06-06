@@ -43,6 +43,13 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
   private List<String> enabledRuleIds;
   private List<String> disabledRuleIds;
 
+  /**
+   * Constructor.
+   *
+   * @param uri URI of the LanguageTool HTTP server
+   * @param languageShortCode short code of the checking language
+   * @param motherTongueShortCode short code of the mother tongue language
+   */
   public LanguageToolHttpInterface(String uri, String languageShortCode,
         String motherTongueShortCode) {
     this.languageShortCode = languageShortCode;

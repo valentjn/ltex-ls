@@ -9,6 +9,12 @@ public class IgnoreRuleSentencePair {
   private final String sentenceString;
   private final Pattern sentencePattern;
 
+  /**
+   * Constructor.
+   *
+   * @param ruleId ID of the LanguageTool rule
+   * @param sentenceString regular expression of the sentence to ignore
+   */
   public IgnoreRuleSentencePair(String ruleId, String sentenceString) {
     this.ruleId = ruleId;
     this.sentenceString = sentenceString;

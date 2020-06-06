@@ -14,6 +14,16 @@ public class LanguageToolRuleMatch {
   private String message;
   private List<String> suggestedReplacements;
 
+  /**
+   * Constructor.
+   *
+   * @param ruleId ID of the LanguageTool rule
+   * @param sentence sentence in which the rule match occurred
+   * @param fromPos from position of the rule match (inclusive)
+   * @param toPos to position of the rule match (exclusive)
+   * @param message message of the rule
+   * @param suggestedReplacements list of suggested replacements for the match
+   */
   public LanguageToolRuleMatch(@Nullable String ruleId, @Nullable String sentence,
         int fromPos, int toPos, String message, List<String> suggestedReplacements) {
     if (ruleId != null) this.ruleId = ruleId;

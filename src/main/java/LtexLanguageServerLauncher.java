@@ -11,6 +11,12 @@ import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
 
 public class LtexLanguageServerLauncher {
+  /**
+   * Launch the LTeX language server.
+   *
+   * @param in InputStream to listen for client input
+   * @param out OutputStream to write server output to
+   */
   public static void launch(InputStream in, OutputStream out) throws
         InterruptedException, ExecutionException {
     LtexLanguageServer server = new LtexLanguageServer();
@@ -23,6 +29,12 @@ public class LtexLanguageServerLauncher {
     listener.get();
   }
 
+  /**
+   * Main method. Checks command-line arguments and launches the LTeX language server with
+   * @c System.in and @c System.out as streams.
+   *
+   * @param args command-line arguments
+   */
   public static void main(String[] args) throws InterruptedException, ExecutionException {
     for (String arg : args) {
       if (arg.equals("--version")) {

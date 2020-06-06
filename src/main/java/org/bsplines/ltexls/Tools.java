@@ -21,6 +21,13 @@ public class Tools {
     logger.addHandler(new ConsoleHandler());
   }
 
+  /**
+   * Format an internationalized message.
+   *
+   * @param key key of the internationalized message
+   * @param messageArguments values to insert into the message
+   * @return formatted message
+   */
   public static String i18n(String key, @Nullable Object... messageArguments) {
     if (messages == null) return "could not get MessagesBundle";
     MessageFormat formatter = new MessageFormat("");
@@ -34,6 +41,9 @@ public class Tools {
     return formatter.format(args);
   }
 
+  /**
+   * Load the internationalized messages according to the default system locale.
+   */
   public static void setDefaultLocale() {
     try {
       setLocale(Locale.getDefault());

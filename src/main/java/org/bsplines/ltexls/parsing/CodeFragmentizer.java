@@ -36,6 +36,13 @@ public abstract class CodeFragmentizer {
     this.originalSettings = originalSettings;
   }
 
+  /**
+   * Create a @c CodeFragmentizer according to the given code langugage.
+   *
+   * @param codeLanguageId ID of the code language
+   * @param originalSettings settings at the beginning of the document
+   * @return corresponding @c CodeFragmentizer
+   */
   public static CodeFragmentizer create(String codeLanguageId, Settings originalSettings) {
     @Nullable Function<String, Function<Settings, CodeFragmentizer>> constructor =
         constructorMap.get(codeLanguageId);

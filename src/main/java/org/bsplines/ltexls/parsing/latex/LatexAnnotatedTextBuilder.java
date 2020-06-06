@@ -139,6 +139,12 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     return dummy;
   }
 
+  /**
+   * Add plain text to the builder.
+   *
+   * @param text plain text
+   * @return @c this
+   */
   public LatexAnnotatedTextBuilder addText(String text) {
     if (text.isEmpty()) return this;
     super.addText(text);
@@ -147,6 +153,12 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     return this;
   }
 
+  /**
+   * Add LaTeX markup to the builder.
+   *
+   * @param markup LaTeX code
+   * @return @c this
+   */
   public LatexAnnotatedTextBuilder addMarkup(String markup) {
     if (markup.isEmpty()) return this;
     super.addMarkup(markup);
@@ -162,6 +174,13 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     return this;
   }
 
+  /**
+   * Add LaTeX markup to the builder.
+   *
+   * @param markup LaTeX code
+   * @param interpretAs replacement text for the resulting plain text
+   * @return @c this
+   */
   public LatexAnnotatedTextBuilder addMarkup(String markup, String interpretAs) {
     if (interpretAs.isEmpty()) {
       return addMarkup(markup);
@@ -237,6 +256,12 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     return (text.contains("\n\n") || text.contains("\r\r") || text.contains("\r\n\r\n"));
   }
 
+  /**
+   * Add LaTeX code to the builder, i.e., parse it and call @c addText and @c addMarkup.
+   *
+   * @param code LaTeX code
+   * @return @c this
+   */
   public LatexAnnotatedTextBuilder addCode(String code) {
     this.code = code;
     pos = 0;
@@ -820,6 +845,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     return this;
   }
 
+  @Override
   public void setSettings(Settings settings) {
     language = settings.getLanguageShortCode();
 

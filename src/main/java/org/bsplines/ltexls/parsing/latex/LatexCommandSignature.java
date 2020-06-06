@@ -45,6 +45,13 @@ public class LatexCommandSignature {
     this(commandPrototype, action, DummyGenerator.getDefault());
   }
 
+  /**
+   * Constructor.
+   *
+   * @param commandPrototype prototype of the command including backslash and empty arguments
+   * @param action action to perform when the command is matched
+   * @param dummyGenerator dummy generator, can be used to generate plural dummies
+   */
   public LatexCommandSignature(String commandPrototype, Action action,
         DummyGenerator dummyGenerator) {
     this.dummyGenerator = dummyGenerator;
@@ -89,6 +96,16 @@ public class LatexCommandSignature {
     return (matcher.find() ? matcher.group() : "");
   }
 
+  /**
+   * Try to match a specific argument type against the given code, starting from the given position.
+   *
+   * @param code LaTeX code to match against
+   * @param fromPos from position to start matching (inclusive, should be the position of the
+   *                opening brace/bracket/parenthesis)
+   * @param argumentType type of the argument to match
+   * @return matched argument including braces/brackets/parenthesis;
+   *         empty string if matching failed
+   */
   public static String matchArgumentFromPosition(
         String code, int fromPos, ArgumentType argumentType) {
     int pos = fromPos;
@@ -174,6 +191,15 @@ public class LatexCommandSignature {
     return "";
   }
 
+  /**
+   * Try to match the LaTeX command against the given code, starting from the given position.
+   *
+   * @param code LaTeX code to match against
+   * @param fromPos from position to start matching (inclusive, should be the position of the
+   *                backslash)
+   * @return list of from/to position pairs of the arguments (inclusive/exclusive);
+   *         @c null if matching failed
+   */
   public @Nullable List<Pair<Integer, Integer>> matchArgumentsFromPosition(
         String code, int fromPos) {
     List<Pair<Integer, Integer>> arguments = new ArrayList<>();

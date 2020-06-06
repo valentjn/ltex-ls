@@ -34,6 +34,9 @@ public class LtexLanguageServerLauncherTest {
   private PipedInputStream pipedInputStream = new PipedInputStream();
   private PipedOutputStream pipedOutputStream = new PipedOutputStream();
 
+  /**
+   * Set up test class.
+   */
   @BeforeAll
   public void setUp() throws InterruptedException, IOException {
     pipedInputStream.connect(out);
@@ -48,6 +51,9 @@ public class LtexLanguageServerLauncherTest {
     Thread.sleep(5000);
   }
 
+  /**
+   * Tear down test class.
+   */
   @AfterAll
   public void tearDown() throws IOException {
     if (launcherThread != null) launcherThread.interrupt();

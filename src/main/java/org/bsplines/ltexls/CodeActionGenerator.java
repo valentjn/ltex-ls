@@ -78,6 +78,13 @@ public class CodeActionGenerator {
         && (position1.getCharacter() < position2.getCharacter())));
   }
 
+  /**
+   * Create diagnostic from rule match.
+   *
+   * @param match LanguageTool rule match
+   * @param positionCalculator DocumentPositionCalculator for corresponding document
+   * @return diagnostic corresponding to @c match
+   */
   public Diagnostic createDiagnostic(
         LanguageToolRuleMatch match, DocumentPositionCalculator positionCalculator) {
     Diagnostic ret = new Diagnostic();
@@ -90,6 +97,14 @@ public class CodeActionGenerator {
     return ret;
   }
 
+  /**
+   * Generate list of commands and code actions after checking a document.
+   *
+   * @param params parameters of @c CodeAction method
+   * @param document document
+   * @param checkingResult lists of rule matches and annotated text fragments
+   * @return list of commands and code actions
+   */
   public List<Either<Command, CodeAction>> generate(
         CodeActionParams params, TextDocumentItem document,
         Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) {

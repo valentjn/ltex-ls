@@ -30,6 +30,9 @@ public class LanguageToolHttpInterfaceTest {
   private DocumentChecker documentChecker = new DocumentChecker(settingsManager);
   private @MonotonicNonNull Thread serverThread;
 
+  /**
+   * Set up test class.
+   */
   @BeforeAll
   public void setUp() throws InterruptedException {
     serverThread = new Thread(() -> {
@@ -45,6 +48,9 @@ public class LanguageToolHttpInterfaceTest {
     settingsManager.setSettings(settings);
   }
 
+  /**
+   * Tear down test class.
+   */
   @AfterAll
   public void tearDown() {
     if (serverThread != null) serverThread.interrupt();

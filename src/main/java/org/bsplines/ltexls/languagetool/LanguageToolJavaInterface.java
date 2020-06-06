@@ -33,6 +33,14 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
   private static final int resultCacheExpireAfterMinutes = 10;
 
+  /**
+   * Constructor.
+   *
+   * @param languageShortCode short code of the checking language
+   * @param motherTongueShortCode short code of the mother tongue language
+   * @param sentenceCacheSize size of the sentence cache in sentences
+   * @param dictionary list of words of the user dictionary
+   */
   public LanguageToolJavaInterface(String languageShortCode, String motherTongueShortCode,
         int sentenceCacheSize, List<String> dictionary) {
     if (!Languages.isLanguageSupported(languageShortCode)) {
