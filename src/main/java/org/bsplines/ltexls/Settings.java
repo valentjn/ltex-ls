@@ -397,8 +397,8 @@ public class Settings {
     return hash;
   }
 
-  private static <T> T getDefault(@Nullable T obj, T default_) {
-    return ((obj != null) ? obj : default_);
+  private static <T> T getDefault(@Nullable T obj, T defaultValue) {
+    return ((obj != null) ? obj : defaultValue);
   }
 
   public String getLanguageShortCode() {
