@@ -111,10 +111,11 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
           return CompletableFuture.completedFuture(Collections.emptyList());
         }
 
-        return checkDocument(document).thenApply(
-              (Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) -> {
-          return codeActionGenerator.generate(params, document, checkingResult);
-        });
+        return checkDocument(document)
+            .thenApply((Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>
+            checkingResult) -> {
+              return codeActionGenerator.generate(params, document, checkingResult);
+            });
       }
 
       @Override
@@ -160,19 +161,20 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   }
 
   private CompletableFuture<List<Diagnostic>> getIssues(TextDocumentItem document) {
-    return checkDocument(document).thenApply(
-          (Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) -> {
-      List<LanguageToolRuleMatch> matches = checkingResult.getKey();
-      DocumentPositionCalculator positionCalculator =
-          new DocumentPositionCalculator(document.getText());
-      List<Diagnostic> diagnostics = new ArrayList<>();
+    return checkDocument(document)
+        .thenApply((Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>
+        checkingResult) -> {
+          List<LanguageToolRuleMatch> matches = checkingResult.getKey();
+          DocumentPositionCalculator positionCalculator =
+              new DocumentPositionCalculator(document.getText());
+          List<Diagnostic> diagnostics = new ArrayList<>();
 
-      for (LanguageToolRuleMatch match : matches) {
-        diagnostics.add(codeActionGenerator.createDiagnostic(match, positionCalculator));
-      }
+          for (LanguageToolRuleMatch match : matches) {
+            diagnostics.add(codeActionGenerator.createDiagnostic(match, positionCalculator));
+          }
 
-      return diagnostics;
-    });
+          return diagnostics;
+        });
   }
 
   private void sendProgressEvent(String uri, String operation, double progress) {

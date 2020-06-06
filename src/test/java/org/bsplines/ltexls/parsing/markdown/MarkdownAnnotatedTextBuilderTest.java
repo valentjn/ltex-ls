@@ -18,7 +18,7 @@ public class MarkdownAnnotatedTextBuilderTest {
   }
 
   private static void assertPlainText(String code, String expectedPlainText,
-    List<String> ignoreNodeTypes, List<String> dummyNodeTypes) {
+        List<String> ignoreNodeTypes, List<String> dummyNodeTypes) {
     AnnotatedText annotatedText = buildAnnotatedText(code, ignoreNodeTypes, dummyNodeTypes);
     Assertions.assertEquals(expectedPlainText, annotatedText.getPlainText());
   }

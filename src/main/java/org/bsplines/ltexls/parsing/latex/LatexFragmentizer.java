@@ -16,10 +16,10 @@ public class LatexFragmentizer extends CodeFragmentizer {
   private static Pattern commentPattern = Pattern.compile(
       "^\\s*%\\s*(?i)ltex(?-i):(?<settings>.*?)$", Pattern.MULTILINE);
   private static LatexCommandSignature[] extraCommandSignatures = {
-        new LatexCommandSignature("\\footnote{}"),
-        new LatexCommandSignature("\\footnote[]{}"),
-        new LatexCommandSignature("\\todo{}"),
-        new LatexCommandSignature("\\todo[]{}"),
+      new LatexCommandSignature("\\footnote{}"),
+      new LatexCommandSignature("\\footnote[]{}"),
+      new LatexCommandSignature("\\todo{}"),
+      new LatexCommandSignature("\\todo[]{}"),
       };
   private static Pattern extraCommandPattern = Pattern.compile("\\\\(footnote|todo)[^A-Za-z]");
 
