@@ -26,9 +26,9 @@ public class LtexLanguageServerLauncher {
   public static void main(String[] args) throws InterruptedException, ExecutionException {
     for (String arg : args) {
       if (arg.equals("--version")) {
-        Package package_ = LtexLanguageServer.class.getPackage();
-        if (package_ == null) throw new RuntimeException(Tools.i18n("couldNotGetPackage"));
-        System.out.println("ltex-ls " + package_.getImplementationVersion());
+        Package ltexLsPackage = LtexLanguageServer.class.getPackage();
+        if (ltexLsPackage == null) throw new RuntimeException(Tools.i18n("couldNotGetPackage"));
+        System.out.println("ltex-ls " + ltexLsPackage.getImplementationVersion());
         return;
       }
     }

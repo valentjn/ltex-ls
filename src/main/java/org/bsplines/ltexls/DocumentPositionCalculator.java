@@ -16,8 +16,8 @@ class DocumentPositionCalculator {
     int line = Arrays.binarySearch(lineStarts, pos);
 
     if (line < 0) {
-      int insertion_point = -1 * line - 1;
-      line = insertion_point - 1;
+      int insertionPoint = -1 * line - 1;
+      line = insertionPoint - 1;
     }
 
     return new Position(line, pos - lineStarts[line]);
