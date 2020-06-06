@@ -58,7 +58,7 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
     }
   }
 
-  @EnsuresNonNullIf(expression="this.url", result=true)
+  @EnsuresNonNullIf(expression = "this.url", result = true)
   @Override
   public boolean isReady() {
     return (url != null);

@@ -52,7 +52,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     this.languageTool = languageTool;
   }
 
-  @EnsuresNonNullIf(expression="this.languageTool", result=true)
+  @EnsuresNonNullIf(expression = "this.languageTool", result = true)
   @Override
   public boolean isReady() {
     return (languageTool != null);
