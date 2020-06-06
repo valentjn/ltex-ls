@@ -50,6 +50,8 @@ public class IgnoreRuleSentencePair {
   }
 
   public String getRuleId() { return ruleId; }
+
   public String getSentenceString() { return sentenceString; }
+
   public Pattern getSentencePattern() { return sentencePattern; }
 }

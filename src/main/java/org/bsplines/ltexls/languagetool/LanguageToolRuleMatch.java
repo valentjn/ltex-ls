@@ -25,12 +25,18 @@ public class LanguageToolRuleMatch {
   }
 
   public @Nullable String getRuleId() { return ruleId; }
+
   public @Nullable String getSentence() { return sentence; }
+
   public int getFromPos() { return fromPos; }
+
   public int getToPos() { return toPos; }
+
   public String getMessage() { return message; }
+
   public List<String> getSuggestedReplacements() { return suggestedReplacements; }
 
   public void setFromPos(int fromPos) { this.fromPos = fromPos; }
+
   public void setToPos(int toPos) { this.toPos = toPos; }
 }

@@ -61,13 +61,13 @@ public class LtexLanguageServerLauncherTest {
     public enum Source {
       Client,
       Server,
-    };
+    }
 
     public enum Type {
       Notification,
       Request,
       Response,
-    };
+    }
 
     public Source source;
     public JsonObject body;

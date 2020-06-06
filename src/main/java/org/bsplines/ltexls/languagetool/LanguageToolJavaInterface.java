@@ -168,9 +168,12 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
   @Override
   public void enableEasterEgg() {
     if (!isReady()) return;
+
     languageTool.addRule(new Rule() {
-      public String getId() { return "bspline"; };
-      public String getDescription() { return "Unknown basis function"; };
+      public String getId() { return "bspline"; }
+
+      public String getDescription() { return "Unknown basis function"; }
+
       public RuleMatch[] match(AnalyzedSentence sentence) {
         List<RuleMatch> matches = new ArrayList<>();
         for (AnalyzedTokenReadings token : sentence.getTokens()) {
@@ -182,9 +185,12 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
         return matches.toArray(new RuleMatch[]{});
       }
     });
+
     languageTool.addRule(new Rule() {
-      public String getId() { return "ungendered"; };
-      public String getDescription() { return "Ungendered variant"; };
+      public String getId() { return "ungendered"; }
+
+      public String getDescription() { return "Ungendered variant"; }
+
       public RuleMatch[] match(AnalyzedSentence sentence) {
         List<RuleMatch> matches = new ArrayList<>();
         for (AnalyzedTokenReadings token : sentence.getTokens()) {

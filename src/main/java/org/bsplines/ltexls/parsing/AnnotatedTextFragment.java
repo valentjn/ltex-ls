@@ -18,6 +18,7 @@ public class AnnotatedTextFragment {
   }
 
   public AnnotatedText getAnnotatedText() { return annotatedText; }
+
   public CodeFragment getCodeFragment() { return codeFragment; }
 
   public AnnotatedText invert() {

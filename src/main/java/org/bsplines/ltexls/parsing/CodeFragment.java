@@ -17,8 +17,11 @@ public class CodeFragment {
   }
 
   public String getCodeLanguageId() { return codeLanguageId; }
+
   public String getCode() { return code; }
+
   public int getFromPos() { return fromPos; }
+
   public Settings getSettings() { return settings; }
 
   public boolean contains(LanguageToolRuleMatch match) {
