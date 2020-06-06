@@ -108,6 +108,10 @@ public class LatexCommandSignature {
         openChar = '(';
         break;
       }
+      default: {
+        openChar = '{';
+        break;
+      }
     }
 
     if (code.charAt(pos) != openChar) return "";
@@ -156,6 +160,9 @@ public class LatexCommandSignature {
             return code.substring(fromPos, pos + 1);
           }
 
+          break;
+        }
+        default: {
           break;
         }
       }

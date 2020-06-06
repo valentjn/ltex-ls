@@ -626,6 +626,10 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                     addMarkup(match, generateDummy(matchingCommand.dummyGenerator));
                     break;
                   }
+                  default: {
+                    addMarkup(match);
+                    break;
+                  }
                 }
               }
             }
