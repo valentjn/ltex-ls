@@ -326,5 +326,7 @@ class DefaultLatexCommandSignatures {
 
   private DefaultLatexCommandSignatures() {}
 
-  public static LatexCommandSignature[] get() { return list; }
+  public static LatexCommandSignature[] get() {
+    return list;
+  }
 }

@@ -170,9 +170,13 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     if (!isReady()) return;
 
     languageTool.addRule(new Rule() {
-      public String getId() { return "bspline"; }
+      public String getId() {
+        return "bspline";
+      }
 
-      public String getDescription() { return "Unknown basis function"; }
+      public String getDescription() {
+        return "Unknown basis function";
+      }
 
       public RuleMatch[] match(AnalyzedSentence sentence) {
         List<RuleMatch> matches = new ArrayList<>();
@@ -187,9 +191,13 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     });
 
     languageTool.addRule(new Rule() {
-      public String getId() { return "ungendered"; }
+      public String getId() {
+        return "ungendered";
+      }
 
-      public String getDescription() { return "Ungendered variant"; }
+      public String getDescription() {
+        return "Ungendered variant";
+      }
 
       public RuleMatch[] match(AnalyzedSentence sentence) {
         List<RuleMatch> matches = new ArrayList<>();

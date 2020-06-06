@@ -17,9 +17,13 @@ public class AnnotatedTextFragment {
     this.codeFragment = codeFragment;
   }
 
-  public AnnotatedText getAnnotatedText() { return annotatedText; }
+  public AnnotatedText getAnnotatedText() {
+    return annotatedText;
+  }
 
-  public CodeFragment getCodeFragment() { return codeFragment; }
+  public CodeFragment getCodeFragment() {
+    return codeFragment;
+  }
 
   public AnnotatedText invert() {
     List<Map.Entry<Integer, Integer>> mapping = annotatedText.getMapping();

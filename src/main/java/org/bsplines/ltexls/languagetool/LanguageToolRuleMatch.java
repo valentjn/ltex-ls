@@ -24,19 +24,35 @@ public class LanguageToolRuleMatch {
     this.suggestedReplacements = new ArrayList<>(suggestedReplacements);
   }
 
-  public @Nullable String getRuleId() { return ruleId; }
+  public @Nullable String getRuleId() {
+    return ruleId;
+  }
 
-  public @Nullable String getSentence() { return sentence; }
+  public @Nullable String getSentence() {
+    return sentence;
+  }
 
-  public int getFromPos() { return fromPos; }
+  public int getFromPos() {
+    return fromPos;
+  }
 
-  public int getToPos() { return toPos; }
+  public int getToPos() {
+    return toPos;
+  }
 
-  public String getMessage() { return message; }
+  public String getMessage() {
+    return message;
+  }
 
-  public List<String> getSuggestedReplacements() { return suggestedReplacements; }
+  public List<String> getSuggestedReplacements() {
+    return suggestedReplacements;
+  }
 
-  public void setFromPos(int fromPos) { this.fromPos = fromPos; }
+  public void setFromPos(int fromPos) {
+    this.fromPos = fromPos;
+  }
 
-  public void setToPos(int toPos) { this.toPos = toPos; }
+  public void setToPos(int toPos) {
+    this.toPos = toPos;
+  }
 }

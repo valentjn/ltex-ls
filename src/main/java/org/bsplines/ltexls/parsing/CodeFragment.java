@@ -16,13 +16,21 @@ public class CodeFragment {
     this.settings = settings;
   }
 
-  public String getCodeLanguageId() { return codeLanguageId; }
+  public String getCodeLanguageId() {
+    return codeLanguageId;
+  }
 
-  public String getCode() { return code; }
+  public String getCode() {
+    return code;
+  }
 
-  public int getFromPos() { return fromPos; }
+  public int getFromPos() {
+    return fromPos;
+  }
 
-  public Settings getSettings() { return settings; }
+  public Settings getSettings() {
+    return settings;
+  }
 
   public boolean contains(LanguageToolRuleMatch match) {
     return ((match.getFromPos() >= fromPos) && (match.getToPos() <= fromPos + code.length()));

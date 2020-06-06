@@ -30,5 +30,7 @@ public class DummyGenerator {
     }
   }
 
-  public boolean isPlural() { return isPlural_; }
+  public boolean isPlural() {
+    return isPlural_;
+  }
 }

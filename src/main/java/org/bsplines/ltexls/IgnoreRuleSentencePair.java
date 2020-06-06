@@ -49,9 +49,15 @@ public class IgnoreRuleSentencePair {
     return hash;
   }
 
-  public String getRuleId() { return ruleId; }
+  public String getRuleId() {
+    return ruleId;
+  }
 
-  public String getSentenceString() { return sentenceString; }
+  public String getSentenceString() {
+    return sentenceString;
+  }
 
-  public Pattern getSentencePattern() { return sentencePattern; }
+  public Pattern getSentencePattern() {
+    return sentencePattern;
+  }
 }
