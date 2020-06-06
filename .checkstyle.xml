@@ -247,9 +247,17 @@
         </module>
         <module name="JavadocMethod">
             <property name="scope" value="public"/>
-            <property name="allowMissingParamTags" value="true"/>
+            <!--
+                ltex-ls: Force documentation of arguments.
+            -->
+            <!--<property name="allowMissingParamTags" value="true"/>-->
+            <property name="allowMissingParamTags" value="false"/>
             <property name="allowMissingThrowsTags" value="true"/>
-            <property name="allowMissingReturnTag" value="true"/>
+            <!--
+                ltex-ls: Force documentation of return values.
+            -->
+            <!--<property name="allowMissingReturnTag" value="true"/>-->
+            <property name="allowMissingReturnTag" value="false"/>
             <property name="minLineCount" value="2"/>
             <property name="allowedAnnotations" value="Override, Test"/>
             <property name="allowThrowsTagsForSubclasses" value="true"/>
