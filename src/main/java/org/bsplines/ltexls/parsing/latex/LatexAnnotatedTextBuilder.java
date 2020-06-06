@@ -229,7 +229,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
         + "\", isMathEmpty = " + isMathEmpty + ", preserveDummyLast = " + preserveDummyLast
         + ", canInsertSpaceBeforeDummy = " + canInsertSpaceBeforeDummy
         + ", isMathCharTrivial = " + isMathCharTrivial + ", modeStack = " + modeStack
-        + ", curChar = \"" + curChar + "\", curString = \"" + curString + "\", curMode = " + curMode;
+        + ", curChar = \"" + curChar + "\", curString = \"" + curString
+        + "\", curMode = " + curMode;
   }
 
   private static boolean containsTwoEndsOfLine(String text) {
