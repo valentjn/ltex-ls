@@ -1,10 +1,13 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.bsplines.ltexls.LtexLanguageServer;
-import org.bsplines.ltexls.Tools;
 
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
@@ -39,8 +42,18 @@ public class LtexLanguageServerLauncher {
     for (String arg : args) {
       if (arg.equals("--version")) {
         Package ltexLsPackage = LtexLanguageServer.class.getPackage();
-        if (ltexLsPackage == null) throw new RuntimeException(Tools.i18n("couldNotGetPackage"));
-        System.out.println("ltex-ls " + ltexLsPackage.getImplementationVersion());
+        JsonObject jsonObject = new JsonObject();
+
+        if (ltexLsPackage != null) {
+          String ltexLsVersion = ltexLsPackage.getImplementationVersion();
+          if (ltexLsVersion != null) jsonObject.addProperty("ltex-ls", ltexLsVersion);
+        }
+
+        String javaVersion = System.getProperty("java.version");
+        if (javaVersion != null) jsonObject.addProperty("java", javaVersion);
+
+        Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(gsonBuilder.toJson(jsonObject));
         return;
       }
     }
