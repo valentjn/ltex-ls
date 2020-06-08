@@ -3,7 +3,16 @@ package org.bsplines.ltexls;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
+
+import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
+import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
+
+import org.checkerframework.checker.initialization.qual.NotOnlyInitialized;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.eclipse.lsp4j.CodeAction;
 import org.eclipse.lsp4j.CodeActionParams;
@@ -29,30 +38,26 @@ import org.eclipse.lsp4j.Hover;
 import org.eclipse.lsp4j.HoverParams;
 import org.eclipse.lsp4j.Location;
 import org.eclipse.lsp4j.LocationLink;
+import org.eclipse.lsp4j.PublishDiagnosticsParams;
 import org.eclipse.lsp4j.ReferenceParams;
 import org.eclipse.lsp4j.RenameParams;
 import org.eclipse.lsp4j.SignatureHelp;
 import org.eclipse.lsp4j.SignatureHelpParams;
 import org.eclipse.lsp4j.SymbolInformation;
 import org.eclipse.lsp4j.TextDocumentContentChangeEvent;
-import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.lsp4j.TextEdit;
 import org.eclipse.lsp4j.WorkspaceEdit;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
+import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.TextDocumentService;
+import org.eclipse.xtext.xbase.lib.Pair;
 
-/**
-* `TextDocumentService` that only supports `TextDocumentSyncKind.Full` updates.
-* Override members to add functionality.
-*/
-class FullTextDocumentService implements TextDocumentService {
-  HashMap<String, TextDocumentItem> documents;
+public class LtexTextDocumentService implements TextDocumentService {
+  @NotOnlyInitialized LtexLanguageServer ltexLanguageServer;
+  Map<String, LtexTextDocumentItem> documents;
 
-  public FullTextDocumentService(HashMap<String, TextDocumentItem> documents) {
-    this.documents = documents;
-  }
-
-  public FullTextDocumentService() {
+  public LtexTextDocumentService(@UnknownInitialization LtexLanguageServer ltexLanguageServer) {
+    this.ltexLanguageServer = ltexLanguageServer;
     this.documents = new HashMap<>();
   }
 
@@ -101,11 +106,6 @@ class FullTextDocumentService implements TextDocumentService {
   }
 
   @Override
-  public CompletableFuture<List<Either<Command, CodeAction>>> codeAction(CodeActionParams params) {
-    return CompletableFuture.completedFuture(Collections.emptyList());
-  }
-
-  @Override
   public CompletableFuture<List<? extends CodeLens>> codeLens(CodeLensParams params) {
     return CompletableFuture.completedFuture(Collections.emptyList());
   }
@@ -138,38 +138,80 @@ class FullTextDocumentService implements TextDocumentService {
   }
 
   @Override
-  public void didOpen(DidOpenTextDocumentParams params) {
-    documents.put(params.getTextDocument().getUri(), params.getTextDocument());
-  }
-
-  @Override
   public void didChange(DidChangeTextDocumentParams params) {
     String uri = params.getTextDocument().getUri();
-    TextDocumentItem document = documents.get(uri);
+    LtexTextDocumentItem document = documents.get(uri);
 
     if (document == null) {
       Tools.logger.warning(Tools.i18n("couldNotFindDocumentWithUri", uri));
       return;
     }
 
-    for (TextDocumentContentChangeEvent changeEvent : params.getContentChanges()) {
-      // Will be full update because we specified that is all we support
-      if (changeEvent.getRange() != null) {
-        throw new UnsupportedOperationException(Tools.i18n("rangeShouldBeNull"));
-      }
-
-      document.setText(changeEvent.getText());
+    for (TextDocumentContentChangeEvent textChangeEvent : params.getContentChanges()) {
+      document.applyTextChangeEvent(textChangeEvent);
       document.setVersion(params.getTextDocument().getVersion());
     }
+
+    ltexLanguageServer.publishDiagnostics(document);
+  }
+
+  @Override
+  public void didSave(DidSaveTextDocumentParams params) {
+  }
+
+  @Override
+  public CompletableFuture<List<Either<Command, CodeAction>>> codeAction(
+        CodeActionParams params) {
+    if (params.getContext().getDiagnostics().isEmpty()) {
+      return CompletableFuture.completedFuture(Collections.emptyList());
+    }
+
+    String uri = params.getTextDocument().getUri();
+    LtexTextDocumentItem document = documents.get(uri);
+
+    if (document == null) {
+      Tools.logger.warning(Tools.i18n("couldNotFindDocumentWithUri", uri));
+      return CompletableFuture.completedFuture(Collections.emptyList());
+    }
+
+    return ltexLanguageServer.checkDocument(document)
+        .thenApply((Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>
+        checkingResult) -> {
+          return ltexLanguageServer.getCodeActionGenerator().generate(
+              params, document, checkingResult);
+        });
+  }
+
+  @Override
+  public void didOpen(DidOpenTextDocumentParams params) {
+    documents.put(params.getTextDocument().getUri(),
+        new LtexTextDocumentItem(params.getTextDocument()));
+    @Nullable LtexTextDocumentItem document = getDocument(params.getTextDocument().getUri());
+    if (document != null) ltexLanguageServer.publishDiagnostics(document);
   }
 
   @Override
   public void didClose(DidCloseTextDocumentParams params) {
     String uri = params.getTextDocument().getUri();
     documents.remove(uri);
+    LanguageClient languageClient = ltexLanguageServer.getLanguageClient();
+    if (languageClient == null) return;
+    languageClient.publishDiagnostics(
+        new PublishDiagnosticsParams(uri, Collections.emptyList()));
   }
 
-  @Override
-  public void didSave(DidSaveTextDocumentParams params) {
+  private @Nullable LtexTextDocumentItem getDocument(String uri) {
+    LtexTextDocumentItem document = documents.get(uri);
+
+    if (document != null) {
+      return document;
+    } else {
+      Tools.logger.warning(Tools.i18n("couldNotFindDocumentWithUri", uri));
+      return null;
+    }
+  }
+
+  public void executeFunction(Consumer<? super LtexTextDocumentItem> function) {
+    documents.values().forEach(function);
   }
 }

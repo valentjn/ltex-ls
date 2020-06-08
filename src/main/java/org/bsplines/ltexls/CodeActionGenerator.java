@@ -28,7 +28,6 @@ import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.ResourceOperation;
 import org.eclipse.lsp4j.TextDocumentEdit;
-import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.lsp4j.TextEdit;
 import org.eclipse.lsp4j.VersionedTextDocumentIdentifier;
 import org.eclipse.lsp4j.WorkspaceEdit;
@@ -66,10 +65,10 @@ public class CodeActionGenerator {
   }
 
   private static boolean matchIntersectsWithRange(LanguageToolRuleMatch match, Range range,
-      DocumentPositionCalculator positionCalculator) {
+        LtexTextDocumentItem document) {
     // false iff match is completely before range or completely after range
-    return !(positionLower(positionCalculator.getPosition(match.getToPos()), range.getStart())
-        || positionLower(range.getEnd(), positionCalculator.getPosition(match.getFromPos())));
+    return !(positionLower(document.convertPosition(match.getToPos()), range.getStart())
+        || positionLower(range.getEnd(), document.convertPosition(match.getFromPos())));
   }
 
   private static boolean positionLower(Position position1, Position position2) {
@@ -82,15 +81,14 @@ public class CodeActionGenerator {
    * Create diagnostic from rule match.
    *
    * @param match LanguageTool rule match
-   * @param positionCalculator DocumentPositionCalculator for corresponding document
+   * @param document document in which the match occurred
    * @return diagnostic corresponding to @c match
    */
   public Diagnostic createDiagnostic(
-        LanguageToolRuleMatch match, DocumentPositionCalculator positionCalculator) {
+        LanguageToolRuleMatch match, LtexTextDocumentItem document) {
     Diagnostic ret = new Diagnostic();
-    ret.setRange(new Range(
-        positionCalculator.getPosition(match.getFromPos()),
-        positionCalculator.getPosition(match.getToPos())));
+    ret.setRange(new Range(document.convertPosition(match.getFromPos()),
+        document.convertPosition(match.getToPos())));
     ret.setSeverity(settingsManager.getSettings().getDiagnosticSeverity());
     ret.setSource("LTeX - " + match.getRuleId());
     ret.setMessage(match.getMessage().replaceAll("<suggestion>(.*?)</suggestion>", "'$1'"));
@@ -106,14 +104,12 @@ public class CodeActionGenerator {
    * @return list of commands and code actions
    */
   public List<Either<Command, CodeAction>> generate(
-        CodeActionParams params, TextDocumentItem document,
+        CodeActionParams params, LtexTextDocumentItem document,
         Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) {
     if (checkingResult.getValue() == null) return Collections.emptyList();
 
     VersionedTextDocumentIdentifier textDocument = new VersionedTextDocumentIdentifier(
         document.getUri(), document.getVersion());
-    String text = document.getText();
-    DocumentPositionCalculator positionCalculator = new DocumentPositionCalculator(text);
     List<Either<Command, CodeAction>> result =
         new ArrayList<Either<Command, CodeAction>>();
 
@@ -123,7 +119,7 @@ public class CodeActionGenerator {
     Map<String, List<LanguageToolRuleMatch>> useWordMatchesMap = new LinkedHashMap<>();
 
     for (LanguageToolRuleMatch match : checkingResult.getKey()) {
-      if (matchIntersectsWithRange(match, params.getRange(), positionCalculator)) {
+      if (matchIntersectsWithRange(match, params.getRange(), document)) {
         String ruleId = match.getRuleId();
 
         if ((ruleId != null) && (ruleId.startsWith("MORFOLOGIK_")
@@ -147,7 +143,7 @@ public class CodeActionGenerator {
     if (!addWordToDictionaryMatches.isEmpty()
           && settingsManager.getSettings().getLanguageToolHttpServerUri().isEmpty()) {
       CodeAction codeAction = getAddWordToDictionaryCodeAction(document,
-          addWordToDictionaryMatches, checkingResult.getValue(), positionCalculator);
+          addWordToDictionaryMatches, checkingResult.getValue());
       result.add(Either.forRight(codeAction));
     }
 
@@ -186,7 +182,7 @@ public class CodeActionGenerator {
           sentencePatternStringsJson.add(sentencePatternString);
         }
 
-        diagnostics.add(createDiagnostic(match, positionCalculator));
+        diagnostics.add(createDiagnostic(match, document));
       }
 
       JsonObject arguments = new JsonObject();
@@ -221,7 +217,7 @@ public class CodeActionGenerator {
           ruleIdsJson.add(ruleId);
         }
 
-        diagnostics.add(createDiagnostic(match, positionCalculator));
+        diagnostics.add(createDiagnostic(match, document));
       }
 
       JsonObject arguments = new JsonObject();
@@ -248,7 +244,7 @@ public class CodeActionGenerator {
       List<Either<TextDocumentEdit, ResourceOperation>> documentChanges = new ArrayList<>();
 
       for (LanguageToolRuleMatch match : useWordMatches) {
-        Diagnostic diagnostic = createDiagnostic(match, positionCalculator);
+        Diagnostic diagnostic = createDiagnostic(match, document);
         Range range = diagnostic.getRange();
 
         diagnostics.add(diagnostic);
@@ -273,10 +269,9 @@ public class CodeActionGenerator {
   }
 
   private CodeAction getAddWordToDictionaryCodeAction(
-        TextDocumentItem document,
+        LtexTextDocumentItem document,
         List<LanguageToolRuleMatch> addWordToDictionaryMatches,
-        List<AnnotatedTextFragment> annotatedTextFragments,
-        DocumentPositionCalculator positionCalculator) {
+        List<AnnotatedTextFragment> annotatedTextFragments) {
     List<@Nullable AnnotatedText> invertedAnnotatedTexts = new ArrayList<>();
     List<@Nullable String> plainTexts = new ArrayList<>();
 
@@ -325,7 +320,7 @@ public class CodeActionGenerator {
         unknownWordsJson.add(word);
       }
 
-      diagnostics.add(createDiagnostic(match, positionCalculator));
+      diagnostics.add(createDiagnostic(match, document));
     }
 
     JsonObject arguments = new JsonObject();

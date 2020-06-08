@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
@@ -14,28 +13,21 @@ import java.util.concurrent.CompletableFuture;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 
+import org.checkerframework.checker.initialization.qual.NotOnlyInitialized;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import org.eclipse.lsp4j.CodeAction;
 import org.eclipse.lsp4j.CodeActionOptions;
-import org.eclipse.lsp4j.CodeActionParams;
-import org.eclipse.lsp4j.Command;
 import org.eclipse.lsp4j.ConfigurationItem;
 import org.eclipse.lsp4j.ConfigurationParams;
 import org.eclipse.lsp4j.Diagnostic;
-import org.eclipse.lsp4j.DidChangeConfigurationParams;
-import org.eclipse.lsp4j.DidChangeTextDocumentParams;
-import org.eclipse.lsp4j.DidCloseTextDocumentParams;
-import org.eclipse.lsp4j.DidOpenTextDocumentParams;
 import org.eclipse.lsp4j.ExecuteCommandOptions;
-import org.eclipse.lsp4j.ExecuteCommandParams;
 import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.PublishDiagnosticsParams;
 import org.eclipse.lsp4j.ServerCapabilities;
 import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.lsp4j.TextDocumentSyncKind;
-import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
@@ -45,27 +37,29 @@ import org.eclipse.lsp4j.services.WorkspaceService;
 import org.eclipse.xtext.xbase.lib.Pair;
 
 public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
-  private HashMap<String, TextDocumentItem> documents = new HashMap<>();
   private @MonotonicNonNull LanguageClient languageClient;
   private SettingsManager settingsManager;
   private DocumentChecker documentChecker;
   private CodeActionGenerator codeActionGenerator;
+  private @NotOnlyInitialized LtexTextDocumentService ltexTextDocumentService;
+  private @NotOnlyInitialized LtexWorkspaceService ltexWorkspaceService;
 
   /**
    * Constructor.
    * Note: The object cannot be used before @c connect() has been called.
    */
   public LtexLanguageServer() {
-    this.documents = new HashMap<>();
     this.settingsManager = new SettingsManager();
     this.documentChecker = new DocumentChecker(settingsManager);
     this.codeActionGenerator = new CodeActionGenerator(settingsManager);
+    this.ltexTextDocumentService = new LtexTextDocumentService(this);
+    this.ltexWorkspaceService = new LtexWorkspaceService(this);
   }
 
   @Override
   public CompletableFuture<InitializeResult> initialize(InitializeParams params) {
     ServerCapabilities capabilities = new ServerCapabilities();
-    capabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
+    capabilities.setTextDocumentSync(TextDocumentSyncKind.Incremental);
     capabilities.setCodeActionProvider(new CodeActionOptions(CodeActionGenerator.getCodeActions()));
     capabilities.setExecuteCommandProvider(new ExecuteCommandOptions(
         CodeActionGenerator.getCommandNames()));
@@ -97,66 +91,18 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   }
 
   @Override
-  public TextDocumentService getTextDocumentService() {
-    return new FullTextDocumentService(documents) {
-
-      @Override
-      public CompletableFuture<List<Either<Command, CodeAction>>> codeAction(
-            CodeActionParams params) {
-        if (params.getContext().getDiagnostics().isEmpty()) {
-          return CompletableFuture.completedFuture(Collections.emptyList());
-        }
-
-        String uri = params.getTextDocument().getUri();
-        TextDocumentItem document = documents.get(uri);
-
-        if (document == null) {
-          Tools.logger.warning(Tools.i18n("couldNotFindDocumentWithUri", uri));
-          return CompletableFuture.completedFuture(Collections.emptyList());
-        }
-
-        return checkDocument(document)
-            .thenApply((Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>
-            checkingResult) -> {
-              return codeActionGenerator.generate(params, document, checkingResult);
-            });
-      }
-
-      @Override
-      public void didOpen(DidOpenTextDocumentParams params) {
-        super.didOpen(params);
-        publishIssues(params.getTextDocument().getUri());
-      }
-
-      @Override
-      public void didChange(DidChangeTextDocumentParams params) {
-        super.didChange(params);
-        publishIssues(params.getTextDocument().getUri());
-      }
-
-      @Override
-      public void didClose(DidCloseTextDocumentParams params) {
-        super.didClose(params);
-        String uri = params.getTextDocument().getUri();
-        if (languageClient == null) return;
-        languageClient.publishDiagnostics(
-            new PublishDiagnosticsParams(uri, Collections.emptyList()));
-      }
-
-      private void publishIssues(String uri) {
-        TextDocumentItem document = documents.get(uri);
-
-        if (document != null) {
-          LtexLanguageServer.this.publishIssues(document);
-        } else {
-          Tools.logger.warning(Tools.i18n("couldNotFindDocumentWithUri", uri));
-        }
-      }
-    };
+  public void connect(LanguageClient languageClient) {
+    this.languageClient = languageClient;
   }
 
-  private CompletableFuture<Void> publishIssues(TextDocumentItem document) {
-    return getIssues(document).thenApply((List<Diagnostic> diagnostics) -> {
+  /**
+   * Check a document and publish the resulting diagnostics.
+   *
+   * @param document document to check
+   * @return completable future of type void
+   */
+  public CompletableFuture<Void> publishDiagnostics(LtexTextDocumentItem document) {
+    return getDiagnostics(document).thenApply((List<Diagnostic> diagnostics) -> {
       if (languageClient == null) return null;
       languageClient.publishDiagnostics(new PublishDiagnosticsParams(
           document.getUri(), diagnostics));
@@ -164,17 +110,15 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     });
   }
 
-  private CompletableFuture<List<Diagnostic>> getIssues(TextDocumentItem document) {
+  private CompletableFuture<List<Diagnostic>> getDiagnostics(LtexTextDocumentItem document) {
     return checkDocument(document)
         .thenApply((Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>
         checkingResult) -> {
           List<LanguageToolRuleMatch> matches = checkingResult.getKey();
-          DocumentPositionCalculator positionCalculator =
-              new DocumentPositionCalculator(document.getText());
           List<Diagnostic> diagnostics = new ArrayList<>();
 
           for (LanguageToolRuleMatch match : matches) {
-            diagnostics.add(codeActionGenerator.createDiagnostic(match, positionCalculator));
+            diagnostics.add(codeActionGenerator.createDiagnostic(match, document));
           }
 
           return diagnostics;
@@ -193,7 +137,13 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     languageClient.telemetryEvent(arguments);
   }
 
-  private CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>>
+  /**
+   * Check a document for diagnostics.
+   *
+   * @param document document to check
+   * @return completable future with lists of rule matches and annotated text fragments
+   */
+  public CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>>
         checkDocument(TextDocumentItem document) {
     ConfigurationItem configurationItem = new ConfigurationItem();
     configurationItem.setSection("ltex");
@@ -219,30 +169,32 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   }
 
   @Override
-  public WorkspaceService getWorkspaceService() {
-    return new NoOpWorkspaceService() {
-      @Override
-      public void didChangeConfiguration(DidChangeConfigurationParams params) {
-        super.didChangeConfiguration(params);
-        settingsManager.setSettings(((JsonObject)params.getSettings()).get("ltex"));
-        documents.values().forEach(LtexLanguageServer.this::publishIssues);
-      }
-
-      @Override
-      public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
-        if (CodeActionGenerator.getCommandNames().contains(params.getCommand())
-              && (languageClient != null)) {
-          languageClient.telemetryEvent(params.getArguments().get(0));
-          return CompletableFuture.completedFuture(true);
-        } else {
-          return CompletableFuture.completedFuture(false);
-        }
-      }
-    };
+  public TextDocumentService getTextDocumentService() {
+    return ltexTextDocumentService;
   }
 
   @Override
-  public void connect(LanguageClient languageClient) {
-    this.languageClient = languageClient;
+  public WorkspaceService getWorkspaceService() {
+    return ltexWorkspaceService;
+  }
+
+  public @Nullable LanguageClient getLanguageClient() {
+    return languageClient;
+  }
+
+  public SettingsManager getSettingsManager() {
+    return settingsManager;
+  }
+
+  public DocumentChecker getDocumentChecker() {
+    return documentChecker;
+  }
+
+  public CodeActionGenerator getCodeActionGenerator() {
+    return codeActionGenerator;
+  }
+
+  public LtexTextDocumentService getLtexTextDocumentService() {
+    return ltexTextDocumentService;
   }
 }

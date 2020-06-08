@@ -1,9 +1,7 @@
 package org.bsplines.ltexls;
 
 import java.util.Collections;
-import java.util.HashMap;
 
-import org.eclipse.lsp4j.CodeActionParams;
 import org.eclipse.lsp4j.CodeLens;
 import org.eclipse.lsp4j.CodeLensParams;
 import org.eclipse.lsp4j.CompletionItem;
@@ -19,7 +17,6 @@ import org.eclipse.lsp4j.DocumentOnTypeFormattingParams;
 import org.eclipse.lsp4j.DocumentRangeFormattingParams;
 import org.eclipse.lsp4j.DocumentSymbolParams;
 import org.eclipse.lsp4j.HoverParams;
-import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.ReferenceParams;
 import org.eclipse.lsp4j.RenameParams;
 import org.eclipse.lsp4j.SignatureHelpParams;
@@ -30,13 +27,12 @@ import org.eclipse.lsp4j.VersionedTextDocumentIdentifier;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class FullTextDocumentServiceTest {
+public class LtexTextDocumentServiceTest {
   @Test
   public void doTest() {
-    FullTextDocumentService service = new FullTextDocumentService(new HashMap<>());
-    Assertions.assertDoesNotThrow(() -> new FullTextDocumentService());
+    LtexLanguageServer server = new LtexLanguageServer();
+    LtexTextDocumentService service = new LtexTextDocumentService(server);
 
-    Assertions.assertDoesNotThrow(() -> service.codeAction(new CodeActionParams()));
     Assertions.assertDoesNotThrow(() -> service.codeLens(new CodeLensParams()));
     Assertions.assertDoesNotThrow(() -> service.completion(new CompletionParams()));
     Assertions.assertDoesNotThrow(() -> service.definition(new DefinitionParams()));
@@ -62,13 +58,11 @@ public class FullTextDocumentServiceTest {
 
     service.didChange(new DidChangeTextDocumentParams(versionedDocument,
         Collections.singletonList(new TextDocumentContentChangeEvent("abc"))));
-    Assertions.assertThrows(UnsupportedOperationException.class, () ->
-        service.didChange(new DidChangeTextDocumentParams(versionedDocument,
-          Collections.singletonList(new TextDocumentContentChangeEvent(new Range(), 0, "abc")))));
 
     Assertions.assertDoesNotThrow(() ->
         service.didSave(new DidSaveTextDocumentParams(versionedDocument)));
     Assertions.assertDoesNotThrow(() ->
         service.didClose(new DidCloseTextDocumentParams(versionedDocument)));
   }
+
 }

@@ -40,8 +40,8 @@ public class DocumentCheckerTest {
     return documentChecker.check(document);
   }
 
-  public static TextDocumentItem createDocument(String codeLanguageId, String code) {
-    return new TextDocumentItem("untitled:test.txt", codeLanguageId, 1, code);
+  public static LtexTextDocumentItem createDocument(String codeLanguageId, String code) {
+    return new LtexTextDocumentItem("untitled:test.txt", codeLanguageId, 1, code);
   }
 
   /**
@@ -93,7 +93,7 @@ public class DocumentCheckerTest {
 
   @Test
   public void testLatex() {
-    TextDocumentItem document;
+    LtexTextDocumentItem document;
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult;
 
     document = createDocument("latex",
@@ -164,7 +164,7 @@ public class DocumentCheckerTest {
 
   @Test
   public void testMarkdown() {
-    TextDocumentItem document = createDocument("markdown",
+    LtexTextDocumentItem document = createDocument("markdown",
         "This is an **test.**\n\n[comment]: <> \"LTeX: language=de-DE\"\n\n"
         + "Dies ist eine **Test**.\n");
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
@@ -174,7 +174,7 @@ public class DocumentCheckerTest {
 
   @Test
   public void testCodeActionGenerator() {
-    TextDocumentItem document = createDocument("plaintext",
+    LtexTextDocumentItem document = createDocument("plaintext",
         "This is an unknownword.\n");
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         checkDocument(document);
@@ -190,7 +190,7 @@ public class DocumentCheckerTest {
 
   @Test
   public void testIgnoreRuleSentencePairs() {
-    TextDocumentItem document = createDocument("plaintext",
+    LtexTextDocumentItem document = createDocument("plaintext",
         "This is an unknownword.\n");
     Settings settings = new Settings();
     settings.setIgnoreRuleSentencePairs(Collections.singletonList(

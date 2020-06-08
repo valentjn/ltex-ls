@@ -4,14 +4,13 @@ import java.util.List;
 
 import org.bsplines.ltexls.DocumentChecker;
 import org.bsplines.ltexls.DocumentCheckerTest;
+import org.bsplines.ltexls.LtexTextDocumentItem;
 import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.SettingsManager;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 
 import org.checkerframework.checker.nullness.NullnessUtil;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-
-import org.eclipse.lsp4j.TextDocumentItem;
 
 import org.eclipse.xtext.xbase.lib.Pair;
 
@@ -66,7 +65,7 @@ public class LanguageToolHttpInterfaceTest {
 
   @Test
   public void testCheck() {
-    TextDocumentItem document = DocumentCheckerTest.createDocument("latex",
+    LtexTextDocumentItem document = DocumentCheckerTest.createDocument("latex",
         "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n");
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         documentChecker.check(document);
