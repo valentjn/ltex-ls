@@ -148,7 +148,7 @@ public class LtexTextDocumentService implements TextDocumentService {
 
     document.applyTextChangeEvents(params.getContentChanges());
     document.setVersion(params.getTextDocument().getVersion());
-    ltexLanguageServer.publishDiagnostics(document);
+    ltexLanguageServer.publishDiagnostics(document, document.getCaretPosition());
   }
 
   @Override

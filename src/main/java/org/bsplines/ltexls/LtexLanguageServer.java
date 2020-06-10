@@ -24,7 +24,9 @@ import org.eclipse.lsp4j.Diagnostic;
 import org.eclipse.lsp4j.ExecuteCommandOptions;
 import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializeResult;
+import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.PublishDiagnosticsParams;
+import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.ServerCapabilities;
 import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.lsp4j.TextDocumentSyncKind;
@@ -102,10 +104,35 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
    * @return completable future of type void
    */
   public CompletableFuture<Void> publishDiagnostics(LtexTextDocumentItem document) {
+    return publishDiagnostics(document, null);
+  }
+
+  /**
+   * Check a document and publish the resulting diagnostics. If the current position of the caret
+   * is given, the diagnostics that are at the caret position are withhold and will be published
+   * after a short amount of time.
+   *
+   * @param document document to check
+   * @param caretPosition optional position of the caret
+   * @return completable future of type void
+   */
+  public CompletableFuture<Void> publishDiagnostics(LtexTextDocumentItem document,
+        @Nullable Position caretPosition) {
     return getDiagnostics(document).thenApply((List<Diagnostic> diagnostics) -> {
       if (languageClient == null) return null;
+
+      List<Diagnostic> diagnosticsNotAtCaret =
+          extractDiagnosticsNotAtCaret(diagnostics, caretPosition);
       languageClient.publishDiagnostics(new PublishDiagnosticsParams(
-          document.getUri(), diagnostics));
+          document.getUri(), diagnosticsNotAtCaret));
+      document.setDiagnostics(diagnostics);
+
+      if (diagnosticsNotAtCaret.size() < diagnostics.size()) {
+        Thread thread = new Thread(new DelayedDiagnosticsPublisherRunnable(
+            languageClient, document));
+        thread.start();
+      }
+
       return null;
     });
   }
@@ -123,6 +150,21 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
           return diagnostics;
         });
+  }
+
+  private List<Diagnostic> extractDiagnosticsNotAtCaret(
+        List<Diagnostic> diagnostics, @Nullable Position caretPosition) {
+    if (caretPosition == null) return new ArrayList<>(diagnostics);
+    List<Diagnostic> diagnosticsNotAtCaret = new ArrayList<>();
+    Range caretRange = new Range(caretPosition, caretPosition);
+
+    for (Diagnostic diagnostic : diagnostics) {
+      if (!Tools.areRangesIntersecting(diagnostic.getRange(), caretRange)) {
+        diagnosticsNotAtCaret.add(diagnostic);
+      }
+    }
+
+    return diagnosticsNotAtCaret;
   }
 
   private void sendProgressEvent(String uri, String operation, double progress) {
