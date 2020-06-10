@@ -274,5 +274,13 @@
             <property name="exceptionVariableName" value="expected"/>
         </module>
         <module name="CommentsIndentation"/>
+        <!--
+            ltex-ls: Force usage of "this" for all fields.
+            (The Google style guide doesn't say anything about this.)
+        -->
+        <module name="RequireThis">
+            <property name="checkMethods" value="false"/>
+            <property name="validateOnlyOverlapping" value="false"/>
+        </module>
     </module>
 </module>
