@@ -1,11 +1,13 @@
 package org.bsplines.ltexls;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import org.eclipse.lsp4j.Diagnostic;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.TextDocumentContentChangeEvent;
@@ -13,6 +15,9 @@ import org.eclipse.lsp4j.TextDocumentItem;
 
 public class LtexTextDocumentItem extends TextDocumentItem {
   private List<Integer> lineStartPosList;
+  private List<Diagnostic> diagnostics;
+  private @Nullable Position caretPosition;
+  private Instant lastCaretChangeInstant;
 
   public LtexTextDocumentItem(TextDocumentItem document) {
     this(document.getUri(), document.getLanguageId(), document.getVersion(), document.getText());
@@ -28,7 +33,10 @@ public class LtexTextDocumentItem extends TextDocumentItem {
    */
   public LtexTextDocumentItem(String uri, String codeLanguageId, int version, String text) {
     super(uri, codeLanguageId, version, text);
-    lineStartPosList = new ArrayList<>();
+    this.lineStartPosList = new ArrayList<>();
+    this.diagnostics = new ArrayList<>();
+    this.caretPosition = null;
+    this.lastCaretChangeInstant = Instant.now();
     reinitializeLineStartPosList(text, lineStartPosList);
   }
 
@@ -121,10 +129,46 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     return new Position(line, pos - lineStartPosList.get(line));
   }
 
+  public List<Diagnostic> getDiagnostics() {
+    return new ArrayList<>(diagnostics);
+  }
+
+  public void setDiagnostics(List<Diagnostic> diagnostics) {
+    this.diagnostics = new ArrayList<>(diagnostics);
+  }
+
+  public @Nullable Position getCaretPosition() {
+    return ((caretPosition != null)
+        ? new Position(caretPosition.getLine(), caretPosition.getCharacter()) : null);
+  }
+
+  public Instant getLastCaretChangeInstant() {
+    return lastCaretChangeInstant;
+  }
+
   @Override
   public void setText(String text) {
     super.setText(text);
+    this.caretPosition = null;
     reinitializeLineStartPosList();
+  }
+
+  /**
+   * Apply a list of full or incremental text change events.
+   *
+   * @param textChangeEvents list of text change events to apply
+   */
+  public void applyTextChangeEvents(List<TextDocumentContentChangeEvent> textChangeEvents) {
+    Instant oldlastCaretChangeInstant = lastCaretChangeInstant;
+
+    for (TextDocumentContentChangeEvent textChangeEvent : textChangeEvents) {
+      applyTextChangeEvent(textChangeEvent);
+    }
+
+    if (textChangeEvents.size() > 1) {
+      this.caretPosition = null;
+      this.lastCaretChangeInstant = oldlastCaretChangeInstant;
+    }
   }
 
   /**
@@ -133,17 +177,31 @@ public class LtexTextDocumentItem extends TextDocumentItem {
    * @param textChangeEvent text change event to apply
    */
   public void applyTextChangeEvent(TextDocumentContentChangeEvent textChangeEvent) {
-    Range range = textChangeEvent.getRange();
+    Range changeRange = textChangeEvent.getRange();
+    String changeText = textChangeEvent.getText();
 
-    if (range != null) {
+    if (changeRange != null) {
       String text = getText();
-      int fromPos = convertPosition(range.getStart());
-      int toPos   = ((range.getEnd() != range.getStart())
-          ? convertPosition(range.getEnd()) : fromPos);
-      text = text.substring(0, fromPos) + textChangeEvent.getText() + text.substring(toPos);
+      int fromPos = convertPosition(changeRange.getStart());
+      int toPos   = ((changeRange.getEnd() != changeRange.getStart())
+          ? convertPosition(changeRange.getEnd()) : fromPos);
+      text = text.substring(0, fromPos) + changeText + text.substring(toPos);
       setText(text);
+
+      if ((fromPos == toPos) && (changeText.length() == 1)) {
+        this.caretPosition = convertPosition(toPos + 1);
+        this.lastCaretChangeInstant = Instant.now();
+      } else if ((fromPos == toPos - 1) && changeText.isEmpty()) {
+        if (this.caretPosition == null) this.caretPosition = new Position();
+        this.caretPosition.setLine(changeRange.getStart().getLine());
+        this.caretPosition.setCharacter(changeRange.getStart().getCharacter());
+        this.lastCaretChangeInstant = Instant.now();
+      } else {
+        this.caretPosition = null;
+      }
     } else {
-      setText(textChangeEvent.getText());
+      setText(changeText);
+      this.caretPosition = null;
     }
   }
 }

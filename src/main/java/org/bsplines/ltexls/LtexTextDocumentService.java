@@ -44,7 +44,6 @@ import org.eclipse.lsp4j.RenameParams;
 import org.eclipse.lsp4j.SignatureHelp;
 import org.eclipse.lsp4j.SignatureHelpParams;
 import org.eclipse.lsp4j.SymbolInformation;
-import org.eclipse.lsp4j.TextDocumentContentChangeEvent;
 import org.eclipse.lsp4j.TextEdit;
 import org.eclipse.lsp4j.WorkspaceEdit;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
@@ -147,11 +146,8 @@ public class LtexTextDocumentService implements TextDocumentService {
       return;
     }
 
-    for (TextDocumentContentChangeEvent textChangeEvent : params.getContentChanges()) {
-      document.applyTextChangeEvent(textChangeEvent);
-      document.setVersion(params.getTextDocument().getVersion());
-    }
-
+    document.applyTextChangeEvents(params.getContentChanges());
+    document.setVersion(params.getTextDocument().getVersion());
     ltexLanguageServer.publishDiagnostics(document);
   }
 
