@@ -24,7 +24,6 @@ import org.eclipse.lsp4j.CodeActionKind;
 import org.eclipse.lsp4j.CodeActionParams;
 import org.eclipse.lsp4j.Command;
 import org.eclipse.lsp4j.Diagnostic;
-import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.ResourceOperation;
 import org.eclipse.lsp4j.TextDocumentEdit;
@@ -62,19 +61,6 @@ public class CodeActionGenerator {
 
   public CodeActionGenerator(SettingsManager settingsManager) {
     this.settingsManager = settingsManager;
-  }
-
-  private static boolean matchIntersectsWithRange(LanguageToolRuleMatch match, Range range,
-        LtexTextDocumentItem document) {
-    // false iff match is completely before range or completely after range
-    return !(positionLower(document.convertPosition(match.getToPos()), range.getStart())
-        || positionLower(range.getEnd(), document.convertPosition(match.getFromPos())));
-  }
-
-  private static boolean positionLower(Position position1, Position position2) {
-    return ((position1.getLine() < position2.getLine())
-        || ((position1.getLine() == position2.getLine())
-        && (position1.getCharacter() < position2.getCharacter())));
   }
 
   /**
@@ -119,7 +105,7 @@ public class CodeActionGenerator {
     Map<String, List<LanguageToolRuleMatch>> useWordMatchesMap = new LinkedHashMap<>();
 
     for (LanguageToolRuleMatch match : checkingResult.getKey()) {
-      if (matchIntersectsWithRange(match, params.getRange(), document)) {
+      if (match.isIntersectingWithRange(params.getRange(), document)) {
         String ruleId = match.getRuleId();
 
         if ((ruleId != null) && (ruleId.startsWith("MORFOLOGIK_")

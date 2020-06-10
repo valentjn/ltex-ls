@@ -3,8 +3,13 @@ package org.bsplines.ltexls.languagetool;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bsplines.ltexls.LtexTextDocumentItem;
+import org.bsplines.ltexls.Tools;
+
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+
+import org.eclipse.lsp4j.Range;
 
 public class LanguageToolRuleMatch {
   private @MonotonicNonNull String ruleId;
@@ -64,5 +69,18 @@ public class LanguageToolRuleMatch {
 
   public void setToPos(int toPos) {
     this.toPos = toPos;
+  }
+
+  /**
+   * Check if the match is intersecting with a range. This is false if and only if the ,atcj
+   * is completely before or completely after the range.
+   *
+   * @param range range
+   * @param document document in which the match occurred
+   * @return whether the match is intersecting with the range
+   */
+  public boolean isIntersectingWithRange(Range range, LtexTextDocumentItem document) {
+    return Tools.areRangesIntersecting(new Range(document.convertPosition(fromPos),
+        document.convertPosition(toPos)), range);
   }
 }
