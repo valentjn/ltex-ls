@@ -28,7 +28,7 @@ public class LanguageToolJavaInterfaceTest {
         "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n");
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         documentChecker.check(document);
-    DocumentCheckerTest.testMatches(checkingResult.getKey(), 8, 10, 58, 75);
+    DocumentCheckerTest.assertMatches(checkingResult.getKey(), 8, 10, 58, 75);
   }
 
   @Test

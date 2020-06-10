@@ -53,7 +53,7 @@ public class DocumentCheckerTest {
    * @param fromPos2 actual from position of the second diagnostic (inclusive)
    * @param toPos2 actual to position of the second diagnostic (exclusive)
    */
-  public static void testMatches(List<LanguageToolRuleMatch> matches, int fromPos1, int toPos1,
+  public static void assertMatches(List<LanguageToolRuleMatch> matches, int fromPos1, int toPos1,
         int fromPos2, int toPos2) {
     Assertions.assertEquals(2, matches.size());
 
@@ -99,7 +99,7 @@ public class DocumentCheckerTest {
     document = createDocument("latex",
         "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n");
     checkingResult = checkDocument(document);
-    testMatches(checkingResult.getKey(), 8, 10, 58, 75);
+    assertMatches(checkingResult.getKey(), 8, 10, 58, 75);
 
     document = createDocument("latex",
         "This is a qwertyzuiopa\\footnote{This is another qwertyzuiopb.}.\n"
@@ -169,7 +169,7 @@ public class DocumentCheckerTest {
         + "Dies ist eine **Test**.\n");
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         checkDocument(document);
-    testMatches(checkingResult.getKey(), 8, 10, 69, 80);
+    assertMatches(checkingResult.getKey(), 8, 10, 69, 80);
   }
 
   @Test
