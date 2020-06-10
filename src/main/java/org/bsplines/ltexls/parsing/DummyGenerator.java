@@ -33,11 +33,11 @@ public class DummyGenerator {
     if (language.equalsIgnoreCase("fr")) {
       return "Jimmy-" + number;
     } else {
-      return (plural ? "Dummies" : ("Dummy" + number));
+      return (this.plural ? "Dummies" : ("Dummy" + number));
     }
   }
 
   public boolean isPlural() {
-    return plural;
+    return this.plural;
   }
 }

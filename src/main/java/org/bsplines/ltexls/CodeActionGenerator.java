@@ -75,7 +75,7 @@ public class CodeActionGenerator {
     Diagnostic ret = new Diagnostic();
     ret.setRange(new Range(document.convertPosition(match.getFromPos()),
         document.convertPosition(match.getToPos())));
-    ret.setSeverity(settingsManager.getSettings().getDiagnosticSeverity());
+    ret.setSeverity(this.settingsManager.getSettings().getDiagnosticSeverity());
     ret.setSource("LTeX - " + match.getRuleId());
     ret.setMessage(match.getMessage().replaceAll("<suggestion>(.*?)</suggestion>", "'$1'"));
     return ret;
@@ -127,7 +127,7 @@ public class CodeActionGenerator {
     }
 
     if (!addWordToDictionaryMatches.isEmpty()
-          && settingsManager.getSettings().getLanguageToolHttpServerUri().isEmpty()) {
+          && this.settingsManager.getSettings().getLanguageToolHttpServerUri().isEmpty()) {
       CodeAction codeAction = getAddWordToDictionaryCodeAction(document,
           addWordToDictionaryMatches, checkingResult.getValue());
       result.add(Either.forRight(codeAction));

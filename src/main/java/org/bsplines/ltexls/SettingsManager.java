@@ -24,29 +24,30 @@ public class SettingsManager {
    */
   public SettingsManager() {
     reinitializeLanguageToolInterface();
-    String language = settings.getLanguageShortCode();
+    String language = this.settings.getLanguageShortCode();
     this.settingsMap = new HashMap<>();
-    settingsMap.put(language, settings);
+    this.settingsMap.put(language, this.settings);
     this.languageToolInterfaceMap = new HashMap<>();
-    languageToolInterfaceMap.put(language, languageToolInterface);
+    this.languageToolInterfaceMap.put(language, this.languageToolInterface);
   }
 
   @EnsuresNonNull("settings")
   private void reinitializeLanguageToolInterface(
         @UnknownInitialization(Object.class) SettingsManager this) {
-    if (settings == null) this.settings = new Settings();
+    if (this.settings == null) this.settings = new Settings();
 
-    if (settings.getLanguageToolHttpServerUri().isEmpty()) {
-      this.languageToolInterface = new LanguageToolJavaInterface(settings.getLanguageShortCode(),
-          settings.getMotherTongueShortCode(), settings.getSentenceCacheSize(),
-          settings.getDictionary());
+    if (this.settings.getLanguageToolHttpServerUri().isEmpty()) {
+      this.languageToolInterface = new LanguageToolJavaInterface(
+          this.settings.getLanguageShortCode(),
+          this.settings.getMotherTongueShortCode(), this.settings.getSentenceCacheSize(),
+          this.settings.getDictionary());
     } else {
       this.languageToolInterface = new LanguageToolHttpInterface(
-          settings.getLanguageToolHttpServerUri(), settings.getLanguageShortCode(),
-          settings.getMotherTongueShortCode());
+          this.settings.getLanguageToolHttpServerUri(), this.settings.getLanguageShortCode(),
+          this.settings.getMotherTongueShortCode());
     }
 
-    if (!languageToolInterface.isReady()) {
+    if (!this.languageToolInterface.isReady()) {
       this.languageToolInterface = null;
       return;
     }
@@ -54,35 +55,35 @@ public class SettingsManager {
     // fixes false-positive dereference.of.nullable warnings
     LanguageToolInterface languageToolInterface = this.languageToolInterface;
 
-    if (!settings.getLanguageModelRulesDirectory().isEmpty()) {
+    if (!this.settings.getLanguageModelRulesDirectory().isEmpty()) {
       languageToolInterface.activateLanguageModelRules(
-          settings.getLanguageModelRulesDirectory());
+          this.settings.getLanguageModelRulesDirectory());
     } else {
-      if (!settings.getMotherTongueShortCode().isEmpty()) {
+      if (!this.settings.getMotherTongueShortCode().isEmpty()) {
         languageToolInterface.activateDefaultFalseFriendRules();
       }
     }
 
-    if (!settings.getNeuralNetworkModelRulesDirectory().isEmpty()) {
+    if (!this.settings.getNeuralNetworkModelRulesDirectory().isEmpty()) {
       languageToolInterface.activateNeuralNetworkRules(
-          settings.getNeuralNetworkModelRulesDirectory());
+          this.settings.getNeuralNetworkModelRulesDirectory());
     }
 
-    if (!settings.getWord2VecModelRulesDirectory().isEmpty()) {
+    if (!this.settings.getWord2VecModelRulesDirectory().isEmpty()) {
       languageToolInterface.activateWord2VecModelRules(
-          settings.getWord2VecModelRulesDirectory());
+          this.settings.getWord2VecModelRulesDirectory());
     }
 
-    languageToolInterface.enableRules(settings.getEnabledRules());
-    languageToolInterface.disableRules(settings.getDisabledRules());
+    languageToolInterface.enableRules(this.settings.getEnabledRules());
+    languageToolInterface.disableRules(this.settings.getDisabledRules());
   }
 
   public Settings getSettings() {
-    return settings;
+    return this.settings;
   }
 
   public @Nullable LanguageToolInterface getLanguageToolInterface() {
-    return languageToolInterface;
+    return this.languageToolInterface;
   }
 
   public void setSettings(JsonElement newJsonSettings) {
@@ -97,16 +98,16 @@ public class SettingsManager {
    */
   public void setSettings(Settings newSettings) {
     String newLanguage = newSettings.getLanguageShortCode();
-    @Nullable Settings oldSettings = settingsMap.get(newLanguage);
+    @Nullable Settings oldSettings = this.settingsMap.get(newLanguage);
 
     if (newSettings.equals(oldSettings)) {
       this.settings = oldSettings;
-      this.languageToolInterface = languageToolInterfaceMap.get(newLanguage);
+      this.languageToolInterface = this.languageToolInterfaceMap.get(newLanguage);
     } else {
-      settingsMap.put(newLanguage, newSettings);
+      this.settingsMap.put(newLanguage, newSettings);
       this.settings = newSettings;
       reinitializeLanguageToolInterface();
-      languageToolInterfaceMap.put(newLanguage, languageToolInterface);
+      this.languageToolInterfaceMap.put(newLanguage, this.languageToolInterface);
     }
   }
 }

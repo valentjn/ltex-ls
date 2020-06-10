@@ -68,7 +68,7 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
   @EnsuresNonNullIf(expression = "this.url", result = true)
   @Override
   public boolean isReady() {
-    return (url != null);
+    return (this.url != null);
   }
 
   @Override
@@ -102,19 +102,19 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
     jsonData.add("annotation", jsonDataAnnotation);
 
     Map<String, String> requestEntries = new HashMap<>();
-    requestEntries.put("language", languageShortCode);
+    requestEntries.put("language", this.languageShortCode);
     requestEntries.put("data", jsonData.toString());
 
-    if (!motherTongueShortCode.isEmpty()) {
-      requestEntries.put("motherTongue", motherTongueShortCode);
+    if (!this.motherTongueShortCode.isEmpty()) {
+      requestEntries.put("motherTongue", this.motherTongueShortCode);
     }
 
-    if (!enabledRuleIds.isEmpty()) {
-      requestEntries.put("enabledRules", String.join(",", enabledRuleIds));
+    if (!this.enabledRuleIds.isEmpty()) {
+      requestEntries.put("enabledRules", String.join(",", this.enabledRuleIds));
     }
 
-    if (!disabledRuleIds.isEmpty()) {
-      requestEntries.put("disabledRules", String.join(",", disabledRuleIds));
+    if (!this.disabledRuleIds.isEmpty()) {
+      requestEntries.put("disabledRules", String.join(",", this.disabledRuleIds));
     }
 
     StringBuilder builder = new StringBuilder();
@@ -144,9 +144,9 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
       HttpPost httpPost;
 
       try {
-        httpPost = new HttpPost(url.toURI());
+        httpPost = new HttpPost(this.url.toURI());
       } catch (URISyntaxException e) {
-        Tools.logger.severe(Tools.i18n("couldNotParseHttpServerUri", url.toString(),
+        Tools.logger.severe(Tools.i18n("couldNotParseHttpServerUri", this.url.toString(),
             e.getMessage()));
         e.printStackTrace();
         return Collections.emptyList();
@@ -252,13 +252,13 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
 
   @Override
   public void enableRules(List<String> ruleIds) {
-    enabledRuleIds.addAll(ruleIds);
-    disabledRuleIds.removeAll(ruleIds);
+    this.enabledRuleIds.addAll(ruleIds);
+    this.disabledRuleIds.removeAll(ruleIds);
   }
 
   @Override public void disableRules(List<String> ruleIds) {
-    enabledRuleIds.removeAll(ruleIds);
-    disabledRuleIds.addAll(ruleIds);
+    this.enabledRuleIds.removeAll(ruleIds);
+    this.disabledRuleIds.addAll(ruleIds);
   }
 
   @Override public void enableEasterEgg() {

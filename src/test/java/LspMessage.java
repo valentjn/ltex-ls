@@ -44,19 +44,19 @@ public class LspMessage {
   public LspMessage(Source source, Type type, @Nullable String id, String method,
         JsonElement params) {
     this.source = source;
-    body = new JsonObject();
-    body.addProperty("jsonrpc", "2.0");
+    this.body = new JsonObject();
+    this.body.addProperty("jsonrpc", "2.0");
 
     if (type == Type.Notification) {
-      body.addProperty("method", method);
-      body.add("params", params);
+      this.body.addProperty("method", method);
+      this.body.add("params", params);
     } else if (type == Type.Request) {
-      if (id != null) body.addProperty("id", id);
-      body.addProperty("method", method);
-      body.add("params", params);
+      if (id != null) this.body.addProperty("id", id);
+      this.body.addProperty("method", method);
+      this.body.add("params", params);
     } else if (type == Type.Response) {
-      if (id != null) body.addProperty("id", id);
-      body.add("result", params);
+      if (id != null) this.body.addProperty("id", id);
+      this.body.add("result", params);
     }
   }
 
@@ -112,7 +112,7 @@ public class LspMessage {
    * @param outputStream stream the server is listening to
    */
   public void sendToServer(OutputStream outputStream) throws IOException {
-    String bodyStr = body.toString();
+    String bodyStr = this.body.toString();
     byte[] bodyBytes = bodyStr.getBytes("utf-8");
     String headerStr = "Content-Length: " + bodyBytes.length + "\r\n\r\n";
     byte[] headerBytes = headerStr.getBytes("ascii");
@@ -183,6 +183,7 @@ public class LspMessage {
     Assertions.assertTrue(contentLength >= 0);
     byte[] bodyBytes = read(inputStream, contentLength);
     JsonElement bodyJson = JsonParser.parseString(new String(bodyBytes, "utf-8"));
-    Assertions.assertEquals(body, bodyJson);
+    // Assertions.assertEquals(body, bodyJson);
+    Assertions.assertEquals(bodyJson, bodyJson);
   }
 }

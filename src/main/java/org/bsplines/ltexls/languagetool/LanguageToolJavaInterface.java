@@ -63,7 +63,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
   @EnsuresNonNullIf(expression = "this.languageTool", result = true)
   @Override
   public boolean isReady() {
-    return (languageTool != null);
+    return (this.languageTool != null);
   }
 
   @Override
@@ -76,7 +76,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     List<RuleMatch> matches;
 
     try {
-      matches = languageTool.check(annotatedText);
+      matches = this.languageTool.check(annotatedText);
     } catch (RuntimeException | IOException e) {
       Tools.logger.severe(Tools.i18n("languageToolFailed", e.getMessage()));
       e.printStackTrace();
@@ -108,9 +108,9 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
         + JLanguageTool.FALSE_FRIEND_FILE;
 
     try {
-      List<AbstractPatternRule> falseFriendRules = languageTool.loadFalseFriendRules(
+      List<AbstractPatternRule> falseFriendRules = this.languageTool.loadFalseFriendRules(
           falseFriendRulePath);
-      for (Rule rule : falseFriendRules) languageTool.addRule(rule);
+      for (Rule rule : falseFriendRules) this.languageTool.addRule(rule);
     } catch (ParserConfigurationException | SAXException | IOException e) {
       Tools.logger.warning(Tools.i18n("couldNotLoadFalseFriendRules",
           falseFriendRulePath, e.getMessage()));
@@ -123,7 +123,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     if (!isReady()) return;
 
     try {
-      languageTool.activateLanguageModelRules(new File(languageModelRulesDirectory));
+      this.languageTool.activateLanguageModelRules(new File(languageModelRulesDirectory));
     } catch (IOException | RuntimeException e) {
       Tools.logger.warning(Tools.i18n("couldNotLoadLanguageModel",
           languageModelRulesDirectory, e.getMessage()));
@@ -136,7 +136,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     if (!isReady()) return;
 
     try {
-      languageTool.activateNeuralNetworkRules(new File(neuralNetworkRulesDirectory));
+      this.languageTool.activateNeuralNetworkRules(new File(neuralNetworkRulesDirectory));
     } catch (IOException | RuntimeException e) {
       Tools.logger.warning(Tools.i18n("couldNotLoadNeuralNetworkModel",
           neuralNetworkRulesDirectory, e.getMessage()));
@@ -149,7 +149,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     if (!isReady()) return;
 
     try {
-      languageTool.activateWord2VecModelRules(new File(word2vecRulesDirectory));
+      this.languageTool.activateWord2VecModelRules(new File(word2vecRulesDirectory));
     } catch (IOException | RuntimeException e) {
       Tools.logger.warning(Tools.i18n("couldNotLoadWord2VecModel",
           word2vecRulesDirectory, e.getMessage()));
@@ -163,21 +163,21 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
     // for strange reasons there is no JLanguageTool.enableRules
     for (String ruleId : ruleIds) {
-      languageTool.enableRule(ruleId);
+      this.languageTool.enableRule(ruleId);
     }
   }
 
   @Override
   public void disableRules(List<String> ruleIds) {
     if (!isReady()) return;
-    languageTool.disableRules(ruleIds);
+    this.languageTool.disableRules(ruleIds);
   }
 
   @Override
   public void enableEasterEgg() {
     if (!isReady()) return;
 
-    languageTool.addRule(new Rule() {
+    this.languageTool.addRule(new Rule() {
       public String getId() {
         return "bspline";
       }
@@ -198,7 +198,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
       }
     });
 
-    languageTool.addRule(new Rule() {
+    this.languageTool.addRule(new Rule() {
       public String getId() {
         return "ungendered";
       }

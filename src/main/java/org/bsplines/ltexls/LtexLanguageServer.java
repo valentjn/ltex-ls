@@ -52,8 +52,8 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
    */
   public LtexLanguageServer() {
     this.settingsManager = new SettingsManager();
-    this.documentChecker = new DocumentChecker(settingsManager);
-    this.codeActionGenerator = new CodeActionGenerator(settingsManager);
+    this.documentChecker = new DocumentChecker(this.settingsManager);
+    this.codeActionGenerator = new CodeActionGenerator(this.settingsManager);
     this.ltexTextDocumentService = new LtexTextDocumentService(this);
     this.ltexWorkspaceService = new LtexWorkspaceService(this);
   }
@@ -119,17 +119,17 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   public CompletableFuture<Void> publishDiagnostics(LtexTextDocumentItem document,
         @Nullable Position caretPosition) {
     return getDiagnostics(document).thenApply((List<Diagnostic> diagnostics) -> {
-      if (languageClient == null) return null;
+      if (this.languageClient == null) return null;
 
       List<Diagnostic> diagnosticsNotAtCaret =
           extractDiagnosticsNotAtCaret(diagnostics, caretPosition);
-      languageClient.publishDiagnostics(new PublishDiagnosticsParams(
+      this.languageClient.publishDiagnostics(new PublishDiagnosticsParams(
           document.getUri(), diagnosticsNotAtCaret));
       document.setDiagnostics(diagnostics);
 
       if (diagnosticsNotAtCaret.size() < diagnostics.size()) {
         Thread thread = new Thread(new DelayedDiagnosticsPublisherRunnable(
-            languageClient, document));
+            this.languageClient, document));
         thread.start();
       }
 
@@ -145,7 +145,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
           List<Diagnostic> diagnostics = new ArrayList<>();
 
           for (LanguageToolRuleMatch match : matches) {
-            diagnostics.add(codeActionGenerator.createDiagnostic(match, document));
+            diagnostics.add(this.codeActionGenerator.createDiagnostic(match, document));
           }
 
           return diagnostics;
@@ -175,8 +175,8 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     arguments.addProperty("uri", uri);
     arguments.addProperty("operation", operation);
     arguments.addProperty("progress", progress);
-    if (languageClient == null) return;
-    languageClient.telemetryEvent(arguments);
+    if (this.languageClient == null) return;
+    this.languageClient.telemetryEvent(arguments);
   }
 
   /**
@@ -191,19 +191,19 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     configurationItem.setSection("ltex");
     configurationItem.setScopeUri(document.getUri());
 
-    if (languageClient == null) {
+    if (this.languageClient == null) {
       return CompletableFuture.completedFuture(
           Pair.of(Collections.emptyList(), Collections.emptyList()));
     }
 
-    CompletableFuture<List<Object>> configurationFuture = languageClient.configuration(
+    CompletableFuture<List<Object>> configurationFuture = this.languageClient.configuration(
         new ConfigurationParams(Arrays.asList(configurationItem)));
     sendProgressEvent(document.getUri(), "checkDocument", 0);
 
     return configurationFuture.thenApply((List<Object> configuration) -> {
       try {
-        settingsManager.setSettings((JsonElement)configuration.get(0));
-        return documentChecker.check(document);
+        this.settingsManager.setSettings((JsonElement)configuration.get(0));
+        return this.documentChecker.check(document);
       } finally {
         sendProgressEvent(document.getUri(), "checkDocument", 1);
       }
@@ -212,31 +212,31 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
   @Override
   public TextDocumentService getTextDocumentService() {
-    return ltexTextDocumentService;
+    return this.ltexTextDocumentService;
   }
 
   @Override
   public WorkspaceService getWorkspaceService() {
-    return ltexWorkspaceService;
+    return this.ltexWorkspaceService;
   }
 
   public @Nullable LanguageClient getLanguageClient() {
-    return languageClient;
+    return this.languageClient;
   }
 
   public SettingsManager getSettingsManager() {
-    return settingsManager;
+    return this.settingsManager;
   }
 
   public DocumentChecker getDocumentChecker() {
-    return documentChecker;
+    return this.documentChecker;
   }
 
   public CodeActionGenerator getCodeActionGenerator() {
-    return codeActionGenerator;
+    return this.codeActionGenerator;
   }
 
   public LtexTextDocumentService getLtexTextDocumentService() {
-    return ltexTextDocumentService;
+    return this.ltexTextDocumentService;
   }
 }

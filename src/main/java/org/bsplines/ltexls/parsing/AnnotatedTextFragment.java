@@ -18,11 +18,11 @@ public class AnnotatedTextFragment {
   }
 
   public AnnotatedText getAnnotatedText() {
-    return annotatedText;
+    return this.annotatedText;
   }
 
   public CodeFragment getCodeFragment() {
-    return codeFragment;
+    return this.codeFragment;
   }
 
   /**
@@ -31,7 +31,7 @@ public class AnnotatedTextFragment {
    * @return inverted annotated text
    */
   public AnnotatedText invert() {
-    List<Map.Entry<Integer, Integer>> mapping = annotatedText.getMapping();
+    List<Map.Entry<Integer, Integer>> mapping = this.annotatedText.getMapping();
     List<Map.Entry<Integer, Integer>> inverseMapping = new ArrayList<>();
 
     for (Map.Entry<Integer, Integer> entry : mapping) {

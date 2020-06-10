@@ -139,7 +139,7 @@ public class LtexTextDocumentService implements TextDocumentService {
   @Override
   public void didChange(DidChangeTextDocumentParams params) {
     String uri = params.getTextDocument().getUri();
-    LtexTextDocumentItem document = documents.get(uri);
+    LtexTextDocumentItem document = this.documents.get(uri);
 
     if (document == null) {
       Tools.logger.warning(Tools.i18n("couldNotFindDocumentWithUri", uri));
@@ -148,7 +148,7 @@ public class LtexTextDocumentService implements TextDocumentService {
 
     document.applyTextChangeEvents(params.getContentChanges());
     document.setVersion(params.getTextDocument().getVersion());
-    ltexLanguageServer.publishDiagnostics(document, document.getCaretPosition());
+    this.ltexLanguageServer.publishDiagnostics(document, document.getCaretPosition());
   }
 
   @Override
@@ -163,41 +163,41 @@ public class LtexTextDocumentService implements TextDocumentService {
     }
 
     String uri = params.getTextDocument().getUri();
-    LtexTextDocumentItem document = documents.get(uri);
+    LtexTextDocumentItem document = this.documents.get(uri);
 
     if (document == null) {
       Tools.logger.warning(Tools.i18n("couldNotFindDocumentWithUri", uri));
       return CompletableFuture.completedFuture(Collections.emptyList());
     }
 
-    return ltexLanguageServer.checkDocument(document)
+    return this.ltexLanguageServer.checkDocument(document)
         .thenApply((Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>
         checkingResult) -> {
-          return ltexLanguageServer.getCodeActionGenerator().generate(
+          return this.ltexLanguageServer.getCodeActionGenerator().generate(
               params, document, checkingResult);
         });
   }
 
   @Override
   public void didOpen(DidOpenTextDocumentParams params) {
-    documents.put(params.getTextDocument().getUri(),
+    this.documents.put(params.getTextDocument().getUri(),
         new LtexTextDocumentItem(params.getTextDocument()));
     @Nullable LtexTextDocumentItem document = getDocument(params.getTextDocument().getUri());
-    if (document != null) ltexLanguageServer.publishDiagnostics(document);
+    if (document != null) this.ltexLanguageServer.publishDiagnostics(document);
   }
 
   @Override
   public void didClose(DidCloseTextDocumentParams params) {
     String uri = params.getTextDocument().getUri();
-    documents.remove(uri);
-    LanguageClient languageClient = ltexLanguageServer.getLanguageClient();
+    this.documents.remove(uri);
+    LanguageClient languageClient = this.ltexLanguageServer.getLanguageClient();
     if (languageClient == null) return;
     languageClient.publishDiagnostics(
         new PublishDiagnosticsParams(uri, Collections.emptyList()));
   }
 
   private @Nullable LtexTextDocumentItem getDocument(String uri) {
-    LtexTextDocumentItem document = documents.get(uri);
+    LtexTextDocumentItem document = this.documents.get(uri);
 
     if (document != null) {
       return document;
@@ -208,6 +208,6 @@ public class LtexTextDocumentService implements TextDocumentService {
   }
 
   public void executeFunction(Consumer<? super LtexTextDocumentItem> function) {
-    documents.values().forEach(function);
+    this.documents.values().forEach(function);
   }
 }

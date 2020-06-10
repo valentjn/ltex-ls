@@ -31,11 +31,11 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   }
 
   private boolean isInNodeType(String nodeType) {
-    return nodeTypeStack.contains(nodeType);
+    return this.nodeTypeStack.contains(nodeType);
   }
 
   private boolean isInNodeType(List<String> nodeTypes) {
-    for (String nodeType : nodeTypeStack) {
+    for (String nodeType : this.nodeTypeStack) {
       if (nodeTypes.contains(nodeType)) return true;
     }
 
@@ -46,35 +46,35 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     boolean inParagraph = isInNodeType("Paragraph");
 
     while (true) {
-      if ((pos >= code.length()) || (pos >= newPos)) break;
-      int curPos = code.indexOf('\r', pos);
+      if ((this.pos >= this.code.length()) || (this.pos >= newPos)) break;
+      int curPos = this.code.indexOf('\r', this.pos);
 
       if ((curPos == -1) || (curPos >= newPos)) {
-        curPos = code.indexOf('\n', pos);
+        curPos = this.code.indexOf('\n', this.pos);
         if ((curPos == -1) || (curPos >= newPos)) break;
       }
 
-      if (curPos > pos) super.addMarkup(code.substring(pos, curPos));
-      super.addMarkup(code.substring(curPos, curPos + 1), (inParagraph ? " " : "\n"));
+      if (curPos > pos) super.addMarkup(this.code.substring(this.pos, curPos));
+      super.addMarkup(this.code.substring(curPos, curPos + 1), (inParagraph ? " " : "\n"));
 
-      pos = curPos + 1;
+      this.pos = curPos + 1;
     }
 
     if (newPos > pos) {
-      super.addMarkup(code.substring(pos, newPos));
-      pos = newPos;
+      super.addMarkup(this.code.substring(this.pos, newPos));
+      this.pos = newPos;
     }
   }
 
   private void addText(int newPos) {
     if (newPos > pos) {
-      super.addText(code.substring(pos, newPos));
-      pos = newPos;
+      super.addText(this.code.substring(this.pos, newPos));
+      this.pos = newPos;
     }
   }
 
   private String generateDummy() {
-    return DummyGenerator.getDefault().generate(language, dummyCounter++);
+    return DummyGenerator.getDefault().generate(this.language, this.dummyCounter++);
   }
 
   /**
@@ -96,42 +96,42 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     this.dummyCounter = 0;
     this.nodeTypeStack.clear();
     visitChildren(document);
-    if (pos < code.length()) addMarkup(code.length());
+    if (this.pos < this.code.length()) addMarkup(this.code.length());
   }
 
   private void visit(Node node) {
     String nodeType = node.getClass().getSimpleName();
 
     if (nodeType.equals("Text")) {
-      if (isInNodeType(ignoreNodeTypes)) {
+      if (isInNodeType(this.ignoreNodeTypes)) {
         addMarkup(node.getEndOffset());
       } else {
         addMarkup(node.getStartOffset());
         addText(node.getEndOffset());
       }
-    } else if (dummyNodeTypes.contains(nodeType)) {
+    } else if (this.dummyNodeTypes.contains(nodeType)) {
       addMarkup(node.getStartOffset());
       int newPos = node.getEndOffset();
 
       if (newPos > pos) {
-        super.addMarkup(code.substring(pos, newPos), generateDummy());
-        pos = newPos;
+        super.addMarkup(this.code.substring(this.pos, newPos), generateDummy());
+        this.pos = newPos;
       }
     } else {
       if (nodeType.equals("Paragraph")) {
         addMarkup(node.getStartOffset());
       }
 
-      nodeTypeStack.push(nodeType);
+      this.nodeTypeStack.push(nodeType);
       visitChildren(node);
-      nodeTypeStack.pop();
+      this.nodeTypeStack.pop();
     }
   }
 
   @Override
   public void setSettings(Settings settings) {
-    language = settings.getLanguageShortCode();
-    dummyNodeTypes.addAll(settings.getDummyMarkdownNodeTypes());
-    ignoreNodeTypes.addAll(settings.getIgnoreMarkdownNodeTypes());
+    this.language = settings.getLanguageShortCode();
+    this.dummyNodeTypes.addAll(settings.getDummyMarkdownNodeTypes());
+    this.ignoreNodeTypes.addAll(settings.getIgnoreMarkdownNodeTypes());
   }
 }

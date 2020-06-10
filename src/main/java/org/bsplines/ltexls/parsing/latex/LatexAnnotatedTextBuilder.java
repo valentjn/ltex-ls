@@ -92,7 +92,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private Map<String, List<LatexCommandSignature>> createCommandSignatureMap() {
     Map<String, List<LatexCommandSignature>> map = new HashMap<>();
 
-    for (LatexCommandSignature commandSignature : commandSignatures) {
+    for (LatexCommandSignature commandSignature : this.commandSignatures) {
       String commandName = commandSignature.name;
       if (!map.containsKey(commandName)) map.put(commandName, new ArrayList<>());
       map.get(commandName).add(commandSignature);
@@ -102,11 +102,11 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   }
 
   private String matchFromPosition(Pattern pattern) {
-    return matchFromPosition(pattern, pos);
+    return matchFromPosition(pattern, this.pos);
   }
 
   private String matchFromPosition(Pattern pattern, int pos) {
-    Matcher matcher = pattern.matcher(code.substring(pos));
+    Matcher matcher = pattern.matcher(this.code.substring(pos));
     return (matcher.find() ? matcher.group() : "");
   }
 
@@ -117,25 +117,26 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private String generateDummy(DummyGenerator dummyGenerator) {
     String dummy;
 
-    if (isTextMode(curMode)) {
-      dummy = dummyGenerator.generate(language, dummyCounter++);
-    } else if (isMathEmpty) {
-      if (curMode == Mode.DISPLAY_MATH) {
-        dummy = (lastSpace.isEmpty() ? " " : "");
+    if (isTextMode(this.curMode)) {
+      dummy = dummyGenerator.generate(this.language, this.dummyCounter++);
+    } else if (this.isMathEmpty) {
+      if (this.curMode == Mode.DISPLAY_MATH) {
+        dummy = (this.lastSpace.isEmpty() ? " " : "");
       } else {
         dummy = "";
       }
-    } else if (curMode == Mode.DISPLAY_MATH) {
-      dummy = ((lastSpace.isEmpty() ? " " : ""))
-          + dummyGenerator.generate(language, dummyCounter++)
-          + dummyLastPunctuation + ((modeStack.peek() == Mode.INLINE_TEXT) ? dummyLastSpace : " ");
+    } else if (this.curMode == Mode.DISPLAY_MATH) {
+      dummy = ((this.lastSpace.isEmpty() ? " " : ""))
+          + dummyGenerator.generate(this.language, this.dummyCounter++)
+          + dummyLastPunctuation + ((this.modeStack.peek() == Mode.INLINE_TEXT)
+          ? dummyLastSpace : " ");
     } else {
-      dummy = dummyGenerator.generate(language, dummyCounter++) + dummyLastPunctuation
+      dummy = dummyGenerator.generate(this.language, this.dummyCounter++) + dummyLastPunctuation
           + dummyLastSpace;
     }
 
-    dummyLastSpace = "";
-    dummyLastPunctuation = "";
+    this.dummyLastSpace = "";
+    this.dummyLastPunctuation = "";
     return dummy;
   }
 
@@ -148,7 +149,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   public LatexAnnotatedTextBuilder addText(String text) {
     if (text.isEmpty()) return this;
     super.addText(text);
-    pos += text.length();
+    this.pos += text.length();
     textAdded(text);
     return this;
   }
@@ -162,13 +163,13 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   public LatexAnnotatedTextBuilder addMarkup(String markup) {
     if (markup.isEmpty()) return this;
     super.addMarkup(markup);
-    pos += markup.length();
+    this.pos += markup.length();
 
-    if (preserveDummyLast) {
-      preserveDummyLast = false;
+    if (this.preserveDummyLast) {
+      this.preserveDummyLast = false;
     } else {
-      dummyLastSpace = "";
-      dummyLastPunctuation = "";
+      this.dummyLastSpace = "";
+      this.dummyLastPunctuation = "";
     }
 
     return this;
@@ -186,8 +187,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
       return addMarkup(markup);
     } else {
       super.addMarkup(markup, interpretAs);
-      pos += markup.length();
-      preserveDummyLast = false;
+      this.pos += markup.length();
+      this.preserveDummyLast = false;
       textAdded(interpretAs);
       return this;
     }
@@ -196,13 +197,13 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private void textAdded(String text) {
     if (text.isEmpty()) return;
     char lastChar = text.charAt(text.length() - 1);
-    lastSpace = (((lastChar == ' ') || (lastChar == '\n') || (lastChar == '\r')) ? " " : "");
-    lastPunctuation = (isPunctuation(lastChar) ? " " : "");
+    this.lastSpace = (((lastChar == ' ') || (lastChar == '\n') || (lastChar == '\r')) ? " " : "");
+    this.lastPunctuation = (isPunctuation(lastChar) ? " " : "");
   }
 
   private void popMode() {
-    modeStack.pop();
-    if (modeStack.isEmpty()) modeStack.push(Mode.PARAGRAPH_TEXT);
+    this.modeStack.pop();
+    if (this.modeStack.isEmpty()) this.modeStack.push(Mode.PARAGRAPH_TEXT);
   }
 
   private static boolean isPunctuation(char ch) {
@@ -226,30 +227,36 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   }
 
   private void enterDisplayMath() {
-    modeStack.push(Mode.DISPLAY_MATH);
-    isMathEmpty = true;
-    canInsertSpaceBeforeDummy = true;
+    this.modeStack.push(Mode.DISPLAY_MATH);
+    this.isMathEmpty = true;
+    this.canInsertSpaceBeforeDummy = true;
   }
 
   private void enterInlineMath() {
-    modeStack.push(Mode.INLINE_MATH);
-    isMathEmpty = true;
-    canInsertSpaceBeforeDummy = true;
-    isMathCharTrivial = true;
+    this.modeStack.push(Mode.INLINE_MATH);
+    this.isMathEmpty = true;
+    this.canInsertSpaceBeforeDummy = true;
+    this.isMathCharTrivial = true;
   }
 
   private String getDebugInformation(String code) {
     String remainingCode = StringEscapeUtils.escapeJava(
-        code.substring(pos, Math.min(pos + 100, code.length())));
+        code.substring(this.pos, Math.min(this.pos + 100, code.length())));
     return "Remaining code = \"" + remainingCode
-        + "\", pos = " + pos + ", dummyCounter = " + dummyCounter + ", lastSpace = \"" + lastSpace
-        + "\", lastPunctuation = \"" + lastPunctuation + "\", dummyLastSpace = \"" + dummyLastSpace
-        + "\", dummyLastPunctuation = \"" + dummyLastPunctuation
-        + "\", isMathEmpty = " + isMathEmpty + ", preserveDummyLast = " + preserveDummyLast
-        + ", canInsertSpaceBeforeDummy = " + canInsertSpaceBeforeDummy
-        + ", isMathCharTrivial = " + isMathCharTrivial + ", modeStack = " + modeStack
-        + ", curChar = \"" + curChar + "\", curString = \"" + curString
-        + "\", curMode = " + curMode;
+        + "\", pos = " + this.pos
+        + ", dummyCounter = " + this.dummyCounter
+        + ", lastSpace = \"" + this.lastSpace
+        + "\", lastPunctuation = \"" + this.lastPunctuation
+        + "\", dummyLastSpace = \"" + this.dummyLastSpace
+        + "\", dummyLastPunctuation = \"" + this.dummyLastPunctuation
+        + "\", isMathEmpty = " + this.isMathEmpty
+        + ", preserveDummyLast = " + this.preserveDummyLast
+        + ", canInsertSpaceBeforeDummy = " + this.canInsertSpaceBeforeDummy
+        + ", isMathCharTrivial = " + this.isMathCharTrivial
+        + ", modeStack = " + this.modeStack
+        + ", curChar = \"" + this.curChar
+        + "\", curString = \"" + this.curString
+        + "\", curMode = " + this.curMode;
   }
 
   private static boolean containsTwoEndsOfLine(String text) {
@@ -264,37 +271,37 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
    */
   public LatexAnnotatedTextBuilder addCode(String code) {
     this.code = code;
-    pos = 0;
-    dummyCounter = 0;
-    lastSpace = "";
-    lastPunctuation = "";
-    dummyLastSpace = "";
-    dummyLastPunctuation = "";
-    isMathEmpty = true;
-    preserveDummyLast = false;
-    canInsertSpaceBeforeDummy = false;
-    isMathCharTrivial = false;
+    this.pos = 0;
+    this.dummyCounter = 0;
+    this.lastSpace = "";
+    this.lastPunctuation = "";
+    this.dummyLastSpace = "";
+    this.dummyLastPunctuation = "";
+    this.isMathEmpty = true;
+    this.preserveDummyLast = false;
+    this.canInsertSpaceBeforeDummy = false;
+    this.isMathCharTrivial = false;
 
-    modeStack = new Stack<>();
-    modeStack.push(Mode.PARAGRAPH_TEXT);
+    this.modeStack = new Stack<>();
+    this.modeStack.push(Mode.PARAGRAPH_TEXT);
 
     Map<String, List<LatexCommandSignature>> commandSignatureMap = createCommandSignatureMap();
     Pattern ignoreEnvironmentEndPattern = null;
     int lastPos = -1;
 
-    while (pos < code.length()) {
-      curChar = code.charAt(pos);
-      curString = String.valueOf(curChar);
-      curMode = modeStack.peek();
-      isMathCharTrivial = false;
-      lastPos = pos;
+    while (this.pos < code.length()) {
+      this.curChar = code.charAt(this.pos);
+      this.curString = String.valueOf(this.curChar);
+      this.curMode = this.modeStack.peek();
+      this.isMathCharTrivial = false;
+      lastPos = this.pos;
 
-      if (isIgnoreEnvironmentMode(curMode)) {
+      if (isIgnoreEnvironmentMode(this.curMode)) {
         if (ignoreEnvironmentEndPattern != null) {
           String ignoreEnvironmentEnd = matchFromPosition(ignoreEnvironmentEndPattern);
 
           if (ignoreEnvironmentEnd.isEmpty()) {
-            addMarkup(curString);
+            addMarkup(this.curString);
           } else {
             popMode();
             addMarkup(ignoreEnvironmentEnd);
@@ -303,22 +310,22 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
           Tools.logger.warning(Tools.i18n("ignoreEnvironmentEndPatternNotSet"));
           popMode();
         }
-      } else if (codeLanguageId.equals("rsweave") && isRsweaveMode(curMode)) {
+      } else if (this.codeLanguageId.equals("rsweave") && isRsweaveMode(this.curMode)) {
         String rsweaveEnd = matchFromPosition(rsweaveEndPattern);
 
         if (rsweaveEnd.isEmpty()) {
-          addMarkup(curString);
+          addMarkup(this.curString);
         } else {
           popMode();
           addMarkup(rsweaveEnd);
         }
       } else {
-        switch (curChar) {
+        switch (this.curChar) {
           case '\\': {
             String command = matchFromPosition(commandPattern);
 
             if (command.equals("\\begin") || command.equals("\\end")) {
-              preserveDummyLast = true;
+              this.preserveDummyLast = true;
               addMarkup(command);
 
               String argument = matchFromPosition(argumentPattern);
@@ -337,30 +344,30 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                   interpretAs = generateDummy();
                 }
               } else if (command.equals("\\begin")
-                    && ignoreEnvironments.contains(environmentName)) {
-                modeStack.push(Mode.IGNORE_ENVIRONMENT);
+                    && this.ignoreEnvironments.contains(environmentName)) {
+                this.modeStack.push(Mode.IGNORE_ENVIRONMENT);
                 ignoreEnvironmentEndPattern = Pattern.compile(
                     "^\\\\end\\{" + Pattern.quote(environmentName) + "\\}");
               } else {
-                if (command.equals("\\begin")) modeStack.push(curMode);
+                if (command.equals("\\begin")) this.modeStack.push(this.curMode);
                 else popMode();
               }
 
-              if (!isIgnoreEnvironmentMode(modeStack.peek())) {
-                isMathCharTrivial = true;
-                preserveDummyLast = true;
+              if (!isIgnoreEnvironmentMode(this.modeStack.peek())) {
+                this.isMathCharTrivial = true;
+                this.preserveDummyLast = true;
                 addMarkup(argument, interpretAs);
 
                 if (command.equals("\\begin")) {
-                  while (pos < code.length()) {
+                  while (this.pos < code.length()) {
                     String environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
-                        code, pos, LatexCommandSignature.ArgumentType.BRACE);
+                        code, this.pos, LatexCommandSignature.ArgumentType.BRACE);
 
                     if (!environmentArgument.isEmpty()) {
                       addMarkup(environmentArgument);
                     } else {
                       environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
-                          code, pos, LatexCommandSignature.ArgumentType.BRACKET);
+                          code, this.pos, LatexCommandSignature.ArgumentType.BRACKET);
 
                       if (!environmentArgument.isEmpty()) {
                         addMarkup(environmentArgument);
@@ -398,7 +405,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
             } else if (command.equals("\\`") || command.equals("\\'") || command.equals("\\^")
                   || command.equals("\\~") || command.equals("\\\"") || command.equals("\\=")
                   || command.equals("\\.")) {
-              Matcher matcher = accentPattern1.matcher(code.substring(pos));
+              Matcher matcher = accentPattern1.matcher(code.substring(this.pos));
 
               if (matcher.find()) {
                 String accentCommand = matcher.group(1);
@@ -516,7 +523,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                 addMarkup(command);
               }
             } else if (command.equals("\\c") || command.equals("\\r")) {
-              Matcher matcher = accentPattern2.matcher(code.substring(pos));
+              Matcher matcher = accentPattern2.matcher(code.substring(this.pos));
 
               if (matcher.find()) {
                 String accentCommand = matcher.group(1);
@@ -555,22 +562,23 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                   || command.equals("\\quad") || command.equals("\\qquad")
                   || command.equals("\\newline")) {
               if (command.equals("\\hspace") || command.equals("\\hspace*")) {
-                String argument = matchFromPosition(argumentPattern, pos + command.length());
+                String argument = matchFromPosition(argumentPattern, this.pos + command.length());
                 command += argument;
               }
 
-              if (isMathMode(curMode) && lastSpace.isEmpty() && canInsertSpaceBeforeDummy) {
+              if (isMathMode(this.curMode) && this.lastSpace.isEmpty()
+                    && canInsertSpaceBeforeDummy) {
                 addMarkup(command, " ");
               } else {
-                preserveDummyLast = true;
+                this.preserveDummyLast = true;
 
-                if (isMathMode(curMode)) {
+                if (isMathMode(this.curMode)) {
                   addMarkup(command);
-                  dummyLastSpace = " ";
+                  this.dummyLastSpace = " ";
                 } else {
                   String space = " ";
 
-                  if (!lastSpace.isEmpty()) {
+                  if (!this.lastSpace.isEmpty()) {
                     space = "";
                   } else if (command.equals("\\,")) {
                     space = "\u202f";
@@ -584,7 +592,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                   || command.equals("\\ie") || command.equals("\\iec")) {
               String interpretAs = "";
 
-              if (!isMathMode(curMode)) {
+              if (!isMathMode(this.curMode)) {
                 if (command.equals("\\dots")) {
                   interpretAs = "...";
                 } else if (command.equals("\\eg")) {
@@ -602,7 +610,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
 
               addMarkup(command, interpretAs);
             } else if (command.equals("\\notag") || command.equals("\\qed")) {
-              preserveDummyLast = true;
+              this.preserveDummyLast = true;
               addMarkup(command);
             } else if (command.equals("\\part") || command.equals("\\chapter")
                   || command.equals("\\section") || command.equals("\\subsection")
@@ -612,11 +620,11 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                   || command.equals("\\section*") || command.equals("\\subsection*")
                   || command.equals("\\subsubsection*") || command.equals("\\paragraph*")
                   || command.equals("\\subparagraph*")) {
-              modeStack.push(Mode.HEADING);
+              this.modeStack.push(Mode.HEADING);
               addMarkup(command + "{");
             } else if (command.equals("\\text") || command.equals("\\intertext")) {
-              modeStack.push(Mode.INLINE_TEXT);
-              String interpretAs = (isMathMode(curMode) ? generateDummy() : "");
+              this.modeStack.push(Mode.INLINE_TEXT);
+              String interpretAs = (isMathMode(this.curMode) ? generateDummy() : "");
               addMarkup(command + "{", interpretAs);
             } else if (command.equals("\\verb")) {
               String verbCommand = matchFromPosition(verbCommandPattern);
@@ -632,7 +640,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               }
 
               for (LatexCommandSignature latexCommandSignature : possibleCommandSignatures) {
-                String curMatch = latexCommandSignature.matchFromPosition(code, pos);
+                String curMatch = latexCommandSignature.matchFromPosition(code, this.pos);
 
                 if (curMatch.length() > match.length()) {
                   match = curMatch;
@@ -668,27 +676,31 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
             if (!length.isEmpty()) {
               addMarkup(length);
             } else {
-              modeStack.push(curMode);
-              addMarkup(curString);
+              this.modeStack.push(this.curMode);
+              addMarkup(this.curString);
             }
 
             break;
           }
           case '}': {
             String interpretAs = "";
-            if ((curMode == Mode.HEADING) && lastPunctuation.isEmpty()) interpretAs = ".";
+            if ((this.curMode == Mode.HEADING) && this.lastPunctuation.isEmpty()) interpretAs = ".";
             popMode();
-            addMarkup(curString, interpretAs);
-            canInsertSpaceBeforeDummy = true;
-            if (isTextMode(curMode) && isMathMode(modeStack.peek())) isMathEmpty = true;
-            isMathCharTrivial = true;
+            addMarkup(this.curString, interpretAs);
+            this.canInsertSpaceBeforeDummy = true;
+
+            if (isTextMode(this.curMode) && isMathMode(this.modeStack.peek())) {
+              this.isMathEmpty = true;
+            }
+
+            this.isMathCharTrivial = true;
             break;
           }
           case '$': {
             String displayMath = matchFromPosition(displayMathPattern);
 
             if (!displayMath.isEmpty()) {
-              if (curMode == Mode.DISPLAY_MATH) {
+              if (this.curMode == Mode.DISPLAY_MATH) {
                 popMode();
                 addMarkup(displayMath, generateDummy());
               } else {
@@ -696,12 +708,12 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                 addMarkup(displayMath);
               }
             } else {
-              if (curMode == Mode.INLINE_MATH) {
+              if (this.curMode == Mode.INLINE_MATH) {
                 popMode();
-                addMarkup(curString, generateDummy());
+                addMarkup(this.curString, generateDummy());
               } else {
                 enterInlineMath();
-                addMarkup(curString);
+                addMarkup(this.curString);
               }
             }
 
@@ -709,8 +721,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
           }
           case '%': {
             String comment = matchFromPosition(commentPattern);
-            preserveDummyLast = true;
-            isMathCharTrivial = true;
+            this.preserveDummyLast = true;
+            this.isMathCharTrivial = true;
             addMarkup(comment, (containsTwoEndsOfLine(comment) ? "\n\n" : ""));
             break;
           }
@@ -720,23 +732,23 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
           case '\n':
           case '\r':
           case '\t': {
-            String whiteSpace = (((curChar != '~') && (curChar != '&'))
+            String whiteSpace = (((this.curChar != '~') && (this.curChar != '&'))
                 ? matchFromPosition(whiteSpacePattern) : curString);
-            preserveDummyLast = true;
-            isMathCharTrivial = true;
+            this.preserveDummyLast = true;
+            this.isMathCharTrivial = true;
 
-            if (isTextMode(curMode)) {
+            if (isTextMode(this.curMode)) {
               if (containsTwoEndsOfLine(whiteSpace)) {
                 addMarkup(whiteSpace, "\n\n");
               } else {
-                addMarkup(whiteSpace, (lastSpace.isEmpty() ? " " : ""));
+                addMarkup(whiteSpace, (this.lastSpace.isEmpty() ? " " : ""));
               }
             } else {
               addMarkup(whiteSpace);
             }
 
-            if ((curChar == '~') || (curChar == '&')) {
-              dummyLastSpace = " ";
+            if ((this.curChar == '~') || (this.curChar == '&')) {
+              this.dummyLastSpace = " ";
             }
 
             break;
@@ -744,12 +756,12 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
           case '`':
           case '\'':
           case '"': {
-            if (isTextMode(curMode)) {
+            if (isTextMode(this.curMode)) {
               String quote = "";
               String smartQuote = "";
 
-              if (pos + 1 < code.length()) {
-                quote = code.substring(pos, pos + 2);
+              if (this.pos + 1 < code.length()) {
+                quote = code.substring(this.pos, this.pos + 2);
 
                 if (quote.equals("``") || quote.equals("\"'")) {
                   smartQuote = "\u201c";
@@ -762,10 +774,10 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                 }
               }
 
-              if (quote.isEmpty()) addText(curString);
+              if (quote.isEmpty()) addText(this.curString);
               else addMarkup(quote, smartQuote);
             } else {
-              addMarkup(curString);
+              addMarkup(this.curString);
             }
 
             break;
@@ -773,7 +785,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
           case '-': {
             String emDash = matchFromPosition(emDashPattern);
 
-            if (isTextMode(curMode)) {
+            if (isTextMode(this.curMode)) {
               if (!emDash.isEmpty()) {
                 addMarkup(emDash, "\u2014");
                 break;
@@ -792,19 +804,19 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
             String length = matchFromPosition(lengthInBracketPattern);
 
             if (!length.isEmpty()) {
-              isMathCharTrivial = true;
-              preserveDummyLast = true;
+              this.isMathCharTrivial = true;
+              this.preserveDummyLast = true;
               addMarkup(length);
               break;
             }
           }
           // fall through
           case '<': {
-            if (codeLanguageId.equals("rsweave")) {
+            if (this.codeLanguageId.equals("rsweave")) {
               String rsweaveBegin = matchFromPosition(rsweaveBeginPattern);
 
               if (!rsweaveBegin.isEmpty()) {
-                modeStack.push(Mode.RSWEAVE);
+                this.modeStack.push(Mode.RSWEAVE);
                 addMarkup(rsweaveBegin);
                 break;
               }
@@ -812,12 +824,12 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
           }
           // fall through
           default: {
-            if (isTextMode(curMode)) {
-              addText(curString);
-              if (isPunctuation(curChar)) lastPunctuation = curString;
+            if (isTextMode(this.curMode)) {
+              addText(this.curString);
+              if (isPunctuation(this.curChar)) this.lastPunctuation = this.curString;
             } else {
-              addMarkup(curString);
-              if (isPunctuation(curChar)) dummyLastPunctuation = curString;
+              addMarkup(this.curString);
+              if (isPunctuation(this.curChar)) this.dummyLastPunctuation = this.curString;
             }
 
             break;
@@ -825,19 +837,19 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
         }
       }
 
-      if (!isMathCharTrivial) {
-        canInsertSpaceBeforeDummy = false;
-        isMathEmpty = false;
+      if (!this.isMathCharTrivial) {
+        this.canInsertSpaceBeforeDummy = false;
+        this.isMathEmpty = false;
       }
 
-      if (pos == lastPos) {
-        if (isInStrictMode) {
+      if (this.pos == lastPos) {
+        if (this.isInStrictMode) {
           throw new RuntimeException(Tools.i18n(
               "latexAnnotatedTextBuilderInfiniteLoop", getDebugInformation(code)));
         } else {
           Tools.logger.warning(Tools.i18n(
               "latexAnnotatedTextBuilderPreventedInfiniteLoop", getDebugInformation(code)));
-          pos++;
+          this.pos++;
         }
       }
     }
@@ -847,18 +859,18 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
 
   @Override
   public void setSettings(Settings settings) {
-    language = settings.getLanguageShortCode();
+    this.language = settings.getLanguageShortCode();
 
     for (String commandPrototype : settings.getDummyCommandPrototypes()) {
-      commandSignatures.add(new LatexCommandSignature(commandPrototype,
+      this.commandSignatures.add(new LatexCommandSignature(commandPrototype,
           LatexCommandSignature.Action.DUMMY));
     }
 
     for (String commandPrototype : settings.getIgnoreCommandPrototypes()) {
-      commandSignatures.add(new LatexCommandSignature(commandPrototype,
+      this.commandSignatures.add(new LatexCommandSignature(commandPrototype,
           LatexCommandSignature.Action.IGNORE));
     }
 
-    ignoreEnvironments.addAll(settings.getIgnoreEnvironments());
+    this.ignoreEnvironments.addAll(settings.getIgnoreEnvironments());
   }
 }

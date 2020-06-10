@@ -37,11 +37,11 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     this.diagnostics = new ArrayList<>();
     this.caretPosition = null;
     this.lastCaretChangeInstant = Instant.now();
-    reinitializeLineStartPosList(text, lineStartPosList);
+    reinitializeLineStartPosList(text, this.lineStartPosList);
   }
 
   private void reinitializeLineStartPosList() {
-    reinitializeLineStartPosList(getText(), lineStartPosList);
+    reinitializeLineStartPosList(getText(), this.lineStartPosList);
   }
 
   private static void reinitializeLineStartPosList(String text, List<Integer> lineStartPosList) {
@@ -66,7 +66,7 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     LtexTextDocumentItem other = (LtexTextDocumentItem)obj;
 
     if (!super.equals(other)) return false;
-    if (!lineStartPosList.equals(other.lineStartPosList)) return false;
+    if (!this.lineStartPosList.equals(other.lineStartPosList)) return false;
 
     return true;
   }
@@ -76,7 +76,7 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     int hash = 3;
 
     hash = 53 * hash + super.hashCode();
-    hash = 53 * hash + lineStartPosList.hashCode();
+    hash = 53 * hash + this.lineStartPosList.hashCode();
 
     return hash;
   }
@@ -94,12 +94,12 @@ public class LtexTextDocumentItem extends TextDocumentItem {
 
     if (line < 0) {
       return 0;
-    } else if (line >= lineStartPosList.size()) {
+    } else if (line >= this.lineStartPosList.size()) {
       return textLength;
     } else {
-      int lineStart = lineStartPosList.get(line);
-      int nextLineStart = ((line < lineStartPosList.size() - 1)
-          ? lineStartPosList.get(line + 1) : textLength);
+      int lineStart = this.lineStartPosList.get(line);
+      int nextLineStart = ((line < this.lineStartPosList.size() - 1)
+          ? this.lineStartPosList.get(line + 1) : textLength);
       int lineLength = nextLineStart - lineStart;
 
       if (character < 0) {
@@ -119,18 +119,18 @@ public class LtexTextDocumentItem extends TextDocumentItem {
    * @return line/column Position object
    */
   public Position convertPosition(int pos) {
-    int line = Collections.binarySearch(lineStartPosList, pos);
+    int line = Collections.binarySearch(this.lineStartPosList, pos);
 
     if (line < 0) {
       int insertionPoint = -line - 1;
       line = insertionPoint - 1;
     }
 
-    return new Position(line, pos - lineStartPosList.get(line));
+    return new Position(line, pos - this.lineStartPosList.get(line));
   }
 
   public List<Diagnostic> getDiagnostics() {
-    return new ArrayList<>(diagnostics);
+    return new ArrayList<>(this.diagnostics);
   }
 
   public void setDiagnostics(List<Diagnostic> diagnostics) {
@@ -138,12 +138,12 @@ public class LtexTextDocumentItem extends TextDocumentItem {
   }
 
   public @Nullable Position getCaretPosition() {
-    return ((caretPosition != null)
-        ? new Position(caretPosition.getLine(), caretPosition.getCharacter()) : null);
+    return ((this.caretPosition != null)
+        ? new Position(this.caretPosition.getLine(), this.caretPosition.getCharacter()) : null);
   }
 
   public Instant getLastCaretChangeInstant() {
-    return lastCaretChangeInstant;
+    return this.lastCaretChangeInstant;
   }
 
   @Override
@@ -159,7 +159,7 @@ public class LtexTextDocumentItem extends TextDocumentItem {
    * @param textChangeEvents list of text change events to apply
    */
   public void applyTextChangeEvents(List<TextDocumentContentChangeEvent> textChangeEvents) {
-    Instant oldlastCaretChangeInstant = lastCaretChangeInstant;
+    Instant oldlastCaretChangeInstant = this.lastCaretChangeInstant;
 
     for (TextDocumentContentChangeEvent textChangeEvent : textChangeEvents) {
       applyTextChangeEvent(textChangeEvent);

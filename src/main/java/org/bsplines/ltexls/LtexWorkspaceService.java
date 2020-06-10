@@ -31,10 +31,10 @@ class LtexWorkspaceService implements WorkspaceService {
 
   @Override
   public void didChangeConfiguration(DidChangeConfigurationParams params) {
-    ltexLanguageServer.getSettingsManager().setSettings(
+    this.ltexLanguageServer.getSettingsManager().setSettings(
         ((JsonObject)params.getSettings()).get("ltex"));
-    ltexLanguageServer.getLtexTextDocumentService().executeFunction(
-        ltexLanguageServer::publishDiagnostics);
+    this.ltexLanguageServer.getLtexTextDocumentService().executeFunction(
+        this.ltexLanguageServer::publishDiagnostics);
   }
 
   @Override
@@ -43,7 +43,7 @@ class LtexWorkspaceService implements WorkspaceService {
 
   @Override
   public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
-    LanguageClient languageClient = ltexLanguageServer.getLanguageClient();
+    LanguageClient languageClient = this.ltexLanguageServer.getLanguageClient();
 
     if (CodeActionGenerator.getCommandNames().contains(params.getCommand())
           && (languageClient != null)) {

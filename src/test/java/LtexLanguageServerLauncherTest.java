@@ -28,13 +28,13 @@ public class LtexLanguageServerLauncherTest {
    */
   @BeforeAll
   public void setUp() throws InterruptedException, IOException {
-    pipedInputStream.connect(out);
-    pipedOutputStream.connect(in);
+    this.pipedInputStream.connect(this.out);
+    this.pipedOutputStream.connect(this.in);
 
-    launcherThread = new Thread(() -> {
-      Assertions.assertDoesNotThrow(() -> LtexLanguageServerLauncher.launch(in, out));
+    this.launcherThread = new Thread(() -> {
+      Assertions.assertDoesNotThrow(() -> LtexLanguageServerLauncher.launch(this.in, this.out));
     });
-    launcherThread.start();
+    this.launcherThread.start();
 
     // wait until LtexLanguageServer has initialized itself
     Thread.sleep(5000);
@@ -45,11 +45,11 @@ public class LtexLanguageServerLauncherTest {
    */
   @AfterAll
   public void tearDown() throws IOException {
-    if (launcherThread != null) launcherThread.interrupt();
-    pipedInputStream.close();
-    pipedOutputStream.close();
-    out.close();
-    in.close();
+    if (this.launcherThread != null) this.launcherThread.interrupt();
+    this.pipedInputStream.close();
+    this.pipedOutputStream.close();
+    this.out.close();
+    this.in.close();
   }
 
   private static List<LspMessage> convertLogToMessages(String log) {
@@ -71,9 +71,9 @@ public class LtexLanguageServerLauncherTest {
 
     for (LspMessage message : messages) {
       if (message.source == LspMessage.Source.Client) {
-        message.sendToServer(pipedOutputStream);
+        message.sendToServer(this.pipedOutputStream);
       } else if (message.source == LspMessage.Source.Server) {
-        message.waitForServer(pipedInputStream);
+        message.waitForServer(this.pipedInputStream);
       }
     }
   }

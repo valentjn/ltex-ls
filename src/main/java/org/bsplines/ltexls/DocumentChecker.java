@@ -28,7 +28,7 @@ public class DocumentChecker {
 
   private List<CodeFragment> fragmentizeDocument(TextDocumentItem document) {
     CodeFragmentizer codeFragmentizer = CodeFragmentizer.create(
-        document.getLanguageId(), settingsManager.getSettings());
+        document.getLanguageId(), this.settingsManager.getSettings());
     return codeFragmentizer.fragmentize(document.getText());
   }
 
@@ -62,8 +62,8 @@ public class DocumentChecker {
   private List<LanguageToolRuleMatch> checkAnnotatedTextFragment(
         AnnotatedTextFragment annotatedTextFragment) {
     Settings settings = annotatedTextFragment.getCodeFragment().getSettings();
-    settingsManager.setSettings(settings);
-    LanguageToolInterface languageToolInterface = settingsManager.getLanguageToolInterface();
+    this.settingsManager.setSettings(settings);
+    LanguageToolInterface languageToolInterface = this.settingsManager.getLanguageToolInterface();
 
     if (languageToolInterface == null) {
       Tools.logger.warning(Tools.i18n("skippingTextCheck"));
@@ -109,7 +109,7 @@ public class DocumentChecker {
   }
 
   private void removeIgnoredMatches(List<LanguageToolRuleMatch> matches) {
-    Settings settings = settingsManager.getSettings();
+    Settings settings = this.settingsManager.getSettings();
     List<IgnoreRuleSentencePair> ignoreRuleSentencePairs = settings.getIgnoreRuleSentencePairs();
 
     if (!matches.isEmpty() && !ignoreRuleSentencePairs.isEmpty()) {
@@ -149,7 +149,7 @@ public class DocumentChecker {
    */
   public Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> check(
         TextDocumentItem document) {
-    Settings originalSettings = settingsManager.getSettings();
+    Settings originalSettings = this.settingsManager.getSettings();
 
     try {
       List<CodeFragment> codeFragments = fragmentizeDocument(document);
@@ -158,7 +158,7 @@ public class DocumentChecker {
       List<LanguageToolRuleMatch> matches = checkAnnotatedTextFragments(annotatedTextFragments);
       return new Pair<>(matches, annotatedTextFragments);
     } finally {
-      settingsManager.setSettings(originalSettings);
+      this.settingsManager.setSettings(originalSettings);
     }
   }
 }

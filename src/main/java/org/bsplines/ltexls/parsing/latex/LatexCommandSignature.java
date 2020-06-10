@@ -82,13 +82,13 @@ public class LatexCommandSignature {
         argumentType = LatexCommandSignature.ArgumentType.BRACE;
       }
 
-      argumentTypes.add(argumentType);
+      this.argumentTypes.add(argumentType);
       pos += argumentMatcher.group().length();
       assert argumentMatcher.group().length() > 0;
     }
 
     this.action = action;
-    this.thisCommandPattern = Pattern.compile("^" + Pattern.quote(name));
+    this.thisCommandPattern = Pattern.compile("^" + Pattern.quote(this.name));
   }
 
   private static String matchPatternFromPosition(String code, int fromPos, Pattern pattern) {
@@ -215,10 +215,10 @@ public class LatexCommandSignature {
   private int matchFromPosition(String code, int fromPos,
         @Nullable List<Pair<Integer, Integer>> arguments) {
     int pos = fromPos;
-    String match = matchPatternFromPosition(code, pos, thisCommandPattern);
+    String match = matchPatternFromPosition(code, pos, this.thisCommandPattern);
     pos += match.length();
 
-    for (ArgumentType argumentType : argumentTypes) {
+    for (ArgumentType argumentType : this.argumentTypes) {
       match = matchPatternFromPosition(code, pos, commentPattern);
       pos += match.length();
 

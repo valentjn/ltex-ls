@@ -26,10 +26,10 @@ public class DelayedDiagnosticsPublisherRunnable implements Runnable {
       return;
     }
 
-    if (Duration.between(document.getLastCaretChangeInstant(),
+    if (Duration.between(this.document.getLastCaretChangeInstant(),
           Instant.now()).compareTo(showCaretDiagnosticsDuration) > 0) {
-      languageClient.publishDiagnostics(new PublishDiagnosticsParams(
-          document.getUri(), document.getDiagnostics()));
+      this.languageClient.publishDiagnostics(new PublishDiagnosticsParams(
+          this.document.getUri(), this.document.getDiagnostics()));
     }
   }
 }

@@ -33,13 +33,13 @@ public class LatexFragmentizer extends CodeFragmentizer {
    */
   public LatexFragmentizer(String codeLanguageId, Settings originalSettings) {
     super(codeLanguageId, originalSettings);
-    commentFragmentizer = new RegexCodeFragmentizer(
+    this.commentFragmentizer = new RegexCodeFragmentizer(
         codeLanguageId, originalSettings, commentPattern);
   }
 
   @Override
   public List<CodeFragment> fragmentize(String code) {
-    List<CodeFragment> commentFragments = commentFragmentizer.fragmentize(code);
+    List<CodeFragment> commentFragments = this.commentFragmentizer.fragmentize(code);
     ArrayList<CodeFragment> fragments = new ArrayList<>();
 
     for (CodeFragment commentFragment : commentFragments) {

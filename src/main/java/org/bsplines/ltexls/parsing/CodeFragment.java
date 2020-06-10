@@ -25,22 +25,23 @@ public class CodeFragment {
   }
 
   public String getCodeLanguageId() {
-    return codeLanguageId;
+    return this.codeLanguageId;
   }
 
   public String getCode() {
-    return code;
+    return this.code;
   }
 
   public int getFromPos() {
-    return fromPos;
+    return this.fromPos;
   }
 
   public Settings getSettings() {
-    return settings;
+    return this.settings;
   }
 
   public boolean contains(LanguageToolRuleMatch match) {
-    return ((match.getFromPos() >= fromPos) && (match.getToPos() <= fromPos + code.length()));
+    return ((match.getFromPos() >= fromPos)
+        && (match.getToPos() <= this.fromPos + this.code.length()));
   }
 }

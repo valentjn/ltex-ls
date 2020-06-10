@@ -40,27 +40,27 @@ public class LanguageToolRuleMatch {
   }
 
   public @Nullable String getRuleId() {
-    return ruleId;
+    return this.ruleId;
   }
 
   public @Nullable String getSentence() {
-    return sentence;
+    return this.sentence;
   }
 
   public int getFromPos() {
-    return fromPos;
+    return this.fromPos;
   }
 
   public int getToPos() {
-    return toPos;
+    return this.toPos;
   }
 
   public String getMessage() {
-    return message;
+    return this.message;
   }
 
   public List<String> getSuggestedReplacements() {
-    return suggestedReplacements;
+    return this.suggestedReplacements;
   }
 
   public void setFromPos(int fromPos) {
@@ -80,7 +80,7 @@ public class LanguageToolRuleMatch {
    * @return whether the match is intersecting with the range
    */
   public boolean isIntersectingWithRange(Range range, LtexTextDocumentItem document) {
-    return Tools.areRangesIntersecting(new Range(document.convertPosition(fromPos),
-        document.convertPosition(toPos)), range);
+    return Tools.areRangesIntersecting(new Range(document.convertPosition(this.fromPos),
+        document.convertPosition(this.toPos)), range);
   }
 }

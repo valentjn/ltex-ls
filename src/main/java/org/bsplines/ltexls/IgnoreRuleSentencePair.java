@@ -33,12 +33,12 @@ public class IgnoreRuleSentencePair {
 
     IgnoreRuleSentencePair other = (IgnoreRuleSentencePair)obj;
 
-    if ((ruleId == null) ? (other.ruleId != null) : !ruleId.equals(other.ruleId)) {
+    if ((this.ruleId == null) ? (other.ruleId != null) : !this.ruleId.equals(other.ruleId)) {
       return false;
     }
 
-    if ((sentenceString == null) ? (other.sentenceString != null) :
-          !sentenceString.equals(other.sentenceString)) {
+    if ((this.sentenceString == null) ? (other.sentenceString != null) :
+          !this.sentenceString.equals(other.sentenceString)) {
       return false;
     }
 
@@ -49,21 +49,21 @@ public class IgnoreRuleSentencePair {
   public int hashCode() {
     int hash = 3;
 
-    hash = 53 * hash + ((ruleId != null) ? ruleId.hashCode() : 0);
-    hash = 53 * hash + ((sentenceString != null) ? sentenceString.hashCode() : 0);
+    hash = 53 * hash + ((this.ruleId != null) ? this.ruleId.hashCode() : 0);
+    hash = 53 * hash + ((this.sentenceString != null) ? this.sentenceString.hashCode() : 0);
 
     return hash;
   }
 
   public String getRuleId() {
-    return ruleId;
+    return this.ruleId;
   }
 
   public String getSentenceString() {
-    return sentenceString;
+    return this.sentenceString;
   }
 
   public Pattern getSentencePattern() {
-    return sentencePattern;
+    return this.sentencePattern;
   }
 }
