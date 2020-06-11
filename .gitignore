@@ -3,12 +3,13 @@
 
 /.gradle/
 /.settings/
-/bin/
-/build/
 
-/ltex-ls-languagetool-patch/.classpath
-/ltex-ls-languagetool-patch/.project
+/ltexls/bin/
+/ltexls/build/
 
-/ltex-ls-languagetool-patch/.settings/
-/ltex-ls-languagetool-patch/bin/
-/ltex-ls-languagetool-patch/build/
+/ltexls-languagetool-patch/.classpath
+/ltexls-languagetool-patch/.project
+
+/ltexls-languagetool-patch/.settings/
+/ltexls-languagetool-patch/bin/
+/ltexls-languagetool-patch/build/

@@ -183,7 +183,6 @@ public class LspMessage {
     Assertions.assertTrue(contentLength >= 0);
     byte[] bodyBytes = read(inputStream, contentLength);
     JsonElement bodyJson = JsonParser.parseString(new String(bodyBytes, "utf-8"));
-    // Assertions.assertEquals(body, bodyJson);
-    Assertions.assertEquals(bodyJson, bodyJson);
+    Assertions.assertEquals(body, bodyJson);
   }
 }
