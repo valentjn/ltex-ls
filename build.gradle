@@ -9,7 +9,7 @@ plugins {
 }
 
 allprojects {
-  group('valentjn')
+  group('org.bsplines')
   version('5.1.0-alpha.1')
 
   repositories {
