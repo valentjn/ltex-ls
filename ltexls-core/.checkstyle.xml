@@ -21,7 +21,7 @@
     <property name="charset" value="UTF-8"/>
 
     <!--
-        ltex-ls: Change severity of violations from warning to error.
+        LTeX LS: Change severity of violations from warning to error.
     -->
     <!--<property name="severity" value="warning"/>-->
     <property name="severity" value="error"/>
@@ -34,7 +34,7 @@
     </module>
 
     <!--
-        ltex-ls: Move LineLength to Checker, was under TreeWalker (throws an error with Maven).
+        LTeX LS: Move LineLength to Checker, was under TreeWalker (throws an error with Maven).
     -->
     <module name="LineLength">
         <property name="max" value="100"/>
@@ -51,7 +51,7 @@
              value="Consider using special escape sequence instead of octal value or Unicode escaped value."/>
         </module>
         <!--
-            ltex-ls: Allowing Unicode characters in code leads to problems with different editors
+            LTeX LS: Allowing Unicode characters in code leads to problems with different editors
             and different platforms (example: Travis build on Windows).
             It's better when code is ASCII-only.
         -->
@@ -69,7 +69,7 @@
              value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH"/>
         </module>
         <!--
-            ltex-ls: Allow single-line statements (e.g., if statements) without braces.
+            LTeX LS: Allow single-line statements (e.g., if statements) without braces.
         -->
         <!--<module name="NeedBraces"/>-->
         <module name="NeedBraces">
@@ -256,28 +256,28 @@
         <module name="JavadocMethod">
             <property name="scope" value="public"/>
             <!--
-                ltex-ls: Force documentation of arguments.
+                LTeX LS: Force documentation of arguments.
             -->
             <!--<property name="allowMissingParamTags" value="true"/>-->
             <property name="allowMissingParamTags" value="false"/>
             <!--
-                ltex-ls: allowMissingThrowsTags doesn't exist according to the docs,
+                LTeX LS: allowMissingThrowsTags doesn't exist according to the docs,
                 disabling.
             -->
             <!--<property name="allowMissingThrowsTags" value="true"/>-->
             <!--
-                ltex-ls: Force documentation of return values.
+                LTeX LS: Force documentation of return values.
             -->
             <!--<property name="allowMissingReturnTag" value="true"/>-->
             <property name="allowMissingReturnTag" value="false"/>
             <!--
-                ltex-ls: minLineCount doesn't exist according to the docs,
+                LTeX LS: minLineCount doesn't exist according to the docs,
                 disabling.
             -->
             <!--<property name="minLineCount" value="2"/>-->
             <property name="allowedAnnotations" value="Override, Test"/>
             <!--
-                ltex-ls: allowThrowsTagsForSubclasses doesn't exist according to the docs,
+                LTeX LS: allowThrowsTagsForSubclasses doesn't exist according to the docs,
                 disabling.
             -->
             <!--<property name="allowThrowsTagsForSubclasses" value="true"/>-->
@@ -295,7 +295,7 @@
         </module>
         <module name="CommentsIndentation"/>
         <!--
-            ltex-ls: Force usage of "this" for all fields.
+            LTeX LS: Force usage of "this" for all fields.
             (The Google style guide doesn't say anything about this.)
         -->
         <module name="RequireThis">
