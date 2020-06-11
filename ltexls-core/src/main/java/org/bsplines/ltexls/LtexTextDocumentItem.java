@@ -99,22 +99,33 @@ public class LtexTextDocumentItem extends TextDocumentItem {
   public int convertPosition(Position position) {
     int line = position.getLine();
     int character = position.getCharacter();
-    int textLength = getText().length();
+    String text = getText();
 
     if (line < 0) {
       return 0;
     } else if (line >= this.lineStartPosList.size()) {
-      return textLength;
+      return text.length();
     } else {
       int lineStart = this.lineStartPosList.get(line);
       int nextLineStart = ((line < this.lineStartPosList.size() - 1)
-          ? this.lineStartPosList.get(line + 1) : textLength);
+          ? this.lineStartPosList.get(line + 1) : text.length());
       int lineLength = nextLineStart - lineStart;
 
       if (character < 0) {
         return lineStart;
       } else if (character >= lineLength) {
-        return lineStart + lineLength;
+        int pos = lineStart + lineLength;
+
+        if (pos >= 1) {
+          if (text.charAt(pos - 1) == '\r') {
+            pos--;
+          } else if (text.charAt(pos - 1) == '\n') {
+            pos--;
+            if ((pos >= 1) && (text.charAt(pos - 1) == '\r')) pos--;
+          }
+        }
+
+        return pos;
       } else {
         return lineStart + character;
       }

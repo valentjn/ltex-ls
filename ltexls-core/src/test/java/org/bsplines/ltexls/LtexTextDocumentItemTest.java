@@ -23,6 +23,12 @@ public class LtexTextDocumentItemTest {
     assertPosition(document, 18, new Position(1, 12));
     assertPosition(document, 20, new Position(2, 0));
 
+    Assertions.assertEquals(0, document.convertPosition(new Position(-1, 0)));
+    Assertions.assertEquals(27, document.convertPosition(new Position(3, 0)));
+    Assertions.assertEquals(6, document.convertPosition(new Position(1, -1)));
+    Assertions.assertEquals(5, document.convertPosition(new Position(0, 20)));
+    Assertions.assertEquals(18, document.convertPosition(new Position(1, 20)));
+
     document = new LtexTextDocumentItem("untitled:test.txt", "plaintext", 1, "\nHi");
     Assertions.assertEquals(new Position(1, 0), document.convertPosition(1));
     assertPosition(document, 1, new Position(1, 0));
