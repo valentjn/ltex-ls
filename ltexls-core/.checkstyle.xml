@@ -20,7 +20,11 @@
 <module name = "Checker">
     <property name="charset" value="UTF-8"/>
 
-    <property name="severity" value="warning"/>
+    <!--
+        ltex-ls: Change severity of violations from warning to error.
+    -->
+    <!--<property name="severity" value="warning"/>-->
+    <property name="severity" value="error"/>
 
     <property name="fileExtensions" value="java, properties, xml"/>
     <!-- Checks for whitespace                               -->
