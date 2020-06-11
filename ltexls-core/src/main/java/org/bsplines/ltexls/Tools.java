@@ -13,7 +13,7 @@ import org.eclipse.lsp4j.Range;
 
 public class Tools {
   private static @MonotonicNonNull ResourceBundle messages = null;
-  public static final Logger logger = Logger.getLogger("org.bsplines.ltex_ls");
+  public static final Logger logger = Logger.getLogger("org.bsplines.ltexls");
 
   static {
     setDefaultLocale();
