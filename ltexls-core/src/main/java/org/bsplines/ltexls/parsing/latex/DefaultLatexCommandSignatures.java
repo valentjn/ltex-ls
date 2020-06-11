@@ -324,7 +324,8 @@ class DefaultLatexCommandSignatures {
       new LatexCommandSignature("\\WarningFilter{}{}"),
       };
 
-  private DefaultLatexCommandSignatures() {}
+  private DefaultLatexCommandSignatures() {
+  }
 
   public static LatexCommandSignature[] get() {
     return list;

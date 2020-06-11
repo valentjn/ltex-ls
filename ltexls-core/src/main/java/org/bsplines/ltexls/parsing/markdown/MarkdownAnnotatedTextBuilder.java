@@ -52,20 +52,20 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
         if ((curPos == -1) || (curPos >= newPos)) break;
       }
 
-      if (curPos > pos) super.addMarkup(this.code.substring(this.pos, curPos));
+      if (curPos > this.pos) super.addMarkup(this.code.substring(this.pos, curPos));
       super.addMarkup(this.code.substring(curPos, curPos + 1), (inParagraph ? " " : "\n"));
 
       this.pos = curPos + 1;
     }
 
-    if (newPos > pos) {
+    if (newPos > this.pos) {
       super.addMarkup(this.code.substring(this.pos, newPos));
       this.pos = newPos;
     }
   }
 
   private void addText(int newPos) {
-    if (newPos > pos) {
+    if (newPos > this.pos) {
       super.addText(this.code.substring(this.pos, newPos));
       this.pos = newPos;
     }
@@ -111,7 +111,7 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
       addMarkup(node.getStartOffset());
       int newPos = node.getEndOffset();
 
-      if (newPos > pos) {
+      if (newPos > this.pos) {
         super.addMarkup(this.code.substring(this.pos, newPos), generateDummy());
         this.pos = newPos;
       }

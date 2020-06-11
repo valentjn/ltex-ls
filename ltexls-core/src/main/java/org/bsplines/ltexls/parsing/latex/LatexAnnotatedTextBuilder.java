@@ -126,11 +126,11 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     } else if (this.curMode == Mode.DISPLAY_MATH) {
       dummy = ((this.lastSpace.isEmpty() ? " " : ""))
           + dummyGenerator.generate(this.language, this.dummyCounter++)
-          + dummyLastPunctuation + ((this.modeStack.peek() == Mode.INLINE_TEXT)
-          ? dummyLastSpace : " ");
+          + this.dummyLastPunctuation + ((this.modeStack.peek() == Mode.INLINE_TEXT)
+          ? this.dummyLastSpace : " ");
     } else {
-      dummy = dummyGenerator.generate(this.language, this.dummyCounter++) + dummyLastPunctuation
-          + dummyLastSpace;
+      dummy = dummyGenerator.generate(this.language, this.dummyCounter++)
+          + this.dummyLastPunctuation + this.dummyLastSpace;
     }
 
     this.dummyLastSpace = "";
@@ -565,7 +565,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               }
 
               if (isMathMode(this.curMode) && this.lastSpace.isEmpty()
-                    && canInsertSpaceBeforeDummy) {
+                    && this.canInsertSpaceBeforeDummy) {
                 addMarkup(command, " ");
               } else {
                 this.preserveDummyLast = true;
@@ -731,7 +731,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
           case '\r':
           case '\t': {
             String whiteSpace = (((this.curChar != '~') && (this.curChar != '&'))
-                ? matchFromPosition(whiteSpacePattern) : curString);
+                ? matchFromPosition(whiteSpacePattern) : this.curString);
             this.preserveDummyLast = true;
             this.isMathCharTrivial = true;
 

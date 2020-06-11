@@ -41,7 +41,7 @@ public class CodeFragment {
   }
 
   public boolean contains(LanguageToolRuleMatch match) {
-    return ((match.getFromPos() >= fromPos)
+    return ((match.getFromPos() >= this.fromPos)
         && (match.getToPos() <= this.fromPos + this.code.length()));
   }
 }
