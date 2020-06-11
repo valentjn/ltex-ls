@@ -4,12 +4,14 @@
 /.gradle/
 /.settings/
 
-/ltexls/bin/
-/ltexls/build/
+/ltexls-core/.classpath
+/ltexls-core/.project
+
+/ltexls-core/.settings/
+/ltexls-core/target/
 
 /ltexls-languagetool-patch/.classpath
 /ltexls-languagetool-patch/.project
 
 /ltexls-languagetool-patch/.settings/
-/ltexls-languagetool-patch/bin/
-/ltexls-languagetool-patch/build/
+/ltexls-languagetool-patch/target/
