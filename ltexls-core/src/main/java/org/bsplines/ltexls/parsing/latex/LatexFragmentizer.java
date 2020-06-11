@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.parsing.CodeFragment;
 import org.bsplines.ltexls.parsing.CodeFragmentizer;
 import org.bsplines.ltexls.parsing.RegexCodeFragmentizer;
-
 import org.eclipse.xtext.xbase.lib.Pair;
 
 public class LatexFragmentizer extends CodeFragmentizer {

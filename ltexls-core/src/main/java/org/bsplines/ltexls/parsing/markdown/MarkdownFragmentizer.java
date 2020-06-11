@@ -1,7 +1,6 @@
 package org.bsplines.ltexls.parsing.markdown;
 
 import java.util.regex.Pattern;
-
 import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.parsing.RegexCodeFragmentizer;
 

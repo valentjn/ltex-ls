@@ -6,10 +6,8 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
-
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
 

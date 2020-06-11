@@ -2,10 +2,8 @@ package org.bsplines.ltexls.parsing.plaintext;
 
 import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import org.languagetool.markup.AnnotatedText;
 
 public class PlaintextAnnotatedTextBuilderTest {

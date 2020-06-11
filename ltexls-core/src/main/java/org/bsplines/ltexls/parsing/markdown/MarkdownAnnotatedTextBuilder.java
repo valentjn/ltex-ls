@@ -3,11 +3,9 @@ package org.bsplines.ltexls.parsing.markdown;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.ast.Node;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-
 import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.DummyGenerator;

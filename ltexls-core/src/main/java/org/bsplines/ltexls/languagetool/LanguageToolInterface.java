@@ -1,7 +1,6 @@
 package org.bsplines.ltexls.languagetool;
 
 import java.util.List;
-
 import org.languagetool.markup.AnnotatedText;
 
 public abstract class LanguageToolInterface {

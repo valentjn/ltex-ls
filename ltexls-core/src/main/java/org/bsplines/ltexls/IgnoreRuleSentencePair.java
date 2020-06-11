@@ -1,7 +1,6 @@
 package org.bsplines.ltexls;
 
 import java.util.regex.Pattern;
-
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class IgnoreRuleSentencePair {

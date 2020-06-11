@@ -1,7 +1,6 @@
 package org.bsplines.ltexls;
 
 import org.eclipse.lsp4j.Position;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

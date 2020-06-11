@@ -2,7 +2,6 @@ package org.bsplines.ltexls.parsing.plaintext;
 
 import java.util.Collections;
 import java.util.List;
-
 import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.parsing.CodeFragment;
 import org.bsplines.ltexls.parsing.CodeFragmentizer;

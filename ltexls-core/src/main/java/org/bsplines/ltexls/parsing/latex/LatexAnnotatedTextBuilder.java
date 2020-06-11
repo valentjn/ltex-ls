@@ -9,9 +9,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.text.StringEscapeUtils;
-
 import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.Tools;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;

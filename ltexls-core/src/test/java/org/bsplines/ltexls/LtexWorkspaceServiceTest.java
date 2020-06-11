@@ -1,11 +1,9 @@
 package org.bsplines.ltexls;
 
 import com.google.gson.JsonObject;
-
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.DidChangeWatchedFilesParams;
 import org.eclipse.lsp4j.WorkspaceSymbolParams;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

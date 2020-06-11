@@ -2,11 +2,8 @@ package org.bsplines.ltexls;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import java.util.Collections;
-
 import org.eclipse.lsp4j.DiagnosticSeverity;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -3,13 +3,10 @@ package org.bsplines.ltexls.parsing.markdown;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-
 import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
 import org.languagetool.markup.AnnotatedText;
 
 public class MarkdownAnnotatedTextBuilderTest {

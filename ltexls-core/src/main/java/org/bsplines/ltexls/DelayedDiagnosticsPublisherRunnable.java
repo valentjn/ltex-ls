@@ -2,7 +2,6 @@ package org.bsplines.ltexls;
 
 import java.time.Duration;
 import java.time.Instant;
-
 import org.eclipse.lsp4j.PublishDiagnosticsParams;
 import org.eclipse.lsp4j.services.LanguageClient;
 
