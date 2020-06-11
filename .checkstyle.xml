@@ -40,7 +40,7 @@
         </module>
         <!--
             ltex-ls: Allowing Unicode characters in code leads to problems with different editors
-            and different platforms (example Travis build under Windows).
+            and different platforms (example: Travis build on Windows).
             It's better when code is ASCII-only.
         -->
         <!--<module name="AvoidEscapedUnicodeCharacters">
