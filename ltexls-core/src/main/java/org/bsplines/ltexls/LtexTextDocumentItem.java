@@ -162,8 +162,25 @@ public class LtexTextDocumentItem extends TextDocumentItem {
         ? new Position(this.caretPosition.getLine(), this.caretPosition.getCharacter()) : null);
   }
 
+  public void setCaretPosition(@Nullable Position caretPosition) {
+    if (caretPosition != null) {
+      if (this.caretPosition != null) {
+        this.caretPosition.setLine(caretPosition.getLine());
+        this.caretPosition.setCharacter(caretPosition.getCharacter());
+      } else {
+        this.caretPosition = new Position(caretPosition.getLine(), caretPosition.getCharacter());
+      }
+    } else {
+      this.caretPosition = null;
+    }
+  }
+
   public Instant getLastCaretChangeInstant() {
     return this.lastCaretChangeInstant;
+  }
+
+  public void setLastCaretChangeInstant(Instant lastCaretChangeInstant) {
+    this.lastCaretChangeInstant = lastCaretChangeInstant;
   }
 
   @Override
