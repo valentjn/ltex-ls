@@ -33,6 +33,14 @@
         <property name="eachLine" value="true"/>
     </module>
 
+    <!--
+        ltex-ls: Move LineLength to Checker, was under TreeWalker (throws an error with Maven).
+    -->
+    <module name="LineLength">
+        <property name="max" value="100"/>
+        <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
+    </module>
+
     <module name="TreeWalker">
         <module name="OuterTypeFilename"/>
         <module name="IllegalTokenText">
@@ -52,10 +60,6 @@
             <property name="allowByTailComment" value="true"/>
             <property name="allowNonPrintableEscapes" value="true"/>
         </module>-->
-        <module name="LineLength">
-            <property name="max" value="100"/>
-            <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
-        </module>
         <module name="AvoidStarImport"/>
         <module name="OneTopLevelClass"/>
         <module name="NoLineWrap"/>
@@ -256,15 +260,27 @@
             -->
             <!--<property name="allowMissingParamTags" value="true"/>-->
             <property name="allowMissingParamTags" value="false"/>
-            <property name="allowMissingThrowsTags" value="true"/>
+            <!--
+                ltex-ls: allowMissingThrowsTags doesn't exist according to the docs,
+                disabling.
+            -->
+            <!--<property name="allowMissingThrowsTags" value="true"/>-->
             <!--
                 ltex-ls: Force documentation of return values.
             -->
             <!--<property name="allowMissingReturnTag" value="true"/>-->
             <property name="allowMissingReturnTag" value="false"/>
-            <property name="minLineCount" value="2"/>
+            <!--
+                ltex-ls: minLineCount doesn't exist according to the docs,
+                disabling.
+            -->
+            <!--<property name="minLineCount" value="2"/>-->
             <property name="allowedAnnotations" value="Override, Test"/>
-            <property name="allowThrowsTagsForSubclasses" value="true"/>
+            <!--
+                ltex-ls: allowThrowsTagsForSubclasses doesn't exist according to the docs,
+                disabling.
+            -->
+            <!--<property name="allowThrowsTagsForSubclasses" value="true"/>-->
         </module>
         <module name="MethodName">
             <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9_]*$"/>
