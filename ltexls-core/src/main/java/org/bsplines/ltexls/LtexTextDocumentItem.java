@@ -179,7 +179,7 @@ public class LtexTextDocumentItem extends TextDocumentItem {
    * @param textChangeEvents list of text change events to apply
    */
   public void applyTextChangeEvents(List<TextDocumentContentChangeEvent> textChangeEvents) {
-    Instant oldlastCaretChangeInstant = this.lastCaretChangeInstant;
+    Instant oldLastCaretChangeInstant = this.lastCaretChangeInstant;
 
     for (TextDocumentContentChangeEvent textChangeEvent : textChangeEvents) {
       applyTextChangeEvent(textChangeEvent);
@@ -187,7 +187,7 @@ public class LtexTextDocumentItem extends TextDocumentItem {
 
     if (textChangeEvents.size() > 1) {
       this.caretPosition = null;
-      this.lastCaretChangeInstant = oldlastCaretChangeInstant;
+      this.lastCaretChangeInstant = oldLastCaretChangeInstant;
     }
   }
 
