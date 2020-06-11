@@ -65,6 +65,14 @@ public class LtexTextDocumentItem extends TextDocumentItem {
 
     if (!super.equals(other)) return false;
     if (!this.lineStartPosList.equals(other.lineStartPosList)) return false;
+    if (!this.diagnostics.equals(other.diagnostics)) return false;
+
+    if ((this.caretPosition == null) ? (other.caretPosition != null) :
+          ((other.caretPosition == null) || !this.caretPosition.equals(other.caretPosition))) {
+      return false;
+    }
+
+    if (!this.lastCaretChangeInstant.equals(other.lastCaretChangeInstant)) return false;
 
     return true;
   }
@@ -75,6 +83,9 @@ public class LtexTextDocumentItem extends TextDocumentItem {
 
     hash = 53 * hash + super.hashCode();
     hash = 53 * hash + this.lineStartPosList.hashCode();
+    hash = 53 * hash + this.diagnostics.hashCode();
+    if (this.caretPosition != null) hash = 53 * hash + this.caretPosition.hashCode();
+    hash = 53 * hash + this.lastCaretChangeInstant.hashCode();
 
     return hash;
   }
