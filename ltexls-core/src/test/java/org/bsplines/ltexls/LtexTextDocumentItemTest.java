@@ -1,6 +1,16 @@
 package org.bsplines.ltexls;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Collections;
+
+import com.sun.tools.javac.util.List;
+
+import org.checkerframework.checker.nullness.NullnessUtil;
+import org.eclipse.lsp4j.Diagnostic;
 import org.eclipse.lsp4j.Position;
+import org.eclipse.lsp4j.Range;
+import org.eclipse.lsp4j.TextDocumentContentChangeEvent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -32,5 +42,91 @@ public class LtexTextDocumentItemTest {
     document = new LtexTextDocumentItem("untitled:test.txt", "plaintext", 1, "\nHi");
     Assertions.assertEquals(new Position(1, 0), document.convertPosition(1));
     assertPosition(document, 1, new Position(1, 0));
+  }
+
+  @Test
+  public void testApplyTextChangeEvents() {
+    LtexTextDocumentItem document = new LtexTextDocumentItem(
+        "untitled:text.txt", "plaintext", 1, "abc");
+    Instant pastInstant = Instant.now().minus(Duration.ofSeconds(10));
+
+    document.applyTextChangeEvent(new TextDocumentContentChangeEvent("abcdef"));
+    Assertions.assertEquals("abcdef", document.getText());
+    Assertions.assertEquals(null, document.getCaretPosition());
+
+    document.setLastCaretChangeInstant(pastInstant);
+    document.applyTextChangeEvent(new TextDocumentContentChangeEvent(
+        new Range(new Position(0, 3), new Position(0, 3)), null, "1"));
+    Assertions.assertEquals("abc1def", document.getText());
+    Assertions.assertEquals(new Position(0, 4),
+        NullnessUtil.castNonNull(document.getCaretPosition()));
+    Assertions.assertTrue(
+        Duration.between(document.getLastCaretChangeInstant(), Instant.now()).toMillis() < 100);
+
+    document.setLastCaretChangeInstant(pastInstant);
+    document.applyTextChangeEvent(new TextDocumentContentChangeEvent(
+        new Range(new Position(0, 1), new Position(0, 2)), null, ""));
+    Assertions.assertEquals("ac1def", document.getText());
+    Assertions.assertEquals(new Position(0, 1),
+        NullnessUtil.castNonNull(document.getCaretPosition()));
+    Assertions.assertTrue(
+        Duration.between(document.getLastCaretChangeInstant(), Instant.now()).toMillis() < 100);
+
+    document.applyTextChangeEvent(new TextDocumentContentChangeEvent(
+        new Range(new Position(0, 3), new Position(0, 3)), null, "23"));
+    Assertions.assertEquals("ac123def", document.getText());
+    Assertions.assertEquals(null, document.getCaretPosition());
+
+    document.applyTextChangeEvents(Collections.singletonList(new TextDocumentContentChangeEvent(
+        new Range(new Position(0, 5), new Position(0, 5)), null, "4")));
+    Assertions.assertEquals("ac1234def", document.getText());
+    Assertions.assertEquals(new Position(0, 6),
+        NullnessUtil.castNonNull(document.getCaretPosition()));
+
+    document.applyTextChangeEvents(List.from(new TextDocumentContentChangeEvent[]{
+        new TextDocumentContentChangeEvent(
+          new Range(new Position(0, 6), new Position(0, 6)), null, "5"),
+        new TextDocumentContentChangeEvent(
+          new Range(new Position(0, 7), new Position(0, 7)), null, "6")}));
+    Assertions.assertEquals("ac123456def", document.getText());
+    Assertions.assertEquals(null, document.getCaretPosition());
+  }
+
+  @Test
+  public void testProperties() {
+    LtexTextDocumentItem origDocument = new LtexTextDocumentItem(
+        "untitled:text.txt", "plaintext", 1, "abc");
+    Assertions.assertTrue(origDocument.equals(origDocument));
+    Assertions.assertDoesNotThrow(() -> origDocument.hashCode());
+
+    {
+      LtexTextDocumentItem document = new LtexTextDocumentItem(
+          "untitled:text.txt", "plaintext", 1, "abc");
+      document.setLastCaretChangeInstant(origDocument.getLastCaretChangeInstant());
+      document.setDiagnostics(Collections.singletonList(new Diagnostic()));
+      Assertions.assertEquals(1, document.getDiagnostics().size());
+      Assertions.assertFalse(document.equals(origDocument));
+      Assertions.assertFalse(origDocument.equals(document));
+    }
+
+    {
+      LtexTextDocumentItem document = new LtexTextDocumentItem(
+          "untitled:text.txt", "plaintext", 1, "abc");
+      document.setLastCaretChangeInstant(origDocument.getLastCaretChangeInstant());
+      document.setCaretPosition(new Position(13, 37));
+      Assertions.assertEquals(new Position(13, 37), document.getCaretPosition());
+      Assertions.assertFalse(document.equals(origDocument));
+      Assertions.assertFalse(origDocument.equals(document));
+    }
+
+    {
+      LtexTextDocumentItem document = new LtexTextDocumentItem(
+          "untitled:text.txt", "plaintext", 1, "abc");
+      Instant now = Instant.now();
+      document.setLastCaretChangeInstant(now);
+      Assertions.assertEquals(now, document.getLastCaretChangeInstant());
+      Assertions.assertFalse(document.equals(origDocument));
+      Assertions.assertFalse(origDocument.equals(document));
+    }
   }
 }
