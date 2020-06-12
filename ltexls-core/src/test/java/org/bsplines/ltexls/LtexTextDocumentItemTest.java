@@ -129,9 +129,9 @@ public class LtexTextDocumentItemTest {
     {
       LtexTextDocumentItem document = new LtexTextDocumentItem(
           "untitled:text.txt", "plaintext", 1, "abc");
-      Instant now = Instant.now();
-      document.setLastCaretChangeInstant(now);
-      Assertions.assertEquals(now, document.getLastCaretChangeInstant());
+      Instant pastInstant = Instant.now().minus(Duration.ofSeconds(10));
+      document.setLastCaretChangeInstant(pastInstant);
+      Assertions.assertEquals(pastInstant, document.getLastCaretChangeInstant());
       Assertions.assertFalse(document.equals(origDocument));
       Assertions.assertFalse(origDocument.equals(document));
     }
