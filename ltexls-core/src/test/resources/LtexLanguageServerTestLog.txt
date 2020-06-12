@@ -1,25 +1,25 @@
-2020-05-29T17:43:15.019Z Info:
-2020-05-29T17:43:15.019Z Info: ltex.ltex-ls.path set to /home/valentjn/repos/ltex-ls/build/install/ltex-ls.
-2020-05-29T17:43:15.020Z Info:
-2020-05-29T17:43:15.020Z Info: ltex.java.path not set.
-2020-05-29T17:43:15.020Z Info: Using ltex-ls from '/home/valentjn/repos/ltex-ls/build/install/ltex-ls'.
-2020-05-29T17:43:15.020Z Info: Using Java from PATH or JAVA_HOME (may fail if not installed).
-2020-05-29T17:43:15.064Z Info: Testing ltex-ls...
-2020-05-29T17:43:15.083Z Info:   Command: "/home/valentjn/repos/ltex-ls/build/install/ltex-ls/bin/ltex-ls"
-2020-05-29T17:43:15.083Z Info:   Arguments: ["--version"]
-2020-05-29T17:43:15.083Z Info:   env['JAVA_HOME']: undefined
-2020-05-29T17:43:15.083Z Info:   env['LTEX_LS_OPTS']: "-Xms50m -Xmx500m"
-2020-05-29T17:43:16.077Z Info: Test successful!
-2020-05-29T17:43:16.091Z Info:
-2020-05-29T17:43:16.101Z Info: Starting ltex-ls...
-2020-05-29T17:43:16.101Z Info:   Command: "/home/valentjn/repos/ltex-ls/build/install/ltex-ls/bin/ltex-ls"
-2020-05-29T17:43:16.101Z Info:   Arguments: []
-2020-05-29T17:43:16.101Z Info:   env['JAVA_HOME']: undefined
-2020-05-29T17:43:16.101Z Info:   env['LTEX_LS_OPTS']: "-Xms50m -Xmx500m"
-2020-05-29T17:43:16.101Z Info:
-[Trace - 7:43:16 PM] Sending request 'initialize - (0)'.
+2020-06-11T22:08:59.394Z Info:
+2020-06-11T22:08:59.394Z Info: ltex.ltex-ls.path set to /home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler.
+2020-06-11T22:08:59.394Z Info:
+2020-06-11T22:08:59.394Z Info: ltex.java.path not set.
+2020-06-11T22:08:59.395Z Info: Using ltex-ls from '/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler'.
+2020-06-11T22:08:59.395Z Info: Using Java from PATH or JAVA_HOME (may fail if not installed).
+2020-06-11T22:08:59.424Z Info: Testing ltex-ls...
+2020-06-11T22:08:59.424Z Info:   Command: "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler/bin/ltex-ls"
+2020-06-11T22:08:59.424Z Info:   Arguments: ["--version"]
+2020-06-11T22:08:59.424Z Info:   env['JAVA_HOME']: undefined
+2020-06-11T22:08:59.452Z Info:   env['JAVA_OPTS']: "-Xms50m -Xmx500m"
+2020-06-11T22:09:00.185Z Info: Test successful!
+2020-06-11T22:09:00.203Z Info:
+2020-06-11T22:09:00.210Z Info: Starting ltex-ls...
+2020-06-11T22:09:00.210Z Info:   Command: "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler/bin/ltex-ls"
+2020-06-11T22:09:00.210Z Info:   Arguments: []
+2020-06-11T22:09:00.210Z Info:   env['JAVA_HOME']: undefined
+2020-06-11T22:09:00.210Z Info:   env['JAVA_OPTS']: "-Xms50m -Xmx500m"
+2020-06-11T22:09:00.210Z Info:
+[Trace - 12:09:00 AM] Sending request 'initialize - (0)'.
 Params: {
-    "processId": 518123,
+    "processId": 902347,
     "clientInfo": {
         "name": "vscode",
         "version": "1.44.2"
@@ -286,10 +286,10 @@ Params: {
 }
 
 
-[Trace - 7:43:23 PM] Received response 'initialize - (0)' in 7657ms.
+[Trace - 12:09:07 AM] Received response 'initialize - (0)' in 6911ms.
 Result: {
     "capabilities": {
-        "textDocumentSync": 1,
+        "textDocumentSync": 2,
         "codeActionProvider": {
             "codeActionKinds": [
                 "quickfix.ltex.acceptSuggestion",
@@ -309,78 +309,21 @@ Result: {
 }
 
 
-[Trace - 7:43:23 PM] Sending notification 'initialized'.
+[Trace - 12:09:07 AM] Sending notification 'initialized'.
 Params: {}
 
 
-[Trace - 7:43:23 PM] Sending notification 'workspace/didChangeConfiguration'.
+[Trace - 12:09:07 AM] Sending notification 'workspace/didChangeConfiguration'.
 Params: {
     "settings": {
         "ltex": {
-            "de": {
-                "dictionary": ["B-splines"],
-                "disabledRules": [],
-                "enabledRules": []
-            },
-            "de-DE": {
-                "dictionary": ["B-splines"],
-                "disabledRules": [],
-                "enabledRules": []
-            },
-            "de-AT": {
-                "dictionary": ["B-splines"],
-                "disabledRules": [],
-                "enabledRules": []
-            },
-            "de-CH": {
-                "dictionary": ["B-splines"],
-                "disabledRules": [],
-                "enabledRules": []
-            },
-            "en": {
-                "dictionary": ["B-splines"],
-                "disabledRules": [],
-                "enabledRules": []
-            },
-            "en-US": {
-                "dictionary": ["B-splines"],
-                "disabledRules": [],
-                "enabledRules": []
-            },
-            "en-GB": {
-                "dictionary": ["B-splines"],
-                "disabledRules": [],
-                "enabledRules": [
-                    "OXFORD_SPELLING_NOUNS"
-                ]
-            },
-            "en-AU": {
-                "dictionary": ["B-splines"],
-                "disabledRules": [],
-                "enabledRules": []
-            },
-            "en-CA": {
-                "dictionary": ["B-splines"],
-                "disabledRules": [],
-                "enabledRules": []
-            },
-            "en-NZ": {
-                "dictionary": ["B-splines"],
-                "disabledRules": [],
-                "enabledRules": []
-            },
-            "en-ZA": {
-                "dictionary": ["B-splines"],
-                "disabledRules": [],
-                "enabledRules": []
-            },
             "enabled": true,
             "language": "en-US",
             "dictionary": {},
             "disabledRules": {},
             "enabledRules": {},
             "ltex-ls": {
-                "path": "/home/valentjn/repos/ltex-ls/build/install/ltex-ls",
+                "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
                 "languageToolHttpServerUri": ""
             },
             "java": {
@@ -447,188 +390,13 @@ Params: {
                 "maximumHeapSize": null,
                 "sentenceCacheSize": 1234,
                 "maximumJavaHeapSize": 500
-            },
-            "ar": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "ar-DZ": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "ast-ES": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "be-BY": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "br-FR": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "ca-ES": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "ca-ES-valencia": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "da-DK": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "de-DE-x-simple-language": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "el-GR": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "eo": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "es": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "fa": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "fr": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "ga-IE": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "gl-ES": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "it": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "ja-JP": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "km-KH": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "nl": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "pl-PL": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "pt": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "pt-AO": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "pt-BR": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "pt-MZ": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "pt-PT": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "ro-RO": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "ru-RU": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "sk-SK": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "sl-SI": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "sv": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "ta-IN": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "tl-PH": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "uk-UA": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
-            },
-            "zh-CN": {
-                "dictionary": ["B-splines"],
-                "enabledRules": [],
-                "disabledRules": []
             }
         }
     }
 }
 
 
-[Trace - 7:43:23 PM] Sending notification 'textDocument/didOpen'.
+[Trace - 12:09:07 AM] Sending notification 'textDocument/didOpen'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1",
@@ -639,7 +407,7 @@ Params: {
 }
 
 
-[Trace - 7:43:24 PM] Received request 'workspace/configuration - (1)'.
+[Trace - 12:09:07 AM] Received request 'workspace/configuration - (1)'.
 Params: {
     "items": [
         {
@@ -650,73 +418,16 @@ Params: {
 }
 
 
-[Trace - 7:43:24 PM] Sending response 'workspace/configuration - (1)'. Processing request took 11ms
+[Trace - 12:09:07 AM] Sending response 'workspace/configuration - (1)'. Processing request took 13ms
 Result: [
     {
-        "de": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-DE": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-AT": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-CH": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-US": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-GB": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": [
-                "OXFORD_SPELLING_NOUNS"
-            ]
-        },
-        "en-AU": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-CA": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-NZ": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-ZA": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
         "enabled": true,
         "language": "en-US",
         "dictionary": {},
         "disabledRules": {},
         "enabledRules": {},
         "ltex-ls": {
-            "path": "/home/valentjn/repos/ltex-ls/build/install/ltex-ls",
+            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
             "languageToolHttpServerUri": ""
         },
         "java": {
@@ -783,212 +494,37 @@ Result: [
             "maximumHeapSize": null,
             "sentenceCacheSize": 1234,
             "maximumJavaHeapSize": 500
-        },
-        "ar": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ar-DZ": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ast-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "be-BY": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "br-FR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ca-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ca-ES-valencia": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "da-DK": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "de-DE-x-simple-language": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "el-GR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "eo": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "es": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "fa": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "fr": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ga-IE": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "gl-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "it": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ja-JP": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "km-KH": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "nl": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pl-PL": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-AO": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-BR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-MZ": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-PT": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ro-RO": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ru-RU": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sk-SK": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sl-SI": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sv": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ta-IN": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "tl-PH": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "uk-UA": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "zh-CN": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
         }
     }
 ]
 
 
-[Trace - 7:43:24 PM] Received notification 'telemetry/event'.
+[Trace - 12:09:07 AM] Received notification 'telemetry/event'.
 Params: {
     "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
-    "progress": 0.0
+    "progress": 0
 }
 
 
-[Trace - 7:43:24 PM] Received notification 'telemetry/event'.
+[Trace - 12:09:07 AM] Received notification 'telemetry/event'.
 Params: {
     "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
-    "progress": 1.0
+    "progress": 1
 }
 
 
-[Trace - 7:43:24 PM] Received notification 'textDocument/publishDiagnostics'.
+[Trace - 12:09:07 AM] Received notification 'textDocument/publishDiagnostics'.
 Params: {
     "uri": "untitled:Untitled-1",
     "diagnostics": []
 }
 
 
-[Trace - 7:43:28 PM] Sending notification 'textDocument/didChange'.
+[Trace - 12:09:16 AM] Sending notification 'textDocument/didChange'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1",
@@ -996,13 +532,24 @@ Params: {
     },
     "contentChanges": [
         {
+            "range": {
+                "start": {
+                    "line": 0,
+                    "character": 0
+                },
+                "end": {
+                    "line": 0,
+                    "character": 0
+                }
+            },
+            "rangeLength": 0,
             "text": "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n"
         }
     ]
 }
 
 
-[Trace - 7:43:28 PM] Received request 'workspace/configuration - (2)'.
+[Trace - 12:09:16 AM] Received request 'workspace/configuration - (2)'.
 Params: {
     "items": [
         {
@@ -1013,73 +560,16 @@ Params: {
 }
 
 
-[Trace - 7:43:28 PM] Sending response 'workspace/configuration - (2)'. Processing request took 8ms
+[Trace - 12:09:16 AM] Sending response 'workspace/configuration - (2)'. Processing request took 7ms
 Result: [
     {
-        "de": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-DE": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-AT": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-CH": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-US": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-GB": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": [
-                "OXFORD_SPELLING_NOUNS"
-            ]
-        },
-        "en-AU": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-CA": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-NZ": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-ZA": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
         "enabled": true,
         "language": "en-US",
         "dictionary": {},
         "disabledRules": {},
         "enabledRules": {},
         "ltex-ls": {
-            "path": "/home/valentjn/repos/ltex-ls/build/install/ltex-ls",
+            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
             "languageToolHttpServerUri": ""
         },
         "java": {
@@ -1146,208 +636,33 @@ Result: [
             "maximumHeapSize": null,
             "sentenceCacheSize": 1234,
             "maximumJavaHeapSize": 500
-        },
-        "ar": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ar-DZ": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ast-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "be-BY": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "br-FR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ca-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ca-ES-valencia": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "da-DK": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "de-DE-x-simple-language": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "el-GR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "eo": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "es": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "fa": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "fr": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ga-IE": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "gl-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "it": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ja-JP": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "km-KH": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "nl": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pl-PL": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-AO": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-BR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-MZ": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-PT": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ro-RO": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ru-RU": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sk-SK": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sl-SI": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sv": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ta-IN": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "tl-PH": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "uk-UA": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "zh-CN": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
         }
     }
 ]
 
 
-[Trace - 7:43:28 PM] Received notification 'telemetry/event'.
+[Trace - 12:09:16 AM] Received notification 'telemetry/event'.
 Params: {
     "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
-    "progress": 0.0
+    "progress": 0
 }
 
 
-[Trace - 7:43:30 PM] Sending request 'textDocument/codeAction - (1)'.
+[Trace - 12:09:28 AM] Sending request 'textDocument/codeAction - (1)'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1"
     },
     "range": {
         "start": {
-            "line": 2,
-            "character": 11
+            "line": 1,
+            "character": 1
         },
         "end": {
-            "line": 2,
-            "character": 11
+            "line": 1,
+            "character": 1
         }
     },
     "context": {
@@ -1356,16 +671,70 @@ Params: {
 }
 
 
-[Trace - 7:43:45 PM] Received notification 'telemetry/event'.
+[Trace - 12:09:30 AM] Sending request 'textDocument/codeAction - (2)'.
+Params: {
+    "textDocument": {
+        "uri": "untitled:Untitled-1"
+    },
+    "range": {
+        "start": {
+            "line": 0,
+            "character": 8
+        },
+        "end": {
+            "line": 0,
+            "character": 8
+        }
+    },
+    "context": {
+        "diagnostics": []
+    }
+}
+
+
+[Trace - 12:09:30 AM] Sending notification '$/cancelRequest'.
+Params: {
+    "id": 1
+}
+
+
+[Trace - 12:09:30 AM] Sending request 'textDocument/codeAction - (3)'.
+Params: {
+    "textDocument": {
+        "uri": "untitled:Untitled-1"
+    },
+    "range": {
+        "start": {
+            "line": 0,
+            "character": 9
+        },
+        "end": {
+            "line": 0,
+            "character": 9
+        }
+    },
+    "context": {
+        "diagnostics": []
+    }
+}
+
+
+[Trace - 12:09:30 AM] Sending notification '$/cancelRequest'.
+Params: {
+    "id": 2
+}
+
+
+[Trace - 12:09:34 AM] Received notification 'telemetry/event'.
 Params: {
     "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
-    "progress": 1.0
+    "progress": 1
 }
 
 
-[Trace - 7:43:45 PM] Received notification 'textDocument/publishDiagnostics'.
+[Trace - 12:09:34 AM] Received notification 'textDocument/publishDiagnostics'.
 Params: {
     "uri": "untitled:Untitled-1",
     "diagnostics": [
@@ -1403,23 +772,31 @@ Params: {
 }
 
 
-[Trace - 7:43:45 PM] Received response 'textDocument/codeAction - (1)' in 15032ms.
+[Trace - 12:09:34 AM] Received response 'textDocument/codeAction - (1)' in 5970ms.
 Result: []
 
 
-[Trace - 7:43:46 PM] Sending request 'textDocument/codeAction - (2)'.
+[Trace - 12:09:34 AM] Received response 'textDocument/codeAction - (2)' in 4199ms.
+Result: []
+
+
+[Trace - 12:09:34 AM] Received response 'textDocument/codeAction - (3)' in 3853ms.
+Result: []
+
+
+[Trace - 12:09:34 AM] Sending request 'textDocument/codeAction - (4)'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1"
     },
     "range": {
         "start": {
-            "line": 2,
-            "character": 11
+            "line": 0,
+            "character": 9
         },
         "end": {
-            "line": 2,
-            "character": 11
+            "line": 0,
+            "character": 9
         }
     },
     "context": {
@@ -1427,24 +804,24 @@ Params: {
             {
                 "range": {
                     "start": {
-                        "line": 2,
-                        "character": 9
+                        "line": 0,
+                        "character": 8
                     },
                     "end": {
-                        "line": 2,
-                        "character": 26
+                        "line": 0,
+                        "character": 10
                     }
                 },
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad').",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'",
                 "severity": 3,
-                "source": "LTeX - DE_AGREEMENT"
+                "source": "LTeX - EN_A_VS_AN"
             }
         ]
     }
 }
 
 
-[Trace - 7:43:46 PM] Received request 'workspace/configuration - (3)'.
+[Trace - 12:09:34 AM] Received request 'workspace/configuration - (3)'.
 Params: {
     "items": [
         {
@@ -1455,73 +832,16 @@ Params: {
 }
 
 
-[Trace - 7:43:46 PM] Sending response 'workspace/configuration - (3)'. Processing request took 12ms
+[Trace - 12:09:34 AM] Sending response 'workspace/configuration - (3)'. Processing request took 6ms
 Result: [
     {
-        "de": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-DE": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-AT": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-CH": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-US": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-GB": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": [
-                "OXFORD_SPELLING_NOUNS"
-            ]
-        },
-        "en-AU": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-CA": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-NZ": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-ZA": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
         "enabled": true,
         "language": "en-US",
         "dictionary": {},
         "disabledRules": {},
         "enabledRules": {},
         "ltex-ls": {
-            "path": "/home/valentjn/repos/ltex-ls/build/install/ltex-ls",
+            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
             "languageToolHttpServerUri": ""
         },
         "java": {
@@ -1588,205 +908,30 @@ Result: [
             "maximumHeapSize": null,
             "sentenceCacheSize": 1234,
             "maximumJavaHeapSize": 500
-        },
-        "ar": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ar-DZ": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ast-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "be-BY": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "br-FR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ca-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ca-ES-valencia": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "da-DK": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "de-DE-x-simple-language": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "el-GR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "eo": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "es": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "fa": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "fr": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ga-IE": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "gl-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "it": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ja-JP": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "km-KH": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "nl": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pl-PL": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-AO": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-BR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-MZ": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-PT": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ro-RO": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ru-RU": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sk-SK": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sl-SI": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sv": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ta-IN": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "tl-PH": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "uk-UA": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "zh-CN": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
         }
     }
 ]
 
 
-[Trace - 7:43:46 PM] Received notification 'telemetry/event'.
+[Trace - 12:09:34 AM] Received notification 'telemetry/event'.
 Params: {
     "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
-    "progress": 0.0
+    "progress": 0
 }
 
 
-[Trace - 7:43:46 PM] Received notification 'telemetry/event'.
+[Trace - 12:09:34 AM] Received notification 'telemetry/event'.
 Params: {
     "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
-    "progress": 1.0
+    "progress": 1
 }
 
 
-[Trace - 7:43:46 PM] Received response 'textDocument/codeAction - (2)' in 100ms.
+[Trace - 12:09:34 AM] Received response 'textDocument/codeAction - (4)' in 47ms.
 Result: [
     {
         "title": "Ignore rule in this sentence",
@@ -1795,17 +940,17 @@ Result: [
             {
                 "range": {
                     "start": {
-                        "line": 2,
-                        "character": 9
+                        "line": 0,
+                        "character": 8
                     },
                     "end": {
-                        "line": 2,
-                        "character": 26
+                        "line": 0,
+                        "character": 10
                     }
                 },
                 "severity": 3,
-                "source": "LTeX - DE_AGREEMENT",
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+                "source": "LTeX - EN_A_VS_AN",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
             }
         ],
         "command": {
@@ -1817,10 +962,10 @@ Result: [
                     "command": "ltex.ignoreRuleInSentence",
                     "uri": "untitled:Untitled-1",
                     "ruleId": [
-                        "DE_AGREEMENT"
+                        "EN_A_VS_AN"
                     ],
                     "sentencePattern": [
-                        "^\\QDies ist eine Test.\\E$"
+                        "^\\QThis is an test.\\E$"
                     ]
                 }
             ]
@@ -1833,17 +978,17 @@ Result: [
             {
                 "range": {
                     "start": {
-                        "line": 2,
-                        "character": 9
+                        "line": 0,
+                        "character": 8
                     },
                     "end": {
-                        "line": 2,
-                        "character": 26
+                        "line": 0,
+                        "character": 10
                     }
                 },
                 "severity": 3,
-                "source": "LTeX - DE_AGREEMENT",
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+                "source": "LTeX - EN_A_VS_AN",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
             }
         ],
         "command": {
@@ -1855,30 +1000,30 @@ Result: [
                     "command": "ltex.disableRule",
                     "uri": "untitled:Untitled-1",
                     "ruleId": [
-                        "DE_AGREEMENT"
+                        "EN_A_VS_AN"
                     ]
                 }
             ]
         }
     },
     {
-        "title": "Use 'ein Test'",
+        "title": "Use 'a'",
         "kind": "quickfix.ltex.acceptSuggestion",
         "diagnostics": [
             {
                 "range": {
                     "start": {
-                        "line": 2,
-                        "character": 9
+                        "line": 0,
+                        "character": 8
                     },
                     "end": {
-                        "line": 2,
-                        "character": 26
+                        "line": 0,
+                        "character": 10
                     }
                 },
                 "severity": 3,
-                "source": "LTeX - DE_AGREEMENT",
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+                "source": "LTeX - EN_A_VS_AN",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
             }
         ],
         "edit": {
@@ -1892,107 +1037,15 @@ Result: [
                         {
                             "range": {
                                 "start": {
-                                    "line": 2,
-                                    "character": 9
+                                    "line": 0,
+                                    "character": 8
                                 },
                                 "end": {
-                                    "line": 2,
-                                    "character": 26
+                                    "line": 0,
+                                    "character": 10
                                 }
                             },
-                            "newText": "ein Test"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'einem Test'",
-        "kind": "quickfix.ltex.acceptSuggestion",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 9
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 26
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - DE_AGREEMENT",
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 2,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 9
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 26
-                                }
-                            },
-                            "newText": "einem Test"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'einen Test'",
-        "kind": "quickfix.ltex.acceptSuggestion",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 9
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 26
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - DE_AGREEMENT",
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 2,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 9
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 26
-                                }
-                            },
-                            "newText": "einen Test"
+                            "newText": "a"
                         }
                     ]
                 }
@@ -2002,19 +1055,19 @@ Result: [
 ]
 
 
-[Trace - 7:43:49 PM] Sending request 'textDocument/codeAction - (3)'.
+[Trace - 12:09:39 AM] Sending request 'textDocument/codeAction - (5)'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1"
     },
     "range": {
         "start": {
-            "line": 2,
-            "character": 11
+            "line": 0,
+            "character": 9
         },
         "end": {
-            "line": 2,
-            "character": 11
+            "line": 0,
+            "character": 9
         }
     },
     "context": {
@@ -2022,24 +1075,24 @@ Params: {
             {
                 "range": {
                     "start": {
-                        "line": 2,
-                        "character": 9
+                        "line": 0,
+                        "character": 8
                     },
                     "end": {
-                        "line": 2,
-                        "character": 26
+                        "line": 0,
+                        "character": 10
                     }
                 },
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad').",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'",
                 "severity": 3,
-                "source": "LTeX - DE_AGREEMENT"
+                "source": "LTeX - EN_A_VS_AN"
             }
         ]
     }
 }
 
 
-[Trace - 7:43:49 PM] Received request 'workspace/configuration - (4)'.
+[Trace - 12:09:39 AM] Received request 'workspace/configuration - (4)'.
 Params: {
     "items": [
         {
@@ -2050,73 +1103,16 @@ Params: {
 }
 
 
-[Trace - 7:43:49 PM] Sending response 'workspace/configuration - (4)'. Processing request took 6ms
+[Trace - 12:09:39 AM] Sending response 'workspace/configuration - (4)'. Processing request took 20ms
 Result: [
     {
-        "de": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-DE": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-AT": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-CH": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-US": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-GB": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": [
-                "OXFORD_SPELLING_NOUNS"
-            ]
-        },
-        "en-AU": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-CA": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-NZ": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-ZA": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
         "enabled": true,
         "language": "en-US",
         "dictionary": {},
         "disabledRules": {},
         "enabledRules": {},
         "ltex-ls": {
-            "path": "/home/valentjn/repos/ltex-ls/build/install/ltex-ls",
+            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
             "languageToolHttpServerUri": ""
         },
         "java": {
@@ -2183,205 +1179,30 @@ Result: [
             "maximumHeapSize": null,
             "sentenceCacheSize": 1234,
             "maximumJavaHeapSize": 500
-        },
-        "ar": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ar-DZ": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ast-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "be-BY": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "br-FR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ca-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ca-ES-valencia": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "da-DK": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "de-DE-x-simple-language": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "el-GR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "eo": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "es": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "fa": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "fr": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ga-IE": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "gl-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "it": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ja-JP": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "km-KH": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "nl": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pl-PL": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-AO": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-BR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-MZ": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-PT": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ro-RO": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ru-RU": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sk-SK": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sl-SI": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sv": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ta-IN": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "tl-PH": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "uk-UA": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "zh-CN": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
         }
     }
 ]
 
 
-[Trace - 7:43:49 PM] Received notification 'telemetry/event'.
+[Trace - 12:09:39 AM] Received notification 'telemetry/event'.
 Params: {
     "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
-    "progress": 0.0
+    "progress": 0
 }
 
 
-[Trace - 7:43:49 PM] Received notification 'telemetry/event'.
+[Trace - 12:09:39 AM] Received notification 'telemetry/event'.
 Params: {
     "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
-    "progress": 1.0
+    "progress": 1
 }
 
 
-[Trace - 7:43:49 PM] Received response 'textDocument/codeAction - (3)' in 27ms.
+[Trace - 12:09:39 AM] Received response 'textDocument/codeAction - (5)' in 37ms.
 Result: [
     {
         "title": "Ignore rule in this sentence",
@@ -2390,17 +1211,17 @@ Result: [
             {
                 "range": {
                     "start": {
-                        "line": 2,
-                        "character": 9
+                        "line": 0,
+                        "character": 8
                     },
                     "end": {
-                        "line": 2,
-                        "character": 26
+                        "line": 0,
+                        "character": 10
                     }
                 },
                 "severity": 3,
-                "source": "LTeX - DE_AGREEMENT",
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+                "source": "LTeX - EN_A_VS_AN",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
             }
         ],
         "command": {
@@ -2412,10 +1233,10 @@ Result: [
                     "command": "ltex.ignoreRuleInSentence",
                     "uri": "untitled:Untitled-1",
                     "ruleId": [
-                        "DE_AGREEMENT"
+                        "EN_A_VS_AN"
                     ],
                     "sentencePattern": [
-                        "^\\QDies ist eine Test.\\E$"
+                        "^\\QThis is an test.\\E$"
                     ]
                 }
             ]
@@ -2428,17 +1249,17 @@ Result: [
             {
                 "range": {
                     "start": {
-                        "line": 2,
-                        "character": 9
+                        "line": 0,
+                        "character": 8
                     },
                     "end": {
-                        "line": 2,
-                        "character": 26
+                        "line": 0,
+                        "character": 10
                     }
                 },
                 "severity": 3,
-                "source": "LTeX - DE_AGREEMENT",
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+                "source": "LTeX - EN_A_VS_AN",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
             }
         ],
         "command": {
@@ -2450,30 +1271,30 @@ Result: [
                     "command": "ltex.disableRule",
                     "uri": "untitled:Untitled-1",
                     "ruleId": [
-                        "DE_AGREEMENT"
+                        "EN_A_VS_AN"
                     ]
                 }
             ]
         }
     },
     {
-        "title": "Use 'ein Test'",
+        "title": "Use 'a'",
         "kind": "quickfix.ltex.acceptSuggestion",
         "diagnostics": [
             {
                 "range": {
                     "start": {
-                        "line": 2,
-                        "character": 9
+                        "line": 0,
+                        "character": 8
                     },
                     "end": {
-                        "line": 2,
-                        "character": 26
+                        "line": 0,
+                        "character": 10
                     }
                 },
                 "severity": 3,
-                "source": "LTeX - DE_AGREEMENT",
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+                "source": "LTeX - EN_A_VS_AN",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
             }
         ],
         "edit": {
@@ -2487,107 +1308,15 @@ Result: [
                         {
                             "range": {
                                 "start": {
-                                    "line": 2,
-                                    "character": 9
+                                    "line": 0,
+                                    "character": 8
                                 },
                                 "end": {
-                                    "line": 2,
-                                    "character": 26
+                                    "line": 0,
+                                    "character": 10
                                 }
                             },
-                            "newText": "ein Test"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'einem Test'",
-        "kind": "quickfix.ltex.acceptSuggestion",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 9
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 26
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - DE_AGREEMENT",
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 2,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 9
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 26
-                                }
-                            },
-                            "newText": "einem Test"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'einen Test'",
-        "kind": "quickfix.ltex.acceptSuggestion",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 9
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 26
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - DE_AGREEMENT",
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 2,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 9
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 26
-                                }
-                            },
-                            "newText": "einen Test"
+                            "newText": "a"
                         }
                     ]
                 }
@@ -2597,7 +1326,7 @@ Result: [
 ]
 
 
-[Trace - 7:43:51 PM] Sending notification 'textDocument/didChange'.
+[Trace - 12:09:43 AM] Sending notification 'textDocument/didChange'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1",
@@ -2605,25 +1334,36 @@ Params: {
     },
     "contentChanges": [
         {
-            "text": "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist ein Test}.\n"
+            "range": {
+                "start": {
+                    "line": 0,
+                    "character": 9
+                },
+                "end": {
+                    "line": 0,
+                    "character": 10
+                }
+            },
+            "rangeLength": 1,
+            "text": ""
         }
     ]
 }
 
 
-[Trace - 7:43:51 PM] Sending request 'textDocument/codeAction - (4)'.
+[Trace - 12:09:43 AM] Sending request 'textDocument/codeAction - (6)'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1"
     },
     "range": {
         "start": {
-            "line": 2,
-            "character": 11
+            "line": 0,
+            "character": 9
         },
         "end": {
-            "line": 2,
-            "character": 11
+            "line": 0,
+            "character": 9
         }
     },
     "context": {
@@ -2631,24 +1371,24 @@ Params: {
             {
                 "range": {
                     "start": {
-                        "line": 2,
-                        "character": 9
+                        "line": 0,
+                        "character": 8
                     },
                     "end": {
-                        "line": 2,
-                        "character": 26
+                        "line": 0,
+                        "character": 10
                     }
                 },
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad').",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'",
                 "severity": 3,
-                "source": "LTeX - DE_AGREEMENT"
+                "source": "LTeX - EN_A_VS_AN"
             }
         ]
     }
 }
 
 
-[Trace - 7:43:51 PM] Received request 'workspace/configuration - (5)'.
+[Trace - 12:09:43 AM] Received request 'workspace/configuration - (5)'.
 Params: {
     "items": [
         {
@@ -2659,73 +1399,16 @@ Params: {
 }
 
 
-[Trace - 7:43:51 PM] Sending response 'workspace/configuration - (5)'. Processing request took 7ms
+[Trace - 12:09:43 AM] Sending response 'workspace/configuration - (5)'. Processing request took 9ms
 Result: [
     {
-        "de": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-DE": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-AT": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-CH": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-US": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-GB": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": [
-                "OXFORD_SPELLING_NOUNS"
-            ]
-        },
-        "en-AU": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-CA": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-NZ": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-ZA": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
         "enabled": true,
         "language": "en-US",
         "dictionary": {},
         "disabledRules": {},
         "enabledRules": {},
         "ltex-ls": {
-            "path": "/home/valentjn/repos/ltex-ls/build/install/ltex-ls",
+            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
             "languageToolHttpServerUri": ""
         },
         "java": {
@@ -2792,196 +1475,21 @@ Result: [
             "maximumHeapSize": null,
             "sentenceCacheSize": 1234,
             "maximumJavaHeapSize": 500
-        },
-        "ar": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ar-DZ": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ast-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "be-BY": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "br-FR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ca-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ca-ES-valencia": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "da-DK": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "de-DE-x-simple-language": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "el-GR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "eo": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "es": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "fa": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "fr": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ga-IE": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "gl-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "it": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ja-JP": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "km-KH": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "nl": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pl-PL": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-AO": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-BR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-MZ": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-PT": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ro-RO": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ru-RU": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sk-SK": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sl-SI": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sv": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ta-IN": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "tl-PH": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "uk-UA": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "zh-CN": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
         }
     }
 ]
 
 
-[Trace - 7:43:51 PM] Received notification 'telemetry/event'.
+[Trace - 12:09:43 AM] Received notification 'telemetry/event'.
 Params: {
     "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
-    "progress": 0.0
+    "progress": 0
 }
 
 
-[Trace - 7:43:51 PM] Received request 'workspace/configuration - (6)'.
+[Trace - 12:09:43 AM] Received request 'workspace/configuration - (6)'.
 Params: {
     "items": [
         {
@@ -2992,73 +1500,16 @@ Params: {
 }
 
 
-[Trace - 7:43:51 PM] Sending response 'workspace/configuration - (6)'. Processing request took 13ms
+[Trace - 12:09:43 AM] Sending response 'workspace/configuration - (6)'. Processing request took 22ms
 Result: [
     {
-        "de": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-DE": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-AT": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "de-CH": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-US": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-GB": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": [
-                "OXFORD_SPELLING_NOUNS"
-            ]
-        },
-        "en-AU": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-CA": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-NZ": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
-        "en-ZA": {
-            "dictionary": ["B-splines"],
-            "disabledRules": [],
-            "enabledRules": []
-        },
         "enabled": true,
         "language": "en-US",
         "dictionary": {},
         "disabledRules": {},
         "enabledRules": {},
         "ltex-ls": {
-            "path": "/home/valentjn/repos/ltex-ls/build/install/ltex-ls",
+            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
             "languageToolHttpServerUri": ""
         },
         "java": {
@@ -3125,253 +1576,78 @@ Result: [
             "maximumHeapSize": null,
             "sentenceCacheSize": 1234,
             "maximumJavaHeapSize": 500
-        },
-        "ar": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ar-DZ": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ast-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "be-BY": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "br-FR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ca-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ca-ES-valencia": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "da-DK": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "de-DE-x-simple-language": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "el-GR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "eo": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "es": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "fa": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "fr": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ga-IE": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "gl-ES": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "it": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ja-JP": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "km-KH": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "nl": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pl-PL": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-AO": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-BR": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-MZ": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "pt-PT": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ro-RO": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ru-RU": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sk-SK": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sl-SI": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "sv": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "ta-IN": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "tl-PH": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "uk-UA": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
-        },
-        "zh-CN": {
-            "dictionary": ["B-splines"],
-            "enabledRules": [],
-            "disabledRules": []
         }
     }
 ]
 
 
-[Trace - 7:43:51 PM] Received notification 'telemetry/event'.
+[Trace - 12:09:43 AM] Received notification 'telemetry/event'.
 Params: {
     "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
-    "progress": 0.0
+    "progress": 0
 }
 
 
-[Trace - 7:43:51 PM] Received notification 'telemetry/event'.
+[Trace - 12:09:43 AM] Received notification 'telemetry/event'.
 Params: {
     "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
-    "progress": 1.0
+    "progress": 1
 }
 
 
-[Trace - 7:43:51 PM] Received notification 'textDocument/publishDiagnostics'.
+[Trace - 12:09:43 AM] Received notification 'textDocument/publishDiagnostics'.
 Params: {
     "uri": "untitled:Untitled-1",
     "diagnostics": [
         {
             "range": {
                 "start": {
-                    "line": 0,
-                    "character": 8
+                    "line": 2,
+                    "character": 9
                 },
                 "end": {
-                    "line": 0,
-                    "character": 10
+                    "line": 2,
+                    "character": 26
                 }
             },
             "severity": 3,
-            "source": "LTeX - EN_A_VS_AN",
-            "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
+            "source": "LTeX - DE_AGREEMENT",
+            "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
         }
     ]
 }
 
 
-[Trace - 7:43:51 PM] Received notification 'telemetry/event'.
+[Trace - 12:09:43 AM] Received notification 'telemetry/event'.
 Params: {
     "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
-    "progress": 1.0
+    "progress": 1
 }
 
 
-[Trace - 7:43:51 PM] Received response 'textDocument/codeAction - (4)' in 120ms.
+[Trace - 12:09:43 AM] Received response 'textDocument/codeAction - (6)' in 229ms.
 Result: []
 
 
-[Trace - 7:43:51 PM] Sending request 'textDocument/codeAction - (5)'.
+[Trace - 12:09:43 AM] Sending request 'textDocument/codeAction - (7)'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1"
     },
     "range": {
         "start": {
-            "line": 2,
-            "character": 11
+            "line": 0,
+            "character": 9
         },
         "end": {
-            "line": 2,
-            "character": 11
+            "line": 0,
+            "character": 9
         }
     },
     "context": {
@@ -3380,22 +1656,2179 @@ Params: {
 }
 
 
-[Trace - 7:43:51 PM] Received response 'textDocument/codeAction - (5)' in 3ms.
+[Trace - 12:09:43 AM] Received response 'textDocument/codeAction - (7)' in 1ms.
 Result: []
 
 
-[Trace - 7:44:09 PM] Sending notification 'textDocument/didClose'.
+[Trace - 12:09:51 AM] Sending request 'textDocument/codeAction - (8)'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1"
+    },
+    "range": {
+        "start": {
+            "line": 2,
+            "character": 26
+        },
+        "end": {
+            "line": 2,
+            "character": 26
+        }
+    },
+    "context": {
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad').",
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT"
+            }
+        ]
     }
 }
 
 
-[Trace - 7:44:09 PM] Received notification 'textDocument/publishDiagnostics'.
+[Trace - 12:09:51 AM] Received request 'workspace/configuration - (7)'.
+Params: {
+    "items": [
+        {
+            "scopeUri": "untitled:Untitled-1",
+            "section": "ltex"
+        }
+    ]
+}
+
+
+[Trace - 12:09:51 AM] Sending response 'workspace/configuration - (7)'. Processing request took 8ms
+Result: [
+    {
+        "enabled": true,
+        "language": "en-US",
+        "dictionary": {},
+        "disabledRules": {},
+        "enabledRules": {},
+        "ltex-ls": {
+            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
+            "languageToolHttpServerUri": ""
+        },
+        "java": {
+            "path": "",
+            "initialHeapSize": 64,
+            "maximumHeapSize": 512
+        },
+        "commands": {
+            "ignore": [
+                "\\setnumberoftableheaderrows{}",
+                "\\usenotation{}"
+            ],
+            "dummy": [
+                "\\ang{}",
+                "\\bfs",
+                "\\dagr",
+                "\\fem",
+                "\\hftr",
+                "\\initial[]",
+                "\\lhs",
+                "\\pop{}",
+                "\\rhs",
+                "\\spd",
+                "\\texttt{}",
+                "\\thmref{}",
+                "\\tiftr",
+                "\\up"
+            ]
+        },
+        "environments": {
+            "ignore": []
+        },
+        "markdown": {
+            "ignore": [
+                "CodeBlock",
+                "FencedCodeBlock",
+                "IndentedCodeBlock"
+            ],
+            "dummy": [
+                "AutoLink",
+                "Code"
+            ]
+        },
+        "ignoreRuleInSentence": [],
+        "configurationTarget": {
+            "addToDictionary": "global",
+            "disableRule": "workspaceFolder",
+            "ignoreRuleInSentence": "workspaceFolder"
+        },
+        "additionalRules": {
+            "motherTongue": "",
+            "languageModel": "",
+            "neuralNetworkModel": "",
+            "word2VecModel": ""
+        },
+        "sentenceCacheSize": 2000,
+        "diagnosticSeverity": "information",
+        "trace": {
+            "server": "verbose"
+        },
+        "javaHome": null,
+        "performance": {
+            "initialJavaHeapSize": 50,
+            "maximumHeapSize": null,
+            "sentenceCacheSize": 1234,
+            "maximumJavaHeapSize": 500
+        }
+    }
+]
+
+
+[Trace - 12:09:51 AM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 0
+}
+
+
+[Trace - 12:09:51 AM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 1
+}
+
+
+[Trace - 12:09:51 AM] Received response 'textDocument/codeAction - (8)' in 23ms.
+Result: [
+    {
+        "title": "Ignore rule in this sentence",
+        "kind": "quickfix.ltex.ignoreRuleInSentence",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT",
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+            }
+        ],
+        "command": {
+            "title": "Ignore rule in this sentence",
+            "command": "ltex.ignoreRuleInSentence",
+            "arguments": [
+                {
+                    "type": "command",
+                    "command": "ltex.ignoreRuleInSentence",
+                    "uri": "untitled:Untitled-1",
+                    "ruleId": [
+                        "DE_AGREEMENT"
+                    ],
+                    "sentencePattern": [
+                        "^\\QDies ist eine Test.\\E$"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Disable rule",
+        "kind": "quickfix.ltex.disableRule",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT",
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+            }
+        ],
+        "command": {
+            "title": "Disable rule",
+            "command": "ltex.disableRule",
+            "arguments": [
+                {
+                    "type": "command",
+                    "command": "ltex.disableRule",
+                    "uri": "untitled:Untitled-1",
+                    "ruleId": [
+                        "DE_AGREEMENT"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'ein Test'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT",
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 3,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 9
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 26
+                                }
+                            },
+                            "newText": "ein Test"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'einem Test'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT",
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 3,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 9
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 26
+                                }
+                            },
+                            "newText": "einem Test"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'einen Test'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 9
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 26
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - DE_AGREEMENT",
+                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 3,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 9
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 26
+                                }
+                            },
+                            "newText": "einen Test"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+]
+
+
+[Trace - 12:09:57 AM] Sending notification 'textDocument/didChange'.
+Params: {
+    "textDocument": {
+        "uri": "untitled:Untitled-1",
+        "version": 4
+    },
+    "contentChanges": [
+        {
+            "range": {
+                "start": {
+                    "line": 2,
+                    "character": 26
+                },
+                "end": {
+                    "line": 2,
+                    "character": 26
+                }
+            },
+            "rangeLength": 0,
+            "text": "a"
+        }
+    ]
+}
+
+
+[Trace - 12:09:57 AM] Received request 'workspace/configuration - (8)'.
+Params: {
+    "items": [
+        {
+            "scopeUri": "untitled:Untitled-1",
+            "section": "ltex"
+        }
+    ]
+}
+
+
+[Trace - 12:09:57 AM] Sending response 'workspace/configuration - (8)'. Processing request took 17ms
+Result: [
+    {
+        "enabled": true,
+        "language": "en-US",
+        "dictionary": {},
+        "disabledRules": {},
+        "enabledRules": {},
+        "ltex-ls": {
+            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
+            "languageToolHttpServerUri": ""
+        },
+        "java": {
+            "path": "",
+            "initialHeapSize": 64,
+            "maximumHeapSize": 512
+        },
+        "commands": {
+            "ignore": [
+                "\\setnumberoftableheaderrows{}",
+                "\\usenotation{}"
+            ],
+            "dummy": [
+                "\\ang{}",
+                "\\bfs",
+                "\\dagr",
+                "\\fem",
+                "\\hftr",
+                "\\initial[]",
+                "\\lhs",
+                "\\pop{}",
+                "\\rhs",
+                "\\spd",
+                "\\texttt{}",
+                "\\thmref{}",
+                "\\tiftr",
+                "\\up"
+            ]
+        },
+        "environments": {
+            "ignore": []
+        },
+        "markdown": {
+            "ignore": [
+                "CodeBlock",
+                "FencedCodeBlock",
+                "IndentedCodeBlock"
+            ],
+            "dummy": [
+                "AutoLink",
+                "Code"
+            ]
+        },
+        "ignoreRuleInSentence": [],
+        "configurationTarget": {
+            "addToDictionary": "global",
+            "disableRule": "workspaceFolder",
+            "ignoreRuleInSentence": "workspaceFolder"
+        },
+        "additionalRules": {
+            "motherTongue": "",
+            "languageModel": "",
+            "neuralNetworkModel": "",
+            "word2VecModel": ""
+        },
+        "sentenceCacheSize": 2000,
+        "diagnosticSeverity": "information",
+        "trace": {
+            "server": "verbose"
+        },
+        "javaHome": null,
+        "performance": {
+            "initialJavaHeapSize": 50,
+            "maximumHeapSize": null,
+            "sentenceCacheSize": 1234,
+            "maximumJavaHeapSize": 500
+        }
+    }
+]
+
+
+[Trace - 12:09:57 AM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 0
+}
+
+
+[Trace - 12:09:57 AM] Sending request 'textDocument/codeAction - (9)'.
+Params: {
+    "textDocument": {
+        "uri": "untitled:Untitled-1"
+    },
+    "range": {
+        "start": {
+            "line": 2,
+            "character": 27
+        },
+        "end": {
+            "line": 2,
+            "character": 27
+        }
+    },
+    "context": {
+        "diagnostics": []
+    }
+}
+
+
+[Trace - 12:09:57 AM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 1
+}
+
+
+[Trace - 12:09:57 AM] Received notification 'textDocument/publishDiagnostics'.
 Params: {
     "uri": "untitled:Untitled-1",
     "diagnostics": []
 }
+
+
+[Trace - 12:09:57 AM] Received response 'textDocument/codeAction - (9)' in 429ms.
+Result: []
+
+
+[Trace - 12:09:58 AM] Sending request 'textDocument/codeAction - (10)'.
+Params: {
+    "textDocument": {
+        "uri": "untitled:Untitled-1"
+    },
+    "range": {
+        "start": {
+            "line": 2,
+            "character": 27
+        },
+        "end": {
+            "line": 2,
+            "character": 27
+        }
+    },
+    "context": {
+        "diagnostics": []
+    }
+}
+
+
+[Trace - 12:09:58 AM] Received response 'textDocument/codeAction - (10)' in 3ms.
+Result: []
+
+
+[Trace - 12:09:59 AM] Received notification 'textDocument/publishDiagnostics'.
+Params: {
+    "uri": "untitled:Untitled-1",
+    "diagnostics": [
+        {
+            "range": {
+                "start": {
+                    "line": 2,
+                    "character": 22
+                },
+                "end": {
+                    "line": 2,
+                    "character": 27
+                }
+            },
+            "severity": 3,
+            "source": "LTeX - GERMAN_SPELLER_RULE",
+            "message": "Möglicher Tippfehler gefunden."
+        }
+    ]
+}
+
+
+[Trace - 12:10:00 AM] Sending request 'textDocument/codeAction - (11)'.
+Params: {
+    "textDocument": {
+        "uri": "untitled:Untitled-1"
+    },
+    "range": {
+        "start": {
+            "line": 2,
+            "character": 27
+        },
+        "end": {
+            "line": 2,
+            "character": 27
+        }
+    },
+    "context": {
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "message": "Möglicher Tippfehler gefunden.",
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE"
+            }
+        ]
+    }
+}
+
+
+[Trace - 12:10:00 AM] Received request 'workspace/configuration - (9)'.
+Params: {
+    "items": [
+        {
+            "scopeUri": "untitled:Untitled-1",
+            "section": "ltex"
+        }
+    ]
+}
+
+
+[Trace - 12:10:00 AM] Sending response 'workspace/configuration - (9)'. Processing request took 8ms
+Result: [
+    {
+        "enabled": true,
+        "language": "en-US",
+        "dictionary": {},
+        "disabledRules": {},
+        "enabledRules": {},
+        "ltex-ls": {
+            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
+            "languageToolHttpServerUri": ""
+        },
+        "java": {
+            "path": "",
+            "initialHeapSize": 64,
+            "maximumHeapSize": 512
+        },
+        "commands": {
+            "ignore": [
+                "\\setnumberoftableheaderrows{}",
+                "\\usenotation{}"
+            ],
+            "dummy": [
+                "\\ang{}",
+                "\\bfs",
+                "\\dagr",
+                "\\fem",
+                "\\hftr",
+                "\\initial[]",
+                "\\lhs",
+                "\\pop{}",
+                "\\rhs",
+                "\\spd",
+                "\\texttt{}",
+                "\\thmref{}",
+                "\\tiftr",
+                "\\up"
+            ]
+        },
+        "environments": {
+            "ignore": []
+        },
+        "markdown": {
+            "ignore": [
+                "CodeBlock",
+                "FencedCodeBlock",
+                "IndentedCodeBlock"
+            ],
+            "dummy": [
+                "AutoLink",
+                "Code"
+            ]
+        },
+        "ignoreRuleInSentence": [],
+        "configurationTarget": {
+            "addToDictionary": "global",
+            "disableRule": "workspaceFolder",
+            "ignoreRuleInSentence": "workspaceFolder"
+        },
+        "additionalRules": {
+            "motherTongue": "",
+            "languageModel": "",
+            "neuralNetworkModel": "",
+            "word2VecModel": ""
+        },
+        "sentenceCacheSize": 2000,
+        "diagnosticSeverity": "information",
+        "trace": {
+            "server": "verbose"
+        },
+        "javaHome": null,
+        "performance": {
+            "initialJavaHeapSize": 50,
+            "maximumHeapSize": null,
+            "sentenceCacheSize": 1234,
+            "maximumJavaHeapSize": 500
+        }
+    }
+]
+
+
+[Trace - 12:10:00 AM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 0
+}
+
+
+[Trace - 12:10:00 AM] Received notification 'telemetry/event'.
+Params: {
+    "type": "progress",
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 1
+}
+
+
+[Trace - 12:10:00 AM] Received response 'textDocument/codeAction - (11)' in 31ms.
+Result: [
+    {
+        "title": "Add 'Testa' to dictionary",
+        "kind": "quickfix.ltex.addToDictionary",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "command": {
+            "title": "Add 'Testa' to dictionary",
+            "command": "ltex.addToDictionary",
+            "arguments": [
+                {
+                    "type": "command",
+                    "command": "ltex.addToDictionary",
+                    "uri": "untitled:Untitled-1",
+                    "word": [
+                        "Testa"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Ignore rule in this sentence",
+        "kind": "quickfix.ltex.ignoreRuleInSentence",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "command": {
+            "title": "Ignore rule in this sentence",
+            "command": "ltex.ignoreRuleInSentence",
+            "arguments": [
+                {
+                    "type": "command",
+                    "command": "ltex.ignoreRuleInSentence",
+                    "uri": "untitled:Untitled-1",
+                    "ruleId": [
+                        "GERMAN_SPELLER_RULE"
+                    ],
+                    "sentencePattern": [
+                        "^\\QDies ist eine Testa.\\E$"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Disable rule",
+        "kind": "quickfix.ltex.disableRule",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "command": {
+            "title": "Disable rule",
+            "command": "ltex.disableRule",
+            "arguments": [
+                {
+                    "type": "command",
+                    "command": "ltex.disableRule",
+                    "uri": "untitled:Untitled-1",
+                    "ruleId": [
+                        "GERMAN_SPELLER_RULE"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Tests'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Tests"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Testat'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Testat"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Desto'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Desto"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Tesla'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Tesla"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Delta'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Delta"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Testen'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Testen"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Tessa'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Tessa"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Teste'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Teste"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Testet'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Testet"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Test'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Test"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Theta'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Theta"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Distal'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Distal"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Test-'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Test-"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Teslas'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Teslas"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Vesta'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Vesta"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Tessas'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Tessas"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Des'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Des"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Dental'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Dental"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Fest'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Fest"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Beste'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Beste"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'West'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "West"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Text'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Text"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Feste'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Feste"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Testart'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Testart"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Texte'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Texte"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Testate'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Testate"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Rest'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Rest"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Thema'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Thema"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Testats'",
+        "kind": "quickfix.ltex.acceptSuggestion",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Testats"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+]
 
 
