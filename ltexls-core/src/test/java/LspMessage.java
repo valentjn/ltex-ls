@@ -108,15 +108,17 @@ public class LspMessage {
    *
    * @param outputStream stream the server is listening to
    */
-  public void sendToServer(OutputStream outputStream) throws IOException {
+  public void sendToServer(OutputStream outputStream) throws IOException, InterruptedException {
     String bodyStr = this.body.toString();
     byte[] bodyBytes = bodyStr.getBytes("utf-8");
     String headerStr = "Content-Length: " + bodyBytes.length + "\r\n\r\n";
     byte[] headerBytes = headerStr.getBytes("ascii");
 
+    Thread.sleep(100);
     outputStream.write(headerBytes);
     outputStream.write(bodyBytes);
     outputStream.flush();
+    Thread.sleep(100);
   }
 
   private static byte[] read(InputStream inputStream, int numberOfBytes) throws IOException {

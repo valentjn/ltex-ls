@@ -63,7 +63,7 @@ public class LtexLanguageServerLauncherTest {
   }
 
   @Test
-  public void doTest() throws IOException {
+  public void doTest() throws IOException, InterruptedException {
     Path path = Paths.get("src", "test", "resources", "LtexLanguageServerTestLog.txt");
     String log = new String(Files.readAllBytes(path), "utf-8");
     List<LspMessage> messages = convertLogToMessages(log);
