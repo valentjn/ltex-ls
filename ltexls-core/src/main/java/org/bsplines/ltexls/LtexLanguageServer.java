@@ -151,7 +151,10 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
         List<Diagnostic> diagnostics, @Nullable Position caretPosition) {
     if (caretPosition == null) return new ArrayList<>(diagnostics);
     List<Diagnostic> diagnosticsNotAtCaret = new ArrayList<>();
-    Range caretRange = new Range(caretPosition, caretPosition);
+    int character = caretPosition.getCharacter();
+    Position beforeCaretPosition = new Position(caretPosition.getLine(),
+        ((character >= 1) ? (character - 1) : 0));
+    Range caretRange = new Range(beforeCaretPosition, caretPosition);
 
     for (Diagnostic diagnostic : diagnostics) {
       if (!Tools.areRangesIntersecting(diagnostic.getRange(), caretRange)) {
