@@ -6,15 +6,3 @@ updates:
       interval: "weekly"
       day: "friday"
     open-pull-requests-limit: 10
-  - package-ecosystem: "maven"
-    directory: "/ltexls-core/"
-    schedule:
-      interval: "weekly"
-      day: "friday"
-    open-pull-requests-limit: 10
-  - package-ecosystem: "maven"
-    directory: "/ltexls-languagetool-patch/"
-    schedule:
-      interval: "weekly"
-      day: "friday"
-    open-pull-requests-limit: 10
