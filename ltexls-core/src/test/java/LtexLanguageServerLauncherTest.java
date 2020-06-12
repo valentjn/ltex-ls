@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.nio.file.Files;
@@ -6,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -17,26 +20,42 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 @TestInstance(Lifecycle.PER_CLASS)
 public class LtexLanguageServerLauncherTest {
   private @MonotonicNonNull Thread launcherThread;
-  private PipedOutputStream out = new PipedOutputStream();
   private PipedInputStream in = new PipedInputStream();
+  private PipedOutputStream out = new PipedOutputStream();
   private PipedInputStream pipedInputStream = new PipedInputStream();
   private PipedOutputStream pipedOutputStream = new PipedOutputStream();
+
+  private static class LtexLanguageServerLauncherRunnable implements Runnable {
+    private InputStream in;
+    private OutputStream out;
+
+    public LtexLanguageServerLauncherRunnable(InputStream in, OutputStream out) {
+      this.in = in;
+      this.out = out;
+    }
+
+    @Override
+    public void run() {
+      try {
+         LtexLanguageServerLauncher.launch(this.in, this.out);
+      } catch (InterruptedException e) {
+        // occurs when JUnit tears down class
+      } catch (ExecutionException e) {
+        throw new RuntimeException("ExecutionException thrown", e);
+      }
+    }
+  }
 
   /**
    * Set up test class.
    */
   @BeforeAll
   public void setUp() throws InterruptedException, IOException {
-    this.pipedInputStream.connect(this.out);
     this.pipedOutputStream.connect(this.in);
+    this.pipedInputStream.connect(this.out);
 
-    this.launcherThread = new Thread(() -> {
-      try {
-        LtexLanguageServerLauncher.launch(this.in, this.out);
-      } catch (InterruptedException e) {
-        // occurs when JUnit tears down class
-      }
-    });
+    this.launcherThread = new Thread(
+        new LtexLanguageServerLauncherRunnable(this.in, this.out));
     this.launcherThread.start();
 
     // wait until LtexLanguageServer has initialized itself
@@ -51,8 +70,8 @@ public class LtexLanguageServerLauncherTest {
     if (this.launcherThread != null) this.launcherThread.interrupt();
     this.pipedInputStream.close();
     this.pipedOutputStream.close();
-    this.out.close();
     this.in.close();
+    this.out.close();
   }
 
   private static List<LspMessage> convertLogToMessages(String log) {
