@@ -220,7 +220,7 @@
         </configuration>
         <executions>
           <execution>
-            <phase>prepare-package</phase>
+            <phase>package</phase>
             <goals>
               <goal>assemble</goal>
             </goals>
@@ -233,7 +233,7 @@
         <version>3.0.0</version>
         <executions>
           <execution>
-            <phase>prepare-package</phase>
+            <phase>package</phase>
             <configuration>
               <target>
                 <replace file="target/appassembler/bin/ltex-ls">
