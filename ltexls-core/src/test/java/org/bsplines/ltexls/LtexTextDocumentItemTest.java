@@ -3,10 +3,10 @@ package org.bsplines.ltexls;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collections;
-
 import com.sun.tools.javac.util.List;
-
 import org.checkerframework.checker.nullness.NullnessUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.Diagnostic;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
@@ -18,6 +18,12 @@ public class LtexTextDocumentItemTest {
   private static void assertPosition(LtexTextDocumentItem document, int pos, Position position) {
     Assertions.assertEquals(position, document.convertPosition(pos));
     Assertions.assertEquals(pos, document.convertPosition(position));
+  }
+
+  private static void assertNull(@Nullable Object actual) {
+    @SuppressWarnings("assignment.type.incompatible")
+    @NonNull Object actualNonNull = actual;
+    Assertions.assertNull(actualNonNull);
   }
 
   @Test
@@ -52,11 +58,11 @@ public class LtexTextDocumentItemTest {
 
     document.applyTextChangeEvent(new TextDocumentContentChangeEvent("abcdef"));
     Assertions.assertEquals("abcdef", document.getText());
-    Assertions.assertEquals(null, document.getCaretPosition());
+    assertNull(document.getCaretPosition());
 
     document.setLastCaretChangeInstant(pastInstant);
     document.applyTextChangeEvent(new TextDocumentContentChangeEvent(
-        new Range(new Position(0, 3), new Position(0, 3)), null, "1"));
+        new Range(new Position(0, 3), new Position(0, 3)), 0, "1"));
     Assertions.assertEquals("abc1def", document.getText());
     Assertions.assertEquals(new Position(0, 4),
         NullnessUtil.castNonNull(document.getCaretPosition()));
@@ -65,7 +71,7 @@ public class LtexTextDocumentItemTest {
 
     document.setLastCaretChangeInstant(pastInstant);
     document.applyTextChangeEvent(new TextDocumentContentChangeEvent(
-        new Range(new Position(0, 1), new Position(0, 2)), null, ""));
+        new Range(new Position(0, 1), new Position(0, 2)), 1, ""));
     Assertions.assertEquals("ac1def", document.getText());
     Assertions.assertEquals(new Position(0, 1),
         NullnessUtil.castNonNull(document.getCaretPosition()));
@@ -73,23 +79,23 @@ public class LtexTextDocumentItemTest {
         Duration.between(document.getLastCaretChangeInstant(), Instant.now()).toMillis() < 100);
 
     document.applyTextChangeEvent(new TextDocumentContentChangeEvent(
-        new Range(new Position(0, 3), new Position(0, 3)), null, "23"));
+        new Range(new Position(0, 3), new Position(0, 3)), 0, "23"));
     Assertions.assertEquals("ac123def", document.getText());
-    Assertions.assertEquals(null, document.getCaretPosition());
+    assertNull(document.getCaretPosition());
 
     document.applyTextChangeEvents(Collections.singletonList(new TextDocumentContentChangeEvent(
-        new Range(new Position(0, 5), new Position(0, 5)), null, "4")));
+        new Range(new Position(0, 5), new Position(0, 5)), 0, "4")));
     Assertions.assertEquals("ac1234def", document.getText());
     Assertions.assertEquals(new Position(0, 6),
         NullnessUtil.castNonNull(document.getCaretPosition()));
 
     document.applyTextChangeEvents(List.from(new TextDocumentContentChangeEvent[]{
         new TextDocumentContentChangeEvent(
-          new Range(new Position(0, 6), new Position(0, 6)), null, "5"),
+          new Range(new Position(0, 6), new Position(0, 6)), 0, "5"),
         new TextDocumentContentChangeEvent(
-          new Range(new Position(0, 7), new Position(0, 7)), null, "6")}));
+          new Range(new Position(0, 7), new Position(0, 7)), 0, "6")}));
     Assertions.assertEquals("ac123456def", document.getText());
-    Assertions.assertEquals(null, document.getCaretPosition());
+    assertNull(document.getCaretPosition());
   }
 
   @Test
@@ -114,7 +120,8 @@ public class LtexTextDocumentItemTest {
           "untitled:text.txt", "plaintext", 1, "abc");
       document.setLastCaretChangeInstant(origDocument.getLastCaretChangeInstant());
       document.setCaretPosition(new Position(13, 37));
-      Assertions.assertEquals(new Position(13, 37), document.getCaretPosition());
+      Assertions.assertEquals(new Position(13, 37),
+          NullnessUtil.castNonNull(document.getCaretPosition()));
       Assertions.assertFalse(document.equals(origDocument));
       Assertions.assertFalse(origDocument.equals(document));
     }
