@@ -125,6 +125,8 @@
         <version>3.8.1</version>
         <configuration>
           <fork>true</fork>
+          <source>8</source>
+          <target>8</target>
           <compilerArguments>
             <Xmaxerrs>10000</Xmaxerrs>
             <Xmaxwarns>10000</Xmaxwarns>

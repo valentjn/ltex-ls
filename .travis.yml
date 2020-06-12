@@ -12,20 +12,32 @@ jobs:
     - stage: "test"
       os: "linux"
       script:
-        - "mvn verify -e"
+        - "mvn -e verify"
     - stage: "test"
       os: "osx"
       jdk: "openjdk11"
+      addons:
+        homebrew:
+          update: true
+          taps:
+            - "adoptopenjdk/openjdk"
+          casks:
+            - "adoptopenjdk8"
+      before_install:
+        - "export JAVA_HOME=\"/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home\""
+        - "export PATH=\"$JAVA_HOME/bin:$PATH\""
+        - "echo $JAVA_HOME"
+        - "echo $PATH"
       script:
-        - "mvn verify -e"
+        - "mvn -e verify"
     - stage: "test"
       os: "windows"
       language: "shell"
       install:
-        - "choco install openjdk11"
+        - "choco install openjdk8"
         - "choco install maven"
       script:
-        - "cmd.exe //C \"RefreshEnv.cmd & mvn verify -e\""
+        - "cmd.exe //C \"RefreshEnv.cmd & mvn -e verify\""
     - stage: "coverage"
       script:
         - "mvn verify -e org.jacoco:jacoco-maven-plugin:report org.eluder.coveralls:coveralls-maven-plugin:report"
