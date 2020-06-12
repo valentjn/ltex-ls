@@ -31,7 +31,11 @@ public class LtexLanguageServerLauncherTest {
     this.pipedOutputStream.connect(this.in);
 
     this.launcherThread = new Thread(() -> {
-      Assertions.assertDoesNotThrow(() -> LtexLanguageServerLauncher.launch(this.in, this.out));
+      try {
+        LtexLanguageServerLauncher.launch(this.in, this.out);
+      } catch (InterruptedException e) {
+        // occurs when JUnit tears down class
+      }
     });
     this.launcherThread.start();
 
