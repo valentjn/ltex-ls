@@ -12,7 +12,7 @@ jobs:
     - stage: "test"
       os: "linux"
       script:
-        - "mvn -e verify"
+        - "mvn -e verify package"
     - stage: "test"
       os: "osx"
       jdk: "openjdk11"
@@ -29,7 +29,7 @@ jobs:
         - "echo $JAVA_HOME"
         - "echo $PATH"
       script:
-        - "mvn -e verify"
+        - "mvn -e verify package"
     - stage: "test"
       os: "windows"
       language: "shell"
@@ -37,17 +37,17 @@ jobs:
         - "choco install openjdk8"
         - "choco install maven"
       script:
-        - "cmd.exe //C \"RefreshEnv.cmd & mvn -e verify\""
+        - "cmd.exe //C \"RefreshEnv.cmd & mvn -e verify package\""
     - stage: "coverage"
       script:
-        - "mvn verify -e org.jacoco:jacoco-maven-plugin:report org.eluder.coveralls:coveralls-maven-plugin:report"
+        - "mvn -e verify org.jacoco:jacoco-maven-plugin:report org.eluder.coveralls:coveralls-maven-plugin:report"
     - stage: "deploy"
       if: "tag IS present"
       install:
         - "sudo apt-get -y install python3-pip"
         - "pip3 install semver"
       script:
-        - "mvn package -e"
+        - "mvn -e package"
         - "ltexls-core/target/appassembler/bin/ltex-ls --version > ltexLsVersion.json"
         - "export LTEX_LS_VERSION=\"$(python3 -c \"import json; print(json.load(open('ltexLsVersion.json'))['ltex-ls'], end='')\")\""
         - "rm ltexLsVersion.json"
