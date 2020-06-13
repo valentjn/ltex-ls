@@ -19,8 +19,13 @@ public class DelayedDiagnosticsPublisherRunnable implements Runnable {
 
   @Override
   public void run() {
+    Duration sleepDuration = showCaretDiagnosticsDuration.minus(
+        Duration.between(this.document.getLastCaretChangeInstant(), Instant.now()));
+    if (sleepDuration.isNegative()) sleepDuration = Duration.ZERO;
+    sleepDuration = sleepDuration.plusMillis(10);
+
     try {
-      Thread.sleep(showCaretDiagnosticsDuration.toMillis() + 10);
+      Thread.sleep(sleepDuration.toMillis());
     } catch (InterruptedException e) {
       return;
     }
