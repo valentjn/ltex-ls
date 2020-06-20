@@ -149,7 +149,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
   private List<Diagnostic> extractDiagnosticsNotAtCaret(
         List<Diagnostic> diagnostics, @Nullable Position caretPosition) {
-    if (caretPosition == null) return new ArrayList<>(diagnostics);
+    if (caretPosition == null) return Collections.unmodifiableList(diagnostics);
     List<Diagnostic> diagnosticsNotAtCaret = new ArrayList<>();
     int character = caretPosition.getCharacter();
     Position beforeCaretPosition = new Position(caretPosition.getLine(),

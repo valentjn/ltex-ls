@@ -150,7 +150,7 @@ public class LtexTextDocumentItem extends TextDocumentItem {
   }
 
   public List<Diagnostic> getDiagnostics() {
-    return new ArrayList<>(this.diagnostics);
+    return Collections.unmodifiableList(this.diagnostics);
   }
 
   public void setDiagnostics(List<Diagnostic> diagnostics) {
