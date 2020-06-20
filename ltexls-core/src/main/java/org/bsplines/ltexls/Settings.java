@@ -6,7 +6,9 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.DiagnosticSeverity;
@@ -18,9 +20,9 @@ public class Settings {
       Arrays.asList("CodeBlock", "FencedCodeBlock", "IndentedCodeBlock");
 
   private @Nullable String languageShortCode = null;
-  private @Nullable List<String> dictionary = null;
-  private @Nullable List<String> disabledRules = null;
-  private @Nullable List<String> enabledRules = null;
+  private @Nullable Map<String, List<String>> dictionary = null;
+  private @Nullable Map<String, List<String>> disabledRules = null;
+  private @Nullable Map<String, List<String>> enabledRules = null;
   private @Nullable String languageToolHttpServerUri = null;
   private @Nullable List<String> dummyCommandPrototypes = null;
   private @Nullable List<String> ignoreCommandPrototypes = null;
@@ -45,22 +47,22 @@ public class Settings {
    */
   public Settings(Settings obj) {
     this.languageShortCode = obj.languageShortCode;
-    this.dictionary = ((obj.dictionary == null) ? null : new ArrayList<>(obj.dictionary));
-    this.disabledRules = ((obj.disabledRules == null) ? null : new ArrayList<>(obj.disabledRules));
-    this.enabledRules = ((obj.enabledRules == null) ? null : new ArrayList<>(obj.enabledRules));
+    this.dictionary = ((obj.dictionary == null) ? null : copyMapOfLists(obj.dictionary));
+    this.disabledRules = ((obj.disabledRules == null) ? null : copyMapOfLists(obj.disabledRules));
+    this.enabledRules = ((obj.enabledRules == null) ? null : copyMapOfLists(obj.enabledRules));
     this.languageToolHttpServerUri = obj.languageToolHttpServerUri;
-    this.dummyCommandPrototypes = ((obj.dummyCommandPrototypes == null) ? null :
-        new ArrayList<>(obj.dummyCommandPrototypes));
-    this.ignoreCommandPrototypes = ((obj.ignoreCommandPrototypes == null) ? null :
-        new ArrayList<>(obj.ignoreCommandPrototypes));
-    this.ignoreEnvironments = ((obj.ignoreEnvironments == null) ? null :
-        new ArrayList<>(obj.ignoreEnvironments));
-    this.dummyMarkdownNodeTypes = ((obj.dummyMarkdownNodeTypes == null) ? null :
-        new ArrayList<>(obj.dummyMarkdownNodeTypes));
-    this.ignoreMarkdownNodeTypes = ((obj.ignoreMarkdownNodeTypes == null) ? null :
-        new ArrayList<>(obj.ignoreMarkdownNodeTypes));
-    this.ignoreRuleSentencePairs = ((obj.ignoreRuleSentencePairs == null) ? null :
-        new ArrayList<>(obj.ignoreRuleSentencePairs));
+    this.dummyCommandPrototypes = ((obj.dummyCommandPrototypes == null) ? null
+        : new ArrayList<>(obj.dummyCommandPrototypes));
+    this.ignoreCommandPrototypes = ((obj.ignoreCommandPrototypes == null) ? null
+        : new ArrayList<>(obj.ignoreCommandPrototypes));
+    this.ignoreEnvironments = ((obj.ignoreEnvironments == null) ? null
+        : new ArrayList<>(obj.ignoreEnvironments));
+    this.dummyMarkdownNodeTypes = ((obj.dummyMarkdownNodeTypes == null) ? null
+        : new ArrayList<>(obj.dummyMarkdownNodeTypes));
+    this.ignoreMarkdownNodeTypes = ((obj.ignoreMarkdownNodeTypes == null) ? null
+        : new ArrayList<>(obj.ignoreMarkdownNodeTypes));
+    this.ignoreRuleSentencePairs = ((obj.ignoreRuleSentencePairs == null) ? null
+        : new ArrayList<>(obj.ignoreRuleSentencePairs));
     this.motherTongueShortCode = obj.motherTongueShortCode;
     this.languageModelRulesDirectory = obj.languageModelRulesDirectory;
     this.neuralNetworkModelRulesDirectory = obj.neuralNetworkModelRulesDirectory;
@@ -73,6 +75,16 @@ public class Settings {
     setSettings(jsonSettings);
   }
 
+  private static Map<String, List<String>> copyMapOfLists(Map<String, List<String>> map) {
+    Map<String, List<String>> mapCopy = new HashMap<>();
+
+    for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+      mapCopy.put(entry.getKey(), new ArrayList<>(entry.getValue()));
+    }
+
+    return mapCopy;
+  }
+
   private static JsonElement getSettingFromJson(JsonElement jsonSettings, String name) {
     for (String component : name.split("\\.")) {
       jsonSettings = jsonSettings.getAsJsonObject().get(component);
@@ -82,9 +94,37 @@ public class Settings {
   }
 
   private static List<String> convertJsonArrayToList(JsonArray array) {
-    List<String> result = new ArrayList<>();
-    for (JsonElement element : array) result.add(element.getAsString());
-    return result;
+    List<String> list = new ArrayList<>();
+    for (JsonElement element : array) list.add(element.getAsString());
+    return list;
+  }
+
+  private static Map<String, List<String>> convertJsonObjectToMapOfLists(JsonObject object) {
+    Map<String, List<String>> map = new HashMap<>();
+
+    for (String key : object.keySet()) {
+      map.put(key, convertJsonArrayToList(object.get(key).getAsJsonArray()));
+    }
+
+    return map;
+  }
+
+  private static boolean mapOfListsEqual(@Nullable Map<String, List<String>> map1,
+        @Nullable Map<String, List<String>> map2, @Nullable String key) {
+    if (key == null) return true;
+
+    if ((map1 != null) && (map2 != null)) {
+      @Nullable List<String> list1 = map1.get(key);
+      @Nullable List<String> list2 = map2.get(key);
+      return ((list1 != null) ? list1.equals(list2) : (list2 == null));
+    } else {
+      return ((map1 != null) ? (map2 != null) : (map2 == null));
+    }
+  }
+
+  private static int mapOfListsHashCode(
+        @Nullable Map<String, List<String>> map, @Nullable String key) {
+    return (((map != null) && (key != null) && map.containsKey(key)) ? map.get(key).hashCode() : 0);
   }
 
   /**
@@ -100,27 +140,27 @@ public class Settings {
       this.languageShortCode = null;
     }
 
-    this.dictionary = new ArrayList<>();
-    this.disabledRules = new ArrayList<>();
-    this.enabledRules = new ArrayList<>();
+    this.dictionary = new HashMap<>();
+    this.disabledRules = new HashMap<>();
+    this.enabledRules = new HashMap<>();
 
     if (this.languageShortCode != null) {
       // fixes false-positive argument.type.incompatible warnings
       String languageShortCode = this.languageShortCode;
-      List<String> dictionary = this.dictionary;
-      List<String> disabledRules = this.disabledRules;
-      List<String> enabledRules = this.enabledRules;
+      Map<String, List<String>> dictionary = this.dictionary;
+      Map<String, List<String>> disabledRules = this.disabledRules;
+      Map<String, List<String>> enabledRules = this.enabledRules;
 
       try {
-        dictionary.addAll(convertJsonArrayToList(
-            getSettingFromJson(jsonSettings, "dictionary").getAsJsonObject()
-            .get(languageShortCode).getAsJsonArray()));
+        dictionary.putAll(convertJsonObjectToMapOfLists(
+            getSettingFromJson(jsonSettings, "dictionary").getAsJsonObject()));
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
         // setting not set
       }
 
       try {
-        dictionary.addAll(convertJsonArrayToList(
+        if (dictionary.get(languageShortCode) == null) throw new NullPointerException();
+        dictionary.get(languageShortCode).addAll(convertJsonArrayToList(
             getSettingFromJson(jsonSettings,
             languageShortCode + ".dictionary").getAsJsonArray()));
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
@@ -128,15 +168,15 @@ public class Settings {
       }
 
       try {
-        disabledRules.addAll(convertJsonArrayToList(
-            getSettingFromJson(jsonSettings, "disabledRules").getAsJsonObject()
-            .get(languageShortCode).getAsJsonArray()));
+        disabledRules.putAll(convertJsonObjectToMapOfLists(
+            getSettingFromJson(jsonSettings, "disabledRules").getAsJsonObject()));
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
         // setting not set
       }
 
       try {
-        disabledRules.addAll(convertJsonArrayToList(
+        if (disabledRules.get(languageShortCode) == null) throw new NullPointerException();
+        disabledRules.get(languageShortCode).addAll(convertJsonArrayToList(
             getSettingFromJson(jsonSettings,
             languageShortCode + ".disabledRules").getAsJsonArray()));
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
@@ -144,15 +184,15 @@ public class Settings {
       }
 
       try {
-        enabledRules.addAll(convertJsonArrayToList(
-            getSettingFromJson(jsonSettings, "enabledRules").getAsJsonObject()
-            .get(languageShortCode).getAsJsonArray()));
+        enabledRules.putAll(convertJsonObjectToMapOfLists(
+            getSettingFromJson(jsonSettings, "enabledRules").getAsJsonObject()));
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
         // setting not set
       }
 
       try {
-        enabledRules.addAll(convertJsonArrayToList(
+        if (enabledRules.get(languageShortCode) == null) throw new NullPointerException();
+        enabledRules.get(languageShortCode).addAll(convertJsonArrayToList(
             getSettingFromJson(jsonSettings,
             languageShortCode + ".enabledRules").getAsJsonArray()));
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
@@ -288,18 +328,15 @@ public class Settings {
       return false;
     }
 
-    if ((this.dictionary == null) ? (other.dictionary != null) :
-          !this.dictionary.equals(other.dictionary)) {
+    if (!mapOfListsEqual(this.dictionary, other.dictionary, this.languageShortCode)) {
       return false;
     }
 
-    if ((this.disabledRules == null) ? (other.disabledRules != null) :
-          !this.disabledRules.equals(other.disabledRules)) {
+    if (!mapOfListsEqual(this.disabledRules, other.disabledRules, this.languageShortCode)) {
       return false;
     }
 
-    if ((this.enabledRules == null) ? (other.enabledRules != null) :
-          !this.enabledRules.equals(other.enabledRules)) {
+    if (!mapOfListsEqual(this.enabledRules, other.enabledRules, this.languageShortCode)) {
       return false;
     }
 
@@ -378,9 +415,9 @@ public class Settings {
 
     hash = 53 * hash + ((this.languageShortCode != null)
         ? this.languageShortCode.hashCode() : 0);
-    hash = 53 * hash + ((this.dictionary != null) ? this.dictionary.hashCode() : 0);
-    hash = 53 * hash + ((this.disabledRules != null) ? this.disabledRules.hashCode() : 0);
-    hash = 53 * hash + ((this.enabledRules != null) ? this.enabledRules.hashCode() : 0);
+    hash = 53 * hash + mapOfListsHashCode(this.dictionary, this.languageShortCode);
+    hash = 53 * hash + mapOfListsHashCode(this.disabledRules, this.languageShortCode);
+    hash = 53 * hash + mapOfListsHashCode(this.enabledRules, this.languageShortCode);
     hash = 53 * hash + ((this.languageToolHttpServerUri != null)
         ? this.languageToolHttpServerUri.hashCode() : 0);
     hash = 53 * hash + ((this.dummyCommandPrototypes != null)
@@ -413,20 +450,28 @@ public class Settings {
     return ((obj != null) ? obj : defaultValue);
   }
 
+  private static List<String> getDefault(@Nullable Map<String, List<String>> map, String key,
+        List<String> defaultValue) {
+    return (((map != null) && map.containsKey(key)) ? map.get(key) : defaultValue);
+  }
+
   public String getLanguageShortCode() {
     return getDefault(this.languageShortCode, "en-US");
   }
 
   public List<String> getDictionary() {
-    return Collections.unmodifiableList(getDefault(this.dictionary, Collections.emptyList()));
+    return Collections.unmodifiableList(getDefault(
+        this.dictionary, getLanguageShortCode(), Collections.emptyList()));
   }
 
   public List<String> getDisabledRules() {
-    return Collections.unmodifiableList(getDefault(this.disabledRules, Collections.emptyList()));
+    return Collections.unmodifiableList(getDefault(
+        this.disabledRules, getLanguageShortCode(), Collections.emptyList()));
   }
 
   public List<String> getEnabledRules() {
-    return Collections.unmodifiableList(getDefault(this.enabledRules, Collections.emptyList()));
+    return Collections.unmodifiableList(getDefault(
+        this.enabledRules, getLanguageShortCode(), Collections.emptyList()));
   }
 
   public String getLanguageToolHttpServerUri() {
@@ -492,15 +537,18 @@ public class Settings {
   }
 
   public void setDictionary(List<String> dictionary) {
-    this.dictionary = new ArrayList<>(dictionary);
+    if (this.dictionary == null) this.dictionary = new HashMap<>();
+    this.dictionary.put(getLanguageShortCode(), new ArrayList<>(dictionary));
   }
 
   public void setDisabledRules(List<String> disabledRules) {
-    this.disabledRules = new ArrayList<>(disabledRules);
+    if (this.disabledRules == null) this.disabledRules = new HashMap<>();
+    this.disabledRules.put(getLanguageShortCode(), new ArrayList<>(disabledRules));
   }
 
   public void setEnabledRules(List<String> enabledRules) {
-    this.enabledRules = new ArrayList<>(enabledRules);
+    if (this.enabledRules == null) this.enabledRules = new HashMap<>();
+    this.enabledRules.put(getLanguageShortCode(), new ArrayList<>(enabledRules));
   }
 
   public void setLanguageToolHttpServerUri(String languageToolHttpServerUri) {
