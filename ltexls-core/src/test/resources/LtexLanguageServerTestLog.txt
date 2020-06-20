@@ -292,17 +292,17 @@ Result: {
         "textDocumentSync": 2,
         "codeActionProvider": {
             "codeActionKinds": [
-                "quickfix.ltex.acceptSuggestion",
+                "quickfix.ltex.acceptSuggestions",
                 "quickfix.ltex.addToDictionary",
-                "quickfix.ltex.disableRule",
-                "quickfix.ltex.ignoreRuleInSentence"
+                "quickfix.ltex.disableRules",
+                "quickfix.ltex.ignoreRulesInSentence"
             ]
         },
         "executeCommandProvider": {
             "commands": [
                 "ltex.addToDictionary",
-                "ltex.disableRule",
-                "ltex.ignoreRuleInSentence"
+                "ltex.disableRules",
+                "ltex.ignoreRulesInSentence"
             ]
         }
     }
@@ -935,7 +935,7 @@ Params: {
 Result: [
     {
         "title": "Ignore rule in this sentence",
-        "kind": "quickfix.ltex.ignoreRuleInSentence",
+        "kind": "quickfix.ltex.ignoreRulesInSentence",
         "diagnostics": [
             {
                 "range": {
@@ -955,16 +955,16 @@ Result: [
         ],
         "command": {
             "title": "Ignore rule in this sentence",
-            "command": "ltex.ignoreRuleInSentence",
+            "command": "ltex.ignoreRulesInSentence",
             "arguments": [
                 {
                     "type": "command",
-                    "command": "ltex.ignoreRuleInSentence",
+                    "command": "ltex.ignoreRulesInSentence",
                     "uri": "untitled:Untitled-1",
-                    "ruleId": [
+                    "ruleIds": [
                         "EN_A_VS_AN"
                     ],
-                    "sentencePattern": [
+                    "sentencePatterns": [
                         "^\\QThis is an test.\\E$"
                     ]
                 }
@@ -973,7 +973,7 @@ Result: [
     },
     {
         "title": "Disable rule",
-        "kind": "quickfix.ltex.disableRule",
+        "kind": "quickfix.ltex.disableRules",
         "diagnostics": [
             {
                 "range": {
@@ -993,13 +993,13 @@ Result: [
         ],
         "command": {
             "title": "Disable rule",
-            "command": "ltex.disableRule",
+            "command": "ltex.disableRules",
             "arguments": [
                 {
                     "type": "command",
-                    "command": "ltex.disableRule",
+                    "command": "ltex.disableRules",
                     "uri": "untitled:Untitled-1",
-                    "ruleId": {
+                    "ruleIds": {
                         "en-US": [
                             "EN_A_VS_AN"
                         ]
@@ -1010,7 +1010,7 @@ Result: [
     },
     {
         "title": "Use 'a'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -1208,7 +1208,7 @@ Params: {
 Result: [
     {
         "title": "Ignore rule in this sentence",
-        "kind": "quickfix.ltex.ignoreRuleInSentence",
+        "kind": "quickfix.ltex.ignoreRulesInSentence",
         "diagnostics": [
             {
                 "range": {
@@ -1228,16 +1228,16 @@ Result: [
         ],
         "command": {
             "title": "Ignore rule in this sentence",
-            "command": "ltex.ignoreRuleInSentence",
+            "command": "ltex.ignoreRulesInSentence",
             "arguments": [
                 {
                     "type": "command",
-                    "command": "ltex.ignoreRuleInSentence",
+                    "command": "ltex.ignoreRulesInSentence",
                     "uri": "untitled:Untitled-1",
-                    "ruleId": [
+                    "ruleIds": [
                         "EN_A_VS_AN"
                     ],
-                    "sentencePattern": [
+                    "sentencePatterns": [
                         "^\\QThis is an test.\\E$"
                     ]
                 }
@@ -1246,7 +1246,7 @@ Result: [
     },
     {
         "title": "Disable rule",
-        "kind": "quickfix.ltex.disableRule",
+        "kind": "quickfix.ltex.disableRules",
         "diagnostics": [
             {
                 "range": {
@@ -1266,13 +1266,13 @@ Result: [
         ],
         "command": {
             "title": "Disable rule",
-            "command": "ltex.disableRule",
+            "command": "ltex.disableRules",
             "arguments": [
                 {
                     "type": "command",
-                    "command": "ltex.disableRule",
+                    "command": "ltex.disableRules",
                     "uri": "untitled:Untitled-1",
-                    "ruleId": {
+                    "ruleIds": {
                         "en-US": [
                             "EN_A_VS_AN"
                         ]
@@ -1283,7 +1283,7 @@ Result: [
     },
     {
         "title": "Use 'a'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -1815,7 +1815,7 @@ Params: {
 Result: [
     {
         "title": "Ignore rule in this sentence",
-        "kind": "quickfix.ltex.ignoreRuleInSentence",
+        "kind": "quickfix.ltex.ignoreRulesInSentence",
         "diagnostics": [
             {
                 "range": {
@@ -1835,16 +1835,16 @@ Result: [
         ],
         "command": {
             "title": "Ignore rule in this sentence",
-            "command": "ltex.ignoreRuleInSentence",
+            "command": "ltex.ignoreRulesInSentence",
             "arguments": [
                 {
                     "type": "command",
-                    "command": "ltex.ignoreRuleInSentence",
+                    "command": "ltex.ignoreRulesInSentence",
                     "uri": "untitled:Untitled-1",
-                    "ruleId": [
+                    "ruleIds": [
                         "DE_AGREEMENT"
                     ],
-                    "sentencePattern": [
+                    "sentencePatterns": [
                         "^\\QDies ist eine Test.\\E$"
                     ]
                 }
@@ -1853,7 +1853,7 @@ Result: [
     },
     {
         "title": "Disable rule",
-        "kind": "quickfix.ltex.disableRule",
+        "kind": "quickfix.ltex.disableRules",
         "diagnostics": [
             {
                 "range": {
@@ -1873,13 +1873,13 @@ Result: [
         ],
         "command": {
             "title": "Disable rule",
-            "command": "ltex.disableRule",
+            "command": "ltex.disableRules",
             "arguments": [
                 {
                     "type": "command",
-                    "command": "ltex.disableRule",
+                    "command": "ltex.disableRules",
                     "uri": "untitled:Untitled-1",
-                    "ruleId": {
+                    "ruleIds": {
                         "de-DE": [
                             "DE_AGREEMENT"
                         ]
@@ -1890,7 +1890,7 @@ Result: [
     },
     {
         "title": "Use 'ein Test'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -1936,7 +1936,7 @@ Result: [
     },
     {
         "title": "Use 'einem Test'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -1982,7 +1982,7 @@ Result: [
     },
     {
         "title": "Use 'einen Test'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -2421,7 +2421,7 @@ Result: [
                     "type": "command",
                     "command": "ltex.addToDictionary",
                     "uri": "untitled:Untitled-1",
-                    "word": {
+                    "words": {
                         "de-DE": [
                             "Testa"
                         ]
@@ -2432,7 +2432,7 @@ Result: [
     },
     {
         "title": "Ignore rule in this sentence",
-        "kind": "quickfix.ltex.ignoreRuleInSentence",
+        "kind": "quickfix.ltex.ignoreRulesInSentence",
         "diagnostics": [
             {
                 "range": {
@@ -2452,16 +2452,16 @@ Result: [
         ],
         "command": {
             "title": "Ignore rule in this sentence",
-            "command": "ltex.ignoreRuleInSentence",
+            "command": "ltex.ignoreRulesInSentence",
             "arguments": [
                 {
                     "type": "command",
-                    "command": "ltex.ignoreRuleInSentence",
+                    "command": "ltex.ignoreRulesInSentence",
                     "uri": "untitled:Untitled-1",
-                    "ruleId": [
+                    "ruleIds": [
                         "GERMAN_SPELLER_RULE"
                     ],
-                    "sentencePattern": [
+                    "sentencePatterns": [
                         "^\\QDies ist eine Testa.\\E$"
                     ]
                 }
@@ -2470,7 +2470,7 @@ Result: [
     },
     {
         "title": "Disable rule",
-        "kind": "quickfix.ltex.disableRule",
+        "kind": "quickfix.ltex.disableRules",
         "diagnostics": [
             {
                 "range": {
@@ -2490,13 +2490,13 @@ Result: [
         ],
         "command": {
             "title": "Disable rule",
-            "command": "ltex.disableRule",
+            "command": "ltex.disableRules",
             "arguments": [
                 {
                     "type": "command",
-                    "command": "ltex.disableRule",
+                    "command": "ltex.disableRules",
                     "uri": "untitled:Untitled-1",
-                    "ruleId": {
+                    "ruleIds": {
                         "de-DE": [
                             "GERMAN_SPELLER_RULE"
                         ]
@@ -2507,7 +2507,7 @@ Result: [
     },
     {
         "title": "Use 'Tests'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -2553,7 +2553,7 @@ Result: [
     },
     {
         "title": "Use 'Testat'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -2599,7 +2599,7 @@ Result: [
     },
     {
         "title": "Use 'Desto'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -2645,7 +2645,7 @@ Result: [
     },
     {
         "title": "Use 'Tesla'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -2691,7 +2691,7 @@ Result: [
     },
     {
         "title": "Use 'Delta'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -2737,7 +2737,7 @@ Result: [
     },
     {
         "title": "Use 'Testen'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -2783,7 +2783,7 @@ Result: [
     },
     {
         "title": "Use 'Tessa'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -2829,7 +2829,7 @@ Result: [
     },
     {
         "title": "Use 'Teste'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -2875,7 +2875,7 @@ Result: [
     },
     {
         "title": "Use 'Testet'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -2921,7 +2921,7 @@ Result: [
     },
     {
         "title": "Use 'Test'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -2967,7 +2967,7 @@ Result: [
     },
     {
         "title": "Use 'Theta'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3013,7 +3013,7 @@ Result: [
     },
     {
         "title": "Use 'Distal'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3059,7 +3059,7 @@ Result: [
     },
     {
         "title": "Use 'Test-'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3105,7 +3105,7 @@ Result: [
     },
     {
         "title": "Use 'Teslas'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3151,7 +3151,7 @@ Result: [
     },
     {
         "title": "Use 'Vesta'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3197,7 +3197,7 @@ Result: [
     },
     {
         "title": "Use 'Tessas'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3243,7 +3243,7 @@ Result: [
     },
     {
         "title": "Use 'Des'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3289,7 +3289,7 @@ Result: [
     },
     {
         "title": "Use 'Dental'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3335,7 +3335,7 @@ Result: [
     },
     {
         "title": "Use 'Fest'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3381,7 +3381,7 @@ Result: [
     },
     {
         "title": "Use 'Beste'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3427,7 +3427,7 @@ Result: [
     },
     {
         "title": "Use 'West'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3473,7 +3473,7 @@ Result: [
     },
     {
         "title": "Use 'Text'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3519,7 +3519,7 @@ Result: [
     },
     {
         "title": "Use 'Feste'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3565,7 +3565,7 @@ Result: [
     },
     {
         "title": "Use 'Testart'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3611,7 +3611,7 @@ Result: [
     },
     {
         "title": "Use 'Texte'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3657,7 +3657,7 @@ Result: [
     },
     {
         "title": "Use 'Testate'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3703,7 +3703,7 @@ Result: [
     },
     {
         "title": "Use 'Rest'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3749,7 +3749,7 @@ Result: [
     },
     {
         "title": "Use 'Thema'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {
@@ -3795,7 +3795,7 @@ Result: [
     },
     {
         "title": "Use 'Testats'",
-        "kind": "quickfix.ltex.acceptSuggestion",
+        "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
                 "range": {

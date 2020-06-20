@@ -35,22 +35,22 @@ import org.languagetool.markup.AnnotatedText;
 public class CodeActionGenerator {
   private SettingsManager settingsManager;
 
-  private static final String acceptSuggestionCodeActionKind =
-      CodeActionKind.QuickFix + ".ltex.acceptSuggestion";
+  private static final String acceptSuggestionsCodeActionKind =
+      CodeActionKind.QuickFix + ".ltex.acceptSuggestions";
   private static final String addToDictionaryCodeActionKind =
       CodeActionKind.QuickFix + ".ltex.addToDictionary";
-  private static final String disableRuleCodeActionKind =
-      CodeActionKind.QuickFix + ".ltex.disableRule";
-  private static final String ignoreRuleInSentenceCodeActionKind =
-      CodeActionKind.QuickFix + ".ltex.ignoreRuleInSentence";
+  private static final String disableRulesCodeActionKind =
+      CodeActionKind.QuickFix + ".ltex.disableRules";
+  private static final String ignoreRulesInSentenceCodeActionKind =
+      CodeActionKind.QuickFix + ".ltex.ignoreRulesInSentence";
   private static final String addToDictionaryCommandName = "ltex.addToDictionary";
-  private static final String disableRuleCommandName = "ltex.disableRule";
-  private static final String ignoreRuleInSentenceCommandName = "ltex.ignoreRuleInSentence";
+  private static final String disableRulesCommandName = "ltex.disableRules";
+  private static final String ignoreRulesInSentenceCommandName = "ltex.ignoreRulesInSentence";
   private static final List<String> codeActions = Arrays.asList(new String[]{
-      acceptSuggestionCodeActionKind, addToDictionaryCodeActionKind,
-      disableRuleCodeActionKind, ignoreRuleInSentenceCodeActionKind});
+      acceptSuggestionsCodeActionKind, addToDictionaryCodeActionKind,
+      disableRulesCodeActionKind, ignoreRulesInSentenceCodeActionKind});
   private static final List<String> commandNames = Arrays.asList(new String[]{
-      addToDictionaryCommandName, disableRuleCommandName, ignoreRuleInSentenceCommandName});
+      addToDictionaryCommandName, disableRulesCommandName, ignoreRulesInSentenceCommandName});
   private static final Set<String> commandNamesAsSet = new HashSet<>(commandNames);
   private static final String dummyPatternStr = "Dummy[0-9]+";
   private static final Pattern dummyPattern = Pattern.compile(dummyPatternStr);
@@ -204,18 +204,18 @@ public class CodeActionGenerator {
 
       JsonObject arguments = new JsonObject();
       arguments.addProperty("type", "command");
-      arguments.addProperty("command", ignoreRuleInSentenceCommandName);
+      arguments.addProperty("command", ignoreRulesInSentenceCommandName);
       arguments.addProperty("uri", document.getUri());
-      arguments.add("ruleId", ruleIdsJson);
-      arguments.add("sentencePattern", sentencePatternStringsJson);
+      arguments.add("ruleIds", ruleIdsJson);
+      arguments.add("sentencePatterns", sentencePatternStringsJson);
       Command command = new Command(((ruleIdSentencePairs.size() == 1)
           ? Tools.i18n("ignoreRuleInThisSentence")
           : Tools.i18n("ignoreAllRulesInTheSelectedSentences")),
-          ignoreRuleInSentenceCommandName);
+          ignoreRulesInSentenceCommandName);
       command.setArguments(Arrays.asList(arguments));
 
       CodeAction codeAction = new CodeAction(command.getTitle());
-      codeAction.setKind(ignoreRuleInSentenceCodeActionKind);
+      codeAction.setKind(ignoreRulesInSentenceCodeActionKind);
       codeAction.setDiagnostics(diagnostics);
       codeAction.setCommand(command);
       result.add(Either.forRight(codeAction));
@@ -249,17 +249,17 @@ public class CodeActionGenerator {
 
       JsonObject arguments = new JsonObject();
       arguments.addProperty("type", "command");
-      arguments.addProperty("command", disableRuleCommandName);
+      arguments.addProperty("command", disableRulesCommandName);
       arguments.addProperty("uri", document.getUri());
-      arguments.add("ruleId", ruleIdsJsonObject);
+      arguments.add("ruleIds", ruleIdsJsonObject);
       String commandTitle = ((getOnlyEntry(ruleIdsMap) != null)
           ? Tools.i18n("disableRule")
           : Tools.i18n("disableAllRulesWithMatchesInSelection"));
-      Command command = new Command(commandTitle, disableRuleCommandName);
+      Command command = new Command(commandTitle, disableRulesCommandName);
       command.setArguments(Arrays.asList(arguments));
 
       CodeAction codeAction = new CodeAction(command.getTitle());
-      codeAction.setKind(disableRuleCodeActionKind);
+      codeAction.setKind(disableRulesCodeActionKind);
       codeAction.setDiagnostics(diagnostics);
       codeAction.setCommand(command);
       result.add(Either.forRight(codeAction));
@@ -282,7 +282,7 @@ public class CodeActionGenerator {
 
       CodeAction codeAction = new CodeAction((useWordMatches.size() == 1)
           ? Tools.i18n("useWord", newWord) : Tools.i18n("useWordAllSelectedMatches", newWord));
-      codeAction.setKind(acceptSuggestionCodeActionKind);
+      codeAction.setKind(acceptSuggestionsCodeActionKind);
       codeAction.setDiagnostics(diagnostics);
       codeAction.setEdit(new WorkspaceEdit(documentChanges));
       result.add(Either.forRight(codeAction));
@@ -347,7 +347,7 @@ public class CodeActionGenerator {
     arguments.addProperty("type", "command");
     arguments.addProperty("command", addToDictionaryCommandName);
     arguments.addProperty("uri", document.getUri());
-    arguments.add("word", unknownWordsJsonObject);
+    arguments.add("words", unknownWordsJsonObject);
 
     @Nullable String onlyUnknownWord = getOnlyEntry(unknownWordsMap);
     String commandTitle = ((onlyUnknownWord != null)
