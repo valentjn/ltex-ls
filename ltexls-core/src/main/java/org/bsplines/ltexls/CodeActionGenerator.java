@@ -179,7 +179,7 @@ public class CodeActionGenerator {
   }
 
   private static int getPlainTextPositionFor(int originalTextPosition,
-      AnnotatedText inverseAnnotatedText) {
+        AnnotatedText inverseAnnotatedText) {
     return inverseAnnotatedText.getOriginalTextPositionFor(originalTextPosition);
   }
 
