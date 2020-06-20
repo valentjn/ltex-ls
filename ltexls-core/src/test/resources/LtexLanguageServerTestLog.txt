@@ -999,9 +999,11 @@ Result: [
                     "type": "command",
                     "command": "ltex.disableRule",
                     "uri": "untitled:Untitled-1",
-                    "ruleId": [
-                        "EN_A_VS_AN"
-                    ]
+                    "ruleId": {
+                        "en-US": [
+                            "EN_A_VS_AN"
+                        ]
+                    }
                 }
             ]
         }
@@ -1270,9 +1272,11 @@ Result: [
                     "type": "command",
                     "command": "ltex.disableRule",
                     "uri": "untitled:Untitled-1",
-                    "ruleId": [
-                        "EN_A_VS_AN"
-                    ]
+                    "ruleId": {
+                        "en-US": [
+                            "EN_A_VS_AN"
+                        ]
+                    }
                 }
             ]
         }
@@ -1875,9 +1879,11 @@ Result: [
                     "type": "command",
                     "command": "ltex.disableRule",
                     "uri": "untitled:Untitled-1",
-                    "ruleId": [
-                        "DE_AGREEMENT"
-                    ]
+                    "ruleId": {
+                        "de-DE": [
+                            "DE_AGREEMENT"
+                        ]
+                    }
                 }
             ]
         }
@@ -2415,9 +2421,11 @@ Result: [
                     "type": "command",
                     "command": "ltex.addToDictionary",
                     "uri": "untitled:Untitled-1",
-                    "word": [
-                        "Testa"
-                    ]
+                    "word": {
+                        "de-DE": [
+                            "Testa"
+                        ]
+                    }
                 }
             ]
         }
@@ -2488,9 +2496,11 @@ Result: [
                     "type": "command",
                     "command": "ltex.disableRule",
                     "uri": "untitled:Untitled-1",
-                    "ruleId": [
-                        "GERMAN_SPELLER_RULE"
-                    ]
+                    "ruleId": {
+                        "de-DE": [
+                            "GERMAN_SPELLER_RULE"
+                        ]
+                    }
                 }
             ]
         }

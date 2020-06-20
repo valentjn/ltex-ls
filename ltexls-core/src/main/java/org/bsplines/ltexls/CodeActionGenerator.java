@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
+import org.bsplines.ltexls.parsing.CodeFragment;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.CodeAction;
 import org.eclipse.lsp4j.CodeActionKind;
@@ -75,6 +77,40 @@ public class CodeActionGenerator {
     return ret;
   }
 
+  private static int findAnnotatedTextFragmentWithMatch(
+        List<AnnotatedTextFragment> annotatedTextFragments, LanguageToolRuleMatch match) {
+    for (int i = 0; i < annotatedTextFragments.size(); i++) {
+      if (annotatedTextFragments.get(i).getCodeFragment().contains(match)) return i;
+    }
+
+    return -1;
+  }
+
+  private static void addToMap(String key, String value,
+        Map<String, List<String>> map, JsonObject jsonObject) {
+    if (!map.containsKey(key)) {
+      map.put(key, new ArrayList<>());
+      jsonObject.add(key, new JsonArray());
+    }
+
+    List<String> unknownWordsList = map.get(key);
+    JsonArray unknownWordsJsonArray = jsonObject.getAsJsonArray(key);
+
+    if (!unknownWordsList.contains(value)) {
+      unknownWordsList.add(value);
+      unknownWordsJsonArray.add(value);
+    }
+  }
+
+  private static @Nullable String getOnlyEntry(Map<String, List<String>> map) {
+    if (map.size() == 1) {
+      List<String> list = map.entrySet().stream().findFirst().get().getValue();
+      if (list.size() == 1) return list.get(0);
+    }
+
+    return null;
+  }
+
   /**
    * Generate list of commands and code actions after checking a document.
    *
@@ -88,6 +124,7 @@ public class CodeActionGenerator {
         Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) {
     if (checkingResult.getValue() == null) return Collections.emptyList();
 
+    List<AnnotatedTextFragment> annotatedTextFragments = checkingResult.getValue();
     VersionedTextDocumentIdentifier textDocument = new VersionedTextDocumentIdentifier(
         document.getUri(), document.getVersion());
     List<Either<Command, CodeAction>> result =
@@ -123,7 +160,7 @@ public class CodeActionGenerator {
     if (!addWordToDictionaryMatches.isEmpty()
           && this.settingsManager.getSettings().getLanguageToolHttpServerUri().isEmpty()) {
       CodeAction codeAction = getAddWordToDictionaryCodeAction(document,
-          addWordToDictionaryMatches, checkingResult.getValue());
+          addWordToDictionaryMatches, annotatedTextFragments);
       result.add(Either.forRight(codeAction));
     }
 
@@ -185,16 +222,26 @@ public class CodeActionGenerator {
     }
 
     if (!disableRuleMatches.isEmpty()) {
-      List<String> ruleIds = new ArrayList<>();
-      JsonArray ruleIdsJson = new JsonArray();
+      Map<String, List<String>> ruleIdsMap = new HashMap<>();
+      JsonObject ruleIdsJsonObject = new JsonObject();
       List<Diagnostic> diagnostics = new ArrayList<>();
 
       for (LanguageToolRuleMatch match : disableRuleMatches) {
         String ruleId = match.getRuleId();
 
-        if ((ruleId != null) && !ruleIds.contains(ruleId)) {
-          ruleIds.add(ruleId);
-          ruleIdsJson.add(ruleId);
+        if (ruleId != null) {
+          int fragmentIndex = findAnnotatedTextFragmentWithMatch(
+              annotatedTextFragments, match);
+
+          if (fragmentIndex == -1) {
+            Tools.logger.warning(Tools.i18n("couldNotFindFragmentForMatch"));
+            continue;
+          }
+
+          AnnotatedTextFragment annotatedTextFragment = annotatedTextFragments.get(fragmentIndex);
+          String language =
+              annotatedTextFragment.getCodeFragment().getSettings().getLanguageShortCode();
+          addToMap(language, ruleId, ruleIdsMap, ruleIdsJsonObject);
         }
 
         diagnostics.add(createDiagnostic(match, document));
@@ -204,10 +251,11 @@ public class CodeActionGenerator {
       arguments.addProperty("type", "command");
       arguments.addProperty("command", disableRuleCommandName);
       arguments.addProperty("uri", document.getUri());
-      arguments.add("ruleId", ruleIdsJson);
-      Command command = new Command(((ruleIds.size() == 1)
-          ? Tools.i18n("disableRule") : Tools.i18n("disableAllRulesWithMatchesInSelection")),
-          disableRuleCommandName);
+      arguments.add("ruleId", ruleIdsJsonObject);
+      String commandTitle = ((getOnlyEntry(ruleIdsMap) != null)
+          ? Tools.i18n("disableRule")
+          : Tools.i18n("disableAllRulesWithMatchesInSelection"));
+      Command command = new Command(commandTitle, disableRuleCommandName);
       command.setArguments(Arrays.asList(arguments));
 
       CodeAction codeAction = new CodeAction(command.getTitle());
@@ -260,22 +308,16 @@ public class CodeActionGenerator {
       plainTexts.add(null);
     }
 
-    List<String> unknownWords = new ArrayList<>();
-    JsonArray unknownWordsJson = new JsonArray();
+    Map<String, List<String>> unknownWordsMap = new HashMap<>();
+    JsonObject unknownWordsJsonObject = new JsonObject();
     List<Diagnostic> diagnostics = new ArrayList<>();
 
     for (LanguageToolRuleMatch match : addWordToDictionaryMatches) {
-      int fragmentIndex = -1;
-
-      for (int i = 0; i < annotatedTextFragments.size(); i++) {
-        if (annotatedTextFragments.get(i).getCodeFragment().contains(match)) {
-          fragmentIndex = i;
-          break;
-        }
-      }
+      int fragmentIndex = findAnnotatedTextFragmentWithMatch(
+          annotatedTextFragments, match);
 
       if (fragmentIndex == -1) {
-        Tools.logger.warning(Tools.i18n("couldNotFindFragmentForUnknownWord"));
+        Tools.logger.warning(Tools.i18n("couldNotFindFragmentForMatch"));
         continue;
       }
 
@@ -288,18 +330,16 @@ public class CodeActionGenerator {
 
       AnnotatedText inverseAnnotatedText = invertedAnnotatedTexts.get(fragmentIndex);
       String plainText = plainTexts.get(fragmentIndex);
-      int offset = annotatedTextFragment.getCodeFragment().getFromPos();
+      CodeFragment codeFragment = annotatedTextFragment.getCodeFragment();
+      int offset = codeFragment.getFromPos();
 
+      String language = codeFragment.getSettings().getLanguageShortCode();
       @SuppressWarnings({"dereference.of.nullable", "argument.type.incompatible"})
       String word = plainText.substring(
           getPlainTextPositionFor(match.getFromPos() - offset, inverseAnnotatedText),
           getPlainTextPositionFor(match.getToPos() - offset, inverseAnnotatedText));
 
-      if (!unknownWords.contains(word)) {
-        unknownWords.add(word);
-        unknownWordsJson.add(word);
-      }
-
+      addToMap(language, word, unknownWordsMap, unknownWordsJsonObject);
       diagnostics.add(createDiagnostic(match, document));
     }
 
@@ -307,11 +347,13 @@ public class CodeActionGenerator {
     arguments.addProperty("type", "command");
     arguments.addProperty("command", addToDictionaryCommandName);
     arguments.addProperty("uri", document.getUri());
-    arguments.add("word", unknownWordsJson);
-    Command command = new Command(((unknownWords.size() == 1)
-        ? Tools.i18n("addWordToDictionary", unknownWords.get(0))
-        : Tools.i18n("addAllUnknownWordsInSelectionToDictionary")),
-        addToDictionaryCommandName);
+    arguments.add("word", unknownWordsJsonObject);
+
+    @Nullable String onlyUnknownWord = getOnlyEntry(unknownWordsMap);
+    String commandTitle = ((onlyUnknownWord != null)
+        ? Tools.i18n("addWordToDictionary", onlyUnknownWord)
+        : Tools.i18n("addAllUnknownWordsInSelectionToDictionary"));
+    Command command = new Command(commandTitle, addToDictionaryCommandName);
     command.setArguments(Arrays.asList(arguments));
 
     CodeAction codeAction = new CodeAction(command.getTitle());
