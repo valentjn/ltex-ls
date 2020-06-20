@@ -125,8 +125,6 @@ public class CodeActionGenerator {
     if (checkingResult.getValue() == null) return Collections.emptyList();
 
     List<AnnotatedTextFragment> annotatedTextFragments = checkingResult.getValue();
-    VersionedTextDocumentIdentifier textDocument = new VersionedTextDocumentIdentifier(
-        document.getUri(), document.getVersion());
     List<Either<Command, CodeAction>> result =
         new ArrayList<Either<Command, CodeAction>>();
 
@@ -159,133 +157,22 @@ public class CodeActionGenerator {
 
     if (!addWordToDictionaryMatches.isEmpty()
           && this.settingsManager.getSettings().getLanguageToolHttpServerUri().isEmpty()) {
-      CodeAction codeAction = getAddWordToDictionaryCodeAction(document,
-          addWordToDictionaryMatches, annotatedTextFragments);
-      result.add(Either.forRight(codeAction));
+      result.add(Either.forRight(getAddWordToDictionaryCodeAction(document,
+          addWordToDictionaryMatches, annotatedTextFragments)));
     }
 
     if (!ignoreRuleInThisSentenceMatches.isEmpty()) {
-      List<Pair<String, String>> ruleIdSentencePairs = new ArrayList<>();
-      JsonArray ruleIdsJson = new JsonArray();
-      JsonArray sentencePatternStringsJson = new JsonArray();
-      List<Diagnostic> diagnostics = new ArrayList<>();
-
-      for (LanguageToolRuleMatch match : ignoreRuleInThisSentenceMatches) {
-        String ruleId = match.getRuleId();
-        String sentence = match.getSentence();
-        if ((ruleId == null) || (sentence == null)) continue;
-        sentence = sentence.trim();
-        Pair<String, String> pair = new Pair<>(ruleId, sentence);
-
-        if (!ruleIdSentencePairs.contains(pair)) {
-          Matcher matcher = dummyPattern.matcher(sentence);
-          StringBuilder sentencePatternStringBuilder = new StringBuilder();
-          int lastEnd = 0;
-
-          while (matcher.find()) {
-            sentencePatternStringBuilder.append(Pattern.quote(
-                sentence.substring(lastEnd, matcher.start())));
-            sentencePatternStringBuilder.append(dummyPatternStr);
-            lastEnd = matcher.end();
-          }
-
-          if (lastEnd < sentence.length()) {
-            sentencePatternStringBuilder.append(Pattern.quote(sentence.substring(lastEnd)));
-          }
-
-          ruleIdSentencePairs.add(pair);
-          ruleIdsJson.add(ruleId);
-          String sentencePatternString = "^" + sentencePatternStringBuilder.toString() + "$";
-          sentencePatternStringsJson.add(sentencePatternString);
-        }
-
-        diagnostics.add(createDiagnostic(match, document));
-      }
-
-      JsonObject arguments = new JsonObject();
-      arguments.addProperty("type", "command");
-      arguments.addProperty("command", ignoreRulesInSentenceCommandName);
-      arguments.addProperty("uri", document.getUri());
-      arguments.add("ruleIds", ruleIdsJson);
-      arguments.add("sentencePatterns", sentencePatternStringsJson);
-      Command command = new Command(((ruleIdSentencePairs.size() == 1)
-          ? Tools.i18n("ignoreRuleInThisSentence")
-          : Tools.i18n("ignoreAllRulesInTheSelectedSentences")),
-          ignoreRulesInSentenceCommandName);
-      command.setArguments(Arrays.asList(arguments));
-
-      CodeAction codeAction = new CodeAction(command.getTitle());
-      codeAction.setKind(ignoreRulesInSentenceCodeActionKind);
-      codeAction.setDiagnostics(diagnostics);
-      codeAction.setCommand(command);
-      result.add(Either.forRight(codeAction));
+      result.add(Either.forRight(getIgnoreRuleInThisSentenceCodeAction(document,
+          ignoreRuleInThisSentenceMatches, annotatedTextFragments)));
     }
 
     if (!disableRuleMatches.isEmpty()) {
-      Map<String, List<String>> ruleIdsMap = new HashMap<>();
-      JsonObject ruleIdsJsonObject = new JsonObject();
-      List<Diagnostic> diagnostics = new ArrayList<>();
-
-      for (LanguageToolRuleMatch match : disableRuleMatches) {
-        String ruleId = match.getRuleId();
-
-        if (ruleId != null) {
-          int fragmentIndex = findAnnotatedTextFragmentWithMatch(
-              annotatedTextFragments, match);
-
-          if (fragmentIndex == -1) {
-            Tools.logger.warning(Tools.i18n("couldNotFindFragmentForMatch"));
-            continue;
-          }
-
-          AnnotatedTextFragment annotatedTextFragment = annotatedTextFragments.get(fragmentIndex);
-          String language =
-              annotatedTextFragment.getCodeFragment().getSettings().getLanguageShortCode();
-          addToMap(language, ruleId, ruleIdsMap, ruleIdsJsonObject);
-        }
-
-        diagnostics.add(createDiagnostic(match, document));
-      }
-
-      JsonObject arguments = new JsonObject();
-      arguments.addProperty("type", "command");
-      arguments.addProperty("command", disableRulesCommandName);
-      arguments.addProperty("uri", document.getUri());
-      arguments.add("ruleIds", ruleIdsJsonObject);
-      String commandTitle = ((getOnlyEntry(ruleIdsMap) != null)
-          ? Tools.i18n("disableRule")
-          : Tools.i18n("disableAllRulesWithMatchesInSelection"));
-      Command command = new Command(commandTitle, disableRulesCommandName);
-      command.setArguments(Arrays.asList(arguments));
-
-      CodeAction codeAction = new CodeAction(command.getTitle());
-      codeAction.setKind(disableRulesCodeActionKind);
-      codeAction.setDiagnostics(diagnostics);
-      codeAction.setCommand(command);
-      result.add(Either.forRight(codeAction));
+      result.add(Either.forRight(getDisableRuleCodeAction(document,
+          disableRuleMatches, annotatedTextFragments)));
     }
 
     for (Map.Entry<String, List<LanguageToolRuleMatch>> entry : useWordMatchesMap.entrySet()) {
-      String newWord = entry.getKey();
-      List<LanguageToolRuleMatch> useWordMatches = entry.getValue();
-      List<Diagnostic> diagnostics = new ArrayList<>();
-      List<Either<TextDocumentEdit, ResourceOperation>> documentChanges = new ArrayList<>();
-
-      for (LanguageToolRuleMatch match : useWordMatches) {
-        Diagnostic diagnostic = createDiagnostic(match, document);
-        Range range = diagnostic.getRange();
-
-        diagnostics.add(diagnostic);
-        documentChanges.add(Either.forLeft(new TextDocumentEdit(textDocument,
-            Collections.singletonList(new TextEdit(range, newWord)))));
-      }
-
-      CodeAction codeAction = new CodeAction((useWordMatches.size() == 1)
-          ? Tools.i18n("useWord", newWord) : Tools.i18n("useWordAllSelectedMatches", newWord));
-      codeAction.setKind(acceptSuggestionsCodeActionKind);
-      codeAction.setDiagnostics(diagnostics);
-      codeAction.setEdit(new WorkspaceEdit(documentChanges));
-      result.add(Either.forRight(codeAction));
+      result.add(Either.forRight(getUseWordCodeAction(document, entry.getKey(), entry.getValue())));
     }
 
     return result;
@@ -360,6 +247,140 @@ public class CodeActionGenerator {
     codeAction.setKind(addToDictionaryCodeActionKind);
     codeAction.setDiagnostics(diagnostics);
     codeAction.setCommand(command);
+
+    return codeAction;
+  }
+
+  private CodeAction getIgnoreRuleInThisSentenceCodeAction(
+        LtexTextDocumentItem document,
+        List<LanguageToolRuleMatch> ignoreRuleInThisSentenceMatches,
+        List<AnnotatedTextFragment> annotatedTextFragments) {
+    List<Pair<String, String>> ruleIdSentencePairs = new ArrayList<>();
+    JsonArray ruleIdsJson = new JsonArray();
+    JsonArray sentencePatternStringsJson = new JsonArray();
+    List<Diagnostic> diagnostics = new ArrayList<>();
+
+    for (LanguageToolRuleMatch match : ignoreRuleInThisSentenceMatches) {
+      String ruleId = match.getRuleId();
+      String sentence = match.getSentence();
+      if ((ruleId == null) || (sentence == null)) continue;
+      sentence = sentence.trim();
+      Pair<String, String> pair = new Pair<>(ruleId, sentence);
+
+      if (!ruleIdSentencePairs.contains(pair)) {
+        Matcher matcher = dummyPattern.matcher(sentence);
+        StringBuilder sentencePatternStringBuilder = new StringBuilder();
+        int lastEnd = 0;
+
+        while (matcher.find()) {
+          sentencePatternStringBuilder.append(Pattern.quote(
+              sentence.substring(lastEnd, matcher.start())));
+          sentencePatternStringBuilder.append(dummyPatternStr);
+          lastEnd = matcher.end();
+        }
+
+        if (lastEnd < sentence.length()) {
+          sentencePatternStringBuilder.append(Pattern.quote(sentence.substring(lastEnd)));
+        }
+
+        ruleIdSentencePairs.add(pair);
+        ruleIdsJson.add(ruleId);
+        String sentencePatternString = "^" + sentencePatternStringBuilder.toString() + "$";
+        sentencePatternStringsJson.add(sentencePatternString);
+      }
+
+      diagnostics.add(createDiagnostic(match, document));
+    }
+
+    JsonObject arguments = new JsonObject();
+    arguments.addProperty("type", "command");
+    arguments.addProperty("command", ignoreRulesInSentenceCommandName);
+    arguments.addProperty("uri", document.getUri());
+    arguments.add("ruleIds", ruleIdsJson);
+    arguments.add("sentencePatterns", sentencePatternStringsJson);
+    Command command = new Command(((ruleIdSentencePairs.size() == 1)
+        ? Tools.i18n("ignoreRuleInThisSentence")
+        : Tools.i18n("ignoreAllRulesInTheSelectedSentences")),
+        ignoreRulesInSentenceCommandName);
+    command.setArguments(Arrays.asList(arguments));
+
+    CodeAction codeAction = new CodeAction(command.getTitle());
+    codeAction.setKind(ignoreRulesInSentenceCodeActionKind);
+    codeAction.setDiagnostics(diagnostics);
+    codeAction.setCommand(command);
+
+    return codeAction;
+  }
+
+  private CodeAction getDisableRuleCodeAction(
+        LtexTextDocumentItem document,
+        List<LanguageToolRuleMatch> disableRuleMatches,
+        List<AnnotatedTextFragment> annotatedTextFragments) {
+    Map<String, List<String>> ruleIdsMap = new HashMap<>();
+    JsonObject ruleIdsJsonObject = new JsonObject();
+    List<Diagnostic> diagnostics = new ArrayList<>();
+
+    for (LanguageToolRuleMatch match : disableRuleMatches) {
+      String ruleId = match.getRuleId();
+
+      if (ruleId != null) {
+        int fragmentIndex = findAnnotatedTextFragmentWithMatch(
+            annotatedTextFragments, match);
+
+        if (fragmentIndex == -1) {
+          Tools.logger.warning(Tools.i18n("couldNotFindFragmentForMatch"));
+          continue;
+        }
+
+        AnnotatedTextFragment annotatedTextFragment = annotatedTextFragments.get(fragmentIndex);
+        String language =
+            annotatedTextFragment.getCodeFragment().getSettings().getLanguageShortCode();
+        addToMap(language, ruleId, ruleIdsMap, ruleIdsJsonObject);
+      }
+
+      diagnostics.add(createDiagnostic(match, document));
+    }
+
+    JsonObject arguments = new JsonObject();
+    arguments.addProperty("type", "command");
+    arguments.addProperty("command", disableRulesCommandName);
+    arguments.addProperty("uri", document.getUri());
+    arguments.add("ruleIds", ruleIdsJsonObject);
+    String commandTitle = ((getOnlyEntry(ruleIdsMap) != null)
+        ? Tools.i18n("disableRule")
+        : Tools.i18n("disableAllRulesWithMatchesInSelection"));
+    Command command = new Command(commandTitle, disableRulesCommandName);
+    command.setArguments(Arrays.asList(arguments));
+
+    CodeAction codeAction = new CodeAction(command.getTitle());
+    codeAction.setKind(disableRulesCodeActionKind);
+    codeAction.setDiagnostics(diagnostics);
+    codeAction.setCommand(command);
+
+    return codeAction;
+  }
+
+  private CodeAction getUseWordCodeAction(
+        LtexTextDocumentItem document, String newWord, List<LanguageToolRuleMatch> useWordMatches) {
+    VersionedTextDocumentIdentifier textDocument = new VersionedTextDocumentIdentifier(
+        document.getUri(), document.getVersion());
+    List<Diagnostic> diagnostics = new ArrayList<>();
+    List<Either<TextDocumentEdit, ResourceOperation>> documentChanges = new ArrayList<>();
+
+    for (LanguageToolRuleMatch match : useWordMatches) {
+      Diagnostic diagnostic = createDiagnostic(match, document);
+      Range range = diagnostic.getRange();
+
+      diagnostics.add(diagnostic);
+      documentChanges.add(Either.forLeft(new TextDocumentEdit(textDocument,
+          Collections.singletonList(new TextEdit(range, newWord)))));
+    }
+
+    CodeAction codeAction = new CodeAction((useWordMatches.size() == 1)
+        ? Tools.i18n("useWord", newWord) : Tools.i18n("useWordAllSelectedMatches", newWord));
+    codeAction.setKind(acceptSuggestionsCodeActionKind);
+    codeAction.setDiagnostics(diagnostics);
+    codeAction.setEdit(new WorkspaceEdit(documentChanges));
 
     return codeAction;
   }
