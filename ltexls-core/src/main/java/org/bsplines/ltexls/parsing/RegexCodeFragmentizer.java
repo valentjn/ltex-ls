@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.Tools;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class RegexCodeFragmentizer extends CodeFragmentizer {
   private static Pattern splitSettingsPattern = Pattern.compile("\\s+");
@@ -32,7 +33,7 @@ public class RegexCodeFragmentizer extends CodeFragmentizer {
       codeFragments.add(new CodeFragment(codeLanguageId, lastCode, lastFromPos, lastSettings));
 
       curSettings = new Settings(curSettings);
-      String settingsLine = matcher.group("settings");
+      @Nullable String settingsLine = matcher.group("settings");
 
       if (settingsLine == null) {
         Tools.logger.warning(Tools.i18n("couldNotFindSettingsInMatch"));

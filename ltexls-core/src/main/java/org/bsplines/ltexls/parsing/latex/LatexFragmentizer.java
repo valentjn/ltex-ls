@@ -8,6 +8,7 @@ import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.parsing.CodeFragment;
 import org.bsplines.ltexls.parsing.CodeFragmentizer;
 import org.bsplines.ltexls.parsing.RegexCodeFragmentizer;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.xtext.xbase.lib.Pair;
 
 public class LatexFragmentizer extends CodeFragmentizer {
@@ -45,7 +46,7 @@ public class LatexFragmentizer extends CodeFragmentizer {
 
       while (extraMatcher.find()) {
         int fromPos = commentFragment.getFromPos() + extraMatcher.start();
-        List<Pair<Integer, Integer>> arguments = null;
+        @Nullable List<Pair<Integer, Integer>> arguments = null;
 
         for (LatexCommandSignature extraCommandSignature : extraCommandSignatures) {
           if (commentFragment.getSettings().getIgnoreCommandPrototypes().contains(

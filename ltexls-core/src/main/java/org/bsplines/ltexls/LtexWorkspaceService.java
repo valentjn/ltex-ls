@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.checkerframework.checker.initialization.qual.NotOnlyInitialized;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.DidChangeWatchedFilesParams;
 import org.eclipse.lsp4j.ExecuteCommandParams;
@@ -40,7 +41,7 @@ class LtexWorkspaceService implements WorkspaceService {
 
   @Override
   public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
-    LanguageClient languageClient = this.ltexLanguageServer.getLanguageClient();
+    @Nullable LanguageClient languageClient = this.ltexLanguageServer.getLanguageClient();
 
     if (CodeActionGenerator.getCommandNames().contains(params.getCommand())
           && (languageClient != null)) {

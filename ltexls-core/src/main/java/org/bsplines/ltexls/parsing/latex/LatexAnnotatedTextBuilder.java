@@ -14,6 +14,7 @@ import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.Tools;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.DummyGenerator;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private enum Mode {
@@ -284,7 +285,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     this.modeStack.push(Mode.PARAGRAPH_TEXT);
 
     Map<String, List<LatexCommandSignature>> commandSignatureMap = createCommandSignatureMap();
-    Pattern ignoreEnvironmentEndPattern = null;
+    @Nullable Pattern ignoreEnvironmentEndPattern = null;
     int lastPos = -1;
 
     while (this.pos < code.length()) {
@@ -406,8 +407,9 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               Matcher matcher = accentPattern1.matcher(code.substring(this.pos));
 
               if (matcher.find()) {
-                String accentCommand = matcher.group(1);
-                String letter = ((matcher.group(3) != null) ? matcher.group(3) : matcher.group(5));
+                @Nullable String accentCommand = matcher.group(1);
+                @Nullable String letter = ((matcher.group(3) != null)
+                    ? matcher.group(3) : matcher.group(5));
                 String interpretAs = "";
 
                 if ((accentCommand != null) && (letter != null)) {
@@ -524,8 +526,9 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               Matcher matcher = accentPattern2.matcher(code.substring(this.pos));
 
               if (matcher.find()) {
-                String accentCommand = matcher.group(1);
-                String letter = ((matcher.group(3) != null) ? matcher.group(3) : matcher.group(4));
+                @Nullable String accentCommand = matcher.group(1);
+                @Nullable String letter = ((matcher.group(3) != null)
+                    ? matcher.group(3) : matcher.group(4));
                 String interpretAs = "";
 
                 if ((accentCommand != null) && (letter != null)) {
@@ -629,9 +632,9 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               addMarkup(verbCommand, generateDummy());
             } else {
               String match = "";
-              List<LatexCommandSignature> possibleCommandSignatures =
+              @Nullable List<LatexCommandSignature> possibleCommandSignatures =
                   commandSignatureMap.get(command);
-              LatexCommandSignature matchingCommand = null;
+              @Nullable LatexCommandSignature matchingCommand = null;
 
               if (possibleCommandSignatures == null) {
                 possibleCommandSignatures = Collections.emptyList();

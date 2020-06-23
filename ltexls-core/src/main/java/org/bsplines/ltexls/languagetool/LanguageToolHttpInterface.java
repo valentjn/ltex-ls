@@ -27,6 +27,7 @@ import org.apache.http.util.EntityUtils;
 import org.bsplines.ltexls.Tools;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.languagetool.markup.AnnotatedText;
 import org.languagetool.markup.TextPart;
 
@@ -148,7 +149,7 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
       }
 
       httpPost.setEntity(new StringEntity(requestBody, ContentType.APPLICATION_JSON));
-      CloseableHttpResponse httpResponse = null;
+      @Nullable CloseableHttpResponse httpResponse = null;
 
       try {
         httpResponse = httpClient.execute(httpPost);

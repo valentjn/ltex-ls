@@ -10,6 +10,7 @@ import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.CodeFragment;
 import org.bsplines.ltexls.parsing.CodeFragmentizer;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.xtext.xbase.lib.Pair;
 import org.languagetool.markup.AnnotatedText;
@@ -58,7 +59,8 @@ public class DocumentChecker {
         AnnotatedTextFragment annotatedTextFragment) {
     Settings settings = annotatedTextFragment.getCodeFragment().getSettings();
     this.settingsManager.setSettings(settings);
-    LanguageToolInterface languageToolInterface = this.settingsManager.getLanguageToolInterface();
+    @Nullable LanguageToolInterface languageToolInterface =
+        this.settingsManager.getLanguageToolInterface();
 
     if (languageToolInterface == null) {
       Tools.logger.warning(Tools.i18n("skippingTextCheck"));
@@ -111,8 +113,8 @@ public class DocumentChecker {
       List<LanguageToolRuleMatch> ignoreMatches = new ArrayList<>();
 
       for (LanguageToolRuleMatch match : matches) {
-        String ruleId = match.getRuleId();
-        String sentence = match.getSentence();
+        @Nullable String ruleId = match.getRuleId();
+        @Nullable String sentence = match.getSentence();
         if ((ruleId == null) || (sentence == null)) continue;
         sentence = sentence.trim();
 

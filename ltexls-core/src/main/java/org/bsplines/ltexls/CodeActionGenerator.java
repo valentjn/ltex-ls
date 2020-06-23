@@ -135,7 +135,7 @@ public class CodeActionGenerator {
 
     for (LanguageToolRuleMatch match : checkingResult.getKey()) {
       if (match.isIntersectingWithRange(params.getRange(), document)) {
-        String ruleId = match.getRuleId();
+        @Nullable String ruleId = match.getRuleId();
 
         if ((ruleId != null) && (ruleId.startsWith("MORFOLOGIK_")
               || ruleId.startsWith("HUNSPELL_") || ruleId.startsWith("GERMAN_SPELLER_"))) {
@@ -215,13 +215,14 @@ public class CodeActionGenerator {
         plainTexts.set(fragmentIndex, annotatedTextFragment.getAnnotatedText().getPlainText());
       }
 
+      @SuppressWarnings({"assignment.type.incompatible"})
       AnnotatedText inverseAnnotatedText = invertedAnnotatedTexts.get(fragmentIndex);
+      @SuppressWarnings({"assignment.type.incompatible"})
       String plainText = plainTexts.get(fragmentIndex);
       CodeFragment codeFragment = annotatedTextFragment.getCodeFragment();
       int offset = codeFragment.getFromPos();
 
       String language = codeFragment.getSettings().getLanguageShortCode();
-      @SuppressWarnings({"dereference.of.nullable", "argument.type.incompatible"})
       String word = plainText.substring(
           getPlainTextPositionFor(match.getFromPos() - offset, inverseAnnotatedText),
           getPlainTextPositionFor(match.getToPos() - offset, inverseAnnotatedText));
@@ -261,8 +262,8 @@ public class CodeActionGenerator {
     List<Diagnostic> diagnostics = new ArrayList<>();
 
     for (LanguageToolRuleMatch match : ignoreRuleInThisSentenceMatches) {
-      String ruleId = match.getRuleId();
-      String sentence = match.getSentence();
+      @Nullable String ruleId = match.getRuleId();
+      @Nullable String sentence = match.getSentence();
       if ((ruleId == null) || (sentence == null)) continue;
       sentence = sentence.trim();
       Pair<String, String> pair = new Pair<>(ruleId, sentence);
@@ -321,7 +322,7 @@ public class CodeActionGenerator {
     List<Diagnostic> diagnostics = new ArrayList<>();
 
     for (LanguageToolRuleMatch match : disableRuleMatches) {
-      String ruleId = match.getRuleId();
+      @Nullable String ruleId = match.getRuleId();
 
       if (ruleId != null) {
         int fragmentIndex = findAnnotatedTextFragmentWithMatch(

@@ -136,7 +136,7 @@ public class LtexTextDocumentService implements TextDocumentService {
   @Override
   public void didChange(DidChangeTextDocumentParams params) {
     String uri = params.getTextDocument().getUri();
-    LtexTextDocumentItem document = this.documents.get(uri);
+    @Nullable LtexTextDocumentItem document = this.documents.get(uri);
 
     if (document == null) {
       Tools.logger.warning(Tools.i18n("couldNotFindDocumentWithUri", uri));
@@ -160,7 +160,7 @@ public class LtexTextDocumentService implements TextDocumentService {
     }
 
     String uri = params.getTextDocument().getUri();
-    LtexTextDocumentItem document = this.documents.get(uri);
+    @Nullable LtexTextDocumentItem document = this.documents.get(uri);
 
     if (document == null) {
       Tools.logger.warning(Tools.i18n("couldNotFindDocumentWithUri", uri));
@@ -187,14 +187,14 @@ public class LtexTextDocumentService implements TextDocumentService {
   public void didClose(DidCloseTextDocumentParams params) {
     String uri = params.getTextDocument().getUri();
     this.documents.remove(uri);
-    LanguageClient languageClient = this.ltexLanguageServer.getLanguageClient();
+    @Nullable LanguageClient languageClient = this.ltexLanguageServer.getLanguageClient();
     if (languageClient == null) return;
     languageClient.publishDiagnostics(
         new PublishDiagnosticsParams(uri, Collections.emptyList()));
   }
 
   private @Nullable LtexTextDocumentItem getDocument(String uri) {
-    LtexTextDocumentItem document = this.documents.get(uri);
+    @Nullable LtexTextDocumentItem document = this.documents.get(uri);
 
     if (document != null) {
       return document;

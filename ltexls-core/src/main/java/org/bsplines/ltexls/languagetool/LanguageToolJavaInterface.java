@@ -10,6 +10,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.bsplines.ltexls.Tools;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.languagetool.AnalyzedSentence;
 import org.languagetool.AnalyzedTokenReadings;
 import org.languagetool.JLanguageTool;
@@ -44,7 +45,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     }
 
     Language language = Languages.getLanguageForShortCode(languageShortCode);
-    Language motherTongue = ((!motherTongueShortCode.isEmpty())
+    @Nullable Language motherTongue = ((!motherTongueShortCode.isEmpty())
         ? Languages.getLanguageForShortCode(motherTongueShortCode) : null);
     ResultCache resultCache = new ResultCache(sentenceCacheSize,
         resultCacheExpireAfterMinutes, TimeUnit.MINUTES);
@@ -83,9 +84,10 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     for (RuleMatch match : matches) {
       int fromPos = match.getFromPos();
       int toPos = match.getToPos();
-      String ruleId = ((match.getRule() != null) ? match.getRule().getId() : null);
+      @Nullable String ruleId = ((match.getRule() != null) ? match.getRule().getId() : null);
       String message = match.getMessage();
-      String sentence = ((match.getSentence() != null) ? match.getSentence().getText() : null);
+      @Nullable String sentence = ((match.getSentence() != null)
+          ? match.getSentence().getText() : null);
       List<String> suggestedReplacements = match.getSuggestedReplacements();
       result.add(new LanguageToolRuleMatch(ruleId, sentence, fromPos, toPos, message,
           suggestedReplacements));
