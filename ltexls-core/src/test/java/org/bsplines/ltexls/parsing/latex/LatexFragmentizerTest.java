@@ -1,5 +1,6 @@
 package org.bsplines.ltexls.parsing.latex;
 
+import java.util.Arrays;
 import java.util.List;
 import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.parsing.CodeFragment;
@@ -48,6 +49,17 @@ public class LatexFragmentizerTest {
   @Test
   public void testLatex() {
     testCodeLanguage("latex");
+
+    {
+      Settings settings = new Settings();
+      settings.setIgnoreCommandPrototypes(Arrays.asList(new String[]{"\\todo{}"}));
+      CodeFragmentizer fragmentizer = CodeFragmentizer.create("latex", settings);
+      List<CodeFragment> codeFragments = fragmentizer.fragmentize(
+          "Sentence\\footnote[abc]{Footnote} 1\n"
+          + "\t\t  %\t ltex: language=de-DE\nSentence 2\\todo{Todo note}\n"
+          + "%ltex:\tlanguage=en-US\n\nSentence 3\n");
+      Assertions.assertEquals(4, codeFragments.size());
+    }
   }
 
   @Test

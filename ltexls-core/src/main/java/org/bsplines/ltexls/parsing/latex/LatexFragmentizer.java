@@ -48,6 +48,11 @@ public class LatexFragmentizer extends CodeFragmentizer {
         List<Pair<Integer, Integer>> arguments = null;
 
         for (LatexCommandSignature extraCommandSignature : extraCommandSignatures) {
+          if (commentFragment.getSettings().getIgnoreCommandPrototypes().contains(
+                extraCommandSignature.getCommandPrototype())) {
+            continue;
+          }
+
           arguments = extraCommandSignature.matchArgumentsFromPosition(code, fromPos);
           if (arguments != null) break;
         }
