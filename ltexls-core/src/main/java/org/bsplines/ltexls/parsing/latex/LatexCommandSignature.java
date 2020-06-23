@@ -32,6 +32,7 @@ public class LatexCommandSignature {
   public Action action = Action.IGNORE;
   public DummyGenerator dummyGenerator;
 
+  private String thisCommandPrototype;
   private Pattern thisCommandPattern;
 
   public LatexCommandSignature(String commandPrototype) {
@@ -52,6 +53,7 @@ public class LatexCommandSignature {
   public LatexCommandSignature(String commandPrototype, Action action,
         DummyGenerator dummyGenerator) {
     this.dummyGenerator = dummyGenerator;
+    this.thisCommandPrototype = commandPrototype;
     Matcher commandMatcher = commandPattern.matcher(commandPrototype);
 
     if (!commandMatcher.find()) {
@@ -226,5 +228,9 @@ public class LatexCommandSignature {
     }
 
     return pos;
+  }
+
+  public String getCommandPrototype() {
+    return this.thisCommandPrototype;
   }
 }
