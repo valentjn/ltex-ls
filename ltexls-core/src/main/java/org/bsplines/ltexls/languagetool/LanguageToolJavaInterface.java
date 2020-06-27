@@ -65,7 +65,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
   @Override
   public List<LanguageToolRuleMatch> check(AnnotatedText annotatedText) {
     if (!isReady()) {
-      Tools.logger.warning(Tools.i18n("skippingTextCheck"));
+      Tools.logger.warning(Tools.i18n("skippingTextCheckAsLanguageToolHasNotBeenInitialized"));
       return Collections.emptyList();
     }
 

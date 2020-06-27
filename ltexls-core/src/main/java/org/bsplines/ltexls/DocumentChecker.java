@@ -63,7 +63,7 @@ public class DocumentChecker {
         this.settingsManager.getLanguageToolInterface();
 
     if (languageToolInterface == null) {
-      Tools.logger.warning(Tools.i18n("skippingTextCheck"));
+      Tools.logger.warning(Tools.i18n("skippingTextCheckAsLanguageToolHasNotBeenInitialized"));
       return Collections.emptyList();
     } else if ((settings.getDictionary().size() >= 1)
           && "BsPlInEs".equals(settings.getDictionary().get(0))) {
