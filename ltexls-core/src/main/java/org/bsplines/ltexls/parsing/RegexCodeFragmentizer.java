@@ -53,7 +53,9 @@ public class RegexCodeFragmentizer extends CodeFragmentizer {
         String settingName = settingsChange.substring(0, settingNameLength);
         String settingValue = settingsChange.substring(settingNameLength + 1);
 
-        if (settingName.equalsIgnoreCase("language")) {
+        if (settingName.equalsIgnoreCase("enabled")) {
+          curSettings.setEnabled(settingValue.equals("true"));
+        } else if (settingName.equalsIgnoreCase("language")) {
           curSettings.setLanguageShortCode(settingValue);
         } else {
           Tools.logger.warning(Tools.i18n("ignoringUnknownInlineSetting",

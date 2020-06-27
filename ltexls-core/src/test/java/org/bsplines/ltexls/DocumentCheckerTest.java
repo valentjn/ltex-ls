@@ -184,6 +184,19 @@ public class DocumentCheckerTest {
   }
 
   @Test
+  public void testEnabled() {
+    LtexTextDocumentItem document = createDocument("latex",
+        "This is a firstunknownword.\n" +
+        "% ltex: enabled=false\n" +
+        "This is a secondunknownword.\n" +
+        "% ltex: enabled=true\n" +
+        "This is a thirdunknownword.");
+    Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
+        checkDocument(document);
+    Assertions.assertEquals(2, checkingResult.getKey().size());
+  }
+
+  @Test
   public void testIgnoreRuleSentencePairs() {
     LtexTextDocumentItem document = createDocument("plaintext",
         "This is an unknownword.\n");
