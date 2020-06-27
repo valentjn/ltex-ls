@@ -3058,7 +3058,7 @@ Result: [
         }
     },
     {
-        "title": "Use 'Test-'",
+        "title": "Use 'Vesta'",
         "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
@@ -3096,7 +3096,7 @@ Result: [
                                     "character": 27
                                 }
                             },
-                            "newText": "Test-"
+                            "newText": "Vesta"
                         }
                     ]
                 }
@@ -3150,7 +3150,7 @@ Result: [
         }
     },
     {
-        "title": "Use 'Vesta'",
+        "title": "Use 'Des'",
         "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
@@ -3188,7 +3188,7 @@ Result: [
                                     "character": 27
                                 }
                             },
-                            "newText": "Vesta"
+                            "newText": "Des"
                         }
                     ]
                 }
@@ -3242,7 +3242,7 @@ Result: [
         }
     },
     {
-        "title": "Use 'Des'",
+        "title": "Use 'Fest'",
         "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
@@ -3280,7 +3280,7 @@ Result: [
                                     "character": 27
                                 }
                             },
-                            "newText": "Des"
+                            "newText": "Fest"
                         }
                     ]
                 }
@@ -3327,52 +3327,6 @@ Result: [
                                 }
                             },
                             "newText": "Dental"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Fest'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Fest"
                         }
                     ]
                 }
@@ -3518,6 +3472,52 @@ Result: [
         }
     },
     {
+        "title": "Use 'Test-'",
+        "kind": "quickfix.ltex.acceptSuggestions",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Test-"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
         "title": "Use 'Feste'",
         "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
@@ -3557,52 +3557,6 @@ Result: [
                                 }
                             },
                             "newText": "Feste"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Testart'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Testart"
                         }
                     ]
                 }
@@ -3656,7 +3610,7 @@ Result: [
         }
     },
     {
-        "title": "Use 'Testate'",
+        "title": "Use 'Testart'",
         "kind": "quickfix.ltex.acceptSuggestions",
         "diagnostics": [
             {
@@ -3694,7 +3648,7 @@ Result: [
                                     "character": 27
                                 }
                             },
-                            "newText": "Testate"
+                            "newText": "Testart"
                         }
                     ]
                 }
@@ -3741,6 +3695,52 @@ Result: [
                                 }
                             },
                             "newText": "Rest"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'Testate'",
+        "kind": "quickfix.ltex.acceptSuggestions",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 2,
+                        "character": 22
+                    },
+                    "end": {
+                        "line": 2,
+                        "character": 27
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - GERMAN_SPELLER_RULE",
+                "message": "Möglicher Tippfehler gefunden."
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 4,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 2,
+                                    "character": 22
+                                },
+                                "end": {
+                                    "line": 2,
+                                    "character": 27
+                                }
+                            },
+                            "newText": "Testate"
                         }
                     ]
                 }
