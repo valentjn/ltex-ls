@@ -19,6 +19,7 @@ public class Settings {
   private static final List<String> defaultIgnoreMarkdownNodeTypes =
       Arrays.asList("CodeBlock", "FencedCodeBlock", "IndentedCodeBlock");
 
+  private @Nullable Boolean enabled = null;
   private @Nullable String languageShortCode = null;
   private @Nullable Map<String, List<String>> dictionary = null;
   private @Nullable Map<String, List<String>> disabledRules = null;
@@ -46,6 +47,7 @@ public class Settings {
    * @param obj object to copy
    */
   public Settings(Settings obj) {
+    this.enabled = obj.enabled;
     this.languageShortCode = obj.languageShortCode;
     this.dictionary = ((obj.dictionary == null) ? null : copyMapOfLists(obj.dictionary));
     this.disabledRules = ((obj.disabledRules == null) ? null : copyMapOfLists(obj.disabledRules));
@@ -134,6 +136,12 @@ public class Settings {
    */
   public void setSettings(@UnknownInitialization(Object.class) Settings this,
         JsonElement jsonSettings) {
+    try {
+      this.enabled = getSettingFromJson(jsonSettings, "enabled").getAsBoolean();
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      this.enabled = null;
+    }
+
     try {
       this.languageShortCode = getSettingFromJson(jsonSettings, "language").getAsString();
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
@@ -323,6 +331,10 @@ public class Settings {
     if ((obj == null) || !Settings.class.isAssignableFrom(obj.getClass())) return false;
     Settings other = (Settings)obj;
 
+    if ((this.enabled == null) ? (other.enabled != null) : !this.enabled.equals(other.enabled)) {
+      return false;
+    }
+
     if ((this.languageShortCode == null) ? (other.languageShortCode != null) :
           !this.languageShortCode.equals(other.languageShortCode)) {
       return false;
@@ -413,8 +425,8 @@ public class Settings {
   public int hashCode() {
     int hash = 3;
 
-    hash = 53 * hash + ((this.languageShortCode != null)
-        ? this.languageShortCode.hashCode() : 0);
+    hash = 53 * hash + ((this.enabled != null) ? this.enabled.hashCode() : 0);
+    hash = 53 * hash + ((this.languageShortCode != null) ? this.languageShortCode.hashCode() : 0);
     hash = 53 * hash + mapOfListsHashCode(this.dictionary, this.languageShortCode);
     hash = 53 * hash + mapOfListsHashCode(this.disabledRules, this.languageShortCode);
     hash = 53 * hash + mapOfListsHashCode(this.enabledRules, this.languageShortCode);
@@ -453,6 +465,10 @@ public class Settings {
   private static List<String> getDefault(@Nullable Map<String, List<String>> map, String key,
         List<String> defaultValue) {
     return (((map != null) && map.containsKey(key)) ? map.get(key) : defaultValue);
+  }
+
+  public Boolean isEnabled() {
+    return getDefault(this.enabled, true);
   }
 
   public String getLanguageShortCode() {
@@ -530,6 +546,10 @@ public class Settings {
 
   public DiagnosticSeverity getDiagnosticSeverity() {
     return getDefault(this.diagnosticSeverity, DiagnosticSeverity.Information);
+  }
+
+  public void setEnabled(Boolean enabled) {
+    this.enabled = enabled;
   }
 
   public void setLanguageShortCode(String languageShortCode) {

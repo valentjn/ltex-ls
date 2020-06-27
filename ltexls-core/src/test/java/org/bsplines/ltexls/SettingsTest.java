@@ -31,6 +31,10 @@ public class SettingsTest {
     Settings settings = new Settings();
     Settings settings2 = new Settings();
 
+    settings.setEnabled(false);
+    Assertions.assertEquals(false, settings.isEnabled());
+    settings2 = compareSettings(settings, settings2);
+
     settings.setLanguageShortCode("languageShortCode");
     Assertions.assertEquals("languageShortCode", settings.getLanguageShortCode());
     settings2 = compareSettings(settings, settings2);
