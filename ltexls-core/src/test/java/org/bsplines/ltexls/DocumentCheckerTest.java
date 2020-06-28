@@ -1,5 +1,7 @@
 package org.bsplines.ltexls;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.util.Collections;
 import java.util.List;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
@@ -190,10 +192,27 @@ public class DocumentCheckerTest {
         "% ltex: enabled=false\n" +
         "This is a secondunknownword.\n" +
         "% ltex: enabled=true\n" +
-        "This is a thirdunknownword.");
+        "This is a thirdunknownword.\n");
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         checkDocument(document);
     Assertions.assertEquals(2, checkingResult.getKey().size());
+  }
+
+  @Test
+  public void testDictionary() {
+    LtexTextDocumentItem document = createDocument("latex",
+        "This is an unknownword.\n% ltex: language=de-DE\nDies ist ein unbekannteswort.\n");
+    Settings settings = new Settings();
+    JsonArray jsonDictionaryArray = new JsonArray();
+    jsonDictionaryArray.add("unbekannteswort");
+    JsonObject jsonDictionaryObject = new JsonObject();
+    jsonDictionaryObject.add("de-DE", jsonDictionaryArray);
+    JsonObject jsonSettings = new JsonObject();
+    jsonSettings.add("dictionary", jsonDictionaryObject);
+    settings.setSettings(jsonSettings);
+    Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
+        checkDocument(document, settings);
+    Assertions.assertEquals(1, checkingResult.getKey().size());
   }
 
   @Test

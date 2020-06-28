@@ -97,12 +97,12 @@ public class SettingsManager {
     String newLanguage = newSettings.getLanguageShortCode();
     @Nullable Settings oldSettings = this.settingsMap.get(newLanguage);
 
+    this.settings = new Settings(newSettings);
+    this.settingsMap.put(newLanguage, this.settings);
+
     if (newSettings.equals(oldSettings)) {
-      this.settings = oldSettings;
       this.languageToolInterface = this.languageToolInterfaceMap.get(newLanguage);
     } else {
-      this.settingsMap.put(newLanguage, newSettings);
-      this.settings = newSettings;
       reinitializeLanguageToolInterface();
       this.languageToolInterfaceMap.put(newLanguage, this.languageToolInterface);
     }

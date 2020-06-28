@@ -152,19 +152,35 @@ public class Settings {
     this.disabledRules = new HashMap<>();
     this.enabledRules = new HashMap<>();
 
+    // fixes false-positive argument.type.incompatible warnings
+    Map<String, List<String>> dictionary = this.dictionary;
+    Map<String, List<String>> disabledRules = this.disabledRules;
+    Map<String, List<String>> enabledRules = this.enabledRules;
+
+    try {
+      dictionary.putAll(convertJsonObjectToMapOfLists(
+          getSettingFromJson(jsonSettings, "dictionary").getAsJsonObject()));
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      // setting not set
+    }
+
+    try {
+      disabledRules.putAll(convertJsonObjectToMapOfLists(
+          getSettingFromJson(jsonSettings, "disabledRules").getAsJsonObject()));
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      // setting not set
+    }
+
+    try {
+      enabledRules.putAll(convertJsonObjectToMapOfLists(
+          getSettingFromJson(jsonSettings, "enabledRules").getAsJsonObject()));
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      // setting not set
+    }
+
     if (this.languageShortCode != null) {
       // fixes false-positive argument.type.incompatible warnings
       String languageShortCode = this.languageShortCode;
-      Map<String, List<String>> dictionary = this.dictionary;
-      Map<String, List<String>> disabledRules = this.disabledRules;
-      Map<String, List<String>> enabledRules = this.enabledRules;
-
-      try {
-        dictionary.putAll(convertJsonObjectToMapOfLists(
-            getSettingFromJson(jsonSettings, "dictionary").getAsJsonObject()));
-      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-        // setting not set
-      }
 
       try {
         if (dictionary.get(languageShortCode) == null) throw new NullPointerException();
@@ -176,24 +192,10 @@ public class Settings {
       }
 
       try {
-        disabledRules.putAll(convertJsonObjectToMapOfLists(
-            getSettingFromJson(jsonSettings, "disabledRules").getAsJsonObject()));
-      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-        // setting not set
-      }
-
-      try {
         if (disabledRules.get(languageShortCode) == null) throw new NullPointerException();
         disabledRules.get(languageShortCode).addAll(convertJsonArrayToList(
             getSettingFromJson(jsonSettings,
             languageShortCode + ".disabledRules").getAsJsonArray()));
-      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-        // setting not set
-      }
-
-      try {
-        enabledRules.putAll(convertJsonObjectToMapOfLists(
-            getSettingFromJson(jsonSettings, "enabledRules").getAsJsonObject()));
       } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
         // setting not set
       }
