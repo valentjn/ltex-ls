@@ -4,11 +4,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bsplines</groupId>
   <artifactId>ltexls-languagetool-patch</artifactId>
-  <version>6.0.0-beta.2</version>
+  <version>6.0.0-beta.3</version>
   <parent>
       <groupId>org.bsplines</groupId>
       <artifactId>ltexls</artifactId>
-      <version>6.0.0-beta.2</version>
+      <version>6.0.0-beta.3</version>
   </parent>
   <dependencies>
     <dependency>
