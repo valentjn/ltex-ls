@@ -1,22 +1,3 @@
-2020-06-11T22:08:59.394Z Info:
-2020-06-11T22:08:59.394Z Info: ltex.ltex-ls.path set to /home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler.
-2020-06-11T22:08:59.394Z Info:
-2020-06-11T22:08:59.394Z Info: ltex.java.path not set.
-2020-06-11T22:08:59.395Z Info: Using ltex-ls from '/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler'.
-2020-06-11T22:08:59.395Z Info: Using Java from PATH or JAVA_HOME (may fail if not installed).
-2020-06-11T22:08:59.424Z Info: Testing ltex-ls...
-2020-06-11T22:08:59.424Z Info:   Command: "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler/bin/ltex-ls"
-2020-06-11T22:08:59.424Z Info:   Arguments: ["--version"]
-2020-06-11T22:08:59.424Z Info:   env['JAVA_HOME']: undefined
-2020-06-11T22:08:59.452Z Info:   env['JAVA_OPTS']: "-Xms50m -Xmx500m"
-2020-06-11T22:09:00.185Z Info: Test successful!
-2020-06-11T22:09:00.203Z Info:
-2020-06-11T22:09:00.210Z Info: Starting ltex-ls...
-2020-06-11T22:09:00.210Z Info:   Command: "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler/bin/ltex-ls"
-2020-06-11T22:09:00.210Z Info:   Arguments: []
-2020-06-11T22:09:00.210Z Info:   env['JAVA_HOME']: undefined
-2020-06-11T22:09:00.210Z Info:   env['JAVA_OPTS']: "-Xms50m -Xmx500m"
-2020-06-11T22:09:00.210Z Info:
 [Trace - 12:09:00 AM] Sending request 'initialize - (0)'.
 Params: {
     "processId": 902347,
