@@ -2,6 +2,8 @@ package org.bsplines.ltexls.languagetool;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -72,7 +74,20 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     List<RuleMatch> matches;
 
     try {
-      matches = this.languageTool.check(annotatedText);
+      // workaround bugs like https://github.com/languagetool-org/languagetool/issues/3181,
+      // in which LT prints to stdout instead of stderr (this messes up the LSP communication
+      // and results in a deadlock) => temporarily discard output to stdout
+      PrintStream stdout = System.out;
+      System.setOut(new PrintStream(new OutputStream() {
+            public void write(int b) {
+            }
+          }, false, "utf-8"));
+
+      try {
+        matches = this.languageTool.check(annotatedText);
+      } finally {
+        System.setOut(stdout);
+      }
     } catch (RuntimeException | IOException e) {
       Tools.logger.severe(Tools.i18n("languageToolFailed", e.getMessage()));
       e.printStackTrace();
