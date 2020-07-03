@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+   - Copyright (C) 2020 Julian Valentin, LTeX Development Community
+   -
+   - This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at https://mozilla.org/MPL/2.0/.
+   -->
 <FindBugsFilter>
   <Match>
     <Bug pattern="NP_NONNULL_PARAM_VIOLATION,NP_NONNULL_RETURN_VIOLATION,RCN_REDUNDANT_NULLCHECK_OF_NONNULL_VALUE"/>
