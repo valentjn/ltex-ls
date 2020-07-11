@@ -251,6 +251,46 @@
                   <replacetoken>"%REPO%"\*</replacetoken>
                   <replacevalue>"%REPO%"\ltexls-languagetool-patch-${project.version}.jar;"%REPO%"\*</replacevalue>
                 </replace>
+                <replace file="target/appassembler/bin/ltex-ls.bat">
+                  <replacetoken>if "%JAVACMD%"=="" set JAVACMD=java</replacetoken>
+                  <replacevalue><![CDATA[if "%JAVACMD%" NEQ "" goto init
+
+@rem Find java.exe
+if defined JAVA_HOME goto findJavaFromJavaHome
+
+set JAVACMD=java.exe
+%JAVACMD% -version >NUL 2>&1
+if "%ERRORLEVEL%" == "0" goto init
+
+echo.
+echo ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
+echo.
+echo Please set the JAVA_HOME variable in your environment to match the
+echo location of your Java installation.
+
+goto error
+
+:findJavaFromJavaHome
+set JAVA_HOME=%JAVA_HOME:"=%
+set JAVACMD=%JAVA_HOME%/bin/java.exe
+
+if exist "%JAVACMD%" goto init
+
+echo.
+echo ERROR: JAVA_HOME is set to an invalid directory: %JAVA_HOME%
+echo.
+echo Please set the JAVA_HOME variable in your environment to match the
+echo location of your Java installation.
+
+goto error
+
+:init]]></replacevalue>
+                </replace>
+                <replace file="target/appassembler/bin/ltex-ls.bat">
+                  <replacetoken>set ERROR_CODE=%ERRORLEVEL%</replacetoken>
+                  <replacevalue>set ERROR_CODE=%ERRORLEVEL%
+if %ERROR_CODE% EQU 0 set ERROR_CODE=1</replacevalue>
+                </replace>
                 <chmod file="target/appassembler/bin/ltex-ls" perm="755"/>
               </target>
             </configuration>
