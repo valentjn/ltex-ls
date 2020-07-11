@@ -11,20 +11,20 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bsplines</groupId>
   <artifactId>ltexls-core</artifactId>
-  <version>6.0.1</version>
+  <version>6.0.2</version>
   <properties>
     <errorProneJavac>${com.google.errorprone:javac:jar}</errorProneJavac>
   </properties>
   <parent>
     <groupId>org.bsplines</groupId>
     <artifactId>ltexls</artifactId>
-    <version>6.0.1</version>
+    <version>6.0.2</version>
   </parent>
   <dependencies>
     <dependency>
       <groupId>org.bsplines</groupId>
       <artifactId>ltexls-languagetool-patch</artifactId>
-      <version>6.0.1</version>
+      <version>6.0.2</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
