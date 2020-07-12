@@ -44,7 +44,7 @@ public class LtexLanguageServerLauncherTest {
     @Override
     public void run() {
       try {
-         LtexLanguageServerLauncher.launch(this.in, this.out);
+        LtexLanguageServerLauncher.launch(this.in, this.out);
       } catch (InterruptedException e) {
         // occurs when JUnit tears down class
       } catch (ExecutionException e) {

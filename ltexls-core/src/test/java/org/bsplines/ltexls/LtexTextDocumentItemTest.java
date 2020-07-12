@@ -7,10 +7,10 @@
 
 package org.bsplines.ltexls;
 
+import com.sun.tools.javac.util.List;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collections;
-import com.sun.tools.javac.util.List;
 import org.checkerframework.checker.nullness.NullnessUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -61,11 +61,12 @@ public class LtexTextDocumentItemTest {
   public void testApplyTextChangeEvents() {
     LtexTextDocumentItem document = new LtexTextDocumentItem(
         "untitled:text.txt", "plaintext", 1, "abc");
-    Instant pastInstant = Instant.now().minus(Duration.ofSeconds(10));
 
     document.applyTextChangeEvent(new TextDocumentContentChangeEvent("abcdef"));
     Assertions.assertEquals("abcdef", document.getText());
     assertNull(document.getCaretPosition());
+
+    Instant pastInstant = Instant.now().minus(Duration.ofSeconds(10));
 
     document.setLastCaretChangeInstant(pastInstant);
     document.applyTextChangeEvent(new TextDocumentContentChangeEvent(

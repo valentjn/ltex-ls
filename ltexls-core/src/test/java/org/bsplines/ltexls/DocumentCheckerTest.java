@@ -195,11 +195,11 @@ public class DocumentCheckerTest {
   @Test
   public void testEnabled() {
     LtexTextDocumentItem document = createDocument("latex",
-        "This is a firstunknownword.\n" +
-        "% ltex: enabled=false\n" +
-        "This is a secondunknownword.\n" +
-        "% ltex: enabled=true\n" +
-        "This is a thirdunknownword.\n");
+        "This is a firstunknownword.\n"
+        + "% ltex: enabled=false\n"
+        + "This is a secondunknownword.\n"
+        + "% ltex: enabled=true\n"
+        + "This is a thirdunknownword.\n");
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         checkDocument(document);
     Assertions.assertEquals(2, checkingResult.getKey().size());
@@ -207,15 +207,15 @@ public class DocumentCheckerTest {
 
   @Test
   public void testDictionary() {
-    LtexTextDocumentItem document = createDocument("latex",
-        "This is an unknownword.\n% ltex: language=de-DE\nDies ist ein unbekannteswort.\n");
-    Settings settings = new Settings();
     JsonArray jsonDictionaryArray = new JsonArray();
     jsonDictionaryArray.add("unbekannteswort");
     JsonObject jsonDictionaryObject = new JsonObject();
     jsonDictionaryObject.add("de-DE", jsonDictionaryArray);
     JsonObject jsonSettings = new JsonObject();
     jsonSettings.add("dictionary", jsonDictionaryObject);
+    LtexTextDocumentItem document = createDocument("latex",
+        "This is an unknownword.\n% ltex: language=de-DE\nDies ist ein unbekannteswort.\n");
+    Settings settings = new Settings();
     settings.setSettings(jsonSettings);
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         checkDocument(document, settings);
