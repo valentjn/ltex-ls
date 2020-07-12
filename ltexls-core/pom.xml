@@ -100,9 +100,10 @@
         <version>3.1.1</version>
         <configuration>
           <configLocation>.checkstyle.xml</configLocation>
-          <encoding>UTF-8</encoding>
           <consoleOutput>true</consoleOutput>
+          <encoding>UTF-8</encoding>
           <failsOnError>true</failsOnError>
+          <includeTestSourceDirectory>true</includeTestSourceDirectory>
         </configuration>
         <executions>
           <execution>
@@ -164,6 +165,7 @@
         <version>4.0.4</version>
         <configuration>
           <excludeFilterFile>.spotbugs-exclude.xml</excludeFilterFile>
+          <includeTests>true</includeTests>
         </configuration>
         <executions>
           <execution>
