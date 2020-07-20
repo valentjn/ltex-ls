@@ -247,14 +247,7 @@
                   <replacetoken>"$REPO"/*</replacetoken>
                   <replacevalue>"$REPO"/ltexls-languagetool-patch-${project.version}.jar:"$REPO"/*</replacevalue>
                 </replace>
-                <replace file="target/appassembler/bin/ltex-ls.bat">
-                  <replacetoken>"%REPO%"\*</replacetoken>
-                  <replacevalue>"%REPO%"\ltexls-languagetool-patch-${project.version}.jar;"%REPO%"\*</replacevalue>
-                </replace>
-                <replace file="target/appassembler/bin/ltex-ls.bat">
-                  <replacetoken>%JAVACMD% %JAVA_OPTS%  -classpath %CLASSPATH%</replacetoken>
-                  <replacevalue>"%JAVACMD%" %JAVA_OPTS%  -classpath "%CLASSPATH%"</replacevalue>
-                </replace>
+                <chmod file="target/appassembler/bin/ltex-ls" perm="755"/>
                 <replace file="target/appassembler/bin/ltex-ls.bat">
                   <replacetoken>if "%JAVACMD%"=="" set JAVACMD=java</replacetoken>
                   <replacevalue><![CDATA[if "%JAVACMD%" NEQ "" goto init
@@ -291,11 +284,18 @@ goto error
 :init]]></replacevalue>
                 </replace>
                 <replace file="target/appassembler/bin/ltex-ls.bat">
+                  <replacetoken>"%REPO%"\*</replacetoken>
+                  <replacevalue>"%REPO%"\ltexls-languagetool-patch-${project.version}.jar;"%REPO%"\*</replacevalue>
+                </replace>
+                <replace file="target/appassembler/bin/ltex-ls.bat">
+                  <replacetoken>%JAVACMD% %JAVA_OPTS%  -classpath %CLASSPATH%</replacetoken>
+                  <replacevalue>"%JAVACMD%" %JAVA_OPTS%  -classpath "%CLASSPATH%"</replacevalue>
+                </replace>
+                <replace file="target/appassembler/bin/ltex-ls.bat">
                   <replacetoken>set ERROR_CODE=%ERRORLEVEL%</replacetoken>
                   <replacevalue>set ERROR_CODE=%ERRORLEVEL%
 if %ERROR_CODE% EQU 0 set ERROR_CODE=1</replacevalue>
                 </replace>
-                <chmod file="target/appassembler/bin/ltex-ls" perm="755"/>
               </target>
             </configuration>
             <goals>
