@@ -252,6 +252,10 @@
                   <replacevalue>"%REPO%"\ltexls-languagetool-patch-${project.version}.jar;"%REPO%"\*</replacevalue>
                 </replace>
                 <replace file="target/appassembler/bin/ltex-ls.bat">
+                  <replacetoken>%JAVACMD% %JAVA_OPTS%  -classpath %CLASSPATH%</replacetoken>
+                  <replacevalue>"%JAVACMD%" %JAVA_OPTS%  -classpath "%CLASSPATH%"</replacevalue>
+                </replace>
+                <replace file="target/appassembler/bin/ltex-ls.bat">
                   <replacetoken>if "%JAVACMD%"=="" set JAVACMD=java</replacetoken>
                   <replacevalue><![CDATA[if "%JAVACMD%" NEQ "" goto init
 
