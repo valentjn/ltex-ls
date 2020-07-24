@@ -44,7 +44,7 @@ public class CodeFragment {
   }
 
   public Settings getSettings() {
-    return this.settings;
+    return new Settings(this.settings);
   }
 
   public boolean contains(LanguageToolRuleMatch match) {

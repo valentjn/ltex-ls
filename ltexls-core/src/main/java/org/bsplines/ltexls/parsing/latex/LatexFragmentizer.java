@@ -54,9 +54,10 @@ public class LatexFragmentizer extends CodeFragmentizer {
       while (extraMatcher.find()) {
         int fromPos = commentFragment.getFromPos() + extraMatcher.start();
         @Nullable List<Pair<Integer, Integer>> arguments = null;
+        Settings fragmentSettings = commentFragment.getSettings();
 
         for (LatexCommandSignature extraCommandSignature : extraCommandSignatures) {
-          if (commentFragment.getSettings().getIgnoreCommandPrototypes().contains(
+          if (fragmentSettings.getIgnoreCommandPrototypes().contains(
                 extraCommandSignature.getCommandPrototype())) {
             continue;
           }
@@ -70,7 +71,7 @@ public class LatexFragmentizer extends CodeFragmentizer {
         fromPos = lastArgument.getKey() + 1;
         int toPos = lastArgument.getValue() - 1;
         fragments.add(new CodeFragment(codeLanguageId, code.substring(fromPos, toPos), fromPos,
-            commentFragment.getSettings()));
+            fragmentSettings));
       }
 
       fragments.add(commentFragment);

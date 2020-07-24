@@ -83,7 +83,7 @@ public class SettingsManager {
   }
 
   public Settings getSettings() {
-    return this.settings;
+    return new Settings(this.settings);
   }
 
   public @Nullable LanguageToolInterface getLanguageToolInterface() {
