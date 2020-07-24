@@ -45,16 +45,22 @@ public class LatexFragmentizer extends CodeFragmentizer {
 
   @Override
   public List<CodeFragment> fragmentize(String code) {
-    List<CodeFragment> commentFragments = this.commentFragmentizer.fragmentize(code);
-    ArrayList<CodeFragment> fragments = new ArrayList<>();
+    List<CodeFragment> fragments = this.commentFragmentizer.fragmentize(code);
+    fragments = fragmentizeExtraCommands(code, fragments);
 
-    for (CodeFragment commentFragment : commentFragments) {
-      Matcher extraMatcher = extraCommandPattern.matcher(commentFragment.getCode());
+    return fragments;
+  }
+
+  private List<CodeFragment> fragmentizeExtraCommands(String code, List<CodeFragment> fragments) {
+    ArrayList<CodeFragment> newFragments = new ArrayList<>();
+
+    for (CodeFragment fragment : fragments) {
+      Matcher extraMatcher = extraCommandPattern.matcher(fragment.getCode());
 
       while (extraMatcher.find()) {
-        int fromPos = commentFragment.getFromPos() + extraMatcher.start();
+        int fromPos = fragment.getFromPos() + extraMatcher.start();
         @Nullable List<Pair<Integer, Integer>> arguments = null;
-        Settings fragmentSettings = commentFragment.getSettings();
+        Settings fragmentSettings = fragment.getSettings();
 
         for (LatexCommandSignature extraCommandSignature : extraCommandSignatures) {
           if (fragmentSettings.getIgnoreCommandPrototypes().contains(
@@ -70,13 +76,13 @@ public class LatexFragmentizer extends CodeFragmentizer {
         Pair<Integer, Integer> lastArgument = arguments.get(arguments.size() - 1);
         fromPos = lastArgument.getKey() + 1;
         int toPos = lastArgument.getValue() - 1;
-        fragments.add(new CodeFragment(codeLanguageId, code.substring(fromPos, toPos), fromPos,
+        newFragments.add(new CodeFragment(codeLanguageId, code.substring(fromPos, toPos), fromPos,
             fragmentSettings));
       }
 
-      fragments.add(commentFragment);
+      newFragments.add(fragment);
     }
 
-    return fragments;
+    return newFragments;
   }
 }
