@@ -13,8 +13,8 @@ import org.bsplines.ltexls.languagetool.LanguageToolHttpInterface;
 import org.bsplines.ltexls.languagetool.LanguageToolInterface;
 import org.bsplines.ltexls.languagetool.LanguageToolJavaInterface;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
-import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 public class SettingsManager {
   private HashMap<String, Settings> settingsMap;
@@ -23,10 +23,12 @@ public class SettingsManager {
   private Settings settings;
   private @Nullable LanguageToolInterface languageToolInterface;
 
-  /**
-   * Constructor.
-   */
   public SettingsManager() {
+    this(new Settings());
+  }
+
+  public SettingsManager(Settings settings) {
+    this.settings = settings;
     reinitializeLanguageToolInterface();
     String language = this.settings.getLanguageShortCode();
     this.settingsMap = new HashMap<>();
@@ -35,11 +37,9 @@ public class SettingsManager {
     this.languageToolInterfaceMap.put(language, this.languageToolInterface);
   }
 
-  @EnsuresNonNull("settings")
+  @RequiresNonNull("settings")
   private void reinitializeLanguageToolInterface(
         @UnknownInitialization(Object.class) SettingsManager this) {
-    if (this.settings == null) this.settings = new Settings();
-
     if (this.settings.getLanguageToolHttpServerUri().isEmpty()) {
       this.languageToolInterface = new LanguageToolJavaInterface(
           this.settings.getLanguageShortCode(),

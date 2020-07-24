@@ -27,9 +27,8 @@ import org.languagetool.server.HTTPServer;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class LanguageToolHttpInterfaceTest {
-  private SettingsManager settingsManager = new SettingsManager();
-  private DocumentChecker documentChecker = new DocumentChecker(this.settingsManager);
   private @MonotonicNonNull Thread serverThread;
+  private Settings defaultSettings = new Settings();
 
   /**
    * Set up test class.
@@ -44,9 +43,7 @@ public class LanguageToolHttpInterfaceTest {
     // wait until LanguageTool has initialized itself
     Thread.sleep(5000);
 
-    Settings settings = new Settings();
-    settings.setLanguageToolHttpServerUri("http://localhost:8081");
-    this.settingsManager.setSettings(settings);
+    this.defaultSettings.setLanguageToolHttpServerUri("http://localhost:8081");
   }
 
   /**
@@ -67,16 +64,21 @@ public class LanguageToolHttpInterfaceTest {
 
   @Test
   public void testCheck() {
+    Settings settings = new Settings(this.defaultSettings);
+    SettingsManager settingsManager = new SettingsManager(settings);
+    DocumentChecker documentChecker = new DocumentChecker(settingsManager);
     LtexTextDocumentItem document = DocumentCheckerTest.createDocument("latex",
         "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n");
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
-        this.documentChecker.check(document);
+        documentChecker.check(document);
     DocumentCheckerTest.assertMatches(checkingResult.getKey(), 8, 10, 58, 75);
   }
 
   @Test
   public void testOtherMethods() {
-    LanguageToolInterface ltInterface = this.settingsManager.getLanguageToolInterface();
+    Settings settings = new Settings(this.defaultSettings);
+    SettingsManager settingsManager = new SettingsManager(settings);
+    LanguageToolInterface ltInterface = settingsManager.getLanguageToolInterface();
     Assertions.assertNotNull(NullnessUtil.castNonNull(ltInterface));
     Assertions.assertDoesNotThrow(() -> ltInterface.activateDefaultFalseFriendRules());
     Assertions.assertDoesNotThrow(() -> ltInterface.activateLanguageModelRules("foobar"));

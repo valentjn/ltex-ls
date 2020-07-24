@@ -38,8 +38,7 @@ public class DocumentCheckerTest {
 
   private static Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkDocument(
         TextDocumentItem document, Settings settings) {
-    SettingsManager settingsManager = new SettingsManager();
-    settingsManager.setSettings(settings);
+    SettingsManager settingsManager = new SettingsManager(settings);
     DocumentChecker documentChecker = new DocumentChecker(settingsManager);
     return documentChecker.check(document);
   }
