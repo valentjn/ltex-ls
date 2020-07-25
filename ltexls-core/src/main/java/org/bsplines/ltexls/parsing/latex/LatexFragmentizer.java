@@ -209,18 +209,17 @@ public class LatexFragmentizer extends CodeFragmentizer {
    * Constructor.
    *
    * @param codeLanguageId ID of the code language
-   * @param originalSettings settings at the beginning of the document
    */
-  public LatexFragmentizer(String codeLanguageId, Settings originalSettings) {
-    super(codeLanguageId, originalSettings);
+  public LatexFragmentizer(String codeLanguageId) {
+    super(codeLanguageId);
     this.commentFragmentizer = new RegexCodeFragmentizer(
-        codeLanguageId, originalSettings, commentPattern);
+        codeLanguageId, commentPattern);
   }
 
   @Override
-  public List<CodeFragment> fragmentize(String code) {
+  public List<CodeFragment> fragmentize(String code, Settings originalSettings) {
     List<CodeFragment> fragments = Collections.singletonList(new CodeFragment(
-          this.codeLanguageId, code, 0, this.originalSettings));
+          this.codeLanguageId, code, 0, originalSettings));
 
     fragments = this.commentFragmentizer.fragmentize(fragments);
     fragments = fragmentizeBabelSwitchCommands(fragments);

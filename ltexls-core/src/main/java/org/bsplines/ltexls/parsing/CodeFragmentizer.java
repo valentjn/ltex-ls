@@ -20,65 +20,56 @@ import org.bsplines.ltexls.parsing.plaintext.PlaintextFragmentizer;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public abstract class CodeFragmentizer {
-  private static Map<String, Function<String, Function<Settings, CodeFragmentizer>>>
+  private static Map<String, Function<String, CodeFragmentizer>>
       constructorMap = new HashMap<>();
 
   protected String codeLanguageId;
-  protected Settings originalSettings;
 
   static {
-    constructorMap.put("latex", (String codeLanguageId) -> (Settings originalSettings) ->
-        new LatexFragmentizer(codeLanguageId, originalSettings));
-    constructorMap.put("markdown", (String codeLanguageId) -> (Settings originalSettings) ->
-        new MarkdownFragmentizer(codeLanguageId, originalSettings));
-    constructorMap.put("plaintext", (String codeLanguageId) -> (Settings originalSettings) ->
-        new PlaintextFragmentizer(codeLanguageId, originalSettings));
-    constructorMap.put("rsweave", (String codeLanguageId) -> (Settings originalSettings) ->
-        new LatexFragmentizer(codeLanguageId, originalSettings));
+    constructorMap.put("latex", (String codeLanguageId) ->
+        new LatexFragmentizer(codeLanguageId));
+    constructorMap.put("markdown", (String codeLanguageId) ->
+        new MarkdownFragmentizer(codeLanguageId));
+    constructorMap.put("plaintext", (String codeLanguageId) ->
+        new PlaintextFragmentizer(codeLanguageId));
+    constructorMap.put("rsweave", (String codeLanguageId) ->
+        new LatexFragmentizer(codeLanguageId));
   }
 
-  public CodeFragmentizer(String codeLanguageId, Settings originalSettings) {
+  public CodeFragmentizer(String codeLanguageId) {
     this.codeLanguageId = codeLanguageId;
-    this.originalSettings = originalSettings;
   }
 
   /**
    * Create a @c CodeFragmentizer according to the given code langugage.
    *
    * @param codeLanguageId ID of the code language
-   * @param originalSettings settings at the beginning of the document
    * @return corresponding @c CodeFragmentizer
    */
-  public static CodeFragmentizer create(String codeLanguageId, Settings originalSettings) {
-    @Nullable Function<String, Function<Settings, CodeFragmentizer>> constructor =
-        constructorMap.get(codeLanguageId);
+  public static CodeFragmentizer create(String codeLanguageId) {
+    @Nullable Function<String, CodeFragmentizer> constructor = constructorMap.get(codeLanguageId);
 
     if (constructor != null) {
-      return constructor.apply(codeLanguageId).apply(originalSettings);
+      return constructor.apply(codeLanguageId);
     } else {
       Tools.logger.warning(Tools.i18n("invalidCodeLanguageId", codeLanguageId));
-      return new PlaintextFragmentizer("plaintext", originalSettings);
+      return new PlaintextFragmentizer("plaintext");
     }
   }
 
-  public abstract List<CodeFragment> fragmentize(String code);
+  public abstract List<CodeFragment> fragmentize(String code, Settings originalSettings);
 
   public List<CodeFragment> fragmentize(List<CodeFragment> fragments) {
-    Settings originalOriginalSettings = this.originalSettings;
     List<CodeFragment> newFragments = new ArrayList<>();
 
-    try {
-      for (CodeFragment oldFragment : fragments) {
-        this.originalSettings = oldFragment.getSettings();
-        List<CodeFragment> curNewFragments = fragmentize(oldFragment.getCode());
+    for (CodeFragment oldFragment : fragments) {
+      List<CodeFragment> curNewFragments = fragmentize(
+          oldFragment.getCode(), oldFragment.getSettings());
 
-        for (CodeFragment newFragment : curNewFragments) {
-          newFragments.add(newFragment.withFromPos(
-              newFragment.getFromPos() + oldFragment.getFromPos()));
-        }
+      for (CodeFragment newFragment : curNewFragments) {
+        newFragments.add(newFragment.withFromPos(
+            newFragment.getFromPos() + oldFragment.getFromPos()));
       }
-    } finally {
-      this.originalSettings = originalOriginalSettings;
     }
 
     return newFragments;

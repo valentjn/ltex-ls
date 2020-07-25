@@ -30,9 +30,8 @@ public class DocumentChecker {
   }
 
   private List<CodeFragment> fragmentizeDocument(TextDocumentItem document) {
-    CodeFragmentizer codeFragmentizer = CodeFragmentizer.create(
-        document.getLanguageId(), this.settingsManager.getSettings());
-    return codeFragmentizer.fragmentize(document.getText());
+    CodeFragmentizer codeFragmentizer = CodeFragmentizer.create(document.getLanguageId());
+    return codeFragmentizer.fragmentize(document.getText(), this.settingsManager.getSettings());
   }
 
   private List<AnnotatedTextFragment> buildAnnotatedTextFragments(

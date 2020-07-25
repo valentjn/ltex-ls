@@ -14,12 +14,12 @@ import org.bsplines.ltexls.parsing.CodeFragment;
 import org.bsplines.ltexls.parsing.CodeFragmentizer;
 
 public class PlaintextFragmentizer extends CodeFragmentizer {
-  public PlaintextFragmentizer(String codeLanguageId, Settings originalSettings) {
-    super(codeLanguageId, originalSettings);
+  public PlaintextFragmentizer(String codeLanguageId) {
+    super(codeLanguageId);
   }
 
   @Override
-  public List<CodeFragment> fragmentize(String code) {
+  public List<CodeFragment> fragmentize(String code, Settings originalSettings) {
     return Collections.singletonList(new CodeFragment(codeLanguageId, code, 0, originalSettings));
   }
 }

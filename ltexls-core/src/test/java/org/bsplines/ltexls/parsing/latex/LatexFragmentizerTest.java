@@ -17,11 +17,11 @@ import org.junit.jupiter.api.Test;
 
 public class LatexFragmentizerTest {
   private static void testCodeLanguage(String codeLanguageId) {
-    CodeFragmentizer fragmentizer = CodeFragmentizer.create(codeLanguageId, new Settings());
+    CodeFragmentizer fragmentizer = CodeFragmentizer.create(codeLanguageId);
     List<CodeFragment> codeFragments = fragmentizer.fragmentize(
         "Sentence\\footnote[abc]{Footnote} 1\n"
         + "\t\t  %\t ltex: language=de-DE\nSentence 2\\todo{Todo note}\n"
-        + "%ltex:\tlanguage=en-US\n\nSentence 3\n");
+        + "%ltex:\tlanguage=en-US\n\nSentence 3\n", new Settings());
     Assertions.assertEquals(5, codeFragments.size());
 
     for (CodeFragment codeFragment : codeFragments) {
@@ -63,7 +63,7 @@ public class LatexFragmentizerTest {
         + "  \\begin{french}[abc]\n"
         + "    phrase\n"
         + "  \\end{french}\n"
-        + "\\end{en-US}.\n");
+        + "\\end{en-US}.\n", new Settings());
     Assertions.assertEquals(8, codeFragments.size());
 
     for (CodeFragment codeFragment : codeFragments) {
@@ -127,11 +127,11 @@ public class LatexFragmentizerTest {
     {
       Settings settings = new Settings();
       settings.setIgnoreCommandPrototypes(Arrays.asList(new String[]{"\\todo{}"}));
-      CodeFragmentizer fragmentizer = CodeFragmentizer.create("latex", settings);
+      CodeFragmentizer fragmentizer = CodeFragmentizer.create("latex");
       List<CodeFragment> codeFragments = fragmentizer.fragmentize(
           "Sentence\\footnote[abc]{Footnote} 1\n"
           + "\t\t  %\t ltex: language=de-DE\nSentence 2\\todo{Todo note}\n"
-          + "%ltex:\tlanguage=en-US\n\nSentence 3\n");
+          + "%ltex:\tlanguage=en-US\n\nSentence 3\n", settings);
       Assertions.assertEquals(4, codeFragments.size());
     }
   }
@@ -143,13 +143,13 @@ public class LatexFragmentizerTest {
 
   @Test
   public void testBabelEnvironment() {
-    CodeFragmentizer fragmentizer = CodeFragmentizer.create("latex", new Settings());
+    CodeFragmentizer fragmentizer = CodeFragmentizer.create("latex");
     List<CodeFragment> codeFragments = fragmentizer.fragmentize(
-        "This is a \\begin{otherlanguage*}{de-DE}Beispiel\\end{otherlanguage*}.\n");
+        "This is a \\begin{otherlanguage*}{de-DE}Beispiel\\end{otherlanguage*}.\n", new Settings());
     Assertions.assertEquals(2, codeFragments.size());
 
     codeFragments = fragmentizer.fragmentize(
-        "This is a \\begin{de-DE}Beispiel\\end{de-DE}.\n");
+        "This is a \\begin{de-DE}Beispiel\\end{de-DE}.\n", new Settings());
     Assertions.assertEquals(2, codeFragments.size());
   }
 }

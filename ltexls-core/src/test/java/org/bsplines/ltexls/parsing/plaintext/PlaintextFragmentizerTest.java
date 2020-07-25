@@ -17,9 +17,9 @@ import org.junit.jupiter.api.Test;
 public class PlaintextFragmentizerTest {
   @Test
   public void doTest() {
-    CodeFragmentizer fragmentizer = CodeFragmentizer.create("plaintext", new Settings());
+    CodeFragmentizer fragmentizer = CodeFragmentizer.create("plaintext");
     String code = "This is a test.\n# LTeX: language=de-DE\n% LTeX: language=en-US\n";
-    List<CodeFragment> codeFragments = fragmentizer.fragmentize(code);
+    List<CodeFragment> codeFragments = fragmentizer.fragmentize(code, new Settings());
     Assertions.assertEquals(1, codeFragments.size());
     Assertions.assertEquals("plaintext", codeFragments.get(0).getCodeLanguageId());
     Assertions.assertEquals(code, codeFragments.get(0).getCode());

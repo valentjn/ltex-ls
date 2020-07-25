@@ -17,11 +17,11 @@ import org.junit.jupiter.api.Test;
 public class MarkdownFragmentizerTest {
   @Test
   public void doTest() {
-    CodeFragmentizer fragmentizer = CodeFragmentizer.create("markdown", new Settings());
+    CodeFragmentizer fragmentizer = CodeFragmentizer.create("markdown");
     List<CodeFragment> codeFragments = fragmentizer.fragmentize(
         "Sentence 1\n"
         + "\n[comment]: <> \"ltex: language=de-DE\"\n\nSentence 2\n"
-        + "\n[comment]:\t<>\"ltex:\tlanguage=en-US\"\n\nSentence 3\n");
+        + "\n[comment]:\t<>\"ltex:\tlanguage=en-US\"\n\nSentence 3\n", new Settings());
     Assertions.assertEquals(3, codeFragments.size());
 
     Assertions.assertEquals("markdown", codeFragments.get(0).getCodeLanguageId());
@@ -46,10 +46,10 @@ public class MarkdownFragmentizerTest {
   @Test
   public void testWrongSettings() {
     MarkdownFragmentizer markdownFragmentizer =
-        new MarkdownFragmentizer("markdown", new Settings());
+        new MarkdownFragmentizer("markdown");
     Assertions.assertDoesNotThrow(() -> markdownFragmentizer.fragmentize(
-        "Sentence 1\n[comment]: <> \"ltex: languagede-DE\"\n\nSentence 2\n"));
+        "Sentence 1\n[comment]: <> \"ltex: languagede-DE\"\n\nSentence 2\n", new Settings()));
     Assertions.assertDoesNotThrow(() -> markdownFragmentizer.fragmentize(
-        "Sentence 1\n[comment]: <> \"ltex: unknownKey=abc\"\n\nSentence 2\n"));
+        "Sentence 1\n[comment]: <> \"ltex: unknownKey=abc\"\n\nSentence 2\n", new Settings()));
   }
 }

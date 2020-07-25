@@ -22,13 +22,13 @@ public class RegexCodeFragmentizer extends CodeFragmentizer {
 
   private Pattern pattern;
 
-  public RegexCodeFragmentizer(String codeLanguageId, Settings originalSettings, Pattern pattern) {
-    super(codeLanguageId, originalSettings);
+  public RegexCodeFragmentizer(String codeLanguageId, Pattern pattern) {
+    super(codeLanguageId);
     this.pattern = pattern;
   }
 
   @Override
-  public List<CodeFragment> fragmentize(String code) {
+  public List<CodeFragment> fragmentize(String code, Settings originalSettings) {
     List<CodeFragment> codeFragments = new ArrayList<>();
     Matcher matcher = this.pattern.matcher(code);
     Settings curSettings = originalSettings;
