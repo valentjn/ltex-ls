@@ -15,6 +15,8 @@ import org.bsplines.ltexls.parsing.DummyGenerator;
 class LatexAnnotatedTextBuilderDefaults {
   private static final List<LatexCommandSignature> defaultLatexCommandSignatures =
       createDefaultLatexCommandSignatures();
+  private static final List<String> defaultIgnoreEnvironments =
+      createDefaultIgnoreEnvironments();
 
   private static List<LatexCommandSignature> createDefaultLatexCommandSignatures() {
     List<LatexCommandSignature> list = new ArrayList<>();
@@ -342,10 +344,24 @@ class LatexAnnotatedTextBuilderDefaults {
     return list;
   }
 
+  private static List<String> createDefaultIgnoreEnvironments() {
+    List<String> list = new ArrayList<>();
+
+    list.add("lstlisting");
+    list.add("tikzpicture");
+    list.add("verbatim");
+
+    return list;
+  }
+
   private LatexAnnotatedTextBuilderDefaults() {
   }
 
   public static List<LatexCommandSignature> getDefaultLatexCommandSignatures() {
     return Collections.unmodifiableList(defaultLatexCommandSignatures);
+  }
+
+  public static List<String> getDefaultIgnoreEnvironments() {
+    return Collections.unmodifiableList(defaultIgnoreEnvironments);
   }
 }

@@ -34,10 +34,6 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     RSWEAVE,
   }
 
-  private static final String[] defaultIgnoreEnvironments = {
-    "lstlisting", "tikzpicture", "verbatim",
-  };
-
   private static final Pattern commandPattern = Pattern.compile(
       "^\\\\(([^A-Za-z@]|([A-Za-z@]+))\\*?)");
   private static final Pattern argumentPattern = Pattern.compile("^\\{[^\\}]*?\\}");
@@ -88,7 +84,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   public List<LatexCommandSignature> commandSignatures =
       new ArrayList<>(LatexAnnotatedTextBuilderDefaults.getDefaultLatexCommandSignatures());
   public List<String> ignoreEnvironments =
-      new ArrayList<>(Arrays.asList(defaultIgnoreEnvironments));
+      new ArrayList<>(LatexAnnotatedTextBuilderDefaults.getDefaultIgnoreEnvironments());
   public boolean isInStrictMode = false;
 
   public LatexAnnotatedTextBuilder(String codeLanguageId) {
