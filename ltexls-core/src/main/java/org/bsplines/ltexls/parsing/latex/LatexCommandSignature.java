@@ -239,6 +239,10 @@ public class LatexCommandSignature {
     return pos;
   }
 
+  public String getName() {
+    return this.name;
+  }
+
   public String getCommandPrototype() {
     return this.thisCommandPrototype;
   }
