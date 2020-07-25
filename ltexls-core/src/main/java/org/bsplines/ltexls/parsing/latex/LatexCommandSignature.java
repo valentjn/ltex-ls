@@ -30,7 +30,7 @@ public class LatexCommandSignature {
   }
 
   private static final Pattern commandPattern = Pattern.compile(
-      "^\\\\([^A-Za-z@]|([A-Za-z@]+))\\*?");
+      "^(\\\\.+?)(\\{\\}|\\[\\]|\\(\\))*$");
   private static final Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\])|(\\(\\)))");
   private static final Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
 
@@ -62,15 +62,17 @@ public class LatexCommandSignature {
     this.dummyGenerator = dummyGenerator;
     this.thisCommandPrototype = commandPrototype;
     Matcher commandMatcher = commandPattern.matcher(commandPrototype);
+    boolean found = commandMatcher.find();
+    @Nullable String name = (found ? commandMatcher.group(1) : null);
 
-    if (!commandMatcher.find()) {
+    if (name == null) {
       Tools.logger.warning(Tools.i18n("invalidCommandPrototype", commandPrototype));
       this.thisCommandPattern = Pattern.compile(" ^$");
       return;
     }
 
-    this.name = commandMatcher.group();
-    int pos = commandMatcher.end();
+    this.name = name;
+    int pos = commandMatcher.end(1);
 
     while (true) {
       Matcher argumentMatcher = argumentPattern.matcher(commandPrototype.substring(pos));
