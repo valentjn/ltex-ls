@@ -35,6 +35,7 @@ public class LatexFragmentizer extends CodeFragmentizer {
   private static LatexCommandSignatureMatcher extraCommandSignatureList =
       new LatexCommandSignatureMatcher(Arrays.asList(extraCommandSignatures));
 
+  private static Pattern languageTagReplacementPattern = Pattern.compile("[^A-Za-z]+");
   private static Map<String, String> babelLanguageMap = createBabelLanguageMap();
 
   private static LatexCommandSignature babelSwitchCommandSignature =
@@ -163,7 +164,7 @@ public class LatexFragmentizer extends CodeFragmentizer {
     babelInlineCommandSignatureMap.put(new LatexCommandSignature("\\foreignlanguage[]{}{}"), "");
 
     for (Map.Entry<String, String> entry : babelLanguageMap.entrySet()) {
-      String languageTag = entry.getKey().replaceAll("[^A-Za-z]", "");
+      String languageTag = convertBabelLanguageToLanguageTag(entry.getKey());
       babelInlineCommandSignatureMap.put(new LatexCommandSignature("\\text" + languageTag + "{}"),
           entry.getValue());
     }
@@ -187,7 +188,7 @@ public class LatexFragmentizer extends CodeFragmentizer {
 
     for (Map.Entry<String, String> entry : babelLanguageMap.entrySet()) {
       String languageTag0 = entry.getKey();
-      String languageTag1 = languageTag0.replaceAll("[^A-Za-z]", "");
+      String languageTag1 = convertBabelLanguageToLanguageTag(languageTag0);
 
       for (int i = 0; i < 2; i++) {
         String languageTag = ((i == 0) ? languageTag0 : languageTag1);
@@ -399,5 +400,13 @@ public class LatexFragmentizer extends CodeFragmentizer {
     }
 
     return newFragments;
+  }
+
+  public static String convertBabelLanguageToLanguageTag(String language) {
+    return languageTagReplacementPattern.matcher(language).replaceAll("");
+  }
+
+  public static Map<String, String> getBabelLanguageMap() {
+    return Collections.unmodifiableMap(babelLanguageMap);
   }
 }
