@@ -12,10 +12,11 @@ import java.util.Collections;
 import java.util.List;
 import org.bsplines.ltexls.parsing.DummyGenerator;
 
-class DefaultLatexCommandSignatures {
-  private static final List<LatexCommandSignature> list = createList();
+class LatexAnnotatedTextBuilderDefaults {
+  private static final List<LatexCommandSignature> defaultLatexCommandSignatures =
+      createDefaultLatexCommandSignatures();
 
-  private static List<LatexCommandSignature> createList() {
+  private static List<LatexCommandSignature> createDefaultLatexCommandSignatures() {
     List<LatexCommandSignature> list = new ArrayList<>();
 
     list.add(new LatexCommandSignature("\\addbibresource{}"));
@@ -341,10 +342,10 @@ class DefaultLatexCommandSignatures {
     return list;
   }
 
-  private DefaultLatexCommandSignatures() {
+  private LatexAnnotatedTextBuilderDefaults() {
   }
 
-  public static List<LatexCommandSignature> get() {
-    return Collections.unmodifiableList(list);
+  public static List<LatexCommandSignature> getDefaultLatexCommandSignatures() {
+    return Collections.unmodifiableList(defaultLatexCommandSignatures);
   }
 }

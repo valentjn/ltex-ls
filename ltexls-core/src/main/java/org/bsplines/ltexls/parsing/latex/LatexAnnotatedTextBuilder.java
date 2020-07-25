@@ -86,7 +86,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   public String language = "en-US";
   public String codeLanguageId = "latex";
   public List<LatexCommandSignature> commandSignatures =
-      new ArrayList<>(DefaultLatexCommandSignatures.get());
+      new ArrayList<>(LatexAnnotatedTextBuilderDefaults.getDefaultLatexCommandSignatures());
   public List<String> ignoreEnvironments =
       new ArrayList<>(Arrays.asList(defaultIgnoreEnvironments));
   public boolean isInStrictMode = false;
