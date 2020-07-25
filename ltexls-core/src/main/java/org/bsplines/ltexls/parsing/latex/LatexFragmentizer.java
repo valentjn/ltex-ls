@@ -394,6 +394,20 @@ public class LatexFragmentizer extends CodeFragmentizer {
         }
       }
 
+      int stackSize = settingsStack.size();
+
+      if (stackSize > 1) {
+        // shouldn't happen, as then there is an unmatched \begin
+
+        for (int i = 0; i < stackSize - 1; i++) {
+          Settings prevSettings = settingsStack.pop();
+          int prevFromPos = fromPosStack.pop();
+          newFragments.add(new CodeFragment(this.codeLanguageId,
+              oldFragmentCode.substring(prevFromPos),
+              oldFragment.getFromPos() + prevFromPos, prevSettings));
+        }
+      }
+
       newFragments.add(oldFragment);
     }
 
