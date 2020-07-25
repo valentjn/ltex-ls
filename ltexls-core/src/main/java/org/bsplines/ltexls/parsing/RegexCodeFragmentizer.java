@@ -8,7 +8,9 @@
 package org.bsplines.ltexls.parsing;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bsplines.ltexls.Settings;
@@ -47,26 +49,18 @@ public class RegexCodeFragmentizer extends CodeFragmentizer {
         continue;
       }
 
+      Map<String, String> settingsMap = RegexCodeFragmentizer.parseSettings(
+          settingsLine, splitSettingsPattern);
       settingsLine = settingsLine.trim();
 
-      for (String settingsChange : splitSettingsPattern.split(settingsLine)) {
-        int settingNameLength = settingsChange.indexOf('=');
-
-        if (settingNameLength == -1) {
-          Tools.logger.warning(Tools.i18n("ignoringMalformedInlineSetting", settingsChange));
-          continue;
-        }
-
-        String settingName = settingsChange.substring(0, settingNameLength);
-        String settingValue = settingsChange.substring(settingNameLength + 1);
-
-        if (settingName.equalsIgnoreCase("enabled")) {
-          curSettings.setEnabled(settingValue.equals("true"));
-        } else if (settingName.equalsIgnoreCase("language")) {
-          curSettings.setLanguageShortCode(settingValue);
+      for (Map.Entry<String, String> setting : settingsMap.entrySet()) {
+        if (setting.getKey().equalsIgnoreCase("enabled")) {
+          curSettings.setEnabled(setting.getValue().equals("true"));
+        } else if (setting.getKey().equalsIgnoreCase("language")) {
+          curSettings.setLanguageShortCode(setting.getValue());
         } else {
           Tools.logger.warning(Tools.i18n("ignoringUnknownInlineSetting",
-              settingName, settingValue));
+              setting.getKey(), setting.getValue()));
         }
       }
     }
@@ -75,5 +69,26 @@ public class RegexCodeFragmentizer extends CodeFragmentizer {
         codeLanguageId, code.substring(curFromPos), curFromPos, curSettings));
 
     return codeFragments;
+  }
+
+  public static Map<String, String> parseSettings(
+        String settingsLine, Pattern splitSettingsPattern) {
+    Map<String, String> settingsMap = new HashMap<>();
+    settingsLine = settingsLine.trim();
+
+    for (String settingsChange : splitSettingsPattern.split(settingsLine)) {
+      int settingKeyLength = settingsChange.indexOf('=');
+
+      if (settingKeyLength == -1) {
+        Tools.logger.warning(Tools.i18n("ignoringMalformedInlineSetting", settingsChange));
+        continue;
+      }
+
+      String settingKey = settingsChange.substring(0, settingKeyLength).trim();
+      String settingValue = settingsChange.substring(settingKeyLength + 1).trim();
+      settingsMap.put(settingKey, settingValue);
+    }
+
+    return settingsMap;
   }
 }
