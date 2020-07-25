@@ -7,6 +7,7 @@
 
 package org.bsplines.ltexls.parsing;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,4 +62,25 @@ public abstract class CodeFragmentizer {
   }
 
   public abstract List<CodeFragment> fragmentize(String code);
+
+  public List<CodeFragment> fragmentize(List<CodeFragment> fragments) {
+    Settings originalOriginalSettings = this.originalSettings;
+    List<CodeFragment> newFragments = new ArrayList<>();
+
+    try {
+      for (CodeFragment oldFragment : fragments) {
+        this.originalSettings = oldFragment.getSettings();
+        List<CodeFragment> curNewFragments = fragmentize(oldFragment.getCode());
+
+        for (CodeFragment newFragment : curNewFragments) {
+          newFragments.add(newFragment.withFromPos(
+              newFragment.getFromPos() + oldFragment.getFromPos()));
+        }
+      }
+    } finally {
+      this.originalSettings = originalOriginalSettings;
+    }
+
+    return newFragments;
+  }
 }

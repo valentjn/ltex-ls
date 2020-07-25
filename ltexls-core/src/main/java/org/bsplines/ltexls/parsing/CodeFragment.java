@@ -31,6 +31,10 @@ public class CodeFragment {
     this.settings = settings;
   }
 
+  public CodeFragment(CodeFragment obj) {
+    this(obj.codeLanguageId, obj.code, obj.fromPos, obj.settings);
+  }
+
   public String getCodeLanguageId() {
     return this.codeLanguageId;
   }
@@ -45,6 +49,12 @@ public class CodeFragment {
 
   public Settings getSettings() {
     return new Settings(this.settings);
+  }
+
+  public CodeFragment withFromPos(int fromPos) {
+    CodeFragment obj = new CodeFragment(this);
+    obj.fromPos = fromPos;
+    return obj;
   }
 
   public boolean contains(LanguageToolRuleMatch match) {
