@@ -224,6 +224,7 @@ public class LatexCommandSignature {
         @Nullable List<Pair<Integer, Integer>> arguments) {
     int pos = fromPos;
     String match = matchPatternFromPosition(code, pos, this.thisCommandPattern);
+    if (match.isEmpty()) return -1;
     pos += match.length();
 
     for (ArgumentType argumentType : this.argumentTypes) {
