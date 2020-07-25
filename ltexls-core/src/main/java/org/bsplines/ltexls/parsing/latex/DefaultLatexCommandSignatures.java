@@ -7,334 +7,344 @@
 
 package org.bsplines.ltexls.parsing.latex;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import org.bsplines.ltexls.parsing.DummyGenerator;
 
 class DefaultLatexCommandSignatures {
-  private static final LatexCommandSignature[] list = {
-      new LatexCommandSignature("\\addbibresource{}"),
-      new LatexCommandSignature("\\addtocontents{}"),
-      new LatexCommandSignature("\\addtocounter{}{}"),
-      new LatexCommandSignature("\\addtokomafont{}{}"),
-      new LatexCommandSignature("\\addtotheorempostheadhook{}"),
-      new LatexCommandSignature("\\addxcontentsline{}{}{}"),
-      new LatexCommandSignature("\\algdef{}[]{}{}"),
-      new LatexCommandSignature("\\algnewcommand{}{}"),
-      new LatexCommandSignature("\\algrenewcommand{}{}"),
-      new LatexCommandSignature("\\arabic{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\AtBeginEnvironment{}{}"),
-      new LatexCommandSignature("\\AtEndEnvironment{}{}"),
-      new LatexCommandSignature("\\autopageref{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\autopageref*{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\autoref{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\autoref*{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\bibitem{}"),
-      new LatexCommandSignature("\\bibliography{}"),
-      new LatexCommandSignature("\\bibliographystyle{}"),
-      new LatexCommandSignature("\\captionof{}"),
-      new LatexCommandSignature("\\captionsetup{}"),
-      new LatexCommandSignature("\\captionsetup[]{}"),
-      new LatexCommandSignature("\\cite{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\cite[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\cite[][]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\Cite{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\Cite[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\Cite[][]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\cite*{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\cite*[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\cite*[][]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\citealp{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\citealp[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\citealp*{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\citealp*[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\citealt{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\citealt[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\citealt*{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\citealt*[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\citep{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\citep[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\citep*{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\citep*[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\cites{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\cites{}{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\cites{}{}{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\cites{}{}{}{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\cites{}{}{}{}{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\cites()()[][]{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\cites()()[][]{}[][]{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\cites()()[][]{}[][]{}[][]{}",
-          LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\cites()()[][]{}[][]{}[][]{}[][]{}",
-          LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\cites()()[][]{}[][]{}[][]{}[][]{}[][]{}",
-          LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Cites{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Cites{}{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Cites{}{}{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Cites{}{}{}{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Cites{}{}{}{}{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Cites()()[][]{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Cites()()[][]{}[][]{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Cites()()[][]{}[][]{}[][]{}",
-          LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Cites()()[][]{}[][]{}[][]{}[][]{}",
-          LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Cites()()[][]{}[][]{}[][]{}[][]{}[][]{}",
-          LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\citet{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\citet[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\citet*{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\citet*[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\clearfield{}"),
-      new LatexCommandSignature("\\cref{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\Cref{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\crefname{}{}{}"),
-      new LatexCommandSignature("\\Crefname{}{}{}"),
-      new LatexCommandSignature("\\DeclareCaptionFormat{}{}"),
-      new LatexCommandSignature("\\DeclareCaptionLabelFormat{}{}"),
-      new LatexCommandSignature("\\DeclareCiteCommand{}{}{}{}{}"),
-      new LatexCommandSignature("\\DeclareCiteCommand{}[]{}{}{}{}"),
-      new LatexCommandSignature("\\DeclareFieldFormat{}{}"),
-      new LatexCommandSignature("\\DeclareFieldFormat[]{}{}"),
-      new LatexCommandSignature("\\DeclareGraphicsExtensions{}"),
-      new LatexCommandSignature("\\DeclareMathAlphabet{}{}{}{}{}"),
-      new LatexCommandSignature("\\DeclareMathOperator{}{}"),
-      new LatexCommandSignature("\\DeclareMathOperator*{}{}"),
-      new LatexCommandSignature("\\DeclareNameAlias{}{}"),
-      new LatexCommandSignature("\\DeclareNewTOC{}"),
-      new LatexCommandSignature("\\DeclareNewTOC[]{}"),
-      new LatexCommandSignature("\\declaretheorem{}"),
-      new LatexCommandSignature("\\declaretheorem[]{}"),
-      new LatexCommandSignature("\\declaretheoremstyle{}"),
-      new LatexCommandSignature("\\declaretheoremstyle[]{}"),
-      new LatexCommandSignature("\\DeclareTOCStyleEntry{}"),
-      new LatexCommandSignature("\\DeclareTOCStyleEntry[]{}{}"),
-      new LatexCommandSignature("\\defbibheading{}{}"),
-      new LatexCommandSignature("\\defbibheading{}[]{}"),
-      new LatexCommandSignature("\\defbibnote{}{}"),
-      new LatexCommandSignature("\\definecolor{}{}{}"),
-      new LatexCommandSignature("\\DisableLigatures{}"),
-      new LatexCommandSignature("\\documentclass{}"),
-      new LatexCommandSignature("\\documentclass[]{}"),
-      new LatexCommandSignature("\\email{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\eqref{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\etocsetnexttocdepth{}"),
-      new LatexCommandSignature("\\etocsettocstyle{}{}"),
-      new LatexCommandSignature("\\floatname{}{}"),
-      new LatexCommandSignature("\\floatstyle{}"),
-      new LatexCommandSignature("\\footcite{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\footcite[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\footcite[][]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\footcitetext{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\footcitetext[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\footcitetext[][]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\footnote{}"),
-      new LatexCommandSignature("\\footnote[]{}"),
-      new LatexCommandSignature("\\foreignlanguage{}{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\GenericWarning{}{}"),
-      new LatexCommandSignature("\\geometry{}"),
-      new LatexCommandSignature("\\glsaddstoragekey{}{}{}"),
-      new LatexCommandSignature("\\graphicspath{}"),
-      new LatexCommandSignature("\\href{}{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\hyperref[]"),
-      new LatexCommandSignature("\\hypersetup{}"),
-      new LatexCommandSignature("\\ifcurrentfield{}"),
-      new LatexCommandSignature("\\ifentrytype{}"),
-      new LatexCommandSignature("\\iftoggle{}"),
-      new LatexCommandSignature("\\include{}"),
-      new LatexCommandSignature("\\includegraphics{}"),
-      new LatexCommandSignature("\\includegraphics[]{}"),
-      new LatexCommandSignature("\\includepdf{}"),
-      new LatexCommandSignature("\\includepdf[]{}"),
-      new LatexCommandSignature("\\input{}"),
-      new LatexCommandSignature("\\KOMAoptions{}"),
-      new LatexCommandSignature("\\KOMAScript", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\label{}"),
-      new LatexCommandSignature("\\LaTeX", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\lettrine{}{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\lettrine[]{}{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\linespread{}"),
-      new LatexCommandSignature("\\luadirect{}"),
-      new LatexCommandSignature("\\luaexec{}"),
-      new LatexCommandSignature("\\mdfdefinestyle{}{}"),
-      new LatexCommandSignature("\\multicolumn{}{}"),
-      new LatexCommandSignature("\\multirow{}{}"),
-      new LatexCommandSignature("\\newboolean{}"),
-      new LatexCommandSignature("\\newcolumntype{}{}"),
-      new LatexCommandSignature("\\newcommand{}{}"),
-      new LatexCommandSignature("\\newcommand{}[]{}"),
-      new LatexCommandSignature("\\newcommand*{}{}"),
-      new LatexCommandSignature("\\newcommand*{}[]{}"),
-      new LatexCommandSignature("\\newcounter{}"),
-      new LatexCommandSignature("\\newenvironment{}{}{}"),
-      new LatexCommandSignature("\\newenvironment{}[]{}{}"),
-      new LatexCommandSignature("\\newenvironment*{}{}{}"),
-      new LatexCommandSignature("\\newenvironment*{}[]{}{}"),
-      new LatexCommandSignature("\\newfloat{}{}{}"),
-      new LatexCommandSignature("\\newfloat{}{}{}[]"),
-      new LatexCommandSignature("\\newgeometry{}"),
-      new LatexCommandSignature("\\newglossaryentry{}{}"),
-      new LatexCommandSignature("\\newglossarystyle{}{}"),
-      new LatexCommandSignature("\\newtheorem{}{}"),
-      new LatexCommandSignature("\\newtheorem*{}{}"),
-      new LatexCommandSignature("\\newtoggle{}"),
-      new LatexCommandSignature("\\nolinkurl{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\PackageWarning{}{}"),
-      new LatexCommandSignature("\\pagenumbering{}"),
-      new LatexCommandSignature("\\pageref{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\pageref*{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\pagestyle{}"),
-      new LatexCommandSignature("\\parencite{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\parencite[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\parencite[][]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\parencite*{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\parencite*[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\parencite*[][]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\Parencite{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\Parencite[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\Parencite[][]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\pdfbookmark{}{}"),
-      new LatexCommandSignature("\\pdfbookmark[]{}{}"),
-      new LatexCommandSignature("\\pgfdeclaredecoration{}{}{}"),
-      new LatexCommandSignature("\\pgfmathsetseed{}"),
-      new LatexCommandSignature("\\printbibliography[]"),
-      new LatexCommandSignature("\\printglossary[]"),
-      new LatexCommandSignature("\\providecommand{}{}"),
-      new LatexCommandSignature("\\providecommand{}[]{}"),
-      new LatexCommandSignature("\\providecommand*{}{}"),
-      new LatexCommandSignature("\\providecommand*{}[]{}"),
-      new LatexCommandSignature("\\raisebox{}"),
-      new LatexCommandSignature("\\RedeclareSectionCommand{}"),
-      new LatexCommandSignature("\\RedeclareSectionCommand[]{}"),
-      new LatexCommandSignature("\\RedeclareSectionCommands{}"),
-      new LatexCommandSignature("\\RedeclareSectionCommands[]{}"),
-      new LatexCommandSignature("\\ref{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\ref*{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\renewbibmacro{}{}"),
-      new LatexCommandSignature("\\renewbibmacro*{}{}"),
-      new LatexCommandSignature("\\renewcommand{}{}"),
-      new LatexCommandSignature("\\renewcommand{}[]{}"),
-      new LatexCommandSignature("\\renewcommand*{}{}"),
-      new LatexCommandSignature("\\renewcommand*{}[]{}"),
-      new LatexCommandSignature("\\renewenvironment{}{}{}"),
-      new LatexCommandSignature("\\renewenvironment{}[]{}{}"),
-      new LatexCommandSignature("\\renewenvironment*{}{}{}"),
-      new LatexCommandSignature("\\renewenvironment*{}[]{}{}"),
-      new LatexCommandSignature("\\RequirePackage{}"),
-      new LatexCommandSignature("\\scalebox{}"),
-      new LatexCommandSignature("\\setboolean{}"),
-      new LatexCommandSignature("\\setcopyright{}"),
-      new LatexCommandSignature("\\setcounter{}{}"),
-      new LatexCommandSignature("\\setenumerate{}"),
-      new LatexCommandSignature("\\setglossarystyle{}"),
-      new LatexCommandSignature("\\setitemize{}"),
-      new LatexCommandSignature("\\setkomafont{}{}"),
-      new LatexCommandSignature("\\setkomavar{}{}"),
-      new LatexCommandSignature("\\setkomavar{}[]{}"),
-      new LatexCommandSignature("\\setkomavar*{}{}"),
-      new LatexCommandSignature("\\setkomavar*{}[]{}"),
-      new LatexCommandSignature("\\setlength{}{}"),
-      new LatexCommandSignature("\\setlist{}"),
-      new LatexCommandSignature("\\SetMathAlphabet{}{}{}{}{}{}"),
-      new LatexCommandSignature("\\@setplength{}{}"),
-      new LatexCommandSignature("\\setstretch{}"),
-      new LatexCommandSignature("\\sisetup{}"),
-      new LatexCommandSignature("\\smartcite{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\smartcite[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\smartcite[][]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\Smartcite{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\Smartcite[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\Smartcite[][]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\stepcounter{}"),
-      new LatexCommandSignature("\\supercite{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\SweaveInput{}"),
-      new LatexCommandSignature("\\SweaveOpts{}"),
-      new LatexCommandSignature("\\SweaveSyntax{}"),
-      new LatexCommandSignature("\\TeX", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\textcite{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\textcite[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\textcite[][]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\Textcite{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\Textcite[]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\Textcite[][]{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\textcites{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\textcites{}{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\textcites{}{}{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\textcites{}{}{}{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\textcites{}{}{}{}{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\textcites()()[][]{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\textcites()()[][]{}[][]{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\textcites()()[][]{}[][]{}[][]{}",
-          LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\textcites()()[][]{}[][]{}[][]{}[][]{}",
-          LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\textcites()()[][]{}[][]{}[][]{}[][]{}[][]{}",
-          LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Textcites{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Textcites{}{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Textcites{}{}{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Textcites{}{}{}{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Textcites{}{}{}{}{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Textcites()()[][]{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Textcites()()[][]{}[][]{}", LatexCommandSignature.Action.DUMMY,
-          DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Textcites()()[][]{}[][]{}[][]{}",
-          LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Textcites()()[][]{}[][]{}[][]{}[][]{}",
-          LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\Textcites()()[][]{}[][]{}[][]{}[][]{}[][]{}",
-          LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)),
-      new LatexCommandSignature("\\textcolor{}"),
-      new LatexCommandSignature("\\textproc{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\thispagestyle{}"),
-      new LatexCommandSignature("\\tikz{}"),
-      new LatexCommandSignature("\\tikzset{}"),
-      new LatexCommandSignature("\\todo{}"),
-      new LatexCommandSignature("\\todo[]{}"),
-      new LatexCommandSignature("\\togglefalse{}"),
-      new LatexCommandSignature("\\toggletrue{}"),
-      new LatexCommandSignature("\\url{}", LatexCommandSignature.Action.DUMMY),
-      new LatexCommandSignature("\\usebibmacro{}"),
-      new LatexCommandSignature("\\usekomafont{}"),
-      new LatexCommandSignature("\\usepackage{}"),
-      new LatexCommandSignature("\\usepackage[]{}"),
-      new LatexCommandSignature("\\usetikzlibrary{}"),
-      new LatexCommandSignature("\\value{}"),
-      new LatexCommandSignature("\\vspace{}"),
-      new LatexCommandSignature("\\vspace*{}"),
-      new LatexCommandSignature("\\WarningFilter{}{}"),
-      };
+  private static final List<LatexCommandSignature> list = createList();
+
+  private static List<LatexCommandSignature> createList() {
+    List<LatexCommandSignature> list = new ArrayList<>();
+
+    list.add(new LatexCommandSignature("\\addbibresource{}"));
+    list.add(new LatexCommandSignature("\\addtocontents{}"));
+    list.add(new LatexCommandSignature("\\addtocounter{}{}"));
+    list.add(new LatexCommandSignature("\\addtokomafont{}{}"));
+    list.add(new LatexCommandSignature("\\addtotheorempostheadhook{}"));
+    list.add(new LatexCommandSignature("\\addxcontentsline{}{}{}"));
+    list.add(new LatexCommandSignature("\\algdef{}[]{}{}"));
+    list.add(new LatexCommandSignature("\\algnewcommand{}{}"));
+    list.add(new LatexCommandSignature("\\algrenewcommand{}{}"));
+    list.add(new LatexCommandSignature("\\arabic{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\AtBeginEnvironment{}{}"));
+    list.add(new LatexCommandSignature("\\AtEndEnvironment{}{}"));
+    list.add(new LatexCommandSignature("\\autopageref{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\autopageref*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\autoref{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\autoref*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\bibitem{}"));
+    list.add(new LatexCommandSignature("\\bibliography{}"));
+    list.add(new LatexCommandSignature("\\bibliographystyle{}"));
+    list.add(new LatexCommandSignature("\\captionof{}"));
+    list.add(new LatexCommandSignature("\\captionsetup{}"));
+    list.add(new LatexCommandSignature("\\captionsetup[]{}"));
+    list.add(new LatexCommandSignature("\\cite{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\cite[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\cite[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Cite{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Cite[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Cite[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\cite*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\cite*[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\cite*[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citealp{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citealp[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citealp*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citealp*[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citealt{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citealt[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citealt*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citealt*[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citep{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citep[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citep*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citep*[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\cites{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\cites{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\cites{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\cites{}{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\cites{}{}{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\cites()()[][]{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\cites()()[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\cites()()[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\cites()()[][]{}[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\cites()()[][]{}[][]{}[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Cites{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Cites{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Cites{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Cites{}{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Cites{}{}{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Cites()()[][]{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Cites()()[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Cites()()[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Cites()()[][]{}[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Cites()()[][]{}[][]{}[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\citet{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citet[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citet*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citet*[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\clearfield{}"));
+    list.add(new LatexCommandSignature("\\cref{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Cref{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\crefname{}{}{}"));
+    list.add(new LatexCommandSignature("\\Crefname{}{}{}"));
+    list.add(new LatexCommandSignature("\\DeclareCaptionFormat{}{}"));
+    list.add(new LatexCommandSignature("\\DeclareCaptionLabelFormat{}{}"));
+    list.add(new LatexCommandSignature("\\DeclareCiteCommand{}{}{}{}{}"));
+    list.add(new LatexCommandSignature("\\DeclareCiteCommand{}[]{}{}{}{}"));
+    list.add(new LatexCommandSignature("\\DeclareFieldFormat{}{}"));
+    list.add(new LatexCommandSignature("\\DeclareFieldFormat[]{}{}"));
+    list.add(new LatexCommandSignature("\\DeclareGraphicsExtensions{}"));
+    list.add(new LatexCommandSignature("\\DeclareMathAlphabet{}{}{}{}{}"));
+    list.add(new LatexCommandSignature("\\DeclareMathOperator{}{}"));
+    list.add(new LatexCommandSignature("\\DeclareMathOperator*{}{}"));
+    list.add(new LatexCommandSignature("\\DeclareNameAlias{}{}"));
+    list.add(new LatexCommandSignature("\\DeclareNewTOC{}"));
+    list.add(new LatexCommandSignature("\\DeclareNewTOC[]{}"));
+    list.add(new LatexCommandSignature("\\declaretheorem{}"));
+    list.add(new LatexCommandSignature("\\declaretheorem[]{}"));
+    list.add(new LatexCommandSignature("\\declaretheoremstyle{}"));
+    list.add(new LatexCommandSignature("\\declaretheoremstyle[]{}"));
+    list.add(new LatexCommandSignature("\\DeclareTOCStyleEntry{}"));
+    list.add(new LatexCommandSignature("\\DeclareTOCStyleEntry[]{}{}"));
+    list.add(new LatexCommandSignature("\\defbibheading{}{}"));
+    list.add(new LatexCommandSignature("\\defbibheading{}[]{}"));
+    list.add(new LatexCommandSignature("\\defbibnote{}{}"));
+    list.add(new LatexCommandSignature("\\definecolor{}{}{}"));
+    list.add(new LatexCommandSignature("\\DisableLigatures{}"));
+    list.add(new LatexCommandSignature("\\documentclass{}"));
+    list.add(new LatexCommandSignature("\\documentclass[]{}"));
+    list.add(new LatexCommandSignature("\\email{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\eqref{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\etocsetnexttocdepth{}"));
+    list.add(new LatexCommandSignature("\\etocsettocstyle{}{}"));
+    list.add(new LatexCommandSignature("\\floatname{}{}"));
+    list.add(new LatexCommandSignature("\\floatstyle{}"));
+    list.add(new LatexCommandSignature("\\footcite{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\footcite[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\footcite[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\footcitetext{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\footcitetext[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\footcitetext[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\footnote{}"));
+    list.add(new LatexCommandSignature("\\footnote[]{}"));
+    list.add(new LatexCommandSignature("\\foreignlanguage{}{}",
+        LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\GenericWarning{}{}"));
+    list.add(new LatexCommandSignature("\\geometry{}"));
+    list.add(new LatexCommandSignature("\\glsaddstoragekey{}{}{}"));
+    list.add(new LatexCommandSignature("\\graphicspath{}"));
+    list.add(new LatexCommandSignature("\\href{}{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\hyperref[]"));
+    list.add(new LatexCommandSignature("\\hypersetup{}"));
+    list.add(new LatexCommandSignature("\\ifcurrentfield{}"));
+    list.add(new LatexCommandSignature("\\ifentrytype{}"));
+    list.add(new LatexCommandSignature("\\iftoggle{}"));
+    list.add(new LatexCommandSignature("\\include{}"));
+    list.add(new LatexCommandSignature("\\includegraphics{}"));
+    list.add(new LatexCommandSignature("\\includegraphics[]{}"));
+    list.add(new LatexCommandSignature("\\includepdf{}"));
+    list.add(new LatexCommandSignature("\\includepdf[]{}"));
+    list.add(new LatexCommandSignature("\\input{}"));
+    list.add(new LatexCommandSignature("\\KOMAoptions{}"));
+    list.add(new LatexCommandSignature("\\KOMAScript", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\label{}"));
+    list.add(new LatexCommandSignature("\\LaTeX", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\lettrine{}{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\lettrine[]{}{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\linespread{}"));
+    list.add(new LatexCommandSignature("\\luadirect{}"));
+    list.add(new LatexCommandSignature("\\luaexec{}"));
+    list.add(new LatexCommandSignature("\\mdfdefinestyle{}{}"));
+    list.add(new LatexCommandSignature("\\multicolumn{}{}"));
+    list.add(new LatexCommandSignature("\\multirow{}{}"));
+    list.add(new LatexCommandSignature("\\newboolean{}"));
+    list.add(new LatexCommandSignature("\\newcolumntype{}{}"));
+    list.add(new LatexCommandSignature("\\newcommand{}{}"));
+    list.add(new LatexCommandSignature("\\newcommand{}[]{}"));
+    list.add(new LatexCommandSignature("\\newcommand*{}{}"));
+    list.add(new LatexCommandSignature("\\newcommand*{}[]{}"));
+    list.add(new LatexCommandSignature("\\newcounter{}"));
+    list.add(new LatexCommandSignature("\\newenvironment{}{}{}"));
+    list.add(new LatexCommandSignature("\\newenvironment{}[]{}{}"));
+    list.add(new LatexCommandSignature("\\newenvironment*{}{}{}"));
+    list.add(new LatexCommandSignature("\\newenvironment*{}[]{}{}"));
+    list.add(new LatexCommandSignature("\\newfloat{}{}{}"));
+    list.add(new LatexCommandSignature("\\newfloat{}{}{}[]"));
+    list.add(new LatexCommandSignature("\\newgeometry{}"));
+    list.add(new LatexCommandSignature("\\newglossaryentry{}{}"));
+    list.add(new LatexCommandSignature("\\newglossarystyle{}{}"));
+    list.add(new LatexCommandSignature("\\newtheorem{}{}"));
+    list.add(new LatexCommandSignature("\\newtheorem*{}{}"));
+    list.add(new LatexCommandSignature("\\newtoggle{}"));
+    list.add(new LatexCommandSignature("\\nolinkurl{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\PackageWarning{}{}"));
+    list.add(new LatexCommandSignature("\\pagenumbering{}"));
+    list.add(new LatexCommandSignature("\\pageref{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\pageref*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\pagestyle{}"));
+    list.add(new LatexCommandSignature("\\parencite{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\parencite[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\parencite[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\parencite*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\parencite*[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\parencite*[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Parencite{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Parencite[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Parencite[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\pdfbookmark{}{}"));
+    list.add(new LatexCommandSignature("\\pdfbookmark[]{}{}"));
+    list.add(new LatexCommandSignature("\\pgfdeclaredecoration{}{}{}"));
+    list.add(new LatexCommandSignature("\\pgfmathsetseed{}"));
+    list.add(new LatexCommandSignature("\\printbibliography[]"));
+    list.add(new LatexCommandSignature("\\printglossary[]"));
+    list.add(new LatexCommandSignature("\\providecommand{}{}"));
+    list.add(new LatexCommandSignature("\\providecommand{}[]{}"));
+    list.add(new LatexCommandSignature("\\providecommand*{}{}"));
+    list.add(new LatexCommandSignature("\\providecommand*{}[]{}"));
+    list.add(new LatexCommandSignature("\\raisebox{}"));
+    list.add(new LatexCommandSignature("\\RedeclareSectionCommand{}"));
+    list.add(new LatexCommandSignature("\\RedeclareSectionCommand[]{}"));
+    list.add(new LatexCommandSignature("\\RedeclareSectionCommands{}"));
+    list.add(new LatexCommandSignature("\\RedeclareSectionCommands[]{}"));
+    list.add(new LatexCommandSignature("\\ref{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\ref*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\renewbibmacro{}{}"));
+    list.add(new LatexCommandSignature("\\renewbibmacro*{}{}"));
+    list.add(new LatexCommandSignature("\\renewcommand{}{}"));
+    list.add(new LatexCommandSignature("\\renewcommand{}[]{}"));
+    list.add(new LatexCommandSignature("\\renewcommand*{}{}"));
+    list.add(new LatexCommandSignature("\\renewcommand*{}[]{}"));
+    list.add(new LatexCommandSignature("\\renewenvironment{}{}{}"));
+    list.add(new LatexCommandSignature("\\renewenvironment{}[]{}{}"));
+    list.add(new LatexCommandSignature("\\renewenvironment*{}{}{}"));
+    list.add(new LatexCommandSignature("\\renewenvironment*{}[]{}{}"));
+    list.add(new LatexCommandSignature("\\RequirePackage{}"));
+    list.add(new LatexCommandSignature("\\scalebox{}"));
+    list.add(new LatexCommandSignature("\\setboolean{}"));
+    list.add(new LatexCommandSignature("\\setcopyright{}"));
+    list.add(new LatexCommandSignature("\\setcounter{}{}"));
+    list.add(new LatexCommandSignature("\\setenumerate{}"));
+    list.add(new LatexCommandSignature("\\setglossarystyle{}"));
+    list.add(new LatexCommandSignature("\\setitemize{}"));
+    list.add(new LatexCommandSignature("\\setkomafont{}{}"));
+    list.add(new LatexCommandSignature("\\setkomavar{}{}"));
+    list.add(new LatexCommandSignature("\\setkomavar{}[]{}"));
+    list.add(new LatexCommandSignature("\\setkomavar*{}{}"));
+    list.add(new LatexCommandSignature("\\setkomavar*{}[]{}"));
+    list.add(new LatexCommandSignature("\\setlength{}{}"));
+    list.add(new LatexCommandSignature("\\setlist{}"));
+    list.add(new LatexCommandSignature("\\SetMathAlphabet{}{}{}{}{}{}"));
+    list.add(new LatexCommandSignature("\\@setplength{}{}"));
+    list.add(new LatexCommandSignature("\\setstretch{}"));
+    list.add(new LatexCommandSignature("\\sisetup{}"));
+    list.add(new LatexCommandSignature("\\smartcite{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\smartcite[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\smartcite[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Smartcite{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Smartcite[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Smartcite[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\stepcounter{}"));
+    list.add(new LatexCommandSignature("\\supercite{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\SweaveInput{}"));
+    list.add(new LatexCommandSignature("\\SweaveOpts{}"));
+    list.add(new LatexCommandSignature("\\SweaveSyntax{}"));
+    list.add(new LatexCommandSignature("\\TeX", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\textcite{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\textcite[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\textcite[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Textcite{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Textcite[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Textcite[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\textcites{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\textcites{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\textcites{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\textcites{}{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\textcites{}{}{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\textcites()()[][]{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\textcites()()[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\textcites()()[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\textcites()()[][]{}[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\textcites()()[][]{}[][]{}[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Textcites{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Textcites{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Textcites{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Textcites{}{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Textcites{}{}{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Textcites()()[][]{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Textcites()()[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Textcites()()[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Textcites()()[][]{}[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Textcites()()[][]{}[][]{}[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\textcolor{}"));
+    list.add(new LatexCommandSignature("\\textproc{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\thispagestyle{}"));
+    list.add(new LatexCommandSignature("\\tikz{}"));
+    list.add(new LatexCommandSignature("\\tikzset{}"));
+    list.add(new LatexCommandSignature("\\todo{}"));
+    list.add(new LatexCommandSignature("\\todo[]{}"));
+    list.add(new LatexCommandSignature("\\togglefalse{}"));
+    list.add(new LatexCommandSignature("\\toggletrue{}"));
+    list.add(new LatexCommandSignature("\\url{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\usebibmacro{}"));
+    list.add(new LatexCommandSignature("\\usekomafont{}"));
+    list.add(new LatexCommandSignature("\\usepackage{}"));
+    list.add(new LatexCommandSignature("\\usepackage[]{}"));
+    list.add(new LatexCommandSignature("\\usetikzlibrary{}"));
+    list.add(new LatexCommandSignature("\\value{}"));
+    list.add(new LatexCommandSignature("\\vspace{}"));
+    list.add(new LatexCommandSignature("\\vspace*{}"));
+    list.add(new LatexCommandSignature("\\WarningFilter{}{}"));
+
+    return list;
+  }
 
   private DefaultLatexCommandSignatures() {
   }
 
-  public static LatexCommandSignature[] get() {
-    return list;
+  public static List<LatexCommandSignature> get() {
+    return Collections.unmodifiableList(list);
   }
 }
