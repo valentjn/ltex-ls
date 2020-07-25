@@ -10,6 +10,7 @@ package org.bsplines.ltexls.parsing.latex;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import org.bsplines.ltexls.parsing.DummyGenerator;
 
 class LatexAnnotatedTextBuilderDefaults {
@@ -155,6 +156,8 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\footnote[]{}"));
     list.add(new LatexCommandSignature("\\foreignlanguage{}{}",
         LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\foreignlanguage[]{}{}",
+        LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\GenericWarning{}{}"));
     list.add(new LatexCommandSignature("\\geometry{}"));
     list.add(new LatexCommandSignature("\\glsaddstoragekey{}{}{}"));
@@ -246,6 +249,7 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\renewenvironment*{}[]{}{}"));
     list.add(new LatexCommandSignature("\\RequirePackage{}"));
     list.add(new LatexCommandSignature("\\scalebox{}"));
+    list.add(new LatexCommandSignature("\\selectlanguage{}"));
     list.add(new LatexCommandSignature("\\setboolean{}"));
     list.add(new LatexCommandSignature("\\setcopyright{}"));
     list.add(new LatexCommandSignature("\\setcounter{}{}"));
@@ -341,6 +345,14 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\vspace*{}"));
     list.add(new LatexCommandSignature("\\WarningFilter{}{}"));
 
+    Map<String, String> babelLanguageMap = LatexFragmentizer.getBabelLanguageMap();
+
+    for (String language : babelLanguageMap.keySet()) {
+      String languageTag = LatexFragmentizer.convertBabelLanguageToLanguageTag(language);
+      list.add(new LatexCommandSignature("\\text" + languageTag + "{}",
+          LatexCommandSignature.Action.DUMMY));
+    }
+
     return list;
   }
 
@@ -348,8 +360,18 @@ class LatexAnnotatedTextBuilderDefaults {
     List<String> list = new ArrayList<>();
 
     list.add("lstlisting");
+    list.add("otherlanguage");
+    list.add("otherlanguage*");
     list.add("tikzpicture");
     list.add("verbatim");
+
+    Map<String, String> babelLanguageMap = LatexFragmentizer.getBabelLanguageMap();
+
+    for (String language : babelLanguageMap.keySet()) {
+      String languageTag = LatexFragmentizer.convertBabelLanguageToLanguageTag(language);
+      list.add(language);
+      if (languageTag.length() != language.length()) list.add(languageTag);
+    }
 
     return list;
   }
