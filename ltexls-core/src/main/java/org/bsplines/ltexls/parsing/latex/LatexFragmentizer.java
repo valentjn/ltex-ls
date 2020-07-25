@@ -131,13 +131,16 @@ public class LatexFragmentizer extends CodeFragmentizer {
     babelLanguageMap.put("catalan", "ca-ES");
     babelLanguageMap.put("danish", "da-DK");
     babelLanguageMap.put("german", "de-DE");
+    babelLanguageMap.put("ngerman", "de-DE");
     babelLanguageMap.put("greek", "el-GR");
     babelLanguageMap.put("british", "en-GB");
+    babelLanguageMap.put("UKenglish", "en-GB");
     babelLanguageMap.put("american", "en-US");
     babelLanguageMap.put("english", "en-US");
+    babelLanguageMap.put("USenglish", "en-US");
     babelLanguageMap.put("esperanto", "eo");
     babelLanguageMap.put("estonian", "es");
-    babelLanguageMap.put("persian", "fa");
+    babelLanguageMap.put("farsi", "fa");
     babelLanguageMap.put("french", "fr");
     babelLanguageMap.put("irish", "ga-IE");
     babelLanguageMap.put("galician", "gl-ES");
@@ -150,10 +153,10 @@ public class LatexFragmentizer extends CodeFragmentizer {
     babelLanguageMap.put("romanian", "ro-RO");
     babelLanguageMap.put("russian", "ru-RU");
     babelLanguageMap.put("slovak", "sk-SK");
-    babelLanguageMap.put("slovenian", "sl-SI");
+    babelLanguageMap.put("slovene", "sl-SI");
     babelLanguageMap.put("swedish", "sv");
     babelLanguageMap.put("tamil", "ta-IN");
-    babelLanguageMap.put("ukranian", "uk-UA");
+    babelLanguageMap.put("ukrainian", "uk-UA");
     babelLanguageMap.put("chinese", "zh-CN");
 
     return babelLanguageMap;
