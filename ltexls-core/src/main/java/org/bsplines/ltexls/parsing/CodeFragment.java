@@ -48,7 +48,7 @@ public class CodeFragment {
   }
 
   public Settings getSettings() {
-    return new Settings(this.settings);
+    return this.settings;
   }
 
   public CodeFragment withFromPos(int fromPos) {

@@ -27,10 +27,9 @@ public class SettingsTest {
   }
 
   @Test
-  public void testSetSettings() {
-    Settings settings = new Settings();
+  public void testJsonSettings() {
     JsonElement jsonSettings = new JsonObject();
-    Assertions.assertDoesNotThrow(() -> settings.setSettings(jsonSettings));
+    Assertions.assertDoesNotThrow(() -> new Settings(jsonSettings));
   }
 
   @Test
@@ -38,88 +37,92 @@ public class SettingsTest {
     Settings settings = new Settings();
     Settings settings2 = new Settings();
 
-    settings.setEnabled(false);
+    settings = settings.withEnabled(false);
     Assertions.assertEquals(false, settings.isEnabled());
     settings2 = compareSettings(settings, settings2);
 
-    settings.setLanguageShortCode("languageShortCode");
+    settings = settings.withLanguageShortCode("languageShortCode");
     Assertions.assertEquals("languageShortCode", settings.getLanguageShortCode());
     settings2 = compareSettings(settings, settings2);
 
-    settings.setDictionary(Collections.singletonList("dictionary"));
+    settings = settings.withDictionary(Collections.singletonList("dictionary"));
     Assertions.assertEquals(Collections.singletonList("dictionary"), settings.getDictionary());
     settings2 = compareSettings(settings, settings2);
 
-    settings.setDisabledRules(Collections.singletonList("disabledRules"));
+    settings = settings.withDisabledRules(Collections.singletonList("disabledRules"));
     Assertions.assertEquals(Collections.singletonList("disabledRules"),
         settings.getDisabledRules());
     settings2 = compareSettings(settings, settings2);
 
-    settings.setEnabledRules(Collections.singletonList("enabledRules"));
+    settings = settings.withEnabledRules(Collections.singletonList("enabledRules"));
     Assertions.assertEquals(Collections.singletonList("enabledRules"),
         settings.getEnabledRules());
     settings2 = compareSettings(settings, settings2);
 
-    settings.setLanguageToolHttpServerUri("languageToolHttpServerUri");
+    settings = settings.withLanguageToolHttpServerUri("languageToolHttpServerUri");
     Assertions.assertEquals("languageToolHttpServerUri", settings.getLanguageToolHttpServerUri());
     settings2 = compareSettings(settings, settings2);
 
-    settings.setDummyCommandPrototypes(Collections.singletonList("dummyCommandPrototypes"));
+    settings = settings.withDummyCommandPrototypes(
+        Collections.singletonList("dummyCommandPrototypes"));
     Assertions.assertEquals(Collections.singletonList("dummyCommandPrototypes"),
         settings.getDummyCommandPrototypes());
     settings2 = compareSettings(settings, settings2);
 
-    settings.setIgnoreCommandPrototypes(Collections.singletonList("ignoreCommandPrototypes"));
+    settings = settings.withIgnoreCommandPrototypes(
+        Collections.singletonList("ignoreCommandPrototypes"));
     Assertions.assertEquals(Collections.singletonList("ignoreCommandPrototypes"),
         settings.getIgnoreCommandPrototypes());
     settings2 = compareSettings(settings, settings2);
 
-    settings.setIgnoreEnvironments(Collections.singletonList("ignoreEnvironments"));
+    settings = settings.withIgnoreEnvironments(Collections.singletonList("ignoreEnvironments"));
     Assertions.assertEquals(Collections.singletonList("ignoreEnvironments"),
         settings.getIgnoreEnvironments());
     settings2 = compareSettings(settings, settings2);
 
-    settings.setDummyMarkdownNodeTypes(Collections.singletonList("dummyMarkdownNodeTypes"));
+    settings = settings.withDummyMarkdownNodeTypes(
+        Collections.singletonList("dummyMarkdownNodeTypes"));
     Assertions.assertEquals(Collections.singletonList("dummyMarkdownNodeTypes"),
         settings.getDummyMarkdownNodeTypes());
     settings2 = compareSettings(settings, settings2);
 
-    settings.setIgnoreMarkdownNodeTypes(Collections.singletonList("ignoreMarkdownNodeTypes"));
+    settings = settings.withIgnoreMarkdownNodeTypes(
+        Collections.singletonList("ignoreMarkdownNodeTypes"));
     Assertions.assertEquals(Collections.singletonList("ignoreMarkdownNodeTypes"),
         settings.getIgnoreMarkdownNodeTypes());
     settings2 = compareSettings(settings, settings2);
 
-    settings.setIgnoreRuleSentencePairs(Collections.singletonList(
+    settings = settings.withIgnoreRuleSentencePairs(Collections.singletonList(
         new IgnoreRuleSentencePair("ruleId", "sentenceString")));
     Assertions.assertEquals(Collections.singletonList(
         new IgnoreRuleSentencePair("ruleId", "sentenceString")),
         settings.getIgnoreRuleSentencePairs());
     settings2 = compareSettings(settings, settings2);
 
-    settings.setMotherTongueShortCode("motherTongueShortCode");
+    settings = settings.withMotherTongueShortCode("motherTongueShortCode");
     Assertions.assertEquals("motherTongueShortCode", settings.getMotherTongueShortCode());
     settings2 = compareSettings(settings, settings2);
 
-    settings.setLanguageModelRulesDirectory("languageModelRulesDirectory");
+    settings = settings.withLanguageModelRulesDirectory("languageModelRulesDirectory");
     Assertions.assertEquals("languageModelRulesDirectory",
         settings.getLanguageModelRulesDirectory());
     settings2 = compareSettings(settings, settings2);
 
-    settings.setNeuralNetworkModelRulesDirectory("neuralNetworkModelRulesDirectory");
+    settings = settings.withNeuralNetworkModelRulesDirectory("neuralNetworkModelRulesDirectory");
     Assertions.assertEquals("neuralNetworkModelRulesDirectory",
         settings.getNeuralNetworkModelRulesDirectory());
     settings2 = compareSettings(settings, settings2);
 
-    settings.setWord2VecModelRulesDirectory("word2VecModelRulesDirectory");
+    settings = settings.withWord2VecModelRulesDirectory("word2VecModelRulesDirectory");
     Assertions.assertEquals("word2VecModelRulesDirectory",
         settings.getWord2VecModelRulesDirectory());
     settings2 = compareSettings(settings, settings2);
 
-    settings.setSentenceCacheSize(1337);
+    settings = settings.withSentenceCacheSize(1337);
     Assertions.assertEquals(1337, settings.getSentenceCacheSize());
     settings2 = compareSettings(settings, settings2);
 
-    settings.setDiagnosticSeverity(DiagnosticSeverity.Error);
+    settings = settings.withDiagnosticSeverity(DiagnosticSeverity.Error);
     Assertions.assertEquals(DiagnosticSeverity.Error, settings.getDiagnosticSeverity());
     settings2 = compareSettings(settings, settings2);
   }

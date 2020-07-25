@@ -31,9 +31,8 @@ public class MarkdownAnnotatedTextBuilderTest {
         List<String> ignoreNodeTypes, List<String> dummyNodeTypes) {
     MarkdownAnnotatedTextBuilder builder =
         (MarkdownAnnotatedTextBuilder)CodeAnnotatedTextBuilder.create("markdown");
-    Settings settings = new Settings();
-    settings.setIgnoreMarkdownNodeTypes(ignoreNodeTypes);
-    settings.setDummyMarkdownNodeTypes(dummyNodeTypes);
+    Settings settings = (new Settings()).withIgnoreMarkdownNodeTypes(ignoreNodeTypes)
+        .withDummyMarkdownNodeTypes(dummyNodeTypes);
     builder.setSettings(settings);
     return builder.addCode(code).build();
   }

@@ -41,7 +41,6 @@ public class RegexCodeFragmentizer extends CodeFragmentizer {
       Settings lastSettings = curSettings;
       codeFragments.add(new CodeFragment(codeLanguageId, lastCode, lastFromPos, lastSettings));
 
-      curSettings = new Settings(curSettings);
       @Nullable String settingsLine = matcher.group("settings");
 
       if (settingsLine == null) {
@@ -55,9 +54,9 @@ public class RegexCodeFragmentizer extends CodeFragmentizer {
 
       for (Map.Entry<String, String> setting : settingsMap.entrySet()) {
         if (setting.getKey().equalsIgnoreCase("enabled")) {
-          curSettings.setEnabled(setting.getValue().equals("true"));
+          curSettings = curSettings.withEnabled(setting.getValue().equals("true"));
         } else if (setting.getKey().equalsIgnoreCase("language")) {
-          curSettings.setLanguageShortCode(setting.getValue());
+          curSettings = curSettings.withLanguageShortCode(setting.getValue());
         } else {
           Tools.logger.warning(Tools.i18n("ignoringUnknownInlineSetting",
               setting.getKey(), setting.getValue()));

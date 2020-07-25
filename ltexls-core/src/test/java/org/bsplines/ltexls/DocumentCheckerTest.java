@@ -214,8 +214,7 @@ public class DocumentCheckerTest {
     jsonSettings.add("dictionary", jsonDictionaryObject);
     LtexTextDocumentItem document = createDocument("latex",
         "This is an unknownword.\n% ltex: language=de-DE\nDies ist ein unbekannteswort.\n");
-    Settings settings = new Settings();
-    settings.setSettings(jsonSettings);
+    Settings settings = new Settings(jsonSettings);
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         checkDocument(document, settings);
     Assertions.assertEquals(1, checkingResult.getKey().size());
@@ -225,8 +224,7 @@ public class DocumentCheckerTest {
   public void testIgnoreRuleSentencePairs() {
     LtexTextDocumentItem document = createDocument("plaintext",
         "This is an unknownword.\n");
-    Settings settings = new Settings();
-    settings.setIgnoreRuleSentencePairs(Collections.singletonList(
+    Settings settings = (new Settings()).withIgnoreRuleSentencePairs(Collections.singletonList(
         new IgnoreRuleSentencePair("MORFOLOGIK_RULE_EN_US", "This is an unknownword\\.")));
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         checkDocument(document, settings);

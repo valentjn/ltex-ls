@@ -275,8 +275,7 @@ public class LatexFragmentizer extends CodeFragmentizer {
         }
 
         int nextFromPos = match.getFromPos();
-        Settings nextSettings = new Settings(prevSettings);
-        nextSettings.setLanguageShortCode(languageShortCode);
+        Settings nextSettings = prevSettings.withLanguageShortCode(languageShortCode);
 
         newFragments.add(new CodeFragment(this.codeLanguageId,
             oldFragmentCode.substring(prevFromPos, nextFromPos),
@@ -319,12 +318,10 @@ public class LatexFragmentizer extends CodeFragmentizer {
           languageShortCode = babelLanguageMap.get(babelLanguage);
         }
 
-        curSettings = new Settings(curSettings);
-
         if (languageShortCode == null) {
           Tools.logger.warning(Tools.i18n("unknownBabelLanguage", babelLanguage));
         } else {
-          curSettings.setLanguageShortCode(languageShortCode);
+          curSettings = curSettings.withLanguageShortCode(languageShortCode);
         }
 
         String contents = match.getArgumentContents(match.getArgumentsSize() - 1);
@@ -371,12 +368,12 @@ public class LatexFragmentizer extends CodeFragmentizer {
             languageShortCode = babelLanguageMap.get(babelLanguage);
           }
 
-          Settings newSettings = new Settings(settingsStack.peek());
+          Settings newSettings = settingsStack.peek();
 
           if (languageShortCode == null) {
             Tools.logger.warning(Tools.i18n("unknownBabelLanguage", babelLanguage));
           } else {
-            newSettings.setLanguageShortCode(languageShortCode);
+            newSettings = newSettings.withLanguageShortCode(languageShortCode);
           }
 
           settingsStack.push(newSettings);

@@ -136,12 +136,7 @@ public class Settings {
     return (((map != null) && (key != null) && map.containsKey(key)) ? map.get(key).hashCode() : 0);
   }
 
-  /**
-   * Set settings from JSON.
-   *
-   * @param jsonSettings JSON settings given by the language server
-   */
-  public void setSettings(@UnknownInitialization(Object.class) Settings this,
+  private void setSettings(@UnknownInitialization(Object.class) Settings this,
         JsonElement jsonSettings) {
     try {
       this.enabled = getSettingFromJson(jsonSettings, "enabled").getAsBoolean();
@@ -557,78 +552,115 @@ public class Settings {
     return getDefault(this.diagnosticSeverity, DiagnosticSeverity.Information);
   }
 
-  public void setEnabled(Boolean enabled) {
-    this.enabled = enabled;
+  public Settings withEnabled(Boolean enabled) {
+    Settings obj = new Settings(this);
+    obj.enabled = enabled;
+    return obj;
   }
 
-  public void setLanguageShortCode(String languageShortCode) {
-    this.languageShortCode = languageShortCode;
+  public Settings withLanguageShortCode(String languageShortCode) {
+    Settings obj = new Settings(this);
+    obj.languageShortCode = languageShortCode;
+    return obj;
   }
 
-  public void setDictionary(List<String> dictionary) {
-    if (this.dictionary == null) this.dictionary = new HashMap<>();
-    this.dictionary.put(getLanguageShortCode(), new ArrayList<>(dictionary));
+  public Settings withDictionary(List<String> dictionary) {
+    Settings obj = new Settings(this);
+    if (obj.dictionary == null) obj.dictionary = new HashMap<>();
+    obj.dictionary.put(getLanguageShortCode(), new ArrayList<>(dictionary));
+    return obj;
   }
 
-  public void setDisabledRules(List<String> disabledRules) {
-    if (this.disabledRules == null) this.disabledRules = new HashMap<>();
-    this.disabledRules.put(getLanguageShortCode(), new ArrayList<>(disabledRules));
+  public Settings withDisabledRules(List<String> disabledRules) {
+    Settings obj = new Settings(this);
+    if (obj.disabledRules == null) obj.disabledRules = new HashMap<>();
+    obj.disabledRules.put(getLanguageShortCode(), new ArrayList<>(disabledRules));
+    return obj;
   }
 
-  public void setEnabledRules(List<String> enabledRules) {
-    if (this.enabledRules == null) this.enabledRules = new HashMap<>();
-    this.enabledRules.put(getLanguageShortCode(), new ArrayList<>(enabledRules));
+  public Settings withEnabledRules(List<String> enabledRules) {
+    Settings obj = new Settings(this);
+    if (obj.enabledRules == null) obj.enabledRules = new HashMap<>();
+    obj.enabledRules.put(getLanguageShortCode(), new ArrayList<>(enabledRules));
+    return obj;
   }
 
-  public void setLanguageToolHttpServerUri(String languageToolHttpServerUri) {
-    this.languageToolHttpServerUri = languageToolHttpServerUri;
+  public Settings withLanguageToolHttpServerUri(String languageToolHttpServerUri) {
+    Settings obj = new Settings(this);
+    obj.languageToolHttpServerUri = languageToolHttpServerUri;
+    return obj;
   }
 
-  public void setDummyCommandPrototypes(List<String> dummyCommandPrototypes) {
-    this.dummyCommandPrototypes = new ArrayList<>(dummyCommandPrototypes);
+  public Settings withDummyCommandPrototypes(List<String> dummyCommandPrototypes) {
+    Settings obj = new Settings(this);
+    obj.dummyCommandPrototypes = new ArrayList<>(dummyCommandPrototypes);
+    return obj;
   }
 
-  public void setIgnoreCommandPrototypes(List<String> ignoreCommandPrototypes) {
-    this.ignoreCommandPrototypes = new ArrayList<>(ignoreCommandPrototypes);
+  public Settings withIgnoreCommandPrototypes(List<String> ignoreCommandPrototypes) {
+    Settings obj = new Settings(this);
+    obj.ignoreCommandPrototypes = new ArrayList<>(ignoreCommandPrototypes);
+    return obj;
   }
 
-  public void setIgnoreEnvironments(List<String> ignoreEnvironments) {
-    this.ignoreEnvironments = new ArrayList<>(ignoreEnvironments);
+  public Settings withIgnoreEnvironments(List<String> ignoreEnvironments) {
+    Settings obj = new Settings(this);
+    obj.ignoreEnvironments = new ArrayList<>(ignoreEnvironments);
+    return obj;
   }
 
-  public void setDummyMarkdownNodeTypes(List<String> dummyMarkdownNodeTypes) {
-    this.dummyMarkdownNodeTypes = new ArrayList<>(dummyMarkdownNodeTypes);
+  public Settings withDummyMarkdownNodeTypes(List<String> dummyMarkdownNodeTypes) {
+    Settings obj = new Settings(this);
+    obj.dummyMarkdownNodeTypes = new ArrayList<>(dummyMarkdownNodeTypes);
+    return obj;
   }
 
-  public void setIgnoreMarkdownNodeTypes(List<String> ignoreMarkdownNodeTypes) {
-    this.ignoreMarkdownNodeTypes = new ArrayList<>(ignoreMarkdownNodeTypes);
+  public Settings withIgnoreMarkdownNodeTypes(List<String> ignoreMarkdownNodeTypes) {
+    Settings obj = new Settings(this);
+    obj.ignoreMarkdownNodeTypes = new ArrayList<>(ignoreMarkdownNodeTypes);
+    return obj;
   }
 
-  public void setIgnoreRuleSentencePairs(List<IgnoreRuleSentencePair> ignoreRuleSentencePairs) {
-    this.ignoreRuleSentencePairs = new ArrayList<>(ignoreRuleSentencePairs);
+  public Settings withIgnoreRuleSentencePairs(
+        List<IgnoreRuleSentencePair> ignoreRuleSentencePairs) {
+    Settings obj = new Settings(this);
+    obj.ignoreRuleSentencePairs = new ArrayList<>(ignoreRuleSentencePairs);
+    return obj;
   }
 
-  public void setMotherTongueShortCode(String motherTongueShortCode) {
-    this.motherTongueShortCode = motherTongueShortCode;
+  public Settings withMotherTongueShortCode(String motherTongueShortCode) {
+    Settings obj = new Settings(this);
+    obj.motherTongueShortCode = motherTongueShortCode;
+    return obj;
   }
 
-  public void setLanguageModelRulesDirectory(String languageModelRulesDirectory) {
-    this.languageModelRulesDirectory = languageModelRulesDirectory;
+  public Settings withLanguageModelRulesDirectory(String languageModelRulesDirectory) {
+    Settings obj = new Settings(this);
+    obj.languageModelRulesDirectory = languageModelRulesDirectory;
+    return obj;
   }
 
-  public void setNeuralNetworkModelRulesDirectory(String neuralNetworkModelRulesDirectory) {
-    this.neuralNetworkModelRulesDirectory = neuralNetworkModelRulesDirectory;
+  public Settings withNeuralNetworkModelRulesDirectory(String neuralNetworkModelRulesDirectory) {
+    Settings obj = new Settings(this);
+    obj.neuralNetworkModelRulesDirectory = neuralNetworkModelRulesDirectory;
+    return obj;
   }
 
-  public void setWord2VecModelRulesDirectory(String word2VecModelRulesDirectory) {
-    this.word2VecModelRulesDirectory = word2VecModelRulesDirectory;
+  public Settings withWord2VecModelRulesDirectory(String word2VecModelRulesDirectory) {
+    Settings obj = new Settings(this);
+    obj.word2VecModelRulesDirectory = word2VecModelRulesDirectory;
+    return obj;
   }
 
-  public void setSentenceCacheSize(Integer sentenceCacheSize) {
-    this.sentenceCacheSize = sentenceCacheSize;
+  public Settings withSentenceCacheSize(Integer sentenceCacheSize) {
+    Settings obj = new Settings(this);
+    obj.sentenceCacheSize = sentenceCacheSize;
+    return obj;
   }
 
-  public void setDiagnosticSeverity(DiagnosticSeverity diagnosticSeverity) {
-    this.diagnosticSeverity = diagnosticSeverity;
+  public Settings withDiagnosticSeverity(DiagnosticSeverity diagnosticSeverity) {
+    Settings obj = new Settings(this);
+    obj.diagnosticSeverity = diagnosticSeverity;
+    return obj;
   }
 }

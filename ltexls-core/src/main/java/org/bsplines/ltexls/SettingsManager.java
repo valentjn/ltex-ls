@@ -83,7 +83,7 @@ public class SettingsManager {
   }
 
   public Settings getSettings() {
-    return new Settings(this.settings);
+    return this.settings;
   }
 
   public @Nullable LanguageToolInterface getLanguageToolInterface() {
@@ -104,7 +104,7 @@ public class SettingsManager {
     String newLanguage = newSettings.getLanguageShortCode();
     @Nullable Settings oldSettings = this.settingsMap.get(newLanguage);
 
-    this.settings = new Settings(newSettings);
+    this.settings = newSettings;
     this.settingsMap.put(newLanguage, this.settings);
 
     if (newSettings.equals(oldSettings)) {

@@ -43,7 +43,8 @@ public class LanguageToolHttpInterfaceTest {
     // wait until LanguageTool has initialized itself
     Thread.sleep(5000);
 
-    this.defaultSettings.setLanguageToolHttpServerUri("http://localhost:8081");
+    this.defaultSettings = this.defaultSettings.withLanguageToolHttpServerUri(
+        "http://localhost:8081");
   }
 
   /**
@@ -64,8 +65,7 @@ public class LanguageToolHttpInterfaceTest {
 
   @Test
   public void testCheck() {
-    Settings settings = new Settings(this.defaultSettings);
-    SettingsManager settingsManager = new SettingsManager(settings);
+    SettingsManager settingsManager = new SettingsManager(this.defaultSettings);
     DocumentChecker documentChecker = new DocumentChecker(settingsManager);
     LtexTextDocumentItem document = DocumentCheckerTest.createDocument("latex",
         "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n");
@@ -76,8 +76,7 @@ public class LanguageToolHttpInterfaceTest {
 
   @Test
   public void testOtherMethods() {
-    Settings settings = new Settings(this.defaultSettings);
-    SettingsManager settingsManager = new SettingsManager(settings);
+    SettingsManager settingsManager = new SettingsManager(this.defaultSettings);
     LanguageToolInterface ltInterface = settingsManager.getLanguageToolInterface();
     Assertions.assertNotNull(NullnessUtil.castNonNull(ltInterface));
     Assertions.assertDoesNotThrow(() -> ltInterface.activateDefaultFalseFriendRules());
