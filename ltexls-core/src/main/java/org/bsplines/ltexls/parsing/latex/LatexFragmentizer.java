@@ -92,7 +92,8 @@ public class LatexFragmentizer extends CodeFragmentizer {
     babelLanguageMap.put("ga-IE", "ga-IE");
     babelLanguageMap.put("gl", "gl-ES");
     babelLanguageMap.put("gl-ES", "gl-ES");
-    babelLanguageMap.put("it", "it");
+    // clash with \textit
+    // babelLanguageMap.put("it", "it");
     babelLanguageMap.put("ja", "ja-JP");
     babelLanguageMap.put("ja-JP", "ja-JP");
     babelLanguageMap.put("km", "km-KH");
@@ -111,7 +112,8 @@ public class LatexFragmentizer extends CodeFragmentizer {
     babelLanguageMap.put("ru-RU", "ru-RU");
     babelLanguageMap.put("sk", "sk-SK");
     babelLanguageMap.put("sk-SK", "sk-SK");
-    babelLanguageMap.put("sl", "sl-SI");
+    // clash with \textsl
+    // babelLanguageMap.put("sl", "sl-SI");
     babelLanguageMap.put("sl-SI", "sl-SI");
     babelLanguageMap.put("sv", "sv");
     babelLanguageMap.put("ta", "ta-IN");
