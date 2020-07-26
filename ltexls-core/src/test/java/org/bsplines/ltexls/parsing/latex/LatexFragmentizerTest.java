@@ -151,5 +151,16 @@ public class LatexFragmentizerTest {
     codeFragments = fragmentizer.fragmentize(
         "This is a \\begin{de-DE}Beispiel\\end{de-DE}.\n", new Settings());
     Assertions.assertEquals(2, codeFragments.size());
+
+    codeFragments = fragmentizer.fragmentize(
+        "This is a \\begin{de-DE}Beispiel.\n", new Settings());
+    Assertions.assertEquals(2, codeFragments.size());
+    Assertions.assertEquals(10, codeFragments.get(0).getCode().length());
+    Assertions.assertEquals(33, codeFragments.get(1).getCode().length());
+
+    codeFragments = fragmentizer.fragmentize(
+        "This is a Beispiel\\end{de-DE}.\n", new Settings());
+    Assertions.assertEquals(1, codeFragments.size());
+    Assertions.assertEquals(31, codeFragments.get(0).getCode().length());
   }
 }
