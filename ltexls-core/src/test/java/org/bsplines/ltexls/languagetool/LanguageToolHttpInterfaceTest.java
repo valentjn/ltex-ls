@@ -59,7 +59,7 @@ public class LanguageToolHttpInterfaceTest {
 
   @Test
   public void testCheck() {
-    LanguageToolJavaInterfaceTest.assertMatches(this.defaultSettings);
+    LanguageToolJavaInterfaceTest.assertMatches(this.defaultSettings, false);
   }
 
   @Test

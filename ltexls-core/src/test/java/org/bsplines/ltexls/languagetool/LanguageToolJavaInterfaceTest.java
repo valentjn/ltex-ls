@@ -24,19 +24,46 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class LanguageToolJavaInterfaceTest {
-  public static void assertMatches(Settings settings) {
+  private static List<LanguageToolRuleMatch> checkDocument(Settings settings, String code) {
     SettingsManager settingsManager = new SettingsManager(settings);
     DocumentChecker documentChecker = new DocumentChecker(settingsManager);
-    LtexTextDocumentItem document = DocumentCheckerTest.createDocument("latex",
-        "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n");
+    LtexTextDocumentItem document = DocumentCheckerTest.createDocument("latex", code);
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         documentChecker.check(document);
-    DocumentCheckerTest.assertMatches(checkingResult.getKey(), 8, 10, 58, 75);
+    return checkingResult.getKey();
+  }
+
+  private static void assertMatchesCompare(Settings oldSettings, Settings newSettings,
+        int oldNumberOfMatches, int newNumberOfMatches, String code) {
+    List<LanguageToolRuleMatch> matches = checkDocument(oldSettings, code);
+    Assertions.assertEquals(oldNumberOfMatches, matches.size());
+    matches = checkDocument(newSettings, code);
+    Assertions.assertEquals(newNumberOfMatches, matches.size());
+  }
+
+  public static void assertMatches(Settings settings, boolean checkMotherTongue) {
+    List<LanguageToolRuleMatch> matches = checkDocument(settings,
+        "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n");
+    DocumentCheckerTest.assertMatches(matches, 8, 10, 58, 75);
+
+    assertMatchesCompare(settings, settings.withDisabledRules(
+        Collections.singletonList("UPPERCASE_SENTENCE_START")), 1, 0,
+        "this is a test.\n");
+    assertMatchesCompare(settings, settings.withEnabledRules(
+        Collections.singletonList("PASSIVE_VOICE")), 0, 1,
+        "It is thought that this is a test.\n");
+
+    if (checkMotherTongue) {
+      // mother tongue requires loading false-friends.xml, but loading of custom rules doesn't
+      // seem to be supported by servers (only via the Java API)
+      assertMatchesCompare(settings, settings.withMotherTongueShortCode("de-DE"), 0, 1,
+          "I'm holding my handy.\n");
+    }
   }
 
   @Test
   public void testCheck() {
-    assertMatches(new Settings());
+    assertMatches(new Settings(), true);
   }
 
   @Test
