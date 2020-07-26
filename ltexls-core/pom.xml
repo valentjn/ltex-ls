@@ -291,7 +291,7 @@ goto error
                 </replace>
                 <replace file="target/appassembler/bin/ltex-ls.bat">
                   <replacetoken>%JAVACMD% %JAVA_OPTS%  -classpath %CLASSPATH%</replacetoken>
-                  <replacevalue>"%JAVACMD%" %JAVA_OPTS%  -classpath "%CLASSPATH%"</replacevalue>
+                  <replacevalue>"%JAVACMD%" %JAVA_OPTS%  -classpath %CLASSPATH%</replacevalue>
                 </replace>
                 <replace file="target/appassembler/bin/ltex-ls.bat">
                   <replacetoken>set ERROR_CODE=%ERRORLEVEL%</replacetoken>
