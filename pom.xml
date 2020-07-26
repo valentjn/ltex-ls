@@ -11,7 +11,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bsplines</groupId>
   <artifactId>ltexls</artifactId>
-  <version>6.1.0</version>
+  <version>6.1.1</version>
   <packaging>pom</packaging>
   <properties>
     <maven.compiler.source>8</maven.compiler.source>
