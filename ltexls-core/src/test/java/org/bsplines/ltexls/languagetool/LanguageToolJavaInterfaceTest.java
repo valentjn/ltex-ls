@@ -24,15 +24,19 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class LanguageToolJavaInterfaceTest {
-  @Test
-  public void testCheck() {
-    SettingsManager settingsManager = new SettingsManager();
+  public static void assertMatches(Settings settings) {
+    SettingsManager settingsManager = new SettingsManager(settings);
     DocumentChecker documentChecker = new DocumentChecker(settingsManager);
     LtexTextDocumentItem document = DocumentCheckerTest.createDocument("latex",
         "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n");
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         documentChecker.check(document);
     DocumentCheckerTest.assertMatches(checkingResult.getKey(), 8, 10, 58, 75);
+  }
+
+  @Test
+  public void testCheck() {
+    assertMatches(new Settings());
   }
 
   @Test

@@ -7,16 +7,10 @@
 
 package org.bsplines.ltexls.languagetool;
 
-import java.util.List;
-import org.bsplines.ltexls.DocumentChecker;
-import org.bsplines.ltexls.DocumentCheckerTest;
-import org.bsplines.ltexls.LtexTextDocumentItem;
 import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.SettingsManager;
-import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 import org.checkerframework.checker.nullness.NullnessUtil;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.eclipse.xtext.xbase.lib.Pair;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -65,13 +59,7 @@ public class LanguageToolHttpInterfaceTest {
 
   @Test
   public void testCheck() {
-    SettingsManager settingsManager = new SettingsManager(this.defaultSettings);
-    DocumentChecker documentChecker = new DocumentChecker(settingsManager);
-    LtexTextDocumentItem document = DocumentCheckerTest.createDocument("latex",
-        "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n");
-    Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
-        documentChecker.check(document);
-    DocumentCheckerTest.assertMatches(checkingResult.getKey(), 8, 10, 58, 75);
+    LanguageToolJavaInterfaceTest.assertMatches(this.defaultSettings);
   }
 
   @Test
