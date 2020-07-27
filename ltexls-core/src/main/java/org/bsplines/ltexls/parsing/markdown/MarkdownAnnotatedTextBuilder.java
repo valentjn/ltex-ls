@@ -22,6 +22,8 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private int pos;
   private int dummyCounter;
   private Stack<String> nodeTypeStack = new Stack<>();
+  private boolean firstNode;
+  private boolean inFrontMatter;
 
   public String language = "en-US";
   public List<String> ignoreNodeTypes = new ArrayList<>();
@@ -99,6 +101,8 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     this.code = document.getChars().toString();
     this.pos = 0;
     this.dummyCounter = 0;
+    this.firstNode = true;
+    this.inFrontMatter = false;
     this.nodeTypeStack.clear();
     visitChildren(document);
     if (this.pos < this.code.length()) addMarkup(this.code.length());
@@ -106,8 +110,25 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
 
   private void visit(Node node) {
     String nodeType = node.getClass().getSimpleName();
+    boolean skipNode = false;
 
-    if (nodeType.equals("Text")) {
+    if (nodeType.equals("ThematicBreak")) {
+      if (this.firstNode) {
+        this.inFrontMatter = true;
+        skipNode = true;
+      } else if (this.inFrontMatter) {
+        this.inFrontMatter = false;
+        skipNode = true;
+      }
+    } else if (this.inFrontMatter) {
+      skipNode = true;
+    }
+
+    this.firstNode = false;
+
+    if (skipNode) {
+      addMarkup(node.getEndOffset());
+    } else if (nodeType.equals("Text")) {
       if (isInNodeType(this.ignoreNodeTypes)) {
         addMarkup(node.getEndOffset());
       } else {

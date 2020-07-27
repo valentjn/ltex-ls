@@ -50,5 +50,13 @@ public class MarkdownAnnotatedTextBuilderTest {
         "This is a test: `inline code`.\n\n```\ncode block\n```\n\nThis is another sentence.\n",
         "This is a test: Dummy0.\n\n\n\n\n\nThis is another sentence.\n",
         Collections.singletonList("FencedCodeBlock"), Collections.singletonList("Code"));
+    assertPlainText(
+        "---\n"
+        + "# This is YAML front matter\n"
+        + "- test\n"
+        + "---\n\n"
+        + "# Heading\n"
+        + "Test sentence\n",
+        "\n\n\n\n\nHeading\nTest sentence\n");
   }
 }
