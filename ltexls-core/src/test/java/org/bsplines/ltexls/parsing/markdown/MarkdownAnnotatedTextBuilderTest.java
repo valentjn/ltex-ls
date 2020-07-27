@@ -29,8 +29,7 @@ public class MarkdownAnnotatedTextBuilderTest {
 
   private static AnnotatedText buildAnnotatedText(String code,
         List<String> ignoreNodeTypes, List<String> dummyNodeTypes) {
-    MarkdownAnnotatedTextBuilder builder =
-        (MarkdownAnnotatedTextBuilder)CodeAnnotatedTextBuilder.create("markdown");
+    CodeAnnotatedTextBuilder builder = CodeAnnotatedTextBuilder.create("markdown");
     Settings settings = (new Settings()).withIgnoreMarkdownNodeTypes(ignoreNodeTypes)
         .withDummyMarkdownNodeTypes(dummyNodeTypes);
     builder.setSettings(settings);
@@ -38,7 +37,7 @@ public class MarkdownAnnotatedTextBuilderTest {
   }
 
   @Test
-  public void doTest() throws IOException {
+  public void test() throws IOException {
     assertPlainText(
         "# Heading\n"
         + "Paragraph with\n"
