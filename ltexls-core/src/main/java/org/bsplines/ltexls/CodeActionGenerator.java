@@ -394,14 +394,14 @@ public class CodeActionGenerator {
   }
 
   public static List<String> getCodeActions() {
-    return codeActions;
+    return Collections.unmodifiableList(codeActions);
   }
 
   public static List<String> getCommandNames() {
-    return commandNames;
+    return Collections.unmodifiableList(commandNames);
   }
 
   public static Set<String> getCommandNamesAsSet() {
-    return commandNamesAsSet;
+    return Collections.unmodifiableSet(commandNamesAsSet);
   }
 }
