@@ -106,9 +106,9 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
    * Check a document and publish the resulting diagnostics.
    *
    * @param document document to check
-   * @return completable future of type void
+   * @return completable future of type Boolean: true iff successful
    */
-  public CompletableFuture<Void> publishDiagnostics(LtexTextDocumentItem document) {
+  public CompletableFuture<Boolean> publishDiagnostics(LtexTextDocumentItem document) {
     return publishDiagnostics(document, null);
   }
 
@@ -121,10 +121,10 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
    * @param caretPosition optional position of the caret
    * @return completable future of type void
    */
-  public CompletableFuture<Void> publishDiagnostics(LtexTextDocumentItem document,
+  public CompletableFuture<Boolean> publishDiagnostics(LtexTextDocumentItem document,
         @Nullable Position caretPosition) {
     return getDiagnostics(document).thenApply((List<Diagnostic> diagnostics) -> {
-      if (this.languageClient == null) return null;
+      if (this.languageClient == null) return false;
 
       List<Diagnostic> diagnosticsNotAtCaret =
           extractDiagnosticsNotAtCaret(diagnostics, caretPosition);
@@ -138,7 +138,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
         thread.start();
       }
 
-      return null;
+      return true;
     });
   }
 

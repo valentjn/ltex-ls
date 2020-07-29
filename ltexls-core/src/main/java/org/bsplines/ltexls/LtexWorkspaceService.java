@@ -111,9 +111,9 @@ class LtexWorkspaceService implements WorkspaceService {
 
     LtexTextDocumentItem document = new LtexTextDocumentItem(uriStr, codeLanguageId, 1, text);
 
-    return this.ltexLanguageServer.publishDiagnostics(document).thenApply((Void ignored) -> {
+    return this.ltexLanguageServer.publishDiagnostics(document).thenApply((Boolean success) -> {
       JsonObject jsonObject = new JsonObject();
-      jsonObject.addProperty("success", true);
+      jsonObject.addProperty("success", success);
       return jsonObject;
     });
   }

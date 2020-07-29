@@ -42,8 +42,9 @@ public class LtexWorkspaceServiceTest {
     LtexWorkspaceService service = new LtexWorkspaceService(server);
     ExecuteCommandParams params = new ExecuteCommandParams("ltex.checkDocument",
         Collections.singletonList(JsonParser.parseString("{\"uri\": \"" + uri + "\"}")));
-    JsonElement result = (JsonElement)service.executeCommand(params).get();
-    Assertions.assertEquals(expected, result.getAsJsonObject().get("success").getAsBoolean());
+    JsonObject result = ((JsonElement)service.executeCommand(params).get()).getAsJsonObject();
+    Assertions.assertEquals(false, result.get("success").getAsBoolean());
+    Assertions.assertEquals(!expected, result.has("errorMessage"));
   }
 
   @Test
