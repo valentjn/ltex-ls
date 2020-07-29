@@ -8,6 +8,12 @@
 package org.bsplines.ltexls;
 
 import com.google.gson.JsonObject;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -24,6 +30,8 @@ import org.eclipse.lsp4j.services.WorkspaceService;
 
 class LtexWorkspaceService implements WorkspaceService {
   @NotOnlyInitialized LtexLanguageServer ltexLanguageServer;
+
+  private static final String checkDocumentCommandName = "ltex.checkDocument";
 
   public LtexWorkspaceService(@UnknownInitialization LtexLanguageServer ltexLanguageServer) {
     this.ltexLanguageServer = ltexLanguageServer;
@@ -54,8 +62,66 @@ class LtexWorkspaceService implements WorkspaceService {
           && (languageClient != null)) {
       languageClient.telemetryEvent(params.getArguments().get(0));
       return CompletableFuture.completedFuture(true);
+    } else if (params.getCommand().equals(checkDocumentCommandName)) {
+      return checkDocument((JsonObject)params.getArguments().get(0));
     } else {
       return CompletableFuture.completedFuture(false);
     }
+  }
+
+  public CompletableFuture<Object> checkDocument(JsonObject arguments) {
+    String uriStr = arguments.get("uri").getAsString();
+    @Nullable String codeLanguageId = (arguments.has("codeLanguageId")
+        ? arguments.get("codeLanguageId").getAsString() : null);
+    @Nullable String text = (arguments.has("text") ? arguments.get("text").getAsString() : null);
+
+    if ((codeLanguageId == null) || (text == null)) {
+      @Nullable Path path = null;
+
+      try {
+        path = Paths.get(new URI(uriStr));
+      } catch (URISyntaxException | IllegalArgumentException e) {
+        return failCommand(Tools.i18n("couldNotParseDocumentUri", e.getMessage()));
+      }
+
+      if (text == null) {
+        try {
+          text = new String(Files.readAllBytes(path), "utf-8");
+        } catch (IOException e) {
+          return failCommand(Tools.i18n("couldNotReadFile", path.toString(), e.getMessage()));
+        }
+      }
+
+      if (codeLanguageId == null) {
+        Path fileName = path.getFileName();
+        String fileNameStr = ((fileName != null) ? fileName.toString() : "");
+        codeLanguageId = "plaintext";
+
+        if (fileNameStr.endsWith(".md")) {
+          codeLanguageId = "markdown";
+        } else if (fileNameStr.endsWith(".tex")) {
+          codeLanguageId = "latex";
+        }
+      }
+    }
+
+    LtexTextDocumentItem document = new LtexTextDocumentItem(uriStr, codeLanguageId, 1, text);
+
+    return this.ltexLanguageServer.publishDiagnostics(document).thenApply((Void ignored) -> {
+      JsonObject jsonObject = new JsonObject();
+      jsonObject.addProperty("success", true);
+      return jsonObject;
+    });
+  }
+
+  private static CompletableFuture<Object> failCommand(String errorMessage) {
+    JsonObject jsonObject = new JsonObject();
+    jsonObject.addProperty("success", false);
+    jsonObject.addProperty("errorMessage", errorMessage);
+    return CompletableFuture.completedFuture(jsonObject);
+  }
+
+  public static List<String> getCommandNames() {
+    return Collections.singletonList(checkDocumentCommandName);
   }
 }

@@ -7,9 +7,17 @@
 
 package org.bsplines.ltexls;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.concurrent.ExecutionException;
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.DidChangeWatchedFilesParams;
+import org.eclipse.lsp4j.ExecuteCommandParams;
 import org.eclipse.lsp4j.WorkspaceSymbolParams;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -26,5 +34,32 @@ public class LtexWorkspaceServiceTest {
         new DidChangeConfigurationParams(settings)));
     Assertions.assertDoesNotThrow(() -> service.didChangeWatchedFiles(
         new DidChangeWatchedFilesParams()));
+  }
+
+  private static void assertCheckDocumentResult(String uri, boolean expected)
+        throws InterruptedException, ExecutionException {
+    LtexLanguageServer server = new LtexLanguageServer();
+    LtexWorkspaceService service = new LtexWorkspaceService(server);
+    ExecuteCommandParams params = new ExecuteCommandParams("ltex.checkDocument",
+        Collections.singletonList(JsonParser.parseString("{\"uri\": \"" + uri + "\"}")));
+    JsonElement result = (JsonElement)service.executeCommand(params).get();
+    Assertions.assertEquals(expected, result.getAsJsonObject().get("success").getAsBoolean());
+  }
+
+  @Test
+  public void testExecuteCommand() throws IOException, InterruptedException, ExecutionException,
+        URISyntaxException {
+    assertCheckDocumentResult("invalid_uri", false);
+    assertCheckDocumentResult("file:///non_existent_path", false);
+    File tmpFile = File.createTempFile("ltex-", ".tex");
+
+    try {
+      assertCheckDocumentResult(tmpFile.toURI().toString(), true);
+    } finally {
+      if (!tmpFile.delete()) {
+        Tools.logger.warning(Tools.i18n(
+            "couldNotDeleteTemporaryFile", tmpFile.toPath().toString()));
+      }
+    }
   }
 }

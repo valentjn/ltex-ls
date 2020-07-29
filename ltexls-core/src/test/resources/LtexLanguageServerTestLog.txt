@@ -283,7 +283,8 @@ Result: {
             "commands": [
                 "ltex.addToDictionary",
                 "ltex.disableRules",
-                "ltex.ignoreRulesInSentence"
+                "ltex.ignoreRulesInSentence",
+                "ltex.checkDocument"
             ]
         }
     }

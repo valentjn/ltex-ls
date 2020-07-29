@@ -65,8 +65,11 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     ServerCapabilities capabilities = new ServerCapabilities();
     capabilities.setTextDocumentSync(TextDocumentSyncKind.Incremental);
     capabilities.setCodeActionProvider(new CodeActionOptions(CodeActionGenerator.getCodeActions()));
-    capabilities.setExecuteCommandProvider(new ExecuteCommandOptions(
-        CodeActionGenerator.getCommandNames()));
+
+    List<String> commandNames = new ArrayList<>();
+    commandNames.addAll(CodeActionGenerator.getCommandNames());
+    commandNames.addAll(LtexWorkspaceService.getCommandNames());
+    capabilities.setExecuteCommandProvider(new ExecuteCommandOptions(commandNames));
 
     // Until it is specified in the LSP that the locale is automatically sent with
     // the initialization request, we have to do that manually.
