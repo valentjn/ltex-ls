@@ -70,6 +70,10 @@ class LtexWorkspaceService implements WorkspaceService {
   }
 
   public CompletableFuture<Object> checkDocument(JsonObject arguments) {
+    if (this.ltexLanguageServer == null) {
+      return failCommand(Tools.i18n("languageServerNotInitialized"));
+    }
+
     String uriStr = arguments.get("uri").getAsString();
     @Nullable String codeLanguageId = (arguments.has("codeLanguageId")
         ? arguments.get("codeLanguageId").getAsString() : null);
