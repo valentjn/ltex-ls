@@ -194,10 +194,16 @@ public class LtexTextDocumentService implements TextDocumentService {
   public void didClose(DidCloseTextDocumentParams params) {
     String uri = params.getTextDocument().getUri();
     this.documents.remove(uri);
-    @Nullable LanguageClient languageClient = this.ltexLanguageServer.getLanguageClient();
-    if (languageClient == null) return;
-    languageClient.publishDiagnostics(
-        new PublishDiagnosticsParams(uri, Collections.emptyList()));
+    Settings settings = this.ltexLanguageServer.getSettingsManager().getSettings();
+
+    if (settings.getClearDiagnosticsWhenClosingFile()) {
+      @Nullable LanguageClient languageClient = this.ltexLanguageServer.getLanguageClient();
+
+      if (languageClient != null) {
+        languageClient.publishDiagnostics(
+            new PublishDiagnosticsParams(uri, Collections.emptyList()));
+      }
+    }
   }
 
   private @Nullable LtexTextDocumentItem getDocument(String uri) {

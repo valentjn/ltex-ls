@@ -44,6 +44,7 @@ public class Settings {
   private @Nullable String word2VecModelRulesDirectory = null;
   private @Nullable Integer sentenceCacheSize = null;
   private @Nullable DiagnosticSeverity diagnosticSeverity = null;
+  private @Nullable Boolean clearDiagnosticsWhenClosingFile = null;
 
   public Settings() {
   }
@@ -78,6 +79,8 @@ public class Settings {
     this.word2VecModelRulesDirectory = obj.word2VecModelRulesDirectory;
     this.sentenceCacheSize = obj.sentenceCacheSize;
     this.diagnosticSeverity = ((obj.diagnosticSeverity == null) ? null : obj.diagnosticSeverity);
+    this.clearDiagnosticsWhenClosingFile = ((obj.clearDiagnosticsWhenClosingFile == null) ? null
+        : obj.clearDiagnosticsWhenClosingFile);
   }
 
   public Settings(JsonElement jsonSettings) {
@@ -328,6 +331,13 @@ public class Settings {
     } catch (NullPointerException | UnsupportedOperationException e) {
       this.diagnosticSeverity = null;
     }
+
+    try {
+      this.clearDiagnosticsWhenClosingFile = getSettingFromJson(
+          jsonSettings, "clearDiagnosticsWhenClosingFile").getAsBoolean();
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      this.clearDiagnosticsWhenClosingFile = null;
+    }
   }
 
   @Override
@@ -422,6 +432,12 @@ public class Settings {
       return false;
     }
 
+    if ((this.clearDiagnosticsWhenClosingFile == null)
+          ? (other.clearDiagnosticsWhenClosingFile != null)
+          : !this.clearDiagnosticsWhenClosingFile.equals(other.clearDiagnosticsWhenClosingFile)) {
+      return false;
+    }
+
     return true;
   }
 
@@ -458,6 +474,8 @@ public class Settings {
     hash = 53 * hash + ((this.sentenceCacheSize != null)
         ? this.sentenceCacheSize.hashCode() : 0);
     hash = 53 * hash + ((this.diagnosticSeverity != null) ? this.diagnosticSeverity.hashCode() : 0);
+    hash = 53 * hash + ((this.clearDiagnosticsWhenClosingFile != null)
+        ? this.clearDiagnosticsWhenClosingFile.hashCode() : 0);
 
     return hash;
   }
@@ -550,6 +568,10 @@ public class Settings {
 
   public DiagnosticSeverity getDiagnosticSeverity() {
     return getDefault(this.diagnosticSeverity, DiagnosticSeverity.Information);
+  }
+
+  public Boolean getClearDiagnosticsWhenClosingFile() {
+    return getDefault(this.clearDiagnosticsWhenClosingFile, true);
   }
 
   public Settings withEnabled(Boolean enabled) {
@@ -661,6 +683,12 @@ public class Settings {
   public Settings withDiagnosticSeverity(DiagnosticSeverity diagnosticSeverity) {
     Settings obj = new Settings(this);
     obj.diagnosticSeverity = diagnosticSeverity;
+    return obj;
+  }
+
+  public Settings withClearDiagnosticsWhenClosingFile(Boolean clearDiagnosticsWhenClosingFile) {
+    Settings obj = new Settings(this);
+    obj.clearDiagnosticsWhenClosingFile = clearDiagnosticsWhenClosingFile;
     return obj;
   }
 }
