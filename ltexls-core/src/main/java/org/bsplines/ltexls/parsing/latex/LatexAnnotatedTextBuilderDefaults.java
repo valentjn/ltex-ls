@@ -26,6 +26,7 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\addtocontents{}"));
     list.add(new LatexCommandSignature("\\addtocounter{}{}"));
     list.add(new LatexCommandSignature("\\addtokomafont{}{}"));
+    list.add(new LatexCommandSignature("\\@addtoreset{}{}"));
     list.add(new LatexCommandSignature("\\addtotheorempostheadhook{}"));
     list.add(new LatexCommandSignature("\\addxcontentsline{}{}{}"));
     list.add(new LatexCommandSignature("\\algdef{}[]{}{}"));
@@ -34,6 +35,10 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\arabic{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\AtBeginEnvironment{}{}"));
     list.add(new LatexCommandSignature("\\AtEndEnvironment{}{}"));
+    list.add(new LatexCommandSignature("\\automark{}"));
+    list.add(new LatexCommandSignature("\\automark[]{}"));
+    list.add(new LatexCommandSignature("\\automark*{}"));
+    list.add(new LatexCommandSignature("\\automark*[]{}"));
     list.add(new LatexCommandSignature("\\autopageref{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\autopageref*{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\autoref{}", LatexCommandSignature.Action.DUMMY));
@@ -137,11 +142,13 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\defbibheading{}[]{}"));
     list.add(new LatexCommandSignature("\\defbibnote{}{}"));
     list.add(new LatexCommandSignature("\\definecolor{}{}{}"));
+    list.add(new LatexCommandSignature("\\directlua{}"));
     list.add(new LatexCommandSignature("\\DisableLigatures{}"));
     list.add(new LatexCommandSignature("\\documentclass{}"));
     list.add(new LatexCommandSignature("\\documentclass[]{}"));
     list.add(new LatexCommandSignature("\\email{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\eqref{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\etocsetlevel{}{}"));
     list.add(new LatexCommandSignature("\\etocsetnexttocdepth{}"));
     list.add(new LatexCommandSignature("\\etocsettocstyle{}{}"));
     list.add(new LatexCommandSignature("\\floatname{}{}"));
@@ -247,6 +254,7 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\renewenvironment{}[]{}{}"));
     list.add(new LatexCommandSignature("\\renewenvironment*{}{}{}"));
     list.add(new LatexCommandSignature("\\renewenvironment*{}[]{}{}"));
+    list.add(new LatexCommandSignature("\\renewlist{}{}{}"));
     list.add(new LatexCommandSignature("\\RequirePackage{}"));
     list.add(new LatexCommandSignature("\\scalebox{}"));
     list.add(new LatexCommandSignature("\\selectlanguage{}"));
@@ -263,9 +271,12 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\setkomavar*{}[]{}"));
     list.add(new LatexCommandSignature("\\setlength{}{}"));
     list.add(new LatexCommandSignature("\\setlist{}"));
+    list.add(new LatexCommandSignature("\\setlist[]{}"));
     list.add(new LatexCommandSignature("\\SetMathAlphabet{}{}{}{}{}{}"));
+    list.add(new LatexCommandSignature("\\setparsizes{}{}{}"));
     list.add(new LatexCommandSignature("\\@setplength{}{}"));
     list.add(new LatexCommandSignature("\\setstretch{}"));
+    list.add(new LatexCommandSignature("\\setuptoc{}{}"));
     list.add(new LatexCommandSignature("\\sisetup{}"));
     list.add(new LatexCommandSignature("\\smartcite{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\smartcite[]{}", LatexCommandSignature.Action.DUMMY));
@@ -334,6 +345,7 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\todo[]{}"));
     list.add(new LatexCommandSignature("\\togglefalse{}"));
     list.add(new LatexCommandSignature("\\toggletrue{}"));
+    list.add(new LatexCommandSignature("\\unsettoc{}{}"));
     list.add(new LatexCommandSignature("\\url{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\usebibmacro{}"));
     list.add(new LatexCommandSignature("\\usekomafont{}"));
