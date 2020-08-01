@@ -66,7 +66,8 @@ public class LatexAnnotatedTextBuilderTest {
     assertPlainText("This is a &test.\n", "This is a test. ");
     assertPlainText("You can see this in \\hyperref[alg:abc]{Sec.\\ \\ref*{alg:abc}}.\n",
         "You can see this in Sec. Dummy0. ");
-    assertPlainText("This is a te\\-st.\n", "This is a test. ");
+    assertPlainText("This is a te\\-st. Another te\"-st. Donau\"=Dampf\"\"schiff\"~Fahrt.\n",
+        "This is a test. Another test. Donau-Dampfschiff-Fahrt. ");
     assertPlainText("Ich hei\\ss{}e anders. Das Wasser ist hei\\ss.\n",
         "Ich hei\u00dfe anders. Das Wasser ist hei\u00df. ");
     assertPlainText("Das macht dann 10 \\euro. Oder z.\\,B. vielleicht doch 12~\\euro{}?\n",

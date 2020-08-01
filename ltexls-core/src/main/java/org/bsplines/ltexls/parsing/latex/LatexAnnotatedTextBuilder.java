@@ -773,6 +773,10 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                   smartQuote = "\u201d";
                 } else if (quote.equals("\"`")) {
                   smartQuote = "\u201e";
+                } else if (quote.equals("\"-") || quote.equals("\"\"") || quote.equals("\"|")) {
+                  smartQuote = "";
+                } else if (quote.equals("\"=") || quote.equals("\"~")) {
+                  smartQuote = "-";
                 } else {
                   quote = "";
                 }
