@@ -115,6 +115,10 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\citet*{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\citet*[]{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\clearfield{}"));
+    list.add(new LatexCommandSignature("\\color{}"));
+    list.add(new LatexCommandSignature("\\color[]{}"));
+    list.add(new LatexCommandSignature("\\colorbox{}"));
+    list.add(new LatexCommandSignature("\\colorlet{}{}"));
     list.add(new LatexCommandSignature("\\cref{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\Cref{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\crefname{}{}{}"));
@@ -125,6 +129,7 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\DeclareCiteCommand{}[]{}{}{}{}"));
     list.add(new LatexCommandSignature("\\DeclareFieldFormat{}{}"));
     list.add(new LatexCommandSignature("\\DeclareFieldFormat[]{}{}"));
+    list.add(new LatexCommandSignature("\\DeclareFieldFormat*{}{}"));
     list.add(new LatexCommandSignature("\\DeclareGraphicsExtensions{}"));
     list.add(new LatexCommandSignature("\\DeclareMathAlphabet{}{}{}{}{}"));
     list.add(new LatexCommandSignature("\\DeclareMathOperator{}{}"));
@@ -132,6 +137,8 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\DeclareNameAlias{}{}"));
     list.add(new LatexCommandSignature("\\DeclareNewTOC{}"));
     list.add(new LatexCommandSignature("\\DeclareNewTOC[]{}"));
+    list.add(new LatexCommandSignature("\\DeclareSIUnit{}{}"));
+    list.add(new LatexCommandSignature("\\DeclareSIUnit[]{}{}"));
     list.add(new LatexCommandSignature("\\declaretheorem{}"));
     list.add(new LatexCommandSignature("\\declaretheorem[]{}"));
     list.add(new LatexCommandSignature("\\declaretheoremstyle{}"));
@@ -142,15 +149,18 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\defbibheading{}[]{}"));
     list.add(new LatexCommandSignature("\\defbibnote{}{}"));
     list.add(new LatexCommandSignature("\\definecolor{}{}{}"));
+    list.add(new LatexCommandSignature("\\definespotcolor{}{}{}"));
     list.add(new LatexCommandSignature("\\directlua{}"));
     list.add(new LatexCommandSignature("\\DisableLigatures{}"));
     list.add(new LatexCommandSignature("\\documentclass{}"));
     list.add(new LatexCommandSignature("\\documentclass[]{}"));
     list.add(new LatexCommandSignature("\\email{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\enlargethispage{}"));
     list.add(new LatexCommandSignature("\\eqref{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\etocsetlevel{}{}"));
     list.add(new LatexCommandSignature("\\etocsetnexttocdepth{}"));
     list.add(new LatexCommandSignature("\\etocsettocstyle{}{}"));
+    list.add(new LatexCommandSignature("\\fcolorbox{}"));
     list.add(new LatexCommandSignature("\\floatname{}{}"));
     list.add(new LatexCommandSignature("\\floatstyle{}"));
     list.add(new LatexCommandSignature("\\footcite{}", LatexCommandSignature.Action.DUMMY));
@@ -174,6 +184,7 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\hypersetup{}"));
     list.add(new LatexCommandSignature("\\ifcurrentfield{}"));
     list.add(new LatexCommandSignature("\\ifentrytype{}"));
+    list.add(new LatexCommandSignature("\\@ifpackageloaded{}"));
     list.add(new LatexCommandSignature("\\iftoggle{}"));
     list.add(new LatexCommandSignature("\\include{}"));
     list.add(new LatexCommandSignature("\\includegraphics{}"));
@@ -197,8 +208,10 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\newcolumntype{}{}"));
     list.add(new LatexCommandSignature("\\newcommand{}{}"));
     list.add(new LatexCommandSignature("\\newcommand{}[]{}"));
+    list.add(new LatexCommandSignature("\\newcommand{}[][]{}"));
     list.add(new LatexCommandSignature("\\newcommand*{}{}"));
     list.add(new LatexCommandSignature("\\newcommand*{}[]{}"));
+    list.add(new LatexCommandSignature("\\newcommand*{}[][]{}"));
     list.add(new LatexCommandSignature("\\newcounter{}"));
     list.add(new LatexCommandSignature("\\newenvironment{}{}{}"));
     list.add(new LatexCommandSignature("\\newenvironment{}[]{}{}"));
@@ -214,6 +227,7 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\newtoggle{}"));
     list.add(new LatexCommandSignature("\\nolinkurl{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\PackageWarning{}{}"));
+    list.add(new LatexCommandSignature("\\pagecolor{}"));
     list.add(new LatexCommandSignature("\\pagenumbering{}"));
     list.add(new LatexCommandSignature("\\pageref{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\pageref*{}", LatexCommandSignature.Action.DUMMY));
@@ -248,8 +262,10 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\renewbibmacro*{}{}"));
     list.add(new LatexCommandSignature("\\renewcommand{}{}"));
     list.add(new LatexCommandSignature("\\renewcommand{}[]{}"));
+    list.add(new LatexCommandSignature("\\renewcommand{}[][]{}"));
     list.add(new LatexCommandSignature("\\renewcommand*{}{}"));
     list.add(new LatexCommandSignature("\\renewcommand*{}[]{}"));
+    list.add(new LatexCommandSignature("\\renewcommand*{}[][]{}"));
     list.add(new LatexCommandSignature("\\renewenvironment{}{}{}"));
     list.add(new LatexCommandSignature("\\renewenvironment{}[]{}{}"));
     list.add(new LatexCommandSignature("\\renewenvironment*{}{}{}"));
@@ -337,6 +353,7 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\Textcites()()[][]{}[][]{}[][]{}[][]{}[][]{}",
         LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
     list.add(new LatexCommandSignature("\\textcolor{}"));
+    list.add(new LatexCommandSignature("\\textcolor[]{}"));
     list.add(new LatexCommandSignature("\\textproc{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\thispagestyle{}"));
     list.add(new LatexCommandSignature("\\tikz{}"));
