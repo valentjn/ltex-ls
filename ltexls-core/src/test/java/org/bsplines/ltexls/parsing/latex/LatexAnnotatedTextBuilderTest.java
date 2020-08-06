@@ -71,7 +71,7 @@ public class LatexAnnotatedTextBuilderTest {
     assertPlainText("Ich hei\\ss{}e anders. Das Wasser ist hei\\ss.\n",
         "Ich hei\u00dfe anders. Das Wasser ist hei\u00df. ");
     assertPlainText("Das macht dann 10 \\euro. Oder z.\\,B. vielleicht doch 12~\\euro{}?\n",
-        "Das macht dann 10 \u20ac. Oder z.\u202fB. vielleicht doch 12 \u20ac? ");
+        "Das macht dann 10 \u20ac. Oder z.\u202fB. vielleicht doch 12\u00a0\u20ac? ");
     assertPlainText(
         "\\\"E\\\"in T\\\"ext m\\\"{i}t v\\\"i\\\"{e}l\\\"en "
         + "\\\"{U}ml\\\"a\\\"{u}t\\\"en.\n",
@@ -199,7 +199,7 @@ public class LatexAnnotatedTextBuilderTest {
         + "\\begin{equation*}\n"
         + "  a \\text{,~and} b.\n"
         + "\\end{equation*}\n",
-        "This is a test: Dummy0, and Dummy1. ");
+        "This is a test: Dummy0,\u00a0and Dummy1. ");
     assertPlainText(
         "This is a test:\n"
         + "\\[\n"

@@ -744,6 +744,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
             if (isTextMode(this.curMode)) {
               if (containsTwoEndsOfLine(whiteSpace)) {
                 addMarkup(whiteSpace, "\n\n");
+              } else if (this.curChar == '~') {
+                addMarkup(whiteSpace, (this.lastSpace.isEmpty() ? "\u00a0" : ""));
               } else {
                 addMarkup(whiteSpace, (this.lastSpace.isEmpty() ? " " : ""));
               }
