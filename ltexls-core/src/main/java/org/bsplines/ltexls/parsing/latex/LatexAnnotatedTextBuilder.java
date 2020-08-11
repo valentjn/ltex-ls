@@ -24,6 +24,12 @@ import org.bsplines.ltexls.parsing.DummyGenerator;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
+  private enum MathVowelState {
+    EMPTY,
+    STARTS_WITH_VOWEL,
+    STARTS_WITH_CONSONANT,
+  }
+
   private enum Mode {
     PARAGRAPH_TEXT,
     INLINE_TEXT,
@@ -70,6 +76,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private String dummyLastSpace = "";
   private String dummyLastPunctuation = "";
   private boolean isMathEmpty;
+  private MathVowelState mathVowelState = MathVowelState.EMPTY;
   private boolean preserveDummyLast;
   private boolean canInsertSpaceBeforeDummy;
   private boolean isMathCharTrivial;
@@ -117,10 +124,11 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   }
 
   private String generateDummy(DummyGenerator dummyGenerator) {
+    boolean startsWithVowel = (this.mathVowelState == MathVowelState.STARTS_WITH_VOWEL);
     String dummy;
 
     if (isTextMode(this.curMode)) {
-      dummy = dummyGenerator.generate(this.language, this.dummyCounter++);
+      dummy = dummyGenerator.generate(this.language, this.dummyCounter++, startsWithVowel);
     } else if (this.isMathEmpty) {
       if (this.curMode == Mode.DISPLAY_MATH) {
         dummy = (this.lastSpace.isEmpty() ? " " : "");
@@ -133,12 +141,13 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
           + this.dummyLastPunctuation + ((this.modeStack.peek() == Mode.INLINE_TEXT)
           ? this.dummyLastSpace : " ");
     } else {
-      dummy = dummyGenerator.generate(this.language, this.dummyCounter++)
+      dummy = dummyGenerator.generate(this.language, this.dummyCounter++, startsWithVowel)
           + this.dummyLastPunctuation + this.dummyLastSpace;
     }
 
     this.dummyLastSpace = "";
     this.dummyLastPunctuation = "";
+    this.mathVowelState = MathVowelState.EMPTY;
     return dummy;
   }
 
@@ -212,6 +221,12 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     return ((ch == '.') || (ch == ',') || (ch == ':') || (ch == ';'));
   }
 
+  private static boolean isVowel(char ch) {
+    ch = Character.toLowerCase(ch);
+    return ((ch == 'a') || (ch == 'e') || (ch == 'f') || (ch == 'h') || (ch == 'i') || (ch == 'l')
+        || (ch == 'm') || (ch == 'n') || (ch == 'o') || (ch == 'r') || (ch == 's') || (ch == 'x'));
+  }
+
   private static boolean isMathMode(Mode mode) {
     return ((mode == Mode.INLINE_MATH) || (mode == Mode.DISPLAY_MATH));
   }
@@ -231,12 +246,14 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private void enterDisplayMath() {
     this.modeStack.push(Mode.DISPLAY_MATH);
     this.isMathEmpty = true;
+    this.mathVowelState = MathVowelState.EMPTY;
     this.canInsertSpaceBeforeDummy = true;
   }
 
   private void enterInlineMath() {
     this.modeStack.push(Mode.INLINE_MATH);
     this.isMathEmpty = true;
+    this.mathVowelState = MathVowelState.EMPTY;
     this.canInsertSpaceBeforeDummy = true;
     this.isMathCharTrivial = true;
   }
@@ -252,6 +269,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
         + "\", dummyLastSpace = \"" + this.dummyLastSpace
         + "\", dummyLastPunctuation = \"" + this.dummyLastPunctuation
         + "\", isMathEmpty = " + this.isMathEmpty
+        + "\", mathVowelState = " + this.mathVowelState
         + ", preserveDummyLast = " + this.preserveDummyLast
         + ", canInsertSpaceBeforeDummy = " + this.canInsertSpaceBeforeDummy
         + ", isMathCharTrivial = " + this.isMathCharTrivial
@@ -280,6 +298,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     this.dummyLastSpace = "";
     this.dummyLastPunctuation = "";
     this.isMathEmpty = true;
+    this.mathVowelState = MathVowelState.EMPTY;
     this.preserveDummyLast = false;
     this.canInsertSpaceBeforeDummy = false;
     this.isMathCharTrivial = false;
@@ -840,6 +859,11 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
             } else {
               addMarkup(this.curString);
               if (isPunctuation(this.curChar)) this.dummyLastPunctuation = this.curString;
+
+              if (this.mathVowelState == MathVowelState.EMPTY) {
+                this.mathVowelState = (isVowel(this.curChar) ? MathVowelState.STARTS_WITH_VOWEL
+                    : MathVowelState.STARTS_WITH_CONSONANT);
+              }
             }
 
             break;

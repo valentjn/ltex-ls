@@ -164,7 +164,7 @@ public class LatexAnnotatedTextBuilderTest {
         + "\\end{equation*}\n"
         + "Now we argue.\n",
         "Recall that Dummy0 if Dummy1, Dummy2 otherwise. Now we argue. ");
-    assertPlainText("This equals $a^{b}$.\n", "This equals Dummy0. ");
+    assertPlainText("This equals $a^{b}$.\n", "This equals Ina0. ");
     assertPlainText(
         "This is the proof:\n"
         + "\\begin{equation}\n"
@@ -210,15 +210,26 @@ public class LatexAnnotatedTextBuilderTest {
     assertPlainText(
         "This is a test: $a = b \\footnote{This is another test: $c$.}$.\n"
         + "This is the next sentence: $E = mc^2$.\n",
-        "This is a test: Dummy0. This is the next sentence: Dummy1. ");
+        "This is a test: Ina0. This is the next sentence: Ina1. ");
     assertPlainText(
         "This is a test: $a, b, \\dots, c$.\n"
         + "Second sentence: a, b, $\\dots$, c.\n",
-        "This is a test: Dummy0. Second sentence: a, b, Dummy1, c. ");
+        "This is a test: Ina0. Second sentence: a, b, Dummy1, c. ");
     assertPlainText(
         "C'est un test: $E = mc^2$.\n",
         "C'est un test: Jimmy-0. ",
         "fr");
+    assertPlainText(
+        "This is an $A$-dimensional, $e$-dimensional, $F$-dimensional, "
+        + "$h$-dimensional, $I$-dimensional, $l$-dimensional, $M$-dimensional, "
+        + "$n$-dimensional, $O$-dimensional, $r$-dimensional, $S$-dimensional, "
+        + "$X$-dimensional space.\n"
+        + "This is not a $b$-dimensional or a $C$-dimensional space.\n",
+        "This is an Ina0-dimensional, Ina1-dimensional, Ina2-dimensional, "
+        + "Ina3-dimensional, Ina4-dimensional, Ina5-dimensional, Ina6-dimensional, "
+        + "Ina7-dimensional, Ina8-dimensional, Ina9-dimensional, Ina10-dimensional, "
+        + "Ina11-dimensional space. "
+        + "This is not a Dummy12-dimensional or a Dummy13-dimensional space. ");
 
     {
       AnnotatedText annotatedText = buildAnnotatedText(

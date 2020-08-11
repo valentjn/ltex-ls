@@ -29,18 +29,19 @@ public class DummyGenerator {
     return (plural ? defaultGeneratorPlural : defaultGenerator);
   }
 
-  /**
-   * Generate dummy.
-   *
-   * @param language short code of the language
-   * @param number counter for the dummy, should be increased after calling this function
-   * @return dummy
-   */
   public String generate(String language, int number) {
+    return generate(language, number, false);
+  }
+
+  public String generate(String language, int number, boolean startsWithVowel) {
     if (language.equalsIgnoreCase("fr")) {
       return "Jimmy-" + number;
     } else {
-      return (this.plural ? "Dummies" : ("Dummy" + number));
+      if (this.plural) {
+        return "Dummies";
+      } else {
+        return (startsWithVowel ? "Ina" : "Dummy") + number;
+      }
     }
   }
 
