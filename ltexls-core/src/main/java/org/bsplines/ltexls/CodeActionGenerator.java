@@ -59,7 +59,7 @@ public class CodeActionGenerator {
   private static final List<String> commandNames = Arrays.asList(new String[]{
       addToDictionaryCommandName, disableRulesCommandName, ignoreRulesInSentenceCommandName});
   private static final Set<String> commandNamesAsSet = new HashSet<>(commandNames);
-  private static final String dummyPatternStr = "Dummy[0-9]+";
+  private static final String dummyPatternStr = "(?:Dummy|Jimmy-)[0-9]+";
   private static final Pattern dummyPattern = Pattern.compile(dummyPatternStr);
 
   public CodeActionGenerator(SettingsManager settingsManager) {
