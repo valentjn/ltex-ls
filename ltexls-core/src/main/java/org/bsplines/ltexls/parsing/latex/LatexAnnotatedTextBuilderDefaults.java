@@ -222,6 +222,7 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\newgeometry{}"));
     list.add(new LatexCommandSignature("\\newglossaryentry{}{}"));
     list.add(new LatexCommandSignature("\\newglossarystyle{}{}"));
+    list.add(new LatexCommandSignature("\\newrefcontext[]"));
     list.add(new LatexCommandSignature("\\newtheorem{}{}"));
     list.add(new LatexCommandSignature("\\newtheorem*{}{}"));
     list.add(new LatexCommandSignature("\\newtoggle{}"));
