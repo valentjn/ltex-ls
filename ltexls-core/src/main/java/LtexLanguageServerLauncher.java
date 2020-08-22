@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import org.bsplines.ltexls.LtexLanguageServer;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
@@ -49,11 +50,11 @@ public class LtexLanguageServerLauncher {
         JsonObject jsonObject = new JsonObject();
 
         if (ltexLsPackage != null) {
-          String ltexLsVersion = ltexLsPackage.getImplementationVersion();
+          @Nullable String ltexLsVersion = ltexLsPackage.getImplementationVersion();
           if (ltexLsVersion != null) jsonObject.addProperty("ltex-ls", ltexLsVersion);
         }
 
-        String javaVersion = System.getProperty("java.version");
+        @Nullable String javaVersion = System.getProperty("java.version");
         if (javaVersion != null) jsonObject.addProperty("java", javaVersion);
 
         Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
