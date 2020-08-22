@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.DiagnosticSeverity;
@@ -25,6 +26,7 @@ public class Settings {
       Arrays.asList("AutoLink", "Code");
   private static final List<String> defaultIgnoreMarkdownNodeTypes =
       Arrays.asList("CodeBlock", "FencedCodeBlock", "IndentedCodeBlock");
+  private static final Pattern tildePathPattern = Pattern.compile("^~($|/|\\\\)");
 
   private @Nullable Boolean enabled = null;
   private @Nullable String languageShortCode = null;
@@ -85,6 +87,16 @@ public class Settings {
 
   public Settings(JsonElement jsonSettings) {
     setSettings(jsonSettings);
+  }
+
+  private static String normalizePath(String path) {
+    @Nullable String homeDirPath = System.getProperty("user.home");
+
+    if (homeDirPath != null) {
+      path = tildePathPattern.matcher(path).replaceFirst(homeDirPath + "$1");
+    }
+
+    return path;
   }
 
   private static Map<String, List<String>> copyMapOfLists(Map<String, List<String>> map) {
@@ -551,15 +563,15 @@ public class Settings {
   }
 
   public String getLanguageModelRulesDirectory() {
-    return getDefault(this.languageModelRulesDirectory, "");
+    return normalizePath(getDefault(this.languageModelRulesDirectory, ""));
   }
 
   public String getNeuralNetworkModelRulesDirectory() {
-    return getDefault(this.neuralNetworkModelRulesDirectory, "");
+    return normalizePath(getDefault(this.neuralNetworkModelRulesDirectory, ""));
   }
 
   public String getWord2VecModelRulesDirectory() {
-    return getDefault(this.word2VecModelRulesDirectory, "");
+    return normalizePath(getDefault(this.word2VecModelRulesDirectory, ""));
   }
 
   public Integer getSentenceCacheSize() {

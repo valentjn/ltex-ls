@@ -126,4 +126,14 @@ public class SettingsTest {
     Assertions.assertEquals(DiagnosticSeverity.Error, settings.getDiagnosticSeverity());
     settings2 = compareSettings(settings, settings2);
   }
+
+  @Test
+  public void testTildeExpansion() {
+    Settings settings = new Settings();
+    String originalDirPath = "~/tildeExpansion";
+    settings = settings.withLanguageModelRulesDirectory(originalDirPath);
+    String expandedDirPath = settings.getLanguageModelRulesDirectory();
+    Assertions.assertTrue(expandedDirPath.endsWith("tildeExpansion"));
+    Assertions.assertNotEquals(originalDirPath, expandedDirPath);
+  }
 }
