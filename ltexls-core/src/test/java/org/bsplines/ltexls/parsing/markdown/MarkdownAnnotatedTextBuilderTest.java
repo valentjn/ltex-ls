@@ -57,6 +57,13 @@ public class MarkdownAnnotatedTextBuilderTest {
         + "---\n\n"
         + "# Heading\n"
         + "Test sentence\n",
-        "\n\n\n\n\nHeading\nTest sentence\n");
+        "\nHeading\nTest sentence\n");
+    assertPlainText(
+        "---\n"
+        + "test: This is a test.\n"
+        + "---\n\n"
+        + "# Heading\n"
+        + "Test sentence\n",
+        "\nHeading\nTest sentence\n");
   }
 }

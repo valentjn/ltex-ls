@@ -13,19 +13,21 @@ import com.vladsch.flexmark.util.ast.Node;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.regex.Pattern;
 import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.DummyGenerator;
 
 public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
+  private static final Pattern yamlFrontMatterPattern = Pattern.compile(
+      "\\A---\\s*$.*?^---\\s*$", Pattern.MULTILINE | Pattern.DOTALL);
+
   private Parser parser = Parser.builder().build();
 
   private String code;
   private int pos;
   private int dummyCounter;
   private Stack<String> nodeTypeStack = new Stack<>();
-  private boolean firstNode;
-  private boolean inFrontMatter;
 
   private String language = "en-US";
   private List<String> ignoreNodeTypes = new ArrayList<>();
@@ -93,7 +95,9 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
    * @return @c this
    */
   public MarkdownAnnotatedTextBuilder addCode(String code) {
-    Document document = this.parser.parse(code);
+    String preprocessedCode = MarkdownAnnotatedTextBuilder.yamlFrontMatterPattern
+        .matcher(code).replaceFirst("");
+    Document document = this.parser.parse(preprocessedCode);
     visit(document);
     return this;
   }
@@ -102,8 +106,6 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     this.code = document.getChars().toString();
     this.pos = 0;
     this.dummyCounter = 0;
-    this.firstNode = true;
-    this.inFrontMatter = false;
     this.nodeTypeStack.clear();
     visitChildren(document);
     if (this.pos < this.code.length()) addMarkup(this.code.length());
@@ -111,25 +113,8 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
 
   private void visit(Node node) {
     String nodeType = node.getClass().getSimpleName();
-    boolean skipNode = false;
 
-    if (nodeType.equals("ThematicBreak")) {
-      if (this.firstNode) {
-        this.inFrontMatter = true;
-        skipNode = true;
-      } else if (this.inFrontMatter) {
-        this.inFrontMatter = false;
-        skipNode = true;
-      }
-    } else if (this.inFrontMatter) {
-      skipNode = true;
-    }
-
-    this.firstNode = false;
-
-    if (skipNode) {
-      addMarkup(node.getEndOffset());
-    } else if (nodeType.equals("Text")) {
+    if (nodeType.equals("Text")) {
       if (isInNodeType(this.ignoreNodeTypes)) {
         addMarkup(node.getEndOffset());
       } else {
