@@ -18,6 +18,8 @@ import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.DummyGenerator;
 
 public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
+  private Parser parser = Parser.builder().build();
+
   private String code;
   private int pos;
   private int dummyCounter;
@@ -91,8 +93,7 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
    * @return @c this
    */
   public MarkdownAnnotatedTextBuilder addCode(String code) {
-    Parser parser = Parser.builder().build();
-    Document document = parser.parse(code);
+    Document document = this.parser.parse(code);
     visit(document);
     return this;
   }
