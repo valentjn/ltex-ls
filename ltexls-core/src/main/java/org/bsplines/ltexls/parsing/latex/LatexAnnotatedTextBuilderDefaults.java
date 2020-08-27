@@ -43,6 +43,7 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\autopageref*{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\autoref{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\autoref*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\babeltags{}"));
     list.add(new LatexCommandSignature("\\bibitem{}"));
     list.add(new LatexCommandSignature("\\bibliography{}"));
     list.add(new LatexCommandSignature("\\bibliographystyle{}"));
@@ -145,6 +146,9 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\declaretheoremstyle[]{}"));
     list.add(new LatexCommandSignature("\\DeclareTOCStyleEntry{}"));
     list.add(new LatexCommandSignature("\\DeclareTOCStyleEntry[]{}{}"));
+    list.add(new LatexCommandSignature("\\defbibcheck{}{}"));
+    list.add(new LatexCommandSignature("\\defbibenvironment{}{}{}{}"));
+    list.add(new LatexCommandSignature("\\defbibfilter{}{}"));
     list.add(new LatexCommandSignature("\\defbibheading{}{}"));
     list.add(new LatexCommandSignature("\\defbibheading{}[]{}"));
     list.add(new LatexCommandSignature("\\defbibnote{}{}"));
