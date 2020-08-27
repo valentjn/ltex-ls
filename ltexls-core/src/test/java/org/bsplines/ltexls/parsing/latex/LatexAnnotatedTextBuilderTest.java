@@ -7,6 +7,7 @@
 
 package org.bsplines.ltexls.parsing.latex;
 
+import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -35,8 +36,8 @@ public class LatexAnnotatedTextBuilderTest {
         String codeLanguageId) {
     LatexAnnotatedTextBuilder builder =
         (LatexAnnotatedTextBuilder)CodeAnnotatedTextBuilder.create(codeLanguageId);
-    builder.language = language;
-    builder.isInStrictMode = true;
+    builder.setSettings((new Settings()).withLanguageShortCode(language));
+    builder.setInStrictMode(true);
     return builder.addCode(code).build();
   }
 

@@ -34,10 +34,10 @@ public class LatexCommandSignature {
   private static final Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\])|(\\(\\)))");
   private static final Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
 
-  public String name = "";
-  public ArrayList<ArgumentType> argumentTypes = new ArrayList<ArgumentType>();
-  public Action action = Action.IGNORE;
-  public DummyGenerator dummyGenerator;
+  private String name = "";
+  private ArrayList<ArgumentType> argumentTypes = new ArrayList<ArgumentType>();
+  private Action action = Action.IGNORE;
+  private DummyGenerator dummyGenerator;
 
   private String thisCommandPrototype;
   private Pattern thisCommandPattern;
@@ -246,5 +246,13 @@ public class LatexCommandSignature {
 
   public String getCommandPrototype() {
     return this.thisCommandPrototype;
+  }
+
+  public Action getAction() {
+    return this.action;
+  }
+
+  public DummyGenerator getDummyGenerator() {
+    return this.dummyGenerator;
   }
 }

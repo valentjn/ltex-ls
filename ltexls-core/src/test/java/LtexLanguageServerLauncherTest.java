@@ -99,9 +99,11 @@ public class LtexLanguageServerLauncherTest {
     List<LspMessage> messages = convertLogToMessages(log);
 
     for (LspMessage message : messages) {
-      if (message.source == LspMessage.Source.Client) {
+      LspMessage.Source source = message.getSource();
+
+      if (source == LspMessage.Source.Client) {
         message.sendToServer(this.pipedOutputStream);
-      } else if (message.source == LspMessage.Source.Server) {
+      } else if (source == LspMessage.Source.Server) {
         message.waitForServer(this.pipedInputStream);
       }
     }

@@ -29,8 +29,8 @@ public class LspMessage {
     Response,
   }
 
-  public Source source;
-  public JsonObject body;
+  private Source source;
+  private JsonObject body;
 
   private static Pattern logPattern = Pattern.compile(
       "\\[[^\\]]+\\] (\\S+) (\\S+) '([^' ]+)(?: - \\(([^\\)]+)\\))?'.*\\R(?:Params|Result): ");
@@ -190,5 +190,9 @@ public class LspMessage {
     byte[] bodyBytes = read(inputStream, contentLength);
     JsonElement bodyJson = JsonParser.parseString(new String(bodyBytes, "utf-8"));
     Assertions.assertEquals(this.body, bodyJson);
+  }
+
+  public Source getSource() {
+    return this.source;
   }
 }

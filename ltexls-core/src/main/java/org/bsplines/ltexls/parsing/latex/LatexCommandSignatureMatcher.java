@@ -34,7 +34,7 @@ public class LatexCommandSignatureMatcher {
     this.commandSignatures = new ArrayList<>(commandSignatures);
 
     Set<String> commandNames = new HashSet<>();
-    this.commandSignatures.forEach((LatexCommandSignature x) -> commandNames.add(x.name));
+    this.commandSignatures.forEach((LatexCommandSignature x) -> commandNames.add(x.getName()));
     StringBuilder commandPatternStringBuilder = new StringBuilder("");
     boolean first = true;
 

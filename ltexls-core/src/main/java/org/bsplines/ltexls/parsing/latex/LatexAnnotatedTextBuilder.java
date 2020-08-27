@@ -86,23 +86,26 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private String curString = "";
   private Mode curMode = Mode.PARAGRAPH_TEXT;
 
-  public String language = "en-US";
-  public String codeLanguageId = "latex";
-  public List<LatexCommandSignature> commandSignatures =
+  private String language = "en-US";
+  private String codeLanguageId = "latex";
+  private List<LatexCommandSignature> commandSignatures =
       new ArrayList<>(LatexAnnotatedTextBuilderDefaults.getDefaultLatexCommandSignatures());
-  public List<String> ignoreEnvironments =
+  private Map<String, List<LatexCommandSignature>> commandSignatureMap =
+      createCommandSignatureMap(this.commandSignatures);
+  private List<String> ignoreEnvironments =
       new ArrayList<>(LatexAnnotatedTextBuilderDefaults.getDefaultIgnoreEnvironments());
-  public boolean isInStrictMode = false;
+  private boolean isInStrictMode = false;
 
   public LatexAnnotatedTextBuilder(String codeLanguageId) {
     this.codeLanguageId = codeLanguageId;
   }
 
-  private Map<String, List<LatexCommandSignature>> createCommandSignatureMap() {
+  private static Map<String, List<LatexCommandSignature>> createCommandSignatureMap(
+        List<LatexCommandSignature> commandSignatures) {
     Map<String, List<LatexCommandSignature>> map = new HashMap<>();
 
-    for (LatexCommandSignature commandSignature : this.commandSignatures) {
-      String commandName = commandSignature.name;
+    for (LatexCommandSignature commandSignature : commandSignatures) {
+      String commandName = commandSignature.getName();
       if (!map.containsKey(commandName)) map.put(commandName, new ArrayList<>());
       map.get(commandName).add(commandSignature);
     }
@@ -306,7 +309,6 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     this.modeStack = new Stack<>();
     this.modeStack.push(Mode.PARAGRAPH_TEXT);
 
-    Map<String, List<LatexCommandSignature>> commandSignatureMap = createCommandSignatureMap();
     @Nullable Pattern ignoreEnvironmentEndPattern = null;
     int lastPos = -1;
 
@@ -655,7 +657,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
             } else {
               String match = "";
               @Nullable List<LatexCommandSignature> possibleCommandSignatures =
-                  commandSignatureMap.get(command);
+                  this.commandSignatureMap.get(command);
               @Nullable LatexCommandSignature matchingCommand = null;
 
               if (possibleCommandSignatures == null) {
@@ -674,13 +676,13 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               if (matchingCommand == null) {
                 addMarkup(command);
               } else {
-                switch (matchingCommand.action) {
+                switch (matchingCommand.getAction()) {
                   case IGNORE: {
                     addMarkup(match);
                     break;
                   }
                   case DUMMY: {
-                    addMarkup(match, generateDummy(matchingCommand.dummyGenerator));
+                    addMarkup(match, generateDummy(matchingCommand.getDummyGenerator()));
                     break;
                   }
                   default: {
@@ -905,6 +907,11 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
           LatexCommandSignature.Action.IGNORE));
     }
 
+    this.commandSignatureMap = createCommandSignatureMap(this.commandSignatures);
     this.ignoreEnvironments.addAll(settings.getIgnoreEnvironments());
+  }
+
+  public void setInStrictMode(boolean isInStrictMode) {
+    this.isInStrictMode = isInStrictMode;
   }
 }

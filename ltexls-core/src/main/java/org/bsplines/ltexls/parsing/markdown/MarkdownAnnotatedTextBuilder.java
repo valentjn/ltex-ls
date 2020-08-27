@@ -25,9 +25,9 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private boolean firstNode;
   private boolean inFrontMatter;
 
-  public String language = "en-US";
-  public List<String> ignoreNodeTypes = new ArrayList<>();
-  public List<String> dummyNodeTypes = new ArrayList<>();
+  private String language = "en-US";
+  private List<String> ignoreNodeTypes = new ArrayList<>();
+  private List<String> dummyNodeTypes = new ArrayList<>();
 
   public MarkdownAnnotatedTextBuilder() {
     this.code = "";
