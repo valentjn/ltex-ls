@@ -13,6 +13,7 @@ import com.vladsch.flexmark.util.ast.Node;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
@@ -95,9 +96,16 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
    * @return @c this
    */
   public MarkdownAnnotatedTextBuilder addCode(String code) {
-    String preprocessedCode = MarkdownAnnotatedTextBuilder.yamlFrontMatterPattern
-        .matcher(code).replaceFirst("");
-    Document document = this.parser.parse(preprocessedCode);
+    int pos = 0;
+    Matcher matcher = MarkdownAnnotatedTextBuilder.yamlFrontMatterPattern.matcher(code);
+
+    if (matcher.find()) {
+      int newPos = pos + matcher.end();
+      super.addMarkup(code.substring(pos, newPos));
+      pos += newPos;
+    }
+
+    Document document = this.parser.parse(code.substring(pos));
     visit(document);
     return this;
   }
