@@ -195,38 +195,6 @@ public class Settings {
       // setting not set
     }
 
-    if (this.languageShortCode != null) {
-      // fixes false-positive argument.type.incompatible warnings
-      String languageShortCode = this.languageShortCode;
-
-      try {
-        if (dictionary.get(languageShortCode) == null) throw new NullPointerException();
-        dictionary.get(languageShortCode).addAll(convertJsonArrayToList(
-            getSettingFromJson(jsonSettings,
-            languageShortCode + ".dictionary").getAsJsonArray()));
-      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-        // setting not set
-      }
-
-      try {
-        if (disabledRules.get(languageShortCode) == null) throw new NullPointerException();
-        disabledRules.get(languageShortCode).addAll(convertJsonArrayToList(
-            getSettingFromJson(jsonSettings,
-            languageShortCode + ".disabledRules").getAsJsonArray()));
-      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-        // setting not set
-      }
-
-      try {
-        if (enabledRules.get(languageShortCode) == null) throw new NullPointerException();
-        enabledRules.get(languageShortCode).addAll(convertJsonArrayToList(
-            getSettingFromJson(jsonSettings,
-            languageShortCode + ".enabledRules").getAsJsonArray()));
-      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-        // setting not set
-      }
-    }
-
     try {
       this.languageToolHttpServerUri = getSettingFromJson(
           jsonSettings, "ltex-ls.languageToolHttpServerUri").getAsString();
@@ -317,12 +285,7 @@ public class Settings {
       this.sentenceCacheSize = getSettingFromJson(
           jsonSettings, "sentenceCacheSize").getAsInt();
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      try {
-        this.sentenceCacheSize = getSettingFromJson(
-            jsonSettings, "performance.sentenceCacheSize").getAsInt();
-      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e2) {
-        this.sentenceCacheSize = null;
-      }
+      this.sentenceCacheSize = null;
     }
 
     try {
