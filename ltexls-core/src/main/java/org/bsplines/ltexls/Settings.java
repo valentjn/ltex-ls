@@ -135,6 +135,23 @@ public class Settings {
     return map;
   }
 
+  private static void mergeMapOfSets(Map<String, Set<String>> map1, Map<String, Set<String>> map2) {
+    for (Map.Entry<String, Set<String>> entry2 : map2.entrySet()) {
+      String key = entry2.getKey();
+      if (!map1.containsKey(key)) map1.put(key, new HashSet<>());
+      Set<String> set1 = map1.get(key);
+      Set<String> set2 = entry2.getValue();
+
+      for (String string : set2) {
+        if (string.startsWith("-")) {
+          set1.remove(string.substring(1));
+        } else {
+          set1.add(string);
+        }
+      }
+    }
+  }
+
   private static boolean mapOfSetsEqual(@Nullable Map<String, Set<String>> map1,
         @Nullable Map<String, Set<String>> map2, @Nullable String key) {
     if (key == null) return true;
@@ -176,25 +193,40 @@ public class Settings {
     Map<String, Set<String>> disabledRules = this.disabledRules;
     Map<String, Set<String>> enabledRules = this.enabledRules;
 
-    try {
-      dictionary.putAll(convertJsonObjectToMapOfSets(
-          getSettingFromJson(jsonSettings, "dictionary").getAsJsonObject()));
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      // setting not set
+    String[] dictionarySettingNames = {
+        "dictionary", "workspaceDictionary", "workspaceFolderDictionary"};
+
+    for (String settingName : dictionarySettingNames) {
+      try {
+        mergeMapOfSets(dictionary, convertJsonObjectToMapOfSets(
+            getSettingFromJson(jsonSettings, settingName).getAsJsonObject()));
+      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+        // setting not set
+      }
     }
 
-    try {
-      disabledRules.putAll(convertJsonObjectToMapOfSets(
-          getSettingFromJson(jsonSettings, "disabledRules").getAsJsonObject()));
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      // setting not set
+    String[] disabledRulesSettingNames = {
+        "disabledRules", "workspaceDisabledRules", "workspaceFolderDisabledRules"};
+
+    for (String settingName : disabledRulesSettingNames) {
+      try {
+        mergeMapOfSets(disabledRules, convertJsonObjectToMapOfSets(
+            getSettingFromJson(jsonSettings, settingName).getAsJsonObject()));
+      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+        // setting not set
+      }
     }
 
-    try {
-      enabledRules.putAll(convertJsonObjectToMapOfSets(
-          getSettingFromJson(jsonSettings, "enabledRules").getAsJsonObject()));
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      // setting not set
+    String[] enabledRulesSettingNames = {
+        "enabledRules", "workspaceEnabledRules", "workspaceFolderEnabledRules"};
+
+    for (String settingName : enabledRulesSettingNames) {
+      try {
+        mergeMapOfSets(enabledRules, convertJsonObjectToMapOfSets(
+            getSettingFromJson(jsonSettings, settingName).getAsJsonObject()));
+      } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+        // setting not set
+      }
     }
 
     try {
