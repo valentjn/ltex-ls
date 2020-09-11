@@ -45,17 +45,17 @@ public class SettingsTest {
     Assertions.assertEquals("languageShortCode", settings.getLanguageShortCode());
     settings2 = compareSettings(settings, settings2);
 
-    settings = settings.withDictionary(Collections.singletonList("dictionary"));
-    Assertions.assertEquals(Collections.singletonList("dictionary"), settings.getDictionary());
+    settings = settings.withDictionary(Collections.singleton("dictionary"));
+    Assertions.assertEquals(Collections.singleton("dictionary"), settings.getDictionary());
     settings2 = compareSettings(settings, settings2);
 
-    settings = settings.withDisabledRules(Collections.singletonList("disabledRules"));
-    Assertions.assertEquals(Collections.singletonList("disabledRules"),
+    settings = settings.withDisabledRules(Collections.singleton("disabledRules"));
+    Assertions.assertEquals(Collections.singleton("disabledRules"),
         settings.getDisabledRules());
     settings2 = compareSettings(settings, settings2);
 
-    settings = settings.withEnabledRules(Collections.singletonList("enabledRules"));
-    Assertions.assertEquals(Collections.singletonList("enabledRules"),
+    settings = settings.withEnabledRules(Collections.singleton("enabledRules"));
+    Assertions.assertEquals(Collections.singleton("enabledRules"),
         settings.getEnabledRules());
     settings2 = compareSettings(settings, settings2);
 

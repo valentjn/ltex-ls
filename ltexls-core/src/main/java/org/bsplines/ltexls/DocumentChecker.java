@@ -74,8 +74,7 @@ public class DocumentChecker {
     } else if (!settings.isEnabled()) {
       Tools.logger.info(Tools.i18n("skippingTextCheckAsLtexHasBeenDisabled"));
       return Collections.emptyList();
-    } else if ((settings.getDictionary().size() >= 1)
-          && "BsPlInEs".equals(settings.getDictionary().get(0))) {
+    } else if (settings.getDictionary().contains("BsPlInEs")) {
       languageToolInterface.enableEasterEgg();
     }
 

@@ -8,6 +8,7 @@
 package org.bsplines.ltexls.languagetool;
 
 import java.util.List;
+import java.util.Set;
 import org.languagetool.markup.AnnotatedText;
 
 public abstract class LanguageToolInterface {
@@ -23,9 +24,9 @@ public abstract class LanguageToolInterface {
 
   public abstract void activateWord2VecModelRules(String word2vecRulesDirectory);
 
-  public abstract void enableRules(List<String> ruleIds);
+  public abstract void enableRules(Set<String> ruleIds);
 
-  public abstract void disableRules(List<String> ruleIds);
+  public abstract void disableRules(Set<String> ruleIds);
 
   public abstract void enableEasterEgg();
 }

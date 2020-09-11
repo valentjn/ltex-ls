@@ -47,10 +47,10 @@ public class LanguageToolJavaInterfaceTest {
     DocumentCheckerTest.assertMatches(matches, 8, 10, 58, 75);
 
     assertMatchesCompare(settings, settings.withDisabledRules(
-        Collections.singletonList("UPPERCASE_SENTENCE_START")), 1, 0,
+        Collections.singleton("UPPERCASE_SENTENCE_START")), 1, 0,
         "this is a test.\n");
     assertMatchesCompare(settings, settings.withEnabledRules(
-        Collections.singletonList("PASSIVE_VOICE")), 0, 1,
+        Collections.singleton("PASSIVE_VOICE")), 0, 1,
         "It is thought that this is a test.\n");
 
     if (checkMotherTongue) {
@@ -68,7 +68,7 @@ public class LanguageToolJavaInterfaceTest {
 
   @Test
   public void testEasterEgg() {
-    Settings settings = (new Settings()).withDictionary(Collections.singletonList("BsPlInEs"));
+    Settings settings = (new Settings()).withDictionary(Collections.singleton("BsPlInEs"));
     SettingsManager settingsManager = new SettingsManager(settings);
     DocumentChecker documentChecker = new DocumentChecker(settingsManager);
     LtexTextDocumentItem document = DocumentCheckerTest.createDocument("latex",

@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -254,12 +255,12 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
   }
 
   @Override
-  public void enableRules(List<String> ruleIds) {
+  public void enableRules(Set<String> ruleIds) {
     this.enabledRuleIds.addAll(ruleIds);
     this.disabledRuleIds.removeAll(ruleIds);
   }
 
-  @Override public void disableRules(List<String> ruleIds) {
+  @Override public void disableRules(Set<String> ruleIds) {
     this.enabledRuleIds.removeAll(ruleIds);
     this.disabledRuleIds.addAll(ruleIds);
   }

@@ -14,6 +14,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import javax.xml.parsers.ParserConfigurationException;
 import org.bsplines.ltexls.Tools;
@@ -47,7 +48,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
    * @param dictionary list of words of the user dictionary
    */
   public LanguageToolJavaInterface(String languageShortCode, String motherTongueShortCode,
-        int sentenceCacheSize, List<String> dictionary) {
+        int sentenceCacheSize, Set<String> dictionary) {
     if (!Languages.isLanguageSupported(languageShortCode)) {
       Tools.logger.severe(Tools.i18n("notARecognizedLanguage", languageShortCode));
       return;
@@ -58,7 +59,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
         ? Languages.getLanguageForShortCode(motherTongueShortCode) : null);
     ResultCache resultCache = new ResultCache(sentenceCacheSize,
         resultCacheExpireAfterMinutes, TimeUnit.MINUTES);
-    UserConfig userConfig = new UserConfig(dictionary);
+    UserConfig userConfig = new UserConfig(new ArrayList<>(dictionary));
 
     @SuppressWarnings("argument.type.incompatible")
     JLanguageTool languageTool = new JLanguageTool(language, motherTongue, resultCache, userConfig);
@@ -177,7 +178,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
   }
 
   @Override
-  public void enableRules(List<String> ruleIds) {
+  public void enableRules(Set<String> ruleIds) {
     if (!isReady()) return;
 
     // for strange reasons there is no JLanguageTool.enableRules
@@ -187,9 +188,9 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
   }
 
   @Override
-  public void disableRules(List<String> ruleIds) {
+  public void disableRules(Set<String> ruleIds) {
     if (!isReady()) return;
-    this.languageTool.disableRules(ruleIds);
+    this.languageTool.disableRules(new ArrayList<>(ruleIds));
   }
 
   @Override
