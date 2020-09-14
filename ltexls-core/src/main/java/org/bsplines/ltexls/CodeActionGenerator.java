@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 import org.bsplines.ltexls.parsing.CodeFragment;
+import org.bsplines.ltexls.settings.SettingsManager;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.CodeAction;
 import org.eclipse.lsp4j.CodeActionKind;

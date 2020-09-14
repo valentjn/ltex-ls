@@ -7,8 +7,8 @@
 
 package org.bsplines.ltexls.parsing;
 
-import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
+import org.bsplines.ltexls.settings.Settings;
 
 public class CodeFragment {
   private String codeLanguageId;

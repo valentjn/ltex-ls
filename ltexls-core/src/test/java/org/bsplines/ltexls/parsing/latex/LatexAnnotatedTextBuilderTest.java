@@ -7,8 +7,8 @@
 
 package org.bsplines.ltexls.parsing.latex;
 
-import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
+import org.bsplines.ltexls.settings.Settings;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.languagetool.markup.AnnotatedText;

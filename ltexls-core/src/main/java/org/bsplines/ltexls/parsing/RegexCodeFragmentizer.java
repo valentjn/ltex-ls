@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.Tools;
+import org.bsplines.ltexls.settings.Settings;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class RegexCodeFragmentizer extends CodeFragmentizer {

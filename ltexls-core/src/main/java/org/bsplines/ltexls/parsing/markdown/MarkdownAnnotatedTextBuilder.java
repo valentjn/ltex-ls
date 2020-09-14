@@ -15,9 +15,9 @@ import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.DummyGenerator;
+import org.bsplines.ltexls.settings.Settings;
 
 public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private static final Pattern yamlFrontMatterPattern = Pattern.compile(

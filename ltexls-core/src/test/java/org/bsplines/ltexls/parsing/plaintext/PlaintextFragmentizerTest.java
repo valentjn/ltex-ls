@@ -8,9 +8,9 @@
 package org.bsplines.ltexls.parsing.plaintext;
 
 import java.util.List;
-import org.bsplines.ltexls.Settings;
 import org.bsplines.ltexls.parsing.CodeFragment;
 import org.bsplines.ltexls.parsing.CodeFragmentizer;
+import org.bsplines.ltexls.settings.Settings;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
