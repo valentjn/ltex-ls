@@ -125,6 +125,10 @@ public class SettingsTest {
     settings = settings.withDiagnosticSeverity(DiagnosticSeverity.Error);
     Assertions.assertEquals(DiagnosticSeverity.Error, settings.getDiagnosticSeverity());
     settings2 = compareSettings(settings, settings2);
+
+    settings = settings.withClearDiagnosticsWhenClosingFile(false);
+    Assertions.assertEquals(false, settings.getClearDiagnosticsWhenClosingFile());
+    settings2 = compareSettings(settings, settings2);
   }
 
   @Test
