@@ -9,7 +9,13 @@ package org.bsplines.ltexls.settings;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import org.bsplines.ltexls.Tools;
 import org.eclipse.lsp4j.DiagnosticSeverity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -139,5 +145,45 @@ public class SettingsTest {
     String expandedDirPath = settings.getLanguageModelRulesDirectory();
     Assertions.assertTrue(expandedDirPath.endsWith("tildeExpansion"));
     Assertions.assertNotEquals(originalDirPath, expandedDirPath);
+  }
+
+  @Test
+  public void testDictionaryFiles() throws InterruptedException, IOException {
+    SettingsManager settingsManager = new SettingsManager();
+
+    Thread.sleep(200);
+    Assertions.assertTrue(settingsManager.getFullDictionary().isEmpty());
+
+    Set<String> incompleteFullDictionary = new HashSet<>();
+    incompleteFullDictionary.add("Test1");
+    incompleteFullDictionary.add("Test2");
+
+    Set<String> fullDictionary = new HashSet<>(incompleteFullDictionary);
+    fullDictionary.add("Test3");
+    fullDictionary.add("Test4");
+
+    Set<String> dictionary = new HashSet<>(incompleteFullDictionary);
+
+    File tmpFile = File.createTempFile("ltex-", ".txt");
+
+    try {
+      dictionary.add(":" + tmpFile.toPath().toString());
+
+      settingsManager.setSettings((new Settings()).withDictionary(dictionary));
+      Thread.sleep(200);
+      Assertions.assertEquals(incompleteFullDictionary, settingsManager.getFullDictionary());
+
+      Files.write(tmpFile.toPath(), "Test3\nTest4\n".getBytes("utf-8"));
+      Thread.sleep(200);
+      Assertions.assertEquals(fullDictionary, settingsManager.getFullDictionary());
+    } finally {
+      if (!tmpFile.delete()) {
+        Tools.logger.warning(Tools.i18n(
+            "couldNotDeleteTemporaryFile", tmpFile.toPath().toString()));
+      }
+    }
+
+    Thread.sleep(200);
+    Assertions.assertEquals(dictionary, settingsManager.getFullDictionary());
   }
 }

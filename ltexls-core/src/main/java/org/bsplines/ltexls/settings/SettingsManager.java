@@ -8,7 +8,9 @@
 package org.bsplines.ltexls.settings;
 
 import com.google.gson.JsonElement;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Set;
 import org.bsplines.ltexls.languagetool.LanguageToolHttpInterface;
 import org.bsplines.ltexls.languagetool.LanguageToolInterface;
 import org.bsplines.ltexls.languagetool.LanguageToolJavaInterface;
@@ -18,10 +20,13 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 public class SettingsManager {
   private HashMap<String, Settings> settingsMap;
+  private HashMap<String, DictionaryFileWatcher> dictionaryFileWatcherMap;
   private HashMap<String, @Nullable LanguageToolInterface> languageToolInterfaceMap;
 
   private Settings settings;
+  private DictionaryFileWatcher dictionaryFileWatcher;
   private @Nullable LanguageToolInterface languageToolInterface;
+  private Set<String> fullDictionary;
 
   public SettingsManager() {
     this(new Settings());
@@ -29,22 +34,27 @@ public class SettingsManager {
 
   public SettingsManager(Settings settings) {
     this.settings = settings;
+    this.dictionaryFileWatcher = new DictionaryFileWatcher();
+    this.dictionaryFileWatcher.setWatchedDictionary(this.settings.getDictionary());
+    this.fullDictionary = this.dictionaryFileWatcher.getFullDictionary();
     reinitializeLanguageToolInterface();
     String language = this.settings.getLanguageShortCode();
     this.settingsMap = new HashMap<>();
     this.settingsMap.put(language, this.settings);
+    this.dictionaryFileWatcherMap = new HashMap<>();
+    this.dictionaryFileWatcherMap.put(language, this.dictionaryFileWatcher);
     this.languageToolInterfaceMap = new HashMap<>();
     this.languageToolInterfaceMap.put(language, this.languageToolInterface);
   }
 
-  @RequiresNonNull("settings")
+  @RequiresNonNull({"settings", "fullDictionary"})
   private void reinitializeLanguageToolInterface(
         @UnknownInitialization(Object.class) SettingsManager this) {
     if (this.settings.getLanguageToolHttpServerUri().isEmpty()) {
       this.languageToolInterface = new LanguageToolJavaInterface(
           this.settings.getLanguageShortCode(),
           this.settings.getMotherTongueShortCode(), this.settings.getSentenceCacheSize(),
-          this.settings.getDictionary());
+          this.fullDictionary);
     } else {
       this.languageToolInterface = new LanguageToolHttpInterface(
           this.settings.getLanguageToolHttpServerUri(), this.settings.getLanguageShortCode(),
@@ -90,6 +100,11 @@ public class SettingsManager {
     return this.languageToolInterface;
   }
 
+  public Set<String> getFullDictionary() {
+    return Collections.unmodifiableSet(
+        this.dictionaryFileWatcher.getFullDictionary());
+  }
+
   public void setSettings(JsonElement newJsonSettings) {
     Settings newSettings = new Settings(newJsonSettings);
     setSettings(newSettings);
@@ -102,14 +117,29 @@ public class SettingsManager {
    */
   public void setSettings(Settings newSettings) {
     String newLanguage = newSettings.getLanguageShortCode();
+
+    @Nullable DictionaryFileWatcher newDictionaryFileWatcher =
+        this.dictionaryFileWatcherMap.get(newLanguage);
+
+    if (newDictionaryFileWatcher != null) {
+      this.dictionaryFileWatcher = newDictionaryFileWatcher;
+      this.dictionaryFileWatcher.setWatchedDictionary(newSettings.getDictionary());
+    } else {
+      this.dictionaryFileWatcher = new DictionaryFileWatcher();
+      this.dictionaryFileWatcher.setWatchedDictionary(newSettings.getDictionary());
+      this.dictionaryFileWatcherMap.put(newLanguage, this.dictionaryFileWatcher);
+    }
+
     @Nullable Settings oldSettings = this.settingsMap.get(newLanguage);
 
     this.settings = newSettings;
     this.settingsMap.put(newLanguage, this.settings);
+    Set<String> newFullDictionary = this.dictionaryFileWatcher.getFullDictionary();
 
-    if (newSettings.equals(oldSettings)) {
+    if (newSettings.equals(oldSettings) && newFullDictionary.equals(this.fullDictionary)) {
       this.languageToolInterface = this.languageToolInterfaceMap.get(newLanguage);
     } else {
+      this.fullDictionary = newFullDictionary;
       reinitializeLanguageToolInterface();
       this.languageToolInterfaceMap.put(newLanguage, this.languageToolInterface);
     }
