@@ -7,7 +7,7 @@
 os: "linux"
 dist: "bionic"
 language: "java"
-jdk: "openjdk8"
+jdk: "openjdk11"
 cache: false
 stages:
   - "test"
@@ -21,16 +21,15 @@ jobs:
         - "mvn -e verify package"
     - stage: "test"
       os: "osx"
-      jdk: "openjdk11"
       addons:
         homebrew:
           update: true
           taps:
             - "adoptopenjdk/openjdk"
           casks:
-            - "adoptopenjdk8"
+            - "adoptopenjdk11"
       before_install:
-        - "export JAVA_HOME=\"/Library/Java/JavaVirtualMachines/adoptopenjdk-8.jdk/Contents/Home\""
+        - "export JAVA_HOME=\"/Library/Java/JavaVirtualMachines/adoptopenjdk-11.jdk/Contents/Home\""
         - "export PATH=\"$JAVA_HOME/bin:$PATH\""
         - "echo $JAVA_HOME"
         - "echo $PATH"
@@ -40,7 +39,7 @@ jobs:
       os: "windows"
       language: "shell"
       install:
-        - "choco install openjdk8"
+        - "choco install openjdk11"
         - "choco install maven"
       script:
         - "cmd.exe //C \"RefreshEnv.cmd & mvn -e verify package\""

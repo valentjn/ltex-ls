@@ -132,8 +132,8 @@
         <version>3.8.1</version>
         <configuration>
           <fork>true</fork>
-          <source>8</source>
-          <target>8</target>
+          <source>11</source>
+          <target>11</target>
           <compilerArguments>
             <Xmaxerrs>10000</Xmaxerrs>
             <Xmaxwarns>10000</Xmaxwarns>
@@ -151,10 +151,7 @@
             <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
           </annotationProcessors>
           <compilerArgs>
-            <arg>-J-Xbootclasspath/p:${errorProneJavac}</arg>
-            <!-- If using JDK 11, remove the argument above, remove the
-                space in the one below, and uncomment it. -->
-            <!-- <arg>-J- -add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg> -->
+            <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
           </compilerArgs>
         </configuration>
       </plugin>
