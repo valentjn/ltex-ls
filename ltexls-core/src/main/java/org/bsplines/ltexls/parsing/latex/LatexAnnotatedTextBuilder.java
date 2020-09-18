@@ -645,8 +645,12 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                   || command.equals("\\section*") || command.equals("\\subsection*")
                   || command.equals("\\subsubsection*") || command.equals("\\paragraph*")
                   || command.equals("\\subparagraph*")) {
+              addMarkup(command);
+              String headingArgument = LatexCommandSignature.matchArgumentFromPosition(
+                  code, this.pos, LatexCommandSignature.ArgumentType.BRACKET);
+              if (!headingArgument.isEmpty()) addMarkup(headingArgument);
               this.modeStack.push(Mode.HEADING);
-              addMarkup(command + "{");
+              addMarkup("{");
             } else if (command.equals("\\text") || command.equals("\\intertext")) {
               this.modeStack.push(Mode.INLINE_TEXT);
               String interpretAs = (isMathMode(this.curMode) ? generateDummy() : "");

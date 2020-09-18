@@ -110,7 +110,7 @@ public class LatexAnnotatedTextBuilderTest {
     assertPlainText(
         "\\section{Heading}\n"
         + "This is a test.\n"
-        + "\\subsection{This is another heading.}\n"
+        + "\\subsection[abc]{This is another heading.}\n"
         + "This is another test.\n",
         "Heading. This is a test. This is another heading. This is another test. ");
     assertPlainText(
