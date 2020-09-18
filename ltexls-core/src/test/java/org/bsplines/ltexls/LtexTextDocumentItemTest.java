@@ -7,9 +7,9 @@
 
 package org.bsplines.ltexls;
 
-import com.sun.tools.javac.util.List;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Collections;
 import org.checkerframework.checker.nullness.NullnessUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -97,11 +97,11 @@ public class LtexTextDocumentItemTest {
     Assertions.assertEquals(new Position(0, 6),
         NullnessUtil.castNonNull(document.getCaretPosition()));
 
-    document.applyTextChangeEvents(List.from(new TextDocumentContentChangeEvent[]{
+    document.applyTextChangeEvents(Arrays.asList(
         new TextDocumentContentChangeEvent(
           new Range(new Position(0, 6), new Position(0, 6)), 0, "5"),
         new TextDocumentContentChangeEvent(
-          new Range(new Position(0, 7), new Position(0, 7)), 0, "6")}));
+          new Range(new Position(0, 7), new Position(0, 7)), 0, "6")));
     Assertions.assertEquals("ac123456def", document.getText());
     assertNull(document.getCaretPosition());
   }
