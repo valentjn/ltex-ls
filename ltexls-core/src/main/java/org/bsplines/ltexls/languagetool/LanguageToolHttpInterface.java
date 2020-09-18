@@ -186,7 +186,7 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
             outputStream.write(buffer, 0, length);
           }
 
-          responseBody = outputStream.toString("UTF-8");
+          responseBody = outputStream.toString("utf-8");
           EntityUtils.consume(httpResponse.getEntity());
         } catch (IOException e) {
           Tools.logger.severe(Tools.i18n("couldNotReadHttpResponseFromLanguageTool",
