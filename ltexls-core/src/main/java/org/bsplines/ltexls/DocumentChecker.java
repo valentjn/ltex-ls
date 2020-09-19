@@ -103,8 +103,7 @@ public class DocumentChecker {
           Tools.i18n("obtainedRuleMatches", matches.size()));
       removeIgnoredMatches(matches);
     } catch (RuntimeException e) {
-      Tools.logger.severe(Tools.i18n("languageToolFailed", e.getMessage()));
-      e.printStackTrace();
+      Tools.logger.severe(Tools.i18n("languageToolFailed", e));
       return matches;
     }
 

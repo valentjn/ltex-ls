@@ -97,8 +97,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
         System.setOut(stdout);
       }
     } catch (RuntimeException | IOException e) {
-      Tools.logger.severe(Tools.i18n("languageToolFailed", e.getMessage()));
-      e.printStackTrace();
+      Tools.logger.severe(Tools.i18n("languageToolFailed", e));
       return Collections.emptyList();
     }
 
@@ -132,9 +131,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
           falseFriendRulePath);
       for (Rule rule : falseFriendRules) this.languageTool.addRule(rule);
     } catch (ParserConfigurationException | SAXException | IOException e) {
-      Tools.logger.warning(Tools.i18n("couldNotLoadFalseFriendRules",
-          falseFriendRulePath, e.getMessage()));
-      e.printStackTrace();
+      Tools.logger.warning(Tools.i18n("couldNotLoadFalseFriendRules", e, falseFriendRulePath));
     }
   }
 
@@ -145,9 +142,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     try {
       this.languageTool.activateLanguageModelRules(new File(languageModelRulesDirectory));
     } catch (IOException | RuntimeException e) {
-      Tools.logger.warning(Tools.i18n("couldNotLoadLanguageModel",
-          languageModelRulesDirectory, e.getMessage()));
-      e.printStackTrace();
+      Tools.logger.warning(Tools.i18n("couldNotLoadLanguageModel", e, languageModelRulesDirectory));
     }
   }
 
@@ -158,9 +153,8 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     try {
       this.languageTool.activateNeuralNetworkRules(new File(neuralNetworkRulesDirectory));
     } catch (IOException | RuntimeException e) {
-      Tools.logger.warning(Tools.i18n("couldNotLoadNeuralNetworkModel",
-          neuralNetworkRulesDirectory, e.getMessage()));
-      e.printStackTrace();
+      Tools.logger.warning(Tools.i18n("couldNotLoadNeuralNetworkModel", e,
+          neuralNetworkRulesDirectory));
     }
   }
 
@@ -171,9 +165,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     try {
       this.languageTool.activateWord2VecModelRules(new File(word2vecRulesDirectory));
     } catch (IOException | RuntimeException e) {
-      Tools.logger.warning(Tools.i18n("couldNotLoadWord2VecModel",
-          word2vecRulesDirectory, e.getMessage()));
-      e.printStackTrace();
+      Tools.logger.warning(Tools.i18n("couldNotLoadWord2VecModel", e, word2vecRulesDirectory));
     }
   }
 

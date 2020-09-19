@@ -64,8 +64,7 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
     try {
       this.url = new URL(new URL(uri), "v2/check");
     } catch (MalformedURLException e) {
-      Tools.logger.severe(Tools.i18n("couldNotParseHttpServerUri", uri, e.getMessage()));
-      e.printStackTrace();
+      Tools.logger.severe(Tools.i18n("couldNotParseHttpServerUri", e, uri));
     }
   }
 
@@ -136,7 +135,8 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
         builder.append(URLEncoder.encode(requestEntry.getKey(), "utf-8"))
             .append("=").append(URLEncoder.encode(requestEntry.getValue(), "utf-8"));
       } catch (UnsupportedEncodingException e) {
-        e.printStackTrace();
+        Tools.logger.severe(Tools.i18n(e));
+        return Collections.emptyList();
       }
     }
 
@@ -150,9 +150,7 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
       try {
         httpPost = new HttpPost(this.url.toURI());
       } catch (URISyntaxException e) {
-        Tools.logger.severe(Tools.i18n("couldNotParseHttpServerUri", this.url.toString(),
-            e.getMessage()));
-        e.printStackTrace();
+        Tools.logger.severe(Tools.i18n("couldNotParseHttpServerUri", e, this.url.toString()));
         return Collections.emptyList();
       }
 
@@ -162,8 +160,7 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
       try {
         httpResponse = httpClient.execute(httpPost);
       } catch (IOException e) {
-        Tools.logger.severe(Tools.i18n("couldNotSendHttpRequestToLanguageTool", e.getMessage()));
-        e.printStackTrace();
+        Tools.logger.severe(Tools.i18n("couldNotSendHttpRequestToLanguageTool", e));
         return Collections.emptyList();
       }
 
@@ -171,8 +168,7 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
         int statusCode = httpResponse.getStatusLine().getStatusCode();
 
         if (statusCode != 200) {
-          Tools.logger.severe(Tools.i18n("languageToolFailed",
-              Tools.i18n("receivedStatusCodeFromLanguageTool", statusCode)));
+          Tools.logger.severe(Tools.i18n("languageToolFailedWithStatusCode", statusCode));
           return Collections.emptyList();
         }
 
@@ -189,24 +185,21 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
           responseBody = outputStream.toString("utf-8");
           EntityUtils.consume(httpResponse.getEntity());
         } catch (IOException e) {
-          Tools.logger.severe(Tools.i18n("couldNotReadHttpResponseFromLanguageTool",
-              e.getMessage()));
-          e.printStackTrace();
+          Tools.logger.severe(Tools.i18n("couldNotReadHttpResponseFromLanguageTool", e));
           return Collections.emptyList();
         }
       } finally {
         try {
           if (httpResponse != null) httpResponse.close();
         } catch (IOException e) {
-          Tools.logger.warning(Tools.i18n("couldNotCloseHttpResponseForLanguageTool",
-              e.getMessage()));
+          Tools.logger.warning(Tools.i18n("couldNotCloseHttpResponseForLanguageTool", e));
         }
       }
     } finally {
       try {
         httpClient.close();
       } catch (IOException e) {
-        Tools.logger.warning(Tools.i18n("couldNotCloseHttpClientForLanguageTool", e.getMessage()));
+        Tools.logger.warning(Tools.i18n("couldNotCloseHttpClientForLanguageTool", e));
       }
     }
 

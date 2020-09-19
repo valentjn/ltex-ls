@@ -27,7 +27,7 @@ public class DictionaryFileWatcherRunnable implements Runnable {
     try {
       this.watchService = FileSystems.getDefault().newWatchService();
     } catch (IOException e) {
-      Tools.logger.warning(Tools.i18n("couldNotInitializeWatchService", e.getMessage()));
+      Tools.logger.warning(Tools.i18n("couldNotInitializeWatchService", e));
       this.watchService = null;
     }
   }
@@ -77,8 +77,8 @@ public class DictionaryFileWatcherRunnable implements Runnable {
           StandardWatchEventKinds.ENTRY_DELETE,
           StandardWatchEventKinds.ENTRY_MODIFY);
     } catch (IOException e) {
-      Tools.logger.warning(Tools.i18n("couldNotRegisterDictionaryDirectory",
-          directoryPath.toString(), e.getMessage()));
+      Tools.logger.warning(Tools.i18n("couldNotRegisterDictionaryDirectory", e,
+          directoryPath.toString()));
       return null;
     }
   }

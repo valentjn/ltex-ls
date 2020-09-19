@@ -83,7 +83,7 @@ class LtexWorkspaceService implements WorkspaceService {
       try {
         path = Paths.get(new URI(uriStr));
       } catch (URISyntaxException | IllegalArgumentException e) {
-        return failCommand(Tools.i18n("couldNotParseDocumentUri", e.getMessage()));
+        return failCommand(Tools.i18n("couldNotParseDocumentUri", e));
       }
 
       if (text == null) {

@@ -8,6 +8,8 @@
 package org.bsplines.ltexls;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -53,6 +55,22 @@ public class Tools {
     return formatter.format(args);
   }
 
+  public static String i18n(String key, Exception e, @Nullable Object... messageArguments) {
+    StringWriter stringWriter = new StringWriter();
+    stringWriter.write(i18n(key, messageArguments));
+    stringWriter.write(". ");
+    stringWriter.write(i18n(e));
+    return stringWriter.toString();
+  }
+
+  public static String i18n(Exception e) {
+    StringWriter stringWriter = new StringWriter();
+    stringWriter.write(i18n("followingExceptionOccurred"));
+    stringWriter.write("\n");
+    e.printStackTrace(new PrintWriter(stringWriter));
+    return stringWriter.toString();
+  }
+
   /**
    * Load the internationalized messages according to the default system locale.
    */
@@ -91,7 +109,7 @@ public class Tools {
     try {
       return new String(Files.readAllBytes(filePath), "utf-8");
     } catch (IOException e) {
-      Tools.logger.warning(Tools.i18n("couldNotReadFile", filePath.toString(), e.getMessage()));
+      Tools.logger.warning(Tools.i18n("couldNotReadFile", e, filePath.toString()));
       return null;
     }
   }
@@ -102,7 +120,7 @@ public class Tools {
           StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE,
           StandardOpenOption.SYNC);
     } catch (IOException e) {
-      Tools.logger.warning(Tools.i18n("couldNotWriteFile", filePath.toString(), e.getMessage()));
+      Tools.logger.warning(Tools.i18n("couldNotWriteFile", e, filePath.toString()));
     }
   }
 }
