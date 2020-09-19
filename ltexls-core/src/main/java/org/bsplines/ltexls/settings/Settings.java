@@ -22,13 +22,15 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.DiagnosticSeverity;
 
 public class Settings {
+  private static final Set<String> defaultEnabled =
+      new HashSet<>(Arrays.asList("markdown", "latex", "rsweave"));
   private static final Set<String> defaultDummyMarkdownNodeTypes =
       new HashSet<>(Arrays.asList("AutoLink", "Code"));
   private static final Set<String> defaultIgnoreMarkdownNodeTypes =
       new HashSet<>(Arrays.asList("CodeBlock", "FencedCodeBlock", "IndentedCodeBlock"));
   private static final Pattern tildePathPattern = Pattern.compile("^~($|/|\\\\)");
 
-  private @Nullable Boolean enabled = null;
+  private @Nullable Set<String> enabled = null;
   private @Nullable String languageShortCode = null;
   private @Nullable Map<String, Set<String>> dictionary = null;
   private @Nullable Map<String, Set<String>> disabledRules = null;
@@ -171,7 +173,13 @@ public class Settings {
   private void setSettings(@UnknownInitialization(Object.class) Settings this,
         JsonElement jsonSettings) {
     try {
-      this.enabled = getSettingFromJson(jsonSettings, "enabled").getAsBoolean();
+      JsonElement jsonElement = getSettingFromJson(jsonSettings, "enabled");
+
+      if (jsonElement.isJsonArray()) {
+        this.enabled = convertJsonArrayToSet(jsonElement.getAsJsonArray());
+      } else {
+        this.enabled = (jsonElement.getAsBoolean() ? defaultEnabled : Collections.emptySet());
+      }
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       this.enabled = null;
     }
@@ -496,8 +504,8 @@ public class Settings {
     return (((map != null) && map.containsKey(key)) ? map.get(key) : defaultValue);
   }
 
-  public Boolean isEnabled() {
-    return getDefault(this.enabled, true);
+  public Set<String> getEnabled() {
+    return getDefault(this.enabled, defaultEnabled);
   }
 
   public String getLanguageShortCode() {
@@ -581,10 +589,14 @@ public class Settings {
     return getDefault(this.clearDiagnosticsWhenClosingFile, true);
   }
 
-  public Settings withEnabled(Boolean enabled) {
+  public Settings withEnabled(Set<String> enabled) {
     Settings obj = new Settings(this);
     obj.enabled = enabled;
     return obj;
+  }
+
+  public Settings withEnabled(boolean enabled) {
+    return withEnabled(enabled ? defaultEnabled : Collections.emptySet());
   }
 
   public Settings withLanguageShortCode(String languageShortCode) {

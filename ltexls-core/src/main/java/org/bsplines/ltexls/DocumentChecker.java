@@ -76,8 +76,9 @@ public class DocumentChecker {
     if (languageToolInterface == null) {
       Tools.logger.warning(Tools.i18n("skippingTextCheckAsLanguageToolHasNotBeenInitialized"));
       return Collections.emptyList();
-    } else if (!settings.isEnabled()) {
-      Tools.logger.info(Tools.i18n("skippingTextCheckAsLtexHasBeenDisabled"));
+    } else if (!settings.getEnabled().contains(codeFragment.getCodeLanguageId())) {
+      Tools.logger.info(Tools.i18n("skippingTextCheckAsLtexHasBeenDisabled",
+          codeFragment.getCodeLanguageId()));
       return Collections.emptyList();
     } else if (settings.getDictionary().contains("BsPlInEs")) {
       languageToolInterface.enableEasterEgg();

@@ -45,7 +45,11 @@ public class SettingsTest {
     Settings settings2 = new Settings();
 
     settings = settings.withEnabled(false);
-    Assertions.assertEquals(false, settings.isEnabled());
+    Assertions.assertEquals(Collections.emptySet(), settings.getEnabled());
+    settings2 = compareSettings(settings, settings2);
+
+    settings = settings.withEnabled(Collections.singleton("markdown"));
+    Assertions.assertEquals(Collections.singleton("markdown"), settings.getEnabled());
     settings2 = compareSettings(settings, settings2);
 
     settings = settings.withLanguageShortCode("languageShortCode");
