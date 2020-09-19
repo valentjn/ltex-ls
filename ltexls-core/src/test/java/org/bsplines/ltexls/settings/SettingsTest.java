@@ -11,7 +11,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -173,7 +172,7 @@ public class SettingsTest {
       Thread.sleep(200);
       Assertions.assertEquals(incompleteFullDictionary, settingsManager.getFullDictionary());
 
-      Files.write(tmpFile.toPath(), "Test3\nTest4\n".getBytes("utf-8"));
+      Tools.writeFile(tmpFile.toPath(), "Test3\nTest4\n");
       Thread.sleep(200);
       Assertions.assertEquals(fullDictionary, settingsManager.getFullDictionary());
     } finally {

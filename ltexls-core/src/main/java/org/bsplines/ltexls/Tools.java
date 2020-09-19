@@ -10,6 +10,7 @@ package org.bsplines.ltexls;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -92,6 +93,16 @@ public class Tools {
     } catch (IOException e) {
       Tools.logger.warning(Tools.i18n("couldNotReadFile", filePath.toString(), e.getMessage()));
       return null;
+    }
+  }
+
+  public static void writeFile(Path filePath, String string) {
+    try {
+      Files.write(filePath, string.getBytes("utf-8"), StandardOpenOption.CREATE,
+          StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE,
+          StandardOpenOption.SYNC);
+    } catch (IOException e) {
+      Tools.logger.warning(Tools.i18n("couldNotWriteFile", filePath.toString(), e.getMessage()));
     }
   }
 }
