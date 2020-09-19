@@ -7,6 +7,9 @@
 
 package org.bsplines.ltexls;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -81,5 +84,14 @@ public class Tools {
     return ((position1.getLine() < position2.getLine())
         || ((position1.getLine() == position2.getLine())
         && (position1.getCharacter() < position2.getCharacter())));
+  }
+
+  public static @Nullable String readFile(Path filePath) {
+    try {
+      return new String(Files.readAllBytes(filePath), "utf-8");
+    } catch (IOException e) {
+      Tools.logger.warning(Tools.i18n("couldNotReadFile", filePath.toString(), e.getMessage()));
+      return null;
+    }
   }
 }

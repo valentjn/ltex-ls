@@ -10,13 +10,14 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import org.bsplines.ltexls.Tools;
+import org.checkerframework.checker.nullness.NullnessUtil;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -94,8 +95,9 @@ public class LtexLanguageServerLauncherTest {
 
   @Test
   public void doTest() throws IOException, InterruptedException {
-    Path path = Paths.get("src", "test", "resources", "LtexLanguageServerTestLog.txt");
-    String log = new String(Files.readAllBytes(path), "utf-8");
+    @Nullable String log = Tools.readFile(
+        Paths.get("src", "test", "resources", "LtexLanguageServerTestLog.txt"));
+    Assertions.assertNotNull(NullnessUtil.castNonNull(log));
     List<LspMessage> messages = convertLogToMessages(log);
 
     for (LspMessage message : messages) {

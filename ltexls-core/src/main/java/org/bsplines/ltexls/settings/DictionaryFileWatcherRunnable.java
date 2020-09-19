@@ -9,7 +9,6 @@ package org.bsplines.ltexls.settings;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
@@ -59,7 +58,7 @@ public class DictionaryFileWatcherRunnable implements Runnable {
         @Nullable String fileContents = null;
 
         if (eventKind != StandardWatchEventKinds.ENTRY_DELETE) {
-          fileContents = DictionaryFileWatcherRunnable.readFile(filePath);
+          fileContents = Tools.readFile(filePath);
         }
 
         this.dictionaryFileWatcher.setFileContents(filePath, fileContents);
@@ -80,15 +79,6 @@ public class DictionaryFileWatcherRunnable implements Runnable {
     } catch (IOException e) {
       Tools.logger.warning(Tools.i18n("couldNotRegisterDictionaryDirectory",
           directoryPath.toString(), e.getMessage()));
-      return null;
-    }
-  }
-
-  public static @Nullable String readFile(Path filePath) {
-    try {
-      return new String(Files.readAllBytes(filePath), "utf-8");
-    } catch (IOException e) {
-      Tools.logger.warning(Tools.i18n("couldNotReadFile", filePath.toString(), e.getMessage()));
       return null;
     }
   }

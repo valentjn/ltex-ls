@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import org.bsplines.ltexls.Tools;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class DictionaryFileWatcher {
@@ -78,7 +79,7 @@ public class DictionaryFileWatcher {
 
     for (Path filePath : filePaths) {
       if (!this.fileContentsMap.containsKey(filePath)) {
-        @Nullable String fileContents = DictionaryFileWatcherRunnable.readFile(filePath);
+        @Nullable String fileContents = Tools.readFile(filePath);
         this.fileContentsMap.put(filePath, fileContents);
       }
     }

@@ -8,10 +8,8 @@
 package org.bsplines.ltexls;
 
 import com.google.gson.JsonObject;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -89,11 +87,8 @@ class LtexWorkspaceService implements WorkspaceService {
       }
 
       if (text == null) {
-        try {
-          text = new String(Files.readAllBytes(path), "utf-8");
-        } catch (IOException e) {
-          return failCommand(Tools.i18n("couldNotReadFile", path.toString(), e.getMessage()));
-        }
+        text = Tools.readFile(path);
+        if (text == null) return failCommand(Tools.i18n("couldNotReadFile", path.toString()));
       }
 
       if (codeLanguageId == null) {
