@@ -287,9 +287,9 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   }
 
   private void consumeEnvironmentArguments(String environmentName) {
-    while (this.pos < code.length()) {
+    while (this.pos < this.code.length()) {
       String environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
-          code, this.pos, LatexCommandSignature.ArgumentType.BRACE);
+          this.code, this.pos, LatexCommandSignature.ArgumentType.BRACE);
 
       if (!environmentArgument.isEmpty()) {
         addMarkup(environmentArgument);
@@ -297,7 +297,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
       }
 
       environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
-          code, this.pos, LatexCommandSignature.ArgumentType.BRACKET);
+          this.code, this.pos, LatexCommandSignature.ArgumentType.BRACKET);
 
       if (!environmentArgument.isEmpty()) {
         addMarkup(environmentArgument);
@@ -306,7 +306,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
 
       if (environmentName.equals("textblock") || environmentName.equals("textblock*")) {
         environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
-            code, this.pos, LatexCommandSignature.ArgumentType.PARENTHESIS);
+            this.code, this.pos, LatexCommandSignature.ArgumentType.PARENTHESIS);
 
         if (!environmentArgument.isEmpty()) {
           addMarkup(environmentArgument);
