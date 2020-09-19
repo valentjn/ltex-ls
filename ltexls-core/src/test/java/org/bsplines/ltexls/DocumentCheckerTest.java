@@ -227,7 +227,7 @@ public class DocumentCheckerTest {
   public void testIgnoreRuleSentencePairs() {
     LtexTextDocumentItem document = createDocument("plaintext",
         "This is an unknownword.\n");
-    Settings settings = (new Settings()).withIgnoreRuleSentencePairs(Collections.singletonList(
+    Settings settings = (new Settings()).withIgnoreRuleSentencePairs(Collections.singleton(
         new IgnoreRuleSentencePair("MORFOLOGIK_RULE_EN_US", "This is an unknownword\\.")));
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         checkDocument(document, settings);

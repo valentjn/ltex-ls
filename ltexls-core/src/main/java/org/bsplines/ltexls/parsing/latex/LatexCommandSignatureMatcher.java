@@ -23,7 +23,7 @@ public class LatexCommandSignatureMatcher {
   private Pattern commandPattern;
   private @Nullable String code;
   private @Nullable Matcher matcher;
-  private @Nullable List<String> ignoreCommandPrototypes;
+  private @Nullable Set<String> ignoreCommandPrototypes;
 
   public LatexCommandSignatureMatcher(LatexCommandSignature commandSignature) {
     this(Collections.singletonList(commandSignature));
@@ -55,17 +55,17 @@ public class LatexCommandSignatureMatcher {
     this.ignoreCommandPrototypes = null;
   }
 
-  public void startMatching(String code, List<String> ignoreCommandPrototypes) {
+  public void startMatching(String code, Set<String> ignoreCommandPrototypes) {
     this.code = code;
     this.matcher = this.commandPattern.matcher(code);
-    this.ignoreCommandPrototypes = new ArrayList<String>(ignoreCommandPrototypes);
+    this.ignoreCommandPrototypes = new HashSet<String>(ignoreCommandPrototypes);
   }
 
   public @Nullable LatexCommandSignatureMatch findNextMatch() {
     // fixes false-positive dereference.of.nullable warnings
     @Nullable String code = this.code;
     @Nullable Matcher matcher = this.matcher;
-    @Nullable List<String> ignoreCommandPrototypes = this.ignoreCommandPrototypes;
+    @Nullable Set<String> ignoreCommandPrototypes = this.ignoreCommandPrototypes;
     if ((code == null) || (matcher == null) || (ignoreCommandPrototypes == null)) return null;
 
     while (matcher.find()) {

@@ -10,12 +10,10 @@ package org.bsplines.ltexls.settings;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -24,10 +22,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.DiagnosticSeverity;
 
 public class Settings {
-  private static final List<String> defaultDummyMarkdownNodeTypes =
-      Arrays.asList("AutoLink", "Code");
-  private static final List<String> defaultIgnoreMarkdownNodeTypes =
-      Arrays.asList("CodeBlock", "FencedCodeBlock", "IndentedCodeBlock");
+  private static final Set<String> defaultDummyMarkdownNodeTypes =
+      new HashSet<>(Arrays.asList("AutoLink", "Code"));
+  private static final Set<String> defaultIgnoreMarkdownNodeTypes =
+      new HashSet<>(Arrays.asList("CodeBlock", "FencedCodeBlock", "IndentedCodeBlock"));
   private static final Pattern tildePathPattern = Pattern.compile("^~($|/|\\\\)");
 
   private @Nullable Boolean enabled = null;
@@ -36,12 +34,12 @@ public class Settings {
   private @Nullable Map<String, Set<String>> disabledRules = null;
   private @Nullable Map<String, Set<String>> enabledRules = null;
   private @Nullable String languageToolHttpServerUri = null;
-  private @Nullable List<String> dummyCommandPrototypes = null;
-  private @Nullable List<String> ignoreCommandPrototypes = null;
-  private @Nullable List<String> ignoreEnvironments = null;
-  private @Nullable List<String> dummyMarkdownNodeTypes = null;
-  private @Nullable List<String> ignoreMarkdownNodeTypes = null;
-  private @Nullable List<IgnoreRuleSentencePair> ignoreRuleSentencePairs = null;
+  private @Nullable Set<String> dummyCommandPrototypes = null;
+  private @Nullable Set<String> ignoreCommandPrototypes = null;
+  private @Nullable Set<String> ignoreEnvironments = null;
+  private @Nullable Set<String> dummyMarkdownNodeTypes = null;
+  private @Nullable Set<String> ignoreMarkdownNodeTypes = null;
+  private @Nullable Set<IgnoreRuleSentencePair> ignoreRuleSentencePairs = null;
   private @Nullable String motherTongueShortCode = null;
   private @Nullable String languageModelRulesDirectory = null;
   private @Nullable String neuralNetworkModelRulesDirectory = null;
@@ -66,17 +64,17 @@ public class Settings {
     this.enabledRules = ((obj.enabledRules == null) ? null : copyMapOfSets(obj.enabledRules));
     this.languageToolHttpServerUri = obj.languageToolHttpServerUri;
     this.dummyCommandPrototypes = ((obj.dummyCommandPrototypes == null) ? null
-        : new ArrayList<>(obj.dummyCommandPrototypes));
+        : new HashSet<>(obj.dummyCommandPrototypes));
     this.ignoreCommandPrototypes = ((obj.ignoreCommandPrototypes == null) ? null
-        : new ArrayList<>(obj.ignoreCommandPrototypes));
+        : new HashSet<>(obj.ignoreCommandPrototypes));
     this.ignoreEnvironments = ((obj.ignoreEnvironments == null) ? null
-        : new ArrayList<>(obj.ignoreEnvironments));
+        : new HashSet<>(obj.ignoreEnvironments));
     this.dummyMarkdownNodeTypes = ((obj.dummyMarkdownNodeTypes == null) ? null
-        : new ArrayList<>(obj.dummyMarkdownNodeTypes));
+        : new HashSet<>(obj.dummyMarkdownNodeTypes));
     this.ignoreMarkdownNodeTypes = ((obj.ignoreMarkdownNodeTypes == null) ? null
-        : new ArrayList<>(obj.ignoreMarkdownNodeTypes));
+        : new HashSet<>(obj.ignoreMarkdownNodeTypes));
     this.ignoreRuleSentencePairs = ((obj.ignoreRuleSentencePairs == null) ? null
-        : new ArrayList<>(obj.ignoreRuleSentencePairs));
+        : new HashSet<>(obj.ignoreRuleSentencePairs));
     this.motherTongueShortCode = obj.motherTongueShortCode;
     this.languageModelRulesDirectory = obj.languageModelRulesDirectory;
     this.neuralNetworkModelRulesDirectory = obj.neuralNetworkModelRulesDirectory;
@@ -119,8 +117,8 @@ public class Settings {
     return jsonSettings;
   }
 
-  private static List<String> convertJsonArrayToList(JsonArray array) {
-    List<String> list = new ArrayList<>();
+  private static Set<String> convertJsonArrayToSet(JsonArray array) {
+    Set<String> list = new HashSet<>();
     for (JsonElement element : array) list.add(element.getAsString());
     return list;
   }
@@ -129,7 +127,7 @@ public class Settings {
     Map<String, Set<String>> map = new HashMap<>();
 
     for (String key : object.keySet()) {
-      map.put(key, new HashSet<>(convertJsonArrayToList(object.get(key).getAsJsonArray())));
+      map.put(key, convertJsonArrayToSet(object.get(key).getAsJsonArray()));
     }
 
     return map;
@@ -237,45 +235,45 @@ public class Settings {
     }
 
     try {
-      this.dummyCommandPrototypes = convertJsonArrayToList(
+      this.dummyCommandPrototypes = convertJsonArrayToSet(
           getSettingFromJson(jsonSettings, "commands.dummy").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       this.dummyCommandPrototypes = null;
     }
 
     try {
-      this.ignoreCommandPrototypes = convertJsonArrayToList(
+      this.ignoreCommandPrototypes = convertJsonArrayToSet(
           getSettingFromJson(jsonSettings, "commands.ignore").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       this.ignoreCommandPrototypes = null;
     }
 
     try {
-      this.ignoreEnvironments = convertJsonArrayToList(
+      this.ignoreEnvironments = convertJsonArrayToSet(
           getSettingFromJson(jsonSettings, "environments.ignore").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       this.ignoreEnvironments = null;
     }
 
     try {
-      this.dummyMarkdownNodeTypes = convertJsonArrayToList(
+      this.dummyMarkdownNodeTypes = convertJsonArrayToSet(
           getSettingFromJson(jsonSettings, "markdown.dummy").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       this.dummyMarkdownNodeTypes = null;
     }
 
     try {
-      this.ignoreMarkdownNodeTypes = convertJsonArrayToList(
+      this.ignoreMarkdownNodeTypes = convertJsonArrayToSet(
           getSettingFromJson(jsonSettings, "markdown.ignore").getAsJsonArray());
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       this.ignoreMarkdownNodeTypes = null;
     }
 
     try {
-      this.ignoreRuleSentencePairs = new ArrayList<>();
+      this.ignoreRuleSentencePairs = new HashSet<>();
 
       // fixes false-positive dereference.of.nullable warning
-      List<IgnoreRuleSentencePair> ignoreRuleSentencePairs = this.ignoreRuleSentencePairs;
+      Set<IgnoreRuleSentencePair> ignoreRuleSentencePairs = this.ignoreRuleSentencePairs;
 
       for (JsonElement element :
             getSettingFromJson(jsonSettings, "ignoreRuleInSentence").getAsJsonArray()) {
@@ -525,34 +523,34 @@ public class Settings {
     return getDefault(this.languageToolHttpServerUri, "");
   }
 
-  public List<String> getDummyCommandPrototypes() {
-    return Collections.unmodifiableList(
-        getDefault(this.dummyCommandPrototypes, Collections.emptyList()));
+  public Set<String> getDummyCommandPrototypes() {
+    return Collections.unmodifiableSet(
+        getDefault(this.dummyCommandPrototypes, Collections.emptySet()));
   }
 
-  public List<String> getIgnoreCommandPrototypes() {
-    return Collections.unmodifiableList(
-        getDefault(this.ignoreCommandPrototypes, Collections.emptyList()));
+  public Set<String> getIgnoreCommandPrototypes() {
+    return Collections.unmodifiableSet(
+        getDefault(this.ignoreCommandPrototypes, Collections.emptySet()));
   }
 
-  public List<String> getIgnoreEnvironments() {
-    return Collections.unmodifiableList(
-        getDefault(this.ignoreEnvironments, Collections.emptyList()));
+  public Set<String> getIgnoreEnvironments() {
+    return Collections.unmodifiableSet(
+        getDefault(this.ignoreEnvironments, Collections.emptySet()));
   }
 
-  public List<String> getDummyMarkdownNodeTypes() {
-    return Collections.unmodifiableList(
+  public Set<String> getDummyMarkdownNodeTypes() {
+    return Collections.unmodifiableSet(
         getDefault(this.dummyMarkdownNodeTypes, defaultDummyMarkdownNodeTypes));
   }
 
-  public List<String> getIgnoreMarkdownNodeTypes() {
-    return Collections.unmodifiableList(
+  public Set<String> getIgnoreMarkdownNodeTypes() {
+    return Collections.unmodifiableSet(
         getDefault(this.ignoreMarkdownNodeTypes, defaultIgnoreMarkdownNodeTypes));
   }
 
-  public List<IgnoreRuleSentencePair> getIgnoreRuleSentencePairs() {
-    return Collections.unmodifiableList(
-        getDefault(this.ignoreRuleSentencePairs, Collections.emptyList()));
+  public Set<IgnoreRuleSentencePair> getIgnoreRuleSentencePairs() {
+    return Collections.unmodifiableSet(
+        getDefault(this.ignoreRuleSentencePairs, Collections.emptySet()));
   }
 
   public String getMotherTongueShortCode() {
@@ -622,40 +620,39 @@ public class Settings {
     return obj;
   }
 
-  public Settings withDummyCommandPrototypes(List<String> dummyCommandPrototypes) {
+  public Settings withDummyCommandPrototypes(Set<String> dummyCommandPrototypes) {
     Settings obj = new Settings(this);
-    obj.dummyCommandPrototypes = new ArrayList<>(dummyCommandPrototypes);
+    obj.dummyCommandPrototypes = new HashSet<>(dummyCommandPrototypes);
     return obj;
   }
 
-  public Settings withIgnoreCommandPrototypes(List<String> ignoreCommandPrototypes) {
+  public Settings withIgnoreCommandPrototypes(Set<String> ignoreCommandPrototypes) {
     Settings obj = new Settings(this);
-    obj.ignoreCommandPrototypes = new ArrayList<>(ignoreCommandPrototypes);
+    obj.ignoreCommandPrototypes = new HashSet<>(ignoreCommandPrototypes);
     return obj;
   }
 
-  public Settings withIgnoreEnvironments(List<String> ignoreEnvironments) {
+  public Settings withIgnoreEnvironments(Set<String> ignoreEnvironments) {
     Settings obj = new Settings(this);
-    obj.ignoreEnvironments = new ArrayList<>(ignoreEnvironments);
+    obj.ignoreEnvironments = new HashSet<>(ignoreEnvironments);
     return obj;
   }
 
-  public Settings withDummyMarkdownNodeTypes(List<String> dummyMarkdownNodeTypes) {
+  public Settings withDummyMarkdownNodeTypes(Set<String> dummyMarkdownNodeTypes) {
     Settings obj = new Settings(this);
-    obj.dummyMarkdownNodeTypes = new ArrayList<>(dummyMarkdownNodeTypes);
+    obj.dummyMarkdownNodeTypes = new HashSet<>(dummyMarkdownNodeTypes);
     return obj;
   }
 
-  public Settings withIgnoreMarkdownNodeTypes(List<String> ignoreMarkdownNodeTypes) {
+  public Settings withIgnoreMarkdownNodeTypes(Set<String> ignoreMarkdownNodeTypes) {
     Settings obj = new Settings(this);
-    obj.ignoreMarkdownNodeTypes = new ArrayList<>(ignoreMarkdownNodeTypes);
+    obj.ignoreMarkdownNodeTypes = new HashSet<>(ignoreMarkdownNodeTypes);
     return obj;
   }
 
-  public Settings withIgnoreRuleSentencePairs(
-        List<IgnoreRuleSentencePair> ignoreRuleSentencePairs) {
+  public Settings withIgnoreRuleSentencePairs(Set<IgnoreRuleSentencePair> ignoreRuleSentencePairs) {
     Settings obj = new Settings(this);
-    obj.ignoreRuleSentencePairs = new ArrayList<>(ignoreRuleSentencePairs);
+    obj.ignoreRuleSentencePairs = new HashSet<>(ignoreRuleSentencePairs);
     return obj;
   }
 

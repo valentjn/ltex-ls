@@ -71,37 +71,37 @@ public class SettingsTest {
     settings2 = compareSettings(settings, settings2);
 
     settings = settings.withDummyCommandPrototypes(
-        Collections.singletonList("dummyCommandPrototypes"));
-    Assertions.assertEquals(Collections.singletonList("dummyCommandPrototypes"),
+        Collections.singleton("dummyCommandPrototypes"));
+    Assertions.assertEquals(Collections.singleton("dummyCommandPrototypes"),
         settings.getDummyCommandPrototypes());
     settings2 = compareSettings(settings, settings2);
 
     settings = settings.withIgnoreCommandPrototypes(
-        Collections.singletonList("ignoreCommandPrototypes"));
-    Assertions.assertEquals(Collections.singletonList("ignoreCommandPrototypes"),
+        Collections.singleton("ignoreCommandPrototypes"));
+    Assertions.assertEquals(Collections.singleton("ignoreCommandPrototypes"),
         settings.getIgnoreCommandPrototypes());
     settings2 = compareSettings(settings, settings2);
 
-    settings = settings.withIgnoreEnvironments(Collections.singletonList("ignoreEnvironments"));
-    Assertions.assertEquals(Collections.singletonList("ignoreEnvironments"),
+    settings = settings.withIgnoreEnvironments(Collections.singleton("ignoreEnvironments"));
+    Assertions.assertEquals(Collections.singleton("ignoreEnvironments"),
         settings.getIgnoreEnvironments());
     settings2 = compareSettings(settings, settings2);
 
     settings = settings.withDummyMarkdownNodeTypes(
-        Collections.singletonList("dummyMarkdownNodeTypes"));
-    Assertions.assertEquals(Collections.singletonList("dummyMarkdownNodeTypes"),
+        Collections.singleton("dummyMarkdownNodeTypes"));
+    Assertions.assertEquals(Collections.singleton("dummyMarkdownNodeTypes"),
         settings.getDummyMarkdownNodeTypes());
     settings2 = compareSettings(settings, settings2);
 
     settings = settings.withIgnoreMarkdownNodeTypes(
-        Collections.singletonList("ignoreMarkdownNodeTypes"));
-    Assertions.assertEquals(Collections.singletonList("ignoreMarkdownNodeTypes"),
+        Collections.singleton("ignoreMarkdownNodeTypes"));
+    Assertions.assertEquals(Collections.singleton("ignoreMarkdownNodeTypes"),
         settings.getIgnoreMarkdownNodeTypes());
     settings2 = compareSettings(settings, settings2);
 
-    settings = settings.withIgnoreRuleSentencePairs(Collections.singletonList(
+    settings = settings.withIgnoreRuleSentencePairs(Collections.singleton(
         new IgnoreRuleSentencePair("ruleId", "sentenceString")));
-    Assertions.assertEquals(Collections.singletonList(
+    Assertions.assertEquals(Collections.singleton(
         new IgnoreRuleSentencePair("ruleId", "sentenceString")),
         settings.getIgnoreRuleSentencePairs());
     settings2 = compareSettings(settings, settings2);

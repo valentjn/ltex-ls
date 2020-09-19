@@ -9,7 +9,7 @@ package org.bsplines.ltexls.parsing.markdown;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
 import org.bsplines.ltexls.settings.Settings;
 import org.junit.jupiter.api.Assertions;
@@ -18,17 +18,17 @@ import org.languagetool.markup.AnnotatedText;
 
 public class MarkdownAnnotatedTextBuilderTest {
   private static void assertPlainText(String code, String expectedPlainText) {
-    assertPlainText(code, expectedPlainText, Collections.emptyList(), Collections.emptyList());
+    assertPlainText(code, expectedPlainText, Collections.emptySet(), Collections.emptySet());
   }
 
   private static void assertPlainText(String code, String expectedPlainText,
-        List<String> ignoreNodeTypes, List<String> dummyNodeTypes) {
+        Set<String> ignoreNodeTypes, Set<String> dummyNodeTypes) {
     AnnotatedText annotatedText = buildAnnotatedText(code, ignoreNodeTypes, dummyNodeTypes);
     Assertions.assertEquals(expectedPlainText, annotatedText.getPlainText());
   }
 
   private static AnnotatedText buildAnnotatedText(String code,
-        List<String> ignoreNodeTypes, List<String> dummyNodeTypes) {
+        Set<String> ignoreNodeTypes, Set<String> dummyNodeTypes) {
     CodeAnnotatedTextBuilder builder = CodeAnnotatedTextBuilder.create("markdown");
     Settings settings = (new Settings()).withIgnoreMarkdownNodeTypes(ignoreNodeTypes)
         .withDummyMarkdownNodeTypes(dummyNodeTypes);
@@ -49,7 +49,7 @@ public class MarkdownAnnotatedTextBuilderTest {
     assertPlainText(
         "This is a test: `inline code`.\n\n```\ncode block\n```\n\nThis is another sentence.\n",
         "This is a test: Dummy0.\n\n\n\n\n\nThis is another sentence.\n",
-        Collections.singletonList("FencedCodeBlock"), Collections.singletonList("Code"));
+        Collections.singleton("FencedCodeBlock"), Collections.singleton("Code"));
     assertPlainText(
         "---\n"
         + "# This is YAML front matter\n"

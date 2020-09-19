@@ -10,6 +10,7 @@ package org.bsplines.ltexls;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import org.apache.commons.text.StringEscapeUtils;
 import org.bsplines.ltexls.languagetool.LanguageToolInterface;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
@@ -66,7 +67,8 @@ public class DocumentChecker {
 
   private List<LanguageToolRuleMatch> checkAnnotatedTextFragment(
         AnnotatedTextFragment annotatedTextFragment) {
-    Settings settings = annotatedTextFragment.getCodeFragment().getSettings();
+    CodeFragment codeFragment = annotatedTextFragment.getCodeFragment();
+    Settings settings = codeFragment.getSettings();
     this.settingsManager.setSettings(settings);
     @Nullable LanguageToolInterface languageToolInterface =
         this.settingsManager.getLanguageToolInterface();
@@ -117,7 +119,7 @@ public class DocumentChecker {
 
   private void removeIgnoredMatches(List<LanguageToolRuleMatch> matches) {
     Settings settings = this.settingsManager.getSettings();
-    List<IgnoreRuleSentencePair> ignoreRuleSentencePairs = settings.getIgnoreRuleSentencePairs();
+    Set<IgnoreRuleSentencePair> ignoreRuleSentencePairs = settings.getIgnoreRuleSentencePairs();
 
     if (!matches.isEmpty() && !ignoreRuleSentencePairs.isEmpty()) {
       List<LanguageToolRuleMatch> ignoreMatches = new ArrayList<>();
