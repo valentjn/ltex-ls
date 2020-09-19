@@ -286,6 +286,38 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     return (text.contains("\n\n") || text.contains("\r\r") || text.contains("\r\n\r\n"));
   }
 
+  private void consumeEnvironmentArguments(String environmentName) {
+    while (this.pos < code.length()) {
+      String environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
+          code, this.pos, LatexCommandSignature.ArgumentType.BRACE);
+
+      if (!environmentArgument.isEmpty()) {
+        addMarkup(environmentArgument);
+        continue;
+      }
+
+      environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
+          code, this.pos, LatexCommandSignature.ArgumentType.BRACKET);
+
+      if (!environmentArgument.isEmpty()) {
+        addMarkup(environmentArgument);
+        continue;
+      }
+
+      if (environmentName.equals("textblock") || environmentName.equals("textblock*")) {
+        environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
+            code, this.pos, LatexCommandSignature.ArgumentType.PARENTHESIS);
+
+        if (!environmentArgument.isEmpty()) {
+          addMarkup(environmentArgument);
+          continue;
+        }
+      }
+
+      break;
+    }
+  }
+
   /**
    * Add LaTeX code to the builder, i.e., parse it and call @c addText and @c addMarkup.
    *
@@ -380,26 +412,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                 this.isMathCharTrivial = true;
                 this.preserveDummyLast = true;
                 addMarkup(argument, interpretAs);
-
-                if (command.equals("\\begin")) {
-                  while (this.pos < code.length()) {
-                    String environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
-                        code, this.pos, LatexCommandSignature.ArgumentType.BRACE);
-
-                    if (!environmentArgument.isEmpty()) {
-                      addMarkup(environmentArgument);
-                    } else {
-                      environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
-                          code, this.pos, LatexCommandSignature.ArgumentType.BRACKET);
-
-                      if (!environmentArgument.isEmpty()) {
-                        addMarkup(environmentArgument);
-                      } else {
-                        break;
-                      }
-                    }
-                  }
-                }
+                if (command.equals("\\begin")) consumeEnvironmentArguments(environmentName);
               }
             } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
               addMarkup(command, command.substring(1));

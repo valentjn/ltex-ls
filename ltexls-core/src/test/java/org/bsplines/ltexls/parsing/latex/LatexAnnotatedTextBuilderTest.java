@@ -125,6 +125,13 @@ public class LatexAnnotatedTextBuilderTest {
         + "This is a test, \\iec an actual test \\ie{} test.\n",
         "This is a test, e.g., an actual test e.g. test. "
         + "This is a test, i.e., an actual test i.e. test. ");
+    assertPlainText(
+        "This is a test.\n"
+        + "\\begin{textblock*}{1mm}[2mm,3mm](4mm,5mm)\n"
+        + "  abc"
+        + "\\end{textblock*}\n"
+        + "This is another test.\n",
+        "This is a test. abc This is another test. ");
 
     {
       AnnotatedText annotatedText = buildAnnotatedText("\\cite{Kubota}*{Theorem 3.7}\n");
