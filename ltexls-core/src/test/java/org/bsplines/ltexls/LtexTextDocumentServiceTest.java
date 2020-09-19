@@ -55,7 +55,7 @@ public class LtexTextDocumentServiceTest {
     Assertions.assertDoesNotThrow(() -> service.resolveCompletionItem(new CompletionItem()));
     Assertions.assertDoesNotThrow(() -> service.signatureHelp(new SignatureHelpParams()));
 
-    TextDocumentItem document = new TextDocumentItem("untitled:test.txt", "plaintext", 1, "");
+    TextDocumentItem document = new TextDocumentItem("untitled:test.md", "markdown", 1, "");
     VersionedTextDocumentIdentifier versionedDocument =
         new VersionedTextDocumentIdentifier(document.getUri(), 2);
 

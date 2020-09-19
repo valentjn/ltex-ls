@@ -180,7 +180,7 @@ public class DocumentCheckerTest {
 
   @Test
   public void testCodeActionGenerator() {
-    LtexTextDocumentItem document = createDocument("plaintext",
+    LtexTextDocumentItem document = createDocument("markdown",
         "This is an unknownword.\n");
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         checkDocument(document);
@@ -225,7 +225,7 @@ public class DocumentCheckerTest {
 
   @Test
   public void testIgnoreRuleSentencePairs() {
-    LtexTextDocumentItem document = createDocument("plaintext",
+    LtexTextDocumentItem document = createDocument("markdown",
         "This is an unknownword.\n");
     Settings settings = (new Settings()).withIgnoreRuleSentencePairs(Collections.singleton(
         new IgnoreRuleSentencePair("MORFOLOGIK_RULE_EN_US", "This is an unknownword\\.")));

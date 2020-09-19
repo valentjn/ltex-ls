@@ -37,7 +37,7 @@ public class LtexTextDocumentItemTest {
   public void testConvertPosition() {
     LtexTextDocumentItem document;
 
-    document = new LtexTextDocumentItem("untitled:test.txt", "plaintext", 1,
+    document = new LtexTextDocumentItem("untitled:test.md", "markdown", 1,
         "Hello\nEnthusiastic\r\nReader!");
     assertPosition(document, 0, new Position(0, 0));
     assertPosition(document, 6, new Position(1, 0));
@@ -52,7 +52,7 @@ public class LtexTextDocumentItemTest {
     Assertions.assertEquals(5, document.convertPosition(new Position(0, 20)));
     Assertions.assertEquals(18, document.convertPosition(new Position(1, 20)));
 
-    document = new LtexTextDocumentItem("untitled:test.txt", "plaintext", 1, "\nHi");
+    document = new LtexTextDocumentItem("untitled:test.md", "markdown", 1, "\nHi");
     Assertions.assertEquals(new Position(1, 0), document.convertPosition(1));
     assertPosition(document, 1, new Position(1, 0));
   }
@@ -60,7 +60,7 @@ public class LtexTextDocumentItemTest {
   @Test
   public void testApplyTextChangeEvents() {
     LtexTextDocumentItem document = new LtexTextDocumentItem(
-        "untitled:text.txt", "plaintext", 1, "abc");
+        "untitled:text.md", "markdown", 1, "abc");
 
     document.applyTextChangeEvent(new TextDocumentContentChangeEvent("abcdef"));
     Assertions.assertEquals("abcdef", document.getText());
@@ -109,13 +109,13 @@ public class LtexTextDocumentItemTest {
   @Test
   public void testProperties() {
     LtexTextDocumentItem origDocument = new LtexTextDocumentItem(
-        "untitled:text.txt", "plaintext", 1, "abc");
+        "untitled:text.md", "markdown", 1, "abc");
     Assertions.assertTrue(origDocument.equals(origDocument));
     Assertions.assertDoesNotThrow(() -> origDocument.hashCode());
 
     {
       LtexTextDocumentItem document = new LtexTextDocumentItem(
-          "untitled:text.txt", "plaintext", 1, "abc");
+          "untitled:text.md", "markdown", 1, "abc");
       document.setLastCaretChangeInstant(origDocument.getLastCaretChangeInstant());
       document.setDiagnostics(Collections.singletonList(new Diagnostic()));
       Assertions.assertEquals(1, document.getDiagnostics().size());
@@ -125,7 +125,7 @@ public class LtexTextDocumentItemTest {
 
     {
       LtexTextDocumentItem document = new LtexTextDocumentItem(
-          "untitled:text.txt", "plaintext", 1, "abc");
+          "untitled:text.md", "markdown", 1, "abc");
       document.setLastCaretChangeInstant(origDocument.getLastCaretChangeInstant());
       document.setCaretPosition(new Position(13, 37));
       Assertions.assertEquals(new Position(13, 37),
@@ -136,7 +136,7 @@ public class LtexTextDocumentItemTest {
 
     {
       LtexTextDocumentItem document = new LtexTextDocumentItem(
-          "untitled:text.txt", "plaintext", 1, "abc");
+          "untitled:text.md", "markdown", 1, "abc");
       Instant pastInstant = Instant.now().minus(Duration.ofSeconds(10));
       document.setLastCaretChangeInstant(pastInstant);
       Assertions.assertEquals(pastInstant, document.getLastCaretChangeInstant());
