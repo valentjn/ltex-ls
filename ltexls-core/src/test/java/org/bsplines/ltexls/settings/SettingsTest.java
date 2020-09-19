@@ -18,6 +18,8 @@ import org.bsplines.ltexls.Tools;
 import org.eclipse.lsp4j.DiagnosticSeverity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 public class SettingsTest {
   private static Settings compareSettings(Settings settings, Settings otherSettings) {
@@ -147,6 +149,7 @@ public class SettingsTest {
   }
 
   @Test
+  @DisabledOnOs(OS.MAC)
   public void testDictionaryFiles() throws InterruptedException, IOException {
     SettingsManager settingsManager = new SettingsManager();
 
