@@ -23,6 +23,7 @@ class LatexAnnotatedTextBuilderDefaults {
     List<LatexCommandSignature> list = new ArrayList<>();
 
     list.add(new LatexCommandSignature("\\addbibresource{}"));
+    list.add(new LatexCommandSignature("\\addcontentsline{}{}{}"));
     list.add(new LatexCommandSignature("\\addtocontents{}"));
     list.add(new LatexCommandSignature("\\addtocounter{}{}"));
     list.add(new LatexCommandSignature("\\addtokomafont{}{}"));
