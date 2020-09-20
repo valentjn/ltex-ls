@@ -46,7 +46,7 @@ public abstract class CodeAnnotatedTextBuilder extends AnnotatedTextBuilder {
     if (constructor != null) {
       return constructor.apply(codeLanguageId);
     } else {
-      Tools.logger.warning(Tools.i18n("invalidCodeLanguageId", codeLanguageId));
+      Tools.logger.warning(Tools.i18n("unsupportedCodeLanguageId", codeLanguageId));
       return new PlaintextAnnotatedTextBuilder();
     }
   }
