@@ -69,7 +69,7 @@ public class DictionaryFileWatcherRunnable implements Runnable {
   }
 
   public @Nullable WatchKey registerPath(Path directoryPath) {
-    if (this.watchService == null) return null;
+    if ((this.watchService == null) || (directoryPath == null)) return null;
 
     try {
       return directoryPath.register(this.watchService,

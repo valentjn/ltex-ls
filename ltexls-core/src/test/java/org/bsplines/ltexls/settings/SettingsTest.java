@@ -157,6 +157,9 @@ public class SettingsTest {
     Thread.sleep(200);
     Assertions.assertTrue(settingsManager.getFullDictionary().isEmpty());
 
+    Assertions.assertDoesNotThrow(() -> settingsManager.setSettings((new Settings()).withDictionary(
+        Collections.singleton(":nonExistentFile.txt"))));
+
     Set<String> incompleteFullDictionary = new HashSet<>();
     incompleteFullDictionary.add("Test1");
     incompleteFullDictionary.add("Test2");

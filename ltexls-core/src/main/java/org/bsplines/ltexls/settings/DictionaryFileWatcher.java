@@ -7,6 +7,8 @@
 
 package org.bsplines.ltexls.settings;
 
+import java.io.IOError;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.WatchKey;
@@ -52,9 +54,29 @@ public class DictionaryFileWatcher {
 
     for (String word : watchedDictionary) {
       if (word.startsWith(":")) {
-        Path filePath = Paths.get(word.substring(1));
+        String filePathString = word.substring(1);
+        @Nullable Path filePath = null;
+
+        try {
+          filePath = Paths.get(filePathString);
+        } catch (InvalidPathException e) {
+          Tools.logger.warning(Tools.i18n("couldNotParsePath", e, filePathString));
+          continue;
+        }
+
+        @Nullable Path directoryPath = null;
+
+        try {
+          filePath = filePath.toAbsolutePath();
+          directoryPath = filePath.getParent();
+          if (directoryPath == null) throw new NullPointerException("directoryPath");
+        } catch (IOError | NullPointerException e) {
+          Tools.logger.warning(Tools.i18n("couldNotGetParentOfPath", e, filePath.toString()));
+          continue;
+        }
+
         filePaths.add(filePath);
-        directoryPaths.add(filePath.getParent());
+        directoryPaths.add(directoryPath);
       }
     }
 
