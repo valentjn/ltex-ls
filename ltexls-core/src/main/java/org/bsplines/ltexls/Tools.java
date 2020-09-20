@@ -43,9 +43,39 @@ public class Tools {
    * @return formatted message
    */
   public static String i18n(String key, @Nullable Object... messageArguments) {
-    if (messages == null) return "could not get MessagesBundle";
+    String message;
+
+    if ((messages != null) && (key != null) && messages.containsKey(key)) {
+      message = messages.getString(key);
+    } else {
+      StringWriter stringWriter = new StringWriter();
+
+      if (key == null) {
+        stringWriter.write("could not get i18n message with null key");
+      } else if (messages == null) {
+        stringWriter.write("MessagesBundle is null while trying to get i18n message with key '");
+        stringWriter.write(key);
+        stringWriter.write("'");
+      } else {
+        stringWriter.write("i18n message with key '");
+        stringWriter.write(key);
+        stringWriter.write("' not found");
+      }
+
+      stringWriter.write(", message arguments: ");
+
+      for (int i = 0; i < messageArguments.length; i++) {
+        if (i > 0) stringWriter.write(", ");
+        stringWriter.write("'{");
+        stringWriter.write(Integer.toString(i));
+        stringWriter.write("}'");
+      }
+
+      message = stringWriter.toString();
+    }
+
     MessageFormat formatter = new MessageFormat("");
-    formatter.applyPattern(messages.getString(key).replaceAll("'", "''"));
+    formatter.applyPattern(message.replaceAll("'", "''"));
     Object[] args = new Object[messageArguments.length];
 
     for (int i = 0; i < messageArguments.length; i++) {
