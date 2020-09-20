@@ -105,7 +105,15 @@ public class DictionaryFileWatcher {
 
       if (word.startsWith(":")) {
         Path filePath = Paths.get(word.substring(1));
-        fileContents = this.fileContentsMap.get(filePath);
+        @Nullable String osName = System.getProperty("os.name");
+
+        if ((osName != null) && osName.toLowerCase().startsWith("mac")) {
+          // WatchService doesn't seem to work on Mac, maybe related to
+          // https://bugs.openjdk.java.net/browse/JDK-7133447
+          fileContents = Tools.readFile(filePath);
+        } else {
+          fileContents = this.fileContentsMap.get(filePath);
+        }
       }
 
       if (fileContents != null) {
