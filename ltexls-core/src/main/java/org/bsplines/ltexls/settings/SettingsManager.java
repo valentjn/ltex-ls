@@ -11,6 +11,7 @@ import com.google.gson.JsonElement;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
+import org.bsplines.ltexls.Tools;
 import org.bsplines.ltexls.languagetool.LanguageToolHttpInterface;
 import org.bsplines.ltexls.languagetool.LanguageToolInterface;
 import org.bsplines.ltexls.languagetool.LanguageToolJavaInterface;
@@ -135,10 +136,33 @@ public class SettingsManager {
     this.settings = newSettings;
     this.settingsMap.put(newLanguage, this.settings);
     Set<String> newFullDictionary = this.dictionaryFileWatcher.getFullDictionary();
+    Set<SettingsDifference> differences = newSettings.getDifferences(oldSettings);
+    boolean fullDictionariesEqual = newFullDictionary.equals(this.fullDictionary);
 
-    if (newSettings.equals(oldSettings) && newFullDictionary.equals(this.fullDictionary)) {
+    if (differences.isEmpty() && fullDictionariesEqual) {
       this.languageToolInterface = this.languageToolInterfaceMap.get(newLanguage);
     } else {
+      if (!fullDictionariesEqual) {
+        differences.add(new SettingsDifference("fullDictionary",
+            newFullDictionary, this.fullDictionary));
+      }
+
+      StringBuilder differencesStringBuilder = new StringBuilder();
+
+      for (SettingsDifference difference : differences) {
+        if (differencesStringBuilder.length() > 0) differencesStringBuilder.append("; ");
+        differencesStringBuilder.append("setting '");
+        differencesStringBuilder.append(difference.getName());
+        differencesStringBuilder.append("', old '");
+        differencesStringBuilder.append(difference.getOtherValue());
+        differencesStringBuilder.append("', new '");
+        differencesStringBuilder.append(difference.getValue());
+        differencesStringBuilder.append("'");
+      }
+
+      Tools.logger.info(Tools.i18n("reinitializingLanguageToolDueToDifferentSettings",
+          newLanguage, differencesStringBuilder.toString()));
+
       this.fullDictionary = newFullDictionary;
       reinitializeLanguageToolInterface();
       this.languageToolInterfaceMap.put(newLanguage, this.languageToolInterface);
