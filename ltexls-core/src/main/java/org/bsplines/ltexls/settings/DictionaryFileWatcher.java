@@ -38,15 +38,6 @@ public class DictionaryFileWatcher {
   }
 
   public synchronized void setWatchedDictionary(Collection<? extends String> watchedDictionary) {
-    if (this.dictionaryFileWatcherRunnable == null) {
-      this.dictionaryFileWatcherRunnable = new DictionaryFileWatcherRunnable(this);
-    }
-
-    if (this.watcherThread == null) {
-      this.watcherThread = new Thread(this.dictionaryFileWatcherRunnable);
-      this.watcherThread.start();
-    }
-
     this.watchedDictionary = new HashSet<>(watchedDictionary);
 
     Set<Path> directoryPaths = new HashSet<>();
@@ -99,13 +90,23 @@ public class DictionaryFileWatcher {
       if (!filePaths.contains(entry.getKey())) fileContentsIterator.remove();
     }
 
+    if (filePaths.isEmpty()) return;
+
+    if (this.dictionaryFileWatcherRunnable == null) {
+      this.dictionaryFileWatcherRunnable = new DictionaryFileWatcherRunnable(this);
+    }
+
+    if (this.watcherThread == null) {
+      this.watcherThread = new Thread(this.dictionaryFileWatcherRunnable);
+      this.watcherThread.start();
+    }
+
     for (Path filePath : filePaths) {
       if (!this.fileContentsMap.containsKey(filePath)) {
         @Nullable String fileContents = Tools.readFile(filePath);
         this.fileContentsMap.put(filePath, fileContents);
       }
     }
-
 
     for (Path directoryPath : directoryPaths) {
       if (!this.watchKeyMap.containsKey(directoryPath)) {
