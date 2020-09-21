@@ -148,12 +148,6 @@ public class SettingsManager {
     this.settingsMap.put(newLanguage, this.settings);
   }
 
-  private void setFullDictionary(String newLanguage) {
-    Set<String> newFullDictionary = this.dictionaryFileWatcher.getFullDictionary();
-    this.fullDictionary = newFullDictionary;
-    this.fullDictionaryMap.put(newLanguage, this.fullDictionary);
-  }
-
   private void setDictionaryFileWatcher(String newLanguage, Settings newSettings) {
     @Nullable DictionaryFileWatcher newDictionaryFileWatcher =
         this.dictionaryFileWatcherMap.get(newLanguage);
@@ -166,6 +160,12 @@ public class SettingsManager {
       this.dictionaryFileWatcher.setWatchedDictionary(newSettings.getDictionary());
       this.dictionaryFileWatcherMap.put(newLanguage, this.dictionaryFileWatcher);
     }
+  }
+
+  private void setFullDictionary(String newLanguage) {
+    Set<String> newFullDictionary = this.dictionaryFileWatcher.getFullDictionary();
+    this.fullDictionary = newFullDictionary;
+    this.fullDictionaryMap.put(newLanguage, this.fullDictionary);
   }
 
   private static void logDifferentSettings(String newLanguage,
