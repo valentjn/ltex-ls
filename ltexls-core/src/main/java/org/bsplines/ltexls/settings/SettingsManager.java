@@ -10,6 +10,7 @@ package org.bsplines.ltexls.settings;
 import com.google.gson.JsonElement;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import org.bsplines.ltexls.Tools;
 import org.bsplines.ltexls.languagetool.LanguageToolHttpInterface;
@@ -122,6 +123,38 @@ public class SettingsManager {
   public void setSettings(Settings newSettings) {
     String newLanguage = newSettings.getLanguageShortCode();
 
+    @Nullable final Settings oldSettings = this.settingsMap.get(newLanguage);
+    @Nullable final Set<String> oldFullDictionary = this.fullDictionaryMap.get(newLanguage);
+
+    setSettings(newLanguage, newSettings);
+    setDictionaryFileWatcher(newLanguage, newSettings);
+    setFullDictionary(newLanguage);
+
+    Set<SettingsDifference> settingsDifferences = newSettings.getDifferences(oldSettings);
+    boolean fullDictionariesEqual = this.fullDictionary.equals(oldFullDictionary);
+
+    if (settingsDifferences.isEmpty() && fullDictionariesEqual) {
+      this.languageToolInterface = this.languageToolInterfaceMap.get(newLanguage);
+    } else {
+      logDifferentSettings(newLanguage, settingsDifferences, fullDictionariesEqual,
+          oldFullDictionary, this.fullDictionary);
+      reinitializeLanguageToolInterface();
+      this.languageToolInterfaceMap.put(newLanguage, this.languageToolInterface);
+    }
+  }
+
+  private void setSettings(String newLanguage, Settings newSettings) {
+    this.settings = newSettings;
+    this.settingsMap.put(newLanguage, this.settings);
+  }
+
+  private void setFullDictionary(String newLanguage) {
+    Set<String> newFullDictionary = this.dictionaryFileWatcher.getFullDictionary();
+    this.fullDictionary = newFullDictionary;
+    this.fullDictionaryMap.put(newLanguage, this.fullDictionary);
+  }
+
+  private void setDictionaryFileWatcher(String newLanguage, Settings newSettings) {
     @Nullable DictionaryFileWatcher newDictionaryFileWatcher =
         this.dictionaryFileWatcherMap.get(newLanguage);
 
@@ -133,45 +166,32 @@ public class SettingsManager {
       this.dictionaryFileWatcher.setWatchedDictionary(newSettings.getDictionary());
       this.dictionaryFileWatcherMap.put(newLanguage, this.dictionaryFileWatcher);
     }
+  }
 
-    @Nullable final Settings oldSettings = this.settingsMap.get(newLanguage);
-    this.settings = newSettings;
-    this.settingsMap.put(newLanguage, this.settings);
+  private static void logDifferentSettings(String newLanguage,
+        Set<SettingsDifference> settingsDifferences, boolean fullDictionariesEqual,
+        @Nullable Set<String> oldFullDictionary, Set<String> newFullDictionary) {
+    Set<SettingsDifference> differences = new HashSet<>(settingsDifferences);
 
-    @Nullable Set<String> oldFullDictionary = this.fullDictionaryMap.get(newLanguage);
-    Set<String> newFullDictionary = this.dictionaryFileWatcher.getFullDictionary();
-    this.fullDictionary = newFullDictionary;
-    this.fullDictionaryMap.put(newLanguage, this.fullDictionary);
-
-    Set<SettingsDifference> differences = newSettings.getDifferences(oldSettings);
-    boolean fullDictionariesEqual = newFullDictionary.equals(oldFullDictionary);
-
-    if (differences.isEmpty() && fullDictionariesEqual) {
-      this.languageToolInterface = this.languageToolInterfaceMap.get(newLanguage);
-    } else {
-      if (!fullDictionariesEqual) {
-        differences.add(new SettingsDifference("fullDictionary",
-            newFullDictionary, oldFullDictionary));
-      }
-
-      StringBuilder differencesStringBuilder = new StringBuilder();
-
-      for (SettingsDifference difference : differences) {
-        if (differencesStringBuilder.length() > 0) differencesStringBuilder.append("; ");
-        differencesStringBuilder.append("setting '");
-        differencesStringBuilder.append(difference.getName());
-        differencesStringBuilder.append("', old '");
-        differencesStringBuilder.append(difference.getOtherValue());
-        differencesStringBuilder.append("', new '");
-        differencesStringBuilder.append(difference.getValue());
-        differencesStringBuilder.append("'");
-      }
-
-      Tools.logger.info(Tools.i18n("reinitializingLanguageToolDueToDifferentSettings",
-          newLanguage, differencesStringBuilder.toString()));
-
-      reinitializeLanguageToolInterface();
-      this.languageToolInterfaceMap.put(newLanguage, this.languageToolInterface);
+    if (!fullDictionariesEqual) {
+      differences.add(new SettingsDifference("fullDictionary",
+          newFullDictionary, oldFullDictionary));
     }
+
+    StringBuilder differencesStringBuilder = new StringBuilder();
+
+    for (SettingsDifference difference : differences) {
+      if (differencesStringBuilder.length() > 0) differencesStringBuilder.append("; ");
+      differencesStringBuilder.append("setting '");
+      differencesStringBuilder.append(difference.getName());
+      differencesStringBuilder.append("', old '");
+      differencesStringBuilder.append(difference.getOtherValue());
+      differencesStringBuilder.append("', new '");
+      differencesStringBuilder.append(difference.getValue());
+      differencesStringBuilder.append("'");
+    }
+
+    Tools.logger.info(Tools.i18n("reinitializingLanguageToolDueToDifferentSettings",
+        newLanguage, differencesStringBuilder.toString()));
   }
 }
