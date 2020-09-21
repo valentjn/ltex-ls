@@ -18,7 +18,7 @@ import org.bsplines.ltexls.settings.Settings;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class RegexCodeFragmentizer extends CodeFragmentizer {
-  private static Pattern splitSettingsPattern = Pattern.compile("\\s+");
+  private static final Pattern splitSettingsPattern = Pattern.compile("\\s+");
 
   private Pattern pattern;
 

@@ -23,34 +23,34 @@ import org.bsplines.ltexls.settings.Settings;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class LatexFragmentizer extends CodeFragmentizer {
-  private static Pattern commentPattern = Pattern.compile(
+  private static final Pattern commentPattern = Pattern.compile(
       "^\\s*%\\s*(?i)ltex(?-i):(?<settings>.*?)$", Pattern.MULTILINE);
 
-  private static LatexCommandSignature[] extraCommandSignatures = {
+  private static final LatexCommandSignature[] extraCommandSignatures = {
       new LatexCommandSignature("\\footnote{}"),
       new LatexCommandSignature("\\footnote[]{}"),
       new LatexCommandSignature("\\todo{}"),
       new LatexCommandSignature("\\todo[]{}"),
       };
-  private static LatexCommandSignatureMatcher extraCommandSignatureList =
+  private static final LatexCommandSignatureMatcher extraCommandSignatureList =
       new LatexCommandSignatureMatcher(Arrays.asList(extraCommandSignatures));
 
-  private static Pattern languageTagReplacementPattern = Pattern.compile("[^A-Za-z]+");
-  private static Map<String, String> babelLanguageMap = createBabelLanguageMap();
+  private static final Pattern languageTagReplacementPattern = Pattern.compile("[^A-Za-z]+");
+  private static final Map<String, String> babelLanguageMap = createBabelLanguageMap();
 
-  private static LatexCommandSignature babelSwitchCommandSignature =
+  private static final LatexCommandSignature babelSwitchCommandSignature =
       new LatexCommandSignature("\\selectlanguage{}");
-  private static LatexCommandSignatureMatcher babelSwitchCommandSignatureList =
+  private static final LatexCommandSignatureMatcher babelSwitchCommandSignatureList =
       new LatexCommandSignatureMatcher(Collections.singletonList(babelSwitchCommandSignature));
 
-  private static Map<LatexCommandSignature, String> babelInlineCommandSignatureMap =
+  private static final Map<LatexCommandSignature, String> babelInlineCommandSignatureMap =
       createBabelInlineCommandSignatureMap();
-  private static LatexCommandSignatureMatcher babelInlineCommandSignatureList =
+  private static final LatexCommandSignatureMatcher babelInlineCommandSignatureList =
       new LatexCommandSignatureMatcher(babelInlineCommandSignatureMap.keySet());
 
-  private static Map<LatexCommandSignature, String> babelEnvironmentCommandSignatureMap =
+  private static final Map<LatexCommandSignature, String> babelEnvironmentCommandSignatureMap =
       createBabelEnvironmentCommandSignatureMap();
-  private static LatexCommandSignatureMatcher babelEnvironmentCommandSignatureList =
+  private static final LatexCommandSignatureMatcher babelEnvironmentCommandSignatureList =
       new LatexCommandSignatureMatcher(babelEnvironmentCommandSignatureMap.keySet());
 
   private RegexCodeFragmentizer commentFragmentizer;

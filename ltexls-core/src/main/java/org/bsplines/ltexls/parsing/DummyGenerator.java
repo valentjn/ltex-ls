@@ -10,8 +10,8 @@ package org.bsplines.ltexls.parsing;
 public class DummyGenerator {
   private boolean plural;
 
-  private static DummyGenerator defaultGenerator = new DummyGenerator();
-  private static DummyGenerator defaultGeneratorPlural = new DummyGenerator(true);
+  private static final DummyGenerator defaultGenerator = new DummyGenerator();
+  private static final DummyGenerator defaultGeneratorPlural = new DummyGenerator(true);
 
   public DummyGenerator() {
     this(false);

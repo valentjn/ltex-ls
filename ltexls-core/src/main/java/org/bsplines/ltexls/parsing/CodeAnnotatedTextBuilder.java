@@ -19,7 +19,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.languagetool.markup.AnnotatedTextBuilder;
 
 public abstract class CodeAnnotatedTextBuilder extends AnnotatedTextBuilder {
-  private static Map<String, Function<String, CodeAnnotatedTextBuilder>> constructorMap =
+  private static final Map<String, Function<String, CodeAnnotatedTextBuilder>> constructorMap =
       new HashMap<>();
 
   static {

@@ -32,9 +32,9 @@ public class LspMessage {
   private Source source;
   private JsonObject body;
 
-  private static Pattern logPattern = Pattern.compile(
+  private static final Pattern logPattern = Pattern.compile(
       "\\[[^\\]]+\\] (\\S+) (\\S+) '([^' ]+)(?: - \\(([^\\)]+)\\))?'.*\\R(?:Params|Result): ");
-  private static Pattern headerPattern = Pattern.compile("(\\S+): (.*)\r\n");
+  private static final Pattern headerPattern = Pattern.compile("(\\S+): (.*)\r\n");
 
   /**
    * Constructor.

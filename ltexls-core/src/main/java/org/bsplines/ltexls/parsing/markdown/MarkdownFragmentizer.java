@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 import org.bsplines.ltexls.parsing.RegexCodeFragmentizer;
 
 public class MarkdownFragmentizer extends RegexCodeFragmentizer {
-  private static Pattern pattern = Pattern.compile(
+  private static final Pattern pattern = Pattern.compile(
       "^\\s*\\[[^\\]]+\\]:\\s*<>\\s*\"\\s*(?i)ltex(?-i):(?<settings>.*?)\"\\s*$",
       Pattern.MULTILINE);
 
