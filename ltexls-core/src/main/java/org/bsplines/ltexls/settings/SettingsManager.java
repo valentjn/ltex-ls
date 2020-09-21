@@ -22,12 +22,13 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 public class SettingsManager {
   private HashMap<String, Settings> settingsMap;
   private HashMap<String, DictionaryFileWatcher> dictionaryFileWatcherMap;
+  private HashMap<String, Set<String>> fullDictionaryMap;
   private HashMap<String, @Nullable LanguageToolInterface> languageToolInterfaceMap;
 
   private Settings settings;
   private DictionaryFileWatcher dictionaryFileWatcher;
-  private @Nullable LanguageToolInterface languageToolInterface;
   private Set<String> fullDictionary;
+  private @Nullable LanguageToolInterface languageToolInterface;
 
   public SettingsManager() {
     this(new Settings());
@@ -44,6 +45,8 @@ public class SettingsManager {
     this.settingsMap.put(language, this.settings);
     this.dictionaryFileWatcherMap = new HashMap<>();
     this.dictionaryFileWatcherMap.put(language, this.dictionaryFileWatcher);
+    this.fullDictionaryMap = new HashMap<>();
+    this.fullDictionaryMap.put(language, this.fullDictionary);
     this.languageToolInterfaceMap = new HashMap<>();
     this.languageToolInterfaceMap.put(language, this.languageToolInterface);
   }
@@ -131,20 +134,24 @@ public class SettingsManager {
       this.dictionaryFileWatcherMap.put(newLanguage, this.dictionaryFileWatcher);
     }
 
-    @Nullable Settings oldSettings = this.settingsMap.get(newLanguage);
-
+    @Nullable final Settings oldSettings = this.settingsMap.get(newLanguage);
     this.settings = newSettings;
     this.settingsMap.put(newLanguage, this.settings);
+
+    @Nullable Set<String> oldFullDictionary = this.fullDictionaryMap.get(newLanguage);
     Set<String> newFullDictionary = this.dictionaryFileWatcher.getFullDictionary();
+    this.fullDictionary = newFullDictionary;
+    this.fullDictionaryMap.put(newLanguage, this.fullDictionary);
+
     Set<SettingsDifference> differences = newSettings.getDifferences(oldSettings);
-    boolean fullDictionariesEqual = newFullDictionary.equals(this.fullDictionary);
+    boolean fullDictionariesEqual = newFullDictionary.equals(oldFullDictionary);
 
     if (differences.isEmpty() && fullDictionariesEqual) {
       this.languageToolInterface = this.languageToolInterfaceMap.get(newLanguage);
     } else {
       if (!fullDictionariesEqual) {
         differences.add(new SettingsDifference("fullDictionary",
-            newFullDictionary, this.fullDictionary));
+            newFullDictionary, oldFullDictionary));
       }
 
       StringBuilder differencesStringBuilder = new StringBuilder();
@@ -163,7 +170,6 @@ public class SettingsManager {
       Tools.logger.info(Tools.i18n("reinitializingLanguageToolDueToDifferentSettings",
           newLanguage, differencesStringBuilder.toString()));
 
-      this.fullDictionary = newFullDictionary;
       reinitializeLanguageToolInterface();
       this.languageToolInterfaceMap.put(newLanguage, this.languageToolInterface);
     }
