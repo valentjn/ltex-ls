@@ -63,6 +63,12 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
   @Override
   public CompletableFuture<InitializeResult> initialize(InitializeParams params) {
+    @Nullable Package ltexLsPackage = LtexLanguageServer.class.getPackage();
+    @Nullable String ltexLsVersion = ((ltexLsPackage != null)
+        ? ltexLsPackage.getImplementationVersion() : null);
+    Tools.logger.info(Tools.i18n("initializingLtexLs",
+        ((ltexLsVersion != null) ? ltexLsVersion : "null")));
+
     ServerCapabilities capabilities = new ServerCapabilities();
     capabilities.setTextDocumentSync(TextDocumentSyncKind.Incremental);
     capabilities.setCodeActionProvider(new CodeActionOptions(CodeActionGenerator.getCodeActions()));
@@ -89,12 +95,15 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
   @Override
   public CompletableFuture<Object> shutdown() {
+    Tools.logger.info(Tools.i18n("shuttingDownLtexLs"));
+
     // Per https://github.com/eclipse/lsp4j/issues/18
     return CompletableFuture.completedFuture(new Object());
   }
 
   @Override
   public void exit() {
+    Tools.logger.info(Tools.i18n("exitingLtexLs"));
     System.exit(0);
   }
 
