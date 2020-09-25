@@ -45,7 +45,7 @@ public class DictionaryFileWatcher {
 
     for (String word : watchedDictionary) {
       if (word.startsWith(":")) {
-        String filePathString = word.substring(1);
+        String filePathString = Tools.normalizePath(word.substring(1));
         @Nullable Path filePath = null;
 
         try {
@@ -127,7 +127,8 @@ public class DictionaryFileWatcher {
       @Nullable String fileContents = null;
 
       if (word.startsWith(":")) {
-        Path filePath = Paths.get(word.substring(1));
+        String filePathString = Tools.normalizePath(word.substring(1));
+        Path filePath = Paths.get(filePathString);
         @Nullable String osName = System.getProperty("os.name");
 
         if ((osName != null) && osName.toLowerCase().startsWith("mac")) {
