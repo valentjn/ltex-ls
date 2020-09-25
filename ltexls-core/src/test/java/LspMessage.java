@@ -14,9 +14,12 @@ import java.io.OutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.NullnessUtil;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.DefaultQualifier;
 import org.junit.jupiter.api.Assertions;
 
+@DefaultQualifier(NonNull.class)
 public class LspMessage {
   public enum Source {
     Client,

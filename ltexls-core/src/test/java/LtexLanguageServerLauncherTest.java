@@ -17,7 +17,9 @@ import java.util.concurrent.ExecutionException;
 import org.bsplines.ltexls.Tools;
 import org.checkerframework.checker.nullness.NullnessUtil;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.framework.qual.DefaultQualifier;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -26,6 +28,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 @TestInstance(Lifecycle.PER_CLASS)
+@DefaultQualifier(NonNull.class)
 public class LtexLanguageServerLauncherTest {
   private @MonotonicNonNull Thread launcherThread;
   private PipedInputStream in = new PipedInputStream();
