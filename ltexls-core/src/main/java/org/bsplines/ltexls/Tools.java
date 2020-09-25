@@ -19,6 +19,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.Position;
@@ -27,6 +28,7 @@ import org.eclipse.lsp4j.Range;
 public class Tools {
   private static @MonotonicNonNull ResourceBundle messages = null;
   public static final Logger logger = Logger.getLogger("org.bsplines.ltexls");
+  private static final Pattern tildePathPattern = Pattern.compile("^~($|/|\\\\)");
 
   static {
     setDefaultLocale();
@@ -133,6 +135,16 @@ public class Tools {
     return ((position1.getLine() < position2.getLine())
         || ((position1.getLine() == position2.getLine())
         && (position1.getCharacter() < position2.getCharacter())));
+  }
+
+  public static String normalizePath(String path) {
+    @Nullable String homeDirPath = System.getProperty("user.home");
+
+    if (homeDirPath != null) {
+      path = tildePathPattern.matcher(path).replaceFirst(homeDirPath + "$1");
+    }
+
+    return path;
   }
 
   public static @Nullable String readFile(Path filePath) {

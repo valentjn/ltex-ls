@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Pattern;
+import org.bsplines.ltexls.Tools;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.DiagnosticSeverity;
@@ -28,7 +28,6 @@ public class Settings {
       new HashSet<>(Arrays.asList("AutoLink", "Code"));
   private static final Set<String> defaultIgnoreMarkdownNodeTypes =
       new HashSet<>(Arrays.asList("CodeBlock", "FencedCodeBlock", "IndentedCodeBlock"));
-  private static final Pattern tildePathPattern = Pattern.compile("^~($|/|\\\\)");
 
   private @Nullable Set<String> enabled = null;
   private @Nullable String languageShortCode = null;
@@ -89,16 +88,6 @@ public class Settings {
 
   public Settings(JsonElement jsonSettings) {
     setSettings(jsonSettings);
-  }
-
-  private static String normalizePath(String path) {
-    @Nullable String homeDirPath = System.getProperty("user.home");
-
-    if (homeDirPath != null) {
-      path = tildePathPattern.matcher(path).replaceFirst(homeDirPath + "$1");
-    }
-
-    return path;
   }
 
   private static Map<String, Set<String>> copyMapOfSets(Map<String, Set<String>> map) {
@@ -615,15 +604,15 @@ public class Settings {
   }
 
   public String getLanguageModelRulesDirectory() {
-    return normalizePath(getDefault(this.languageModelRulesDirectory, ""));
+    return Tools.normalizePath(getDefault(this.languageModelRulesDirectory, ""));
   }
 
   public String getNeuralNetworkModelRulesDirectory() {
-    return normalizePath(getDefault(this.neuralNetworkModelRulesDirectory, ""));
+    return Tools.normalizePath(getDefault(this.neuralNetworkModelRulesDirectory, ""));
   }
 
   public String getWord2VecModelRulesDirectory() {
-    return normalizePath(getDefault(this.word2VecModelRulesDirectory, ""));
+    return Tools.normalizePath(getDefault(this.word2VecModelRulesDirectory, ""));
   }
 
   public Integer getSentenceCacheSize() {
