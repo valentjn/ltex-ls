@@ -19,6 +19,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -141,7 +142,8 @@ public class Tools {
     @Nullable String homeDirPath = System.getProperty("user.home");
 
     if (homeDirPath != null) {
-      path = tildePathPattern.matcher(path).replaceFirst(homeDirPath + "$1");
+      path = tildePathPattern.matcher(path).replaceFirst(
+          Matcher.quoteReplacement(homeDirPath) + "$1");
     }
 
     return path;
