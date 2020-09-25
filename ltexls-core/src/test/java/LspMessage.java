@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.checkerframework.checker.nullness.NullnessUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.DefaultQualifier;
@@ -78,8 +77,8 @@ public class LspMessage {
     Matcher matcher = logPattern.matcher(str);
     Assertions.assertTrue(matcher.find());
 
-    String sourceStr = matcher.group(1);
-    Assertions.assertNotNull(NullnessUtil.castNonNull(sourceStr));
+    @Nullable String sourceStr = matcher.group(1);
+    if (sourceStr == null) throw new AssertionError("could not find source in '" + str + "'");
     Source source;
 
     if (sourceStr.equals("Sending")) {
@@ -90,8 +89,8 @@ public class LspMessage {
       throw new AssertionError("unknown source '" + sourceStr + "'");
     }
 
-    String typeStr = matcher.group(2);
-    Assertions.assertNotNull(NullnessUtil.castNonNull(typeStr));
+    @Nullable String typeStr = matcher.group(2);
+    if (typeStr == null) throw new AssertionError("could not find type in '" + str + "'");
     Type type;
 
     if (typeStr.equals("notification")) {
@@ -104,9 +103,9 @@ public class LspMessage {
       throw new AssertionError("unknown type '" + typeStr + "'");
     }
 
-    String method = matcher.group(3);
-    Assertions.assertNotNull(NullnessUtil.castNonNull(method));
-    String id = matcher.group(4);
+    @Nullable String method = matcher.group(3);
+    if (method == null) throw new AssertionError("could not find method in '" + str + "'");
+    @Nullable String id = matcher.group(4);
     String paramsStr = str.substring(matcher.end());
     JsonElement params = JsonParser.parseString(paramsStr);
 
@@ -179,10 +178,17 @@ public class LspMessage {
 
       Matcher matcher = headerPattern.matcher(headerLine);
       Assertions.assertTrue(matcher.matches());
-      String headerName = matcher.group(1);
-      Assertions.assertNotNull(NullnessUtil.castNonNull(headerName));
-      String headerValue = matcher.group(2);
-      Assertions.assertNotNull(NullnessUtil.castNonNull(headerValue));
+      @Nullable String headerName = matcher.group(1);
+
+      if (headerName == null)  {
+        throw new AssertionError("could not find header name in '" + headerLine + "'");
+      }
+
+      @Nullable String headerValue = matcher.group(2);
+
+      if (headerValue == null)  {
+        throw new AssertionError("could not find header value in '" + headerLine + "'");
+      }
 
       if (headerName.equals("Content-Length")) {
         contentLength = Integer.parseInt(headerValue);

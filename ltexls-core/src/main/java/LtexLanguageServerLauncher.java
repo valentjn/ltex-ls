@@ -49,7 +49,7 @@ public class LtexLanguageServerLauncher {
   public static void main(String[] args) throws InterruptedException, ExecutionException {
     for (String arg : args) {
       if (arg.equals("--version")) {
-        Package ltexLsPackage = LtexLanguageServer.class.getPackage();
+        @Nullable Package ltexLsPackage = LtexLanguageServer.class.getPackage();
         JsonObject jsonObject = new JsonObject();
 
         if (ltexLsPackage != null) {
