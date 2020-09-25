@@ -78,6 +78,13 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     }
   }
 
+  private void addMarkup(Node node, String interpretAs) {
+    addMarkup(node.getStartOffset());
+    int newPos = node.getEndOffset();
+    super.addMarkup(this.code.substring(this.pos, newPos), interpretAs);
+    this.pos = newPos;
+  }
+
   private void addText(int newPos) {
     if (newPos > this.pos) {
       super.addText(this.code.substring(this.pos, newPos));
@@ -122,26 +129,15 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private void visit(Node node) {
     String nodeType = node.getClass().getSimpleName();
 
-    if (nodeType.equals("Text")) {
-      if (isInNodeType(this.ignoreNodeTypes)) {
-        addMarkup(node.getEndOffset());
-      } else {
-        addMarkup(node.getStartOffset());
-        addText(node.getEndOffset());
-      }
+    if (isInNodeType(this.ignoreNodeTypes)) {
+      addMarkup(node.getEndOffset());
     } else if (this.dummyNodeTypes.contains(nodeType)) {
+      addMarkup(node, generateDummy());
+    } else if (nodeType.equals("Text")) {
       addMarkup(node.getStartOffset());
-      int newPos = node.getEndOffset();
-
-      if (newPos > this.pos) {
-        super.addMarkup(this.code.substring(this.pos, newPos), generateDummy());
-        this.pos = newPos;
-      }
+      addText(node.getEndOffset());
     } else {
-      if (nodeType.equals("Paragraph")) {
-        addMarkup(node.getStartOffset());
-      }
-
+      if (nodeType.equals("Paragraph")) addMarkup(node.getStartOffset());
       this.nodeTypeStack.push(nodeType);
       visitChildren(node);
       this.nodeTypeStack.pop();
