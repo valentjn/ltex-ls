@@ -10,6 +10,7 @@ package org.bsplines.ltexls.parsing.markdown;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.util.sequence.Escaping;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -136,6 +137,8 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     } else if (nodeType.equals("Text")) {
       addMarkup(node.getStartOffset());
       addText(node.getEndOffset());
+    } else if (nodeType.equals("HtmlEntity")) {
+      addMarkup(node, Escaping.unescapeHtml(node.getChars()));
     } else {
       if (nodeType.equals("Paragraph")) addMarkup(node.getStartOffset());
       this.nodeTypeStack.push(nodeType);

@@ -44,6 +44,10 @@ public class MarkdownAnnotatedTextBuilderTest {
         + "multiple lines and [link](example.com)\n",
         "Heading\nParagraph with multiple lines and link\n");
     assertPlainText(
+        "# This is a &copy; Test\n"
+        + "Another [day &ndash; another](example.com) sentence\n",
+        "This is a \u00a9 Test\nAnother day \u2013 another sentence\n");
+    assertPlainText(
         "This is a test: `inline code`.\n\n```\ncode block\n```\n\nThis is another sentence.\n",
         "This is a test: inline code.\n\n\ncode block\n\n\nThis is another sentence.\n");
     assertPlainText(
