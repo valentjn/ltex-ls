@@ -82,7 +82,7 @@
     <dependency>
       <groupId>org.languagetool</groupId>
       <artifactId>languagetool-server</artifactId>
-      <version>5.0</version>
+      <version>5.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
