@@ -50,8 +50,8 @@ public class LanguageToolJavaInterfaceTest {
         Collections.singleton("UPPERCASE_SENTENCE_START")), 1, 0,
         "this is a test.\n");
     assertMatchesCompare(settings, settings.withEnabledRules(
-        Collections.singleton("PASSIVE_VOICE")), 0, 1,
-        "It is thought that this is a test.\n");
+        Collections.singleton("CAN_NOT")), 0, 1,
+        "You can not use the keyboard to select an item.\n");
 
     if (checkMotherTongue) {
       // mother tongue requires loading false-friends.xml, but loading of custom rules doesn't
@@ -75,7 +75,7 @@ public class LanguageToolJavaInterfaceTest {
         "Hat functions is for a beginner.\n");
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         documentChecker.check(document);
-    Assertions.assertEquals(2, checkingResult.getKey().size());
+    Assertions.assertEquals(3, checkingResult.getKey().size());
   }
 
   @Test
