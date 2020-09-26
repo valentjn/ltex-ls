@@ -6,3 +6,10 @@ updates:
       interval: "weekly"
       day: "friday"
     open-pull-requests-limit: 10
+    # otherwise, we get the error
+    # "Error processing com.google.errorprone:javac (NoMethodError)
+    # undefined method `zero?' for nil:NilClass"
+    # in dependabot-maven-0.120.1/lib/dependabot/maven/version.rb:83
+    # as the version 9+181-r4173-1 does not fit what Dependabot expects
+    ignore:
+      - dependency-name: "com.google.errorprone:javac"
