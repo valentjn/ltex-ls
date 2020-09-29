@@ -416,18 +416,15 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               }
             } else if (command.equals("\\$") || command.equals("\\%") || command.equals("\\&")) {
               addMarkup(command, command.substring(1));
-            } else if (command.equals("\\[") || command.equals("\\]")
-                  || command.equals("\\(") || command.equals("\\)")) {
-              if (command.equals("\\[")) {
-                enterDisplayMath();
-                addMarkup(command);
-              } else if (command.equals("\\(")) {
-                enterInlineMath();
-                addMarkup(command);
-              } else {
-                popMode();
-                addMarkup(command, generateDummy());
-              }
+            } else if (command.equals("\\[")) {
+              enterDisplayMath();
+              addMarkup(command);
+            } else if (command.equals("\\(")) {
+              enterInlineMath();
+              addMarkup(command);
+            } else if (command.equals("\\]") || command.equals("\\)")) {
+              popMode();
+              addMarkup(command, generateDummy());
             } else if (command.equals("\\AA")) {
               addMarkup(command, "\u00c5");
             } else if (command.equals("\\O")) {
