@@ -25,7 +25,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private enum MathVowelState {
-    EMPTY,
+    UNDECIDED,
     STARTS_WITH_VOWEL,
     STARTS_WITH_CONSONANT,
   }
@@ -76,7 +76,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private String dummyLastSpace = "";
   private String dummyLastPunctuation = "";
   private boolean isMathEmpty;
-  private MathVowelState mathVowelState = MathVowelState.EMPTY;
+  private MathVowelState mathVowelState = MathVowelState.UNDECIDED;
   private boolean preserveDummyLast;
   private boolean canInsertSpaceBeforeDummy;
   private boolean isMathCharTrivial;
@@ -150,7 +150,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
 
     this.dummyLastSpace = "";
     this.dummyLastPunctuation = "";
-    this.mathVowelState = MathVowelState.EMPTY;
+    this.mathVowelState = MathVowelState.UNDECIDED;
     return dummy;
   }
 
@@ -249,14 +249,14 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private void enterDisplayMath() {
     this.modeStack.push(Mode.DISPLAY_MATH);
     this.isMathEmpty = true;
-    this.mathVowelState = MathVowelState.EMPTY;
+    this.mathVowelState = MathVowelState.UNDECIDED;
     this.canInsertSpaceBeforeDummy = true;
   }
 
   private void enterInlineMath() {
     this.modeStack.push(Mode.INLINE_MATH);
     this.isMathEmpty = true;
-    this.mathVowelState = MathVowelState.EMPTY;
+    this.mathVowelState = MathVowelState.UNDECIDED;
     this.canInsertSpaceBeforeDummy = true;
     this.isMathCharTrivial = true;
   }
@@ -333,7 +333,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     this.dummyLastSpace = "";
     this.dummyLastPunctuation = "";
     this.isMathEmpty = true;
-    this.mathVowelState = MathVowelState.EMPTY;
+    this.mathVowelState = MathVowelState.UNDECIDED;
     this.preserveDummyLast = false;
     this.canInsertSpaceBeforeDummy = false;
     this.isMathCharTrivial = false;
@@ -879,7 +879,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               addMarkup(this.curString);
               if (isPunctuation(this.curChar)) this.dummyLastPunctuation = this.curString;
 
-              if (this.mathVowelState == MathVowelState.EMPTY) {
+              if (this.mathVowelState == MathVowelState.UNDECIDED) {
                 this.mathVowelState = (isVowel(this.curChar) ? MathVowelState.STARTS_WITH_VOWEL
                     : MathVowelState.STARTS_WITH_CONSONANT);
               }
