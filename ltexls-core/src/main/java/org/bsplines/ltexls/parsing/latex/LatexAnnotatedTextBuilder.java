@@ -272,7 +272,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
         + "\", dummyLastSpace = \"" + this.dummyLastSpace
         + "\", dummyLastPunctuation = \"" + this.dummyLastPunctuation
         + "\", isMathEmpty = " + this.isMathEmpty
-        + "\", mathVowelState = " + this.mathVowelState
+        + ", mathVowelState = " + this.mathVowelState
         + ", preserveDummyLast = " + this.preserveDummyLast
         + ", canInsertSpaceBeforeDummy = " + this.canInsertSpaceBeforeDummy
         + ", isMathCharTrivial = " + this.isMathCharTrivial
