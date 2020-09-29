@@ -691,6 +691,19 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               }
 
               if (matchingCommand == null) {
+                if (isMathMode(this.curMode) && (this.mathVowelState == MathVowelState.UNDECIDED)) {
+                  if (command.equals("\\mathbb") || command.equals("\\mathbf")
+                        || command.equals("\\mathcal") || command.equals("\\mathfrak")
+                        || command.equals("\\mathit") || command.equals("\\mathnormal")
+                        || command.equals("\\mathsf") || command.equals("\\mathtt")) {
+                    // leave this.mathVowelState as MathVowelState.UNDECIDED
+                  } else if (command.equals("\\ell")) {
+                    this.mathVowelState = MathVowelState.STARTS_WITH_VOWEL;
+                  } else {
+                    this.mathVowelState = MathVowelState.STARTS_WITH_CONSONANT;
+                  }
+                }
+
                 addMarkup(command);
               } else {
                 switch (matchingCommand.getAction()) {

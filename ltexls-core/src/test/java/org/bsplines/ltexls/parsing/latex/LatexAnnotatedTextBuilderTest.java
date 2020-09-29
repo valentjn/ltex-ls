@@ -228,16 +228,12 @@ public class LatexAnnotatedTextBuilderTest {
         "C'est un test: Jimmy-0. ",
         "fr");
     assertPlainText(
-        "This is an $A$-dimensional, $e$-dimensional, $F$-dimensional, "
-        + "$h$-dimensional, $I$-dimensional, $l$-dimensional, $M$-dimensional, "
-        + "$n$-dimensional, $O$-dimensional, $r$-dimensional, $S$-dimensional, "
-        + "$X$-dimensional space.\n"
-        + "This is not a $b$-dimensional or a $C$-dimensional space.\n",
-        "This is an Ina0-dimensional, Ina1-dimensional, Ina2-dimensional, "
-        + "Ina3-dimensional, Ina4-dimensional, Ina5-dimensional, Ina6-dimensional, "
-        + "Ina7-dimensional, Ina8-dimensional, Ina9-dimensional, Ina10-dimensional, "
-        + "Ina11-dimensional space. "
-        + "This is not a Dummy12-dimensional or a Dummy13-dimensional space. ");
+        "This is an $A$, $e$, $F$, $h$, $I$, $l$, $M$, "
+        + "$n$, $O$, $r$, $S$, $X$, $\\ell$, $\\mathcal{r}$.\n"
+        + "This is not a $b$, $C$, $\\ella$, $\\test a$, $\\mathcal{b}$.\n",
+        "This is an Ina0, Ina1, Ina2, Ina3, Ina4, Ina5, Ina6, "
+        + "Ina7, Ina8, Ina9, Ina10, Ina11, Ina12, Ina13. "
+        + "This is not a Dummy14, Dummy15, Dummy16, Dummy17, Dummy18. ");
 
     {
       AnnotatedText annotatedText = buildAnnotatedText(
