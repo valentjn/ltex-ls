@@ -286,6 +286,128 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     return (text.contains("\n\n") || text.contains("\r\r") || text.contains("\r\n\r\n"));
   }
 
+  private String convertAccentCommandToUnicode(String accentCommand, String letter) {
+    String unicode = "";
+
+    switch (accentCommand.charAt(1)) {
+      case '`': {
+        if (letter.equals("A")) unicode = "\u00c0";
+        else if (letter.equals("E")) unicode = "\u00c8";
+        else if (letter.equals("I")) unicode = "\u00cc";
+        else if (letter.equals("O")) unicode = "\u00d2";
+        else if (letter.equals("U")) unicode = "\u00d9";
+        else if (letter.equals("a")) unicode = "\u00e0";
+        else if (letter.equals("e")) unicode = "\u00e8";
+        else if (letter.equals("i") || letter.equals("\\i")) unicode = "\u00ec";
+        else if (letter.equals("o")) unicode = "\u00f2";
+        else if (letter.equals("u")) unicode = "\u00f9";
+        break;
+      }
+      case '\'': {
+        if (letter.equals("A")) unicode = "\u00c1";
+        else if (letter.equals("E")) unicode = "\u00c9";
+        else if (letter.equals("I")) unicode = "\u00cd";
+        else if (letter.equals("O")) unicode = "\u00d3";
+        else if (letter.equals("U")) unicode = "\u00da";
+        else if (letter.equals("Y")) unicode = "\u00dd";
+        else if (letter.equals("a")) unicode = "\u00e1";
+        else if (letter.equals("e")) unicode = "\u00e9";
+        else if (letter.equals("i") || letter.equals("\\i")) unicode = "\u00ed";
+        else if (letter.equals("o")) unicode = "\u00f3";
+        else if (letter.equals("u")) unicode = "\u00fa";
+        else if (letter.equals("y")) unicode = "\u00fd";
+        break;
+      }
+      case '^': {
+        if (letter.equals("A")) unicode = "\u00c2";
+        else if (letter.equals("E")) unicode = "\u00ca";
+        else if (letter.equals("I")) unicode = "\u00ce";
+        else if (letter.equals("O")) unicode = "\u00d4";
+        else if (letter.equals("U")) unicode = "\u00db";
+        else if (letter.equals("Y")) unicode = "\u0176";
+        else if (letter.equals("a")) unicode = "\u00e2";
+        else if (letter.equals("e")) unicode = "\u00ea";
+        else if (letter.equals("i") || letter.equals("\\i")) unicode = "\u00ee";
+        else if (letter.equals("o")) unicode = "\u00f4";
+        else if (letter.equals("u")) unicode = "\u00fb";
+        else if (letter.equals("y")) unicode = "\u0177";
+        break;
+      }
+      case '~': {
+        if (letter.equals("A")) unicode = "\u00c3";
+        else if (letter.equals("E")) unicode = "\u1ebc";
+        else if (letter.equals("I")) unicode = "\u0128";
+        else if (letter.equals("N")) unicode = "\u00d1";
+        else if (letter.equals("O")) unicode = "\u00d5";
+        else if (letter.equals("U")) unicode = "\u0168";
+        else if (letter.equals("a")) unicode = "\u00e3";
+        else if (letter.equals("e")) unicode = "\u1ebd";
+        else if (letter.equals("i") || letter.equals("\\i")) unicode = "\u0129";
+        else if (letter.equals("n")) unicode = "\u00f1";
+        else if (letter.equals("o")) unicode = "\u00f5";
+        else if (letter.equals("u")) unicode = "\u0169";
+        break;
+      }
+      case '"': {
+        if (letter.equals("A")) unicode = "\u00c4";
+        else if (letter.equals("E")) unicode = "\u00cb";
+        else if (letter.equals("I")) unicode = "\u00cf";
+        else if (letter.equals("O")) unicode = "\u00d6";
+        else if (letter.equals("U")) unicode = "\u00dc";
+        else if (letter.equals("Y")) unicode = "\u0178";
+        else if (letter.equals("a")) unicode = "\u00e4";
+        else if (letter.equals("e")) unicode = "\u00eb";
+        else if (letter.equals("i") || letter.equals("\\i")) unicode = "\u00ef";
+        else if (letter.equals("o")) unicode = "\u00f6";
+        else if (letter.equals("u")) unicode = "\u00fc";
+        else if (letter.equals("y")) unicode = "\u00ff";
+        break;
+      }
+      case '=': {
+        if (letter.equals("A")) unicode = "\u0100";
+        else if (letter.equals("E")) unicode = "\u0112";
+        else if (letter.equals("I")) unicode = "\u012a";
+        else if (letter.equals("O")) unicode = "\u014c";
+        else if (letter.equals("U")) unicode = "\u016a";
+        else if (letter.equals("Y")) unicode = "\u0232";
+        else if (letter.equals("a")) unicode = "\u0101";
+        else if (letter.equals("e")) unicode = "\u0113";
+        else if (letter.equals("i") || letter.equals("\\i")) unicode = "\u012b";
+        else if (letter.equals("o")) unicode = "\u014d";
+        else if (letter.equals("u")) unicode = "\u016b";
+        else if (letter.equals("y")) unicode = "\u0233";
+        break;
+      }
+      case '.': {
+        if (letter.equals("A")) unicode = "\u0226";
+        else if (letter.equals("E")) unicode = "\u0116";
+        else if (letter.equals("I")) unicode = "\u0130";
+        else if (letter.equals("O")) unicode = "\u022e";
+        else if (letter.equals("a")) unicode = "\u0227";
+        else if (letter.equals("e")) unicode = "\u0117";
+        else if (letter.equals("o")) unicode = "\u022f";
+        break;
+      }
+      case 'c': {
+        if (letter.equals("C")) unicode = "\u00c7";
+        else if (letter.equals("c")) unicode = "\u00e7";
+        break;
+      }
+      case 'r': {
+        if (letter.equals("A")) unicode = "\u00c5";
+        else if (letter.equals("U")) unicode = "\u016e";
+        else if (letter.equals("a")) unicode = "\u00e5";
+        else if (letter.equals("u")) unicode = "\u016f";
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+
+    return unicode;
+  }
+
   private void consumeEnvironmentArguments(String environmentName) {
     while (this.pos < this.code.length()) {
       String environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
@@ -444,114 +566,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                 @Nullable String accentCommand = matcher.group(1);
                 @Nullable String letter = ((matcher.group(3) != null)
                     ? matcher.group(3) : matcher.group(5));
-                String interpretAs = "";
-
-                if ((accentCommand != null) && (letter != null)) {
-                  switch (accentCommand.charAt(1)) {
-                    case '`': {
-                      if (letter.equals("A")) interpretAs = "\u00c0";
-                      else if (letter.equals("E")) interpretAs = "\u00c8";
-                      else if (letter.equals("I")) interpretAs = "\u00cc";
-                      else if (letter.equals("O")) interpretAs = "\u00d2";
-                      else if (letter.equals("U")) interpretAs = "\u00d9";
-                      else if (letter.equals("a")) interpretAs = "\u00e0";
-                      else if (letter.equals("e")) interpretAs = "\u00e8";
-                      else if (letter.equals("i") || letter.equals("\\i")) interpretAs = "\u00ec";
-                      else if (letter.equals("o")) interpretAs = "\u00f2";
-                      else if (letter.equals("u")) interpretAs = "\u00f9";
-                      break;
-                    }
-                    case '\'': {
-                      if (letter.equals("A")) interpretAs = "\u00c1";
-                      else if (letter.equals("E")) interpretAs = "\u00c9";
-                      else if (letter.equals("I")) interpretAs = "\u00cd";
-                      else if (letter.equals("O")) interpretAs = "\u00d3";
-                      else if (letter.equals("U")) interpretAs = "\u00da";
-                      else if (letter.equals("Y")) interpretAs = "\u00dd";
-                      else if (letter.equals("a")) interpretAs = "\u00e1";
-                      else if (letter.equals("e")) interpretAs = "\u00e9";
-                      else if (letter.equals("i") || letter.equals("\\i")) interpretAs = "\u00ed";
-                      else if (letter.equals("o")) interpretAs = "\u00f3";
-                      else if (letter.equals("u")) interpretAs = "\u00fa";
-                      else if (letter.equals("y")) interpretAs = "\u00fd";
-                      break;
-                    }
-                    case '^': {
-                      if (letter.equals("A")) interpretAs = "\u00c2";
-                      else if (letter.equals("E")) interpretAs = "\u00ca";
-                      else if (letter.equals("I")) interpretAs = "\u00ce";
-                      else if (letter.equals("O")) interpretAs = "\u00d4";
-                      else if (letter.equals("U")) interpretAs = "\u00db";
-                      else if (letter.equals("Y")) interpretAs = "\u0176";
-                      else if (letter.equals("a")) interpretAs = "\u00e2";
-                      else if (letter.equals("e")) interpretAs = "\u00ea";
-                      else if (letter.equals("i") || letter.equals("\\i")) interpretAs = "\u00ee";
-                      else if (letter.equals("o")) interpretAs = "\u00f4";
-                      else if (letter.equals("u")) interpretAs = "\u00fb";
-                      else if (letter.equals("y")) interpretAs = "\u0177";
-                      break;
-                    }
-                    case '~': {
-                      if (letter.equals("A")) interpretAs = "\u00c3";
-                      else if (letter.equals("E")) interpretAs = "\u1ebc";
-                      else if (letter.equals("I")) interpretAs = "\u0128";
-                      else if (letter.equals("N")) interpretAs = "\u00d1";
-                      else if (letter.equals("O")) interpretAs = "\u00d5";
-                      else if (letter.equals("U")) interpretAs = "\u0168";
-                      else if (letter.equals("a")) interpretAs = "\u00e3";
-                      else if (letter.equals("e")) interpretAs = "\u1ebd";
-                      else if (letter.equals("i") || letter.equals("\\i")) interpretAs = "\u0129";
-                      else if (letter.equals("n")) interpretAs = "\u00f1";
-                      else if (letter.equals("o")) interpretAs = "\u00f5";
-                      else if (letter.equals("u")) interpretAs = "\u0169";
-                      break;
-                    }
-                    case '"': {
-                      if (letter.equals("A")) interpretAs = "\u00c4";
-                      else if (letter.equals("E")) interpretAs = "\u00cb";
-                      else if (letter.equals("I")) interpretAs = "\u00cf";
-                      else if (letter.equals("O")) interpretAs = "\u00d6";
-                      else if (letter.equals("U")) interpretAs = "\u00dc";
-                      else if (letter.equals("Y")) interpretAs = "\u0178";
-                      else if (letter.equals("a")) interpretAs = "\u00e4";
-                      else if (letter.equals("e")) interpretAs = "\u00eb";
-                      else if (letter.equals("i") || letter.equals("\\i")) interpretAs = "\u00ef";
-                      else if (letter.equals("o")) interpretAs = "\u00f6";
-                      else if (letter.equals("u")) interpretAs = "\u00fc";
-                      else if (letter.equals("y")) interpretAs = "\u00ff";
-                      break;
-                    }
-                    case '=': {
-                      if (letter.equals("A")) interpretAs = "\u0100";
-                      else if (letter.equals("E")) interpretAs = "\u0112";
-                      else if (letter.equals("I")) interpretAs = "\u012a";
-                      else if (letter.equals("O")) interpretAs = "\u014c";
-                      else if (letter.equals("U")) interpretAs = "\u016a";
-                      else if (letter.equals("Y")) interpretAs = "\u0232";
-                      else if (letter.equals("a")) interpretAs = "\u0101";
-                      else if (letter.equals("e")) interpretAs = "\u0113";
-                      else if (letter.equals("i") || letter.equals("\\i")) interpretAs = "\u012b";
-                      else if (letter.equals("o")) interpretAs = "\u014d";
-                      else if (letter.equals("u")) interpretAs = "\u016b";
-                      else if (letter.equals("y")) interpretAs = "\u0233";
-                      break;
-                    }
-                    case '.': {
-                      if (letter.equals("A")) interpretAs = "\u0226";
-                      else if (letter.equals("E")) interpretAs = "\u0116";
-                      else if (letter.equals("I")) interpretAs = "\u0130";
-                      else if (letter.equals("O")) interpretAs = "\u022e";
-                      else if (letter.equals("a")) interpretAs = "\u0227";
-                      else if (letter.equals("e")) interpretAs = "\u0117";
-                      else if (letter.equals("o")) interpretAs = "\u022f";
-                      break;
-                    }
-                    default: {
-                      break;
-                    }
-                  }
-                }
-
+                String interpretAs = (((accentCommand != null) && (letter != null))
+                    ? convertAccentCommandToUnicode(accentCommand, letter) : "");
                 addMarkup(matcher.group(), interpretAs);
               } else {
                 addMarkup(command);
@@ -563,28 +579,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                 @Nullable String accentCommand = matcher.group(1);
                 @Nullable String letter = ((matcher.group(3) != null)
                     ? matcher.group(3) : matcher.group(4));
-                String interpretAs = "";
-
-                if ((accentCommand != null) && (letter != null)) {
-                  switch (accentCommand.charAt(1)) {
-                    case 'c': {
-                      if (letter.equals("C")) interpretAs = "\u00c7";
-                      else if (letter.equals("c")) interpretAs = "\u00e7";
-                      break;
-                    }
-                    case 'r': {
-                      if (letter.equals("A")) interpretAs = "\u00c5";
-                      else if (letter.equals("U")) interpretAs = "\u016e";
-                      else if (letter.equals("a")) interpretAs = "\u00e5";
-                      else if (letter.equals("u")) interpretAs = "\u016f";
-                      break;
-                    }
-                    default: {
-                      break;
-                    }
-                  }
-                }
-
+                String interpretAs = (((accentCommand != null) && (letter != null))
+                    ? convertAccentCommandToUnicode(accentCommand, letter) : "");
                 addMarkup(matcher.group(), interpretAs);
               } else {
                 addMarkup(command);
