@@ -11,7 +11,6 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bsplines</groupId>
   <artifactId>ltexls-core</artifactId>
-  <version>7.2.0</version>
   <properties>
     <errorProneJavac>${com.google.errorprone:javac:jar}</errorProneJavac>
   </properties>
@@ -24,7 +23,7 @@
     <dependency>
       <groupId>org.bsplines</groupId>
       <artifactId>ltexls-languagetool-patch</artifactId>
-      <version>7.2.0</version>
+      <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
