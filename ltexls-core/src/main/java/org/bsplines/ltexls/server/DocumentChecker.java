@@ -5,13 +5,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package org.bsplines.ltexls;
+package org.bsplines.ltexls.server;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import org.apache.commons.text.StringEscapeUtils;
+import org.bsplines.ltexls.Tools;
 import org.bsplines.ltexls.languagetool.LanguageToolInterface;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;

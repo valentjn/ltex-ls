@@ -5,7 +5,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package org.bsplines.ltexls;
+package org.bsplines.ltexls.server;
 
 import com.google.gson.JsonObject;
 import java.net.URI;
@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import org.bsplines.ltexls.Tools;
 import org.checkerframework.checker.initialization.qual.NotOnlyInitialized;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -42,8 +43,6 @@ class LtexWorkspaceService implements WorkspaceService {
 
   @Override
   public void didChangeConfiguration(DidChangeConfigurationParams params) {
-    this.ltexLanguageServer.getSettingsManager().setSettings(
-        ((JsonObject)params.getSettings()).get("ltex"));
     this.ltexLanguageServer.getLtexTextDocumentService().executeFunction(
         this.ltexLanguageServer::publishDiagnostics);
   }

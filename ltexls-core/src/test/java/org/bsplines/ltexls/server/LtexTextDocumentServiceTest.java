@@ -5,7 +5,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package org.bsplines.ltexls;
+package org.bsplines.ltexls.server;
 
 import java.util.Collections;
 import org.eclipse.lsp4j.CodeLens;

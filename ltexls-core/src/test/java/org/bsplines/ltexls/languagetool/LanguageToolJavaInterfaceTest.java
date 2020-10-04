@@ -9,10 +9,10 @@ package org.bsplines.ltexls.languagetool;
 
 import java.util.Collections;
 import java.util.List;
-import org.bsplines.ltexls.DocumentChecker;
-import org.bsplines.ltexls.DocumentCheckerTest;
-import org.bsplines.ltexls.LtexTextDocumentItem;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
+import org.bsplines.ltexls.server.DocumentChecker;
+import org.bsplines.ltexls.server.DocumentCheckerTest;
+import org.bsplines.ltexls.server.LtexTextDocumentItem;
 import org.bsplines.ltexls.settings.Settings;
 import org.bsplines.ltexls.settings.SettingsManager;
 import org.checkerframework.checker.nullness.NullnessUtil;
