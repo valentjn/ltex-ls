@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import org.bsplines.ltexls.client.LtexLanguageClient;
 import org.bsplines.ltexls.server.LtexLanguageServer;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -31,7 +32,9 @@ public class LtexLanguageServerLauncher {
   public static void launch(InputStream in, OutputStream out) throws
         InterruptedException, ExecutionException {
     LtexLanguageServer server = new LtexLanguageServer();
-    Launcher<LanguageClient> launcher = LSPLauncher.createServerLauncher(server, in, out);
+    Launcher<LtexLanguageClient> launcher = (new LSPLauncher.Builder<LtexLanguageClient>())
+        .setLocalService(server).setRemoteInterface(LtexLanguageClient.class)
+        .setInput(in).setOutput(out).create();
 
     LanguageClient client = launcher.getRemoteProxy();
     server.connect(client);

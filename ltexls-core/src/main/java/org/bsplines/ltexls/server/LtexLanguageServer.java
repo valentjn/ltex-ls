@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import org.bsplines.ltexls.Tools;
+import org.bsplines.ltexls.client.LtexLanguageClient;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 import org.bsplines.ltexls.settings.SettingsManager;
@@ -42,7 +43,7 @@ import org.eclipse.lsp4j.services.WorkspaceService;
 import org.eclipse.xtext.xbase.lib.Pair;
 
 public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
-  private @MonotonicNonNull LanguageClient languageClient;
+  private @MonotonicNonNull LtexLanguageClient languageClient;
   private SettingsManager settingsManager;
   private DocumentChecker documentChecker;
   private CodeActionGenerator codeActionGenerator;
@@ -109,7 +110,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
   @Override
   public void connect(LanguageClient languageClient) {
-    this.languageClient = languageClient;
+    this.languageClient = (LtexLanguageClient)languageClient;
   }
 
   /**
