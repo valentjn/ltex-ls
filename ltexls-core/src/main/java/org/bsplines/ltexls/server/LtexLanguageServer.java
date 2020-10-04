@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import org.bsplines.ltexls.Tools;
 import org.bsplines.ltexls.client.LtexLanguageClient;
+import org.bsplines.ltexls.client.LtexProgressNotificationParams;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 import org.bsplines.ltexls.settings.SettingsManager;
@@ -186,18 +187,6 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     return diagnosticsNotAtCaret;
   }
 
-  private void sendProgressEvent(String uri, String operation, double progress) {
-    // real progress events from LSP 3.15 are not implemented yet in LSP4J
-    // (see https://github.com/eclipse/lsp4j/issues/370)
-    JsonObject arguments = new JsonObject();
-    arguments.addProperty("type", "progress");
-    arguments.addProperty("uri", uri);
-    arguments.addProperty("operation", operation);
-    arguments.addProperty("progress", progress);
-    if (this.languageClient == null) return;
-    this.languageClient.telemetryEvent(arguments);
-  }
-
   /**
    * Check a document for diagnostics.
    *
@@ -217,14 +206,18 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
     CompletableFuture<List<Object>> configurationFuture = this.languageClient.configuration(
         new ConfigurationParams(Collections.singletonList(configurationItem)));
-    sendProgressEvent(document.getUri(), "checkDocument", 0);
+    this.languageClient.ltexProgress(new LtexProgressNotificationParams(
+        document.getUri(), "checkDocument", 0));
 
     return configurationFuture.thenApply((List<Object> configuration) -> {
       try {
         this.settingsManager.setSettings((JsonElement)configuration.get(0));
         return this.documentChecker.check(document);
       } finally {
-        sendProgressEvent(document.getUri(), "checkDocument", 1);
+        if (this.languageClient != null) {
+          this.languageClient.ltexProgress(new LtexProgressNotificationParams(
+              document.getUri(), "checkDocument", 1));
+        }
       }
     });
   }

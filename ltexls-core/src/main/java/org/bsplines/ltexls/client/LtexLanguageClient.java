@@ -7,7 +7,10 @@
 
 package org.bsplines.ltexls.client;
 
+import org.eclipse.lsp4j.jsonrpc.services.JsonNotification;
 import org.eclipse.lsp4j.services.LanguageClient;
 
 public interface LtexLanguageClient extends LanguageClient {
+  @JsonNotification("ltex/progress")
+  void ltexProgress(LtexProgressNotificationParams params);
 }

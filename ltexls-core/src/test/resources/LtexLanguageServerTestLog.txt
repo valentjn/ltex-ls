@@ -481,18 +481,16 @@ Result: [
 ]
 
 
-[Trace - 12:09:07 AM] Received notification 'telemetry/event'.
+[Trace - 12:09:07 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 0
 }
 
 
-[Trace - 12:09:07 AM] Received notification 'telemetry/event'.
+[Trace - 12:09:07 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 1
@@ -623,9 +621,8 @@ Result: [
 ]
 
 
-[Trace - 12:09:16 AM] Received notification 'telemetry/event'.
+[Trace - 12:09:16 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 0
@@ -707,9 +704,8 @@ Params: {
 }
 
 
-[Trace - 12:09:34 AM] Received notification 'telemetry/event'.
+[Trace - 12:09:34 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 1
@@ -895,18 +891,16 @@ Result: [
 ]
 
 
-[Trace - 12:09:34 AM] Received notification 'telemetry/event'.
+[Trace - 12:09:34 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 0
 }
 
 
-[Trace - 12:09:34 AM] Received notification 'telemetry/event'.
+[Trace - 12:09:34 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 1
@@ -1168,18 +1162,16 @@ Result: [
 ]
 
 
-[Trace - 12:09:39 AM] Received notification 'telemetry/event'.
+[Trace - 12:09:39 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 0
 }
 
 
-[Trace - 12:09:39 AM] Received notification 'telemetry/event'.
+[Trace - 12:09:39 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 1
@@ -1466,9 +1458,8 @@ Result: [
 ]
 
 
-[Trace - 12:09:43 AM] Received notification 'telemetry/event'.
+[Trace - 12:09:43 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 0
@@ -1567,18 +1558,16 @@ Result: [
 ]
 
 
-[Trace - 12:09:43 AM] Received notification 'telemetry/event'.
+[Trace - 12:09:43 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 0
 }
 
 
-[Trace - 12:09:43 AM] Received notification 'telemetry/event'.
+[Trace - 12:09:43 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 1
@@ -1608,9 +1597,8 @@ Params: {
 }
 
 
-[Trace - 12:09:43 AM] Received notification 'telemetry/event'.
+[Trace - 12:09:43 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 1
@@ -1775,18 +1763,16 @@ Result: [
 ]
 
 
-[Trace - 12:09:51 AM] Received notification 'telemetry/event'.
+[Trace - 12:09:51 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 0
 }
 
 
-[Trace - 12:09:51 AM] Received notification 'telemetry/event'.
+[Trace - 12:09:51 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 1
@@ -2128,9 +2114,8 @@ Result: [
 ]
 
 
-[Trace - 12:09:57 AM] Received notification 'telemetry/event'.
+[Trace - 12:09:57 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 0
@@ -2158,9 +2143,8 @@ Params: {
 }
 
 
-[Trace - 12:09:57 AM] Received notification 'telemetry/event'.
+[Trace - 12:09:57 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 1
@@ -2355,18 +2339,16 @@ Result: [
 ]
 
 
-[Trace - 12:10:00 AM] Received notification 'telemetry/event'.
+[Trace - 12:10:00 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 0
 }
 
 
-[Trace - 12:10:00 AM] Received notification 'telemetry/event'.
+[Trace - 12:10:00 AM] Received notification 'ltex/progress'.
 Params: {
-    "type": "progress",
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 1
