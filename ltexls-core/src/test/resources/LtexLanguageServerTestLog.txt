@@ -273,17 +273,11 @@ Result: {
         "textDocumentSync": 2,
         "codeActionProvider": {
             "codeActionKinds": [
-                "quickfix.ltex.acceptSuggestions",
-                "quickfix.ltex.addToDictionary",
-                "quickfix.ltex.disableRules",
-                "quickfix.ltex.ignoreRulesInSentence"
+                "quickfix.ltex.acceptSuggestions"
             ]
         },
         "executeCommandProvider": {
             "commands": [
-                "ltex.addToDictionary",
-                "ltex.disableRules",
-                "ltex.ignoreRulesInSentence",
                 "ltex.checkDocument"
             ]
         }

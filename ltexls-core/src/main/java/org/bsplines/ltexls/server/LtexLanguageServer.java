@@ -76,7 +76,6 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     capabilities.setCodeActionProvider(new CodeActionOptions(CodeActionGenerator.getCodeActions()));
 
     List<String> commandNames = new ArrayList<>();
-    commandNames.addAll(CodeActionGenerator.getCommandNames());
     commandNames.addAll(LtexWorkspaceService.getCommandNames());
     capabilities.setExecuteCommandProvider(new ExecuteCommandOptions(commandNames));
 

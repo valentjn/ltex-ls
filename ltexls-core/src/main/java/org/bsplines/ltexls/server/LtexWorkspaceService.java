@@ -24,7 +24,6 @@ import org.eclipse.lsp4j.DidChangeWatchedFilesParams;
 import org.eclipse.lsp4j.ExecuteCommandParams;
 import org.eclipse.lsp4j.SymbolInformation;
 import org.eclipse.lsp4j.WorkspaceSymbolParams;
-import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.WorkspaceService;
 
 class LtexWorkspaceService implements WorkspaceService {
@@ -53,13 +52,7 @@ class LtexWorkspaceService implements WorkspaceService {
 
   @Override
   public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
-    @Nullable LanguageClient languageClient = this.ltexLanguageServer.getLanguageClient();
-
-    if (CodeActionGenerator.getCommandNames().contains(params.getCommand())
-          && (languageClient != null)) {
-      languageClient.telemetryEvent(params.getArguments().get(0));
-      return CompletableFuture.completedFuture(true);
-    } else if (params.getCommand().equals(checkDocumentCommandName)) {
+    if (params.getCommand().equals(checkDocumentCommandName)) {
       return checkDocument((JsonObject)params.getArguments().get(0));
     } else {
       return CompletableFuture.completedFuture(false);

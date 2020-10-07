@@ -10,14 +10,11 @@ package org.bsplines.ltexls.server;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bsplines.ltexls.Tools;
@@ -55,12 +52,6 @@ public class CodeActionGenerator {
   private static final String addToDictionaryCommandName = "ltex.addToDictionary";
   private static final String disableRulesCommandName = "ltex.disableRules";
   private static final String ignoreRulesInSentenceCommandName = "ltex.ignoreRulesInSentence";
-  private static final List<String> codeActions = Arrays.asList(new String[]{
-      acceptSuggestionsCodeActionKind, addToDictionaryCodeActionKind,
-      disableRulesCodeActionKind, ignoreRulesInSentenceCodeActionKind});
-  private static final List<String> commandNames = Arrays.asList(new String[]{
-      addToDictionaryCommandName, disableRulesCommandName, ignoreRulesInSentenceCommandName});
-  private static final Set<String> commandNamesAsSet = new HashSet<>(commandNames);
   private static final String dummyPatternStr = "(?:Dummy|Ina|Jimmy-)[0-9]+";
   private static final Pattern dummyPattern = Pattern.compile(dummyPatternStr);
 
@@ -396,14 +387,6 @@ public class CodeActionGenerator {
   }
 
   public static List<String> getCodeActions() {
-    return Collections.unmodifiableList(codeActions);
-  }
-
-  public static List<String> getCommandNames() {
-    return Collections.unmodifiableList(commandNames);
-  }
-
-  public static Set<String> getCommandNamesAsSet() {
-    return Collections.unmodifiableSet(commandNamesAsSet);
+    return Collections.singletonList(acceptSuggestionsCodeActionKind);
   }
 }
