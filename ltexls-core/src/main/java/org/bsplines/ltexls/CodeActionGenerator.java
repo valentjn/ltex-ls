@@ -250,7 +250,7 @@ public class CodeActionGenerator {
         ? Tools.i18n("addWordToDictionary", onlyUnknownWord)
         : Tools.i18n("addAllUnknownWordsInSelectionToDictionary"));
     Command command = new Command(commandTitle, addToDictionaryCommandName);
-    command.setArguments(Arrays.asList(arguments));
+    command.setArguments(Collections.singletonList(arguments));
 
     CodeAction codeAction = new CodeAction(command.getTitle());
     codeAction.setKind(addToDictionaryCodeActionKind);
@@ -311,7 +311,7 @@ public class CodeActionGenerator {
         ? Tools.i18n("ignoreRuleInThisSentence")
         : Tools.i18n("ignoreAllRulesInTheSelectedSentences")),
         ignoreRulesInSentenceCommandName);
-    command.setArguments(Arrays.asList(arguments));
+    command.setArguments(Collections.singletonList(arguments));
 
     CodeAction codeAction = new CodeAction(command.getTitle());
     codeAction.setKind(ignoreRulesInSentenceCodeActionKind);
@@ -359,7 +359,7 @@ public class CodeActionGenerator {
         ? Tools.i18n("disableRule")
         : Tools.i18n("disableAllRulesWithMatchesInSelection"));
     Command command = new Command(commandTitle, disableRulesCommandName);
-    command.setArguments(Arrays.asList(arguments));
+    command.setArguments(Collections.singletonList(arguments));
 
     CodeAction codeAction = new CodeAction(command.getTitle());
     codeAction.setKind(disableRulesCodeActionKind);

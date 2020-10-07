@@ -26,14 +26,12 @@ public class LatexFragmentizer extends CodeFragmentizer {
   private static final Pattern commentPattern = Pattern.compile(
       "^\\s*%\\s*(?i)ltex(?-i):(?<settings>.*?)$", Pattern.MULTILINE);
 
-  private static final LatexCommandSignature[] extraCommandSignatures = {
-      new LatexCommandSignature("\\footnote{}"),
-      new LatexCommandSignature("\\footnote[]{}"),
-      new LatexCommandSignature("\\todo{}"),
-      new LatexCommandSignature("\\todo[]{}"),
-      };
   private static final LatexCommandSignatureMatcher extraCommandSignatureList =
-      new LatexCommandSignatureMatcher(Arrays.asList(extraCommandSignatures));
+      new LatexCommandSignatureMatcher(Arrays.asList(
+        new LatexCommandSignature("\\footnote{}"),
+        new LatexCommandSignature("\\footnote[]{}"),
+        new LatexCommandSignature("\\todo{}"),
+        new LatexCommandSignature("\\todo[]{}")));
 
   private static final Pattern languageTagReplacementPattern = Pattern.compile("[^A-Za-z]+");
   private static final Map<String, String> babelLanguageMap = createBabelLanguageMap();

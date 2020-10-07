@@ -64,9 +64,10 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private static final Pattern rsweaveBeginPattern = Pattern.compile("^<<.*?>>=");
   private static final Pattern rsweaveEndPattern = Pattern.compile("^@");
 
-  private static final String[] mathEnvironments = {"align", "align*", "alignat", "alignat*",
+  private static final List<String> mathEnvironments = Arrays.asList(
+      "align", "align*", "alignat", "alignat*",
       "displaymath", "eqnarray", "eqnarray*", "equation", "equation*", "flalign", "flalign*",
-      "gather", "gather*", "math", "multline", "multline*"};
+      "gather", "gather*", "math", "multline", "multline*");
 
   private String code = "";
   private int pos;
@@ -509,7 +510,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               String environmentName = argument.substring(1, argument.length() - 1);
               String interpretAs = "";
 
-              if (Arrays.asList(mathEnvironments).contains(environmentName)) {
+              if (mathEnvironments.contains(environmentName)) {
                 if (command.equals("\\begin")) {
                   if (environmentName.equals("math")) {
                     enterInlineMath();

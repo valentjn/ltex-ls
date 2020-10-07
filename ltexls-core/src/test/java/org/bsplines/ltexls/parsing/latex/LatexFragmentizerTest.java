@@ -7,8 +7,7 @@
 
 package org.bsplines.ltexls.parsing.latex;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 import org.bsplines.ltexls.parsing.CodeFragment;
 import org.bsplines.ltexls.parsing.CodeFragmentizer;
@@ -127,7 +126,7 @@ public class LatexFragmentizerTest {
 
     {
       Settings settings = (new Settings()).withIgnoreCommandPrototypes(
-          new HashSet<>(Arrays.asList(new String[]{"\\todo{}"})));
+          Collections.singleton("\\todo{}"));
       CodeFragmentizer fragmentizer = CodeFragmentizer.create("latex");
       List<CodeFragment> codeFragments = fragmentizer.fragmentize(
           "Sentence\\footnote[abc]{Footnote} 1\n"

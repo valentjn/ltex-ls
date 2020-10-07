@@ -10,7 +10,6 @@ package org.bsplines.ltexls;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -215,7 +214,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     }
 
     CompletableFuture<List<Object>> configurationFuture = this.languageClient.configuration(
-        new ConfigurationParams(Arrays.asList(configurationItem)));
+        new ConfigurationParams(Collections.singletonList(configurationItem)));
     sendProgressEvent(document.getUri(), "checkDocument", 0);
 
     return configurationFuture.thenApply((List<Object> configuration) -> {
