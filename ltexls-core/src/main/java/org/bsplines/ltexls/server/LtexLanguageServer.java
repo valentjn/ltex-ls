@@ -16,7 +16,7 @@ import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import org.bsplines.ltexls.Tools;
 import org.bsplines.ltexls.client.LtexLanguageClient;
-import org.bsplines.ltexls.client.LtexProgressNotificationParams;
+import org.bsplines.ltexls.client.LtexProgressParams;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 import org.bsplines.ltexls.settings.SettingsManager;
@@ -205,7 +205,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
     CompletableFuture<List<Object>> configurationFuture = this.languageClient.configuration(
         new ConfigurationParams(Collections.singletonList(configurationItem)));
-    this.languageClient.ltexProgress(new LtexProgressNotificationParams(
+    this.languageClient.ltexProgress(new LtexProgressParams(
         document.getUri(), "checkDocument", 0));
 
     return configurationFuture.thenApply((List<Object> configuration) -> {
@@ -214,7 +214,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
         return this.documentChecker.check(document);
       } finally {
         if (this.languageClient != null) {
-          this.languageClient.ltexProgress(new LtexProgressNotificationParams(
+          this.languageClient.ltexProgress(new LtexProgressParams(
               document.getUri(), "checkDocument", 1));
         }
       }

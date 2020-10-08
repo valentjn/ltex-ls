@@ -12,5 +12,5 @@ import org.eclipse.lsp4j.services.LanguageClient;
 
 public interface LtexLanguageClient extends LanguageClient {
   @JsonNotification("ltex/progress")
-  void ltexProgress(LtexProgressNotificationParams params);
+  void ltexProgress(LtexProgressParams params);
 }

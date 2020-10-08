@@ -11,12 +11,12 @@ import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
 // real progress events from LSP 3.15 are not implemented yet in LSP4J
 // (see https://github.com/eclipse/lsp4j/issues/370)
-public class LtexProgressNotificationParams {
+public class LtexProgressParams {
   private String uri;
   private String operation;
   private double progress;
 
-  public LtexProgressNotificationParams(String uri, String operation, double progress) {
+  public LtexProgressParams(String uri, String operation, double progress) {
     this.uri = uri;
     this.operation = operation;
     this.progress = progress;
