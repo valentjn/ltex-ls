@@ -17,10 +17,10 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.text.StringEscapeUtils;
-import org.bsplines.ltexls.Tools;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.DummyGenerator;
 import org.bsplines.ltexls.settings.Settings;
+import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {

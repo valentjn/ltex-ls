@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Pattern;
-import org.bsplines.ltexls.Tools;
 import org.bsplines.ltexls.parsing.CodeFragment;
 import org.bsplines.ltexls.parsing.CodeFragmentizer;
 import org.bsplines.ltexls.parsing.RegexCodeFragmentizer;
 import org.bsplines.ltexls.settings.Settings;
+import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class LatexFragmentizer extends CodeFragmentizer {

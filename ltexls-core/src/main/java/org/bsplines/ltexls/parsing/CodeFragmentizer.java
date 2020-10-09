@@ -12,11 +12,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import org.bsplines.ltexls.Tools;
 import org.bsplines.ltexls.parsing.latex.LatexFragmentizer;
 import org.bsplines.ltexls.parsing.markdown.MarkdownFragmentizer;
 import org.bsplines.ltexls.parsing.plaintext.PlaintextFragmentizer;
 import org.bsplines.ltexls.settings.Settings;
+import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public abstract class CodeFragmentizer {

@@ -9,8 +9,8 @@ package org.bsplines.ltexls.languagetool;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.bsplines.ltexls.Tools;
 import org.bsplines.ltexls.server.LtexTextDocumentItem;
+import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.Range;

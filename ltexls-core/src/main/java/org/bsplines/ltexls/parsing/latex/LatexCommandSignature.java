@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.bsplines.ltexls.Tools;
 import org.bsplines.ltexls.parsing.DummyGenerator;
+import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.xtext.xbase.lib.Pair;
 
