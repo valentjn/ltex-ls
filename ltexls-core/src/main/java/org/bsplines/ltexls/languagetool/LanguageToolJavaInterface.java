@@ -14,9 +14,12 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import javax.xml.parsers.ParserConfigurationException;
+import org.apache.commons.text.StringEscapeUtils;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -75,11 +78,52 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     return (this.resultCache != null) && (this.languageTool != null);
   }
 
+  private static String mapToString(@Nullable Map<?, ?> map) {
+    if (map == null) return "null";
+    StringBuilder builder = new StringBuilder("{");
+
+    for (Map.Entry<?, ?> entry : map.entrySet()) {
+      if (builder.length() > 1) builder.append(", ");
+      appendObjectToBuilder(entry.getKey(), builder);
+      builder.append(": ");
+      appendObjectToBuilder(entry.getValue(), builder);
+    }
+
+    builder.append("}");
+    return builder.toString();
+  }
+
+  private static void appendObjectToBuilder(@Nullable Object object, StringBuilder builder) {
+    if (object != null) {
+      builder.append("\"");
+      builder.append(StringEscapeUtils.escapeJava(object.toString()));
+      builder.append("\"");
+    } else {
+      builder.append("null");
+    }
+  }
+
   @Override
   public List<LanguageToolRuleMatch> check(AnnotatedText annotatedText) {
     if (!isReady()) {
       Tools.logger.warning(Tools.i18n("skippingTextCheckAsLanguageToolHasNotBeenInitialized"));
       return Collections.emptyList();
+    }
+
+    if (Tools.logger.isLoggable(Level.FINER)) {
+      Tools.logger.finer("matchesCache.size() = " + this.resultCache.getMatchesCache().size());
+      Tools.logger.finer("remoteMatchesCache.size() = "
+          + this.resultCache.getRemoteMatchesCache().size());
+      Tools.logger.finer("sentenceCache.size() = " + this.resultCache.getSentenceCache().size());
+
+      if (Tools.logger.isLoggable(Level.FINEST)) {
+        Tools.logger.finest("matchesCache = "
+            + mapToString(this.resultCache.getMatchesCache().asMap()));
+        Tools.logger.finest("remoteMatchesCache = "
+            + mapToString(this.resultCache.getRemoteMatchesCache().asMap()));
+        Tools.logger.finest("sentenceCache = "
+            + mapToString(this.resultCache.getSentenceCache().asMap()));
+      }
     }
 
     List<RuleMatch> matches;

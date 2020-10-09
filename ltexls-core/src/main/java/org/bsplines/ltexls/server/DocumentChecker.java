@@ -7,10 +7,13 @@
 
 package org.bsplines.ltexls.server;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import org.apache.commons.text.StringEscapeUtils;
 import org.bsplines.ltexls.languagetool.LanguageToolInterface;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
@@ -26,6 +29,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.xtext.xbase.lib.Pair;
 import org.languagetool.markup.AnnotatedText;
+import org.languagetool.markup.TextPart;
 
 public class DocumentChecker {
   private SettingsManager settingsManager;
@@ -87,7 +91,26 @@ public class DocumentChecker {
 
     AnnotatedText annotatedText = annotatedTextFragment.getAnnotatedText();
 
-    {
+    if (Tools.logger.isLoggable(Level.FINER)) {
+      Tools.logger.finer(Tools.i18n("checkingText", settings.getLanguageShortCode(),
+          StringEscapeUtils.escapeJava(annotatedText.getPlainText()),
+          ""));
+
+      if (Tools.logger.isLoggable(Level.FINEST)) {
+        StringBuilder builder = new StringBuilder("annotatedTextParts = [");
+
+        for (TextPart textPart : annotatedText.getParts()) {
+          if (builder.length() > 22) builder.append(", ");
+          builder.append(textPart.getType().toString());
+          builder.append("(\"");
+          builder.append(StringEscapeUtils.escapeJava(textPart.getPart()));
+          builder.append("\")");
+        }
+
+        builder.append("]");
+        Tools.logger.finest(builder.toString());
+      }
+    } else if (Tools.logger.isLoggable(Level.FINE)) {
       int logTextMaxLength = 100;
       String logText = annotatedText.getPlainText();
       String postfix = "";
@@ -101,6 +124,7 @@ public class DocumentChecker {
           settings.getLanguageShortCode(), StringEscapeUtils.escapeJava(logText), postfix));
     }
 
+    Instant beforeCheckingInstant = Instant.now();
     List<LanguageToolRuleMatch> matches = Collections.emptyList();
 
     try {
@@ -108,6 +132,11 @@ public class DocumentChecker {
     } catch (RuntimeException e) {
       Tools.logger.severe(Tools.i18n("languageToolFailed", e));
       return matches;
+    }
+
+    if (Tools.logger.isLoggable(Level.FINER)) {
+      Tools.logger.finer(Tools.i18n("checkingDone",
+          Duration.between(beforeCheckingInstant, Instant.now()).toMillis()));
     }
 
     Tools.logger.fine((matches.size() == 1) ? Tools.i18n("obtainedRuleMatch") :
