@@ -85,9 +85,11 @@ public class DocumentChecker {
       languageToolInterface.enableEasterEgg();
     }
 
+    AnnotatedText annotatedText = annotatedTextFragment.getAnnotatedText();
+
     {
       int logTextMaxLength = 100;
-      String logText = annotatedTextFragment.getAnnotatedText().getPlainText();
+      String logText = annotatedText.getPlainText();
       String postfix = "";
 
       if (logText.length() > logTextMaxLength) {
@@ -102,14 +104,15 @@ public class DocumentChecker {
     List<LanguageToolRuleMatch> matches = Collections.emptyList();
 
     try {
-      matches = languageToolInterface.check(annotatedTextFragment.getAnnotatedText());
-      Tools.logger.fine((matches.size() == 1) ? Tools.i18n("obtainedRuleMatch") :
-          Tools.i18n("obtainedRuleMatches", matches.size()));
-      removeIgnoredMatches(matches);
+      matches = languageToolInterface.check(annotatedText);
     } catch (RuntimeException e) {
       Tools.logger.severe(Tools.i18n("languageToolFailed", e));
       return matches;
     }
+
+    Tools.logger.fine((matches.size() == 1) ? Tools.i18n("obtainedRuleMatch") :
+        Tools.i18n("obtainedRuleMatches", matches.size()));
+    removeIgnoredMatches(matches);
 
     for (LanguageToolRuleMatch match : matches) {
       match.setFromPos(match.getFromPos() + annotatedTextFragment.getCodeFragment().getFromPos());
