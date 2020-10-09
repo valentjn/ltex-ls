@@ -72,7 +72,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
         ((ltexLsVersion != null) ? ltexLsVersion : "null")));
 
     ServerCapabilities capabilities = new ServerCapabilities();
-    capabilities.setTextDocumentSync(TextDocumentSyncKind.Incremental);
+    capabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
     capabilities.setCodeActionProvider(new CodeActionOptions(CodeActionGenerator.getCodeActions()));
 
     List<String> commandNames = new ArrayList<>();

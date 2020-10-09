@@ -270,7 +270,7 @@ Params: {
 [Trace - 12:09:07 AM] Received response 'initialize - (0)' in 6911ms.
 Result: {
     "capabilities": {
-        "textDocumentSync": 2,
+        "textDocumentSync": 1,
         "codeActionProvider": {
             "codeActionKinds": [
                 "quickfix.ltex.acceptSuggestions"
@@ -506,17 +506,6 @@ Params: {
     },
     "contentChanges": [
         {
-            "range": {
-                "start": {
-                    "line": 0,
-                    "character": 0
-                },
-                "end": {
-                    "line": 0,
-                    "character": 0
-                }
-            },
-            "rangeLength": 0,
             "text": "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n"
         }
     ]
@@ -1306,18 +1295,7 @@ Params: {
     },
     "contentChanges": [
         {
-            "range": {
-                "start": {
-                    "line": 0,
-                    "character": 9
-                },
-                "end": {
-                    "line": 0,
-                    "character": 10
-                }
-            },
-            "rangeLength": 1,
-            "text": ""
+            "text": "This is a \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n"
         }
     ]
 }
@@ -1999,18 +1977,7 @@ Params: {
     },
     "contentChanges": [
         {
-            "range": {
-                "start": {
-                    "line": 2,
-                    "character": 26
-                },
-                "end": {
-                    "line": 2,
-                    "character": 26
-                }
-            },
-            "rangeLength": 0,
-            "text": "a"
+            "text": "This is a \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Testa}.\n"
         }
     ]
 }
@@ -2116,69 +2083,12 @@ Params: {
 }
 
 
-[Trace - 12:09:57 AM] Sending request 'textDocument/codeAction - (9)'.
-Params: {
-    "textDocument": {
-        "uri": "untitled:Untitled-1"
-    },
-    "range": {
-        "start": {
-            "line": 2,
-            "character": 27
-        },
-        "end": {
-            "line": 2,
-            "character": 27
-        }
-    },
-    "context": {
-        "diagnostics": []
-    }
-}
-
-
 [Trace - 12:09:57 AM] Received notification 'ltex/progress'.
 Params: {
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
     "progress": 1
 }
-
-
-[Trace - 12:09:57 AM] Received notification 'textDocument/publishDiagnostics'.
-Params: {
-    "uri": "untitled:Untitled-1",
-    "diagnostics": []
-}
-
-
-[Trace - 12:09:57 AM] Received response 'textDocument/codeAction - (9)' in 429ms.
-Result: []
-
-
-[Trace - 12:09:58 AM] Sending request 'textDocument/codeAction - (10)'.
-Params: {
-    "textDocument": {
-        "uri": "untitled:Untitled-1"
-    },
-    "range": {
-        "start": {
-            "line": 2,
-            "character": 27
-        },
-        "end": {
-            "line": 2,
-            "character": 27
-        }
-    },
-    "context": {
-        "diagnostics": []
-    }
-}
-
-
-[Trace - 12:09:58 AM] Received response 'textDocument/codeAction - (10)' in 3ms.
-Result: []
 
 
 [Trace - 12:09:59 AM] Received notification 'textDocument/publishDiagnostics'.
