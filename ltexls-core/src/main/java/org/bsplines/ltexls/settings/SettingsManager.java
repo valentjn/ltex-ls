@@ -50,6 +50,7 @@ public class SettingsManager {
     this.fullDictionaryMap.put(language, this.fullDictionary);
     this.languageToolInterfaceMap = new HashMap<>();
     this.languageToolInterfaceMap.put(language, this.languageToolInterface);
+    Tools.setLogLevel(settings.getLogLevel());
   }
 
   @RequiresNonNull({"settings", "fullDictionary"})
@@ -146,6 +147,7 @@ public class SettingsManager {
   private void setSettings(String newLanguage, Settings newSettings) {
     this.settings = newSettings;
     this.settingsMap.put(newLanguage, this.settings);
+    Tools.setLogLevel(this.settings.getLogLevel());
   }
 
   private void setDictionaryFileWatcher(String newLanguage, Settings newSettings) {
@@ -191,7 +193,7 @@ public class SettingsManager {
       differencesStringBuilder.append("'");
     }
 
-    Tools.logger.info(Tools.i18n("reinitializingLanguageToolDueToDifferentSettings",
+    Tools.logger.fine(Tools.i18n("reinitializingLanguageToolDueToDifferentSettings",
         newLanguage, differencesStringBuilder.toString()));
   }
 }

@@ -78,7 +78,7 @@ public class DocumentChecker {
       Tools.logger.warning(Tools.i18n("skippingTextCheckAsLanguageToolHasNotBeenInitialized"));
       return Collections.emptyList();
     } else if (!settings.getEnabled().contains(codeFragment.getCodeLanguageId())) {
-      Tools.logger.info(Tools.i18n("skippingTextCheckAsLtexHasBeenDisabled",
+      Tools.logger.fine(Tools.i18n("skippingTextCheckAsLtexHasBeenDisabled",
           codeFragment.getCodeLanguageId()));
       return Collections.emptyList();
     } else if (settings.getDictionary().contains("BsPlInEs")) {
@@ -95,7 +95,7 @@ public class DocumentChecker {
         postfix = Tools.i18n("truncatedPostfix", logTextMaxLength);
       }
 
-      Tools.logger.info(Tools.i18n("checkingText",
+      Tools.logger.fine(Tools.i18n("checkingText",
           settings.getLanguageShortCode(), StringEscapeUtils.escapeJava(logText), postfix));
     }
 
@@ -103,7 +103,7 @@ public class DocumentChecker {
 
     try {
       matches = languageToolInterface.check(annotatedTextFragment.getAnnotatedText());
-      Tools.logger.info((matches.size() == 1) ? Tools.i18n("obtainedRuleMatch") :
+      Tools.logger.fine((matches.size() == 1) ? Tools.i18n("obtainedRuleMatch") :
           Tools.i18n("obtainedRuleMatches", matches.size()));
       removeIgnoredMatches(matches);
     } catch (RuntimeException e) {
@@ -135,7 +135,7 @@ public class DocumentChecker {
         for (IgnoreRuleSentencePair pair : ignoreRuleSentencePairs) {
           if (pair.getRuleId().equals(ruleId)
                 && pair.getSentencePattern().matcher(sentence).find()) {
-            Tools.logger.info(Tools.i18n("removingIgnoredRuleMatch", ruleId, sentence));
+            Tools.logger.fine(Tools.i18n("removingIgnoredRuleMatch", ruleId, sentence));
             ignoreMatches.add(match);
             break;
           }
@@ -143,7 +143,7 @@ public class DocumentChecker {
       }
 
       if (!ignoreMatches.isEmpty()) {
-        Tools.logger.info((ignoreMatches.size() == 1)
+        Tools.logger.fine((ignoreMatches.size() == 1)
             ? Tools.i18n("removedIgnoredRuleMatch")
             : Tools.i18n("removedIgnoredRuleMatches", ignoreMatches.size()));
         for (LanguageToolRuleMatch match : ignoreMatches) matches.remove(match);

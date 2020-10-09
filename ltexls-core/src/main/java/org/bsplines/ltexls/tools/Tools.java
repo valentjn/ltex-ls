@@ -18,6 +18,7 @@ import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,6 +29,7 @@ import org.eclipse.lsp4j.Range;
 
 public class Tools {
   private static @MonotonicNonNull ResourceBundle messages = null;
+  private static ConsoleHandler loggerConsoleHandler = new ConsoleHandler();
   public static final Logger logger = Logger.getLogger("org.bsplines.ltexls");
   private static final Pattern tildePathPattern = Pattern.compile("^~($|/|\\\\)");
 
@@ -35,7 +37,13 @@ public class Tools {
     setDefaultLocale();
 
     logger.setUseParentHandlers(false);
-    logger.addHandler(new ConsoleHandler());
+    logger.addHandler(loggerConsoleHandler);
+    setLogLevel(Level.FINE);
+  }
+
+  public static void setLogLevel(Level logLevel) {
+    logger.setLevel(logLevel);
+    loggerConsoleHandler.setLevel(logLevel);
   }
 
   /**

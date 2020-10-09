@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -35,6 +36,7 @@ public class Settings {
   private @Nullable Map<String, Set<String>> disabledRules = null;
   private @Nullable Map<String, Set<String>> enabledRules = null;
   private @Nullable String languageToolHttpServerUri = null;
+  private @Nullable Level logLevel = null;
   private @Nullable Set<String> dummyCommandPrototypes = null;
   private @Nullable Set<String> ignoreCommandPrototypes = null;
   private @Nullable Set<String> ignoreEnvironments = null;
@@ -64,6 +66,7 @@ public class Settings {
     this.disabledRules = ((obj.disabledRules == null) ? null : copyMapOfSets(obj.disabledRules));
     this.enabledRules = ((obj.enabledRules == null) ? null : copyMapOfSets(obj.enabledRules));
     this.languageToolHttpServerUri = obj.languageToolHttpServerUri;
+    this.logLevel = obj.logLevel;
     this.dummyCommandPrototypes = ((obj.dummyCommandPrototypes == null) ? null
         : new HashSet<>(obj.dummyCommandPrototypes));
     this.ignoreCommandPrototypes = ((obj.ignoreCommandPrototypes == null) ? null
@@ -229,6 +232,13 @@ public class Settings {
           jsonSettings, "ltex-ls.languageToolHttpServerUri").getAsString();
     } catch (NullPointerException | UnsupportedOperationException e) {
       this.languageToolHttpServerUri = null;
+    }
+
+    try {
+      this.logLevel = Level.parse(
+          getSettingFromJson(jsonSettings, "ltex-ls.logLevel").getAsString().toUpperCase());
+    } catch (NullPointerException | UnsupportedOperationException | IllegalArgumentException e) {
+      this.logLevel = null;
     }
 
     try {
@@ -398,6 +408,12 @@ public class Settings {
       if (shortCircuit) return differences;
     }
 
+    if ((this.logLevel == null) ? (other.logLevel != null) :
+          !this.logLevel.equals(other.logLevel)) {
+      differences.add(new SettingsDifference("ltex-ls.logLevel", this.logLevel, other.logLevel));
+      if (shortCircuit) return differences;
+    }
+
     if ((this.dummyCommandPrototypes == null) ? (other.dummyCommandPrototypes != null) :
           !this.dummyCommandPrototypes.equals(other.dummyCommandPrototypes)) {
       differences.add(new SettingsDifference("commands.dummy",
@@ -505,6 +521,7 @@ public class Settings {
     hash = 53 * hash + mapOfSetsHashCode(this.enabledRules, this.languageShortCode);
     hash = 53 * hash + ((this.languageToolHttpServerUri != null)
         ? this.languageToolHttpServerUri.hashCode() : 0);
+    hash = 53 * hash + ((this.logLevel != null) ? this.logLevel.hashCode() : 0);
     hash = 53 * hash + ((this.dummyCommandPrototypes != null)
         ? this.dummyCommandPrototypes.hashCode() : 0);
     hash = 53 * hash + ((this.ignoreCommandPrototypes != null)
@@ -567,6 +584,10 @@ public class Settings {
 
   public String getLanguageToolHttpServerUri() {
     return getDefault(this.languageToolHttpServerUri, "");
+  }
+
+  public Level getLogLevel() {
+    return getDefault(this.logLevel, Level.FINE);
   }
 
   public Set<String> getDummyCommandPrototypes() {
@@ -667,6 +688,12 @@ public class Settings {
   public Settings withLanguageToolHttpServerUri(String languageToolHttpServerUri) {
     Settings obj = new Settings(this);
     obj.languageToolHttpServerUri = languageToolHttpServerUri;
+    return obj;
+  }
+
+  public Settings withLogLevel(Level logLevel) {
+    Settings obj = new Settings(this);
+    obj.logLevel = logLevel;
     return obj;
   }
 

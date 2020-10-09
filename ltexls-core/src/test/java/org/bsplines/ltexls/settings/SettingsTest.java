@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 import org.bsplines.ltexls.tools.Tools;
 import org.eclipse.lsp4j.DiagnosticSeverity;
 import org.junit.jupiter.api.Assertions;
@@ -70,6 +71,10 @@ public class SettingsTest {
 
     settings = settings.withLanguageToolHttpServerUri("languageToolHttpServerUri");
     Assertions.assertEquals("languageToolHttpServerUri", settings.getLanguageToolHttpServerUri());
+    settings2 = compareSettings(settings, settings2);
+
+    settings = settings.withLogLevel(Level.FINEST);
+    Assertions.assertEquals(Level.FINEST, settings.getLogLevel());
     settings2 = compareSettings(settings, settings2);
 
     settings = settings.withDummyCommandPrototypes(
