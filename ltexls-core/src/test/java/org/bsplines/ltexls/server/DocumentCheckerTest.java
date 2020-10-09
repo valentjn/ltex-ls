@@ -225,10 +225,11 @@ public class DocumentCheckerTest {
     JsonObject jsonDictionaryObject = new JsonObject();
     jsonDictionaryObject.add("de-DE", jsonDictionaryArray);
     JsonObject jsonSettings = new JsonObject();
-    jsonSettings.add("dictionary", jsonDictionaryObject);
+    JsonObject jsonWorkspaceSpecificSettings = new JsonObject();
+    jsonWorkspaceSpecificSettings.add("dictionary", jsonDictionaryObject);
     LtexTextDocumentItem document = createDocument("latex",
         "This is an unknownword.\n% ltex: language=de-DE\nDies ist ein unbekannteswort.\n");
-    Settings settings = new Settings(jsonSettings);
+    Settings settings = new Settings(jsonSettings, jsonWorkspaceSpecificSettings);
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         checkDocument(document, settings);
     Assertions.assertEquals(1, checkingResult.getKey().size());

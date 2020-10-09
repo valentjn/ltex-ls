@@ -401,22 +401,31 @@ public class LtexTextDocumentItem extends TextDocumentItem {
 
     String uri = getUri();
     ConfigurationItem configurationItem = new ConfigurationItem();
-    configurationItem.setSection("ltex");
     configurationItem.setScopeUri(uri);
-    CompletableFuture<List<Object>> configurationFuture = languageClient.configuration(
-        new ConfigurationParams(Collections.singletonList(configurationItem)));
+    configurationItem.setSection("ltex");
+    ConfigurationParams configurationParams = new ConfigurationParams(
+        Collections.singletonList(configurationItem));
+
+    CompletableFuture<List<Object>> configurationFuture =
+        languageClient.configuration(configurationParams);
+    CompletableFuture<List<Object>> workspaceSpecificConfigurationFuture =
+        languageClient.ltexWorkspaceSpecificConfiguration(configurationParams);
+
     languageClient.ltexProgress(new LtexProgressParams(uri, "checkDocument", 0));
 
-    return configurationFuture.thenApply((List<Object> configuration) -> {
-      try {
-        this.languageServer.getSettingsManager().setSettings((JsonElement)configuration.get(0));
-        this.checkingResult = this.languageServer.getDocumentChecker().check(this);
-        return this.checkingResult;
-      } finally {
-        if (languageClient != null) {
-          languageClient.ltexProgress(new LtexProgressParams(uri, "checkDocument", 1));
-        }
-      }
-    });
+    return configurationFuture.thenCombine(workspaceSpecificConfigurationFuture,
+      (List<Object> configuration, List<Object> workspaceSpecificConfiguration) -> {
+          try {
+            this.languageServer.getSettingsManager().setSettings(
+                (JsonElement)configuration.get(0),
+                (JsonElement)workspaceSpecificConfiguration.get(0));
+            this.checkingResult = this.languageServer.getDocumentChecker().check(this);
+            return this.checkingResult;
+          } finally {
+            if (languageClient != null) {
+              languageClient.ltexProgress(new LtexProgressParams(uri, "checkDocument", 1));
+            }
+          }
+        });
   }
 }

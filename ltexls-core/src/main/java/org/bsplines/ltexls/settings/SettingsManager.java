@@ -112,8 +112,9 @@ public class SettingsManager {
         this.dictionaryFileWatcher.getFullDictionary());
   }
 
-  public void setSettings(JsonElement newJsonSettings) {
-    Settings newSettings = new Settings(newJsonSettings);
+  public void setSettings(JsonElement newJsonSettings,
+        JsonElement newJsonWorkspaceSpecificSettings) {
+    Settings newSettings = new Settings(newJsonSettings, newJsonWorkspaceSpecificSettings);
     setSettings(newSettings);
   }
 

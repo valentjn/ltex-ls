@@ -75,7 +75,8 @@ public class SettingsTest {
   @Test
   public void testJsonSettings() {
     JsonElement jsonSettings = new JsonObject();
-    Assertions.assertDoesNotThrow(() -> new Settings(jsonSettings));
+    JsonElement jsonWorkspaceSpecificSettings = new JsonObject();
+    Assertions.assertDoesNotThrow(() -> new Settings(jsonSettings, jsonWorkspaceSpecificSettings));
   }
 
   @Test
