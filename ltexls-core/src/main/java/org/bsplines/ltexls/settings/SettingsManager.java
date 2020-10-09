@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 import org.bsplines.ltexls.languagetool.LanguageToolHttpInterface;
 import org.bsplines.ltexls.languagetool.LanguageToolInterface;
 import org.bsplines.ltexls.languagetool.LanguageToolJavaInterface;
@@ -137,8 +138,11 @@ public class SettingsManager {
     if (settingsDifferences.isEmpty() && fullDictionariesEqual) {
       this.languageToolInterface = this.languageToolInterfaceMap.get(newLanguage);
     } else {
-      logDifferentSettings(newLanguage, settingsDifferences, fullDictionariesEqual,
-          oldFullDictionary, this.fullDictionary);
+      if (Tools.logger.isLoggable(Level.FINE)) {
+        logDifferentSettings(newLanguage, settingsDifferences, fullDictionariesEqual,
+            oldFullDictionary, this.fullDictionary);
+      }
+
       reinitializeLanguageToolInterface();
       this.languageToolInterfaceMap.put(newLanguage, this.languageToolInterface);
     }
