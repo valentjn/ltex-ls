@@ -35,6 +35,7 @@ import org.languagetool.rules.patterns.AbstractPatternRule;
 import org.xml.sax.SAXException;
 
 public class LanguageToolJavaInterface extends LanguageToolInterface {
+  private @MonotonicNonNull ResultCache resultCache;
   private @MonotonicNonNull JLanguageTool languageTool;
 
   private static final int resultCacheExpireAfterMinutes = 10;
@@ -57,19 +58,21 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     Language language = Languages.getLanguageForShortCode(languageShortCode);
     @Nullable Language motherTongue = ((!motherTongueShortCode.isEmpty())
         ? Languages.getLanguageForShortCode(motherTongueShortCode) : null);
-    ResultCache resultCache = new ResultCache(sentenceCacheSize,
-        resultCacheExpireAfterMinutes, TimeUnit.MINUTES);
+    this.resultCache = new ResultCache(
+        sentenceCacheSize, resultCacheExpireAfterMinutes, TimeUnit.MINUTES);
     UserConfig userConfig = new UserConfig(new ArrayList<>(dictionary));
 
     @SuppressWarnings("argument.type.incompatible")
-    JLanguageTool languageTool = new JLanguageTool(language, motherTongue, resultCache, userConfig);
+    JLanguageTool languageTool = new JLanguageTool(
+        language, motherTongue, this.resultCache, userConfig);
     this.languageTool = languageTool;
   }
 
+  @EnsuresNonNullIf(expression = "this.resultCache", result = true)
   @EnsuresNonNullIf(expression = "this.languageTool", result = true)
   @Override
   public boolean isReady() {
-    return (this.languageTool != null);
+    return (this.resultCache != null) && (this.languageTool != null);
   }
 
   @Override
