@@ -11,6 +11,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 import org.bsplines.ltexls.settings.IgnoreRuleSentencePair;
@@ -41,7 +42,7 @@ public class DocumentCheckerTest {
 
   private static Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkDocument(
         TextDocumentItem document, Settings settings) {
-    SettingsManager settingsManager = new SettingsManager(settings);
+    SettingsManager settingsManager = new SettingsManager(settings.withLogLevel(Level.FINEST));
     DocumentChecker documentChecker = new DocumentChecker(settingsManager);
     return documentChecker.check(document);
   }
