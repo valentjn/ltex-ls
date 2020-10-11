@@ -27,12 +27,12 @@ import org.eclipse.lsp4j.WorkspaceSymbolParams;
 import org.eclipse.lsp4j.services.WorkspaceService;
 
 class LtexWorkspaceService implements WorkspaceService {
-  @NotOnlyInitialized LtexLanguageServer ltexLanguageServer;
+  @NotOnlyInitialized LtexLanguageServer languageServer;
 
   private static final String checkDocumentCommandName = "ltex.checkDocument";
 
-  public LtexWorkspaceService(@UnknownInitialization LtexLanguageServer ltexLanguageServer) {
-    this.ltexLanguageServer = ltexLanguageServer;
+  public LtexWorkspaceService(@UnknownInitialization LtexLanguageServer languageServer) {
+    this.languageServer = languageServer;
   }
 
   @Override
@@ -42,8 +42,8 @@ class LtexWorkspaceService implements WorkspaceService {
 
   @Override
   public void didChangeConfiguration(DidChangeConfigurationParams params) {
-    this.ltexLanguageServer.getLtexTextDocumentService().executeFunction(
-        this.ltexLanguageServer::publishDiagnostics);
+    this.languageServer.getLtexTextDocumentService().executeFunction(
+        (LtexTextDocumentItem document) -> document.checkAndPublishDiagnostics());
   }
 
   @Override
@@ -53,14 +53,14 @@ class LtexWorkspaceService implements WorkspaceService {
   @Override
   public CompletableFuture<Object> executeCommand(ExecuteCommandParams params) {
     if (params.getCommand().equals(checkDocumentCommandName)) {
-      return checkDocument((JsonObject)params.getArguments().get(0));
+      return executeCheckDocumentCommand((JsonObject)params.getArguments().get(0));
     } else {
       return CompletableFuture.completedFuture(false);
     }
   }
 
-  public CompletableFuture<Object> checkDocument(JsonObject arguments) {
-    if (this.ltexLanguageServer == null) {
+  public CompletableFuture<Object> executeCheckDocumentCommand(JsonObject arguments) {
+    if (this.languageServer == null) {
       return failCommand(Tools.i18n("languageServerNotInitialized"));
     }
 
@@ -96,9 +96,10 @@ class LtexWorkspaceService implements WorkspaceService {
       }
     }
 
-    LtexTextDocumentItem document = new LtexTextDocumentItem(uriStr, codeLanguageId, 1, text);
+    LtexTextDocumentItem document = new LtexTextDocumentItem(
+        this.languageServer, uriStr, codeLanguageId, 1, text);
 
-    return this.ltexLanguageServer.publishDiagnostics(document).thenApply((Boolean success) -> {
+    return document.checkAndPublishDiagnostics().thenApply((Boolean success) -> {
       JsonObject jsonObject = new JsonObject();
       jsonObject.addProperty("success", success);
       return jsonObject;

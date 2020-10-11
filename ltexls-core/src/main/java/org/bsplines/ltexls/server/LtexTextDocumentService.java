@@ -58,11 +58,11 @@ import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.xtext.xbase.lib.Pair;
 
 public class LtexTextDocumentService implements TextDocumentService {
-  @NotOnlyInitialized LtexLanguageServer ltexLanguageServer;
+  @NotOnlyInitialized LtexLanguageServer languageServer;
   Map<String, LtexTextDocumentItem> documents;
 
-  public LtexTextDocumentService(@UnknownInitialization LtexLanguageServer ltexLanguageServer) {
-    this.ltexLanguageServer = ltexLanguageServer;
+  public LtexTextDocumentService(@UnknownInitialization LtexLanguageServer languageServer) {
+    this.languageServer = languageServer;
     this.documents = new HashMap<>();
   }
 
@@ -154,7 +154,7 @@ public class LtexTextDocumentService implements TextDocumentService {
 
     document.applyTextChangeEvents(params.getContentChanges());
     document.setVersion(params.getTextDocument().getVersion());
-    this.ltexLanguageServer.publishDiagnostics(document, document.getCaretPosition());
+    document.checkAndPublishDiagnostics();
   }
 
   @Override
@@ -176,10 +176,9 @@ public class LtexTextDocumentService implements TextDocumentService {
       return CompletableFuture.completedFuture(Collections.emptyList());
     }
 
-    return this.ltexLanguageServer.checkDocument(document)
-        .thenApply((Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>
-        checkingResult) -> {
-          return this.ltexLanguageServer.getCodeActionGenerator().generate(
+    return document.check().thenApply(
+        (Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) -> {
+          return this.languageServer.getCodeActionGenerator().generate(
               params, document, checkingResult);
         });
   }
@@ -187,19 +186,19 @@ public class LtexTextDocumentService implements TextDocumentService {
   @Override
   public void didOpen(DidOpenTextDocumentParams params) {
     this.documents.put(params.getTextDocument().getUri(),
-        new LtexTextDocumentItem(params.getTextDocument()));
+        new LtexTextDocumentItem(this.languageServer, params.getTextDocument()));
     @Nullable LtexTextDocumentItem document = getDocument(params.getTextDocument().getUri());
-    if (document != null) this.ltexLanguageServer.publishDiagnostics(document);
+    if (document != null) document.checkAndPublishDiagnostics();
   }
 
   @Override
   public void didClose(DidCloseTextDocumentParams params) {
     String uri = params.getTextDocument().getUri();
     this.documents.remove(uri);
-    Settings settings = this.ltexLanguageServer.getSettingsManager().getSettings();
+    Settings settings = this.languageServer.getSettingsManager().getSettings();
 
     if (settings.getClearDiagnosticsWhenClosingFile()) {
-      @Nullable LanguageClient languageClient = this.ltexLanguageServer.getLanguageClient();
+      @Nullable LanguageClient languageClient = this.languageServer.getLanguageClient();
 
       if (languageClient != null) {
         languageClient.publishDiagnostics(

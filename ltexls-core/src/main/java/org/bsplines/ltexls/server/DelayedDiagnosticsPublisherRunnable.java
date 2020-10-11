@@ -9,6 +9,9 @@ package org.bsplines.ltexls.server;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.eclipse.lsp4j.Diagnostic;
 import org.eclipse.lsp4j.PublishDiagnosticsParams;
 import org.eclipse.lsp4j.services.LanguageClient;
 
@@ -39,8 +42,12 @@ public class DelayedDiagnosticsPublisherRunnable implements Runnable {
 
     if (Duration.between(this.document.getLastCaretChangeInstant(),
           Instant.now()).compareTo(showCaretDiagnosticsDuration) > 0) {
-      this.languageClient.publishDiagnostics(new PublishDiagnosticsParams(
-          this.document.getUri(), this.document.getDiagnostics()));
+      @Nullable List<Diagnostic> diagnostics = this.document.getDiagnosticsWithoutChecking();
+
+      if (diagnostics != null) {
+        this.languageClient.publishDiagnostics(new PublishDiagnosticsParams(
+            this.document.getUri(), diagnostics));
+      }
     }
   }
 }

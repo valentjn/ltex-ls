@@ -48,7 +48,8 @@ public class DocumentCheckerTest {
   }
 
   public static LtexTextDocumentItem createDocument(String codeLanguageId, String code) {
-    return new LtexTextDocumentItem("untitled:test.txt", codeLanguageId, 1, code);
+    LtexLanguageServer languageServer = new LtexLanguageServer();
+    return new LtexTextDocumentItem(languageServer, "untitled:test.txt", codeLanguageId, 1, code);
   }
 
   /**

@@ -32,31 +32,25 @@ import org.eclipse.xtext.xbase.lib.Pair;
 public class LtexTextDocumentItem extends TextDocumentItem {
   private LtexLanguageServer languageServer;
   private List<Integer> lineStartPosList;
-  private List<Diagnostic> diagnostics;
+  private @Nullable Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult;
+  private @Nullable List<Diagnostic> diagnostics;
   private @Nullable Position caretPosition;
   private Instant lastCaretChangeInstant;
 
-  /**
-   * Constructor.
-   *
-   * @param uri URI
-   * @param codeLanguageId ID of the code language
-   * @param version version
-   * @param text text
-   */
   public LtexTextDocumentItem(LtexLanguageServer languageServer,
         String uri, String codeLanguageId, int version, String text) {
     super(uri, codeLanguageId, version, text);
     this.languageServer = languageServer;
     this.lineStartPosList = new ArrayList<>();
-    this.diagnostics = new ArrayList<>();
+    this.checkingResult = null;
+    this.diagnostics = null;
     this.caretPosition = null;
     this.lastCaretChangeInstant = Instant.now();
     reinitializeLineStartPosList(text, this.lineStartPosList);
   }
 
-  public LtexTextDocumentItem(LtexTextDocumentItem document) {
-    this(document.getLanguageServer(), document.getUri(), document.getLanguageId(),
+  public LtexTextDocumentItem(LtexLanguageServer languageServer, TextDocumentItem document) {
+    this(languageServer, document.getUri(), document.getLanguageId(),
         document.getVersion(), document.getText());
   }
 
@@ -87,7 +81,16 @@ public class LtexTextDocumentItem extends TextDocumentItem {
 
     if (!super.equals(other)) return false;
     if (!this.lineStartPosList.equals(other.lineStartPosList)) return false;
-    if (!this.diagnostics.equals(other.diagnostics)) return false;
+
+    if ((this.checkingResult == null) ? (other.checkingResult != null) :
+          ((other.checkingResult == null) || !this.checkingResult.equals(other.checkingResult))) {
+      return false;
+    }
+
+    if ((this.diagnostics == null) ? (other.diagnostics != null) :
+          ((other.diagnostics == null) || !this.diagnostics.equals(other.diagnostics))) {
+      return false;
+    }
 
     if ((this.caretPosition == null) ? (other.caretPosition != null) :
           ((other.caretPosition == null) || !this.caretPosition.equals(other.caretPosition))) {
@@ -105,7 +108,8 @@ public class LtexTextDocumentItem extends TextDocumentItem {
 
     hash = 53 * hash + super.hashCode();
     hash = 53 * hash + this.lineStartPosList.hashCode();
-    hash = 53 * hash + this.diagnostics.hashCode();
+    if (this.checkingResult != null) hash = 53 * hash + this.checkingResult.hashCode();
+    if (this.diagnostics != null) hash = 53 * hash + this.diagnostics.hashCode();
     if (this.caretPosition != null) hash = 53 * hash + this.caretPosition.hashCode();
     hash = 53 * hash + this.lastCaretChangeInstant.hashCode();
 
@@ -175,14 +179,6 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     return new Position(line, pos - this.lineStartPosList.get(line));
   }
 
-  public List<Diagnostic> getDiagnostics() {
-    return Collections.unmodifiableList(this.diagnostics);
-  }
-
-  public void setDiagnostics(List<Diagnostic> diagnostics) {
-    this.diagnostics = new ArrayList<>(diagnostics);
-  }
-
   public @Nullable Position getCaretPosition() {
     return ((this.caretPosition != null)
         ? new Position(this.caretPosition.getLine(), this.caretPosition.getCharacter()) : null);
@@ -211,7 +207,10 @@ public class LtexTextDocumentItem extends TextDocumentItem {
 
   @Override
   public void setText(String text) {
+    String oldText = getText();
     super.setText(text);
+    this.checkingResult = null;
+    this.diagnostics = null;
     this.caretPosition = null;
     reinitializeLineStartPosList();
   }
@@ -268,41 +267,23 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     }
   }
 
-  /**
-   * Check a document and publish the resulting diagnostics.
-   *
-   * @param document document to check
-   * @return completable future of type Boolean: true iff successful
-   */
-  public CompletableFuture<Boolean> publishDiagnostics(LtexTextDocumentItem document) {
-    return publishDiagnostics(document, null);
+    this.checkingResult = null;
+    this.diagnostics = null;
   }
 
-  /**
-   * Check a document and publish the resulting diagnostics. If the current position of the caret
-   * is given, the diagnostics that are at the caret position are withhold and will be published
-   * after a short amount of time.
-   *
-   * @param document document to check
-   * @param caretPosition optional position of the caret
-   * @return completable future of type void
-   */
-  public CompletableFuture<Boolean> publishDiagnostics(LtexTextDocumentItem document,
-        @Nullable Position caretPosition) {
+  public CompletableFuture<Boolean> checkAndPublishDiagnostics() {
     @Nullable LtexLanguageClient languageClient = this.languageServer.getLanguageClient();
 
-    return getDiagnostics(document).thenApply((List<Diagnostic> diagnostics) -> {
+    return checkAndGetDiagnostics().thenApply((List<Diagnostic> diagnostics) -> {
       if (languageClient == null) return false;
-
-      List<Diagnostic> diagnosticsNotAtCaret =
-          extractDiagnosticsNotAtCaret(diagnostics, caretPosition);
+      @Nullable List<Diagnostic> diagnosticsNotAtCaret = extractDiagnosticsNotAtCaret();
+      if (diagnosticsNotAtCaret == null) return false;
       languageClient.publishDiagnostics(new PublishDiagnosticsParams(
-          document.getUri(), diagnosticsNotAtCaret));
-      document.setDiagnostics(diagnostics);
+          getUri(), diagnosticsNotAtCaret));
 
       if (diagnosticsNotAtCaret.size() < diagnostics.size()) {
         Thread thread = new Thread(new DelayedDiagnosticsPublisherRunnable(
-            languageClient, document));
+            languageClient, this));
         thread.start();
       }
 
@@ -310,32 +291,39 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     });
   }
 
-  private CompletableFuture<List<Diagnostic>> getDiagnostics(LtexTextDocumentItem document) {
-    return checkDocument(document)
-        .thenApply((Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>
-        checkingResult) -> {
+  private CompletableFuture<List<Diagnostic>> checkAndGetDiagnostics() {
+    if (this.diagnostics != null) return CompletableFuture.completedFuture(this.diagnostics);
+
+    return check().thenApply(
+        (Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) -> {
           List<LanguageToolRuleMatch> matches = checkingResult.getKey();
           List<Diagnostic> diagnostics = new ArrayList<>();
 
           for (LanguageToolRuleMatch match : matches) {
             diagnostics.add(this.languageServer.getCodeActionGenerator().createDiagnostic(
-                match, document));
+                match, this));
           }
 
+          this.diagnostics = diagnostics;
           return diagnostics;
         });
   }
 
-  private List<Diagnostic> extractDiagnosticsNotAtCaret(
-        List<Diagnostic> diagnostics, @Nullable Position caretPosition) {
-    if (caretPosition == null) return Collections.unmodifiableList(diagnostics);
-    List<Diagnostic> diagnosticsNotAtCaret = new ArrayList<>();
-    int character = caretPosition.getCharacter();
-    Position beforeCaretPosition = new Position(caretPosition.getLine(),
-        ((character >= 1) ? (character - 1) : 0));
-    Range caretRange = new Range(beforeCaretPosition, caretPosition);
+  public @Nullable List<Diagnostic> getDiagnosticsWithoutChecking() {
+    return ((this.diagnostics != null) ? Collections.unmodifiableList(this.diagnostics) : null);
+  }
 
-    for (Diagnostic diagnostic : diagnostics) {
+  private @Nullable List<Diagnostic> extractDiagnosticsNotAtCaret() {
+    if (this.diagnostics == null) return null;
+    if (this.caretPosition == null) return Collections.unmodifiableList(this.diagnostics);
+    List<Diagnostic> diagnosticsNotAtCaret = new ArrayList<>();
+    int character = this.caretPosition.getCharacter();
+    Position beforeCaretPosition = new Position(this.caretPosition.getLine(),
+        ((character >= 1) ? (character - 1) : 0));
+    Range caretRange = new Range(beforeCaretPosition, this.caretPosition);
+    if (this.diagnostics == null) return null;
+
+    for (Diagnostic diagnostic : this.diagnostics) {
       if (!Tools.areRangesIntersecting(diagnostic.getRange(), caretRange)) {
         diagnosticsNotAtCaret.add(diagnostic);
       }
@@ -344,15 +332,8 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     return diagnosticsNotAtCaret;
   }
 
-
-  /**
-   * Check a document for diagnostics.
-   *
-   * @param document document to check
-   * @return completable future with lists of rule matches and annotated text fragments
-   */
-  public CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>>
-        checkDocument(TextDocumentItem document) {
+  public CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>> check() {
+    if (this.checkingResult != null) return CompletableFuture.completedFuture(this.checkingResult);
     @Nullable LtexLanguageClient languageClient = this.languageServer.getLanguageClient();
 
     if (languageClient == null) {
@@ -360,22 +341,22 @@ public class LtexTextDocumentItem extends TextDocumentItem {
           Pair.of(Collections.emptyList(), Collections.emptyList()));
     }
 
+    String uri = getUri();
     ConfigurationItem configurationItem = new ConfigurationItem();
     configurationItem.setSection("ltex");
-    configurationItem.setScopeUri(document.getUri());
+    configurationItem.setScopeUri(uri);
     CompletableFuture<List<Object>> configurationFuture = languageClient.configuration(
         new ConfigurationParams(Collections.singletonList(configurationItem)));
-    languageClient.ltexProgress(new LtexProgressParams(
-        document.getUri(), "checkDocument", 0));
+    languageClient.ltexProgress(new LtexProgressParams(uri, "checkDocument", 0));
 
     return configurationFuture.thenApply((List<Object> configuration) -> {
       try {
         this.languageServer.getSettingsManager().setSettings((JsonElement)configuration.get(0));
-        return this.languageServer.getDocumentChecker().check(document);
+        this.checkingResult = this.languageServer.getDocumentChecker().check(this);
+        return this.checkingResult;
       } finally {
         if (languageClient != null) {
-          languageClient.ltexProgress(new LtexProgressParams(
-              document.getUri(), "checkDocument", 1));
+          languageClient.ltexProgress(new LtexProgressParams(uri, "checkDocument", 1));
         }
       }
     });
