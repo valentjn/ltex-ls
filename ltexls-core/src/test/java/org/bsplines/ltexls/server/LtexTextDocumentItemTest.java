@@ -58,15 +58,10 @@ public class LtexTextDocumentItemTest {
   }
 
   @Test
-  public void testApplyTextChangeEvents() {
+  public void testApplyIncrementalTextChangeEvents() {
     LtexLanguageServer languageServer = new LtexLanguageServer();
     LtexTextDocumentItem document = new LtexTextDocumentItem(
-        languageServer,"untitled:text.md", "markdown", 1, "abc");
-
-    document.applyTextChangeEvent(new TextDocumentContentChangeEvent("abcdef"));
-    Assertions.assertEquals("abcdef", document.getText());
-    assertNull(document.getCaretPosition());
-
+        languageServer,"untitled:text.md", "markdown", 1, "abcdef");
     Instant pastInstant = Instant.now().minus(Duration.ofSeconds(10));
 
     document.setLastCaretChangeInstant(pastInstant);
@@ -90,7 +85,8 @@ public class LtexTextDocumentItemTest {
     document.applyTextChangeEvent(new TextDocumentContentChangeEvent(
         new Range(new Position(0, 3), new Position(0, 3)), 0, "23"));
     Assertions.assertEquals("ac123def", document.getText());
-    assertNull(document.getCaretPosition());
+    Assertions.assertEquals(new Position(0, 5),
+        NullnessUtil.castNonNull(document.getCaretPosition()));
 
     document.applyTextChangeEvents(Collections.singletonList(new TextDocumentContentChangeEvent(
         new Range(new Position(0, 5), new Position(0, 5)), 0, "4")));
@@ -103,6 +99,46 @@ public class LtexTextDocumentItemTest {
           new Range(new Position(0, 6), new Position(0, 6)), 0, "5"),
         new TextDocumentContentChangeEvent(
           new Range(new Position(0, 7), new Position(0, 7)), 0, "6")));
+    Assertions.assertEquals("ac123456def", document.getText());
+    assertNull(document.getCaretPosition());
+  }
+
+  @Test
+  public void testApplyFullTextChangeEvents() {
+    LtexLanguageServer languageServer = new LtexLanguageServer();
+    LtexTextDocumentItem document = new LtexTextDocumentItem(
+        languageServer,"untitled:text.md", "markdown", 1, "abcdef");
+    Instant pastInstant = Instant.now().minus(Duration.ofSeconds(10));
+
+    document.setLastCaretChangeInstant(pastInstant);
+    document.applyTextChangeEvent(new TextDocumentContentChangeEvent("abc1def"));
+    Assertions.assertEquals("abc1def", document.getText());
+    Assertions.assertEquals(new Position(0, 4),
+        NullnessUtil.castNonNull(document.getCaretPosition()));
+    Assertions.assertTrue(
+        Duration.between(document.getLastCaretChangeInstant(), Instant.now()).toMillis() < 100);
+
+    document.setLastCaretChangeInstant(pastInstant);
+    document.applyTextChangeEvent(new TextDocumentContentChangeEvent("ac1def"));
+    Assertions.assertEquals("ac1def", document.getText());
+    Assertions.assertEquals(new Position(0, 1),
+        NullnessUtil.castNonNull(document.getCaretPosition()));
+    Assertions.assertTrue(
+        Duration.between(document.getLastCaretChangeInstant(), Instant.now()).toMillis() < 100);
+
+    document.applyTextChangeEvent(new TextDocumentContentChangeEvent("ac123def"));
+    Assertions.assertEquals("ac123def", document.getText());
+    Assertions.assertEquals(new Position(0, 5),
+        NullnessUtil.castNonNull(document.getCaretPosition()));
+
+    document.applyTextChangeEvent(new TextDocumentContentChangeEvent("ac1234def"));
+    Assertions.assertEquals("ac1234def", document.getText());
+    Assertions.assertEquals(new Position(0, 6),
+        NullnessUtil.castNonNull(document.getCaretPosition()));
+
+    document.applyTextChangeEvents(Arrays.asList(
+        new TextDocumentContentChangeEvent("ac12345def"),
+        new TextDocumentContentChangeEvent("ac123456def")));
     Assertions.assertEquals("ac123456def", document.getText());
     assertNull(document.getCaretPosition());
   }

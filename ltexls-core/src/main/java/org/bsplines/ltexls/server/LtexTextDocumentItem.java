@@ -207,12 +207,13 @@ public class LtexTextDocumentItem extends TextDocumentItem {
 
   @Override
   public void setText(String text) {
-    String oldText = getText();
+    final String oldText = getText();
     super.setText(text);
+    reinitializeLineStartPosList();
     this.checkingResult = null;
     this.diagnostics = null;
-    this.caretPosition = null;
-    reinitializeLineStartPosList();
+    this.caretPosition = guessCaretPositionInFullUpdate(oldText);
+    if (this.caretPosition != null) this.lastCaretChangeInstant = Instant.now();
   }
 
   /**
@@ -241,34 +242,77 @@ public class LtexTextDocumentItem extends TextDocumentItem {
   public void applyTextChangeEvent(TextDocumentContentChangeEvent textChangeEvent) {
     Range changeRange = textChangeEvent.getRange();
     String changeText = textChangeEvent.getText();
+    int fromPos = -1;
+    int toPos = -1;
+    String oldText = getText();
+    String newText;
 
     if (changeRange != null) {
-      String text = getText();
-      int fromPos = convertPosition(changeRange.getStart());
-      int toPos   = ((changeRange.getEnd() != changeRange.getStart())
+      fromPos = convertPosition(changeRange.getStart());
+      toPos = ((changeRange.getEnd() != changeRange.getStart())
           ? convertPosition(changeRange.getEnd()) : fromPos);
-      text = text.substring(0, fromPos) + changeText + text.substring(toPos);
-      setText(text);
-
-      if ((fromPos == toPos) && (changeText.length() == 1)) {
-        this.caretPosition = convertPosition(toPos + 1);
-        this.lastCaretChangeInstant = Instant.now();
-      } else if ((fromPos == toPos - 1) && changeText.isEmpty()) {
-        if (this.caretPosition == null) this.caretPosition = new Position();
-        this.caretPosition.setLine(changeRange.getStart().getLine());
-        this.caretPosition.setCharacter(changeRange.getStart().getCharacter());
-        this.lastCaretChangeInstant = Instant.now();
-      } else {
-        this.caretPosition = null;
-      }
+      newText = oldText.substring(0, fromPos) + changeText + oldText.substring(toPos);
     } else {
-      setText(changeText);
-      this.caretPosition = null;
+      newText = changeText;
     }
-  }
 
+    super.setText(newText);
+    reinitializeLineStartPosList();
     this.checkingResult = null;
     this.diagnostics = null;
+
+    if (changeRange != null) {
+      this.caretPosition = guessCaretPositionInIncrementalUpdate(
+          changeRange, changeText, fromPos, toPos);
+    } else {
+      this.caretPosition = guessCaretPositionInFullUpdate(oldText);
+    }
+
+    if (this.caretPosition != null) this.lastCaretChangeInstant = Instant.now();
+  }
+
+  private @Nullable Position guessCaretPositionInIncrementalUpdate(
+        Range changeRange, String changeText, int fromPos, int toPos) {
+    @Nullable Position caretPosition = null;
+
+    if (fromPos == toPos) {
+      caretPosition = convertPosition(toPos + changeText.length());
+    } else if (changeText.isEmpty()) {
+      caretPosition = new Position(changeRange.getStart().getLine(),
+          changeRange.getStart().getCharacter());
+    }
+
+    return caretPosition;
+  }
+
+  private @Nullable Position guessCaretPositionInFullUpdate(String oldText) {
+    String newText = getText();
+    int numberOfEqualCharsAtStart = 0;
+
+    while ((numberOfEqualCharsAtStart < oldText.length())
+          && (numberOfEqualCharsAtStart < newText.length())
+          && (oldText.charAt(numberOfEqualCharsAtStart)
+            == newText.charAt(numberOfEqualCharsAtStart))) {
+      numberOfEqualCharsAtStart++;
+    }
+
+    int numberOfEqualCharsAtEnd = 0;
+
+    while ((numberOfEqualCharsAtEnd < oldText.length() - numberOfEqualCharsAtStart)
+          && (numberOfEqualCharsAtEnd < newText.length() - numberOfEqualCharsAtStart)
+          && (oldText.charAt(oldText.length() - numberOfEqualCharsAtEnd - 1)
+            == newText.charAt(newText.length() - numberOfEqualCharsAtEnd - 1))) {
+      numberOfEqualCharsAtEnd++;
+    }
+
+    int numberOfEqualChars = numberOfEqualCharsAtStart + numberOfEqualCharsAtEnd;
+
+    if ((numberOfEqualChars < 0.5 * oldText.length())
+          || (numberOfEqualChars < 0.5 * newText.length())) {
+      return null;
+    }
+
+    return convertPosition(newText.length() - numberOfEqualCharsAtEnd);
   }
 
   public CompletableFuture<Boolean> checkAndPublishDiagnostics() {
