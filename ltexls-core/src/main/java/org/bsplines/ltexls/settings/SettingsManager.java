@@ -125,8 +125,8 @@ public class SettingsManager {
   public void setSettings(Settings newSettings) {
     String newLanguage = newSettings.getLanguageShortCode();
 
-    @Nullable final Settings oldSettings = this.settingsMap.get(newLanguage);
-    @Nullable final Set<String> oldFullDictionary = this.fullDictionaryMap.get(newLanguage);
+    final @Nullable Settings oldSettings = this.settingsMap.get(newLanguage);
+    final @Nullable Set<String> oldFullDictionary = this.fullDictionaryMap.get(newLanguage);
 
     setSettings(newLanguage, newSettings);
     setDictionaryFileWatcher(newLanguage, newSettings);
