@@ -1,9 +1,9 @@
-[Trace - 12:09:00 AM] Sending request 'initialize - (0)'.
+[Trace - 11:49:13 AM] Sending request 'initialize - (0)'.
 Params: {
-    "processId": 902347,
+    "processId": 3026702,
     "clientInfo": {
         "name": "vscode",
-        "version": "1.44.2"
+        "version": "1.49.2"
     },
     "rootPath": null,
     "rootUri": null,
@@ -267,7 +267,7 @@ Params: {
 }
 
 
-[Trace - 12:09:07 AM] Received response 'initialize - (0)' in 6911ms.
+[Trace - 11:49:20 AM] Received response 'initialize - (0)' in 7388ms.
 Result: {
     "capabilities": {
         "textDocumentSync": 1,
@@ -285,22 +285,33 @@ Result: {
 }
 
 
-[Trace - 12:09:07 AM] Sending notification 'initialized'.
+[Trace - 11:49:20 AM] Sending notification 'initialized'.
 Params: {}
 
 
-[Trace - 12:09:07 AM] Sending notification 'workspace/didChangeConfiguration'.
+[Trace - 11:49:20 AM] Sending notification 'workspace/didChangeConfiguration'.
 Params: {
     "settings": {
         "ltex": {
-            "enabled": true,
+            "enabled": [
+                "markdown",
+                "latex",
+                "rsweave"
+            ],
             "language": "en-US",
             "dictionary": {},
+            "workspaceDictionary": {},
+            "workspaceFolderDictionary": {},
             "disabledRules": {},
+            "workspaceDisabledRules": {},
+            "workspaceFolderDisabledRules": {},
             "enabledRules": {},
+            "workspaceEnabledRules": {},
+            "workspaceFolderEnabledRules": {},
             "ltex-ls": {
                 "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
-                "languageToolHttpServerUri": ""
+                "languageToolHttpServerUri": "",
+                "logLevel": "fine"
             },
             "java": {
                 "path": "",
@@ -308,26 +319,8 @@ Params: {
                 "maximumHeapSize": 512
             },
             "commands": {
-                "ignore": [
-                    "\\setnumberoftableheaderrows{}",
-                    "\\usenotation{}"
-                ],
-                "dummy": [
-                    "\\ang{}",
-                    "\\bfs",
-                    "\\dagr",
-                    "\\fem",
-                    "\\hftr",
-                    "\\initial[]",
-                    "\\lhs",
-                    "\\pop{}",
-                    "\\rhs",
-                    "\\spd",
-                    "\\texttt{}",
-                    "\\thmref{}",
-                    "\\tiftr",
-                    "\\up"
-                ]
+                "ignore": [],
+                "dummy": []
             },
             "environments": {
                 "ignore": []
@@ -345,7 +338,7 @@ Params: {
             },
             "ignoreRuleInSentence": [],
             "configurationTarget": {
-                "addToDictionary": "global",
+                "addToDictionary": "workspaceFolder",
                 "disableRule": "workspaceFolder",
                 "ignoreRuleInSentence": "workspaceFolder"
             },
@@ -357,22 +350,16 @@ Params: {
             },
             "sentenceCacheSize": 2000,
             "diagnosticSeverity": "information",
+            "clearDiagnosticsWhenClosingFile": true,
             "trace": {
                 "server": "verbose"
-            },
-            "javaHome": null,
-            "performance": {
-                "initialJavaHeapSize": 50,
-                "maximumHeapSize": null,
-                "sentenceCacheSize": 1234,
-                "maximumJavaHeapSize": 500
             }
         }
     }
 }
 
 
-[Trace - 12:09:07 AM] Sending notification 'textDocument/didOpen'.
+[Trace - 11:49:20 AM] Sending notification 'textDocument/didOpen'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1",
@@ -383,7 +370,7 @@ Params: {
 }
 
 
-[Trace - 12:09:07 AM] Received request 'workspace/configuration - (1)'.
+[Trace - 11:49:20 AM] Received request 'workspace/configuration - (1)'.
 Params: {
     "items": [
         {
@@ -394,17 +381,28 @@ Params: {
 }
 
 
-[Trace - 12:09:07 AM] Sending response 'workspace/configuration - (1)'. Processing request took 13ms
+[Trace - 11:49:20 AM] Sending response 'workspace/configuration - (1)'. Processing request took 30ms
 Result: [
     {
-        "enabled": true,
+        "enabled": [
+            "markdown",
+            "latex",
+            "rsweave"
+        ],
         "language": "en-US",
         "dictionary": {},
+        "workspaceDictionary": {},
+        "workspaceFolderDictionary": {},
         "disabledRules": {},
+        "workspaceDisabledRules": {},
+        "workspaceFolderDisabledRules": {},
         "enabledRules": {},
+        "workspaceEnabledRules": {},
+        "workspaceFolderEnabledRules": {},
         "ltex-ls": {
             "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
-            "languageToolHttpServerUri": ""
+            "languageToolHttpServerUri": "",
+            "logLevel": "fine"
         },
         "java": {
             "path": "",
@@ -412,26 +410,8 @@ Result: [
             "maximumHeapSize": 512
         },
         "commands": {
-            "ignore": [
-                "\\setnumberoftableheaderrows{}",
-                "\\usenotation{}"
-            ],
-            "dummy": [
-                "\\ang{}",
-                "\\bfs",
-                "\\dagr",
-                "\\fem",
-                "\\hftr",
-                "\\initial[]",
-                "\\lhs",
-                "\\pop{}",
-                "\\rhs",
-                "\\spd",
-                "\\texttt{}",
-                "\\thmref{}",
-                "\\tiftr",
-                "\\up"
-            ]
+            "ignore": [],
+            "dummy": []
         },
         "environments": {
             "ignore": []
@@ -449,7 +429,7 @@ Result: [
         },
         "ignoreRuleInSentence": [],
         "configurationTarget": {
-            "addToDictionary": "global",
+            "addToDictionary": "workspaceFolder",
             "disableRule": "workspaceFolder",
             "ignoreRuleInSentence": "workspaceFolder"
         },
@@ -461,21 +441,15 @@ Result: [
         },
         "sentenceCacheSize": 2000,
         "diagnosticSeverity": "information",
+        "clearDiagnosticsWhenClosingFile": true,
         "trace": {
             "server": "verbose"
-        },
-        "javaHome": null,
-        "performance": {
-            "initialJavaHeapSize": 50,
-            "maximumHeapSize": null,
-            "sentenceCacheSize": 1234,
-            "maximumJavaHeapSize": 500
         }
     }
 ]
 
 
-[Trace - 12:09:07 AM] Received notification 'ltex/progress'.
+[Trace - 11:49:20 AM] Received notification 'ltex/progress'.
 Params: {
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
@@ -483,7 +457,7 @@ Params: {
 }
 
 
-[Trace - 12:09:07 AM] Received notification 'ltex/progress'.
+[Trace - 11:49:21 AM] Received notification 'ltex/progress'.
 Params: {
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
@@ -491,14 +465,14 @@ Params: {
 }
 
 
-[Trace - 12:09:07 AM] Received notification 'textDocument/publishDiagnostics'.
+[Trace - 11:49:21 AM] Received notification 'textDocument/publishDiagnostics'.
 Params: {
     "uri": "untitled:Untitled-1",
     "diagnostics": []
 }
 
 
-[Trace - 12:09:16 AM] Sending notification 'textDocument/didChange'.
+[Trace - 11:49:39 AM] Sending notification 'textDocument/didChange'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1",
@@ -512,7 +486,7 @@ Params: {
 }
 
 
-[Trace - 12:09:16 AM] Received request 'workspace/configuration - (2)'.
+[Trace - 11:49:39 AM] Received request 'workspace/configuration - (2)'.
 Params: {
     "items": [
         {
@@ -523,17 +497,28 @@ Params: {
 }
 
 
-[Trace - 12:09:16 AM] Sending response 'workspace/configuration - (2)'. Processing request took 7ms
+[Trace - 11:49:39 AM] Sending response 'workspace/configuration - (2)'. Processing request took 16ms
 Result: [
     {
-        "enabled": true,
+        "enabled": [
+            "markdown",
+            "latex",
+            "rsweave"
+        ],
         "language": "en-US",
         "dictionary": {},
+        "workspaceDictionary": {},
+        "workspaceFolderDictionary": {},
         "disabledRules": {},
+        "workspaceDisabledRules": {},
+        "workspaceFolderDisabledRules": {},
         "enabledRules": {},
+        "workspaceEnabledRules": {},
+        "workspaceFolderEnabledRules": {},
         "ltex-ls": {
             "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
-            "languageToolHttpServerUri": ""
+            "languageToolHttpServerUri": "",
+            "logLevel": "fine"
         },
         "java": {
             "path": "",
@@ -541,26 +526,8 @@ Result: [
             "maximumHeapSize": 512
         },
         "commands": {
-            "ignore": [
-                "\\setnumberoftableheaderrows{}",
-                "\\usenotation{}"
-            ],
-            "dummy": [
-                "\\ang{}",
-                "\\bfs",
-                "\\dagr",
-                "\\fem",
-                "\\hftr",
-                "\\initial[]",
-                "\\lhs",
-                "\\pop{}",
-                "\\rhs",
-                "\\spd",
-                "\\texttt{}",
-                "\\thmref{}",
-                "\\tiftr",
-                "\\up"
-            ]
+            "ignore": [],
+            "dummy": []
         },
         "environments": {
             "ignore": []
@@ -578,7 +545,7 @@ Result: [
         },
         "ignoreRuleInSentence": [],
         "configurationTarget": {
-            "addToDictionary": "global",
+            "addToDictionary": "workspaceFolder",
             "disableRule": "workspaceFolder",
             "ignoreRuleInSentence": "workspaceFolder"
         },
@@ -590,21 +557,15 @@ Result: [
         },
         "sentenceCacheSize": 2000,
         "diagnosticSeverity": "information",
+        "clearDiagnosticsWhenClosingFile": true,
         "trace": {
             "server": "verbose"
-        },
-        "javaHome": null,
-        "performance": {
-            "initialJavaHeapSize": 50,
-            "maximumHeapSize": null,
-            "sentenceCacheSize": 1234,
-            "maximumJavaHeapSize": 500
         }
     }
 ]
 
 
-[Trace - 12:09:16 AM] Received notification 'ltex/progress'.
+[Trace - 11:49:39 AM] Received notification 'ltex/progress'.
 Params: {
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
@@ -612,19 +573,19 @@ Params: {
 }
 
 
-[Trace - 12:09:28 AM] Sending request 'textDocument/codeAction - (1)'.
+[Trace - 11:49:49 AM] Sending request 'textDocument/codeAction - (1)'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1"
     },
     "range": {
         "start": {
-            "line": 1,
-            "character": 1
+            "line": 0,
+            "character": 10
         },
         "end": {
-            "line": 1,
-            "character": 1
+            "line": 0,
+            "character": 10
         }
     },
     "context": {
@@ -633,61 +594,7 @@ Params: {
 }
 
 
-[Trace - 12:09:30 AM] Sending request 'textDocument/codeAction - (2)'.
-Params: {
-    "textDocument": {
-        "uri": "untitled:Untitled-1"
-    },
-    "range": {
-        "start": {
-            "line": 0,
-            "character": 8
-        },
-        "end": {
-            "line": 0,
-            "character": 8
-        }
-    },
-    "context": {
-        "diagnostics": []
-    }
-}
-
-
-[Trace - 12:09:30 AM] Sending notification '$/cancelRequest'.
-Params: {
-    "id": 1
-}
-
-
-[Trace - 12:09:30 AM] Sending request 'textDocument/codeAction - (3)'.
-Params: {
-    "textDocument": {
-        "uri": "untitled:Untitled-1"
-    },
-    "range": {
-        "start": {
-            "line": 0,
-            "character": 9
-        },
-        "end": {
-            "line": 0,
-            "character": 9
-        }
-    },
-    "context": {
-        "diagnostics": []
-    }
-}
-
-
-[Trace - 12:09:30 AM] Sending notification '$/cancelRequest'.
-Params: {
-    "id": 2
-}
-
-
-[Trace - 12:09:34 AM] Received notification 'ltex/progress'.
+[Trace - 11:50:18 AM] Received notification 'ltex/progress'.
 Params: {
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
@@ -695,7 +602,7 @@ Params: {
 }
 
 
-[Trace - 12:09:34 AM] Received notification 'textDocument/publishDiagnostics'.
+[Trace - 11:50:18 AM] Received notification 'textDocument/publishDiagnostics'.
 Params: {
     "uri": "untitled:Untitled-1",
     "diagnostics": [
@@ -733,19 +640,11 @@ Params: {
 }
 
 
-[Trace - 12:09:34 AM] Received response 'textDocument/codeAction - (1)' in 5970ms.
+[Trace - 11:50:18 AM] Received response 'textDocument/codeAction - (1)' in 28662ms.
 Result: []
 
 
-[Trace - 12:09:34 AM] Received response 'textDocument/codeAction - (2)' in 4199ms.
-Result: []
-
-
-[Trace - 12:09:34 AM] Received response 'textDocument/codeAction - (3)' in 3853ms.
-Result: []
-
-
-[Trace - 12:09:34 AM] Sending request 'textDocument/codeAction - (4)'.
+[Trace - 11:50:18 AM] Sending request 'textDocument/codeAction - (2)'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1"
@@ -753,11 +652,11 @@ Params: {
     "range": {
         "start": {
             "line": 0,
-            "character": 9
+            "character": 10
         },
         "end": {
             "line": 0,
-            "character": 9
+            "character": 10
         }
     },
     "context": {
@@ -782,115 +681,7 @@ Params: {
 }
 
 
-[Trace - 12:09:34 AM] Received request 'workspace/configuration - (3)'.
-Params: {
-    "items": [
-        {
-            "scopeUri": "untitled:Untitled-1",
-            "section": "ltex"
-        }
-    ]
-}
-
-
-[Trace - 12:09:34 AM] Sending response 'workspace/configuration - (3)'. Processing request took 6ms
-Result: [
-    {
-        "enabled": true,
-        "language": "en-US",
-        "dictionary": {},
-        "disabledRules": {},
-        "enabledRules": {},
-        "ltex-ls": {
-            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
-            "languageToolHttpServerUri": ""
-        },
-        "java": {
-            "path": "",
-            "initialHeapSize": 64,
-            "maximumHeapSize": 512
-        },
-        "commands": {
-            "ignore": [
-                "\\setnumberoftableheaderrows{}",
-                "\\usenotation{}"
-            ],
-            "dummy": [
-                "\\ang{}",
-                "\\bfs",
-                "\\dagr",
-                "\\fem",
-                "\\hftr",
-                "\\initial[]",
-                "\\lhs",
-                "\\pop{}",
-                "\\rhs",
-                "\\spd",
-                "\\texttt{}",
-                "\\thmref{}",
-                "\\tiftr",
-                "\\up"
-            ]
-        },
-        "environments": {
-            "ignore": []
-        },
-        "markdown": {
-            "ignore": [
-                "CodeBlock",
-                "FencedCodeBlock",
-                "IndentedCodeBlock"
-            ],
-            "dummy": [
-                "AutoLink",
-                "Code"
-            ]
-        },
-        "ignoreRuleInSentence": [],
-        "configurationTarget": {
-            "addToDictionary": "global",
-            "disableRule": "workspaceFolder",
-            "ignoreRuleInSentence": "workspaceFolder"
-        },
-        "additionalRules": {
-            "motherTongue": "",
-            "languageModel": "",
-            "neuralNetworkModel": "",
-            "word2VecModel": ""
-        },
-        "sentenceCacheSize": 2000,
-        "diagnosticSeverity": "information",
-        "trace": {
-            "server": "verbose"
-        },
-        "javaHome": null,
-        "performance": {
-            "initialJavaHeapSize": 50,
-            "maximumHeapSize": null,
-            "sentenceCacheSize": 1234,
-            "maximumJavaHeapSize": 500
-        }
-    }
-]
-
-
-[Trace - 12:09:34 AM] Received notification 'ltex/progress'.
-Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 0
-}
-
-
-[Trace - 12:09:34 AM] Received notification 'ltex/progress'.
-Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 1
-}
-
-
-[Trace - 12:09:34 AM] Received response 'textDocument/codeAction - (4)' in 47ms.
+[Trace - 11:50:18 AM] Received response 'textDocument/codeAction - (2)' in 71ms.
 Result: [
     {
         "title": "Ignore rule in this sentence",
@@ -1016,7 +807,7 @@ Result: [
 ]
 
 
-[Trace - 12:09:39 AM] Sending request 'textDocument/codeAction - (5)'.
+[Trace - 11:50:21 AM] Sending request 'textDocument/codeAction - (3)'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1"
@@ -1024,11 +815,11 @@ Params: {
     "range": {
         "start": {
             "line": 0,
-            "character": 9
+            "character": 10
         },
         "end": {
             "line": 0,
-            "character": 9
+            "character": 10
         }
     },
     "context": {
@@ -1053,115 +844,7 @@ Params: {
 }
 
 
-[Trace - 12:09:39 AM] Received request 'workspace/configuration - (4)'.
-Params: {
-    "items": [
-        {
-            "scopeUri": "untitled:Untitled-1",
-            "section": "ltex"
-        }
-    ]
-}
-
-
-[Trace - 12:09:39 AM] Sending response 'workspace/configuration - (4)'. Processing request took 20ms
-Result: [
-    {
-        "enabled": true,
-        "language": "en-US",
-        "dictionary": {},
-        "disabledRules": {},
-        "enabledRules": {},
-        "ltex-ls": {
-            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
-            "languageToolHttpServerUri": ""
-        },
-        "java": {
-            "path": "",
-            "initialHeapSize": 64,
-            "maximumHeapSize": 512
-        },
-        "commands": {
-            "ignore": [
-                "\\setnumberoftableheaderrows{}",
-                "\\usenotation{}"
-            ],
-            "dummy": [
-                "\\ang{}",
-                "\\bfs",
-                "\\dagr",
-                "\\fem",
-                "\\hftr",
-                "\\initial[]",
-                "\\lhs",
-                "\\pop{}",
-                "\\rhs",
-                "\\spd",
-                "\\texttt{}",
-                "\\thmref{}",
-                "\\tiftr",
-                "\\up"
-            ]
-        },
-        "environments": {
-            "ignore": []
-        },
-        "markdown": {
-            "ignore": [
-                "CodeBlock",
-                "FencedCodeBlock",
-                "IndentedCodeBlock"
-            ],
-            "dummy": [
-                "AutoLink",
-                "Code"
-            ]
-        },
-        "ignoreRuleInSentence": [],
-        "configurationTarget": {
-            "addToDictionary": "global",
-            "disableRule": "workspaceFolder",
-            "ignoreRuleInSentence": "workspaceFolder"
-        },
-        "additionalRules": {
-            "motherTongue": "",
-            "languageModel": "",
-            "neuralNetworkModel": "",
-            "word2VecModel": ""
-        },
-        "sentenceCacheSize": 2000,
-        "diagnosticSeverity": "information",
-        "trace": {
-            "server": "verbose"
-        },
-        "javaHome": null,
-        "performance": {
-            "initialJavaHeapSize": 50,
-            "maximumHeapSize": null,
-            "sentenceCacheSize": 1234,
-            "maximumJavaHeapSize": 500
-        }
-    }
-]
-
-
-[Trace - 12:09:39 AM] Received notification 'ltex/progress'.
-Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 0
-}
-
-
-[Trace - 12:09:39 AM] Received notification 'ltex/progress'.
-Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 1
-}
-
-
-[Trace - 12:09:39 AM] Received response 'textDocument/codeAction - (5)' in 37ms.
+[Trace - 11:50:21 AM] Received response 'textDocument/codeAction - (3)' in 5ms.
 Result: [
     {
         "title": "Ignore rule in this sentence",
@@ -1287,7 +970,7 @@ Result: [
 ]
 
 
-[Trace - 12:09:43 AM] Sending notification 'textDocument/didChange'.
+[Trace - 11:50:24 AM] Sending notification 'textDocument/didChange'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1",
@@ -1301,7 +984,7 @@ Params: {
 }
 
 
-[Trace - 12:09:43 AM] Sending request 'textDocument/codeAction - (6)'.
+[Trace - 11:50:24 AM] Sending request 'textDocument/codeAction - (4)'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1"
@@ -1338,7 +1021,7 @@ Params: {
 }
 
 
-[Trace - 12:09:43 AM] Received request 'workspace/configuration - (5)'.
+[Trace - 11:50:24 AM] Received request 'workspace/configuration - (3)'.
 Params: {
     "items": [
         {
@@ -1349,17 +1032,28 @@ Params: {
 }
 
 
-[Trace - 12:09:43 AM] Sending response 'workspace/configuration - (5)'. Processing request took 9ms
+[Trace - 11:50:24 AM] Sending response 'workspace/configuration - (3)'. Processing request took 14ms
 Result: [
     {
-        "enabled": true,
+        "enabled": [
+            "markdown",
+            "latex",
+            "rsweave"
+        ],
         "language": "en-US",
         "dictionary": {},
+        "workspaceDictionary": {},
+        "workspaceFolderDictionary": {},
         "disabledRules": {},
+        "workspaceDisabledRules": {},
+        "workspaceFolderDisabledRules": {},
         "enabledRules": {},
+        "workspaceEnabledRules": {},
+        "workspaceFolderEnabledRules": {},
         "ltex-ls": {
             "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
-            "languageToolHttpServerUri": ""
+            "languageToolHttpServerUri": "",
+            "logLevel": "fine"
         },
         "java": {
             "path": "",
@@ -1367,26 +1061,8 @@ Result: [
             "maximumHeapSize": 512
         },
         "commands": {
-            "ignore": [
-                "\\setnumberoftableheaderrows{}",
-                "\\usenotation{}"
-            ],
-            "dummy": [
-                "\\ang{}",
-                "\\bfs",
-                "\\dagr",
-                "\\fem",
-                "\\hftr",
-                "\\initial[]",
-                "\\lhs",
-                "\\pop{}",
-                "\\rhs",
-                "\\spd",
-                "\\texttt{}",
-                "\\thmref{}",
-                "\\tiftr",
-                "\\up"
-            ]
+            "ignore": [],
+            "dummy": []
         },
         "environments": {
             "ignore": []
@@ -1404,7 +1080,7 @@ Result: [
         },
         "ignoreRuleInSentence": [],
         "configurationTarget": {
-            "addToDictionary": "global",
+            "addToDictionary": "workspaceFolder",
             "disableRule": "workspaceFolder",
             "ignoreRuleInSentence": "workspaceFolder"
         },
@@ -1416,21 +1092,15 @@ Result: [
         },
         "sentenceCacheSize": 2000,
         "diagnosticSeverity": "information",
+        "clearDiagnosticsWhenClosingFile": true,
         "trace": {
             "server": "verbose"
-        },
-        "javaHome": null,
-        "performance": {
-            "initialJavaHeapSize": 50,
-            "maximumHeapSize": null,
-            "sentenceCacheSize": 1234,
-            "maximumJavaHeapSize": 500
         }
     }
 ]
 
 
-[Trace - 12:09:43 AM] Received notification 'ltex/progress'.
+[Trace - 11:50:24 AM] Received notification 'ltex/progress'.
 Params: {
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
@@ -1438,7 +1108,7 @@ Params: {
 }
 
 
-[Trace - 12:09:43 AM] Received request 'workspace/configuration - (6)'.
+[Trace - 11:50:24 AM] Received request 'workspace/configuration - (4)'.
 Params: {
     "items": [
         {
@@ -1449,17 +1119,28 @@ Params: {
 }
 
 
-[Trace - 12:09:43 AM] Sending response 'workspace/configuration - (6)'. Processing request took 22ms
+[Trace - 11:50:24 AM] Sending response 'workspace/configuration - (4)'. Processing request took 8ms
 Result: [
     {
-        "enabled": true,
+        "enabled": [
+            "markdown",
+            "latex",
+            "rsweave"
+        ],
         "language": "en-US",
         "dictionary": {},
+        "workspaceDictionary": {},
+        "workspaceFolderDictionary": {},
         "disabledRules": {},
+        "workspaceDisabledRules": {},
+        "workspaceFolderDisabledRules": {},
         "enabledRules": {},
+        "workspaceEnabledRules": {},
+        "workspaceFolderEnabledRules": {},
         "ltex-ls": {
             "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
-            "languageToolHttpServerUri": ""
+            "languageToolHttpServerUri": "",
+            "logLevel": "fine"
         },
         "java": {
             "path": "",
@@ -1467,26 +1148,8 @@ Result: [
             "maximumHeapSize": 512
         },
         "commands": {
-            "ignore": [
-                "\\setnumberoftableheaderrows{}",
-                "\\usenotation{}"
-            ],
-            "dummy": [
-                "\\ang{}",
-                "\\bfs",
-                "\\dagr",
-                "\\fem",
-                "\\hftr",
-                "\\initial[]",
-                "\\lhs",
-                "\\pop{}",
-                "\\rhs",
-                "\\spd",
-                "\\texttt{}",
-                "\\thmref{}",
-                "\\tiftr",
-                "\\up"
-            ]
+            "ignore": [],
+            "dummy": []
         },
         "environments": {
             "ignore": []
@@ -1504,7 +1167,7 @@ Result: [
         },
         "ignoreRuleInSentence": [],
         "configurationTarget": {
-            "addToDictionary": "global",
+            "addToDictionary": "workspaceFolder",
             "disableRule": "workspaceFolder",
             "ignoreRuleInSentence": "workspaceFolder"
         },
@@ -1516,21 +1179,15 @@ Result: [
         },
         "sentenceCacheSize": 2000,
         "diagnosticSeverity": "information",
+        "clearDiagnosticsWhenClosingFile": true,
         "trace": {
             "server": "verbose"
-        },
-        "javaHome": null,
-        "performance": {
-            "initialJavaHeapSize": 50,
-            "maximumHeapSize": null,
-            "sentenceCacheSize": 1234,
-            "maximumJavaHeapSize": 500
         }
     }
 ]
 
 
-[Trace - 12:09:43 AM] Received notification 'ltex/progress'.
+[Trace - 11:50:24 AM] Received notification 'ltex/progress'.
 Params: {
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
@@ -1538,7 +1195,50 @@ Params: {
 }
 
 
-[Trace - 12:09:43 AM] Received notification 'ltex/progress'.
+[Trace - 11:50:24 AM] Sending request 'textDocument/codeAction - (5)'.
+Params: {
+    "textDocument": {
+        "uri": "untitled:Untitled-1"
+    },
+    "range": {
+        "start": {
+            "line": 0,
+            "character": 9
+        },
+        "end": {
+            "line": 0,
+            "character": 9
+        }
+    },
+    "context": {
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 0,
+                        "character": 8
+                    },
+                    "end": {
+                        "line": 0,
+                        "character": 10
+                    }
+                },
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'",
+                "severity": 3,
+                "source": "LTeX - EN_A_VS_AN"
+            }
+        ]
+    }
+}
+
+
+[Trace - 11:50:24 AM] Sending notification '$/cancelRequest'.
+Params: {
+    "id": 4
+}
+
+
+[Trace - 11:50:24 AM] Received notification 'ltex/progress'.
 Params: {
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
@@ -1546,7 +1246,7 @@ Params: {
 }
 
 
-[Trace - 12:09:43 AM] Received notification 'textDocument/publishDiagnostics'.
+[Trace - 11:50:24 AM] Received notification 'textDocument/publishDiagnostics'.
 Params: {
     "uri": "untitled:Untitled-1",
     "diagnostics": [
@@ -1569,7 +1269,7 @@ Params: {
 }
 
 
-[Trace - 12:09:43 AM] Received notification 'ltex/progress'.
+[Trace - 11:50:24 AM] Received notification 'ltex/progress'.
 Params: {
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
@@ -1577,11 +1277,15 @@ Params: {
 }
 
 
-[Trace - 12:09:43 AM] Received response 'textDocument/codeAction - (6)' in 229ms.
+[Trace - 11:50:24 AM] Received response 'textDocument/codeAction - (4)' in 427ms.
 Result: []
 
 
-[Trace - 12:09:43 AM] Sending request 'textDocument/codeAction - (7)'.
+[Trace - 11:50:24 AM] Received response 'textDocument/codeAction - (5)' in 185ms.
+Result: []
+
+
+[Trace - 11:50:24 AM] Sending request 'textDocument/codeAction - (6)'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1"
@@ -1602,11 +1306,11 @@ Params: {
 }
 
 
-[Trace - 12:09:43 AM] Received response 'textDocument/codeAction - (7)' in 1ms.
+[Trace - 11:50:24 AM] Received response 'textDocument/codeAction - (6)' in 5ms.
 Result: []
 
 
-[Trace - 12:09:51 AM] Sending request 'textDocument/codeAction - (8)'.
+[Trace - 11:50:29 AM] Sending request 'textDocument/codeAction - (7)'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1"
@@ -1643,115 +1347,7 @@ Params: {
 }
 
 
-[Trace - 12:09:51 AM] Received request 'workspace/configuration - (7)'.
-Params: {
-    "items": [
-        {
-            "scopeUri": "untitled:Untitled-1",
-            "section": "ltex"
-        }
-    ]
-}
-
-
-[Trace - 12:09:51 AM] Sending response 'workspace/configuration - (7)'. Processing request took 8ms
-Result: [
-    {
-        "enabled": true,
-        "language": "en-US",
-        "dictionary": {},
-        "disabledRules": {},
-        "enabledRules": {},
-        "ltex-ls": {
-            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
-            "languageToolHttpServerUri": ""
-        },
-        "java": {
-            "path": "",
-            "initialHeapSize": 64,
-            "maximumHeapSize": 512
-        },
-        "commands": {
-            "ignore": [
-                "\\setnumberoftableheaderrows{}",
-                "\\usenotation{}"
-            ],
-            "dummy": [
-                "\\ang{}",
-                "\\bfs",
-                "\\dagr",
-                "\\fem",
-                "\\hftr",
-                "\\initial[]",
-                "\\lhs",
-                "\\pop{}",
-                "\\rhs",
-                "\\spd",
-                "\\texttt{}",
-                "\\thmref{}",
-                "\\tiftr",
-                "\\up"
-            ]
-        },
-        "environments": {
-            "ignore": []
-        },
-        "markdown": {
-            "ignore": [
-                "CodeBlock",
-                "FencedCodeBlock",
-                "IndentedCodeBlock"
-            ],
-            "dummy": [
-                "AutoLink",
-                "Code"
-            ]
-        },
-        "ignoreRuleInSentence": [],
-        "configurationTarget": {
-            "addToDictionary": "global",
-            "disableRule": "workspaceFolder",
-            "ignoreRuleInSentence": "workspaceFolder"
-        },
-        "additionalRules": {
-            "motherTongue": "",
-            "languageModel": "",
-            "neuralNetworkModel": "",
-            "word2VecModel": ""
-        },
-        "sentenceCacheSize": 2000,
-        "diagnosticSeverity": "information",
-        "trace": {
-            "server": "verbose"
-        },
-        "javaHome": null,
-        "performance": {
-            "initialJavaHeapSize": 50,
-            "maximumHeapSize": null,
-            "sentenceCacheSize": 1234,
-            "maximumJavaHeapSize": 500
-        }
-    }
-]
-
-
-[Trace - 12:09:51 AM] Received notification 'ltex/progress'.
-Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 0
-}
-
-
-[Trace - 12:09:51 AM] Received notification 'ltex/progress'.
-Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 1
-}
-
-
-[Trace - 12:09:51 AM] Received response 'textDocument/codeAction - (8)' in 23ms.
+[Trace - 11:50:29 AM] Received response 'textDocument/codeAction - (7)' in 6ms.
 Result: [
     {
         "title": "Ignore rule in this sentence",
@@ -1967,1746 +1563,3 @@ Result: [
         }
     }
 ]
-
-
-[Trace - 12:09:57 AM] Sending notification 'textDocument/didChange'.
-Params: {
-    "textDocument": {
-        "uri": "untitled:Untitled-1",
-        "version": 4
-    },
-    "contentChanges": [
-        {
-            "text": "This is a \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Testa}.\n"
-        }
-    ]
-}
-
-
-[Trace - 12:09:57 AM] Received request 'workspace/configuration - (8)'.
-Params: {
-    "items": [
-        {
-            "scopeUri": "untitled:Untitled-1",
-            "section": "ltex"
-        }
-    ]
-}
-
-
-[Trace - 12:09:57 AM] Sending response 'workspace/configuration - (8)'. Processing request took 17ms
-Result: [
-    {
-        "enabled": true,
-        "language": "en-US",
-        "dictionary": {},
-        "disabledRules": {},
-        "enabledRules": {},
-        "ltex-ls": {
-            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
-            "languageToolHttpServerUri": ""
-        },
-        "java": {
-            "path": "",
-            "initialHeapSize": 64,
-            "maximumHeapSize": 512
-        },
-        "commands": {
-            "ignore": [
-                "\\setnumberoftableheaderrows{}",
-                "\\usenotation{}"
-            ],
-            "dummy": [
-                "\\ang{}",
-                "\\bfs",
-                "\\dagr",
-                "\\fem",
-                "\\hftr",
-                "\\initial[]",
-                "\\lhs",
-                "\\pop{}",
-                "\\rhs",
-                "\\spd",
-                "\\texttt{}",
-                "\\thmref{}",
-                "\\tiftr",
-                "\\up"
-            ]
-        },
-        "environments": {
-            "ignore": []
-        },
-        "markdown": {
-            "ignore": [
-                "CodeBlock",
-                "FencedCodeBlock",
-                "IndentedCodeBlock"
-            ],
-            "dummy": [
-                "AutoLink",
-                "Code"
-            ]
-        },
-        "ignoreRuleInSentence": [],
-        "configurationTarget": {
-            "addToDictionary": "global",
-            "disableRule": "workspaceFolder",
-            "ignoreRuleInSentence": "workspaceFolder"
-        },
-        "additionalRules": {
-            "motherTongue": "",
-            "languageModel": "",
-            "neuralNetworkModel": "",
-            "word2VecModel": ""
-        },
-        "sentenceCacheSize": 2000,
-        "diagnosticSeverity": "information",
-        "trace": {
-            "server": "verbose"
-        },
-        "javaHome": null,
-        "performance": {
-            "initialJavaHeapSize": 50,
-            "maximumHeapSize": null,
-            "sentenceCacheSize": 1234,
-            "maximumJavaHeapSize": 500
-        }
-    }
-]
-
-
-[Trace - 12:09:57 AM] Received notification 'ltex/progress'.
-Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 0
-}
-
-
-[Trace - 12:09:57 AM] Received notification 'ltex/progress'.
-Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 1
-}
-
-
-[Trace - 12:09:59 AM] Received notification 'textDocument/publishDiagnostics'.
-Params: {
-    "uri": "untitled:Untitled-1",
-    "diagnostics": [
-        {
-            "range": {
-                "start": {
-                    "line": 2,
-                    "character": 22
-                },
-                "end": {
-                    "line": 2,
-                    "character": 27
-                }
-            },
-            "severity": 3,
-            "source": "LTeX - GERMAN_SPELLER_RULE",
-            "message": "Möglicher Tippfehler gefunden."
-        }
-    ]
-}
-
-
-[Trace - 12:10:00 AM] Sending request 'textDocument/codeAction - (11)'.
-Params: {
-    "textDocument": {
-        "uri": "untitled:Untitled-1"
-    },
-    "range": {
-        "start": {
-            "line": 2,
-            "character": 27
-        },
-        "end": {
-            "line": 2,
-            "character": 27
-        }
-    },
-    "context": {
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "message": "Möglicher Tippfehler gefunden.",
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE"
-            }
-        ]
-    }
-}
-
-
-[Trace - 12:10:00 AM] Received request 'workspace/configuration - (9)'.
-Params: {
-    "items": [
-        {
-            "scopeUri": "untitled:Untitled-1",
-            "section": "ltex"
-        }
-    ]
-}
-
-
-[Trace - 12:10:00 AM] Sending response 'workspace/configuration - (9)'. Processing request took 8ms
-Result: [
-    {
-        "enabled": true,
-        "language": "en-US",
-        "dictionary": {},
-        "disabledRules": {},
-        "enabledRules": {},
-        "ltex-ls": {
-            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
-            "languageToolHttpServerUri": ""
-        },
-        "java": {
-            "path": "",
-            "initialHeapSize": 64,
-            "maximumHeapSize": 512
-        },
-        "commands": {
-            "ignore": [
-                "\\setnumberoftableheaderrows{}",
-                "\\usenotation{}"
-            ],
-            "dummy": [
-                "\\ang{}",
-                "\\bfs",
-                "\\dagr",
-                "\\fem",
-                "\\hftr",
-                "\\initial[]",
-                "\\lhs",
-                "\\pop{}",
-                "\\rhs",
-                "\\spd",
-                "\\texttt{}",
-                "\\thmref{}",
-                "\\tiftr",
-                "\\up"
-            ]
-        },
-        "environments": {
-            "ignore": []
-        },
-        "markdown": {
-            "ignore": [
-                "CodeBlock",
-                "FencedCodeBlock",
-                "IndentedCodeBlock"
-            ],
-            "dummy": [
-                "AutoLink",
-                "Code"
-            ]
-        },
-        "ignoreRuleInSentence": [],
-        "configurationTarget": {
-            "addToDictionary": "global",
-            "disableRule": "workspaceFolder",
-            "ignoreRuleInSentence": "workspaceFolder"
-        },
-        "additionalRules": {
-            "motherTongue": "",
-            "languageModel": "",
-            "neuralNetworkModel": "",
-            "word2VecModel": ""
-        },
-        "sentenceCacheSize": 2000,
-        "diagnosticSeverity": "information",
-        "trace": {
-            "server": "verbose"
-        },
-        "javaHome": null,
-        "performance": {
-            "initialJavaHeapSize": 50,
-            "maximumHeapSize": null,
-            "sentenceCacheSize": 1234,
-            "maximumJavaHeapSize": 500
-        }
-    }
-]
-
-
-[Trace - 12:10:00 AM] Received notification 'ltex/progress'.
-Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 0
-}
-
-
-[Trace - 12:10:00 AM] Received notification 'ltex/progress'.
-Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 1
-}
-
-
-[Trace - 12:10:00 AM] Received response 'textDocument/codeAction - (11)' in 31ms.
-Result: [
-    {
-        "title": "Add 'Testa' to dictionary",
-        "kind": "quickfix.ltex.addToDictionary",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "command": {
-            "title": "Add 'Testa' to dictionary",
-            "command": "ltex.addToDictionary",
-            "arguments": [
-                {
-                    "type": "command",
-                    "command": "ltex.addToDictionary",
-                    "uri": "untitled:Untitled-1",
-                    "words": {
-                        "de-DE": [
-                            "Testa"
-                        ]
-                    }
-                }
-            ]
-        }
-    },
-    {
-        "title": "Ignore rule in this sentence",
-        "kind": "quickfix.ltex.ignoreRulesInSentence",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "command": {
-            "title": "Ignore rule in this sentence",
-            "command": "ltex.ignoreRulesInSentence",
-            "arguments": [
-                {
-                    "type": "command",
-                    "command": "ltex.ignoreRulesInSentence",
-                    "uri": "untitled:Untitled-1",
-                    "ruleIds": [
-                        "GERMAN_SPELLER_RULE"
-                    ],
-                    "sentencePatterns": [
-                        "^\\QDies ist eine Testa.\\E$"
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Disable rule",
-        "kind": "quickfix.ltex.disableRules",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "command": {
-            "title": "Disable rule",
-            "command": "ltex.disableRules",
-            "arguments": [
-                {
-                    "type": "command",
-                    "command": "ltex.disableRules",
-                    "uri": "untitled:Untitled-1",
-                    "ruleIds": {
-                        "de-DE": [
-                            "GERMAN_SPELLER_RULE"
-                        ]
-                    }
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Tests'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Tests"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Testat'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Testat"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Desto'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Desto"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Tesla'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Tesla"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Delta'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Delta"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Testen'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Testen"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Tessa'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Tessa"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Teste'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Teste"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Testet'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Testet"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Test'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Test"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Theta'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Theta"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Distal'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Distal"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Vesta'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Vesta"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Teslas'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Teslas"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Des'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Des"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Tessas'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Tessas"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Fest'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Fest"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Dental'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Dental"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Beste'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Beste"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'West'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "West"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Text'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Text"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Test-'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Test-"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Feste'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Feste"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Texte'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Texte"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Testart'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Testart"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Rest'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Rest"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Testate'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Testate"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Thema'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Thema"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'Testats'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 22
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 27
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - GERMAN_SPELLER_RULE",
-                "message": "Möglicher Tippfehler gefunden."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 4,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 22
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 27
-                                }
-                            },
-                            "newText": "Testats"
-                        }
-                    ]
-                }
-            ]
-        }
-    }
-]
-
-
