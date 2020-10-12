@@ -147,7 +147,7 @@ public class LtexTextDocumentService implements TextDocumentService {
     this.documents.put(params.getTextDocument().getUri(),
         new LtexTextDocumentItem(this.languageServer, params.getTextDocument()));
     @Nullable LtexTextDocumentItem document = getDocument(params.getTextDocument().getUri());
-    if (document != null) document.checkAndPublishDiagnostics();
+    if (document != null) document.checkAndPublishDiagnostics(false);
   }
 
   @Override
@@ -182,7 +182,7 @@ public class LtexTextDocumentService implements TextDocumentService {
 
     document.applyTextChangeEvents(params.getContentChanges());
     document.setVersion(params.getTextDocument().getVersion());
-    document.checkAndPublishDiagnostics();
+    document.checkAndPublishDiagnostics(false);
   }
 
   @Override

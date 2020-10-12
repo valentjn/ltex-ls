@@ -42,7 +42,7 @@ public class DelayedDiagnosticsPublisherRunnable implements Runnable {
 
     if (Duration.between(this.document.getLastCaretChangeInstant(),
           Instant.now()).compareTo(showCaretDiagnosticsDuration) > 0) {
-      @Nullable List<Diagnostic> diagnostics = this.document.getDiagnosticsWithoutChecking();
+      @Nullable List<Diagnostic> diagnostics = this.document.getDiagnosticsCache();
 
       if (diagnostics != null) {
         this.languageClient.publishDiagnostics(new PublishDiagnosticsParams(

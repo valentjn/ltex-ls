@@ -316,9 +316,13 @@ public class LtexTextDocumentItem extends TextDocumentItem {
   }
 
   public CompletableFuture<Boolean> checkAndPublishDiagnostics() {
+    return checkAndPublishDiagnostics(true);
+  }
+
+  public CompletableFuture<Boolean> checkAndPublishDiagnostics(boolean useCache) {
     @Nullable LtexLanguageClient languageClient = this.languageServer.getLanguageClient();
 
-    return checkAndGetDiagnostics().thenApply((List<Diagnostic> diagnostics) -> {
+    return checkAndGetDiagnostics(useCache).thenApply((List<Diagnostic> diagnostics) -> {
       if (languageClient == null) return false;
       @Nullable List<Diagnostic> diagnosticsNotAtCaret = extractDiagnosticsNotAtCaret();
       if (diagnosticsNotAtCaret == null) return false;
@@ -335,10 +339,12 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     });
   }
 
-  private CompletableFuture<List<Diagnostic>> checkAndGetDiagnostics() {
-    if (this.diagnostics != null) return CompletableFuture.completedFuture(this.diagnostics);
+  private CompletableFuture<List<Diagnostic>> checkAndGetDiagnostics(boolean useCache) {
+    if (useCache && (this.diagnostics != null)) {
+      return CompletableFuture.completedFuture(this.diagnostics);
+    }
 
-    return check().thenApply(
+    return check(useCache).thenApply(
         (Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) -> {
           List<LanguageToolRuleMatch> matches = checkingResult.getKey();
           List<Diagnostic> diagnostics = new ArrayList<>();
@@ -353,7 +359,7 @@ public class LtexTextDocumentItem extends TextDocumentItem {
         });
   }
 
-  public @Nullable List<Diagnostic> getDiagnosticsWithoutChecking() {
+  public @Nullable List<Diagnostic> getDiagnosticsCache() {
     return ((this.diagnostics != null) ? Collections.unmodifiableList(this.diagnostics) : null);
   }
 
@@ -377,7 +383,15 @@ public class LtexTextDocumentItem extends TextDocumentItem {
   }
 
   public CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>> check() {
-    if (this.checkingResult != null) return CompletableFuture.completedFuture(this.checkingResult);
+    return check(true);
+  }
+
+  public CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>> check(
+        boolean useCache) {
+    if (useCache && (this.checkingResult != null)) {
+      return CompletableFuture.completedFuture(this.checkingResult);
+    }
+
     @Nullable LtexLanguageClient languageClient = this.languageServer.getLanguageClient();
 
     if (languageClient == null) {
