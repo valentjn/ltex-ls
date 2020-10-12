@@ -11,41 +11,37 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.languagetool.markup.AnnotatedText;
 import org.languagetool.markup.TextPart;
 
 public class LanguageToolHttpInterface extends LanguageToolInterface {
   private String languageShortCode;
   private String motherTongueShortCode;
-
-  private @MonotonicNonNull URL url;
   private List<String> enabledRuleIds;
   private List<String> disabledRuleIds;
+  private HttpClient httpClient;
+  private @MonotonicNonNull URI uri;
 
   /**
    * Constructor.
@@ -60,18 +56,19 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
     this.motherTongueShortCode = motherTongueShortCode;
     this.enabledRuleIds = new ArrayList<>();
     this.disabledRuleIds = new ArrayList<>();
+    this.httpClient = HttpClient.newHttpClient();
 
     try {
-      this.url = new URL(new URL(uri), "v2/check");
-    } catch (MalformedURLException e) {
+      this.uri = (new URL(new URL(uri), "v2/check")).toURI();
+    } catch (MalformedURLException | URISyntaxException e) {
       Tools.logger.severe(Tools.i18n("couldNotParseHttpServerUri", e, uri));
     }
   }
 
-  @EnsuresNonNullIf(expression = "this.url", result = true)
+  @EnsuresNonNullIf(expression = "this.uri", result = true)
   @Override
   public boolean isReady() {
-    return (this.url != null);
+    return (this.uri != null);
   }
 
   @Override
@@ -141,68 +138,27 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
     }
 
     String requestBody = builder.toString();
-    String responseBody;
-    CloseableHttpClient httpClient = HttpClients.createDefault();
+    HttpRequest httpRequest = HttpRequest.newBuilder(this.uri)
+        .header("Content-Type", "application/json")
+        .POST(BodyPublishers.ofString(requestBody))
+        .build();
+    HttpResponse<String> httpResponse;
 
     try {
-      HttpPost httpPost;
-
-      try {
-        httpPost = new HttpPost(this.url.toURI());
-      } catch (URISyntaxException e) {
-        Tools.logger.severe(Tools.i18n("couldNotParseHttpServerUri", e, this.url.toString()));
-        return Collections.emptyList();
-      }
-
-      httpPost.setEntity(new StringEntity(requestBody, ContentType.APPLICATION_JSON));
-      @Nullable CloseableHttpResponse httpResponse = null;
-
-      try {
-        httpResponse = httpClient.execute(httpPost);
-      } catch (IOException e) {
-        Tools.logger.severe(Tools.i18n("couldNotSendHttpRequestToLanguageTool", e));
-        return Collections.emptyList();
-      }
-
-      try {
-        int statusCode = httpResponse.getStatusLine().getStatusCode();
-
-        if (statusCode != 200) {
-          Tools.logger.severe(Tools.i18n("languageToolFailedWithStatusCode", statusCode));
-          return Collections.emptyList();
-        }
-
-        try {
-          InputStream inputStream = httpResponse.getEntity().getContent();
-          ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-          byte[] buffer = new byte[1024];
-          int length;
-
-          while ((length = inputStream.read(buffer)) != -1) {
-            outputStream.write(buffer, 0, length);
-          }
-
-          responseBody = outputStream.toString("utf-8");
-          EntityUtils.consume(httpResponse.getEntity());
-        } catch (IOException e) {
-          Tools.logger.severe(Tools.i18n("couldNotReadHttpResponseFromLanguageTool", e));
-          return Collections.emptyList();
-        }
-      } finally {
-        try {
-          if (httpResponse != null) httpResponse.close();
-        } catch (IOException e) {
-          Tools.logger.warning(Tools.i18n("couldNotCloseHttpResponseForLanguageTool", e));
-        }
-      }
-    } finally {
-      try {
-        httpClient.close();
-      } catch (IOException e) {
-        Tools.logger.warning(Tools.i18n("couldNotCloseHttpClientForLanguageTool", e));
-      }
+      httpResponse = this.httpClient.send(httpRequest, BodyHandlers.ofString());
+    } catch (IOException | InterruptedException e) {
+      Tools.logger.severe(Tools.i18n("couldNotSendHttpRequestToLanguageTool", e));
+      return Collections.emptyList();
     }
 
+    int statusCode = httpResponse.statusCode();
+
+    if (statusCode != 200) {
+      Tools.logger.severe(Tools.i18n("languageToolFailedWithStatusCode", statusCode));
+      return Collections.emptyList();
+    }
+
+    String responseBody = httpResponse.body();
     JsonObject jsonResponse = JsonParser.parseString(responseBody).getAsJsonObject();
     JsonArray jsonMatches = jsonResponse.get("matches").getAsJsonArray();
     List<LanguageToolRuleMatch> result = new ArrayList<>();
