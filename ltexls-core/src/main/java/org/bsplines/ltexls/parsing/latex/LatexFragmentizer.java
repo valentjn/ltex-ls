@@ -21,6 +21,7 @@ import org.bsplines.ltexls.parsing.RegexCodeFragmentizer;
 import org.bsplines.ltexls.settings.Settings;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.eclipse.xtext.xbase.lib.Pair;
 
 public class LatexFragmentizer extends CodeFragmentizer {
   private static final Pattern commentPattern = Pattern.compile(
@@ -35,6 +36,11 @@ public class LatexFragmentizer extends CodeFragmentizer {
 
   private static final Pattern languageTagReplacementPattern = Pattern.compile("[^A-Za-z]+");
   private static final Map<String, String> babelLanguageMap = createBabelLanguageMap();
+
+  private static final LatexCommandSignature usePackageCommandSignature =
+      new LatexCommandSignature("\\usepackage[]{}");
+  private static final LatexCommandSignatureMatcher usePackageCommandSignatureMatcher =
+      new LatexCommandSignatureMatcher(Collections.singletonList(usePackageCommandSignature));
 
   private static final LatexCommandSignature babelSwitchCommandSignature =
       new LatexCommandSignature("\\selectlanguage{}");
@@ -224,12 +230,65 @@ public class LatexFragmentizer extends CodeFragmentizer {
           this.codeLanguageId, code, 0, originalSettings));
 
     fragments = this.commentFragmentizer.fragmentize(fragments);
+    fragments = fragmentizeBabelUsePackageCommands(fragments);
     fragments = fragmentizeBabelSwitchCommands(fragments);
     fragments = fragmentizeBabelInlineCommands(fragments);
     fragments = fragmentizeBabelEnvironments(fragments);
     fragments = fragmentizeExtraCommands(fragments);
 
     return fragments;
+  }
+
+  private List<CodeFragment> fragmentizeBabelUsePackageCommands(List<CodeFragment> fragments) {
+    ArrayList<CodeFragment> newFragments = new ArrayList<>();
+
+    for (CodeFragment oldFragment : fragments) {
+      String oldFragmentCode = oldFragment.getCode();
+      Settings oldFragmentSettings = oldFragment.getSettings();
+      usePackageCommandSignatureMatcher.startMatching(oldFragmentCode,
+          oldFragmentSettings.getIgnoreCommandPrototypes());
+      int prevFromPos = 0;
+      Settings prevSettings = oldFragmentSettings;
+      @Nullable LatexCommandSignatureMatch match;
+
+      while ((match = usePackageCommandSignatureMatcher.findNextMatch()) != null) {
+        String packageName = match.getArgumentContents(1);
+        if (!packageName.equals("babel")) continue;
+
+        List<Pair<String, String>> packageOptions = LatexPackageOptionsParser.parse(
+            match.getArgumentContents(0));
+        @Nullable String babelLanguage = null;
+
+        for (Pair<String, String> packageOption : packageOptions) {
+          String key = packageOption.getKey();
+          if (babelLanguageMap.containsKey(key)) babelLanguage = key;
+        }
+
+        if (babelLanguage == null) continue;
+        @Nullable String languageShortCode = babelLanguageMap.get(babelLanguage);
+
+        if (languageShortCode == null) {
+          Tools.logger.warning(Tools.i18n("unknownBabelLanguage", babelLanguage));
+          continue;
+        }
+
+        int nextFromPos = match.getFromPos();
+        Settings nextSettings = prevSettings.withLanguageShortCode(languageShortCode);
+
+        newFragments.add(new CodeFragment(this.codeLanguageId,
+            oldFragmentCode.substring(prevFromPos, nextFromPos),
+            oldFragment.getFromPos() + prevFromPos, prevSettings));
+
+        prevFromPos = nextFromPos;
+        prevSettings = nextSettings;
+      }
+
+      newFragments.add(new CodeFragment(this.codeLanguageId,
+          oldFragmentCode.substring(prevFromPos),
+          oldFragment.getFromPos() + prevFromPos, prevSettings));
+    }
+
+    return newFragments;
   }
 
   private List<CodeFragment> fragmentizeBabelSwitchCommands(List<CodeFragment> fragments) {

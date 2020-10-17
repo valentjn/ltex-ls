@@ -142,11 +142,24 @@ public class LatexFragmentizerTest {
   }
 
   @Test
-  public void testBabelEnvironment() {
+  public void testBabel() {
     CodeFragmentizer fragmentizer = CodeFragmentizer.create("latex");
     List<CodeFragment> codeFragments = fragmentizer.fragmentize(
         "This is a \\begin{otherlanguage*}{de-DE}Beispiel\\end{otherlanguage*}.\n", new Settings());
     Assertions.assertEquals(2, codeFragments.size());
+
+    codeFragments = fragmentizer.fragmentize(
+        "This is a test.\n\\usepackage[\n"
+        + "  american,  % American English\n"
+        + "  ngerman,   % German\n"
+        + "  dummy={abc,def}\n"
+        + "]{babel}\n"
+        + "Dies ist ein Test.\n", new Settings());
+    Assertions.assertEquals(2, codeFragments.size());
+    Assertions.assertEquals(16, codeFragments.get(0).getCode().length());
+    Assertions.assertEquals(113, codeFragments.get(1).getCode().length());
+    Assertions.assertEquals("en-US", codeFragments.get(0).getSettings().getLanguageShortCode());
+    Assertions.assertEquals("de-DE", codeFragments.get(1).getSettings().getLanguageShortCode());
 
     codeFragments = fragmentizer.fragmentize(
         "This is a \\begin{de-DE}Beispiel\\end{de-DE}.\n", new Settings());
