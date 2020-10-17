@@ -233,29 +233,6 @@ public class LatexFragmentizer extends CodeFragmentizer {
     return fragments;
   }
 
-  private List<CodeFragment> fragmentizeExtraCommands(List<CodeFragment> fragments) {
-    ArrayList<CodeFragment> newFragments = new ArrayList<>();
-
-    for (CodeFragment oldFragment : fragments) {
-      String oldFragmentCode = oldFragment.getCode();
-      Settings oldFragmentSettings = oldFragment.getSettings();
-      extraCommandSignatureList.startMatching(oldFragmentCode,
-          oldFragmentSettings.getIgnoreCommandPrototypes());
-      @Nullable LatexCommandSignatureMatch match;
-
-      while ((match = extraCommandSignatureList.findNextMatch()) != null) {
-        String contents = match.getArgumentContents(match.getArgumentsSize() - 1);
-        int contentsFromPos = match.getArgumentContentsFromPos(match.getArgumentsSize() - 1);
-        newFragments.add(new CodeFragment(this.codeLanguageId, contents,
-            oldFragment.getFromPos() + contentsFromPos, oldFragmentSettings));
-      }
-
-      newFragments.add(oldFragment);
-    }
-
-    return newFragments;
-  }
-
   private List<CodeFragment> fragmentizeBabelSwitchCommands(List<CodeFragment> fragments) {
     ArrayList<CodeFragment> newFragments = new ArrayList<>();
 
@@ -407,6 +384,29 @@ public class LatexFragmentizer extends CodeFragmentizer {
               oldFragmentCode.substring(prevFromPos),
               oldFragment.getFromPos() + prevFromPos, prevSettings));
         }
+      }
+
+      newFragments.add(oldFragment);
+    }
+
+    return newFragments;
+  }
+
+  private List<CodeFragment> fragmentizeExtraCommands(List<CodeFragment> fragments) {
+    ArrayList<CodeFragment> newFragments = new ArrayList<>();
+
+    for (CodeFragment oldFragment : fragments) {
+      String oldFragmentCode = oldFragment.getCode();
+      Settings oldFragmentSettings = oldFragment.getSettings();
+      extraCommandSignatureList.startMatching(oldFragmentCode,
+          oldFragmentSettings.getIgnoreCommandPrototypes());
+      @Nullable LatexCommandSignatureMatch match;
+
+      while ((match = extraCommandSignatureList.findNextMatch()) != null) {
+        String contents = match.getArgumentContents(match.getArgumentsSize() - 1);
+        int contentsFromPos = match.getArgumentContentsFromPos(match.getArgumentsSize() - 1);
+        newFragments.add(new CodeFragment(this.codeLanguageId, contents,
+            oldFragment.getFromPos() + contentsFromPos, oldFragmentSettings));
       }
 
       newFragments.add(oldFragment);
