@@ -26,7 +26,7 @@ public class LatexFragmentizer extends CodeFragmentizer {
   private static final Pattern commentPattern = Pattern.compile(
       "^\\s*%\\s*(?i)ltex(?-i):(?<settings>.*?)$", Pattern.MULTILINE);
 
-  private static final LatexCommandSignatureMatcher extraCommandSignatureList =
+  private static final LatexCommandSignatureMatcher extraCommandSignatureMatcher =
       new LatexCommandSignatureMatcher(Arrays.asList(
         new LatexCommandSignature("\\footnote{}"),
         new LatexCommandSignature("\\footnote[]{}"),
@@ -38,17 +38,17 @@ public class LatexFragmentizer extends CodeFragmentizer {
 
   private static final LatexCommandSignature babelSwitchCommandSignature =
       new LatexCommandSignature("\\selectlanguage{}");
-  private static final LatexCommandSignatureMatcher babelSwitchCommandSignatureList =
+  private static final LatexCommandSignatureMatcher babelSwitchCommandSignatureMatcher =
       new LatexCommandSignatureMatcher(Collections.singletonList(babelSwitchCommandSignature));
 
   private static final Map<LatexCommandSignature, String> babelInlineCommandSignatureMap =
       createBabelInlineCommandSignatureMap();
-  private static final LatexCommandSignatureMatcher babelInlineCommandSignatureList =
+  private static final LatexCommandSignatureMatcher babelInlineCommandSignatureMatcher =
       new LatexCommandSignatureMatcher(babelInlineCommandSignatureMap.keySet());
 
   private static final Map<LatexCommandSignature, String> babelEnvironmentCommandSignatureMap =
       createBabelEnvironmentCommandSignatureMap();
-  private static final LatexCommandSignatureMatcher babelEnvironmentCommandSignatureList =
+  private static final LatexCommandSignatureMatcher babelEnvironmentCommandSignatureMatcher =
       new LatexCommandSignatureMatcher(babelEnvironmentCommandSignatureMap.keySet());
 
   private RegexCodeFragmentizer commentFragmentizer;
@@ -215,8 +215,7 @@ public class LatexFragmentizer extends CodeFragmentizer {
    */
   public LatexFragmentizer(String codeLanguageId) {
     super(codeLanguageId);
-    this.commentFragmentizer = new RegexCodeFragmentizer(
-        codeLanguageId, commentPattern);
+    this.commentFragmentizer = new RegexCodeFragmentizer(codeLanguageId, commentPattern);
   }
 
   @Override
@@ -239,13 +238,13 @@ public class LatexFragmentizer extends CodeFragmentizer {
     for (CodeFragment oldFragment : fragments) {
       String oldFragmentCode = oldFragment.getCode();
       Settings oldFragmentSettings = oldFragment.getSettings();
-      babelSwitchCommandSignatureList.startMatching(oldFragmentCode,
+      babelSwitchCommandSignatureMatcher.startMatching(oldFragmentCode,
           oldFragmentSettings.getIgnoreCommandPrototypes());
       int prevFromPos = 0;
       Settings prevSettings = oldFragmentSettings;
       @Nullable LatexCommandSignatureMatch match;
 
-      while ((match = babelSwitchCommandSignatureList.findNextMatch()) != null) {
+      while ((match = babelSwitchCommandSignatureMatcher.findNextMatch()) != null) {
         String babelLanguage = match.getArgumentContents(0);
         @Nullable String languageShortCode = babelLanguageMap.get(babelLanguage);
 
@@ -279,12 +278,12 @@ public class LatexFragmentizer extends CodeFragmentizer {
     for (CodeFragment oldFragment : fragments) {
       String oldFragmentCode = oldFragment.getCode();
       Settings oldFragmentSettings = oldFragment.getSettings();
-      babelInlineCommandSignatureList.startMatching(oldFragmentCode,
+      babelInlineCommandSignatureMatcher.startMatching(oldFragmentCode,
           oldFragmentSettings.getIgnoreCommandPrototypes());
       Settings curSettings = oldFragmentSettings;
       @Nullable LatexCommandSignatureMatch match;
 
-      while ((match = babelInlineCommandSignatureList.findNextMatch()) != null) {
+      while ((match = babelInlineCommandSignatureMatcher.findNextMatch()) != null) {
         @Nullable String languageShortCode =
             babelInlineCommandSignatureMap.get(match.getCommandSignature());
         String babelLanguage = "";
@@ -322,7 +321,7 @@ public class LatexFragmentizer extends CodeFragmentizer {
     for (CodeFragment oldFragment : fragments) {
       String oldFragmentCode = oldFragment.getCode();
       Settings oldFragmentSettings = oldFragment.getSettings();
-      babelEnvironmentCommandSignatureList.startMatching(oldFragmentCode,
+      babelEnvironmentCommandSignatureMatcher.startMatching(oldFragmentCode,
           oldFragmentSettings.getIgnoreCommandPrototypes());
       Stack<Settings> settingsStack = new Stack<>();
       Stack<Integer> fromPosStack = new Stack<>();
@@ -330,7 +329,7 @@ public class LatexFragmentizer extends CodeFragmentizer {
       fromPosStack.push(0);
       @Nullable LatexCommandSignatureMatch match;
 
-      while (((match = babelEnvironmentCommandSignatureList.findNextMatch()) != null)
+      while (((match = babelEnvironmentCommandSignatureMatcher.findNextMatch()) != null)
             && !settingsStack.isEmpty()) {
         String commandPrototype = match.getCommandSignature().getCommandPrototype();
         boolean isBegin = commandPrototype.startsWith("\\begin");
@@ -398,11 +397,11 @@ public class LatexFragmentizer extends CodeFragmentizer {
     for (CodeFragment oldFragment : fragments) {
       String oldFragmentCode = oldFragment.getCode();
       Settings oldFragmentSettings = oldFragment.getSettings();
-      extraCommandSignatureList.startMatching(oldFragmentCode,
+      extraCommandSignatureMatcher.startMatching(oldFragmentCode,
           oldFragmentSettings.getIgnoreCommandPrototypes());
       @Nullable LatexCommandSignatureMatch match;
 
-      while ((match = extraCommandSignatureList.findNextMatch()) != null) {
+      while ((match = extraCommandSignatureMatcher.findNextMatch()) != null) {
         String contents = match.getArgumentContents(match.getArgumentsSize() - 1);
         int contentsFromPos = match.getArgumentContentsFromPos(match.getArgumentsSize() - 1);
         newFragments.add(new CodeFragment(this.codeLanguageId, contents,
