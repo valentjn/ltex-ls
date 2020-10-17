@@ -45,7 +45,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private static final Pattern argumentPattern = Pattern.compile("^\\{[^\\}]*?\\}");
   private static final Pattern commentPattern = Pattern.compile(
       "^%.*?($|((\n|\r|\r\n)[ \n\r\t]*))");
-  private static final Pattern whiteSpacePattern = Pattern.compile(
+  private static final Pattern whitespacePattern = Pattern.compile(
       "^[ \n\r\t]+(%.*?($|((\n|\r|\r\n)[ \n\r\t]*)))?");
   private static final Pattern lengthPattern = Pattern.compile(
       "-?[0-9]*(\\.[0-9]+)?(pt|mm|cm|ex|em|bp|dd|pc|in)");
@@ -781,21 +781,21 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
           case '\n':
           case '\r':
           case '\t': {
-            String whiteSpace = (((this.curChar != '~') && (this.curChar != '&'))
-                ? matchFromPosition(whiteSpacePattern) : this.curString);
+            String whitespace = (((this.curChar != '~') && (this.curChar != '&'))
+                ? matchFromPosition(whitespacePattern) : this.curString);
             this.preserveDummyLast = true;
             this.isMathCharTrivial = true;
 
             if (isTextMode(this.curMode)) {
-              if (containsTwoEndsOfLine(whiteSpace)) {
-                addMarkup(whiteSpace, "\n\n");
+              if (containsTwoEndsOfLine(whitespace)) {
+                addMarkup(whitespace, "\n\n");
               } else if (this.curChar == '~') {
-                addMarkup(whiteSpace, (this.lastSpace.isEmpty() ? "\u00a0" : ""));
+                addMarkup(whitespace, (this.lastSpace.isEmpty() ? "\u00a0" : ""));
               } else {
-                addMarkup(whiteSpace, (this.lastSpace.isEmpty() ? " " : ""));
+                addMarkup(whitespace, (this.lastSpace.isEmpty() ? " " : ""));
               }
             } else {
-              addMarkup(whiteSpace);
+              addMarkup(whitespace);
             }
 
             if ((this.curChar == '~') || (this.curChar == '&')) {
