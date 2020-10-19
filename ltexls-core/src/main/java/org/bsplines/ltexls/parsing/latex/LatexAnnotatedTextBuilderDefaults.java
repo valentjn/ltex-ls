@@ -121,6 +121,58 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\arabic{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\AtBeginEnvironment{}{}"));
     list.add(new LatexCommandSignature("\\AtEndEnvironment{}{}"));
+    list.add(new LatexCommandSignature("\\autocite{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\autocite[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\autocite[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Autocite{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Autocite[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Autocite[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\autocite*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\autocite*[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\autocite*[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Autocite*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Autocite*[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Autocite*[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\autocites{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\autocites{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\autocites{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\autocites{}{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\autocites{}{}{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\autocites()()[][]{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\autocites()()[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\autocites()()[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\autocites()()[][]{}[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\autocites()()[][]{}[][]{}[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Autocites{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Autocites{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Autocites{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Autocites{}{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Autocites{}{}{}{}{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Autocites()()[][]{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Autocites()()[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Autocites()()[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Autocites()()[][]{}[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Autocites()()[][]{}[][]{}[][]{}[][]{}[][]{}",
+        LatexCommandSignature.Action.DUMMY, DummyGenerator.getDefault(true)));
     list.add(new LatexCommandSignature("\\automark{}"));
     list.add(new LatexCommandSignature("\\automark[]{}"));
     list.add(new LatexCommandSignature("\\automark*{}"));
@@ -153,6 +205,24 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\citealt[]{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\citealt*{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\citealt*[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citeauthor{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citeauthor[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citeauthor[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Citeauthor{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Citeauthor[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Citeauthor[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citeauthor*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citeauthor*[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citeauthor*[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Citeauthor*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Citeauthor*[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Citeauthor*[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citedate{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citedate[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citedate[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citedate*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citedate*[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citedate*[][]{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\citep{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\citep[]{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\citep*{}", LatexCommandSignature.Action.DUMMY));
@@ -201,6 +271,21 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\citet[]{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\citet*{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\citet*[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citetitle{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citetitle[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citetitle[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citetitle*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citetitle*[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citetitle*[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citeurl{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citeurl[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citeurl[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citeyear{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citeyear[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citeyear[][]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citeyear*{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citeyear*[]{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\citeyear*[][]{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\clearfield{}"));
     list.add(new LatexCommandSignature("\\color{}"));
     list.add(new LatexCommandSignature("\\color[]{}"));
