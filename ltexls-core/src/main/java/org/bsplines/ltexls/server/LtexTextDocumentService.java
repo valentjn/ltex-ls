@@ -15,7 +15,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
-import org.bsplines.ltexls.settings.Settings;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.initialization.qual.NotOnlyInitialized;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
@@ -154,9 +153,9 @@ public class LtexTextDocumentService implements TextDocumentService {
   public void didClose(DidCloseTextDocumentParams params) {
     String uri = params.getTextDocument().getUri();
     this.documents.remove(uri);
-    Settings settings = this.languageServer.getSettingsManager().getSettings();
 
-    if (settings.getClearDiagnosticsWhenClosingFile()) {
+    if (this.languageServer.getSettingsManager().getSettings()
+          .getClearDiagnosticsWhenClosingFile()) {
       @Nullable LanguageClient languageClient = this.languageServer.getLanguageClient();
 
       if (languageClient != null) {
