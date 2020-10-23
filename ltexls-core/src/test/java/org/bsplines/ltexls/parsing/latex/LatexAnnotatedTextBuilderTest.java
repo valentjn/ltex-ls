@@ -7,6 +7,7 @@
 
 package org.bsplines.ltexls.parsing.latex;
 
+import java.util.Collections;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
 import org.bsplines.ltexls.settings.Settings;
 import org.junit.jupiter.api.Assertions;
@@ -136,6 +137,13 @@ public class LatexAnnotatedTextBuilderTest {
         + "\\end{textblock*}\n"
         + "This is another test.\n",
         "This is a test. abc This is another test. ");
+    assertPlainText(
+        "This is a test: \\colorbox{abc}{def}.\n",
+        "This is a test: def. ");
+    assertPlainText(
+        "This is a test: \\colorbox{abc}{def}.\n",
+        "This is a test: Dummy0def. ",
+        (new Settings()).withDummyCommandPrototypes(Collections.singleton("\\colorbox{}")));
 
     {
       AnnotatedText annotatedText = buildAnnotatedText("\\cite{Kubota}*{Theorem 3.7}\n");
