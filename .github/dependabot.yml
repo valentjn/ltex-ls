@@ -6,6 +6,10 @@ updates:
       interval: "weekly"
       day: "friday"
     open-pull-requests-limit: 10
+    assignees:
+      - "valentjn"
+    labels:
+      - "pr-dependabot"
     # otherwise, we get the error
     # "Error processing com.google.errorprone:javac (NoMethodError)
     # undefined method `zero?' for nil:NilClass"
