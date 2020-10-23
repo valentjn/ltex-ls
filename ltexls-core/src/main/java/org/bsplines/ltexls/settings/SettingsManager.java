@@ -132,15 +132,16 @@ public class SettingsManager {
     setDictionaryFileWatcher(newLanguage, newSettings);
     setFullDictionary(newLanguage);
 
-    Set<SettingsDifference> settingsDifferences = newSettings.getDifferences(oldSettings);
+    Set<SettingsDifference> settingsDifferencesRelevantForLanguageTool =
+        newSettings.getDifferencesRelevantForLanguageTool(oldSettings);
     boolean fullDictionariesEqual = this.fullDictionary.equals(oldFullDictionary);
 
-    if (settingsDifferences.isEmpty() && fullDictionariesEqual) {
+    if (settingsDifferencesRelevantForLanguageTool.isEmpty() && fullDictionariesEqual) {
       this.languageToolInterface = this.languageToolInterfaceMap.get(newLanguage);
     } else {
       if (Tools.logger.isLoggable(Level.FINE)) {
-        logDifferentSettings(newLanguage, settingsDifferences, fullDictionariesEqual,
-            oldFullDictionary, this.fullDictionary);
+        logDifferentSettings(newLanguage, settingsDifferencesRelevantForLanguageTool,
+            fullDictionariesEqual, oldFullDictionary, this.fullDictionary);
       }
 
       reinitializeLanguageToolInterface();
@@ -175,9 +176,10 @@ public class SettingsManager {
   }
 
   private static void logDifferentSettings(String newLanguage,
-        Set<SettingsDifference> settingsDifferences, boolean fullDictionariesEqual,
+        Set<SettingsDifference> settingsDifferencesRelevantForLanguageTool,
+        boolean fullDictionariesEqual,
         @Nullable Set<String> oldFullDictionary, Set<String> newFullDictionary) {
-    Set<SettingsDifference> differences = new HashSet<>(settingsDifferences);
+    Set<SettingsDifference> differences = new HashSet<>(settingsDifferencesRelevantForLanguageTool);
 
     if (!fullDictionariesEqual) {
       differences.add(new SettingsDifference("fullDictionary",

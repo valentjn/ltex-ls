@@ -357,14 +357,110 @@ public class Settings {
   @Override
   public boolean equals(@Nullable Object obj) {
     if ((obj == null) || !Settings.class.isAssignableFrom(obj.getClass())) return false;
-    return getDifferences((Settings)obj, true).isEmpty();
+    Settings other = (Settings)obj;
+
+    if ((this.enabled == null) ? (other.enabled != null) : !this.enabled.equals(other.enabled)) {
+      return false;
+    }
+
+    if ((this.languageShortCode == null) ? (other.languageShortCode != null) :
+          !this.languageShortCode.equals(other.languageShortCode)) {
+      return false;
+    }
+
+    if (!mapOfSetsEqual(this.dictionary, other.dictionary, this.languageShortCode)) {
+      return false;
+    }
+
+    if (!mapOfSetsEqual(this.disabledRules, other.disabledRules, this.languageShortCode)) {
+      return false;
+    }
+
+    if (!mapOfSetsEqual(this.enabledRules, other.enabledRules, this.languageShortCode)) {
+      return false;
+    }
+
+    if ((this.languageToolHttpServerUri == null) ? (other.languageToolHttpServerUri != null) :
+          !this.languageToolHttpServerUri.equals(other.languageToolHttpServerUri)) {
+      return false;
+    }
+
+    if ((this.logLevel == null) ? (other.logLevel != null) :
+          !this.logLevel.equals(other.logLevel)) {
+      return false;
+    }
+
+    if ((this.dummyCommandPrototypes == null) ? (other.dummyCommandPrototypes != null) :
+          !this.dummyCommandPrototypes.equals(other.dummyCommandPrototypes)) {
+      return false;
+    }
+
+    if ((this.ignoreCommandPrototypes == null) ? (other.ignoreCommandPrototypes != null) :
+          !this.ignoreCommandPrototypes.equals(other.ignoreCommandPrototypes)) {
+      return false;
+    }
+
+    if ((this.ignoreEnvironments == null) ? (other.ignoreEnvironments != null) :
+          !this.ignoreEnvironments.equals(other.ignoreEnvironments)) {
+      return false;
+    }
+
+    if ((this.dummyMarkdownNodeTypes == null) ? (other.dummyMarkdownNodeTypes != null) :
+          !this.dummyMarkdownNodeTypes.equals(other.dummyMarkdownNodeTypes)) {
+      return false;
+    }
+
+    if ((this.ignoreMarkdownNodeTypes == null) ? (other.ignoreMarkdownNodeTypes != null) :
+          !this.ignoreMarkdownNodeTypes.equals(other.ignoreMarkdownNodeTypes)) {
+      return false;
+    }
+
+    if ((this.ignoreRuleSentencePairs == null) ? (other.ignoreRuleSentencePairs != null) :
+          !this.ignoreRuleSentencePairs.equals(other.ignoreRuleSentencePairs)) {
+      return false;
+    }
+
+    if ((this.motherTongueShortCode == null) ? (other.motherTongueShortCode != null) :
+          !this.motherTongueShortCode.equals(other.motherTongueShortCode)) {
+      return false;
+    }
+
+    if ((this.languageModelRulesDirectory == null) ? (other.languageModelRulesDirectory != null) :
+          !this.languageModelRulesDirectory.equals(other.languageModelRulesDirectory)) {
+      return false;
+    }
+
+    if ((this.neuralNetworkModelRulesDirectory == null)
+          ? (other.neuralNetworkModelRulesDirectory != null)
+          : !this.neuralNetworkModelRulesDirectory.equals(other.neuralNetworkModelRulesDirectory)) {
+      return false;
+    }
+
+    if ((this.word2VecModelRulesDirectory == null) ? (other.word2VecModelRulesDirectory != null) :
+          !this.word2VecModelRulesDirectory.equals(other.word2VecModelRulesDirectory)) {
+      return false;
+    }
+
+    if ((this.sentenceCacheSize == null) ? (other.sentenceCacheSize != null) :
+          !this.sentenceCacheSize.equals(other.sentenceCacheSize)) {
+      return false;
+    }
+
+    if ((this.diagnosticSeverity == null) ? (other.diagnosticSeverity != null) :
+          (this.diagnosticSeverity != other.diagnosticSeverity)) {
+      return false;
+    }
+
+    if ((this.clearDiagnosticsWhenClosingFile == null)
+          ? (other.clearDiagnosticsWhenClosingFile != null)
+          : !this.clearDiagnosticsWhenClosingFile.equals(other.clearDiagnosticsWhenClosingFile)) {
+      return false;
+    }
+
+    return true;
   }
 
-  public Set<SettingsDifference> getDifferences(@Nullable Settings other) {
-    return getDifferences(other, false);
-  }
-
-  public Set<SettingsDifference> getDifferences(@Nullable Settings other, boolean shortCircuit) {
+  public Set<SettingsDifference> getDifferencesRelevantForLanguageTool(@Nullable Settings other) {
     Set<SettingsDifference> differences = new HashSet<>();
 
     if (other == null) {
@@ -372,102 +468,36 @@ public class Settings {
       return differences;
     }
 
-    if ((this.enabled == null) ? (other.enabled != null) : !this.enabled.equals(other.enabled)) {
-      differences.add(new SettingsDifference("enabled", this.enabled, other.enabled));
-      if (shortCircuit) return differences;
-    }
-
-    if ((this.languageShortCode == null) ? (other.languageShortCode != null) :
-          !this.languageShortCode.equals(other.languageShortCode)) {
-      differences.add(new SettingsDifference("language",
-          this.languageShortCode, other.languageShortCode));
-      if (shortCircuit) return differences;
-    }
-
     if (!mapOfSetsEqual(this.dictionary, other.dictionary, this.languageShortCode)) {
       differences.add(new SettingsDifference("dictionary", this.dictionary, other.dictionary));
-      if (shortCircuit) return differences;
     }
 
     if (!mapOfSetsEqual(this.disabledRules, other.disabledRules, this.languageShortCode)) {
       differences.add(new SettingsDifference("disabledRules",
           this.disabledRules, other.disabledRules));
-      if (shortCircuit) return differences;
     }
 
     if (!mapOfSetsEqual(this.enabledRules, other.enabledRules, this.languageShortCode)) {
       differences.add(new SettingsDifference("enabledRules",
           this.enabledRules, other.enabledRules));
-      if (shortCircuit) return differences;
     }
 
     if ((this.languageToolHttpServerUri == null) ? (other.languageToolHttpServerUri != null) :
           !this.languageToolHttpServerUri.equals(other.languageToolHttpServerUri)) {
       differences.add(new SettingsDifference("ltex-ls.languageToolHttpServerUri",
           this.languageToolHttpServerUri, other.languageToolHttpServerUri));
-      if (shortCircuit) return differences;
-    }
-
-    if ((this.logLevel == null) ? (other.logLevel != null) :
-          !this.logLevel.equals(other.logLevel)) {
-      differences.add(new SettingsDifference("ltex-ls.logLevel", this.logLevel, other.logLevel));
-      if (shortCircuit) return differences;
-    }
-
-    if ((this.dummyCommandPrototypes == null) ? (other.dummyCommandPrototypes != null) :
-          !this.dummyCommandPrototypes.equals(other.dummyCommandPrototypes)) {
-      differences.add(new SettingsDifference("commands.dummy",
-          this.dummyCommandPrototypes, other.dummyCommandPrototypes));
-      if (shortCircuit) return differences;
-    }
-
-    if ((this.ignoreCommandPrototypes == null) ? (other.ignoreCommandPrototypes != null) :
-          !this.ignoreCommandPrototypes.equals(other.ignoreCommandPrototypes)) {
-      differences.add(new SettingsDifference("commands.ignore",
-          this.ignoreCommandPrototypes, other.ignoreCommandPrototypes));
-      if (shortCircuit) return differences;
-    }
-
-    if ((this.ignoreEnvironments == null) ? (other.ignoreEnvironments != null) :
-          !this.ignoreEnvironments.equals(other.ignoreEnvironments)) {
-      differences.add(new SettingsDifference("environments.ignore",
-          this.ignoreEnvironments, other.ignoreEnvironments));
-      if (shortCircuit) return differences;
-    }
-
-    if ((this.dummyMarkdownNodeTypes == null) ? (other.dummyMarkdownNodeTypes != null) :
-          !this.dummyMarkdownNodeTypes.equals(other.dummyMarkdownNodeTypes)) {
-      differences.add(new SettingsDifference("markdown.dummy",
-          this.dummyMarkdownNodeTypes, other.dummyMarkdownNodeTypes));
-      if (shortCircuit) return differences;
-    }
-
-    if ((this.ignoreMarkdownNodeTypes == null) ? (other.ignoreMarkdownNodeTypes != null) :
-          !this.ignoreMarkdownNodeTypes.equals(other.ignoreMarkdownNodeTypes)) {
-      differences.add(new SettingsDifference("markdown.ignore",
-          this.ignoreMarkdownNodeTypes, other.ignoreMarkdownNodeTypes));
-      if (shortCircuit) return differences;
-    }
-
-    if ((this.ignoreRuleSentencePairs == null) ? (other.ignoreRuleSentencePairs != null) :
-          !this.ignoreRuleSentencePairs.equals(other.ignoreRuleSentencePairs)) {
-      differences.add(new SettingsDifference("ignoreRuleInSentence",
-          this.ignoreRuleSentencePairs, other.ignoreRuleSentencePairs));
-      if (shortCircuit) return differences;
     }
 
     if ((this.motherTongueShortCode == null) ? (other.motherTongueShortCode != null) :
           !this.motherTongueShortCode.equals(other.motherTongueShortCode)) {
       differences.add(new SettingsDifference("additionalRules.motherTongue",
           this.motherTongueShortCode, other.motherTongueShortCode));
-      if (shortCircuit) return differences;
     }
 
     if ((this.languageModelRulesDirectory == null) ? (other.languageModelRulesDirectory != null) :
           !this.languageModelRulesDirectory.equals(other.languageModelRulesDirectory)) {
       differences.add(new SettingsDifference("additionalRules.languageModel",
           this.languageModelRulesDirectory, other.languageModelRulesDirectory));
-      if (shortCircuit) return differences;
     }
 
     if ((this.neuralNetworkModelRulesDirectory == null)
@@ -475,36 +505,18 @@ public class Settings {
           : !this.neuralNetworkModelRulesDirectory.equals(other.neuralNetworkModelRulesDirectory)) {
       differences.add(new SettingsDifference("additionalRules.neuralNetworkModel",
           this.neuralNetworkModelRulesDirectory, other.neuralNetworkModelRulesDirectory));
-      if (shortCircuit) return differences;
     }
 
     if ((this.word2VecModelRulesDirectory == null) ? (other.word2VecModelRulesDirectory != null) :
           !this.word2VecModelRulesDirectory.equals(other.word2VecModelRulesDirectory)) {
       differences.add(new SettingsDifference("additionalRules.word2VecModel",
           this.word2VecModelRulesDirectory, other.word2VecModelRulesDirectory));
-      if (shortCircuit) return differences;
     }
 
     if ((this.sentenceCacheSize == null) ? (other.sentenceCacheSize != null) :
           !this.sentenceCacheSize.equals(other.sentenceCacheSize)) {
       differences.add(new SettingsDifference("sentenceCacheSize",
           this.sentenceCacheSize, other.sentenceCacheSize));
-      if (shortCircuit) return differences;
-    }
-
-    if ((this.diagnosticSeverity == null) ? (other.diagnosticSeverity != null) :
-          (this.diagnosticSeverity != other.diagnosticSeverity)) {
-      differences.add(new SettingsDifference("diagnosticSeverity",
-          this.diagnosticSeverity, other.diagnosticSeverity));
-      if (shortCircuit) return differences;
-    }
-
-    if ((this.clearDiagnosticsWhenClosingFile == null)
-          ? (other.clearDiagnosticsWhenClosingFile != null)
-          : !this.clearDiagnosticsWhenClosingFile.equals(other.clearDiagnosticsWhenClosingFile)) {
-      differences.add(new SettingsDifference("clearDiagnosticsWhenClosingFile",
-          this.clearDiagnosticsWhenClosingFile, other.clearDiagnosticsWhenClosingFile));
-      if (shortCircuit) return differences;
     }
 
     return differences;
