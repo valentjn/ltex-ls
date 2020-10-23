@@ -49,6 +49,7 @@ public class Settings {
   private @Nullable String word2VecModelRulesDirectory = null;
   private @Nullable Integer sentenceCacheSize = null;
   private @Nullable DiagnosticSeverity diagnosticSeverity = null;
+  private @Nullable CheckFrequency checkFrequency = null;
   private @Nullable Boolean clearDiagnosticsWhenClosingFile = null;
 
   public Settings() {
@@ -85,6 +86,7 @@ public class Settings {
     this.word2VecModelRulesDirectory = obj.word2VecModelRulesDirectory;
     this.sentenceCacheSize = obj.sentenceCacheSize;
     this.diagnosticSeverity = ((obj.diagnosticSeverity == null) ? null : obj.diagnosticSeverity);
+    this.checkFrequency = ((obj.checkFrequency == null) ? null : obj.checkFrequency);
     this.clearDiagnosticsWhenClosingFile = ((obj.clearDiagnosticsWhenClosingFile == null) ? null
         : obj.clearDiagnosticsWhenClosingFile);
   }
@@ -327,8 +329,25 @@ public class Settings {
       } else {
         this.diagnosticSeverity = null;
       }
-    } catch (NullPointerException | UnsupportedOperationException e) {
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       this.diagnosticSeverity = null;
+    }
+
+    try {
+      String checkFrequencyString =
+          getSettingFromJson(jsonSettings, "checkFrequency").getAsString();
+
+      if (checkFrequencyString.equals("edit")) {
+        this.checkFrequency = CheckFrequency.EDIT;
+      } else if (checkFrequencyString.equals("save")) {
+        this.checkFrequency = CheckFrequency.SAVE;
+      } else if (checkFrequencyString.equals("manual")) {
+        this.checkFrequency = CheckFrequency.MANUAL;
+      } else {
+        this.checkFrequency = null;
+      }
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      this.checkFrequency = null;
     }
 
     try {
@@ -433,6 +452,11 @@ public class Settings {
 
     if ((this.diagnosticSeverity == null) ? (other.diagnosticSeverity != null) :
           (this.diagnosticSeverity != other.diagnosticSeverity)) {
+      return false;
+    }
+
+    if ((this.checkFrequency == null) ? (other.checkFrequency != null) :
+          (this.checkFrequency != other.checkFrequency)) {
       return false;
     }
 
@@ -541,6 +565,7 @@ public class Settings {
     hash = 53 * hash + ((this.sentenceCacheSize != null)
         ? this.sentenceCacheSize.hashCode() : 0);
     hash = 53 * hash + ((this.diagnosticSeverity != null) ? this.diagnosticSeverity.hashCode() : 0);
+    hash = 53 * hash + ((this.checkFrequency != null) ? this.checkFrequency.hashCode() : 0);
     hash = 53 * hash + ((this.clearDiagnosticsWhenClosingFile != null)
         ? this.clearDiagnosticsWhenClosingFile.hashCode() : 0);
 
@@ -639,6 +664,10 @@ public class Settings {
 
   public DiagnosticSeverity getDiagnosticSeverity() {
     return getDefault(this.diagnosticSeverity, DiagnosticSeverity.Information);
+  }
+
+  public CheckFrequency getCheckFrequency() {
+    return getDefault(this.checkFrequency, CheckFrequency.EDIT);
   }
 
   public Boolean getClearDiagnosticsWhenClosingFile() {
@@ -763,6 +792,12 @@ public class Settings {
   public Settings withDiagnosticSeverity(DiagnosticSeverity diagnosticSeverity) {
     Settings obj = new Settings(this);
     obj.diagnosticSeverity = diagnosticSeverity;
+    return obj;
+  }
+
+  public Settings withCheckFrequency(CheckFrequency checkFrequency) {
+    Settings obj = new Settings(this);
+    obj.checkFrequency = checkFrequency;
     return obj;
   }
 

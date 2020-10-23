@@ -15,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
+import org.bsplines.ltexls.settings.CheckFrequency;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.initialization.qual.NotOnlyInitialized;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
@@ -146,7 +147,12 @@ public class LtexTextDocumentService implements TextDocumentService {
     this.documents.put(params.getTextDocument().getUri(),
         new LtexTextDocumentItem(this.languageServer, params.getTextDocument()));
     @Nullable LtexTextDocumentItem document = getDocument(params.getTextDocument().getUri());
-    if (document != null) document.checkAndPublishDiagnostics(false);
+
+    if ((document != null)
+          && (this.languageServer.getSettingsManager().getSettings().getCheckFrequency()
+            != CheckFrequency.MANUAL)) {
+      document.checkAndPublishDiagnostics(false);
+    }
   }
 
   @Override
@@ -167,6 +173,18 @@ public class LtexTextDocumentService implements TextDocumentService {
 
   @Override
   public void didSave(DidSaveTextDocumentParams params) {
+    String uri = params.getTextDocument().getUri();
+    @Nullable LtexTextDocumentItem document = this.documents.get(uri);
+
+    if (document == null) {
+      Tools.logger.warning(Tools.i18n("couldNotFindDocumentWithUri", uri));
+      return;
+    }
+
+    if (this.languageServer.getSettingsManager().getSettings().getCheckFrequency()
+          == CheckFrequency.SAVE) {
+      document.checkAndPublishDiagnostics(false);
+    }
   }
 
   @Override
@@ -181,7 +199,11 @@ public class LtexTextDocumentService implements TextDocumentService {
 
     document.applyTextChangeEvents(params.getContentChanges());
     document.setVersion(params.getTextDocument().getVersion());
-    document.checkAndPublishDiagnostics(false);
+
+    if (this.languageServer.getSettingsManager().getSettings().getCheckFrequency()
+          == CheckFrequency.EDIT) {
+      document.checkAndPublishDiagnostics(false);
+    }
   }
 
   @Override

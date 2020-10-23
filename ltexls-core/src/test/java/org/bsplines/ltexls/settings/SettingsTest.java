@@ -181,6 +181,10 @@ public class SettingsTest {
     Assertions.assertEquals(DiagnosticSeverity.Error, settings.getDiagnosticSeverity());
     settings2 = compareSettings(settings, settings2, false);
 
+    settings = settings.withCheckFrequency(CheckFrequency.MANUAL);
+    Assertions.assertEquals(CheckFrequency.MANUAL, settings.getCheckFrequency());
+    settings2 = compareSettings(settings, settings2, false);
+
     settings = settings.withClearDiagnosticsWhenClosingFile(false);
     Assertions.assertEquals(false, settings.getClearDiagnosticsWhenClosingFile());
     settings2 = compareSettings(settings, settings2, false);
