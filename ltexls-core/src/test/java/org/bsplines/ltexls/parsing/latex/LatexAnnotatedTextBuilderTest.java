@@ -19,24 +19,28 @@ public class LatexAnnotatedTextBuilderTest {
   }
 
   private static void assertPlainText(String code, String expectedPlainText, String language) {
-    assertPlainText(code, expectedPlainText, language, "latex");
+    assertPlainText(code, expectedPlainText, (new Settings()).withLanguageShortCode(language));
   }
 
-  private static void assertPlainText(String code, String expectedPlainText, String language,
+  private static void assertPlainText(String code, String expectedPlainText, Settings settings) {
+    assertPlainText(code, expectedPlainText, settings, "latex");
+  }
+
+  private static void assertPlainText(String code, String expectedPlainText, Settings settings,
       String codeLanguageId) {
-    AnnotatedText annotatedText = buildAnnotatedText(code, language, codeLanguageId);
+    AnnotatedText annotatedText = buildAnnotatedText(code, settings, codeLanguageId);
     Assertions.assertEquals(expectedPlainText, annotatedText.getPlainText());
   }
 
   private static AnnotatedText buildAnnotatedText(String code) {
-    return buildAnnotatedText(code, "en-US", "latex");
+    return buildAnnotatedText(code, new Settings(), "latex");
   }
 
-  private static AnnotatedText buildAnnotatedText(String code, String language,
+  private static AnnotatedText buildAnnotatedText(String code, Settings settings,
         String codeLanguageId) {
     LatexAnnotatedTextBuilder builder =
         (LatexAnnotatedTextBuilder)CodeAnnotatedTextBuilder.create(codeLanguageId);
-    builder.setSettings((new Settings()).withLanguageShortCode(language));
+    builder.setSettings(settings);
     builder.setInStrictMode(true);
     return builder.addCode(code).build();
   }
@@ -284,12 +288,12 @@ public class LatexAnnotatedTextBuilderTest {
         + "plot(1:1000, rnorm(1000))\n"
         + "@\n",
         " This is a first sentence.\n\n\n\nThis is a second sentence. ",
-        "en-US", "rsweave");
+        new Settings(), "rsweave");
     assertPlainText("<<import-packages>>=\n"
         + "library(tidyverse)\n"
         + "@\n",
         " ",
-        "en-US", "rsweave");
+        new Settings(), "rsweave");
     assertPlainText("<<import-packages>>=\n"
         + "library(tidyverse)\n"
         + "@\n",
