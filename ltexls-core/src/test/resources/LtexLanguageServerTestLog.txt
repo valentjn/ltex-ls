@@ -1,12 +1,10 @@
-[Trace - 11:49:13 AM] Sending request 'initialize - (0)'.
+[Trace - 12:45:01 PM] Sending request 'initialize - (0)'.
 Params: {
-    "processId": 3026702,
+    "processId": 1186589,
     "clientInfo": {
         "name": "vscode",
-        "version": "1.49.2"
+        "version": "1.50.0"
     },
-    "rootPath": null,
-    "rootUri": null,
     "capabilities": {
         "workspace": {
             "applyEdit": true,
@@ -262,12 +260,11 @@ Params: {
     "initializationOptions": {
         "locale": "en"
     },
-    "trace": "verbose",
-    "workspaceFolders": null
+    "trace": "verbose"
 }
 
 
-[Trace - 11:49:20 AM] Received response 'initialize - (0)' in 7388ms.
+[Trace - 12:45:12 PM] Received response 'initialize - (0)' in 10934ms.
 Result: {
     "capabilities": {
         "textDocumentSync": 1,
@@ -285,11 +282,11 @@ Result: {
 }
 
 
-[Trace - 11:49:20 AM] Sending notification 'initialized'.
+[Trace - 12:45:12 PM] Sending notification 'initialized'.
 Params: {}
 
 
-[Trace - 11:49:20 AM] Sending notification 'workspace/didChangeConfiguration'.
+[Trace - 12:45:12 PM] Sending notification 'workspace/didChangeConfiguration'.
 Params: {
     "settings": {
         "ltex": {
@@ -300,14 +297,8 @@ Params: {
             ],
             "language": "en-US",
             "dictionary": {},
-            "workspaceDictionary": {},
-            "workspaceFolderDictionary": {},
             "disabledRules": {},
-            "workspaceDisabledRules": {},
-            "workspaceFolderDisabledRules": {},
             "enabledRules": {},
-            "workspaceEnabledRules": {},
-            "workspaceFolderEnabledRules": {},
             "ltex-ls": {
                 "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
                 "languageToolHttpServerUri": "",
@@ -318,25 +309,16 @@ Params: {
                 "initialHeapSize": 64,
                 "maximumHeapSize": 512
             },
-            "commands": {
+            "latex": {
+                "commands": [],
+                "environments": []
+            },
+            "markdown": {
+                "nodes": [],
                 "ignore": [],
                 "dummy": []
             },
-            "environments": {
-                "ignore": []
-            },
-            "markdown": {
-                "ignore": [
-                    "CodeBlock",
-                    "FencedCodeBlock",
-                    "IndentedCodeBlock"
-                ],
-                "dummy": [
-                    "AutoLink",
-                    "Code"
-                ]
-            },
-            "ignoreRuleInSentence": [],
+            "ignoreRuleInSentence": {},
             "configurationTarget": {
                 "addToDictionary": "workspaceFolder",
                 "disableRule": "workspaceFolder",
@@ -350,16 +332,26 @@ Params: {
             },
             "sentenceCacheSize": 2000,
             "diagnosticSeverity": "information",
+            "checkFrequency": "edit",
             "clearDiagnosticsWhenClosingFile": true,
+            "statusBarItem": false,
             "trace": {
                 "server": "verbose"
-            }
+            },
+            "workspaceDictionary": {},
+            "workspaceFolderDictionary": {},
+            "workspaceDisabledRules": {},
+            "workspaceFolderDisabledRules": {},
+            "workspaceEnabledRules": {},
+            "workspaceFolderEnabledRules": {},
+            "commands": {},
+            "environments": {}
         }
     }
 }
 
 
-[Trace - 11:49:20 AM] Sending notification 'textDocument/didOpen'.
+[Trace - 12:45:12 PM] Sending notification 'textDocument/didOpen'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1",
@@ -370,7 +362,7 @@ Params: {
 }
 
 
-[Trace - 11:49:20 AM] Received request 'workspace/configuration - (1)'.
+[Trace - 12:45:12 PM] Received request 'workspace/configuration - (1)'.
 Params: {
     "items": [
         {
@@ -381,7 +373,7 @@ Params: {
 }
 
 
-[Trace - 11:49:20 AM] Sending response 'workspace/configuration - (1)'. Processing request took 30ms
+[Trace - 12:45:12 PM] Sending response 'workspace/configuration - (1)'. Processing request took 12ms
 Result: [
     {
         "enabled": [
@@ -391,14 +383,8 @@ Result: [
         ],
         "language": "en-US",
         "dictionary": {},
-        "workspaceDictionary": {},
-        "workspaceFolderDictionary": {},
         "disabledRules": {},
-        "workspaceDisabledRules": {},
-        "workspaceFolderDisabledRules": {},
         "enabledRules": {},
-        "workspaceEnabledRules": {},
-        "workspaceFolderEnabledRules": {},
         "ltex-ls": {
             "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
             "languageToolHttpServerUri": "",
@@ -409,25 +395,16 @@ Result: [
             "initialHeapSize": 64,
             "maximumHeapSize": 512
         },
-        "commands": {
+        "latex": {
+            "commands": [],
+            "environments": []
+        },
+        "markdown": {
+            "nodes": [],
             "ignore": [],
             "dummy": []
         },
-        "environments": {
-            "ignore": []
-        },
-        "markdown": {
-            "ignore": [
-                "CodeBlock",
-                "FencedCodeBlock",
-                "IndentedCodeBlock"
-            ],
-            "dummy": [
-                "AutoLink",
-                "Code"
-            ]
-        },
-        "ignoreRuleInSentence": [],
+        "ignoreRuleInSentence": {},
         "configurationTarget": {
             "addToDictionary": "workspaceFolder",
             "disableRule": "workspaceFolder",
@@ -441,15 +418,46 @@ Result: [
         },
         "sentenceCacheSize": 2000,
         "diagnosticSeverity": "information",
+        "checkFrequency": "edit",
         "clearDiagnosticsWhenClosingFile": true,
+        "statusBarItem": false,
         "trace": {
             "server": "verbose"
-        }
+        },
+        "workspaceDictionary": {},
+        "workspaceFolderDictionary": {},
+        "workspaceDisabledRules": {},
+        "workspaceFolderDisabledRules": {},
+        "workspaceEnabledRules": {},
+        "workspaceFolderEnabledRules": {},
+        "commands": {},
+        "environments": {}
     }
 ]
 
 
-[Trace - 11:49:20 AM] Received notification 'ltex/progress'.
+[Trace - 12:45:12 PM] Received request 'ltex/workspaceSpecificConfiguration - (2)'.
+Params: {
+    "items": [
+        {
+            "scopeUri": "untitled:Untitled-1",
+            "section": "ltex"
+        }
+    ]
+}
+
+
+[Trace - 12:45:12 PM] Sending response 'ltex/workspaceSpecificConfiguration - (2)'. Processing request took 11ms
+Result: [
+    {
+        "dictionary": {},
+        "disabledRules": {},
+        "enabledRules": {}
+    }
+]
+
+
+[Trace - 12:45:12 PM] Received notification 'ltex/progress'.
 Params: {
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
@@ -457,7 +465,7 @@ Params: {
 }
 
 
-[Trace - 11:49:21 AM] Received notification 'ltex/progress'.
+[Trace - 12:45:13 PM] Received notification 'ltex/progress'.
 Params: {
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
@@ -465,14 +473,14 @@ Params: {
 }
 
 
-[Trace - 11:49:21 AM] Received notification 'textDocument/publishDiagnostics'.
+[Trace - 12:45:13 PM] Received notification 'textDocument/publishDiagnostics'.
 Params: {
     "uri": "untitled:Untitled-1",
     "diagnostics": []
 }
 
 
-[Trace - 11:49:39 AM] Sending notification 'textDocument/didChange'.
+[Trace - 12:45:22 PM] Sending notification 'textDocument/didChange'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1",
@@ -486,7 +494,7 @@ Params: {
 }
 
 
-[Trace - 11:49:39 AM] Received request 'workspace/configuration - (2)'.
+[Trace - 12:45:22 PM] Received request 'workspace/configuration - (3)'.
 Params: {
     "items": [
         {
@@ -497,7 +505,7 @@ Params: {
 }
 
 
-[Trace - 11:49:39 AM] Sending response 'workspace/configuration - (2)'. Processing request took 16ms
+[Trace - 12:45:22 PM] Sending response 'workspace/configuration - (3)'. Processing request took 28ms
 Result: [
     {
         "enabled": [
@@ -507,14 +515,8 @@ Result: [
         ],
         "language": "en-US",
         "dictionary": {},
-        "workspaceDictionary": {},
-        "workspaceFolderDictionary": {},
         "disabledRules": {},
-        "workspaceDisabledRules": {},
-        "workspaceFolderDisabledRules": {},
         "enabledRules": {},
-        "workspaceEnabledRules": {},
-        "workspaceFolderEnabledRules": {},
         "ltex-ls": {
             "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
             "languageToolHttpServerUri": "",
@@ -525,25 +527,16 @@ Result: [
             "initialHeapSize": 64,
             "maximumHeapSize": 512
         },
-        "commands": {
+        "latex": {
+            "commands": [],
+            "environments": []
+        },
+        "markdown": {
+            "nodes": [],
             "ignore": [],
             "dummy": []
         },
-        "environments": {
-            "ignore": []
-        },
-        "markdown": {
-            "ignore": [
-                "CodeBlock",
-                "FencedCodeBlock",
-                "IndentedCodeBlock"
-            ],
-            "dummy": [
-                "AutoLink",
-                "Code"
-            ]
-        },
-        "ignoreRuleInSentence": [],
+        "ignoreRuleInSentence": {},
         "configurationTarget": {
             "addToDictionary": "workspaceFolder",
             "disableRule": "workspaceFolder",
@@ -557,15 +550,46 @@ Result: [
         },
         "sentenceCacheSize": 2000,
         "diagnosticSeverity": "information",
+        "checkFrequency": "edit",
         "clearDiagnosticsWhenClosingFile": true,
+        "statusBarItem": false,
         "trace": {
             "server": "verbose"
-        }
+        },
+        "workspaceDictionary": {},
+        "workspaceFolderDictionary": {},
+        "workspaceDisabledRules": {},
+        "workspaceFolderDisabledRules": {},
+        "workspaceEnabledRules": {},
+        "workspaceFolderEnabledRules": {},
+        "commands": {},
+        "environments": {}
     }
 ]
 
 
-[Trace - 11:49:39 AM] Received notification 'ltex/progress'.
+[Trace - 12:45:22 PM] Received request 'ltex/workspaceSpecificConfiguration - (4)'.
+Params: {
+    "items": [
+        {
+            "scopeUri": "untitled:Untitled-1",
+            "section": "ltex"
+        }
+    ]
+}
+
+
+[Trace - 12:45:22 PM] Sending response 'ltex/workspaceSpecificConfiguration - (4)'. Processing request took 11ms
+Result: [
+    {
+        "dictionary": {},
+        "disabledRules": {},
+        "enabledRules": {}
+    }
+]
+
+
+[Trace - 12:45:22 PM] Received notification 'ltex/progress'.
 Params: {
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
@@ -573,28 +597,7 @@ Params: {
 }
 
 
-[Trace - 11:49:49 AM] Sending request 'textDocument/codeAction - (1)'.
-Params: {
-    "textDocument": {
-        "uri": "untitled:Untitled-1"
-    },
-    "range": {
-        "start": {
-            "line": 0,
-            "character": 10
-        },
-        "end": {
-            "line": 0,
-            "character": 10
-        }
-    },
-    "context": {
-        "diagnostics": []
-    }
-}
-
-
-[Trace - 11:50:18 AM] Received notification 'ltex/progress'.
+[Trace - 12:46:06 PM] Received notification 'ltex/progress'.
 Params: {
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
@@ -602,7 +605,7 @@ Params: {
 }
 
 
-[Trace - 11:50:18 AM] Received notification 'textDocument/publishDiagnostics'.
+[Trace - 12:46:06 PM] Received notification 'textDocument/publishDiagnostics'.
 Params: {
     "uri": "untitled:Untitled-1",
     "diagnostics": [
@@ -640,11 +643,7 @@ Params: {
 }
 
 
-[Trace - 11:50:18 AM] Received response 'textDocument/codeAction - (1)' in 28662ms.
-Result: []
-
-
-[Trace - 11:50:18 AM] Sending request 'textDocument/codeAction - (2)'.
+[Trace - 12:46:12 PM] Sending request 'textDocument/codeAction - (1)'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1"
@@ -652,7 +651,7 @@ Params: {
     "range": {
         "start": {
             "line": 0,
-            "character": 10
+            "character": 8
         },
         "end": {
             "line": 0,
@@ -676,12 +675,15 @@ Params: {
                 "severity": 3,
                 "source": "LTeX - EN_A_VS_AN"
             }
+        ],
+        "only": [
+            "quickfix"
         ]
     }
 }
 
 
-[Trace - 11:50:18 AM] Received response 'textDocument/codeAction - (2)' in 71ms.
+[Trace - 12:46:12 PM] Received response 'textDocument/codeAction - (1)' in 123ms.
 Result: [
     {
         "title": "Ignore rule in this sentence",
@@ -807,7 +809,7 @@ Result: [
 ]
 
 
-[Trace - 11:50:21 AM] Sending request 'textDocument/codeAction - (3)'.
+[Trace - 12:46:18 PM] Sending request 'textDocument/codeAction - (2)'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1"
@@ -815,11 +817,11 @@ Params: {
     "range": {
         "start": {
             "line": 0,
-            "character": 10
+            "character": 9
         },
         "end": {
             "line": 0,
-            "character": 10
+            "character": 9
         }
     },
     "context": {
@@ -844,7 +846,7 @@ Params: {
 }
 
 
-[Trace - 11:50:21 AM] Received response 'textDocument/codeAction - (3)' in 5ms.
+[Trace - 12:46:18 PM] Received response 'textDocument/codeAction - (2)' in 13ms.
 Result: [
     {
         "title": "Ignore rule in this sentence",
@@ -970,7 +972,170 @@ Result: [
 ]
 
 
-[Trace - 11:50:24 AM] Sending notification 'textDocument/didChange'.
+[Trace - 12:46:24 PM] Sending request 'textDocument/codeAction - (3)'.
+Params: {
+    "textDocument": {
+        "uri": "untitled:Untitled-1"
+    },
+    "range": {
+        "start": {
+            "line": 0,
+            "character": 9
+        },
+        "end": {
+            "line": 0,
+            "character": 9
+        }
+    },
+    "context": {
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 0,
+                        "character": 8
+                    },
+                    "end": {
+                        "line": 0,
+                        "character": 10
+                    }
+                },
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'",
+                "severity": 3,
+                "source": "LTeX - EN_A_VS_AN"
+            }
+        ]
+    }
+}
+
+
+[Trace - 12:46:24 PM] Received response 'textDocument/codeAction - (3)' in 5ms.
+Result: [
+    {
+        "title": "Ignore rule in this sentence",
+        "kind": "quickfix.ltex.ignoreRulesInSentence",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 0,
+                        "character": 8
+                    },
+                    "end": {
+                        "line": 0,
+                        "character": 10
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - EN_A_VS_AN",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
+            }
+        ],
+        "command": {
+            "title": "Ignore rule in this sentence",
+            "command": "ltex.ignoreRulesInSentence",
+            "arguments": [
+                {
+                    "type": "command",
+                    "command": "ltex.ignoreRulesInSentence",
+                    "uri": "untitled:Untitled-1",
+                    "ruleIds": [
+                        "EN_A_VS_AN"
+                    ],
+                    "sentencePatterns": [
+                        "^\\QThis is an test.\\E$"
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "title": "Disable rule",
+        "kind": "quickfix.ltex.disableRules",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 0,
+                        "character": 8
+                    },
+                    "end": {
+                        "line": 0,
+                        "character": 10
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - EN_A_VS_AN",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
+            }
+        ],
+        "command": {
+            "title": "Disable rule",
+            "command": "ltex.disableRules",
+            "arguments": [
+                {
+                    "type": "command",
+                    "command": "ltex.disableRules",
+                    "uri": "untitled:Untitled-1",
+                    "ruleIds": {
+                        "en-US": [
+                            "EN_A_VS_AN"
+                        ]
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "title": "Use 'a'",
+        "kind": "quickfix.ltex.acceptSuggestions",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {
+                        "line": 0,
+                        "character": 8
+                    },
+                    "end": {
+                        "line": 0,
+                        "character": 10
+                    }
+                },
+                "severity": 3,
+                "source": "LTeX - EN_A_VS_AN",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
+            }
+        ],
+        "edit": {
+            "documentChanges": [
+                {
+                    "textDocument": {
+                        "version": 2,
+                        "uri": "untitled:Untitled-1"
+                    },
+                    "edits": [
+                        {
+                            "range": {
+                                "start": {
+                                    "line": 0,
+                                    "character": 8
+                                },
+                                "end": {
+                                    "line": 0,
+                                    "character": 10
+                                }
+                            },
+                            "newText": "a"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+]
+
+
+[Trace - 12:46:30 PM] Sending notification 'textDocument/didChange'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1",
@@ -984,7 +1149,7 @@ Params: {
 }
 
 
-[Trace - 11:50:24 AM] Sending request 'textDocument/codeAction - (4)'.
+[Trace - 12:46:30 PM] Sending request 'textDocument/codeAction - (4)'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1"
@@ -1021,7 +1186,7 @@ Params: {
 }
 
 
-[Trace - 11:50:24 AM] Received request 'workspace/configuration - (3)'.
+[Trace - 12:46:30 PM] Received request 'workspace/configuration - (5)'.
 Params: {
     "items": [
         {
@@ -1032,7 +1197,7 @@ Params: {
 }
 
 
-[Trace - 11:50:24 AM] Sending response 'workspace/configuration - (3)'. Processing request took 14ms
+[Trace - 12:46:30 PM] Sending response 'workspace/configuration - (5)'. Processing request took 8ms
 Result: [
     {
         "enabled": [
@@ -1042,14 +1207,8 @@ Result: [
         ],
         "language": "en-US",
         "dictionary": {},
-        "workspaceDictionary": {},
-        "workspaceFolderDictionary": {},
         "disabledRules": {},
-        "workspaceDisabledRules": {},
-        "workspaceFolderDisabledRules": {},
         "enabledRules": {},
-        "workspaceEnabledRules": {},
-        "workspaceFolderEnabledRules": {},
         "ltex-ls": {
             "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
             "languageToolHttpServerUri": "",
@@ -1060,25 +1219,16 @@ Result: [
             "initialHeapSize": 64,
             "maximumHeapSize": 512
         },
-        "commands": {
+        "latex": {
+            "commands": [],
+            "environments": []
+        },
+        "markdown": {
+            "nodes": [],
             "ignore": [],
             "dummy": []
         },
-        "environments": {
-            "ignore": []
-        },
-        "markdown": {
-            "ignore": [
-                "CodeBlock",
-                "FencedCodeBlock",
-                "IndentedCodeBlock"
-            ],
-            "dummy": [
-                "AutoLink",
-                "Code"
-            ]
-        },
-        "ignoreRuleInSentence": [],
+        "ignoreRuleInSentence": {},
         "configurationTarget": {
             "addToDictionary": "workspaceFolder",
             "disableRule": "workspaceFolder",
@@ -1092,23 +1242,25 @@ Result: [
         },
         "sentenceCacheSize": 2000,
         "diagnosticSeverity": "information",
+        "checkFrequency": "edit",
         "clearDiagnosticsWhenClosingFile": true,
+        "statusBarItem": false,
         "trace": {
             "server": "verbose"
-        }
+        },
+        "workspaceDictionary": {},
+        "workspaceFolderDictionary": {},
+        "workspaceDisabledRules": {},
+        "workspaceFolderDisabledRules": {},
+        "workspaceEnabledRules": {},
+        "workspaceFolderEnabledRules": {},
+        "commands": {},
+        "environments": {}
     }
 ]
 
 
-[Trace - 11:50:24 AM] Received notification 'ltex/progress'.
-Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 0
-}
-
-
-[Trace - 11:50:24 AM] Received request 'workspace/configuration - (4)'.
+[Trace - 12:46:30 PM] Received request 'ltex/workspaceSpecificConfiguration - (6)'.
 Params: {
     "items": [
         {
@@ -1119,7 +1271,36 @@ Params: {
 }
 
 
-[Trace - 11:50:24 AM] Sending response 'workspace/configuration - (4)'. Processing request took 8ms
+[Trace - 12:46:30 PM] Sending response 'ltex/workspaceSpecificConfiguration - (6)'. Processing request took 14ms
+Result: [
+    {
+        "dictionary": {},
+        "disabledRules": {},
+        "enabledRules": {}
+    }
+]
+
+
+[Trace - 12:46:30 PM] Received notification 'ltex/progress'.
+Params: {
+    "uri": "untitled:Untitled-1",
+    "operation": "checkDocument",
+    "progress": 0
+}
+
+
+[Trace - 12:46:30 PM] Received request 'workspace/configuration - (7)'.
+Params: {
+    "items": [
+        {
+            "scopeUri": "untitled:Untitled-1",
+            "section": "ltex"
+        }
+    ]
+}
+
+
+[Trace - 12:46:30 PM] Sending response 'workspace/configuration - (7)'. Processing request took 25ms
 Result: [
     {
         "enabled": [
@@ -1129,14 +1310,8 @@ Result: [
         ],
         "language": "en-US",
         "dictionary": {},
-        "workspaceDictionary": {},
-        "workspaceFolderDictionary": {},
         "disabledRules": {},
-        "workspaceDisabledRules": {},
-        "workspaceFolderDisabledRules": {},
         "enabledRules": {},
-        "workspaceEnabledRules": {},
-        "workspaceFolderEnabledRules": {},
         "ltex-ls": {
             "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
             "languageToolHttpServerUri": "",
@@ -1147,25 +1322,16 @@ Result: [
             "initialHeapSize": 64,
             "maximumHeapSize": 512
         },
-        "commands": {
+        "latex": {
+            "commands": [],
+            "environments": []
+        },
+        "markdown": {
+            "nodes": [],
             "ignore": [],
             "dummy": []
         },
-        "environments": {
-            "ignore": []
-        },
-        "markdown": {
-            "ignore": [
-                "CodeBlock",
-                "FencedCodeBlock",
-                "IndentedCodeBlock"
-            ],
-            "dummy": [
-                "AutoLink",
-                "Code"
-            ]
-        },
-        "ignoreRuleInSentence": [],
+        "ignoreRuleInSentence": {},
         "configurationTarget": {
             "addToDictionary": "workspaceFolder",
             "disableRule": "workspaceFolder",
@@ -1179,15 +1345,46 @@ Result: [
         },
         "sentenceCacheSize": 2000,
         "diagnosticSeverity": "information",
+        "checkFrequency": "edit",
         "clearDiagnosticsWhenClosingFile": true,
+        "statusBarItem": false,
         "trace": {
             "server": "verbose"
-        }
+        },
+        "workspaceDictionary": {},
+        "workspaceFolderDictionary": {},
+        "workspaceDisabledRules": {},
+        "workspaceFolderDisabledRules": {},
+        "workspaceEnabledRules": {},
+        "workspaceFolderEnabledRules": {},
+        "commands": {},
+        "environments": {}
     }
 ]
 
 
-[Trace - 11:50:24 AM] Received notification 'ltex/progress'.
+[Trace - 12:46:30 PM] Received request 'ltex/workspaceSpecificConfiguration - (8)'.
+Params: {
+    "items": [
+        {
+            "scopeUri": "untitled:Untitled-1",
+            "section": "ltex"
+        }
+    ]
+}
+
+
+[Trace - 12:46:30 PM] Sending response 'ltex/workspaceSpecificConfiguration - (8)'. Processing request took 59ms
+Result: [
+    {
+        "dictionary": {},
+        "disabledRules": {},
+        "enabledRules": {}
+    }
+]
+
+
+[Trace - 12:46:30 PM] Received notification 'ltex/progress'.
 Params: {
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
@@ -1195,50 +1392,7 @@ Params: {
 }
 
 
-[Trace - 11:50:24 AM] Sending request 'textDocument/codeAction - (5)'.
-Params: {
-    "textDocument": {
-        "uri": "untitled:Untitled-1"
-    },
-    "range": {
-        "start": {
-            "line": 0,
-            "character": 9
-        },
-        "end": {
-            "line": 0,
-            "character": 9
-        }
-    },
-    "context": {
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 0,
-                        "character": 8
-                    },
-                    "end": {
-                        "line": 0,
-                        "character": 10
-                    }
-                },
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'",
-                "severity": 3,
-                "source": "LTeX - EN_A_VS_AN"
-            }
-        ]
-    }
-}
-
-
-[Trace - 11:50:24 AM] Sending notification '$/cancelRequest'.
-Params: {
-    "id": 4
-}
-
-
-[Trace - 11:50:24 AM] Received notification 'ltex/progress'.
+[Trace - 12:46:30 PM] Received notification 'ltex/progress'.
 Params: {
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
@@ -1246,7 +1400,7 @@ Params: {
 }
 
 
-[Trace - 11:50:24 AM] Received notification 'textDocument/publishDiagnostics'.
+[Trace - 12:46:30 PM] Received notification 'textDocument/publishDiagnostics'.
 Params: {
     "uri": "untitled:Untitled-1",
     "diagnostics": [
@@ -1269,7 +1423,7 @@ Params: {
 }
 
 
-[Trace - 11:50:24 AM] Received notification 'ltex/progress'.
+[Trace - 12:46:30 PM] Received notification 'ltex/progress'.
 Params: {
     "uri": "untitled:Untitled-1",
     "operation": "checkDocument",
@@ -1277,15 +1431,11 @@ Params: {
 }
 
 
-[Trace - 11:50:24 AM] Received response 'textDocument/codeAction - (4)' in 427ms.
+[Trace - 12:46:30 PM] Received response 'textDocument/codeAction - (4)' in 319ms.
 Result: []
 
 
-[Trace - 11:50:24 AM] Received response 'textDocument/codeAction - (5)' in 185ms.
-Result: []
-
-
-[Trace - 11:50:24 AM] Sending request 'textDocument/codeAction - (6)'.
+[Trace - 12:46:31 PM] Sending request 'textDocument/codeAction - (5)'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1"
@@ -1306,260 +1456,7 @@ Params: {
 }
 
 
-[Trace - 11:50:24 AM] Received response 'textDocument/codeAction - (6)' in 5ms.
+[Trace - 12:46:31 PM] Received response 'textDocument/codeAction - (5)' in 4ms.
 Result: []
 
 
-[Trace - 11:50:29 AM] Sending request 'textDocument/codeAction - (7)'.
-Params: {
-    "textDocument": {
-        "uri": "untitled:Untitled-1"
-    },
-    "range": {
-        "start": {
-            "line": 2,
-            "character": 26
-        },
-        "end": {
-            "line": 2,
-            "character": 26
-        }
-    },
-    "context": {
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 9
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 26
-                    }
-                },
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad').",
-                "severity": 3,
-                "source": "LTeX - DE_AGREEMENT"
-            }
-        ]
-    }
-}
-
-
-[Trace - 11:50:29 AM] Received response 'textDocument/codeAction - (7)' in 6ms.
-Result: [
-    {
-        "title": "Ignore rule in this sentence",
-        "kind": "quickfix.ltex.ignoreRulesInSentence",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 9
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 26
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - DE_AGREEMENT",
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
-            }
-        ],
-        "command": {
-            "title": "Ignore rule in this sentence",
-            "command": "ltex.ignoreRulesInSentence",
-            "arguments": [
-                {
-                    "type": "command",
-                    "command": "ltex.ignoreRulesInSentence",
-                    "uri": "untitled:Untitled-1",
-                    "ruleIds": [
-                        "DE_AGREEMENT"
-                    ],
-                    "sentencePatterns": [
-                        "^\\QDies ist eine Test.\\E$"
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Disable rule",
-        "kind": "quickfix.ltex.disableRules",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 9
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 26
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - DE_AGREEMENT",
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
-            }
-        ],
-        "command": {
-            "title": "Disable rule",
-            "command": "ltex.disableRules",
-            "arguments": [
-                {
-                    "type": "command",
-                    "command": "ltex.disableRules",
-                    "uri": "untitled:Untitled-1",
-                    "ruleIds": {
-                        "de-DE": [
-                            "DE_AGREEMENT"
-                        ]
-                    }
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'ein Test'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 9
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 26
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - DE_AGREEMENT",
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 3,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 9
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 26
-                                }
-                            },
-                            "newText": "ein Test"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'einem Test'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 9
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 26
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - DE_AGREEMENT",
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 3,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 9
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 26
-                                }
-                            },
-                            "newText": "einem Test"
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "title": "Use 'einen Test'",
-        "kind": "quickfix.ltex.acceptSuggestions",
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 2,
-                        "character": 9
-                    },
-                    "end": {
-                        "line": 2,
-                        "character": 26
-                    }
-                },
-                "severity": 3,
-                "source": "LTeX - DE_AGREEMENT",
-                "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
-            }
-        ],
-        "edit": {
-            "documentChanges": [
-                {
-                    "textDocument": {
-                        "version": 3,
-                        "uri": "untitled:Untitled-1"
-                    },
-                    "edits": [
-                        {
-                            "range": {
-                                "start": {
-                                    "line": 2,
-                                    "character": 9
-                                },
-                                "end": {
-                                    "line": 2,
-                                    "character": 26
-                                }
-                            },
-                            "newText": "einen Test"
-                        }
-                    ]
-                }
-            ]
-        }
-    }
-]
