@@ -93,8 +93,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
       new ArrayList<>(LatexAnnotatedTextBuilderDefaults.getDefaultLatexCommandSignatures());
   private Map<String, List<LatexCommandSignature>> commandSignatureMap =
       createCommandSignatureMap(this.commandSignatures);
-  private List<String> ignoreEnvironments =
-      new ArrayList<>(LatexAnnotatedTextBuilderDefaults.getDefaultIgnoreEnvironments());
+  private List<LatexEnvironmentSignature> environmentSignatures =
+      new ArrayList<>(LatexAnnotatedTextBuilderDefaults.getDefaultLatexEnvironmentSignatures());
   private boolean isInStrictMode = false;
 
   public LatexAnnotatedTextBuilder(String codeLanguageId) {
@@ -521,14 +521,26 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                   popMode();
                   interpretAs = generateDummy();
                 }
-              } else if (command.equals("\\begin")
-                    && this.ignoreEnvironments.contains(environmentName)) {
-                this.modeStack.push(Mode.IGNORE_ENVIRONMENT);
-                ignoreEnvironmentEndPattern = Pattern.compile(
-                    "^\\\\end\\{" + Pattern.quote(environmentName) + "\\}");
+              } else if (command.equals("\\begin")) {
+                @Nullable LatexEnvironmentSignature matchingEnvironment = null;
+
+                for (LatexEnvironmentSignature latexEnvironmentSignature
+                      : this.environmentSignatures) {
+                  if (latexEnvironmentSignature.getName().equals(environmentName)) {
+                    matchingEnvironment = latexEnvironmentSignature;
+                  }
+                }
+
+                if ((matchingEnvironment != null) && (matchingEnvironment.getAction()
+                      == LatexEnvironmentSignature.Action.IGNORE)) {
+                  this.modeStack.push(Mode.IGNORE_ENVIRONMENT);
+                  ignoreEnvironmentEndPattern = Pattern.compile(
+                      "^\\\\end\\{" + Pattern.quote(environmentName) + "\\}");
+                } else {
+                  this.modeStack.push(this.curMode);
+                }
               } else {
-                if (command.equals("\\begin")) this.modeStack.push(this.curMode);
-                else popMode();
+                popMode();
               }
 
               if (!isIgnoreEnvironmentMode(this.modeStack.peek())) {
@@ -684,7 +696,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
                 }
               }
 
-              if (matchingCommand == null) {
+              if ((matchingCommand == null)
+                    || (matchingCommand.getAction() == LatexCommandSignature.Action.DEFAULT)) {
                 if (isMathMode(this.curMode) && (this.mathVowelState == MathVowelState.UNDECIDED)) {
                   if (command.equals("\\mathbb") || command.equals("\\mathbf")
                         || command.equals("\\mathcal") || command.equals("\\mathfrak")
@@ -921,18 +934,44 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   public void setSettings(Settings settings) {
     this.language = settings.getLanguageShortCode();
 
-    for (String commandPrototype : settings.getDummyCommandPrototypes()) {
-      this.commandSignatures.add(new LatexCommandSignature(commandPrototype,
-          LatexCommandSignature.Action.DUMMY));
-    }
+    for (Map.Entry<String, String> entry : settings.getLatexCommands().entrySet()) {
+      String actionString = entry.getValue();
+      LatexCommandSignature.Action action;
+      @Nullable DummyGenerator dummyGenerator = null;
 
-    for (String commandPrototype : settings.getIgnoreCommandPrototypes()) {
-      this.commandSignatures.add(new LatexCommandSignature(commandPrototype,
-          LatexCommandSignature.Action.IGNORE));
+      if (actionString.equals("default")) {
+        action = LatexCommandSignature.Action.DEFAULT;
+      } else if (actionString.equals("ignore")) {
+        action = LatexCommandSignature.Action.IGNORE;
+      } else if (actionString.equals("dummy")) {
+        action = LatexCommandSignature.Action.DUMMY;
+      } else if (actionString.equals("pluralDummy")) {
+        action = LatexCommandSignature.Action.DUMMY;
+        dummyGenerator = DummyGenerator.getDefault(true);
+      } else {
+        continue;
+      }
+
+      if (dummyGenerator == null) dummyGenerator = DummyGenerator.getDefault();
+      this.commandSignatures.add(new LatexCommandSignature(entry.getKey(), action, dummyGenerator));
     }
 
     this.commandSignatureMap = createCommandSignatureMap(this.commandSignatures);
-    this.ignoreEnvironments.addAll(settings.getIgnoreEnvironments());
+
+    for (Map.Entry<String, String> entry : settings.getLatexEnvironments().entrySet()) {
+      String actionString = entry.getValue();
+      LatexEnvironmentSignature.Action action;
+
+      if (actionString.equals("default")) {
+        action = LatexEnvironmentSignature.Action.DEFAULT;
+      } else if (actionString.equals("ignore")) {
+        action = LatexEnvironmentSignature.Action.IGNORE;
+      } else {
+        continue;
+      }
+
+      this.environmentSignatures.add(new LatexEnvironmentSignature(entry.getKey(), action));
+    }
   }
 
   public void setInStrictMode(boolean isInStrictMode) {

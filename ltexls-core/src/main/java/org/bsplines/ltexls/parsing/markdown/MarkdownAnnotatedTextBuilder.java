@@ -13,12 +13,14 @@ import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.sequence.Escaping;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.DummyGenerator;
 import org.bsplines.ltexls.settings.Settings;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private static final Pattern yamlFrontMatterPattern = Pattern.compile(
@@ -32,8 +34,8 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private Stack<String> nodeTypeStack = new Stack<>();
 
   private String language = "en-US";
-  private List<String> ignoreNodeTypes = new ArrayList<>();
-  private List<String> dummyNodeTypes = new ArrayList<>();
+  private List<MarkdownNodeSignature> nodeSignatures =
+      new ArrayList<>(MarkdownAnnotatedTextBuilderDefaults.getDefaultMarkdownNodeSignatures());
 
   public MarkdownAnnotatedTextBuilder() {
     this.code = "";
@@ -47,12 +49,30 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     return this.nodeTypeStack.contains(nodeType);
   }
 
-  private boolean isInNodeType(List<String> nodeTypes) {
+  private boolean isInIgnoredNodeType() {
+    boolean result = false;
+
     for (String nodeType : this.nodeTypeStack) {
-      if (nodeTypes.contains(nodeType)) return true;
+      for (MarkdownNodeSignature nodeSignature : this.nodeSignatures) {
+        if (nodeSignature.getName().equals(nodeType)) {
+          result = (nodeSignature.getAction() == MarkdownNodeSignature.Action.IGNORE);
+        }
+      }
     }
 
-    return false;
+    return result;
+  }
+
+  private boolean isDummyNodeType(String nodeType) {
+    boolean result = false;
+
+    for (MarkdownNodeSignature nodeSignature : this.nodeSignatures) {
+      if (nodeSignature.getName().equals(nodeType)) {
+        result = (nodeSignature.getAction() == MarkdownNodeSignature.Action.DUMMY);
+      }
+    }
+
+    return result;
   }
 
   private void addMarkup(int newPos) {
@@ -130,9 +150,9 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private void visit(Node node) {
     String nodeType = node.getClass().getSimpleName();
 
-    if (isInNodeType(this.ignoreNodeTypes)) {
+    if (isInIgnoredNodeType()) {
       addMarkup(node.getEndOffset());
-    } else if (this.dummyNodeTypes.contains(nodeType)) {
+    } else if (isDummyNodeType(nodeType)) {
       addMarkup(node, generateDummy());
     } else if (nodeType.equals("Text")) {
       addMarkup(node.getStartOffset());
@@ -150,7 +170,27 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   @Override
   public void setSettings(Settings settings) {
     this.language = settings.getLanguageShortCode();
-    this.dummyNodeTypes.addAll(settings.getDummyMarkdownNodeTypes());
-    this.ignoreNodeTypes.addAll(settings.getIgnoreMarkdownNodeTypes());
+
+    for (Map.Entry<String, String> entry : settings.getMarkdownNodes().entrySet()) {
+      String actionString = entry.getValue();
+      MarkdownNodeSignature.Action action;
+      @Nullable DummyGenerator dummyGenerator = null;
+
+      if (actionString.equals("default")) {
+        action = MarkdownNodeSignature.Action.DEFAULT;
+      } else if (actionString.equals("ignore")) {
+        action = MarkdownNodeSignature.Action.IGNORE;
+      } else if (actionString.equals("dummy")) {
+        action = MarkdownNodeSignature.Action.DUMMY;
+      } else if (actionString.equals("pluralDummy")) {
+        action = MarkdownNodeSignature.Action.DUMMY;
+        dummyGenerator = DummyGenerator.getDefault(true);
+      } else {
+        continue;
+      }
+
+      if (dummyGenerator == null) dummyGenerator = DummyGenerator.getDefault();
+      this.nodeSignatures.add(new MarkdownNodeSignature(entry.getKey(), action, dummyGenerator));
+    }
   }
 }

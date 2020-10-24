@@ -125,8 +125,8 @@ public class LatexFragmentizerTest {
     testCodeLanguage("latex");
 
     {
-      Settings settings = (new Settings()).withIgnoreCommandPrototypes(
-          Collections.singleton("\\todo{}"));
+      Settings settings = (new Settings()).withLatexCommands(
+          Collections.singletonMap("\\todo{}", "ignore"));
       CodeFragmentizer fragmentizer = CodeFragmentizer.create("latex");
       List<CodeFragment> codeFragments = fragmentizer.fragmentize(
           "Sentence\\footnote[abc]{Footnote} 1\n"

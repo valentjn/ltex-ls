@@ -9,7 +9,8 @@ package org.bsplines.ltexls.parsing.markdown;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
 import org.bsplines.ltexls.settings.Settings;
 import org.junit.jupiter.api.Assertions;
@@ -18,20 +19,18 @@ import org.languagetool.markup.AnnotatedText;
 
 public class MarkdownAnnotatedTextBuilderTest {
   private static void assertPlainText(String code, String expectedPlainText) {
-    assertPlainText(code, expectedPlainText, Collections.emptySet(), Collections.emptySet());
+    assertPlainText(code, expectedPlainText, Collections.emptyMap());
   }
 
   private static void assertPlainText(String code, String expectedPlainText,
-        Set<String> ignoreNodeTypes, Set<String> dummyNodeTypes) {
-    AnnotatedText annotatedText = buildAnnotatedText(code, ignoreNodeTypes, dummyNodeTypes);
+        Map<String, String> markdownNodes) {
+    AnnotatedText annotatedText = buildAnnotatedText(code, markdownNodes);
     Assertions.assertEquals(expectedPlainText, annotatedText.getPlainText());
   }
 
-  private static AnnotatedText buildAnnotatedText(String code,
-        Set<String> ignoreNodeTypes, Set<String> dummyNodeTypes) {
+  private static AnnotatedText buildAnnotatedText(String code, Map<String, String> markdownNodes) {
     CodeAnnotatedTextBuilder builder = CodeAnnotatedTextBuilder.create("markdown");
-    Settings settings = (new Settings()).withIgnoreMarkdownNodeTypes(ignoreNodeTypes)
-        .withDummyMarkdownNodeTypes(dummyNodeTypes);
+    Settings settings = (new Settings()).withMarkdownNodes(markdownNodes);
     builder.setSettings(settings);
     return builder.addCode(code).build();
   }
@@ -49,11 +48,16 @@ public class MarkdownAnnotatedTextBuilderTest {
         "This is a \u00a9 Test\nAnother day \u2013 another sentence\n");
     assertPlainText(
         "This is a test: `inline code`.\n\n```\ncode block\n```\n\nThis is another sentence.\n",
-        "This is a test: inline code.\n\n\ncode block\n\n\nThis is another sentence.\n");
+        "This is a test: Dummy0.\n\n\n\n\n\nThis is another sentence.\n");
+
+    Map<String, String> markdownNodes = new HashMap<>();
+    markdownNodes.put("Code", "default");
+    markdownNodes.put("FencedCodeBlock", "default");
     assertPlainText(
         "This is a test: `inline code`.\n\n```\ncode block\n```\n\nThis is another sentence.\n",
-        "This is a test: Dummy0.\n\n\n\n\n\nThis is another sentence.\n",
-        Collections.singleton("FencedCodeBlock"), Collections.singleton("Code"));
+        "This is a test: inline code.\n\n\ncode block\n\n\nThis is another sentence.\n",
+        markdownNodes);
+
     assertPlainText(
         "---\n"
         + "# This is YAML front matter\n"

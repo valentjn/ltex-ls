@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.regex.Pattern;
 import org.bsplines.ltexls.parsing.CodeFragment;
@@ -224,6 +226,16 @@ public class LatexFragmentizer extends CodeFragmentizer {
     this.commentFragmentizer = new RegexCodeFragmentizer(codeLanguageId, commentPattern);
   }
 
+  private static Set<String> getIgnoreCommandPrototypes(Settings settings) {
+    Set<String> ignoreCommandPrototypes = new HashSet<>();
+
+    for (Map.Entry<String, String> entry : settings.getLatexCommands().entrySet()) {
+      if (entry.getValue().equals("ignore")) ignoreCommandPrototypes.add(entry.getKey());
+    }
+
+    return ignoreCommandPrototypes;
+  }
+
   @Override
   public List<CodeFragment> fragmentize(String code, Settings originalSettings) {
     List<CodeFragment> fragments = Collections.singletonList(new CodeFragment(
@@ -246,7 +258,7 @@ public class LatexFragmentizer extends CodeFragmentizer {
       String oldFragmentCode = oldFragment.getCode();
       Settings oldFragmentSettings = oldFragment.getSettings();
       usePackageCommandSignatureMatcher.startMatching(oldFragmentCode,
-          oldFragmentSettings.getIgnoreCommandPrototypes());
+          getIgnoreCommandPrototypes(oldFragmentSettings));
       int prevFromPos = 0;
       Settings prevSettings = oldFragmentSettings;
       @Nullable LatexCommandSignatureMatch match;
@@ -298,7 +310,7 @@ public class LatexFragmentizer extends CodeFragmentizer {
       String oldFragmentCode = oldFragment.getCode();
       Settings oldFragmentSettings = oldFragment.getSettings();
       babelSwitchCommandSignatureMatcher.startMatching(oldFragmentCode,
-          oldFragmentSettings.getIgnoreCommandPrototypes());
+          getIgnoreCommandPrototypes(oldFragmentSettings));
       int prevFromPos = 0;
       Settings prevSettings = oldFragmentSettings;
       @Nullable LatexCommandSignatureMatch match;
@@ -338,7 +350,7 @@ public class LatexFragmentizer extends CodeFragmentizer {
       String oldFragmentCode = oldFragment.getCode();
       Settings oldFragmentSettings = oldFragment.getSettings();
       babelInlineCommandSignatureMatcher.startMatching(oldFragmentCode,
-          oldFragmentSettings.getIgnoreCommandPrototypes());
+          getIgnoreCommandPrototypes(oldFragmentSettings));
       Settings curSettings = oldFragmentSettings;
       @Nullable LatexCommandSignatureMatch match;
 
@@ -381,7 +393,7 @@ public class LatexFragmentizer extends CodeFragmentizer {
       String oldFragmentCode = oldFragment.getCode();
       Settings oldFragmentSettings = oldFragment.getSettings();
       babelEnvironmentCommandSignatureMatcher.startMatching(oldFragmentCode,
-          oldFragmentSettings.getIgnoreCommandPrototypes());
+          getIgnoreCommandPrototypes(oldFragmentSettings));
       Stack<Settings> settingsStack = new Stack<>();
       Stack<Integer> fromPosStack = new Stack<>();
       settingsStack.push(oldFragmentSettings);
@@ -457,7 +469,7 @@ public class LatexFragmentizer extends CodeFragmentizer {
       String oldFragmentCode = oldFragment.getCode();
       Settings oldFragmentSettings = oldFragment.getSettings();
       extraCommandSignatureMatcher.startMatching(oldFragmentCode,
-          oldFragmentSettings.getIgnoreCommandPrototypes());
+          getIgnoreCommandPrototypes(oldFragmentSettings));
       @Nullable LatexCommandSignatureMatch match;
 
       while ((match = extraCommandSignatureMatcher.findNextMatch()) != null) {

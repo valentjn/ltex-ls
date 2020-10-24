@@ -16,8 +16,8 @@ import org.bsplines.ltexls.parsing.DummyGenerator;
 class LatexAnnotatedTextBuilderDefaults {
   private static final List<LatexCommandSignature> defaultLatexCommandSignatures =
       createDefaultLatexCommandSignatures();
-  private static final List<String> defaultIgnoreEnvironments =
-      createDefaultIgnoreEnvironments();
+  private static final List<LatexEnvironmentSignature> defaultLatexEnvironmentSignatures =
+      createDefaultLatexEnvironmentSignatures();
 
   private static List<LatexCommandSignature> createDefaultLatexCommandSignatures() {
     List<LatexCommandSignature> list = new ArrayList<>();
@@ -606,21 +606,24 @@ class LatexAnnotatedTextBuilderDefaults {
     return list;
   }
 
-  private static List<String> createDefaultIgnoreEnvironments() {
-    List<String> list = new ArrayList<>();
+  private static List<LatexEnvironmentSignature> createDefaultLatexEnvironmentSignatures() {
+    List<LatexEnvironmentSignature> list = new ArrayList<>();
 
-    list.add("lstlisting");
-    list.add("otherlanguage");
-    list.add("otherlanguage*");
-    list.add("tikzpicture");
-    list.add("verbatim");
+    list.add(new LatexEnvironmentSignature("lstlisting"));
+    list.add(new LatexEnvironmentSignature("otherlanguage"));
+    list.add(new LatexEnvironmentSignature("otherlanguage*"));
+    list.add(new LatexEnvironmentSignature("tikzpicture"));
+    list.add(new LatexEnvironmentSignature("verbatim"));
 
     Map<String, String> babelLanguageMap = LatexFragmentizer.getBabelLanguageMap();
 
     for (String language : babelLanguageMap.keySet()) {
       String languageTag = LatexFragmentizer.convertBabelLanguageToLanguageTag(language);
-      list.add(language);
-      if (languageTag.length() != language.length()) list.add(languageTag);
+      list.add(new LatexEnvironmentSignature(language));
+
+      if (languageTag.length() != language.length()) {
+        list.add(new LatexEnvironmentSignature(languageTag));
+      }
     }
 
     return list;
@@ -633,7 +636,7 @@ class LatexAnnotatedTextBuilderDefaults {
     return Collections.unmodifiableList(defaultLatexCommandSignatures);
   }
 
-  public static List<String> getDefaultIgnoreEnvironments() {
-    return Collections.unmodifiableList(defaultIgnoreEnvironments);
+  public static List<LatexEnvironmentSignature> getDefaultLatexEnvironmentSignatures() {
+    return Collections.unmodifiableList(defaultLatexEnvironmentSignatures);
   }
 }

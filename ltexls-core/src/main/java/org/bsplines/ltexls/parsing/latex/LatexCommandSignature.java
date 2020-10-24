@@ -25,6 +25,7 @@ public class LatexCommandSignature {
   }
 
   public enum Action {
+    DEFAULT,
     IGNORE,
     DUMMY,
   }

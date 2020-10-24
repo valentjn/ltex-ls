@@ -25,10 +25,6 @@ import org.eclipse.lsp4j.DiagnosticSeverity;
 public class Settings {
   private static final Set<String> defaultEnabled =
       new HashSet<>(Arrays.asList("markdown", "latex", "rsweave"));
-  private static final Set<String> defaultDummyMarkdownNodeTypes =
-      new HashSet<>(Arrays.asList("AutoLink", "Code"));
-  private static final Set<String> defaultIgnoreMarkdownNodeTypes =
-      new HashSet<>(Arrays.asList("CodeBlock", "FencedCodeBlock", "IndentedCodeBlock"));
 
   private @Nullable Set<String> enabled = null;
   private @Nullable String languageShortCode = null;
@@ -37,11 +33,9 @@ public class Settings {
   private @Nullable Map<String, Set<String>> enabledRules = null;
   private @Nullable String languageToolHttpServerUri = null;
   private @Nullable Level logLevel = null;
-  private @Nullable Set<String> dummyCommandPrototypes = null;
-  private @Nullable Set<String> ignoreCommandPrototypes = null;
-  private @Nullable Set<String> ignoreEnvironments = null;
-  private @Nullable Set<String> dummyMarkdownNodeTypes = null;
-  private @Nullable Set<String> ignoreMarkdownNodeTypes = null;
+  private @Nullable Map<String, String> latexCommands = null;
+  private @Nullable Map<String, String> latexEnvironments = null;
+  private @Nullable Map<String, String> markdownNodes = null;
   private @Nullable Set<IgnoreRuleSentencePair> ignoreRuleSentencePairs = null;
   private @Nullable String motherTongueShortCode = null;
   private @Nullable String languageModelRulesDirectory = null;
@@ -68,16 +62,12 @@ public class Settings {
     this.enabledRules = ((obj.enabledRules == null) ? null : copyMapOfSets(obj.enabledRules));
     this.languageToolHttpServerUri = obj.languageToolHttpServerUri;
     this.logLevel = obj.logLevel;
-    this.dummyCommandPrototypes = ((obj.dummyCommandPrototypes == null) ? null
-        : new HashSet<>(obj.dummyCommandPrototypes));
-    this.ignoreCommandPrototypes = ((obj.ignoreCommandPrototypes == null) ? null
-        : new HashSet<>(obj.ignoreCommandPrototypes));
-    this.ignoreEnvironments = ((obj.ignoreEnvironments == null) ? null
-        : new HashSet<>(obj.ignoreEnvironments));
-    this.dummyMarkdownNodeTypes = ((obj.dummyMarkdownNodeTypes == null) ? null
-        : new HashSet<>(obj.dummyMarkdownNodeTypes));
-    this.ignoreMarkdownNodeTypes = ((obj.ignoreMarkdownNodeTypes == null) ? null
-        : new HashSet<>(obj.ignoreMarkdownNodeTypes));
+    this.latexCommands = ((obj.latexCommands == null) ? null
+        : new HashMap<>(obj.latexCommands));
+    this.latexEnvironments = ((obj.latexEnvironments == null) ? null
+        : new HashMap<>(obj.latexEnvironments));
+    this.markdownNodes = ((obj.markdownNodes == null) ? null
+        : new HashMap<>(obj.markdownNodes));
     this.ignoreRuleSentencePairs = ((obj.ignoreRuleSentencePairs == null) ? null
         : new HashSet<>(obj.ignoreRuleSentencePairs));
     this.motherTongueShortCode = obj.motherTongueShortCode;
@@ -117,6 +107,16 @@ public class Settings {
     Set<String> list = new HashSet<>();
     for (JsonElement element : array) list.add(element.getAsString());
     return list;
+  }
+
+  private static Map<String, String> convertJsonObjectToMap(JsonObject object) {
+    Map<String, String> map = new HashMap<>();
+
+    for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+      map.put(entry.getKey(), entry.getValue().getAsString());
+    }
+
+    return map;
   }
 
   private static Map<String, Set<String>> convertJsonObjectToMapOfSets(JsonObject object) {
@@ -228,39 +228,74 @@ public class Settings {
       this.logLevel = null;
     }
 
-    try {
-      this.dummyCommandPrototypes = convertJsonArrayToSet(
-          getSettingFromJson(jsonSettings, "commands.dummy").getAsJsonArray());
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      this.dummyCommandPrototypes = null;
-    }
+    this.latexCommands = new HashMap<>();
+    this.latexEnvironments = new HashMap<>();
+    this.markdownNodes = new HashMap<>();
+
+    // fixes false-positive argument.type.incompatible warnings
+    Map<String, String> latexCommands = this.latexCommands;
+    Map<String, String> latexEnvironments = this.latexEnvironments;
+    Map<String, String> markdownNodes = this.markdownNodes;
 
     try {
-      this.ignoreCommandPrototypes = convertJsonArrayToSet(
+      Set<String> ignoreCommands = convertJsonArrayToSet(
           getSettingFromJson(jsonSettings, "commands.ignore").getAsJsonArray());
+      for (String command : ignoreCommands) latexCommands.put(command, "ignore");
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      this.ignoreCommandPrototypes = null;
+      // setting not set
     }
 
     try {
-      this.ignoreEnvironments = convertJsonArrayToSet(
+      Set<String> dummyCommands = convertJsonArrayToSet(
+          getSettingFromJson(jsonSettings, "commands.dummy").getAsJsonArray());
+      for (String command : dummyCommands) latexCommands.put(command, "dummy");
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      // setting not set
+    }
+
+    try {
+      latexCommands.putAll(convertJsonObjectToMap(
+          getSettingFromJson(jsonSettings, "latex.commands").getAsJsonObject()));
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      // setting not set
+    }
+
+    try {
+      Set<String> ignoreEnvironments = convertJsonArrayToSet(
           getSettingFromJson(jsonSettings, "environments.ignore").getAsJsonArray());
+      for (String environment : ignoreEnvironments) latexEnvironments.put(environment, "ignore");
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      this.ignoreEnvironments = null;
+      // setting not set
     }
 
     try {
-      this.dummyMarkdownNodeTypes = convertJsonArrayToSet(
-          getSettingFromJson(jsonSettings, "markdown.dummy").getAsJsonArray());
+      latexEnvironments.putAll(convertJsonObjectToMap(
+          getSettingFromJson(jsonSettings, "latex.environments").getAsJsonObject()));
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      this.dummyMarkdownNodeTypes = null;
+      // setting not set
     }
 
     try {
-      this.ignoreMarkdownNodeTypes = convertJsonArrayToSet(
+      Set<String> ignoreNodes = convertJsonArrayToSet(
           getSettingFromJson(jsonSettings, "markdown.ignore").getAsJsonArray());
+      for (String command : ignoreNodes) markdownNodes.put(command, "ignore");
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      this.ignoreMarkdownNodeTypes = null;
+      // setting not set
+    }
+
+    try {
+      Set<String> dummyNodes = convertJsonArrayToSet(
+          getSettingFromJson(jsonSettings, "markdown.dummy").getAsJsonArray());
+      for (String command : dummyNodes) markdownNodes.put(command, "dummy");
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      // setting not set
+    }
+
+    try {
+      markdownNodes.putAll(convertJsonObjectToMap(
+          getSettingFromJson(jsonSettings, "markdown.nodes").getAsJsonObject()));
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      // setting not set
     }
 
     try {
@@ -394,28 +429,19 @@ public class Settings {
       return false;
     }
 
-    if ((this.dummyCommandPrototypes == null) ? (other.dummyCommandPrototypes != null) :
-          !this.dummyCommandPrototypes.equals(other.dummyCommandPrototypes)) {
+    if ((this.latexCommands == null) ? (other.latexCommands != null) :
+          ((other.latexCommands == null) || !this.latexCommands.equals(other.latexCommands))) {
       return false;
     }
 
-    if ((this.ignoreCommandPrototypes == null) ? (other.ignoreCommandPrototypes != null) :
-          !this.ignoreCommandPrototypes.equals(other.ignoreCommandPrototypes)) {
+    if ((this.latexEnvironments == null) ? (other.latexEnvironments != null) :
+          ((other.latexEnvironments == null)
+            || !this.latexEnvironments.equals(other.latexEnvironments))) {
       return false;
     }
 
-    if ((this.ignoreEnvironments == null) ? (other.ignoreEnvironments != null) :
-          !this.ignoreEnvironments.equals(other.ignoreEnvironments)) {
-      return false;
-    }
-
-    if ((this.dummyMarkdownNodeTypes == null) ? (other.dummyMarkdownNodeTypes != null) :
-          !this.dummyMarkdownNodeTypes.equals(other.dummyMarkdownNodeTypes)) {
-      return false;
-    }
-
-    if ((this.ignoreMarkdownNodeTypes == null) ? (other.ignoreMarkdownNodeTypes != null) :
-          !this.ignoreMarkdownNodeTypes.equals(other.ignoreMarkdownNodeTypes)) {
+    if ((this.markdownNodes == null) ? (other.markdownNodes != null) :
+          ((other.markdownNodes == null) || !this.markdownNodes.equals(other.markdownNodes))) {
       return false;
     }
 
@@ -543,15 +569,9 @@ public class Settings {
     hash = 53 * hash + ((this.languageToolHttpServerUri != null)
         ? this.languageToolHttpServerUri.hashCode() : 0);
     hash = 53 * hash + ((this.logLevel != null) ? this.logLevel.hashCode() : 0);
-    hash = 53 * hash + ((this.dummyCommandPrototypes != null)
-        ? this.dummyCommandPrototypes.hashCode() : 0);
-    hash = 53 * hash + ((this.ignoreCommandPrototypes != null)
-        ? this.ignoreCommandPrototypes.hashCode() : 0);
-    hash = 53 * hash + ((this.ignoreEnvironments != null) ? this.ignoreEnvironments.hashCode() : 0);
-    hash = 53 * hash + ((this.dummyMarkdownNodeTypes != null)
-        ? this.dummyMarkdownNodeTypes.hashCode() : 0);
-    hash = 53 * hash + ((this.ignoreMarkdownNodeTypes != null)
-        ? this.ignoreMarkdownNodeTypes.hashCode() : 0);
+    hash = 53 * hash + ((this.latexCommands != null) ? this.latexCommands.hashCode() : 0);
+    hash = 53 * hash + ((this.latexEnvironments != null) ? this.latexEnvironments.hashCode() : 0);
+    hash = 53 * hash + ((this.markdownNodes != null) ? this.markdownNodes.hashCode() : 0);
     hash = 53 * hash + ((this.ignoreRuleSentencePairs != null)
         ? this.ignoreRuleSentencePairs.hashCode() : 0);
     hash = 53 * hash + ((this.motherTongueShortCode != null)
@@ -612,29 +632,19 @@ public class Settings {
     return getDefault(this.logLevel, Level.FINE);
   }
 
-  public Set<String> getDummyCommandPrototypes() {
-    return Collections.unmodifiableSet(
-        getDefault(this.dummyCommandPrototypes, Collections.emptySet()));
+  public Map<String, String> getLatexCommands() {
+    return Collections.unmodifiableMap(
+        getDefault(this.latexCommands, Collections.emptyMap()));
   }
 
-  public Set<String> getIgnoreCommandPrototypes() {
-    return Collections.unmodifiableSet(
-        getDefault(this.ignoreCommandPrototypes, Collections.emptySet()));
+  public Map<String, String> getLatexEnvironments() {
+    return Collections.unmodifiableMap(
+        getDefault(this.latexEnvironments, Collections.emptyMap()));
   }
 
-  public Set<String> getIgnoreEnvironments() {
-    return Collections.unmodifiableSet(
-        getDefault(this.ignoreEnvironments, Collections.emptySet()));
-  }
-
-  public Set<String> getDummyMarkdownNodeTypes() {
-    return Collections.unmodifiableSet(
-        getDefault(this.dummyMarkdownNodeTypes, defaultDummyMarkdownNodeTypes));
-  }
-
-  public Set<String> getIgnoreMarkdownNodeTypes() {
-    return Collections.unmodifiableSet(
-        getDefault(this.ignoreMarkdownNodeTypes, defaultIgnoreMarkdownNodeTypes));
+  public Map<String, String> getMarkdownNodes() {
+    return Collections.unmodifiableMap(
+        getDefault(this.markdownNodes, Collections.emptyMap()));
   }
 
   public Set<IgnoreRuleSentencePair> getIgnoreRuleSentencePairs() {
@@ -723,33 +733,21 @@ public class Settings {
     return obj;
   }
 
-  public Settings withDummyCommandPrototypes(Set<String> dummyCommandPrototypes) {
+  public Settings withLatexCommands(Map<String, String> latexCommands) {
     Settings obj = new Settings(this);
-    obj.dummyCommandPrototypes = new HashSet<>(dummyCommandPrototypes);
+    obj.latexCommands = new HashMap<>(latexCommands);
     return obj;
   }
 
-  public Settings withIgnoreCommandPrototypes(Set<String> ignoreCommandPrototypes) {
+  public Settings withLatexEnvironments(Map<String, String> latexEnvironments) {
     Settings obj = new Settings(this);
-    obj.ignoreCommandPrototypes = new HashSet<>(ignoreCommandPrototypes);
+    obj.latexEnvironments = new HashMap<>(latexEnvironments);
     return obj;
   }
 
-  public Settings withIgnoreEnvironments(Set<String> ignoreEnvironments) {
+  public Settings withMarkdownNodes(Map<String, String> markdownNodes) {
     Settings obj = new Settings(this);
-    obj.ignoreEnvironments = new HashSet<>(ignoreEnvironments);
-    return obj;
-  }
-
-  public Settings withDummyMarkdownNodeTypes(Set<String> dummyMarkdownNodeTypes) {
-    Settings obj = new Settings(this);
-    obj.dummyMarkdownNodeTypes = new HashSet<>(dummyMarkdownNodeTypes);
-    return obj;
-  }
-
-  public Settings withIgnoreMarkdownNodeTypes(Set<String> ignoreMarkdownNodeTypes) {
-    Settings obj = new Settings(this);
-    obj.ignoreMarkdownNodeTypes = new HashSet<>(ignoreMarkdownNodeTypes);
+    obj.markdownNodes = new HashMap<>(markdownNodes);
     return obj;
   }
 
