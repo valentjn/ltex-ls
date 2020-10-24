@@ -41,7 +41,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
   private @MonotonicNonNull ResultCache resultCache;
   private @MonotonicNonNull JLanguageTool languageTool;
 
-  private static final int resultCacheExpireAfterMinutes = 10;
+  private static final int resultCacheExpireAfterMinutes = 60;
 
   /**
    * Constructor.
