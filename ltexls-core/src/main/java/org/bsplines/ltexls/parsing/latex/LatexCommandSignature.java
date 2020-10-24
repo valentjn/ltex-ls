@@ -29,7 +29,7 @@ public class LatexCommandSignature {
     DUMMY,
   }
 
-  private static final Pattern commandPattern = Pattern.compile(
+  private static final Pattern genericCommandPattern = Pattern.compile(
       "^(\\\\.+?)(\\{\\}|\\[\\]|\\(\\))*$");
   private static final Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\])|(\\(\\)))");
   private static final Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
@@ -39,8 +39,8 @@ public class LatexCommandSignature {
   private Action action = Action.IGNORE;
   private DummyGenerator dummyGenerator;
 
-  private String thisCommandPrototype;
-  private Pattern thisCommandPattern;
+  private String commandPrototype;
+  private Pattern commandPattern;
 
   public LatexCommandSignature(String commandPrototype) {
     this(commandPrototype, Action.IGNORE, DummyGenerator.getDefault());
@@ -60,14 +60,14 @@ public class LatexCommandSignature {
   public LatexCommandSignature(String commandPrototype, Action action,
         DummyGenerator dummyGenerator) {
     this.dummyGenerator = dummyGenerator;
-    this.thisCommandPrototype = commandPrototype;
-    Matcher commandMatcher = commandPattern.matcher(commandPrototype);
+    this.commandPrototype = commandPrototype;
+    Matcher commandMatcher = genericCommandPattern.matcher(commandPrototype);
     boolean found = commandMatcher.find();
     @Nullable String name = (found ? commandMatcher.group(1) : null);
 
     if (name == null) {
       Tools.logger.warning(Tools.i18n("invalidCommandPrototype", commandPrototype));
-      this.thisCommandPattern = Pattern.compile(" ^$");
+      this.commandPattern = Pattern.compile(" ^$");
       return;
     }
 
@@ -96,7 +96,7 @@ public class LatexCommandSignature {
     }
 
     this.action = action;
-    this.thisCommandPattern = Pattern.compile("^" + Pattern.quote(this.name));
+    this.commandPattern = Pattern.compile("^" + Pattern.quote(this.name));
   }
 
   private static String matchPatternFromPosition(String code, int fromPos, Pattern pattern) {
@@ -223,7 +223,7 @@ public class LatexCommandSignature {
   private int matchFromPosition(String code, int fromPos,
         @Nullable List<Pair<Integer, Integer>> arguments) {
     int pos = fromPos;
-    String match = matchPatternFromPosition(code, pos, this.thisCommandPattern);
+    String match = matchPatternFromPosition(code, pos, this.commandPattern);
     if (match.isEmpty()) return -1;
     pos += match.length();
 
@@ -245,7 +245,7 @@ public class LatexCommandSignature {
   }
 
   public String getCommandPrototype() {
-    return this.thisCommandPrototype;
+    return this.commandPrototype;
   }
 
   public Action getAction() {
