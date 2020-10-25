@@ -24,6 +24,11 @@ jobs:
     runs-on: "ubuntu-latest"
 
     steps:
+      - name: "CodeQL - Setup Java"
+        uses: "actions/setup-java@v1"
+        with:
+         java-version: 11
+
       - name: "CodeQL - Checkout Repository"
         uses: "actions/checkout@v2"
         with:
