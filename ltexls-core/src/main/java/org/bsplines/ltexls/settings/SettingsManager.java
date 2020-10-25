@@ -8,7 +8,6 @@
 package org.bsplines.ltexls.settings;
 
 import com.google.gson.JsonElement;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,13 +22,9 @@ import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 public class SettingsManager {
   private HashMap<String, Settings> settingsMap;
-  private HashMap<String, DictionaryFileWatcher> dictionaryFileWatcherMap;
-  private HashMap<String, Set<String>> fullDictionaryMap;
   private HashMap<String, @Nullable LanguageToolInterface> languageToolInterfaceMap;
 
   private Settings settings;
-  private DictionaryFileWatcher dictionaryFileWatcher;
-  private Set<String> fullDictionary;
   private @Nullable LanguageToolInterface languageToolInterface;
 
   public SettingsManager() {
@@ -38,30 +33,23 @@ public class SettingsManager {
 
   public SettingsManager(Settings settings) {
     this.settings = settings;
-    this.dictionaryFileWatcher = new DictionaryFileWatcher();
-    this.dictionaryFileWatcher.setWatchedDictionary(this.settings.getDictionary());
-    this.fullDictionary = this.dictionaryFileWatcher.getFullDictionary();
     reinitializeLanguageToolInterface();
     String language = this.settings.getLanguageShortCode();
     this.settingsMap = new HashMap<>();
     this.settingsMap.put(language, this.settings);
-    this.dictionaryFileWatcherMap = new HashMap<>();
-    this.dictionaryFileWatcherMap.put(language, this.dictionaryFileWatcher);
-    this.fullDictionaryMap = new HashMap<>();
-    this.fullDictionaryMap.put(language, this.fullDictionary);
     this.languageToolInterfaceMap = new HashMap<>();
     this.languageToolInterfaceMap.put(language, this.languageToolInterface);
     Tools.setLogLevel(settings.getLogLevel());
   }
 
-  @RequiresNonNull({"settings", "fullDictionary"})
+  @RequiresNonNull({"settings"})
   private void reinitializeLanguageToolInterface(
         @UnknownInitialization(Object.class) SettingsManager this) {
     if (this.settings.getLanguageToolHttpServerUri().isEmpty()) {
       this.languageToolInterface = new LanguageToolJavaInterface(
           this.settings.getLanguageShortCode(),
           this.settings.getMotherTongueShortCode(), this.settings.getSentenceCacheSize(),
-          this.fullDictionary);
+          this.settings.getDictionary());
     } else {
       this.languageToolInterface = new LanguageToolHttpInterface(
           this.settings.getLanguageToolHttpServerUri(), this.settings.getLanguageShortCode(),
@@ -107,11 +95,6 @@ public class SettingsManager {
     return this.languageToolInterface;
   }
 
-  public Set<String> getFullDictionary() {
-    return Collections.unmodifiableSet(
-        this.dictionaryFileWatcher.getFullDictionary());
-  }
-
   public void setSettings(JsonElement newJsonSettings,
         JsonElement newJsonWorkspaceSpecificSettings) {
     Settings newSettings = new Settings(newJsonSettings, newJsonWorkspaceSpecificSettings);
@@ -127,22 +110,17 @@ public class SettingsManager {
     String newLanguage = newSettings.getLanguageShortCode();
 
     final @Nullable Settings oldSettings = this.settingsMap.get(newLanguage);
-    final @Nullable Set<String> oldFullDictionary = this.fullDictionaryMap.get(newLanguage);
 
     setSettings(newLanguage, newSettings);
-    setDictionaryFileWatcher(newLanguage, newSettings);
-    setFullDictionary(newLanguage);
 
     Set<SettingsDifference> settingsDifferencesRelevantForLanguageTool =
         newSettings.getDifferencesRelevantForLanguageTool(oldSettings);
-    boolean fullDictionariesEqual = this.fullDictionary.equals(oldFullDictionary);
 
-    if (settingsDifferencesRelevantForLanguageTool.isEmpty() && fullDictionariesEqual) {
+    if (settingsDifferencesRelevantForLanguageTool.isEmpty()) {
       this.languageToolInterface = this.languageToolInterfaceMap.get(newLanguage);
     } else {
       if (Tools.logger.isLoggable(Level.FINE)) {
-        logDifferentSettings(newLanguage, settingsDifferencesRelevantForLanguageTool,
-            fullDictionariesEqual, oldFullDictionary, this.fullDictionary);
+        logDifferentSettings(newLanguage, settingsDifferencesRelevantForLanguageTool);
       }
 
       reinitializeLanguageToolInterface();
@@ -156,37 +134,9 @@ public class SettingsManager {
     Tools.setLogLevel(this.settings.getLogLevel());
   }
 
-  private void setDictionaryFileWatcher(String newLanguage, Settings newSettings) {
-    @Nullable DictionaryFileWatcher newDictionaryFileWatcher =
-        this.dictionaryFileWatcherMap.get(newLanguage);
-
-    if (newDictionaryFileWatcher != null) {
-      this.dictionaryFileWatcher = newDictionaryFileWatcher;
-      this.dictionaryFileWatcher.setWatchedDictionary(newSettings.getDictionary());
-    } else {
-      this.dictionaryFileWatcher = new DictionaryFileWatcher();
-      this.dictionaryFileWatcher.setWatchedDictionary(newSettings.getDictionary());
-      this.dictionaryFileWatcherMap.put(newLanguage, this.dictionaryFileWatcher);
-    }
-  }
-
-  private void setFullDictionary(String newLanguage) {
-    Set<String> newFullDictionary = this.dictionaryFileWatcher.getFullDictionary();
-    this.fullDictionary = newFullDictionary;
-    this.fullDictionaryMap.put(newLanguage, this.fullDictionary);
-  }
-
   private static void logDifferentSettings(String newLanguage,
-        Set<SettingsDifference> settingsDifferencesRelevantForLanguageTool,
-        boolean fullDictionariesEqual,
-        @Nullable Set<String> oldFullDictionary, Set<String> newFullDictionary) {
+        Set<SettingsDifference> settingsDifferencesRelevantForLanguageTool) {
     Set<SettingsDifference> differences = new HashSet<>(settingsDifferencesRelevantForLanguageTool);
-
-    if (!fullDictionariesEqual) {
-      differences.add(new SettingsDifference("fullDictionary",
-          newFullDictionary, oldFullDictionary));
-    }
-
     StringBuilder differencesStringBuilder = new StringBuilder();
 
     for (SettingsDifference difference : differences) {
