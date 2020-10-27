@@ -202,14 +202,14 @@ public class Settings {
 
     try {
       mergeMapOfSets(disabledRules, convertJsonObjectToMapOfSets(
-          getSettingFromJson(jsonSettings, "disabledRules").getAsJsonObject()));
+          getSettingFromJson(jsonWorkspaceSpecificSettings, "disabledRules").getAsJsonObject()));
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       // setting not set
     }
 
     try {
       mergeMapOfSets(enabledRules, convertJsonObjectToMapOfSets(
-          getSettingFromJson(jsonSettings, "enabledRules").getAsJsonObject()));
+          getSettingFromJson(jsonWorkspaceSpecificSettings, "enabledRules").getAsJsonObject()));
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       // setting not set
     }
