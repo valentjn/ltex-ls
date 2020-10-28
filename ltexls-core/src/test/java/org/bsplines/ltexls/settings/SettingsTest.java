@@ -129,11 +129,11 @@ public class SettingsTest {
         settings.getMarkdownNodes());
     settings2 = compareSettings(settings, settings2, false);
 
-    settings = settings.withIgnoreRuleSentencePairs(Collections.singleton(
-        new IgnoreRuleSentencePair("ruleId", "sentenceString")));
+    settings = settings.withHiddenFalsePositives(Collections.singleton(
+        new HiddenFalsePositive("ruleId", "sentenceString")));
     Assertions.assertEquals(Collections.singleton(
-        new IgnoreRuleSentencePair("ruleId", "sentenceString")),
-        settings.getIgnoreRuleSentencePairs());
+        new HiddenFalsePositive("ruleId", "sentenceString")),
+        settings.getHiddenFalsePositives());
     settings2 = compareSettings(settings, settings2, false);
 
     settings = settings.withMotherTongueShortCode("motherTongueShortCode");

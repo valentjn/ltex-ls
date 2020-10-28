@@ -10,13 +10,15 @@ package org.bsplines.ltexls.settings;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class IgnoreRuleSentencePairTest {
+public class HiddenFalsePositiveTest {
   @Test
   public void doTest() {
-    IgnoreRuleSentencePair pair = new IgnoreRuleSentencePair("a", "b");
-    Assertions.assertEquals(pair, new IgnoreRuleSentencePair(pair));
-    Assertions.assertNotEquals(pair, new IgnoreRuleSentencePair("X", "b"));
-    Assertions.assertNotEquals(pair, new IgnoreRuleSentencePair("a", "X"));
+    HiddenFalsePositive pair = new HiddenFalsePositive("a", "b");
+    Assertions.assertEquals(pair, new HiddenFalsePositive(pair));
+    Assertions.assertEquals(pair, HiddenFalsePositive.fromJsonString(
+        "{\"rule\":\"a\",\"sentence\":\"b\"}"));
+    Assertions.assertNotEquals(pair, new HiddenFalsePositive("X", "b"));
+    Assertions.assertNotEquals(pair, new HiddenFalsePositive("a", "X"));
     Assertions.assertDoesNotThrow(() -> pair.hashCode());
     Assertions.assertEquals("a", pair.getRuleId());
     Assertions.assertEquals("b", pair.getSentenceString());

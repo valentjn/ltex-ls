@@ -9,6 +9,7 @@ package org.bsplines.ltexls.server;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -47,11 +48,11 @@ public class CodeActionGenerator {
       CodeActionKind.QuickFix + ".ltex.addToDictionary";
   private static final String disableRulesCodeActionKind =
       CodeActionKind.QuickFix + ".ltex.disableRules";
-  private static final String ignoreRulesInSentenceCodeActionKind =
-      CodeActionKind.QuickFix + ".ltex.ignoreRulesInSentence";
+  private static final String hideFalsePositivesCodeActionKind =
+      CodeActionKind.QuickFix + ".ltex.hideFalsePositives";
   private static final String addToDictionaryCommandName = "ltex.addToDictionary";
   private static final String disableRulesCommandName = "ltex.disableRules";
-  private static final String ignoreRulesInSentenceCommandName = "ltex.ignoreRulesInSentence";
+  private static final String hideFalsePositivesCommandName = "ltex.hideFalsePositives";
   private static final String dummyPatternStr = "(?:Dummy|Ina|Jimmy-)[0-9]+";
   private static final Pattern dummyPattern = Pattern.compile(dummyPatternStr);
 
@@ -128,8 +129,8 @@ public class CodeActionGenerator {
     List<Either<Command, CodeAction>> result =
         new ArrayList<Either<Command, CodeAction>>();
 
-    List<LanguageToolRuleMatch> addWordToDictionaryMatches = new ArrayList<>();
-    List<LanguageToolRuleMatch> ignoreRuleInThisSentenceMatches = new ArrayList<>();
+    List<LanguageToolRuleMatch> addToDictionaryMatches = new ArrayList<>();
+    List<LanguageToolRuleMatch> hideFalsePositiveMatches = new ArrayList<>();
     List<LanguageToolRuleMatch> disableRuleMatches = new ArrayList<>();
     Map<String, List<LanguageToolRuleMatch>> useWordMatchesMap = new LinkedHashMap<>();
 
@@ -139,11 +140,11 @@ public class CodeActionGenerator {
 
         if ((ruleId != null) && (ruleId.startsWith("MORFOLOGIK_")
               || ruleId.startsWith("HUNSPELL_") || ruleId.startsWith("GERMAN_SPELLER_"))) {
-          addWordToDictionaryMatches.add(match);
+          addToDictionaryMatches.add(match);
         }
 
         if (match.getSentence() != null) {
-          ignoreRuleInThisSentenceMatches.add(match);
+          hideFalsePositiveMatches.add(match);
         }
 
         disableRuleMatches.add(match);
@@ -155,15 +156,15 @@ public class CodeActionGenerator {
       }
     }
 
-    if (!addWordToDictionaryMatches.isEmpty()
+    if (!addToDictionaryMatches.isEmpty()
           && this.settingsManager.getSettings().getLanguageToolHttpServerUri().isEmpty()) {
       result.add(Either.forRight(getAddWordToDictionaryCodeAction(document,
-          addWordToDictionaryMatches, annotatedTextFragments)));
+          addToDictionaryMatches, annotatedTextFragments)));
     }
 
-    if (!ignoreRuleInThisSentenceMatches.isEmpty()) {
-      result.add(Either.forRight(getIgnoreRuleInThisSentenceCodeAction(document,
-          ignoreRuleInThisSentenceMatches, annotatedTextFragments)));
+    if (!hideFalsePositiveMatches.isEmpty()) {
+      result.add(Either.forRight(getHideFalsePositiveCodeAction(document,
+          hideFalsePositiveMatches, annotatedTextFragments)));
     }
 
     if (!disableRuleMatches.isEmpty()) {
@@ -185,7 +186,7 @@ public class CodeActionGenerator {
 
   private CodeAction getAddWordToDictionaryCodeAction(
         LtexTextDocumentItem document,
-        List<LanguageToolRuleMatch> addWordToDictionaryMatches,
+        List<LanguageToolRuleMatch> addToDictionaryMatches,
         List<AnnotatedTextFragment> annotatedTextFragments) {
     List<@Nullable AnnotatedText> invertedAnnotatedTexts = new ArrayList<>();
     List<@Nullable String> plainTexts = new ArrayList<>();
@@ -199,7 +200,7 @@ public class CodeActionGenerator {
     JsonObject unknownWordsJsonObject = new JsonObject();
     List<Diagnostic> diagnostics = new ArrayList<>();
 
-    for (LanguageToolRuleMatch match : addWordToDictionaryMatches) {
+    for (LanguageToolRuleMatch match : addToDictionaryMatches) {
       int fragmentIndex = findAnnotatedTextFragmentWithMatch(
           annotatedTextFragments, match);
 
@@ -252,16 +253,16 @@ public class CodeActionGenerator {
     return codeAction;
   }
 
-  private CodeAction getIgnoreRuleInThisSentenceCodeAction(
+  private CodeAction getHideFalsePositiveCodeAction(
         LtexTextDocumentItem document,
-        List<LanguageToolRuleMatch> ignoreRuleInThisSentenceMatches,
+        List<LanguageToolRuleMatch> hideFalsePositiveMatches,
         List<AnnotatedTextFragment> annotatedTextFragments) {
     List<Pair<String, String>> ruleIdSentencePairs = new ArrayList<>();
-    JsonArray ruleIdsJson = new JsonArray();
-    JsonArray sentencePatternStringsJson = new JsonArray();
+    Map<String, List<String>> hiddenFalsePositivesMap = new HashMap<>();
+    JsonObject falsePositivesJsonObject = new JsonObject();
     List<Diagnostic> diagnostics = new ArrayList<>();
 
-    for (LanguageToolRuleMatch match : ignoreRuleInThisSentenceMatches) {
+    for (LanguageToolRuleMatch match : hideFalsePositiveMatches) {
       @Nullable String ruleId = match.getRuleId();
       @Nullable String sentence = match.getSentence();
       if ((ruleId == null) || (sentence == null)) continue;
@@ -269,6 +270,18 @@ public class CodeActionGenerator {
       Pair<String, String> pair = new Pair<>(ruleId, sentence);
 
       if (!ruleIdSentencePairs.contains(pair)) {
+        int fragmentIndex = findAnnotatedTextFragmentWithMatch(
+            annotatedTextFragments, match);
+
+        if (fragmentIndex == -1) {
+          Tools.logger.warning(Tools.i18n("couldNotFindFragmentForMatch"));
+          continue;
+        }
+
+        AnnotatedTextFragment annotatedTextFragment = annotatedTextFragments.get(fragmentIndex);
+        CodeFragment codeFragment = annotatedTextFragment.getCodeFragment();
+        final String language = codeFragment.getSettings().getLanguageShortCode();
+
         Matcher matcher = dummyPattern.matcher(sentence);
         StringBuilder sentencePatternStringBuilder = new StringBuilder();
         int lastEnd = 0;
@@ -285,9 +298,14 @@ public class CodeActionGenerator {
         }
 
         ruleIdSentencePairs.add(pair);
-        ruleIdsJson.add(ruleId);
+
+        JsonObject falsePositiveJson = new JsonObject();
+        falsePositiveJson.add("rule", new JsonPrimitive(ruleId));
         String sentencePatternString = "^" + sentencePatternStringBuilder.toString() + "$";
-        sentencePatternStringsJson.add(sentencePatternString);
+        falsePositiveJson.add("sentence", new JsonPrimitive(sentencePatternString));
+
+        addToMap(language, falsePositiveJson.toString(), hiddenFalsePositivesMap,
+            falsePositivesJsonObject);
       }
 
       diagnostics.add(createDiagnostic(match, document));
@@ -295,18 +313,17 @@ public class CodeActionGenerator {
 
     JsonObject arguments = new JsonObject();
     arguments.addProperty("type", "command");
-    arguments.addProperty("command", ignoreRulesInSentenceCommandName);
+    arguments.addProperty("command", hideFalsePositivesCommandName);
     arguments.addProperty("uri", document.getUri());
-    arguments.add("ruleIds", ruleIdsJson);
-    arguments.add("sentencePatterns", sentencePatternStringsJson);
+    arguments.add("falsePositives", falsePositivesJsonObject);
     Command command = new Command(((ruleIdSentencePairs.size() == 1)
-        ? Tools.i18n("ignoreRuleInThisSentence")
-        : Tools.i18n("ignoreAllRulesInTheSelectedSentences")),
-        ignoreRulesInSentenceCommandName);
+        ? Tools.i18n("hideFalsePositive")
+        : Tools.i18n("hideAllFalsePositivesInTheSelectedSentences")),
+        hideFalsePositivesCommandName);
     command.setArguments(Collections.singletonList(arguments));
 
     CodeAction codeAction = new CodeAction(command.getTitle());
-    codeAction.setKind(ignoreRulesInSentenceCodeActionKind);
+    codeAction.setKind(hideFalsePositivesCodeActionKind);
     codeAction.setDiagnostics(diagnostics);
     codeAction.setCommand(command);
 

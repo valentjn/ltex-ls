@@ -36,7 +36,8 @@ def main():
             r"dictionary|workspaceDictionary|workspaceFolderDictionary|"
             r"disabledRules|workspaceDisabledRules|workspaceDisabledRules|"
             r"enabledRules|workspaceEnabledRules|workspaceEnabledRules|"
-            r"ignoreRuleInSentence|commands|environments)\"): [\{\[]$.*?^" + indent + r"[\}\]]",
+            r"hiddenFalsePositives|ignoreRuleInSentence|"
+            r"commands|environments)\"): [\{\[]$.*?^" + indent + r"[\}\]]",
             r"\1: {}", part, flags=re.MULTILINE | re.DOTALL)
 
     resultTestLog += part

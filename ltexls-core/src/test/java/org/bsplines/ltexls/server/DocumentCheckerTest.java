@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
-import org.bsplines.ltexls.settings.IgnoreRuleSentencePair;
+import org.bsplines.ltexls.settings.HiddenFalsePositive;
 import org.bsplines.ltexls.settings.Settings;
 import org.bsplines.ltexls.settings.SettingsManager;
 import org.checkerframework.checker.nullness.NullnessUtil;
@@ -236,11 +236,11 @@ public class DocumentCheckerTest {
   }
 
   @Test
-  public void testIgnoreRuleSentencePairs() {
+  public void testHiddenFalsePositives() {
     LtexTextDocumentItem document = createDocument("markdown",
         "This is an unknownword.\n");
-    Settings settings = (new Settings()).withIgnoreRuleSentencePairs(Collections.singleton(
-        new IgnoreRuleSentencePair("MORFOLOGIK_RULE_EN_US", "This is an unknownword\\.")));
+    Settings settings = (new Settings()).withHiddenFalsePositives(Collections.singleton(
+        new HiddenFalsePositive("MORFOLOGIK_RULE_EN_US", "This is an unknownword\\.")));
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         checkDocument(document, settings);
     Assertions.assertTrue(checkingResult.getKey().isEmpty());

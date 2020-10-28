@@ -7,37 +7,40 @@
 
 package org.bsplines.ltexls.settings;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class IgnoreRuleSentencePair {
+public class HiddenFalsePositive {
   private final String ruleId;
   private final String sentenceString;
   private final Pattern sentencePattern;
 
-  /**
-   * Constructor.
-   *
-   * @param ruleId ID of the LanguageTool rule
-   * @param sentenceString regular expression of the sentence to ignore
-   */
-  public IgnoreRuleSentencePair(String ruleId, String sentenceString) {
+  public HiddenFalsePositive(String ruleId, String sentenceString) {
     this.ruleId = ruleId;
     this.sentenceString = sentenceString;
     this.sentencePattern = Pattern.compile(sentenceString);
   }
 
-  public IgnoreRuleSentencePair(IgnoreRuleSentencePair obj) {
+  public HiddenFalsePositive(HiddenFalsePositive obj) {
     this(obj.ruleId, obj.sentenceString);
+  }
+
+  public static HiddenFalsePositive fromJsonString(String jsonString) {
+    JsonObject jsonObject = JsonParser.parseString(jsonString).getAsJsonObject();
+    String ruleId = jsonObject.get("rule").getAsString();
+    String sentenceString = jsonObject.get("sentence").getAsString();
+    return new HiddenFalsePositive(ruleId, sentenceString);
   }
 
   @Override
   public boolean equals(@Nullable Object obj) {
-    if ((obj == null) || !IgnoreRuleSentencePair.class.isAssignableFrom(obj.getClass())) {
+    if ((obj == null) || !HiddenFalsePositive.class.isAssignableFrom(obj.getClass())) {
       return false;
     }
 
-    IgnoreRuleSentencePair other = (IgnoreRuleSentencePair)obj;
+    HiddenFalsePositive other = (HiddenFalsePositive)obj;
 
     if ((this.ruleId == null) ? (other.ruleId != null) : !this.ruleId.equals(other.ruleId)) {
       return false;

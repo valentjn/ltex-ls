@@ -31,12 +31,12 @@ public class Settings {
   private @Nullable Map<String, Set<String>> dictionary = null;
   private @Nullable Map<String, Set<String>> disabledRules = null;
   private @Nullable Map<String, Set<String>> enabledRules = null;
+  private @Nullable Map<String, Set<HiddenFalsePositive>> hiddenFalsePositives = null;
   private @Nullable String languageToolHttpServerUri = null;
   private @Nullable Level logLevel = null;
   private @Nullable Map<String, String> latexCommands = null;
   private @Nullable Map<String, String> latexEnvironments = null;
   private @Nullable Map<String, String> markdownNodes = null;
-  private @Nullable Set<IgnoreRuleSentencePair> ignoreRuleSentencePairs = null;
   private @Nullable String motherTongueShortCode = null;
   private @Nullable String languageModelRulesDirectory = null;
   private @Nullable String neuralNetworkModelRulesDirectory = null;
@@ -68,8 +68,8 @@ public class Settings {
         : new HashMap<>(obj.latexEnvironments));
     this.markdownNodes = ((obj.markdownNodes == null) ? null
         : new HashMap<>(obj.markdownNodes));
-    this.ignoreRuleSentencePairs = ((obj.ignoreRuleSentencePairs == null) ? null
-        : new HashSet<>(obj.ignoreRuleSentencePairs));
+    this.hiddenFalsePositives = ((obj.hiddenFalsePositives == null) ? null
+        : new HashMap<>(obj.hiddenFalsePositives));
     this.motherTongueShortCode = obj.motherTongueShortCode;
     this.languageModelRulesDirectory = obj.languageModelRulesDirectory;
     this.neuralNetworkModelRulesDirectory = obj.neuralNetworkModelRulesDirectory;
@@ -146,21 +146,21 @@ public class Settings {
     }
   }
 
-  private static boolean mapOfSetsEqual(@Nullable Map<String, Set<String>> map1,
-        @Nullable Map<String, Set<String>> map2, @Nullable String key) {
+  private static <T> boolean mapOfSetsEqual(@Nullable Map<String, Set<T>> map1,
+        @Nullable Map<String, Set<T>> map2, @Nullable String key) {
     if (key == null) return true;
 
     if ((map1 != null) && (map2 != null)) {
-      @Nullable Set<String> set1 = map1.get(key);
-      @Nullable Set<String> set2 = map2.get(key);
+      @Nullable Set<T> set1 = map1.get(key);
+      @Nullable Set<T> set2 = map2.get(key);
       return ((set1 != null) ? set1.equals(set2) : (set2 == null));
     } else {
       return ((map1 != null) ? (map2 != null) : (map2 == null));
     }
   }
 
-  private static int mapOfSetsHashCode(
-        @Nullable Map<String, Set<String>> map, @Nullable String key) {
+  private static <T> int mapOfSetsHashCode(
+        @Nullable Map<String, Set<T>> map, @Nullable String key) {
     return (((map != null) && (key != null) && map.containsKey(key)) ? map.get(key).hashCode() : 0);
   }
 
@@ -187,11 +187,13 @@ public class Settings {
     this.dictionary = new HashMap<>();
     this.disabledRules = new HashMap<>();
     this.enabledRules = new HashMap<>();
+    this.hiddenFalsePositives = new HashMap<>();
 
     // fixes false-positive argument.type.incompatible warnings
     Map<String, Set<String>> dictionary = this.dictionary;
     Map<String, Set<String>> disabledRules = this.disabledRules;
     Map<String, Set<String>> enabledRules = this.enabledRules;
+    Map<String, Set<HiddenFalsePositive>> hiddenFalsePositives = this.hiddenFalsePositives;
 
     try {
       mergeMapOfSets(dictionary, convertJsonObjectToMapOfSets(
@@ -210,6 +212,52 @@ public class Settings {
     try {
       mergeMapOfSets(enabledRules, convertJsonObjectToMapOfSets(
           getSettingFromJson(jsonWorkspaceSpecificSettings, "enabledRules").getAsJsonObject()));
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      // setting not set
+    }
+
+    // ltex.ignoreRuleInSentence is deprecated since 8.0.0
+    try {
+      String curLanguage = ((this.languageShortCode != null) ? this.languageShortCode : "en-US");
+      @Nullable Set<HiddenFalsePositive> curHiddenFalsePositives =
+          hiddenFalsePositives.get(curLanguage);
+
+      if (curHiddenFalsePositives == null) {
+        curHiddenFalsePositives = new HashSet<>();
+        hiddenFalsePositives.put(curLanguage, curHiddenFalsePositives);
+      }
+
+      for (JsonElement element :
+            getSettingFromJson(jsonSettings, "ignoreRuleInSentence").getAsJsonArray()) {
+        JsonObject elementObject = element.getAsJsonObject();
+        curHiddenFalsePositives.add(new HiddenFalsePositive(
+            elementObject.get("rule").getAsString(), elementObject.get("sentence").getAsString()));
+      }
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      // setting not set
+    }
+
+    try {
+      Map<String, Set<String>> hiddenFalsePositiveJsonStrings = new HashMap<>();
+      mergeMapOfSets(hiddenFalsePositiveJsonStrings, convertJsonObjectToMapOfSets(
+          getSettingFromJson(jsonWorkspaceSpecificSettings,
+          "hiddenFalsePositives").getAsJsonObject()));
+
+      for (Map.Entry<String, Set<String>> entry : hiddenFalsePositiveJsonStrings.entrySet()) {
+        String curLanguage = entry.getKey();
+        @Nullable Set<HiddenFalsePositive> curHiddenFalsePositives =
+            hiddenFalsePositives.get(curLanguage);
+
+        if (curHiddenFalsePositives == null) {
+          curHiddenFalsePositives = new HashSet<>();
+          hiddenFalsePositives.put(curLanguage, curHiddenFalsePositives);
+        }
+
+        for (String hiddenFalsePositiveJsonString : entry.getValue()) {
+          curHiddenFalsePositives.add(
+              HiddenFalsePositive.fromJsonString(hiddenFalsePositiveJsonString));
+        }
+      }
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       // setting not set
     }
@@ -237,6 +285,7 @@ public class Settings {
     Map<String, String> latexEnvironments = this.latexEnvironments;
     Map<String, String> markdownNodes = this.markdownNodes;
 
+    // ltex.commands.ignore is deprecated since 8.0.0
     try {
       Set<String> ignoreCommands = convertJsonArrayToSet(
           getSettingFromJson(jsonSettings, "commands.ignore").getAsJsonArray());
@@ -245,6 +294,7 @@ public class Settings {
       // setting not set
     }
 
+    // ltex.commands.dummy is deprecated since 8.0.0
     try {
       Set<String> dummyCommands = convertJsonArrayToSet(
           getSettingFromJson(jsonSettings, "commands.dummy").getAsJsonArray());
@@ -260,6 +310,7 @@ public class Settings {
       // setting not set
     }
 
+    // ltex.environments.ignore is deprecated since 8.0.0
     try {
       Set<String> ignoreEnvironments = convertJsonArrayToSet(
           getSettingFromJson(jsonSettings, "environments.ignore").getAsJsonArray());
@@ -275,6 +326,7 @@ public class Settings {
       // setting not set
     }
 
+    // ltex.markdown.ignore is deprecated since 8.0.0
     try {
       Set<String> ignoreNodes = convertJsonArrayToSet(
           getSettingFromJson(jsonSettings, "markdown.ignore").getAsJsonArray());
@@ -283,6 +335,7 @@ public class Settings {
       // setting not set
     }
 
+    // ltex.markdown.dummy is deprecated since 8.0.0
     try {
       Set<String> dummyNodes = convertJsonArrayToSet(
           getSettingFromJson(jsonSettings, "markdown.dummy").getAsJsonArray());
@@ -296,22 +349,6 @@ public class Settings {
           getSettingFromJson(jsonSettings, "markdown.nodes").getAsJsonObject()));
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       // setting not set
-    }
-
-    try {
-      this.ignoreRuleSentencePairs = new HashSet<>();
-
-      // fixes false-positive dereference.of.nullable warning
-      Set<IgnoreRuleSentencePair> ignoreRuleSentencePairs = this.ignoreRuleSentencePairs;
-
-      for (JsonElement element :
-            getSettingFromJson(jsonSettings, "ignoreRuleInSentence").getAsJsonArray()) {
-        JsonObject elementObject = element.getAsJsonObject();
-        ignoreRuleSentencePairs.add(new IgnoreRuleSentencePair(
-            elementObject.get("rule").getAsString(), elementObject.get("sentence").getAsString()));
-      }
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      this.ignoreRuleSentencePairs = null;
     }
 
     try {
@@ -419,6 +456,11 @@ public class Settings {
       return false;
     }
 
+    if (!mapOfSetsEqual(this.hiddenFalsePositives, other.hiddenFalsePositives,
+          this.languageShortCode)) {
+      return false;
+    }
+
     if ((this.languageToolHttpServerUri == null) ? (other.languageToolHttpServerUri != null) :
           !this.languageToolHttpServerUri.equals(other.languageToolHttpServerUri)) {
       return false;
@@ -442,11 +484,6 @@ public class Settings {
 
     if ((this.markdownNodes == null) ? (other.markdownNodes != null) :
           ((other.markdownNodes == null) || !this.markdownNodes.equals(other.markdownNodes))) {
-      return false;
-    }
-
-    if ((this.ignoreRuleSentencePairs == null) ? (other.ignoreRuleSentencePairs != null) :
-          !this.ignoreRuleSentencePairs.equals(other.ignoreRuleSentencePairs)) {
       return false;
     }
 
@@ -566,14 +603,13 @@ public class Settings {
     hash = 53 * hash + mapOfSetsHashCode(this.dictionary, this.languageShortCode);
     hash = 53 * hash + mapOfSetsHashCode(this.disabledRules, this.languageShortCode);
     hash = 53 * hash + mapOfSetsHashCode(this.enabledRules, this.languageShortCode);
+    hash = 53 * hash + mapOfSetsHashCode(this.hiddenFalsePositives, this.languageShortCode);
     hash = 53 * hash + ((this.languageToolHttpServerUri != null)
         ? this.languageToolHttpServerUri.hashCode() : 0);
     hash = 53 * hash + ((this.logLevel != null) ? this.logLevel.hashCode() : 0);
     hash = 53 * hash + ((this.latexCommands != null) ? this.latexCommands.hashCode() : 0);
     hash = 53 * hash + ((this.latexEnvironments != null) ? this.latexEnvironments.hashCode() : 0);
     hash = 53 * hash + ((this.markdownNodes != null) ? this.markdownNodes.hashCode() : 0);
-    hash = 53 * hash + ((this.ignoreRuleSentencePairs != null)
-        ? this.ignoreRuleSentencePairs.hashCode() : 0);
     hash = 53 * hash + ((this.motherTongueShortCode != null)
         ? this.motherTongueShortCode.hashCode() : 0);
     hash = 53 * hash + ((this.languageModelRulesDirectory != null)
@@ -596,8 +632,8 @@ public class Settings {
     return ((obj != null) ? obj : defaultValue);
   }
 
-  private static Set<String> getDefault(@Nullable Map<String, Set<String>> map, String key,
-        Set<String> defaultValue) {
+  private static <T> Set<T> getDefault(@Nullable Map<String, Set<T>> map, String key,
+        Set<T> defaultValue) {
     return (((map != null) && map.containsKey(key)) ? map.get(key) : defaultValue);
   }
 
@@ -624,6 +660,11 @@ public class Settings {
         this.enabledRules, getLanguageShortCode(), Collections.emptySet()));
   }
 
+  public Set<HiddenFalsePositive> getHiddenFalsePositives() {
+    return Collections.unmodifiableSet(getDefault(
+        this.hiddenFalsePositives, getLanguageShortCode(), Collections.emptySet()));
+  }
+
   public String getLanguageToolHttpServerUri() {
     return getDefault(this.languageToolHttpServerUri, "");
   }
@@ -645,11 +686,6 @@ public class Settings {
   public Map<String, String> getMarkdownNodes() {
     return Collections.unmodifiableMap(
         getDefault(this.markdownNodes, Collections.emptyMap()));
-  }
-
-  public Set<IgnoreRuleSentencePair> getIgnoreRuleSentencePairs() {
-    return Collections.unmodifiableSet(
-        getDefault(this.ignoreRuleSentencePairs, Collections.emptySet()));
   }
 
   public String getMotherTongueShortCode() {
@@ -721,6 +757,13 @@ public class Settings {
     return obj;
   }
 
+  public Settings withHiddenFalsePositives(Set<HiddenFalsePositive> hiddenFalsePositives) {
+    Settings obj = new Settings(this);
+    if (obj.hiddenFalsePositives == null) obj.hiddenFalsePositives = new HashMap<>();
+    obj.hiddenFalsePositives.put(getLanguageShortCode(), new HashSet<>(hiddenFalsePositives));
+    return obj;
+  }
+
   public Settings withLanguageToolHttpServerUri(String languageToolHttpServerUri) {
     Settings obj = new Settings(this);
     obj.languageToolHttpServerUri = languageToolHttpServerUri;
@@ -748,12 +791,6 @@ public class Settings {
   public Settings withMarkdownNodes(Map<String, String> markdownNodes) {
     Settings obj = new Settings(this);
     obj.markdownNodes = new HashMap<>(markdownNodes);
-    return obj;
-  }
-
-  public Settings withIgnoreRuleSentencePairs(Set<IgnoreRuleSentencePair> ignoreRuleSentencePairs) {
-    Settings obj = new Settings(this);
-    obj.ignoreRuleSentencePairs = new HashSet<>(ignoreRuleSentencePairs);
     return obj;
   }
 

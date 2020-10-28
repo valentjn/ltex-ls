@@ -318,11 +318,11 @@ Params: {
                 "ignore": [],
                 "dummy": []
             },
-            "ignoreRuleInSentence": {},
+            "hiddenFalsePositives": {},
             "configurationTarget": {
-                "addToDictionary": "workspaceFolder",
-                "disableRule": "workspaceFolder",
-                "ignoreRuleInSentence": "workspaceFolder"
+                "dictionary": "workspaceFolder",
+                "disabledRules": "workspaceFolder",
+                "hiddenFalsePositives": "workspaceFolder"
             },
             "additionalRules": {
                 "motherTongue": "",
@@ -404,11 +404,11 @@ Result: [
             "ignore": [],
             "dummy": []
         },
-        "ignoreRuleInSentence": {},
+        "hiddenFalsePositives": {},
         "configurationTarget": {
-            "addToDictionary": "workspaceFolder",
-            "disableRule": "workspaceFolder",
-            "ignoreRuleInSentence": "workspaceFolder"
+            "dictionary": "workspaceFolder",
+            "disabledRules": "workspaceFolder",
+            "hiddenFalsePositives": "workspaceFolder"
         },
         "additionalRules": {
             "motherTongue": "",
@@ -536,11 +536,11 @@ Result: [
             "ignore": [],
             "dummy": []
         },
-        "ignoreRuleInSentence": {},
+        "hiddenFalsePositives": {},
         "configurationTarget": {
-            "addToDictionary": "workspaceFolder",
-            "disableRule": "workspaceFolder",
-            "ignoreRuleInSentence": "workspaceFolder"
+            "dictionary": "workspaceFolder",
+            "disabledRules": "workspaceFolder",
+            "hiddenFalsePositives": "workspaceFolder"
         },
         "additionalRules": {
             "motherTongue": "",
@@ -686,8 +686,8 @@ Params: {
 [Trace - 12:46:12 PM] Received response 'textDocument/codeAction - (1)' in 123ms.
 Result: [
     {
-        "title": "Ignore rule in this sentence",
-        "kind": "quickfix.ltex.ignoreRulesInSentence",
+        "title": "Hide false positive",
+        "kind": "quickfix.ltex.hideFalsePositives",
         "diagnostics": [
             {
                 "range": {
@@ -706,19 +706,18 @@ Result: [
             }
         ],
         "command": {
-            "title": "Ignore rule in this sentence",
-            "command": "ltex.ignoreRulesInSentence",
+            "title": "Hide false positive",
+            "command": "ltex.hideFalsePositives",
             "arguments": [
                 {
                     "type": "command",
-                    "command": "ltex.ignoreRulesInSentence",
+                    "command": "ltex.hideFalsePositives",
                     "uri": "untitled:Untitled-1",
-                    "ruleIds": [
-                        "EN_A_VS_AN"
-                    ],
-                    "sentencePatterns": [
-                        "^\\QThis is an test.\\E$"
-                    ]
+                    "falsePositives": {
+                        "en-US": [
+                            "{\"rule\":\"EN_A_VS_AN\",\"sentence\":\"^\\\\QThis is an test.\\\\E$\"}"
+                        ]
+                    }
                 }
             ]
         }
@@ -849,8 +848,8 @@ Params: {
 [Trace - 12:46:18 PM] Received response 'textDocument/codeAction - (2)' in 13ms.
 Result: [
     {
-        "title": "Ignore rule in this sentence",
-        "kind": "quickfix.ltex.ignoreRulesInSentence",
+        "title": "Hide false positive",
+        "kind": "quickfix.ltex.hideFalsePositives",
         "diagnostics": [
             {
                 "range": {
@@ -869,19 +868,18 @@ Result: [
             }
         ],
         "command": {
-            "title": "Ignore rule in this sentence",
-            "command": "ltex.ignoreRulesInSentence",
+            "title": "Hide false positive",
+            "command": "ltex.hideFalsePositives",
             "arguments": [
                 {
                     "type": "command",
-                    "command": "ltex.ignoreRulesInSentence",
+                    "command": "ltex.hideFalsePositives",
                     "uri": "untitled:Untitled-1",
-                    "ruleIds": [
-                        "EN_A_VS_AN"
-                    ],
-                    "sentencePatterns": [
-                        "^\\QThis is an test.\\E$"
-                    ]
+                    "falsePositives": {
+                        "en-US": [
+                            "{\"rule\":\"EN_A_VS_AN\",\"sentence\":\"^\\\\QThis is an test.\\\\E$\"}"
+                        ]
+                    }
                 }
             ]
         }
@@ -1012,8 +1010,8 @@ Params: {
 [Trace - 12:46:24 PM] Received response 'textDocument/codeAction - (3)' in 5ms.
 Result: [
     {
-        "title": "Ignore rule in this sentence",
-        "kind": "quickfix.ltex.ignoreRulesInSentence",
+        "title": "Hide false positive",
+        "kind": "quickfix.ltex.hideFalsePositives",
         "diagnostics": [
             {
                 "range": {
@@ -1032,19 +1030,18 @@ Result: [
             }
         ],
         "command": {
-            "title": "Ignore rule in this sentence",
-            "command": "ltex.ignoreRulesInSentence",
+            "title": "Hide false positive",
+            "command": "ltex.hideFalsePositives",
             "arguments": [
                 {
                     "type": "command",
-                    "command": "ltex.ignoreRulesInSentence",
+                    "command": "ltex.hideFalsePositives",
                     "uri": "untitled:Untitled-1",
-                    "ruleIds": [
-                        "EN_A_VS_AN"
-                    ],
-                    "sentencePatterns": [
-                        "^\\QThis is an test.\\E$"
-                    ]
+                    "falsePositives": {
+                        "en-US": [
+                            "{\"rule\":\"EN_A_VS_AN\",\"sentence\":\"^\\\\QThis is an test.\\\\E$\"}"
+                        ]
+                    }
                 }
             ]
         }
@@ -1228,11 +1225,11 @@ Result: [
             "ignore": [],
             "dummy": []
         },
-        "ignoreRuleInSentence": {},
+        "hiddenFalsePositives": {},
         "configurationTarget": {
-            "addToDictionary": "workspaceFolder",
-            "disableRule": "workspaceFolder",
-            "ignoreRuleInSentence": "workspaceFolder"
+            "dictionary": "workspaceFolder",
+            "disabledRules": "workspaceFolder",
+            "hiddenFalsePositives": "workspaceFolder"
         },
         "additionalRules": {
             "motherTongue": "",
@@ -1331,11 +1328,11 @@ Result: [
             "ignore": [],
             "dummy": []
         },
-        "ignoreRuleInSentence": {},
+        "hiddenFalsePositives": {},
         "configurationTarget": {
-            "addToDictionary": "workspaceFolder",
-            "disableRule": "workspaceFolder",
-            "ignoreRuleInSentence": "workspaceFolder"
+            "dictionary": "workspaceFolder",
+            "disabledRules": "workspaceFolder",
+            "hiddenFalsePositives": "workspaceFolder"
         },
         "additionalRules": {
             "motherTongue": "",

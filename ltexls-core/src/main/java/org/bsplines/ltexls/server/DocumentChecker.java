@@ -21,7 +21,7 @@ import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.CodeFragment;
 import org.bsplines.ltexls.parsing.CodeFragmentizer;
-import org.bsplines.ltexls.settings.IgnoreRuleSentencePair;
+import org.bsplines.ltexls.settings.HiddenFalsePositive;
 import org.bsplines.ltexls.settings.Settings;
 import org.bsplines.ltexls.settings.SettingsManager;
 import org.bsplines.ltexls.tools.Tools;
@@ -153,9 +153,9 @@ public class DocumentChecker {
 
   private void removeIgnoredMatches(List<LanguageToolRuleMatch> matches) {
     Settings settings = this.settingsManager.getSettings();
-    Set<IgnoreRuleSentencePair> ignoreRuleSentencePairs = settings.getIgnoreRuleSentencePairs();
+    Set<HiddenFalsePositive> hiddenFalsePositives = settings.getHiddenFalsePositives();
 
-    if (!matches.isEmpty() && !ignoreRuleSentencePairs.isEmpty()) {
+    if (!matches.isEmpty() && !hiddenFalsePositives.isEmpty()) {
       List<LanguageToolRuleMatch> ignoreMatches = new ArrayList<>();
 
       for (LanguageToolRuleMatch match : matches) {
@@ -164,10 +164,10 @@ public class DocumentChecker {
         if ((ruleId == null) || (sentence == null)) continue;
         sentence = sentence.trim();
 
-        for (IgnoreRuleSentencePair pair : ignoreRuleSentencePairs) {
+        for (HiddenFalsePositive pair : hiddenFalsePositives) {
           if (pair.getRuleId().equals(ruleId)
                 && pair.getSentencePattern().matcher(sentence).find()) {
-            Tools.logger.fine(Tools.i18n("removingIgnoredRuleMatch", ruleId, sentence));
+            Tools.logger.fine(Tools.i18n("hidingFalsePositive", ruleId, sentence));
             ignoreMatches.add(match);
             break;
           }
@@ -176,8 +176,8 @@ public class DocumentChecker {
 
       if (!ignoreMatches.isEmpty()) {
         Tools.logger.fine((ignoreMatches.size() == 1)
-            ? Tools.i18n("removedIgnoredRuleMatch")
-            : Tools.i18n("removedIgnoredRuleMatches", ignoreMatches.size()));
+            ? Tools.i18n("hidFalsePositive")
+            : Tools.i18n("hidFalsePositives", ignoreMatches.size()));
         for (LanguageToolRuleMatch match : ignoreMatches) matches.remove(match);
       }
     }
