@@ -32,8 +32,6 @@ public class Settings {
   private @Nullable Map<String, Set<String>> disabledRules = null;
   private @Nullable Map<String, Set<String>> enabledRules = null;
   private @Nullable Map<String, Set<HiddenFalsePositive>> hiddenFalsePositives = null;
-  private @Nullable String languageToolHttpServerUri = null;
-  private @Nullable Level logLevel = null;
   private @Nullable Map<String, String> latexCommands = null;
   private @Nullable Map<String, String> latexEnvironments = null;
   private @Nullable Map<String, String> markdownNodes = null;
@@ -41,6 +39,8 @@ public class Settings {
   private @Nullable String languageModelRulesDirectory = null;
   private @Nullable String neuralNetworkModelRulesDirectory = null;
   private @Nullable String word2VecModelRulesDirectory = null;
+  private @Nullable String languageToolHttpServerUri = null;
+  private @Nullable Level logLevel = null;
   private @Nullable Integer sentenceCacheSize = null;
   private @Nullable DiagnosticSeverity diagnosticSeverity = null;
   private @Nullable CheckFrequency checkFrequency = null;
@@ -60,8 +60,6 @@ public class Settings {
     this.dictionary = ((obj.dictionary == null) ? null : copyMapOfSets(obj.dictionary));
     this.disabledRules = ((obj.disabledRules == null) ? null : copyMapOfSets(obj.disabledRules));
     this.enabledRules = ((obj.enabledRules == null) ? null : copyMapOfSets(obj.enabledRules));
-    this.languageToolHttpServerUri = obj.languageToolHttpServerUri;
-    this.logLevel = obj.logLevel;
     this.latexCommands = ((obj.latexCommands == null) ? null
         : new HashMap<>(obj.latexCommands));
     this.latexEnvironments = ((obj.latexEnvironments == null) ? null
@@ -74,6 +72,8 @@ public class Settings {
     this.languageModelRulesDirectory = obj.languageModelRulesDirectory;
     this.neuralNetworkModelRulesDirectory = obj.neuralNetworkModelRulesDirectory;
     this.word2VecModelRulesDirectory = obj.word2VecModelRulesDirectory;
+    this.languageToolHttpServerUri = obj.languageToolHttpServerUri;
+    this.logLevel = obj.logLevel;
     this.sentenceCacheSize = obj.sentenceCacheSize;
     this.diagnosticSeverity = ((obj.diagnosticSeverity == null) ? null : obj.diagnosticSeverity);
     this.checkFrequency = ((obj.checkFrequency == null) ? null : obj.checkFrequency);
@@ -262,20 +262,6 @@ public class Settings {
       // setting not set
     }
 
-    try {
-      this.languageToolHttpServerUri = getSettingFromJson(
-          jsonSettings, "ltex-ls.languageToolHttpServerUri").getAsString();
-    } catch (NullPointerException | UnsupportedOperationException e) {
-      this.languageToolHttpServerUri = null;
-    }
-
-    try {
-      this.logLevel = Level.parse(
-          getSettingFromJson(jsonSettings, "ltex-ls.logLevel").getAsString().toUpperCase());
-    } catch (NullPointerException | UnsupportedOperationException | IllegalArgumentException e) {
-      this.logLevel = null;
-    }
-
     this.latexCommands = new HashMap<>();
     this.latexEnvironments = new HashMap<>();
     this.markdownNodes = new HashMap<>();
@@ -380,6 +366,20 @@ public class Settings {
     }
 
     try {
+      this.languageToolHttpServerUri = getSettingFromJson(
+          jsonSettings, "ltex-ls.languageToolHttpServerUri").getAsString();
+    } catch (NullPointerException | UnsupportedOperationException e) {
+      this.languageToolHttpServerUri = null;
+    }
+
+    try {
+      this.logLevel = Level.parse(
+          getSettingFromJson(jsonSettings, "ltex-ls.logLevel").getAsString().toUpperCase());
+    } catch (NullPointerException | UnsupportedOperationException | IllegalArgumentException e) {
+      this.logLevel = null;
+    }
+
+    try {
       this.sentenceCacheSize = getSettingFromJson(
           jsonSettings, "sentenceCacheSize").getAsInt();
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
@@ -461,16 +461,6 @@ public class Settings {
       return false;
     }
 
-    if ((this.languageToolHttpServerUri == null) ? (other.languageToolHttpServerUri != null) :
-          !this.languageToolHttpServerUri.equals(other.languageToolHttpServerUri)) {
-      return false;
-    }
-
-    if ((this.logLevel == null) ? (other.logLevel != null) :
-          !this.logLevel.equals(other.logLevel)) {
-      return false;
-    }
-
     if ((this.latexCommands == null) ? (other.latexCommands != null) :
           ((other.latexCommands == null) || !this.latexCommands.equals(other.latexCommands))) {
       return false;
@@ -505,6 +495,16 @@ public class Settings {
 
     if ((this.word2VecModelRulesDirectory == null) ? (other.word2VecModelRulesDirectory != null) :
           !this.word2VecModelRulesDirectory.equals(other.word2VecModelRulesDirectory)) {
+      return false;
+    }
+
+    if ((this.languageToolHttpServerUri == null) ? (other.languageToolHttpServerUri != null) :
+          !this.languageToolHttpServerUri.equals(other.languageToolHttpServerUri)) {
+      return false;
+    }
+
+    if ((this.logLevel == null) ? (other.logLevel != null) :
+          !this.logLevel.equals(other.logLevel)) {
       return false;
     }
 
@@ -554,12 +554,6 @@ public class Settings {
           this.enabledRules, other.enabledRules));
     }
 
-    if ((this.languageToolHttpServerUri == null) ? (other.languageToolHttpServerUri != null) :
-          !this.languageToolHttpServerUri.equals(other.languageToolHttpServerUri)) {
-      differences.add(new SettingsDifference("ltex-ls.languageToolHttpServerUri",
-          this.languageToolHttpServerUri, other.languageToolHttpServerUri));
-    }
-
     if ((this.motherTongueShortCode == null) ? (other.motherTongueShortCode != null) :
           !this.motherTongueShortCode.equals(other.motherTongueShortCode)) {
       differences.add(new SettingsDifference("additionalRules.motherTongue",
@@ -585,6 +579,12 @@ public class Settings {
           this.word2VecModelRulesDirectory, other.word2VecModelRulesDirectory));
     }
 
+    if ((this.languageToolHttpServerUri == null) ? (other.languageToolHttpServerUri != null) :
+          !this.languageToolHttpServerUri.equals(other.languageToolHttpServerUri)) {
+      differences.add(new SettingsDifference("ltex-ls.languageToolHttpServerUri",
+          this.languageToolHttpServerUri, other.languageToolHttpServerUri));
+    }
+
     if ((this.sentenceCacheSize == null) ? (other.sentenceCacheSize != null) :
           !this.sentenceCacheSize.equals(other.sentenceCacheSize)) {
       differences.add(new SettingsDifference("sentenceCacheSize",
@@ -604,9 +604,6 @@ public class Settings {
     hash = 53 * hash + mapOfSetsHashCode(this.disabledRules, this.languageShortCode);
     hash = 53 * hash + mapOfSetsHashCode(this.enabledRules, this.languageShortCode);
     hash = 53 * hash + mapOfSetsHashCode(this.hiddenFalsePositives, this.languageShortCode);
-    hash = 53 * hash + ((this.languageToolHttpServerUri != null)
-        ? this.languageToolHttpServerUri.hashCode() : 0);
-    hash = 53 * hash + ((this.logLevel != null) ? this.logLevel.hashCode() : 0);
     hash = 53 * hash + ((this.latexCommands != null) ? this.latexCommands.hashCode() : 0);
     hash = 53 * hash + ((this.latexEnvironments != null) ? this.latexEnvironments.hashCode() : 0);
     hash = 53 * hash + ((this.markdownNodes != null) ? this.markdownNodes.hashCode() : 0);
@@ -618,6 +615,9 @@ public class Settings {
         ? this.neuralNetworkModelRulesDirectory.hashCode() : 0);
     hash = 53 * hash + ((this.word2VecModelRulesDirectory != null)
         ? this.word2VecModelRulesDirectory.hashCode() : 0);
+    hash = 53 * hash + ((this.languageToolHttpServerUri != null)
+        ? this.languageToolHttpServerUri.hashCode() : 0);
+    hash = 53 * hash + ((this.logLevel != null) ? this.logLevel.hashCode() : 0);
     hash = 53 * hash + ((this.sentenceCacheSize != null)
         ? this.sentenceCacheSize.hashCode() : 0);
     hash = 53 * hash + ((this.diagnosticSeverity != null) ? this.diagnosticSeverity.hashCode() : 0);
@@ -665,14 +665,6 @@ public class Settings {
         this.hiddenFalsePositives, getLanguageShortCode(), Collections.emptySet()));
   }
 
-  public String getLanguageToolHttpServerUri() {
-    return getDefault(this.languageToolHttpServerUri, "");
-  }
-
-  public Level getLogLevel() {
-    return getDefault(this.logLevel, Level.FINE);
-  }
-
   public Map<String, String> getLatexCommands() {
     return Collections.unmodifiableMap(
         getDefault(this.latexCommands, Collections.emptyMap()));
@@ -702,6 +694,14 @@ public class Settings {
 
   public String getWord2VecModelRulesDirectory() {
     return Tools.normalizePath(getDefault(this.word2VecModelRulesDirectory, ""));
+  }
+
+  public String getLanguageToolHttpServerUri() {
+    return getDefault(this.languageToolHttpServerUri, "");
+  }
+
+  public Level getLogLevel() {
+    return getDefault(this.logLevel, Level.FINE);
   }
 
   public Integer getSentenceCacheSize() {
@@ -764,18 +764,6 @@ public class Settings {
     return obj;
   }
 
-  public Settings withLanguageToolHttpServerUri(String languageToolHttpServerUri) {
-    Settings obj = new Settings(this);
-    obj.languageToolHttpServerUri = languageToolHttpServerUri;
-    return obj;
-  }
-
-  public Settings withLogLevel(Level logLevel) {
-    Settings obj = new Settings(this);
-    obj.logLevel = logLevel;
-    return obj;
-  }
-
   public Settings withLatexCommands(Map<String, String> latexCommands) {
     Settings obj = new Settings(this);
     obj.latexCommands = new HashMap<>(latexCommands);
@@ -815,6 +803,18 @@ public class Settings {
   public Settings withWord2VecModelRulesDirectory(String word2VecModelRulesDirectory) {
     Settings obj = new Settings(this);
     obj.word2VecModelRulesDirectory = word2VecModelRulesDirectory;
+    return obj;
+  }
+
+  public Settings withLanguageToolHttpServerUri(String languageToolHttpServerUri) {
+    Settings obj = new Settings(this);
+    obj.languageToolHttpServerUri = languageToolHttpServerUri;
+    return obj;
+  }
+
+  public Settings withLogLevel(Level logLevel) {
+    Settings obj = new Settings(this);
+    obj.logLevel = logLevel;
     return obj;
   }
 

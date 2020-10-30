@@ -105,14 +105,6 @@ public class SettingsTest {
         settings.getEnabledRules());
     settings2 = compareSettings(settings, settings2, true);
 
-    settings = settings.withLanguageToolHttpServerUri("languageToolHttpServerUri");
-    Assertions.assertEquals("languageToolHttpServerUri", settings.getLanguageToolHttpServerUri());
-    settings2 = compareSettings(settings, settings2, true);
-
-    settings = settings.withLogLevel(Level.FINEST);
-    Assertions.assertEquals(Level.FINEST, settings.getLogLevel());
-    settings2 = compareSettings(settings, settings2, false);
-
     settings = settings.withLatexCommands(Collections.singletonMap("latexCommand", "ignore"));
     Assertions.assertEquals(Collections.singletonMap("latexCommand", "ignore"),
         settings.getLatexCommands());
@@ -154,6 +146,14 @@ public class SettingsTest {
     Assertions.assertEquals("word2VecModelRulesDirectory",
         settings.getWord2VecModelRulesDirectory());
     settings2 = compareSettings(settings, settings2, true);
+
+    settings = settings.withLanguageToolHttpServerUri("languageToolHttpServerUri");
+    Assertions.assertEquals("languageToolHttpServerUri", settings.getLanguageToolHttpServerUri());
+    settings2 = compareSettings(settings, settings2, true);
+
+    settings = settings.withLogLevel(Level.FINEST);
+    Assertions.assertEquals(Level.FINEST, settings.getLogLevel());
+    settings2 = compareSettings(settings, settings2, false);
 
     settings = settings.withSentenceCacheSize(1337);
     Assertions.assertEquals(1337, settings.getSentenceCacheSize());
