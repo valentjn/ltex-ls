@@ -8,6 +8,10 @@
 package org.bsplines.ltexls.server;
 
 import com.google.gson.JsonObject;
+import com.sun.management.OperatingSystemMXBean;
+import java.lang.management.ManagementFactory;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -24,6 +28,7 @@ import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.ServerCapabilities;
 import org.eclipse.lsp4j.TextDocumentSyncKind;
+import org.eclipse.lsp4j.jsonrpc.services.JsonRequest;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
@@ -37,6 +42,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   private CodeActionGenerator codeActionGenerator;
   private @NotOnlyInitialized LtexTextDocumentService ltexTextDocumentService;
   private @NotOnlyInitialized LtexWorkspaceService ltexWorkspaceService;
+  private Instant startupInstant;
 
   /**
    * Constructor.
@@ -48,6 +54,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     this.codeActionGenerator = new CodeActionGenerator(this.settingsManager);
     this.ltexTextDocumentService = new LtexTextDocumentService(this);
     this.ltexWorkspaceService = new LtexWorkspaceService(this);
+    this.startupInstant = Instant.now();
   }
 
   @Override
@@ -98,6 +105,31 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   @Override
   public void connect(LanguageClient languageClient) {
     this.languageClient = (LtexLanguageClient)languageClient;
+  }
+
+  @JsonRequest("ltex/serverStatus")
+  CompletableFuture<LtexServerStatusParams> ltexServerStatus() {
+    long processId = ProcessHandle.current().pid();
+    double wallClockDuration =
+        Duration.between(this.startupInstant, Instant.now()).toMillis() / 1000.0;
+    @Nullable Double cpuDuration = null;
+    @Nullable Double cpuUsage = null;
+    double totalMemory = Runtime.getRuntime().totalMemory();
+    double usedMemory = totalMemory - Runtime.getRuntime().freeMemory();
+
+    try {
+      OperatingSystemMXBean operatingSystemMxBean =
+          (OperatingSystemMXBean)ManagementFactory.getOperatingSystemMXBean();
+      cpuUsage = operatingSystemMxBean.getProcessCpuLoad();
+      if (cpuUsage == -1) cpuUsage = null;
+      long cpuDurationLong = operatingSystemMxBean.getProcessCpuTime();
+      cpuDuration = ((cpuDurationLong != -1) ? (cpuDurationLong / 1e9) : null);
+    } catch (ClassCastException e) {
+      // do nothing
+    }
+
+    return CompletableFuture.completedFuture(new LtexServerStatusParams(
+        processId, wallClockDuration, cpuUsage, cpuDuration, usedMemory, totalMemory));
   }
 
   @Override
