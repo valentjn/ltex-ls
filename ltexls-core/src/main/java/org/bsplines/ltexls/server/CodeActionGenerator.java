@@ -60,13 +60,6 @@ public class CodeActionGenerator {
     this.settingsManager = settingsManager;
   }
 
-  /**
-   * Create diagnostic from rule match.
-   *
-   * @param match LanguageTool rule match
-   * @param document document in which the match occurred
-   * @return diagnostic corresponding to @c match
-   */
   public Diagnostic createDiagnostic(
         LanguageToolRuleMatch match, LtexTextDocumentItem document) {
     Diagnostic ret = new Diagnostic();
@@ -112,14 +105,6 @@ public class CodeActionGenerator {
     return null;
   }
 
-  /**
-   * Generate list of commands and code actions after checking a document.
-   *
-   * @param params parameters of @c CodeAction method
-   * @param document document
-   * @param checkingResult lists of rule matches and annotated text fragments
-   * @return list of commands and code actions
-   */
   public List<Either<Command, CodeAction>> generate(
         CodeActionParams params, LtexTextDocumentItem document,
         Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) {

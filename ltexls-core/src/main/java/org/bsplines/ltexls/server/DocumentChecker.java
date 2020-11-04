@@ -183,13 +183,6 @@ public class DocumentChecker {
     }
   }
 
-  /**
-   * Check document with LanguageTool by splitting the document into fragments, parse each of
-   * the fragments according to the code language, and passing the fragments to LanguageTool.
-   *
-   * @param document document to check
-   * @return lists of rule matches and annotated text fragments
-   */
   public Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> check(
         TextDocumentItem document) {
     Settings originalSettings = this.settingsManager.getSettings();

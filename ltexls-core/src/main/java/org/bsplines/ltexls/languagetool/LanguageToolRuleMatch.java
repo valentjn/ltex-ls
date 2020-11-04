@@ -23,16 +23,6 @@ public class LanguageToolRuleMatch {
   private String message;
   private List<String> suggestedReplacements;
 
-  /**
-   * Constructor.
-   *
-   * @param ruleId ID of the LanguageTool rule
-   * @param sentence sentence in which the rule match occurred
-   * @param fromPos from position of the rule match (inclusive)
-   * @param toPos to position of the rule match (exclusive)
-   * @param message message of the rule
-   * @param suggestedReplacements list of suggested replacements for the match
-   */
   public LanguageToolRuleMatch(@Nullable String ruleId, @Nullable String sentence,
         int fromPos, int toPos, String message, List<String> suggestedReplacements) {
     if (ruleId != null) this.ruleId = ruleId;
@@ -75,14 +65,6 @@ public class LanguageToolRuleMatch {
     this.toPos = toPos;
   }
 
-  /**
-   * Check if the match is intersecting with a range. This is false if and only if the ,atcj
-   * is completely before or completely after the range.
-   *
-   * @param range range
-   * @param document document in which the match occurred
-   * @return whether the match is intersecting with the range
-   */
   public boolean isIntersectingWithRange(Range range, LtexTextDocumentItem document) {
     return Tools.areRangesIntersecting(new Range(document.convertPosition(this.fromPos),
         document.convertPosition(this.toPos)), range);
