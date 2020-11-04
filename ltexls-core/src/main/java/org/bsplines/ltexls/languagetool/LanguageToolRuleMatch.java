@@ -69,4 +69,9 @@ public class LanguageToolRuleMatch {
     return Tools.areRangesIntersecting(new Range(document.convertPosition(this.fromPos),
         document.convertPosition(this.toPos)), range);
   }
+
+  public boolean isUnknownWordRule() {
+    return ((this.ruleId != null) && (this.ruleId.startsWith("MORFOLOGIK_")
+        || this.ruleId.startsWith("HUNSPELL_") || this.ruleId.startsWith("GERMAN_SPELLER_")));
+  }
 }

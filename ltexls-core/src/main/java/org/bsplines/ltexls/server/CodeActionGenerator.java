@@ -121,17 +121,8 @@ public class CodeActionGenerator {
 
     for (LanguageToolRuleMatch match : checkingResult.getKey()) {
       if (match.isIntersectingWithRange(params.getRange(), document)) {
-        @Nullable String ruleId = match.getRuleId();
-
-        if ((ruleId != null) && (ruleId.startsWith("MORFOLOGIK_")
-              || ruleId.startsWith("HUNSPELL_") || ruleId.startsWith("GERMAN_SPELLER_"))) {
-          addToDictionaryMatches.add(match);
-        }
-
-        if (match.getSentence() != null) {
-          hideFalsePositiveMatches.add(match);
-        }
-
+        if (match.isUnknownWordRule()) addToDictionaryMatches.add(match);
+        if (match.getSentence() != null) hideFalsePositiveMatches.add(match);
         disableRuleMatches.add(match);
 
         for (String newWord : match.getSuggestedReplacements()) {
