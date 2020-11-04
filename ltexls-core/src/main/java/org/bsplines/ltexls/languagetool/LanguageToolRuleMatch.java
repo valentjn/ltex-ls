@@ -9,8 +9,10 @@ package org.bsplines.ltexls.languagetool;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 import org.bsplines.ltexls.server.LtexTextDocumentItem;
 import org.bsplines.ltexls.tools.Tools;
+import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.Range;
@@ -24,20 +26,27 @@ public class LanguageToolRuleMatch {
   private String message;
   private List<String> suggestedReplacements;
 
-  public LanguageToolRuleMatch(RuleMatch match) {
+  public LanguageToolRuleMatch(RuleMatch match, AnnotatedTextFragment annotatedTextFragment) {
     this(((match.getRule() != null) ? match.getRule().getId() : null),
         ((match.getSentence() != null) ? match.getSentence().getText() : null),
-        match.getFromPos(), match.getToPos(), match.getMessage(), match.getSuggestedReplacements());
+        match.getFromPos(), match.getToPos(), match.getMessage(), match.getSuggestedReplacements(),
+        annotatedTextFragment);
   }
 
   public LanguageToolRuleMatch(@Nullable String ruleId, @Nullable String sentence,
-        int fromPos, int toPos, String message, List<String> suggestedReplacements) {
+        int fromPos, int toPos, String message, List<String> suggestedReplacements,
+        AnnotatedTextFragment annotatedTextFragment) {
     if (ruleId != null) this.ruleId = ruleId;
     if (sentence != null) this.sentence = sentence;
     this.fromPos = fromPos;
     this.toPos = toPos;
     this.message = message;
     this.suggestedReplacements = new ArrayList<>(suggestedReplacements);
+
+    if (this.isUnknownWordRule()) {
+      String unknownWord = annotatedTextFragment.getSubstringOfPlainText(fromPos, toPos);
+      this.message = "'" + unknownWord + "': " + this.message;
+    }
   }
 
   public @Nullable String getRuleId() {
@@ -77,7 +86,8 @@ public class LanguageToolRuleMatch {
         document.convertPosition(this.toPos)), range);
   }
 
-  public boolean isUnknownWordRule() {
+  public boolean isUnknownWordRule(
+        @UnknownInitialization(Object.class) LanguageToolRuleMatch this) {
     return ((this.ruleId != null) && (this.ruleId.startsWith("MORFOLOGIK_")
         || this.ruleId.startsWith("HUNSPELL_") || this.ruleId.startsWith("GERMAN_SPELLER_")));
   }

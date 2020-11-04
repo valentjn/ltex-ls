@@ -128,7 +128,7 @@ public class DocumentChecker {
     List<LanguageToolRuleMatch> matches = Collections.emptyList();
 
     try {
-      matches = languageToolInterface.check(annotatedText);
+      matches = languageToolInterface.check(annotatedTextFragment);
     } catch (RuntimeException e) {
       Tools.logger.severe(Tools.i18n("languageToolFailed", e));
       return matches;

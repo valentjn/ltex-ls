@@ -20,6 +20,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.text.StringEscapeUtils;
+import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -31,7 +32,6 @@ import org.languagetool.Language;
 import org.languagetool.Languages;
 import org.languagetool.ResultCache;
 import org.languagetool.UserConfig;
-import org.languagetool.markup.AnnotatedText;
 import org.languagetool.rules.Rule;
 import org.languagetool.rules.RuleMatch;
 import org.languagetool.rules.patterns.AbstractPatternRule;
@@ -104,7 +104,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
   }
 
   @Override
-  public List<LanguageToolRuleMatch> check(AnnotatedText annotatedText) {
+  public List<LanguageToolRuleMatch> check(AnnotatedTextFragment annotatedTextFragment) {
     if (!isReady()) {
       Tools.logger.warning(Tools.i18n("skippingTextCheckAsLanguageToolHasNotBeenInitialized"));
       return Collections.emptyList();
@@ -139,7 +139,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
           }, false, "utf-8"));
 
       try {
-        matches = this.languageTool.check(annotatedText);
+        matches = this.languageTool.check(annotatedTextFragment.getAnnotatedText());
       } finally {
         System.setOut(stdout);
       }
@@ -149,7 +149,10 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     }
 
     List<LanguageToolRuleMatch> result = new ArrayList<>();
-    for (RuleMatch match : matches) result.add(new LanguageToolRuleMatch(match));
+
+    for (RuleMatch match : matches) {
+      result.add(new LanguageToolRuleMatch(match, annotatedTextFragment));
+    }
 
     return result;
   }

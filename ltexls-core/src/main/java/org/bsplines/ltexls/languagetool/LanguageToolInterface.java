@@ -9,12 +9,12 @@ package org.bsplines.ltexls.languagetool;
 
 import java.util.List;
 import java.util.Set;
-import org.languagetool.markup.AnnotatedText;
+import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 
 public abstract class LanguageToolInterface {
   public abstract boolean isReady();
 
-  public abstract List<LanguageToolRuleMatch> check(AnnotatedText annotatedText);
+  public abstract List<LanguageToolRuleMatch> check(AnnotatedTextFragment annotatedTextFragment);
 
   public abstract void activateDefaultFalseFriendRules();
 

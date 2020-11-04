@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -72,11 +73,11 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
   }
 
   @Override
-  public List<LanguageToolRuleMatch> check(AnnotatedText annotatedText) {
+  public List<LanguageToolRuleMatch> check(AnnotatedTextFragment annotatedTextFragment) {
     if (!isReady()) return Collections.emptyList();
 
     JsonArray jsonDataAnnotation = new JsonArray();
-    List<TextPart> parts = annotatedText.getParts();
+    List<TextPart> parts = annotatedTextFragment.getAnnotatedText().getParts();
 
     for (int i = 0; i < parts.size(); i++) {
       JsonObject jsonPart = new JsonObject();
@@ -177,7 +178,7 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
       }
 
       result.add(new LanguageToolRuleMatch(ruleId, sentence, fromPos, toPos, message,
-          suggestedReplacements));
+          suggestedReplacements, annotatedTextFragment));
     }
 
     return result;
