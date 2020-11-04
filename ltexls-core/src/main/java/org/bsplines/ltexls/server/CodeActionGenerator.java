@@ -37,7 +37,6 @@ import org.eclipse.lsp4j.VersionedTextDocumentIdentifier;
 import org.eclipse.lsp4j.WorkspaceEdit;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.xtext.xbase.lib.Pair;
-import org.languagetool.markup.AnnotatedText;
 
 public class CodeActionGenerator {
   private SettingsManager settingsManager;
@@ -155,23 +154,10 @@ public class CodeActionGenerator {
     return result;
   }
 
-  private static int getPlainTextPositionFor(int originalTextPosition,
-        AnnotatedText inverseAnnotatedText) {
-    return inverseAnnotatedText.getOriginalTextPositionFor(originalTextPosition);
-  }
-
   private CodeAction getAddWordToDictionaryCodeAction(
         LtexTextDocumentItem document,
         List<LanguageToolRuleMatch> addToDictionaryMatches,
         List<AnnotatedTextFragment> annotatedTextFragments) {
-    List<@Nullable AnnotatedText> invertedAnnotatedTexts = new ArrayList<>();
-    List<@Nullable String> plainTexts = new ArrayList<>();
-
-    for (int i = 0; i < annotatedTextFragments.size(); i++) {
-      invertedAnnotatedTexts.add(null);
-      plainTexts.add(null);
-    }
-
     Map<String, List<String>> unknownWordsMap = new HashMap<>();
     JsonObject unknownWordsJsonObject = new JsonObject();
     List<Diagnostic> diagnostics = new ArrayList<>();
@@ -186,23 +172,11 @@ public class CodeActionGenerator {
       }
 
       AnnotatedTextFragment annotatedTextFragment = annotatedTextFragments.get(fragmentIndex);
-
-      if (invertedAnnotatedTexts.get(fragmentIndex) == null) {
-        invertedAnnotatedTexts.set(fragmentIndex, annotatedTextFragment.invert());
-        plainTexts.set(fragmentIndex, annotatedTextFragment.getAnnotatedText().getPlainText());
-      }
-
-      @SuppressWarnings({"assignment.type.incompatible"})
-      AnnotatedText inverseAnnotatedText = invertedAnnotatedTexts.get(fragmentIndex);
-      @SuppressWarnings({"assignment.type.incompatible"})
-      String plainText = plainTexts.get(fragmentIndex);
       CodeFragment codeFragment = annotatedTextFragment.getCodeFragment();
-      int offset = codeFragment.getFromPos();
-
       String language = codeFragment.getSettings().getLanguageShortCode();
-      String word = plainText.substring(
-          getPlainTextPositionFor(match.getFromPos() - offset, inverseAnnotatedText),
-          getPlainTextPositionFor(match.getToPos() - offset, inverseAnnotatedText));
+      int offset = codeFragment.getFromPos();
+      String word = annotatedTextFragment.getSubstringOfPlainText(
+          match.getFromPos() - offset, match.getToPos() - offset);
 
       addToMap(language, word, unknownWordsMap, unknownWordsJsonObject);
       diagnostics.add(createDiagnostic(match, document));
