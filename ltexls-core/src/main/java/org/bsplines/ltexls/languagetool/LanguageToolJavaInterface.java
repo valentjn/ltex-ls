@@ -149,18 +149,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     }
 
     List<LanguageToolRuleMatch> result = new ArrayList<>();
-
-    for (RuleMatch match : matches) {
-      int fromPos = match.getFromPos();
-      int toPos = match.getToPos();
-      @Nullable String ruleId = ((match.getRule() != null) ? match.getRule().getId() : null);
-      String message = match.getMessage();
-      @Nullable String sentence = ((match.getSentence() != null)
-          ? match.getSentence().getText() : null);
-      List<String> suggestedReplacements = match.getSuggestedReplacements();
-      result.add(new LanguageToolRuleMatch(ruleId, sentence, fromPos, toPos, message,
-          suggestedReplacements));
-    }
+    for (RuleMatch match : matches) result.add(new LanguageToolRuleMatch(match));
 
     return result;
   }

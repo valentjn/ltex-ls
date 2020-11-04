@@ -14,6 +14,7 @@ import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.Range;
+import org.languagetool.rules.RuleMatch;
 
 public class LanguageToolRuleMatch {
   private @MonotonicNonNull String ruleId;
@@ -22,6 +23,12 @@ public class LanguageToolRuleMatch {
   private int toPos;
   private String message;
   private List<String> suggestedReplacements;
+
+  public LanguageToolRuleMatch(RuleMatch match) {
+    this(((match.getRule() != null) ? match.getRule().getId() : null),
+        ((match.getSentence() != null) ? match.getSentence().getText() : null),
+        match.getFromPos(), match.getToPos(), match.getMessage(), match.getSuggestedReplacements());
+  }
 
   public LanguageToolRuleMatch(@Nullable String ruleId, @Nullable String sentence,
         int fromPos, int toPos, String message, List<String> suggestedReplacements) {
