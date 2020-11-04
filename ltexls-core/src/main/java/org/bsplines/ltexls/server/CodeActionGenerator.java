@@ -59,8 +59,7 @@ public class CodeActionGenerator {
     this.settingsManager = settingsManager;
   }
 
-  public Diagnostic createDiagnostic(
-        LanguageToolRuleMatch match, LtexTextDocumentItem document) {
+  public Diagnostic createDiagnostic(LanguageToolRuleMatch match, LtexTextDocumentItem document) {
     Diagnostic ret = new Diagnostic();
     ret.setRange(new Range(document.convertPosition(match.getFromPos()),
         document.convertPosition(match.getToPos())));
