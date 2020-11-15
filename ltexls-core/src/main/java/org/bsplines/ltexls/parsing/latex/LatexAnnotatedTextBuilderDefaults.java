@@ -440,6 +440,9 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\newglossarystyle{}{}"));
     list.add(new LatexCommandSignature("\\newrefcontext[]"));
     list.add(new LatexCommandSignature("\\newtheorem{}{}"));
+    list.add(new LatexCommandSignature("\\newtheorem{}{}[]"));
+    list.add(new LatexCommandSignature("\\newtheorem{}[]{}"));
+    list.add(new LatexCommandSignature("\\newtheorem{}[]{}[]"));
     list.add(new LatexCommandSignature("\\newtheorem*{}{}"));
     list.add(new LatexCommandSignature("\\newtoggle{}"));
     list.add(new LatexCommandSignature("\\nolinkurl{}", LatexCommandSignature.Action.DUMMY));
