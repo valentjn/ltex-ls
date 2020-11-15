@@ -144,6 +144,9 @@ public class LatexAnnotatedTextBuilderTest {
         "This is a test: \\colorbox{abc}{def}.\n",
         "This is a test: Dummy0def. ",
         (new Settings()).withLatexCommands(Collections.singletonMap("\\colorbox{}", "dummy")));
+    assertPlainText(
+        "\\setcounter{a}[b]{c} This is an test.\n",
+        "a[b]c This is an test. ");
 
     {
       AnnotatedText annotatedText = buildAnnotatedText("\\cite{Kubota}*{Theorem 3.7}\n");

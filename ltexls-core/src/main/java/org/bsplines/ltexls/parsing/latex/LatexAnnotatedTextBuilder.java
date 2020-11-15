@@ -690,7 +690,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               for (LatexCommandSignature latexCommandSignature : possibleCommandSignatures) {
                 String curMatch = latexCommandSignature.matchFromPosition(code, this.pos);
 
-                if (curMatch.length() >= match.length()) {
+                if (!curMatch.isEmpty() && (curMatch.length() >= match.length())) {
                   match = curMatch;
                   matchingCommand = latexCommandSignature;
                 }
