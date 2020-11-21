@@ -3,6 +3,7 @@
 
 /.gradle/
 /.settings/
+/target/
 
 /ltexls-core/.classpath
 /ltexls-core/.project

@@ -43,10 +43,9 @@ jobs:
         - "choco install maven"
       script:
         - "cmd.exe //C \"RefreshEnv.cmd & mvn -e verify package\""
-    # coveralls-maven-plugin doesn't work with Java 11
-    #- stage: "coverage"
-    #  script:
-    #    - "mvn -e verify org.jacoco:jacoco-maven-plugin:report org.eluder.coveralls:coveralls-maven-plugin:report"
+    - stage: "coverage"
+      script:
+        - "mvn -e verify jacoco:report coveralls:report"
     - stage: "deploy"
       if: "tag IS present"
       install:
