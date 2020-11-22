@@ -138,13 +138,13 @@ jobs:
         run: "mvn -B -e package"
 
       - name: "Set LTEX_LS_VERSION"
-        run: "ltexls-core/target/appassembler/bin/ltex-ls --version > ltexLsVersion.json && echo \"LTEX_LS_VERSION=$(python3 -c \"import json; print(json.load(open('ltexLsVersion.json'))['ltex-ls'], end='')\")\" >> $GITHUB_ENV && rm ltexLsVersion.json"
+        run: "ltexls-core/target/appassembler/bin/ltex-ls --version > ltexLsVersion.json && echo \"LTEX_LS_VERSION=$(python -c \"import json; print(json.load(open('ltexLsVersion.json'))['ltex-ls'], end='')\")\" >> $GITHUB_ENV && rm ltexLsVersion.json"
 
       - name: "Check LTEX_LS_VERSION"
         run: "if [[ -z \"$LTEX_LS_VERSION\" ]]; then echo 'Error: LTEX_LS_VERSION not set!'; (exit 1); fi; echo \"LTEX_LS_VERSION set to '$LTEX_LS_VERSION'\""
 
       - name: "Set LTEX_LS_IS_PRERELEASE"
-        run: "if [[ -z \"$LTEX_LS_VERSION\" ]]; then echo 'Error: LTEX_LS_VERSION not set!'; (exit 1); fi; echo \"LTEX_LS_IS_PRERELEASE=$(python3 -c \"import semver; print('true' if semver.VersionInfo.parse('$LTEX_LS_VERSION').prerelease is not None else 'false', end='')\")\" >> $GITHUB_ENV"
+        run: "if [[ -z \"$LTEX_LS_VERSION\" ]]; then echo 'Error: LTEX_LS_VERSION not set!'; (exit 1); fi; echo \"LTEX_LS_IS_PRERELEASE=$(python -c \"import semver; print('true' if semver.VersionInfo.parse('$LTEX_LS_VERSION').prerelease is not None else 'false', end='')\")\" >> $GITHUB_ENV"
 
       - name: "Check LTEX_LS_IS_PRERELEASE"
         run: "if [[ -z \"$LTEX_LS_IS_PRERELEASE\" ]]; then echo 'Error: LTEX_LS_IS_PRERELEASE not set!'; (exit 1); fi; echo \"LTEX_LS_IS_PRERELEASE set to '$LTEX_LS_IS_PRERELEASE'\""
