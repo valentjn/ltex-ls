@@ -1,0 +1,169 @@
+# Copyright (C) 2020 Julian Valentin, LTeX Development Community
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+name: "ltex-ls CI"
+
+on:
+  push:
+    branches:
+      - "develop"
+      - "release"
+    tags:
+      - "*"
+  pull_request:
+    branches:
+      - "develop"
+
+jobs:
+  build:
+    name: "ltex-ls CI - Build Job"
+    runs-on: "${{ matrix.os }}"
+
+    strategy:
+      matrix:
+        os: ["ubuntu-20.04", "windows-2019", "macos-11.0"]
+
+    steps:
+      - name: "Checkout Repository"
+        uses: "actions/checkout@v2"
+        with:
+          fetch-depth: "2"
+
+      - name: "Checkout Head of PR Instead of Merge Commit"
+        run: "git checkout HEAD^2"
+        if: "${{ github.event_name == 'pull_request' }}"
+
+      - name: "Set up Java"
+        uses: "actions/setup-java@v1"
+        with:
+          java-version: "11.0.9"
+
+      - name: "Verify and Build Package with Maven"
+        run: "mvn -B -e verify package"
+
+  analyze_codeql:
+    name: "ltex-ls CI - CodeQL Job"
+    runs-on: "ubuntu-20.04"
+
+    steps:
+      - name: "Checkout Repository"
+        uses: "actions/checkout@v2"
+        with:
+          fetch-depth: "2"
+
+      - name: "Checkout Head of PR Instead of Merge Commit"
+        run: "git checkout HEAD^2"
+        if: "${{ github.event_name == 'pull_request' }}"
+
+      - name: "Set up Java"
+        uses: "actions/setup-java@v1"
+        with:
+          java-version: "11.0.9"
+
+      - name: "Install Python 2 pip (Workaround github/codeql-action#316)"
+        run: "curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py && python2 get-pip.py"
+
+      - name: "Initialize CodeQL"
+        uses: "github/codeql-action/init@v1"
+
+      - name: "Autobuild"
+        uses: "github/codeql-action/autobuild@v1"
+
+      - name: "Perform CodeQL Analysis"
+        uses: "github/codeql-action/analyze@v1"
+
+  check_coverage:
+    name: "ltex-ls CI - Check Coverage Job"
+    needs:
+      - "build"
+      - "analyze_codeql"
+    runs-on: "ubuntu-20.04"
+
+    steps:
+      - name: "Checkout Repository"
+        uses: "actions/checkout@v2"
+        with:
+          fetch-depth: "2"
+
+      - name: "Checkout Head of PR Instead of Merge Commit"
+        run: "git checkout HEAD^2"
+        if: "${{ github.event_name == 'pull_request' }}"
+
+      - name: "Set up Java"
+        uses: "actions/setup-java@v1"
+        with:
+          java-version: "11.0.9"
+
+      - name: "Check Coverage and Upload Report to Coveralls"
+        env:
+          LTEX_LS_COVERALLS_REPOSITORY_TOKEN: "${{ secrets.LTEX_LS_COVERALLS_REPOSITORY_TOKEN }}"
+        run: "mvn -B -e verify jacoco:report coveralls:report \"-DrepoToken=$LTEX_LS_COVERALLS_REPOSITORY_TOKEN\""
+
+  deploy:
+    name: "ltex-ls CI - Deploy Job"
+    needs:
+      - "build"
+      - "analyze_codeql"
+      - "check_coverage"
+    if: "${{ startsWith(github.ref, 'refs/tags/') }}"
+    runs-on: "ubuntu-20.04"
+
+    steps:
+      - name: "Checkout Repository"
+        uses: "actions/checkout@v2"
+        with:
+          fetch-depth: "2"
+
+      - name: "Checkout Head of PR Instead of Merge Commit"
+        run: "git checkout HEAD^2"
+        if: "${{ github.event_name == 'pull_request' }}"
+
+      - name: "Set up Java"
+        uses: "actions/setup-java@v1"
+        with:
+          java-version: "11.0.9"
+
+      - name: "Set up Python"
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.9.0"
+
+      - name: "Install Python Dependencies"
+        run: "python -m pip install --upgrade pip && pip install semver==2.13.0"
+
+      - name: "Build Package with Maven"
+        run: "mvn -B -e package"
+
+      - name: "Set LTEX_LS_VERSION"
+        run: "ltexls-core/target/appassembler/bin/ltex-ls --version > ltexLsVersion.json && echo \"LTEX_LS_VERSION=$(python3 -c \"import json; print(json.load(open('ltexLsVersion.json'))['ltex-ls'], end='')\")\" >> $GITHUB_ENV && rm ltexLsVersion.json"
+
+      - name: "Check LTEX_LS_VERSION"
+        run: "if [[ -z \"$LTEX_LS_VERSION\" ]]; then echo 'Error: LTEX_LS_VERSION not set!'; (exit 1); fi; echo \"LTEX_LS_VERSION set to '$LTEX_LS_VERSION'\""
+
+      - name: "Set LTEX_LS_IS_PRERELEASE"
+        run: "if [[ -z \"$LTEX_LS_VERSION\" ]]; then echo 'Error: LTEX_LS_VERSION not set!'; (exit 1); fi; echo \"LTEX_LS_IS_PRERELEASE=$(python3 -c \"import semver; print('true' if semver.VersionInfo.parse('$LTEX_LS_VERSION').prerelease is not None else 'false', end='')\")\" >> $GITHUB_ENV"
+
+      - name: "Check LTEX_LS_IS_PRERELEASE"
+        run: "if [[ -z \"$LTEX_LS_IS_PRERELEASE\" ]]; then echo 'Error: LTEX_LS_IS_PRERELEASE not set!'; (exit 1); fi; echo \"LTEX_LS_IS_PRERELEASE set to '$LTEX_LS_IS_PRERELEASE'\""
+
+      - name: "Create GitHub Release"
+        id: "create_github_release"
+        uses: "actions/create-release@v1"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        with:
+          tag_name: "${{ github.ref }}"
+          prerelease: "${{ env.LTEX_LS_IS_PRERELEASE }}"
+
+      - name: "Upload Asset to GitHub Release"
+        uses: "actions/upload-release-asset@v1"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        with:
+          asset_content_type: "application/gzip"
+          asset_name: "ltex-ls-${{ env.LTEX_LS_VERSION }}.tar.gz"
+          asset_path: "ltexls-core/target/ltex-ls-${{ env.LTEX_LS_VERSION }}.tar.gz"
+          upload_url: "${{ steps.create_github_release.outputs.upload_url }}"
