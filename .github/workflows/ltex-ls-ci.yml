@@ -89,7 +89,7 @@ jobs:
       - name: "Checkout Repository"
         uses: "actions/checkout@v2"
         with:
-          fetch-depth: "2"
+          fetch-depth: 2
 
       - name: "Checkout Head of PR Instead of Merge Commit"
         run: "git checkout HEAD^2"
@@ -130,7 +130,7 @@ jobs:
           java-version: "11.0.9"
 
       - name: "Set up Python"
-        uses: actions/setup-python@v2
+        uses: "actions/setup-python@v2"
         with:
           python-version: "3.9.0"
 
