@@ -4,7 +4,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-name: "ltex-ls CI"
+name: "CI"
 
 on:
   push:
@@ -20,7 +20,7 @@ on:
 
 jobs:
   build:
-    name: "ltex-ls CI - Build Job"
+    name: "CI - Build Job"
     runs-on: "${{ matrix.os }}"
 
     strategy:
@@ -49,7 +49,7 @@ jobs:
         run: "mvn -B -e verify package"
 
   analyze_codeql:
-    name: "ltex-ls CI - CodeQL Job"
+    name: "CI - CodeQL Job"
     runs-on: "ubuntu-20.04"
 
     steps:
@@ -80,7 +80,7 @@ jobs:
         uses: "github/codeql-action/analyze@v1"
 
   check_coverage:
-    name: "ltex-ls CI - Check Coverage Job"
+    name: "CI - Check Coverage Job"
     needs:
       - "build"
       - "analyze_codeql"
@@ -107,7 +107,7 @@ jobs:
         run: "mvn -B -e verify jacoco:report coveralls:report \"-DrepoToken=$LTEX_LS_COVERALLS_REPOSITORY_TOKEN\""
 
   deploy:
-    name: "ltex-ls CI - Deploy Job"
+    name: "CI - Deploy Job"
     needs:
       - "build"
       - "analyze_codeql"
