@@ -5,6 +5,8 @@
 /.settings/
 /target/
 
+/.vscode/ltex.*.txt
+
 /ltexls-core/.classpath
 /ltexls-core/.project
 
