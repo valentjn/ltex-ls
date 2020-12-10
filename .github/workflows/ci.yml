@@ -34,7 +34,7 @@ jobs:
       - name: "Checkout Repository"
         uses: "actions/checkout@v2"
         with:
-          fetch-depth: "2"
+          fetch-depth: 2
 
       - name: "Checkout Head of PR Instead of Merge Commit"
         run: "git checkout HEAD^2"
@@ -73,39 +73,34 @@ jobs:
       - name: "Perform CodeQL Analysis"
         uses: "github/codeql-action/analyze@v1"
 
-  check_coverage:
-    name: "CI - Check Coverage Job"
+  upload_coverage:
+    name: "CI - Upload Coverage Job"
     needs:
       - "build"
       - "analyze_codeql"
+    if: "${{ github.event_name != 'pull_request' }}"
     runs-on: "ubuntu-20.04"
 
     steps:
       - name: "Checkout Repository"
         uses: "actions/checkout@v2"
-        with:
-          fetch-depth: 2
-
-      - name: "Checkout Head of PR Instead of Merge Commit"
-        run: "git checkout HEAD^2"
-        if: "${{ github.event_name == 'pull_request' }}"
 
       - name: "Set up Java"
         uses: "actions/setup-java@v1"
         with:
           java-version: "11.0.9"
 
-      - name: "Check Coverage and Upload Report to Coveralls"
+      - name: "Build and Upload Coverage Report to Coveralls"
         env:
           LTEX_LS_COVERALLS_REPOSITORY_TOKEN: "${{ secrets.LTEX_LS_COVERALLS_REPOSITORY_TOKEN }}"
-        run: "mvn -B -e verify jacoco:report coveralls:report \"-DrepoToken=$LTEX_LS_COVERALLS_REPOSITORY_TOKEN\""
+        run: "mvn -B -e verify coveralls:report \"-DrepoToken=$LTEX_LS_COVERALLS_REPOSITORY_TOKEN\""
 
   deploy:
     name: "CI - Deploy Job"
     needs:
       - "build"
       - "analyze_codeql"
-      - "check_coverage"
+      - "upload_coverage"
     if: "${{ startsWith(github.ref, 'refs/tags/') }}"
     runs-on: "ubuntu-20.04"
 
@@ -113,7 +108,7 @@ jobs:
       - name: "Checkout Repository"
         uses: "actions/checkout@v2"
         with:
-          fetch-depth: "2"
+          fetch-depth: 2
 
       - name: "Checkout Head of PR Instead of Merge Commit"
         run: "git checkout HEAD^2"
