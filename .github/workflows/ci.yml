@@ -33,12 +33,6 @@ jobs:
     steps:
       - name: "Checkout Repository"
         uses: "actions/checkout@v2"
-        with:
-          fetch-depth: 2
-
-      - name: "Checkout Head of PR Instead of Merge Commit"
-        run: "git checkout HEAD^2"
-        if: "${{ github.event_name == 'pull_request' }}"
 
       - name: "Set up Java"
         uses: "actions/setup-java@v1"
@@ -107,12 +101,6 @@ jobs:
     steps:
       - name: "Checkout Repository"
         uses: "actions/checkout@v2"
-        with:
-          fetch-depth: 2
-
-      - name: "Checkout Head of PR Instead of Merge Commit"
-        run: "git checkout HEAD^2"
-        if: "${{ github.event_name == 'pull_request' }}"
 
       - name: "Set up Java"
         uses: "actions/setup-java@v1"
