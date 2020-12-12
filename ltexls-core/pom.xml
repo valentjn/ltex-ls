@@ -77,6 +77,12 @@
       <groupId>org.languagetool</groupId>
       <artifactId>languagetool-server</artifactId>
       <version>5.1</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>logback-classic</artifactId>
+          <groupId>ch.qos.logback</groupId>
+        </exclusion>
+      </exclusions>
       <scope>test</scope>
     </dependency>
     <dependency>
