@@ -108,7 +108,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   }
 
   @JsonRequest("ltex/serverStatus")
-  CompletableFuture<LtexServerStatusParams> ltexServerStatus() {
+  CompletableFuture<LtexServerStatusResult> ltexServerStatus() {
     long processId = ProcessHandle.current().pid();
     double wallClockDuration =
         Duration.between(this.startupInstant, Instant.now()).toMillis() / 1000.0;
@@ -128,7 +128,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
       // do nothing
     }
 
-    return CompletableFuture.completedFuture(new LtexServerStatusParams(
+    return CompletableFuture.completedFuture(new LtexServerStatusResult(
         processId, wallClockDuration, cpuUsage, cpuDuration, usedMemory, totalMemory));
   }
 

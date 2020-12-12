@@ -10,7 +10,7 @@ package org.bsplines.ltexls.server;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.xtext.xbase.lib.util.ToStringBuilder;
 
-public class LtexServerStatusParams {
+public class LtexServerStatusResult {
   private long processId;
   private double wallClockDuration;
   private @Nullable Double cpuUsage;
@@ -18,7 +18,7 @@ public class LtexServerStatusParams {
   private double usedMemory;
   private double totalMemory;
 
-  public LtexServerStatusParams(long processId, double wallClockDuration, @Nullable Double cpuUsage,
+  public LtexServerStatusResult(long processId, double wallClockDuration, @Nullable Double cpuUsage,
         @Nullable Double cpuDuration, double usedMemory, double totalMemory) {
     this.processId = processId;
     this.wallClockDuration = wallClockDuration;
