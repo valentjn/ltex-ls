@@ -9,8 +9,7 @@ name: "CI"
 on:
   push:
     branches:
-      - "develop"
-      - "release"
+      - "*"
     tags:
       - "*"
   pull_request:
