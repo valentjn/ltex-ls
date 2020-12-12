@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import org.bsplines.ltexls.client.LtexLanguageClient;
-import org.bsplines.ltexls.client.LtexProgressParams;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 import org.bsplines.ltexls.tools.Tools;
@@ -23,10 +22,14 @@ import org.eclipse.lsp4j.ConfigurationItem;
 import org.eclipse.lsp4j.ConfigurationParams;
 import org.eclipse.lsp4j.Diagnostic;
 import org.eclipse.lsp4j.Position;
+import org.eclipse.lsp4j.ProgressParams;
 import org.eclipse.lsp4j.PublishDiagnosticsParams;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.TextDocumentContentChangeEvent;
 import org.eclipse.lsp4j.TextDocumentItem;
+import org.eclipse.lsp4j.WorkDoneProgressBegin;
+import org.eclipse.lsp4j.WorkDoneProgressEnd;
+import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.xtext.xbase.lib.Pair;
 
 public class LtexTextDocumentItem extends TextDocumentItem {
@@ -34,6 +37,7 @@ public class LtexTextDocumentItem extends TextDocumentItem {
   private List<Integer> lineStartPosList;
   private @Nullable Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult;
   private @Nullable List<Diagnostic> diagnostics;
+  private ProgressTokenGenerator progressTokenGenerator;
   private @Nullable Position caretPosition;
   private Instant lastCaretChangeInstant;
 
@@ -44,6 +48,7 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     this.lineStartPosList = new ArrayList<>();
     this.checkingResult = null;
     this.diagnostics = null;
+    this.progressTokenGenerator = new ProgressTokenGenerator();
     this.caretPosition = null;
     this.lastCaretChangeInstant = Instant.now();
     reinitializeLineStartPosList(text, this.lineStartPosList);
@@ -400,6 +405,16 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     }
 
     String uri = getUri();
+
+    WorkDoneProgressBegin workDoneProgressBegin = new WorkDoneProgressBegin();
+    workDoneProgressBegin.setTitle(Tools.i18n("checkingUri", uri));
+    workDoneProgressBegin.setCancellable(false);
+
+    Either<String, Number> progressToken =
+        this.progressTokenGenerator.generate(uri, "checkDocument");
+
+    languageClient.notifyProgress(new ProgressParams(progressToken, workDoneProgressBegin));
+
     ConfigurationItem configurationItem = new ConfigurationItem();
     configurationItem.setScopeUri(uri);
     configurationItem.setSection("ltex");
@@ -411,20 +426,19 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     CompletableFuture<List<Object>> workspaceSpecificConfigurationFuture =
         languageClient.ltexWorkspaceSpecificConfiguration(configurationParams);
 
-    languageClient.ltexProgress(new LtexProgressParams(uri, "checkDocument", 0));
-
     return configurationFuture.thenCombine(workspaceSpecificConfigurationFuture,
       (List<Object> configuration, List<Object> workspaceSpecificConfiguration) -> {
-          try {
-            this.languageServer.getSettingsManager().setSettings(
-                (JsonElement)configuration.get(0),
-                (JsonElement)workspaceSpecificConfiguration.get(0));
-            this.checkingResult = this.languageServer.getDocumentChecker().check(this);
-            return this.checkingResult;
-          } finally {
-            if (languageClient != null) {
-              languageClient.ltexProgress(new LtexProgressParams(uri, "checkDocument", 1));
-            }
+          this.languageServer.getSettingsManager().setSettings(
+              (JsonElement)configuration.get(0),
+              (JsonElement)workspaceSpecificConfiguration.get(0));
+          this.checkingResult = this.languageServer.getDocumentChecker().check(this);
+          return this.checkingResult;
+        }).whenComplete((
+              Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult,
+              Throwable e) -> {
+          if (languageClient != null) {
+            languageClient.notifyProgress(new ProgressParams(
+                progressToken, new WorkDoneProgressEnd()));
           }
         });
   }

@@ -362,6 +362,17 @@ Params: {
 }
 
 
+[Trace - 12:45:12 PM] Received notification '$/progress'.
+Params: {
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":0}",
+    "value": {
+        "kind": "begin",
+        "title": "Checking 'untitled:Untitled-1'...",
+        "cancellable": false
+    }
+}
+
+
 [Trace - 12:45:12 PM] Received request 'workspace/configuration - (1)'.
 Params: {
     "items": [
@@ -457,19 +468,12 @@ Result: [
 ]
 
 
-[Trace - 12:45:12 PM] Received notification 'ltex/progress'.
+[Trace - 12:45:13 PM] Received notification '$/progress'.
 Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 0
-}
-
-
-[Trace - 12:45:13 PM] Received notification 'ltex/progress'.
-Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 1
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":0}",
+    "value": {
+        "kind": "end"
+    }
 }
 
 
@@ -491,6 +495,17 @@ Params: {
             "text": "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n"
         }
     ]
+}
+
+
+[Trace - 12:45:22 PM] Received notification '$/progress'.
+Params: {
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":1}",
+    "value": {
+        "kind": "begin",
+        "title": "Checking 'untitled:Untitled-1'...",
+        "cancellable": false
+    }
 }
 
 
@@ -589,19 +604,12 @@ Result: [
 ]
 
 
-[Trace - 12:45:22 PM] Received notification 'ltex/progress'.
+[Trace - 12:46:06 PM] Received notification '$/progress'.
 Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 0
-}
-
-
-[Trace - 12:46:06 PM] Received notification 'ltex/progress'.
-Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 1
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":1}",
+    "value": {
+        "kind": "end"
+    }
 }
 
 
@@ -1183,6 +1191,17 @@ Params: {
 }
 
 
+[Trace - 12:46:30 PM] Received notification '$/progress'.
+Params: {
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":2}",
+    "value": {
+        "kind": "begin",
+        "title": "Checking 'untitled:Untitled-1'...",
+        "cancellable": false
+    }
+}
+
+
 [Trace - 12:46:30 PM] Received request 'workspace/configuration - (5)'.
 Params: {
     "items": [
@@ -1278,11 +1297,14 @@ Result: [
 ]
 
 
-[Trace - 12:46:30 PM] Received notification 'ltex/progress'.
+[Trace - 12:46:30 PM] Received notification '$/progress'.
 Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 0
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":3}",
+    "value": {
+        "kind": "begin",
+        "title": "Checking 'untitled:Untitled-1'...",
+        "cancellable": false
+    }
 }
 
 
@@ -1381,19 +1403,12 @@ Result: [
 ]
 
 
-[Trace - 12:46:30 PM] Received notification 'ltex/progress'.
+[Trace - 12:46:30 PM] Received notification '$/progress'.
 Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 0
-}
-
-
-[Trace - 12:46:30 PM] Received notification 'ltex/progress'.
-Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 1
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":2}",
+    "value": {
+        "kind": "end"
+    }
 }
 
 
@@ -1420,11 +1435,12 @@ Params: {
 }
 
 
-[Trace - 12:46:30 PM] Received notification 'ltex/progress'.
+[Trace - 12:46:30 PM] Received notification '$/progress'.
 Params: {
-    "uri": "untitled:Untitled-1",
-    "operation": "checkDocument",
-    "progress": 1
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":3}",
+    "value": {
+        "kind": "end"
+    }
 }
 
 
