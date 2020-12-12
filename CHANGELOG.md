@@ -13,6 +13,7 @@
 - Make versioning independent of vscode-ltex; LT<sub>E</sub>X LS now adheres to [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html)
 - Require support of LSP 3.15
 - Replace `ltex/progress` with `$/progress` (fixes [#34](https://github.com/valentjn/ltex-ls/issues/34))
+- Add `customCapabilities` in `InitializeParams.initializationOptions`
 - Remove unneeded command arguments `type` and `command`
 
 ## 8.1.1 (November 24, 2020)

@@ -81,7 +81,7 @@ public class Settings {
         : obj.clearDiagnosticsWhenClosingFile);
   }
 
-  public Settings(JsonElement jsonSettings, JsonElement jsonWorkspaceSpecificSettings) {
+  public Settings(JsonElement jsonSettings, @Nullable JsonElement jsonWorkspaceSpecificSettings) {
     setSettings(jsonSettings, jsonWorkspaceSpecificSettings);
   }
 
@@ -165,7 +165,9 @@ public class Settings {
   }
 
   private void setSettings(@UnknownInitialization(Object.class) Settings this,
-        JsonElement jsonSettings, JsonElement jsonWorkspaceSpecificSettings) {
+        JsonElement jsonSettings, @Nullable JsonElement jsonWorkspaceSpecificSettings) {
+    if (jsonWorkspaceSpecificSettings == null) jsonWorkspaceSpecificSettings = jsonSettings;
+
     try {
       JsonElement jsonElement = getSettingFromJson(jsonSettings, "enabled");
 

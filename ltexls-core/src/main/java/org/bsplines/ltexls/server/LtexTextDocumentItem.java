@@ -423,15 +423,25 @@ public class LtexTextDocumentItem extends TextDocumentItem {
 
     CompletableFuture<List<Object>> configurationFuture =
         languageClient.configuration(configurationParams);
-    CompletableFuture<List<Object>> workspaceSpecificConfigurationFuture =
-        languageClient.ltexWorkspaceSpecificConfiguration(configurationParams);
+    CompletableFuture<List<@Nullable Object>> workspaceSpecificConfigurationFuture =
+        (this.languageServer.isClientSupportingWorkspaceSpecificConfiguration()
+          ? languageClient.ltexWorkspaceSpecificConfiguration(configurationParams)
+          : CompletableFuture.completedFuture(Collections.singletonList(null)));
 
     return configurationFuture.thenCombine(workspaceSpecificConfigurationFuture,
-      (List<Object> configuration, List<Object> workspaceSpecificConfiguration) -> {
+      (List<Object> configuration, List<@Nullable Object> workspaceSpecificConfiguration) -> {
+          JsonElement jsonConfiguration = (JsonElement)configuration.get(0);
+          @Nullable Object workspaceSpecificConfigurationElement =
+              workspaceSpecificConfiguration.get(0);
+          @Nullable JsonElement jsonWorkspaceSpecificConfiguration =
+              ((workspaceSpecificConfigurationElement != null)
+                ? (JsonElement)workspaceSpecificConfigurationElement : null);
+
           this.languageServer.getSettingsManager().setSettings(
-              (JsonElement)configuration.get(0),
-              (JsonElement)workspaceSpecificConfiguration.get(0));
+              jsonConfiguration, jsonWorkspaceSpecificConfiguration);
+
           this.checkingResult = this.languageServer.getDocumentChecker().check(this);
+
           return this.checkingResult;
         }).whenComplete((
               Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult,

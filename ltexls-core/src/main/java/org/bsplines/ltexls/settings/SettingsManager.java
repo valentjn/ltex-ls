@@ -96,7 +96,7 @@ public class SettingsManager {
   }
 
   public void setSettings(JsonElement newJsonSettings,
-        JsonElement newJsonWorkspaceSpecificSettings) {
+        @Nullable JsonElement newJsonWorkspaceSpecificSettings) {
     Settings newSettings = new Settings(newJsonSettings, newJsonWorkspaceSpecificSettings);
     setSettings(newSettings);
   }

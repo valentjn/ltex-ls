@@ -258,7 +258,10 @@ Params: {
         }
     },
     "initializationOptions": {
-        "locale": "en"
+        "locale": "en",
+        "customCapabilities": {
+            "workspaceSpecificConfiguration": true
+        }
     },
     "trace": "verbose"
 }

@@ -9,11 +9,13 @@ package org.bsplines.ltexls.client;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.ConfigurationParams;
 import org.eclipse.lsp4j.jsonrpc.services.JsonRequest;
 import org.eclipse.lsp4j.services.LanguageClient;
 
 public interface LtexLanguageClient extends LanguageClient {
   @JsonRequest("ltex/workspaceSpecificConfiguration")
-  CompletableFuture<List<Object>> ltexWorkspaceSpecificConfiguration(ConfigurationParams params);
+  CompletableFuture<List<@Nullable Object>> ltexWorkspaceSpecificConfiguration(
+      ConfigurationParams params);
 }

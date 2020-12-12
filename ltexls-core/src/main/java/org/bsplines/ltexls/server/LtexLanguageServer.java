@@ -42,6 +42,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   private CodeActionGenerator codeActionGenerator;
   private @NotOnlyInitialized LtexTextDocumentService ltexTextDocumentService;
   private @NotOnlyInitialized LtexWorkspaceService ltexWorkspaceService;
+  private boolean clientSupportsWorkspaceSpecificConfiguration;
   private Instant startupInstant;
 
   /**
@@ -54,6 +55,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     this.codeActionGenerator = new CodeActionGenerator(this.settingsManager);
     this.ltexTextDocumentService = new LtexTextDocumentService(this);
     this.ltexWorkspaceService = new LtexWorkspaceService(this);
+    this.clientSupportsWorkspaceSpecificConfiguration = false;
     this.startupInstant = Instant.now();
   }
 
@@ -76,13 +78,24 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     // Until it is specified in the LSP that the locale is automatically sent with
     // the initialization request, we have to do that manually.
     // See https://github.com/microsoft/language-server-protocol/issues/754.
-    JsonObject initializationOptions = (JsonObject)params.getInitializationOptions();
+    @Nullable JsonObject initializationOptions = (JsonObject)params.getInitializationOptions();
 
-    if ((initializationOptions != null) && initializationOptions.has("locale")) {
-      String localeLanguage = initializationOptions.get("locale").getAsString();
-      Locale locale = Locale.forLanguageTag(localeLanguage);
-      Tools.logger.info(Tools.i18n("settingLocale", locale.getLanguage()));
-      Tools.setLocale(locale);
+    if (initializationOptions != null) {
+      if (initializationOptions.has("locale")) {
+        String localeLanguage = initializationOptions.get("locale").getAsString();
+        Locale locale = Locale.forLanguageTag(localeLanguage);
+        Tools.logger.info(Tools.i18n("settingLocale", locale.getLanguage()));
+        Tools.setLocale(locale);
+      }
+
+      if (initializationOptions.has("customCapabilities")) {
+        JsonObject customCapabilities = initializationOptions.getAsJsonObject("customCapabilities");
+
+        if (customCapabilities.has("workspaceSpecificConfiguration")) {
+          this.clientSupportsWorkspaceSpecificConfiguration =
+              customCapabilities.get("workspaceSpecificConfiguration").getAsBoolean();
+        }
+      }
     }
 
     return CompletableFuture.completedFuture(new InitializeResult(capabilities));
@@ -160,5 +173,9 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
   public LtexTextDocumentService getLtexTextDocumentService() {
     return this.ltexTextDocumentService;
+  }
+
+  public boolean isClientSupportingWorkspaceSpecificConfiguration() {
+    return this.clientSupportsWorkspaceSpecificConfiguration;
   }
 }
