@@ -718,8 +718,6 @@ Result: [
             "command": "ltex.hideFalsePositives",
             "arguments": [
                 {
-                    "type": "command",
-                    "command": "ltex.hideFalsePositives",
                     "uri": "untitled:Untitled-1",
                     "falsePositives": {
                         "en-US": [
@@ -755,8 +753,6 @@ Result: [
             "command": "ltex.disableRules",
             "arguments": [
                 {
-                    "type": "command",
-                    "command": "ltex.disableRules",
                     "uri": "untitled:Untitled-1",
                     "ruleIds": {
                         "en-US": [
@@ -880,8 +876,6 @@ Result: [
             "command": "ltex.hideFalsePositives",
             "arguments": [
                 {
-                    "type": "command",
-                    "command": "ltex.hideFalsePositives",
                     "uri": "untitled:Untitled-1",
                     "falsePositives": {
                         "en-US": [
@@ -917,8 +911,6 @@ Result: [
             "command": "ltex.disableRules",
             "arguments": [
                 {
-                    "type": "command",
-                    "command": "ltex.disableRules",
                     "uri": "untitled:Untitled-1",
                     "ruleIds": {
                         "en-US": [
@@ -1042,8 +1034,6 @@ Result: [
             "command": "ltex.hideFalsePositives",
             "arguments": [
                 {
-                    "type": "command",
-                    "command": "ltex.hideFalsePositives",
                     "uri": "untitled:Untitled-1",
                     "falsePositives": {
                         "en-US": [
@@ -1079,8 +1069,6 @@ Result: [
             "command": "ltex.disableRules",
             "arguments": [
                 {
-                    "type": "command",
-                    "command": "ltex.disableRules",
                     "uri": "untitled:Untitled-1",
                     "ruleIds": {
                         "en-US": [

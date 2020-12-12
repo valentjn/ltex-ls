@@ -182,8 +182,6 @@ public class CodeActionGenerator {
     }
 
     JsonObject arguments = new JsonObject();
-    arguments.addProperty("type", "command");
-    arguments.addProperty("command", addToDictionaryCommandName);
     arguments.addProperty("uri", document.getUri());
     arguments.add("words", unknownWordsJsonObject);
 
@@ -261,10 +259,9 @@ public class CodeActionGenerator {
     }
 
     JsonObject arguments = new JsonObject();
-    arguments.addProperty("type", "command");
-    arguments.addProperty("command", hideFalsePositivesCommandName);
     arguments.addProperty("uri", document.getUri());
     arguments.add("falsePositives", falsePositivesJsonObject);
+
     Command command = new Command(((ruleIdSentencePairs.size() == 1)
         ? Tools.i18n("hideFalsePositive")
         : Tools.i18n("hideAllFalsePositivesInTheSelectedSentences")),
@@ -309,10 +306,9 @@ public class CodeActionGenerator {
     }
 
     JsonObject arguments = new JsonObject();
-    arguments.addProperty("type", "command");
-    arguments.addProperty("command", disableRulesCommandName);
     arguments.addProperty("uri", document.getUri());
     arguments.add("ruleIds", ruleIdsJsonObject);
+
     String commandTitle = ((getOnlyEntry(ruleIdsMap) != null)
         ? Tools.i18n("disableRule")
         : Tools.i18n("disableAllRulesWithMatchesInSelection"));
