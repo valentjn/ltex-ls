@@ -33,7 +33,6 @@ import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
-import org.languagetool.markup.AnnotatedText;
 import org.languagetool.markup.TextPart;
 
 public class LanguageToolHttpInterface extends LanguageToolInterface {
