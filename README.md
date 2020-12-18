@@ -29,7 +29,7 @@ It is recommended to use the startup scripts `bin/ltex-ls` (Linux, Mac) and `bin
 - `JAVA_HOME`: Path to the directory of the JRE or JDK to use (contains `bin`, `lib`, and other subdirectories).
 - `JAVA_OPTS`: Java arguments to be fed to `java`.
 - Any command-line arguments supplied to the startup scripts are fed to LT<sub>E</sub>X LS. The following arguments are supported:
-  - `--version`: Prints a JSON string with versioning information to the standard output and exits. The format is a JSON object with `"java"` and `"ltex-ls"` keys and string values. A key may be missing if no information about the corresponding version could be retrieved.
+  - `--version`: Print a JSON string with versioning information to the standard output and exit. The format is a JSON object with `"java"` and `"ltex-ls"` keys and string values. A key may be missing if no information about the corresponding version could be retrieved.
 
 You can also start LT<sub>E</sub>X LS directly without the startup scripts (not recommended). In this case, make sure that when you supply all JAR files in the `lib` directory to Java's class path, `ltexls-languagetool-patch-LTEXLSVERSION.jar` (where `LTEXLSVERSION` is the version of LT<sub>E</sub>X LS; Java's class path does not support wildcards in the middle of filenames) is listed as the first JAR file. It does not suffice to supply `lib/*` to the class path, as the order in which the JAR files are included in wildcards is not specified by Java, so this will fail randomly.
 
@@ -128,8 +128,8 @@ interface CustomInitializationOptions {
    * Logging messages are always in English. Diagnostic messages are always in the language of
    * the checked text they belong to.
    *
-   * If not specified, the default locale of the JVM will be used. If the specified locale cannot be
-   * resolved to a supported i18n language of LTeX LS, then English will be used.
+   * If not specified, the default locale of the JVM will be used. If the specified locale
+   * cannot be resolved to a supported i18n language of LTeX LS, then English will be used.
    */
   locale?: string;
 
