@@ -35,7 +35,7 @@ public class LspMessage {
   private JsonObject body;
 
   private static final Pattern logPattern = Pattern.compile(
-      "\\[[^\\]]+\\] (\\S+) (\\S+) '([^' ]+)(?: - \\(([^\\)]+)\\))?'.*\\R(?:Params|Result): ");
+      "\\[[^\\]]+\\] (\\S+) (\\S+) '([^' ]+)(?: - \\(([^\\)]+)\\))?'.*\\R(?:Params|Result):");
   private static final Pattern headerPattern = Pattern.compile("(\\S+): (.*)\r\n");
 
   /**

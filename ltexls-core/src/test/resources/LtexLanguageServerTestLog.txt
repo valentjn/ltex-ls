@@ -365,6 +365,16 @@ Params: {
 }
 
 
+[Trace - 12:45:12 PM] Received request 'window/workDoneProgress/create - (1)'.
+Params: {
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":0}"
+}
+
+
+[Trace - 12:45:12 PM] Sending response 'window/workDoneProgress/create - (1)'. Processing request took 12ms
+Result:
+
+
 [Trace - 12:45:12 PM] Received notification '$/progress'.
 Params: {
     "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":0}",
@@ -376,7 +386,7 @@ Params: {
 }
 
 
-[Trace - 12:45:12 PM] Received request 'workspace/configuration - (1)'.
+[Trace - 12:45:12 PM] Received request 'workspace/configuration - (2)'.
 Params: {
     "items": [
         {
@@ -387,7 +397,7 @@ Params: {
 }
 
 
-[Trace - 12:45:12 PM] Sending response 'workspace/configuration - (1)'. Processing request took 12ms
+[Trace - 12:45:12 PM] Sending response 'workspace/configuration - (2)'. Processing request took 12ms
 Result: [
     {
         "enabled": [
@@ -450,7 +460,7 @@ Result: [
 ]
 
 
-[Trace - 12:45:12 PM] Received request 'ltex/workspaceSpecificConfiguration - (2)'.
+[Trace - 12:45:12 PM] Received request 'ltex/workspaceSpecificConfiguration - (3)'.
 Params: {
     "items": [
         {
@@ -461,7 +471,7 @@ Params: {
 }
 
 
-[Trace - 12:45:12 PM] Sending response 'ltex/workspaceSpecificConfiguration - (2)'. Processing request took 11ms
+[Trace - 12:45:12 PM] Sending response 'ltex/workspaceSpecificConfiguration - (3)'. Processing request took 11ms
 Result: [
     {
         "dictionary": {},
@@ -501,6 +511,16 @@ Params: {
 }
 
 
+[Trace - 12:45:22 PM] Received request 'window/workDoneProgress/create - (4)'.
+Params: {
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":1}"
+}
+
+
+[Trace - 12:45:22 PM] Sending response 'window/workDoneProgress/create - (4)'. Processing request took 12ms
+Result:
+
+
 [Trace - 12:45:22 PM] Received notification '$/progress'.
 Params: {
     "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":1}",
@@ -512,7 +532,7 @@ Params: {
 }
 
 
-[Trace - 12:45:22 PM] Received request 'workspace/configuration - (3)'.
+[Trace - 12:45:22 PM] Received request 'workspace/configuration - (5)'.
 Params: {
     "items": [
         {
@@ -523,7 +543,7 @@ Params: {
 }
 
 
-[Trace - 12:45:22 PM] Sending response 'workspace/configuration - (3)'. Processing request took 28ms
+[Trace - 12:45:22 PM] Sending response 'workspace/configuration - (5)'. Processing request took 28ms
 Result: [
     {
         "enabled": [
@@ -586,7 +606,7 @@ Result: [
 ]
 
 
-[Trace - 12:45:22 PM] Received request 'ltex/workspaceSpecificConfiguration - (4)'.
+[Trace - 12:45:22 PM] Received request 'ltex/workspaceSpecificConfiguration - (6)'.
 Params: {
     "items": [
         {
@@ -597,7 +617,7 @@ Params: {
 }
 
 
-[Trace - 12:45:22 PM] Sending response 'ltex/workspaceSpecificConfiguration - (4)'. Processing request took 11ms
+[Trace - 12:45:22 PM] Sending response 'ltex/workspaceSpecificConfiguration - (6)'. Processing request took 11ms
 Result: [
     {
         "dictionary": {},
@@ -1145,41 +1165,14 @@ Params: {
 }
 
 
-[Trace - 12:46:30 PM] Sending request 'textDocument/codeAction - (4)'.
+[Trace - 12:46:30 PM] Received request 'window/workDoneProgress/create - (7)'.
 Params: {
-    "textDocument": {
-        "uri": "untitled:Untitled-1"
-    },
-    "range": {
-        "start": {
-            "line": 0,
-            "character": 9
-        },
-        "end": {
-            "line": 0,
-            "character": 9
-        }
-    },
-    "context": {
-        "diagnostics": [
-            {
-                "range": {
-                    "start": {
-                        "line": 0,
-                        "character": 8
-                    },
-                    "end": {
-                        "line": 0,
-                        "character": 10
-                    }
-                },
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'",
-                "severity": 3,
-                "source": "LTeX - EN_A_VS_AN"
-            }
-        ]
-    }
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":2}"
 }
+
+
+[Trace - 12:46:30 PM] Sending response 'window/workDoneProgress/create - (7)'. Processing request took 12ms
+Result:
 
 
 [Trace - 12:46:30 PM] Received notification '$/progress'.
@@ -1193,7 +1186,7 @@ Params: {
 }
 
 
-[Trace - 12:46:30 PM] Received request 'workspace/configuration - (5)'.
+[Trace - 12:46:30 PM] Received request 'workspace/configuration - (8)'.
 Params: {
     "items": [
         {
@@ -1204,7 +1197,7 @@ Params: {
 }
 
 
-[Trace - 12:46:30 PM] Sending response 'workspace/configuration - (5)'. Processing request took 8ms
+[Trace - 12:46:30 PM] Sending response 'workspace/configuration - (8)'. Processing request took 8ms
 Result: [
     {
         "enabled": [
@@ -1267,7 +1260,7 @@ Result: [
 ]
 
 
-[Trace - 12:46:30 PM] Received request 'ltex/workspaceSpecificConfiguration - (6)'.
+[Trace - 12:46:30 PM] Received request 'ltex/workspaceSpecificConfiguration - (9)'.
 Params: {
     "items": [
         {
@@ -1278,113 +1271,7 @@ Params: {
 }
 
 
-[Trace - 12:46:30 PM] Sending response 'ltex/workspaceSpecificConfiguration - (6)'. Processing request took 14ms
-Result: [
-    {
-        "dictionary": {},
-        "disabledRules": {},
-        "enabledRules": {}
-    }
-]
-
-
-[Trace - 12:46:30 PM] Received notification '$/progress'.
-Params: {
-    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":3}",
-    "value": {
-        "kind": "begin",
-        "title": "Checking 'untitled:Untitled-1'...",
-        "cancellable": false
-    }
-}
-
-
-[Trace - 12:46:30 PM] Received request 'workspace/configuration - (7)'.
-Params: {
-    "items": [
-        {
-            "scopeUri": "untitled:Untitled-1",
-            "section": "ltex"
-        }
-    ]
-}
-
-
-[Trace - 12:46:30 PM] Sending response 'workspace/configuration - (7)'. Processing request took 25ms
-Result: [
-    {
-        "enabled": [
-            "markdown",
-            "latex",
-            "rsweave"
-        ],
-        "language": "en-US",
-        "dictionary": {},
-        "disabledRules": {},
-        "enabledRules": {},
-        "ltex-ls": {
-            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
-            "languageToolHttpServerUri": "",
-            "logLevel": "fine"
-        },
-        "java": {
-            "path": "",
-            "initialHeapSize": 64,
-            "maximumHeapSize": 512
-        },
-        "latex": {
-            "commands": [],
-            "environments": []
-        },
-        "markdown": {
-            "nodes": [],
-            "ignore": [],
-            "dummy": []
-        },
-        "hiddenFalsePositives": {},
-        "configurationTarget": {
-            "dictionary": "workspaceFolder",
-            "disabledRules": "workspaceFolder",
-            "hiddenFalsePositives": "workspaceFolder"
-        },
-        "additionalRules": {
-            "motherTongue": "",
-            "languageModel": "",
-            "neuralNetworkModel": "",
-            "word2VecModel": ""
-        },
-        "sentenceCacheSize": 2000,
-        "diagnosticSeverity": "information",
-        "checkFrequency": "edit",
-        "clearDiagnosticsWhenClosingFile": true,
-        "statusBarItem": false,
-        "trace": {
-            "server": "verbose"
-        },
-        "workspaceDictionary": {},
-        "workspaceFolderDictionary": {},
-        "workspaceDisabledRules": {},
-        "workspaceFolderDisabledRules": {},
-        "workspaceEnabledRules": {},
-        "workspaceFolderEnabledRules": {},
-        "commands": {},
-        "environments": {}
-    }
-]
-
-
-[Trace - 12:46:30 PM] Received request 'ltex/workspaceSpecificConfiguration - (8)'.
-Params: {
-    "items": [
-        {
-            "scopeUri": "untitled:Untitled-1",
-            "section": "ltex"
-        }
-    ]
-}
-
-
-[Trace - 12:46:30 PM] Sending response 'ltex/workspaceSpecificConfiguration - (8)'. Processing request took 59ms
+[Trace - 12:46:30 PM] Sending response 'ltex/workspaceSpecificConfiguration - (9)'. Processing request took 14ms
 Result: [
     {
         "dictionary": {},
@@ -1426,20 +1313,7 @@ Params: {
 }
 
 
-[Trace - 12:46:30 PM] Received notification '$/progress'.
-Params: {
-    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":3}",
-    "value": {
-        "kind": "end"
-    }
-}
-
-
-[Trace - 12:46:30 PM] Received response 'textDocument/codeAction - (4)' in 319ms.
-Result: []
-
-
-[Trace - 12:46:31 PM] Sending request 'textDocument/codeAction - (5)'.
+[Trace - 12:46:31 PM] Sending request 'textDocument/codeAction - (4)'.
 Params: {
     "textDocument": {
         "uri": "untitled:Untitled-1"
@@ -1460,7 +1334,7 @@ Params: {
 }
 
 
-[Trace - 12:46:31 PM] Received response 'textDocument/codeAction - (5)' in 4ms.
+[Trace - 12:46:31 PM] Received response 'textDocument/codeAction - (4)' in 4ms.
 Result: []
 
 

@@ -22,12 +22,14 @@ import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.initialization.qual.NotOnlyInitialized;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.eclipse.lsp4j.ClientCapabilities;
 import org.eclipse.lsp4j.CodeActionOptions;
 import org.eclipse.lsp4j.ExecuteCommandOptions;
 import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.ServerCapabilities;
 import org.eclipse.lsp4j.TextDocumentSyncKind;
+import org.eclipse.lsp4j.WindowClientCapabilities;
 import org.eclipse.lsp4j.jsonrpc.services.JsonRequest;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
@@ -42,6 +44,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   private CodeActionGenerator codeActionGenerator;
   private @NotOnlyInitialized LtexTextDocumentService ltexTextDocumentService;
   private @NotOnlyInitialized LtexWorkspaceService ltexWorkspaceService;
+  private boolean clientSupportsWorkDoneProgress;
   private boolean clientSupportsWorkspaceSpecificConfiguration;
   private Instant startupInstant;
 
@@ -55,6 +58,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     this.codeActionGenerator = new CodeActionGenerator(this.settingsManager);
     this.ltexTextDocumentService = new LtexTextDocumentService(this);
     this.ltexWorkspaceService = new LtexWorkspaceService(this);
+    this.clientSupportsWorkDoneProgress = false;
     this.clientSupportsWorkspaceSpecificConfiguration = false;
     this.startupInstant = Instant.now();
   }
@@ -67,20 +71,23 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     Tools.logger.info(Tools.i18n("initializingLtexLs",
         ((ltexLsVersion != null) ? ltexLsVersion : "null")));
 
-    ServerCapabilities capabilities = new ServerCapabilities();
-    capabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
-    capabilities.setCodeActionProvider(new CodeActionOptions(CodeActionGenerator.getCodeActions()));
+    @Nullable ClientCapabilities clientCapabilities = params.getCapabilities();
 
-    List<String> commandNames = new ArrayList<>();
-    commandNames.addAll(LtexWorkspaceService.getCommandNames());
-    capabilities.setExecuteCommandProvider(new ExecuteCommandOptions(commandNames));
+    if (clientCapabilities != null) {
+      @Nullable WindowClientCapabilities windowClientCapabilities = clientCapabilities.getWindow();
 
-    // Until it is specified in the LSP that the locale is automatically sent with
-    // the initialization request, we have to do that manually.
-    // See https://github.com/microsoft/language-server-protocol/issues/754.
+      if ((windowClientCapabilities != null) && (windowClientCapabilities.getWorkDoneProgress())) {
+        this.clientSupportsWorkDoneProgress = true;
+      }
+    }
+
+    Tools.logger.warning("clientSupportsWorkDoneProgress = " + this.clientSupportsWorkDoneProgress);
     @Nullable JsonObject initializationOptions = (JsonObject)params.getInitializationOptions();
 
     if (initializationOptions != null) {
+      // Until it is specified in the LSP that the locale is automatically sent with
+      // the initialization request, we have to do that manually.
+      // See https://github.com/microsoft/language-server-protocol/issues/754.
       if (initializationOptions.has("locale")) {
         String localeLanguage = initializationOptions.get("locale").getAsString();
         Locale locale = Locale.forLanguageTag(localeLanguage);
@@ -98,7 +105,16 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
       }
     }
 
-    return CompletableFuture.completedFuture(new InitializeResult(capabilities));
+    ServerCapabilities serverCapabilities = new ServerCapabilities();
+    serverCapabilities.setTextDocumentSync(TextDocumentSyncKind.Full);
+    serverCapabilities.setCodeActionProvider(
+        new CodeActionOptions(CodeActionGenerator.getCodeActions()));
+
+    List<String> commandNames = new ArrayList<>();
+    commandNames.addAll(LtexWorkspaceService.getCommandNames());
+    serverCapabilities.setExecuteCommandProvider(new ExecuteCommandOptions(commandNames));
+
+    return CompletableFuture.completedFuture(new InitializeResult(serverCapabilities));
   }
 
   @Override
@@ -173,6 +189,10 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
   public LtexTextDocumentService getLtexTextDocumentService() {
     return this.ltexTextDocumentService;
+  }
+
+  public boolean isClientSupportingWorkDoneProgress() {
+    return this.clientSupportsWorkDoneProgress;
   }
 
   public boolean isClientSupportingWorkspaceSpecificConfiguration() {

@@ -28,6 +28,7 @@ import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.TextDocumentContentChangeEvent;
 import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.lsp4j.WorkDoneProgressBegin;
+import org.eclipse.lsp4j.WorkDoneProgressCreateParams;
 import org.eclipse.lsp4j.WorkDoneProgressEnd;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.xtext.xbase.lib.Pair;
@@ -405,15 +406,25 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     }
 
     String uri = getUri();
-
-    WorkDoneProgressBegin workDoneProgressBegin = new WorkDoneProgressBegin();
-    workDoneProgressBegin.setTitle(Tools.i18n("checkingUri", uri));
-    workDoneProgressBegin.setCancellable(false);
-
     Either<String, Number> progressToken =
         this.progressTokenGenerator.generate(uri, "checkDocument");
 
-    languageClient.notifyProgress(new ProgressParams(progressToken, workDoneProgressBegin));
+    final CompletableFuture<@Nullable Either<String, Number>> workDoneProgressCreateFuture =
+        ((this.languageServer.isClientSupportingWorkDoneProgress())
+          ? languageClient.createProgress(new WorkDoneProgressCreateParams(progressToken)).handle(
+            (Void voidObject, @Nullable Throwable e) -> {
+              if (e == null) {
+                WorkDoneProgressBegin workDoneProgressBegin = new WorkDoneProgressBegin();
+                workDoneProgressBegin.setTitle(Tools.i18n("checkingUri", uri));
+                workDoneProgressBegin.setCancellable(false);
+                languageClient.notifyProgress(new ProgressParams(
+                    progressToken, workDoneProgressBegin));
+                return progressToken;
+              } else {
+                return null;
+              }
+            })
+          : CompletableFuture.completedFuture(null));
 
     ConfigurationItem configurationItem = new ConfigurationItem();
     configurationItem.setScopeUri(uri);
@@ -421,35 +432,56 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     ConfigurationParams configurationParams = new ConfigurationParams(
         Collections.singletonList(configurationItem));
 
-    CompletableFuture<List<Object>> configurationFuture =
-        languageClient.configuration(configurationParams);
-    CompletableFuture<List<@Nullable Object>> workspaceSpecificConfigurationFuture =
-        (this.languageServer.isClientSupportingWorkspaceSpecificConfiguration()
-          ? languageClient.ltexWorkspaceSpecificConfiguration(configurationParams)
-          : CompletableFuture.completedFuture(Collections.singletonList(null)));
+    CompletableFuture<List<Object>> intermediateResult1 = workDoneProgressCreateFuture.thenCompose(
+        (@Nullable Either<String, Number> curProgressToken) -> {
+        return languageClient.configuration(configurationParams);
+      });
 
-    return configurationFuture.thenCombine(workspaceSpecificConfigurationFuture,
-      (List<Object> configuration, List<@Nullable Object> workspaceSpecificConfiguration) -> {
-          JsonElement jsonConfiguration = (JsonElement)configuration.get(0);
-          @Nullable Object workspaceSpecificConfigurationElement =
-              workspaceSpecificConfiguration.get(0);
-          @Nullable JsonElement jsonWorkspaceSpecificConfiguration =
-              ((workspaceSpecificConfigurationElement != null)
-                ? (JsonElement)workspaceSpecificConfigurationElement : null);
+    @SuppressWarnings({"assignment.type.incompatible", "return.type.incompatible"})
+    CompletableFuture<Pair<List<Object>, List<@Nullable Object>>> intermediateResult2 =
+        intermediateResult1.thenCompose(
+          (List<Object> configurationResult) -> {
+            return (this.languageServer.isClientSupportingWorkspaceSpecificConfiguration()
+                ? languageClient.ltexWorkspaceSpecificConfiguration(configurationParams)
+                : CompletableFuture.completedFuture(Collections.singletonList(null))).thenApply(
+                  (List<@Nullable Object> workspaceSpecificConfigurationResult) -> {
+                    return Pair.of(configurationResult, workspaceSpecificConfigurationResult);
+                  });
+          });
 
-          this.languageServer.getSettingsManager().setSettings(
-              jsonConfiguration, jsonWorkspaceSpecificConfiguration);
+    CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>>
+        intermediateResult3 = intermediateResult2.thenApply(
+          (Pair<List<Object>, List<@Nullable Object>> futureArgument) -> {
+            List<Object> configurationResult = futureArgument.getKey();
+            List<@Nullable Object> workspaceSpecificConfigurationResult = futureArgument.getValue();
 
-          this.checkingResult = this.languageServer.getDocumentChecker().check(this);
+            try {
+              JsonElement jsonConfiguration = (JsonElement)configurationResult.get(0);
+              @Nullable Object workspaceSpecificConfiguration =
+                  workspaceSpecificConfigurationResult.get(0);
+              @Nullable JsonElement jsonWorkspaceSpecificConfiguration =
+                  ((workspaceSpecificConfiguration != null)
+                    ? (JsonElement)workspaceSpecificConfiguration : null);
 
-          return this.checkingResult;
-        }).whenComplete((
-              Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult,
-              Throwable e) -> {
-          if (languageClient != null) {
-            languageClient.notifyProgress(new ProgressParams(
-                progressToken, new WorkDoneProgressEnd()));
-          }
-        });
+              this.languageServer.getSettingsManager().setSettings(
+                  jsonConfiguration, jsonWorkspaceSpecificConfiguration);
+
+              Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
+                  this.languageServer.getDocumentChecker().check(this);
+              this.checkingResult = checkingResult;
+
+              return checkingResult;
+            } finally {
+              @Nullable Either<String, Number> curProgressToken =
+                  workDoneProgressCreateFuture.join();
+
+              if ((languageClient != null) && (curProgressToken != null)) {
+                languageClient.notifyProgress(new ProgressParams(
+                    curProgressToken, new WorkDoneProgressEnd()));
+              }
+            }
+          });
+
+    return intermediateResult3;
   }
 }
