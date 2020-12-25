@@ -380,8 +380,9 @@ Params: {
     "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":0}",
     "value": {
         "kind": "begin",
-        "title": "Checking 'untitled:Untitled-1'...",
-        "cancellable": false
+        "title": "Checking document",
+        "cancellable": false,
+        "message": "untitled:Untitled-1"
     }
 }
 
@@ -526,8 +527,9 @@ Params: {
     "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":1}",
     "value": {
         "kind": "begin",
-        "title": "Checking 'untitled:Untitled-1'...",
-        "cancellable": false
+        "title": "Checking document",
+        "cancellable": false,
+        "message": "untitled:Untitled-1"
     }
 }
 
@@ -1180,8 +1182,9 @@ Params: {
     "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":2}",
     "value": {
         "kind": "begin",
-        "title": "Checking 'untitled:Untitled-1'...",
-        "cancellable": false
+        "title": "Checking document",
+        "cancellable": false,
+        "message": "untitled:Untitled-1"
     }
 }
 

@@ -415,7 +415,8 @@ public class LtexTextDocumentItem extends TextDocumentItem {
             (Void voidObject, @Nullable Throwable e) -> {
               if (e == null) {
                 WorkDoneProgressBegin workDoneProgressBegin = new WorkDoneProgressBegin();
-                workDoneProgressBegin.setTitle(Tools.i18n("checkingUri", uri));
+                workDoneProgressBegin.setTitle(Tools.i18n("checkingDocument"));
+                workDoneProgressBegin.setMessage(uri);
                 workDoneProgressBegin.setCancellable(false);
                 languageClient.notifyProgress(new ProgressParams(
                     progressToken, workDoneProgressBegin));
