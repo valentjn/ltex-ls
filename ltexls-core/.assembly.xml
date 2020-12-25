@@ -18,5 +18,15 @@
       <directory>${basedir}/target/appassembler</directory>
       <outputDirectory></outputDirectory>
     </fileSet>
+    <fileSet>
+      <directory>${basedir}/..</directory>
+      <includes>
+        <include>ACKNOWLEDGMENTS.md</include>
+        <include>CHANGELOG.md</include>
+        <include>LICENSE.md</include>
+        <include>README.md</include>
+      </includes>
+      <outputDirectory></outputDirectory>
+    </fileSet>
   </fileSets>
 </assembly>
