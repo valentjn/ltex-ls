@@ -74,12 +74,12 @@ public class DocumentCheckerTest {
     try {
       Assertions.assertEquals("Use <suggestion>a</suggestion> instead of 'an' if the following "
           + "word doesn't start with a vowel sound, e.g. "
-          + "'a sentence', 'a university'",
+          + "'a sentence', 'a university'.",
           matches.get(0).getMessage());
     } catch (AssertionError e) {
       Assertions.assertEquals("Use \u201ca\u201d instead of \u2018an\u2019 if the following "
           + "word doesn\u2019t start with a vowel sound, e.g. "
-          + "\u2018a sentence\u2019, \u2018a university\u2019",
+          + "\u2018a sentence\u2019, \u2018a university\u2019.",
           matches.get(0).getMessage());
     }
 
@@ -91,6 +91,7 @@ public class DocumentCheckerTest {
         NullnessUtil.castNonNull(matches.get(1).getSentence()).trim());
     Assertions.assertEquals(fromPos2, matches.get(1).getFromPos());
     Assertions.assertEquals(toPos2, matches.get(1).getToPos());
+
     try {
       Assertions.assertEquals("M\u00f6glicherweise fehlende grammatische \u00dcbereinstimmung des "
           + "Genus (m\u00e4nnlich, weiblich, s\u00e4chlich - "
@@ -102,6 +103,7 @@ public class DocumentCheckerTest {
           + "Beispiel: \u201ader Fahrrad\u2018 statt \u201adas Fahrrad\u2018).",
           matches.get(1).getMessage());
     }
+
     Assertions.assertEquals(3, matches.get(1).getSuggestedReplacements().size());
     Assertions.assertEquals("ein Test", matches.get(1).getSuggestedReplacements().get(0));
     Assertions.assertEquals("einem Test", matches.get(1).getSuggestedReplacements().get(1));

@@ -655,7 +655,7 @@ Params: {
             },
             "severity": 3,
             "source": "LTeX - EN_A_VS_AN",
-            "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
+            "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
         },
         {
             "range": {
@@ -704,7 +704,7 @@ Params: {
                         "character": 10
                     }
                 },
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'.",
                 "severity": 3,
                 "source": "LTeX - EN_A_VS_AN"
             }
@@ -735,7 +735,7 @@ Result: [
                 },
                 "severity": 3,
                 "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
         ],
         "command": {
@@ -770,7 +770,7 @@ Result: [
                 },
                 "severity": 3,
                 "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
         ],
         "command": {
@@ -805,7 +805,7 @@ Result: [
                 },
                 "severity": 3,
                 "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
         ],
         "edit": {
@@ -865,7 +865,7 @@ Params: {
                         "character": 10
                     }
                 },
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'.",
                 "severity": 3,
                 "source": "LTeX - EN_A_VS_AN"
             }
@@ -893,7 +893,7 @@ Result: [
                 },
                 "severity": 3,
                 "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
         ],
         "command": {
@@ -928,7 +928,7 @@ Result: [
                 },
                 "severity": 3,
                 "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
         ],
         "command": {
@@ -963,7 +963,7 @@ Result: [
                 },
                 "severity": 3,
                 "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
         ],
         "edit": {
@@ -1023,7 +1023,7 @@ Params: {
                         "character": 10
                     }
                 },
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'.",
                 "severity": 3,
                 "source": "LTeX - EN_A_VS_AN"
             }
@@ -1051,7 +1051,7 @@ Result: [
                 },
                 "severity": 3,
                 "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
         ],
         "command": {
@@ -1086,7 +1086,7 @@ Result: [
                 },
                 "severity": 3,
                 "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
         ],
         "command": {
@@ -1121,7 +1121,7 @@ Result: [
                 },
                 "severity": 3,
                 "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'"
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
         ],
         "edit": {
