@@ -16,6 +16,7 @@
 - Replace `ltex/progress` with `$/progress` (fixes [#34](https://github.com/valentjn/ltex-ls/issues/34))
 - Add `customCapabilities` in `InitializeParams.initializationOptions`
 - Remove unneeded command arguments `type` and `command`
+- Replace `\dots` with Unicode ellipsis `…` instead of three dots `...` to fix some false positives
 - Add documentation
 
 ## 8.1.1 (November 24, 2020)

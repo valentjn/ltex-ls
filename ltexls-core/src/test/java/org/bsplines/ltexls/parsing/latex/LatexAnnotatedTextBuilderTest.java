@@ -55,7 +55,7 @@ public class LatexAnnotatedTextBuilderTest {
         + "  \\item that.\n"
         + "\\end{itemize}\n",
         "We can do this or that. ");
-    assertPlainText("This is good\\dots No, it isn't.\n", "This is good... No, it isn't. ");
+    assertPlainText("This is good\\dots No, it isn't.\n", "This is good\u2026 No, it isn't. ");
     assertPlainText("This is a test of\\\\line breaks.\n", "This is a test of line breaks. ");
     assertPlainText(
         "This is a sentence.%\n"
@@ -105,7 +105,7 @@ public class LatexAnnotatedTextBuilderTest {
         "\u00c7\u00e7\u00c5\u016e\u00e5\u016f");
     assertPlainText(
         "This is a test: a, b, \\dots, c.\n",
-        "This is a test: a, b, ..., c. ");
+        "This is a test: a, b, \u2026, c. ");
     assertPlainText(
         "This is a test -- this is another test --- this is the final test.\n",
         "This is a test \u2013 this is another test \u2014 this is the final test. ");

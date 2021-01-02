@@ -222,7 +222,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   }
 
   private static boolean isPunctuation(char ch) {
-    return ((ch == '.') || (ch == ',') || (ch == ':') || (ch == ';'));
+    return ((ch == '.') || (ch == ',') || (ch == ':') || (ch == ';') || (ch == '\u2026'));
   }
 
   private static boolean isVowel(char ch) {
@@ -638,7 +638,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
 
               if (!isMathMode(this.curMode)) {
                 if (command.equals("\\dots")) {
-                  interpretAs = "...";
+                  interpretAs = "\u2026";
                 } else if (command.equals("\\eg")) {
                   interpretAs = "e.g.";
                 } else if (command.equals("\\egc")) {
