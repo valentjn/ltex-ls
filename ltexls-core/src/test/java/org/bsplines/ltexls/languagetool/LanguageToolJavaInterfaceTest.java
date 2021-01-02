@@ -52,11 +52,14 @@ public class LanguageToolJavaInterfaceTest {
     assertMatchesCompare(settings, settings.withEnabledRules(
         Collections.singleton("CAN_NOT")), 0, 1,
         "You can not use the keyboard to select an item.\n");
+    assertMatchesCompare(settings, settings.withEnablePickyRules(true), 0, 1,
+        "Her work will not have been finished by tonight.\n");
 
     if (checkMotherTongue) {
       // mother tongue requires loading false-friends.xml, but loading of custom rules doesn't
       // seem to be supported by servers (only via the Java API)
-      assertMatchesCompare(settings, settings.withMotherTongueShortCode("de-DE"), 0, 1,
+      assertMatchesCompare(settings,
+          settings.withMotherTongueShortCode("de-DE").withEnablePickyRules(true), 0, 1,
           "I'm holding my handy.\n");
     }
   }

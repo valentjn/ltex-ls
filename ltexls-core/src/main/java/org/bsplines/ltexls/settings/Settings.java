@@ -35,6 +35,7 @@ public class Settings {
   private @Nullable Map<String, String> latexCommands = null;
   private @Nullable Map<String, String> latexEnvironments = null;
   private @Nullable Map<String, String> markdownNodes = null;
+  private @Nullable Boolean enablePickyRules = null;
   private @Nullable String motherTongueShortCode = null;
   private @Nullable String languageModelRulesDirectory = null;
   private @Nullable String neuralNetworkModelRulesDirectory = null;
@@ -68,6 +69,7 @@ public class Settings {
         : new HashMap<>(obj.markdownNodes));
     this.hiddenFalsePositives = ((obj.hiddenFalsePositives == null) ? null
         : new HashMap<>(obj.hiddenFalsePositives));
+    this.enablePickyRules = obj.enablePickyRules;
     this.motherTongueShortCode = obj.motherTongueShortCode;
     this.languageModelRulesDirectory = obj.languageModelRulesDirectory;
     this.neuralNetworkModelRulesDirectory = obj.neuralNetworkModelRulesDirectory;
@@ -340,6 +342,13 @@ public class Settings {
     }
 
     try {
+      this.enablePickyRules = getSettingFromJson(
+          jsonSettings, "additionalRules.enablePickyRules").getAsBoolean();
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      this.enablePickyRules = null;
+    }
+
+    try {
       this.motherTongueShortCode = getSettingFromJson(
           jsonSettings, "additionalRules.motherTongue").getAsString();
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
@@ -479,6 +488,11 @@ public class Settings {
       return false;
     }
 
+    if ((this.enablePickyRules == null) ? (other.enablePickyRules != null) :
+          !this.enablePickyRules.equals(other.enablePickyRules)) {
+      return false;
+    }
+
     if ((this.motherTongueShortCode == null) ? (other.motherTongueShortCode != null) :
           !this.motherTongueShortCode.equals(other.motherTongueShortCode)) {
       return false;
@@ -609,6 +623,7 @@ public class Settings {
     hash = 53 * hash + ((this.latexCommands != null) ? this.latexCommands.hashCode() : 0);
     hash = 53 * hash + ((this.latexEnvironments != null) ? this.latexEnvironments.hashCode() : 0);
     hash = 53 * hash + ((this.markdownNodes != null) ? this.markdownNodes.hashCode() : 0);
+    hash = 53 * hash + ((this.enablePickyRules != null) ? this.enablePickyRules.hashCode() : 0);
     hash = 53 * hash + ((this.motherTongueShortCode != null)
         ? this.motherTongueShortCode.hashCode() : 0);
     hash = 53 * hash + ((this.languageModelRulesDirectory != null)
@@ -680,6 +695,10 @@ public class Settings {
   public Map<String, String> getMarkdownNodes() {
     return Collections.unmodifiableMap(
         getDefault(this.markdownNodes, Collections.emptyMap()));
+  }
+
+  public Boolean getEnablePickyRules() {
+    return getDefault(this.enablePickyRules, false);
   }
 
   public String getMotherTongueShortCode() {
@@ -781,6 +800,12 @@ public class Settings {
   public Settings withMarkdownNodes(Map<String, String> markdownNodes) {
     Settings obj = new Settings(this);
     obj.markdownNodes = new HashMap<>(markdownNodes);
+    return obj;
+  }
+
+  public Settings withEnablePickyRules(Boolean enablePickyRules) {
+    Settings obj = new Settings(this);
+    obj.enablePickyRules = enablePickyRules;
     return obj;
   }
 

@@ -31,6 +31,7 @@ import org.languagetool.JLanguageTool;
 import org.languagetool.Language;
 import org.languagetool.Languages;
 import org.languagetool.ResultCache;
+import org.languagetool.RuleMatchListener;
 import org.languagetool.UserConfig;
 import org.languagetool.rules.Rule;
 import org.languagetool.rules.RuleMatch;
@@ -126,6 +127,12 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
       }
     }
 
+    @SuppressWarnings("assignment.type.incompatible")
+    RuleMatchListener ruleMatchListener = null;
+    JLanguageTool.Level ruleLevel = (
+        annotatedTextFragment.getCodeFragment().getSettings().getEnablePickyRules()
+        ? JLanguageTool.Level.PICKY : JLanguageTool.Level.DEFAULT);
+
     List<RuleMatch> matches;
 
     try {
@@ -139,7 +146,9 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
           }, false, "utf-8"));
 
       try {
-        matches = this.languageTool.check(annotatedTextFragment.getAnnotatedText());
+        matches = this.languageTool.check(annotatedTextFragment.getAnnotatedText(),
+            true, JLanguageTool.ParagraphHandling.NORMAL, ruleMatchListener, JLanguageTool.Mode.ALL,
+            ruleLevel);
       } finally {
         System.setOut(stdout);
       }

@@ -128,6 +128,10 @@ public class SettingsTest {
         settings.getHiddenFalsePositives());
     settings2 = compareSettings(settings, settings2, false);
 
+    settings = settings.withEnablePickyRules(true);
+    Assertions.assertEquals(true, settings.getEnablePickyRules());
+    settings2 = compareSettings(settings, settings2, false);
+
     settings = settings.withMotherTongueShortCode("motherTongueShortCode");
     Assertions.assertEquals("motherTongueShortCode", settings.getMotherTongueShortCode());
     settings2 = compareSettings(settings, settings2, true);

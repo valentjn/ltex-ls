@@ -105,6 +105,10 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
     requestEntries.put("language", this.languageShortCode);
     requestEntries.put("data", jsonData.toString());
 
+    if (annotatedTextFragment.getCodeFragment().getSettings().getEnablePickyRules()) {
+      requestEntries.put("level", "picky");
+    }
+
     if (!this.motherTongueShortCode.isEmpty()) {
       requestEntries.put("motherTongue", this.motherTongueShortCode);
     }
