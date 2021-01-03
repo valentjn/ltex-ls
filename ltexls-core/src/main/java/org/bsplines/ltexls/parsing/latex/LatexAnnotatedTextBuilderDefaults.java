@@ -579,6 +579,7 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\textcolor{}"));
     list.add(new LatexCommandSignature("\\textcolor[]{}"));
     list.add(new LatexCommandSignature("\\textproc{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\theoremstyle{}"));
     list.add(new LatexCommandSignature("\\thispagestyle{}"));
     list.add(new LatexCommandSignature("\\tikz{}"));
     list.add(new LatexCommandSignature("\\tikzset{}"));

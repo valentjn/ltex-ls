@@ -8,6 +8,10 @@
 
 # Changelog
 
+## 9.0.1 (upcoming)
+
+- Ignore `\theoremstyle{}`
+
 ## 9.0.0 (January 3, 2021)
 
 - Make versioning independent of vscode-ltex; LT<sub>E</sub>X LS now adheres to [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html)
