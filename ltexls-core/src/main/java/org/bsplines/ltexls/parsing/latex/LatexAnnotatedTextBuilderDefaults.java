@@ -514,6 +514,8 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\setlist{}"));
     list.add(new LatexCommandSignature("\\setlist[]{}"));
     list.add(new LatexCommandSignature("\\SetMathAlphabet{}{}{}{}{}{}"));
+    list.add(new LatexCommandSignature("\\setmainfont{}"));
+    list.add(new LatexCommandSignature("\\setmainfont{}[]"));
     list.add(new LatexCommandSignature("\\setparsizes{}{}{}"));
     list.add(new LatexCommandSignature("\\@setplength{}{}"));
     list.add(new LatexCommandSignature("\\setstretch{}"));

@@ -10,7 +10,7 @@
 
 ## 9.0.1 (upcoming)
 
-- Ignore `\pgfmathsetmacro` and `\theoremstyle`
+- Ignore `\pgfmathsetmacro`, `\setmainfont`, and `\theoremstyle`
 
 ## 9.0.0 (January 3, 2021)
 
