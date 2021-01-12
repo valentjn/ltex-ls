@@ -561,21 +561,21 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               popMode();
               addMarkup(command, generateDummy());
             } else if (command.equals("\\AA")) {
-              addMarkup(command, "\u00c5");
+              addMarkup(command, (isMathMode(this.curMode) ? "" : "\u00c5"));
             } else if (command.equals("\\O")) {
-              addMarkup(command, "\u00d8");
+              addMarkup(command, (isMathMode(this.curMode) ? "" : "\u00d8"));
             } else if (command.equals("\\aa")) {
-              addMarkup(command, "\u00e5");
+              addMarkup(command, (isMathMode(this.curMode) ? "" : "\u00e5"));
             } else if (command.equals("\\ss")) {
-              addMarkup(command, "\u00df");
+              addMarkup(command, (isMathMode(this.curMode) ? "" : "\u00df"));
             } else if (command.equals("\\o")) {
-              addMarkup(command, "\u00f8");
+              addMarkup(command, (isMathMode(this.curMode) ? "" : "\u00f8"));
             } else if (command.equals("\\`") || command.equals("\\'") || command.equals("\\^")
                   || command.equals("\\~") || command.equals("\\\"") || command.equals("\\=")
                   || command.equals("\\.")) {
               Matcher matcher = accentPattern1.matcher(code.substring(this.pos));
 
-              if (matcher.find()) {
+              if (!isMathMode(this.curMode) && matcher.find()) {
                 @Nullable String accentCommand = matcher.group(1);
                 @Nullable String letter = ((matcher.group(3) != null)
                     ? matcher.group(3) : matcher.group(5));
@@ -588,7 +588,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
             } else if (command.equals("\\c") || command.equals("\\r")) {
               Matcher matcher = accentPattern2.matcher(code.substring(this.pos));
 
-              if (matcher.find()) {
+              if (!isMathMode(this.curMode) && matcher.find()) {
                 @Nullable String accentCommand = matcher.group(1);
                 @Nullable String letter = ((matcher.group(3) != null)
                     ? matcher.group(3) : matcher.group(4));

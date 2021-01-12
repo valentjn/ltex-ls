@@ -225,6 +225,13 @@ public class LatexAnnotatedTextBuilderTest {
         "This is a test: Dummy0,\u00a0and Dummy1. ");
     assertPlainText(
         "This is a test:\n"
+        + "\\begin{equation}\n"
+        + "    Gau\\ss{}: \\O(n^2).\n"
+        + "\\end{equation}\n"
+        + "This is another test: $Gau\\ss{}: \\O(n^2)$.\n",
+        "This is a test: Dummy0. This is another test: Dummy1. ");
+    assertPlainText(
+        "This is a test:\n"
         + "\\[\n"
         + "  E = mc^2.\n"
         + "\\]\n"
