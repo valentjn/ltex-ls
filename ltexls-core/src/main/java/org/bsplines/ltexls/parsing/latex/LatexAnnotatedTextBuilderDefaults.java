@@ -464,6 +464,7 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\pdfbookmark{}{}"));
     list.add(new LatexCommandSignature("\\pdfbookmark[]{}{}"));
     list.add(new LatexCommandSignature("\\pgfdeclaredecoration{}{}{}"));
+    list.add(new LatexCommandSignature("\\pgfmathsetmacro{}{}"));
     list.add(new LatexCommandSignature("\\pgfmathsetseed{}"));
     list.add(new LatexCommandSignature("\\printacronyms"));
     list.add(new LatexCommandSignature("\\printacronyms[]"));
