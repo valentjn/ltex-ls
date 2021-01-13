@@ -2,7 +2,7 @@
 name: "Bug report"
 about: "Create a report to help us improve (fill in as many details as you can)."
 title: ""
-labels: "1-bug, 2-unconfirmed"
+labels: "1-bug 🐛, 2-unconfirmed"
 assignees: ""
 ---
 

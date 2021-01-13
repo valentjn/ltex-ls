@@ -9,7 +9,7 @@ updates:
     assignees:
       - "valentjn"
     labels:
-      - "pr-dependabot"
+      - "pr-dependabot 🤖"
     # otherwise, we get the error
     # "Error processing com.google.errorprone:javac (NoMethodError)
     # undefined method `zero?' for nil:NilClass"
