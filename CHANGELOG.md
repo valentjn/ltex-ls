@@ -11,6 +11,7 @@
 ## 9.1.0 (upcoming)
 
 - Use Flexmark's YAML Front Matter extension to ignore YAML front matter in Markdown instead of own handling
+- Print Flexmark AST of Markdown documents to log when [`ltex.ltex-ls.logLevel`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexltex-lsloglevel) is `"finest"`
 
 ## 9.0.1 (January 13, 2021)
 

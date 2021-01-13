@@ -9,6 +9,7 @@ package org.bsplines.ltexls.parsing.markdown;
 
 import com.vladsch.flexmark.ext.yaml.front.matter.YamlFrontMatterExtension;
 import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.test.util.AstCollectingVisitor;
 import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.util.data.DataHolder;
@@ -19,9 +20,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import java.util.logging.Level;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.DummyGenerator;
 import org.bsplines.ltexls.settings.Settings;
+import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
@@ -127,6 +130,12 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
    */
   public MarkdownAnnotatedTextBuilder addCode(String code) {
     Document document = this.parser.parse(code);
+
+    if (Tools.logger.isLoggable(Level.FINEST)) {
+      Tools.logger.finest("flexmarkAst = "
+          + (new AstCollectingVisitor().collectAndGetAstText(document)));
+    }
+
     visit(document);
     return this;
   }
