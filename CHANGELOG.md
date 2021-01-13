@@ -8,7 +8,7 @@
 
 # Changelog
 
-## 9.0.1 (upcoming)
+## 9.0.1 (January 13, 2021)
 
 - Ignore `\pgfmathsetmacro`, `\setmainfont`, and `\theoremstyle`
 - Fix accent commands such as `\O` in math mode resulting in diagnostics (fixes [vscode-ltex#216](https://github.com/valentjn/vscode-ltex/issues/216))
