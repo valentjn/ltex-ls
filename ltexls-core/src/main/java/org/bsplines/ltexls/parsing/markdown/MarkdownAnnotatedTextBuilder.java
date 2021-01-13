@@ -7,26 +7,28 @@
 
 package org.bsplines.ltexls.parsing.markdown;
 
+import com.vladsch.flexmark.ext.yaml.front.matter.YamlFrontMatterExtension;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.util.ast.Document;
 import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.util.data.DataHolder;
+import com.vladsch.flexmark.util.data.MutableDataSet;
 import com.vladsch.flexmark.util.sequence.Escaping;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.DummyGenerator;
 import org.bsplines.ltexls.settings.Settings;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
-  private static final Pattern yamlFrontMatterPattern = Pattern.compile(
-      "\\A---\\s*$.*?^---\\s*$", Pattern.MULTILINE | Pattern.DOTALL);
+  private static final DataHolder parserOptions = new MutableDataSet().set(Parser.EXTENSIONS,
+      Arrays.asList(YamlFrontMatterExtension.create()));
 
-  private Parser parser = Parser.builder().build();
+  private Parser parser = Parser.builder(parserOptions).build();
 
   private String code;
   private int pos;
@@ -124,16 +126,7 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
    * @return @c this
    */
   public MarkdownAnnotatedTextBuilder addCode(String code) {
-    int pos = 0;
-    Matcher matcher = MarkdownAnnotatedTextBuilder.yamlFrontMatterPattern.matcher(code);
-
-    if (matcher.find()) {
-      int newPos = pos + matcher.end();
-      super.addMarkup(code.substring(pos, newPos));
-      pos += newPos;
-    }
-
-    Document document = this.parser.parse(code.substring(pos));
+    Document document = this.parser.parse(code);
     visit(document);
     return this;
   }

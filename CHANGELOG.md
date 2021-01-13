@@ -8,6 +8,10 @@
 
 # Changelog
 
+## 9.1.0 (upcoming)
+
+- Use Flexmark's YAML Front Matter extension to ignore YAML front matter in Markdown instead of own handling
+
 ## 9.0.1 (January 13, 2021)
 
 - Ignore `\pgfmathsetmacro`, `\setmainfont`, and `\theoremstyle`
