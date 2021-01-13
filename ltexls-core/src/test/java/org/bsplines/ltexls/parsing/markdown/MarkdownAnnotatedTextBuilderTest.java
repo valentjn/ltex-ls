@@ -49,6 +49,9 @@ public class MarkdownAnnotatedTextBuilderTest {
     assertPlainText(
         "This is a test: `inline code`.\n\n```\ncode block\n```\n\nThis is another sentence.\n",
         "This is a test: Dummy0.\n\n\n\n\n\nThis is another sentence.\n");
+    assertPlainText(
+        "This is a test: $`E = mc^2`$.\n\n```math\na^2 + b^2 = c^2\n```\n\nThis is another test.\n",
+        "This is a test: Dummy0.\n\n\n\n\n\nThis is another test.\n");
 
     Map<String, String> markdownNodes = new HashMap<>();
     markdownNodes.put("Code", "default");

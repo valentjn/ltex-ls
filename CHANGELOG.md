@@ -10,6 +10,7 @@
 
 ## 9.1.0 (upcoming)
 
+- Add support for [GitLab Flavored Markdown](https://gitlab.com/gitlab-org/gitlab/blob/master/doc/user/markdown.md), especially inline math (e.g., ``$`E = mc^2`$``)
 - Use Flexmark's YAML Front Matter extension to ignore YAML front matter in Markdown instead of own handling
 - Print Flexmark AST of Markdown documents to log when [`ltex.ltex-ls.logLevel`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexltex-lsloglevel) is `"finest"`
 

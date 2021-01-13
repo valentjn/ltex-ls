@@ -7,6 +7,7 @@
 
 package org.bsplines.ltexls.parsing.markdown;
 
+import com.vladsch.flexmark.ext.gitlab.GitLabExtension;
 import com.vladsch.flexmark.ext.yaml.front.matter.YamlFrontMatterExtension;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.test.util.AstCollectingVisitor;
@@ -29,7 +30,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private static final DataHolder parserOptions = new MutableDataSet().set(Parser.EXTENSIONS,
-      Arrays.asList(YamlFrontMatterExtension.create()));
+      Arrays.asList(
+        GitLabExtension.create(),
+        YamlFrontMatterExtension.create()
+      ));
 
   private Parser parser = Parser.builder(parserOptions).build();
 
