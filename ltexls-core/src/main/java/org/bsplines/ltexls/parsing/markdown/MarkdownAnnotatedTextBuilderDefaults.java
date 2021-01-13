@@ -24,6 +24,7 @@ class MarkdownAnnotatedTextBuilderDefaults {
     list.add(new MarkdownNodeSignature("FencedCodeBlock"));
     list.add(new MarkdownNodeSignature("GitLabInlineMath", MarkdownNodeSignature.Action.DUMMY));
     list.add(new MarkdownNodeSignature("IndentedCodeBlock"));
+    list.add(new MarkdownNodeSignature("TableSeparator"));
 
     return list;
   }

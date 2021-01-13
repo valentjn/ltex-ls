@@ -8,6 +8,7 @@
 package org.bsplines.ltexls.parsing.markdown;
 
 import com.vladsch.flexmark.ext.gitlab.GitLabExtension;
+import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.ext.yaml.front.matter.YamlFrontMatterExtension;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.test.util.AstCollectingVisitor;
@@ -32,6 +33,7 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private static final DataHolder parserOptions = new MutableDataSet().set(Parser.EXTENSIONS,
       Arrays.asList(
         GitLabExtension.create(),
+        TablesExtension.create(),
         YamlFrontMatterExtension.create()
       ));
 
@@ -40,6 +42,7 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private String code;
   private int pos;
   private int dummyCounter;
+  private boolean firstCellInTableRow;
   private Stack<String> nodeTypeStack = new Stack<>();
 
   private String language = "en-US";
@@ -148,6 +151,7 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     this.code = document.getChars().toString();
     this.pos = 0;
     this.dummyCounter = 0;
+    this.firstCellInTableRow = false;
     this.nodeTypeStack.clear();
     visitChildren(document);
     if (this.pos < this.code.length()) addMarkup(this.code.length());
@@ -155,6 +159,16 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
 
   private void visit(Node node) {
     String nodeType = node.getClass().getSimpleName();
+
+    if (nodeType.equals("TableRow")) {
+      this.firstCellInTableRow = true;
+    } else if (nodeType.equals("TableCell")) {
+      if (this.firstCellInTableRow) {
+        this.firstCellInTableRow = false;
+      } else {
+        super.addMarkup("", " ");
+      }
+    }
 
     if (isInIgnoredNodeType()) {
       addMarkup(node.getEndOffset());
