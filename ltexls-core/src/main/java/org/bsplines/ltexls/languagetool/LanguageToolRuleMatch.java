@@ -88,7 +88,12 @@ public class LanguageToolRuleMatch {
 
   public boolean isUnknownWordRule(
         @UnknownInitialization(Object.class) LanguageToolRuleMatch this) {
-    return ((this.ruleId != null) && (this.ruleId.startsWith("MORFOLOGIK_")
-        || this.ruleId.startsWith("HUNSPELL_") || this.ruleId.startsWith("GERMAN_SPELLER_")));
+    return ((this.ruleId != null) && (
+        this.ruleId.startsWith("MORFOLOGIK_")
+        || this.ruleId.startsWith("HUNSPELL_")
+        || this.ruleId.startsWith("GERMAN_SPELLER_")
+        || this.ruleId.equals("MUZSKY_ROD_NEZIV_A")
+        || this.ruleId.equals("ZENSKY_ROD_A")
+        || this.ruleId.equals("STREDNY_ROD_A")));
   }
 }
