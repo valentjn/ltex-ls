@@ -9,6 +9,7 @@ package org.bsplines.ltexls.languagetool;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 import org.bsplines.ltexls.server.LtexTextDocumentItem;
 import org.bsplines.ltexls.tools.Tools;
@@ -19,6 +20,8 @@ import org.eclipse.lsp4j.Range;
 import org.languagetool.rules.RuleMatch;
 
 public class LanguageToolRuleMatch {
+  private static final Pattern twoOrMoreSpacesPattern = Pattern.compile("[ \n]{2,}");
+
   private @MonotonicNonNull String ruleId;
   private @MonotonicNonNull String sentence;
   private int fromPos;
@@ -47,6 +50,8 @@ public class LanguageToolRuleMatch {
       String unknownWord = annotatedTextFragment.getSubstringOfPlainText(fromPos, toPos);
       this.message = "'" + unknownWord + "': " + this.message;
     }
+
+    this.message = twoOrMoreSpacesPattern.matcher(message).replaceAll(" ").trim();
   }
 
   public @Nullable String getRuleId() {
