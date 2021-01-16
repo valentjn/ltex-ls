@@ -92,7 +92,8 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
 
     while (true) {
       if ((this.pos >= this.code.length()) || (this.pos >= newPos)) break;
-      int curPos = this.code.indexOf('\r', this.pos);
+      int curPos = this.code.indexOf("\r\n", this.pos);
+      if (curPos != -1) curPos += 1;
 
       if ((curPos == -1) || (curPos >= newPos)) {
         curPos = this.code.indexOf('\n', this.pos);
