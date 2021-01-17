@@ -31,7 +31,7 @@ public class LatexCommandSignature {
   }
 
   private static final Pattern genericCommandPattern = Pattern.compile(
-      "^(\\\\.+?)(\\{\\}|\\[\\]|\\(\\))*$");
+      "^([\\\\@].+?)(\\{\\}|\\[\\]|\\(\\))*$");
   private static final Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\])|(\\(\\)))");
   private static final Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
 
