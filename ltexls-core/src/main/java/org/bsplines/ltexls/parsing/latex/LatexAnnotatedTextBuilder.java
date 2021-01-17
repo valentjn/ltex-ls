@@ -850,48 +850,44 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
 
             break;
           }
-          case '-': {
-            String emDash = matchFromPosition(emDashPattern);
+          default: {
+            if (this.curChar == '-') {
+              String emDash = matchFromPosition(emDashPattern);
 
-            if (isTextMode(this.curMode)) {
-              if (!emDash.isEmpty()) {
-                addMarkup(emDash, "\u2014");
+              if (isTextMode(this.curMode)) {
+                if (!emDash.isEmpty()) {
+                  addMarkup(emDash, "\u2014");
+                  break;
+                } else {
+                  String enDash = matchFromPosition(enDashPattern);
+
+                  if (!enDash.isEmpty()) {
+                    addMarkup(enDash, "\u2013");
+                    break;
+                  }
+                }
+              }
+            } else if (this.curChar == '[') {
+              String length = matchFromPosition(lengthInBracketPattern);
+
+              if (!length.isEmpty()) {
+                this.isMathCharTrivial = true;
+                this.preserveDummyLast = true;
+                addMarkup(length);
                 break;
-              } else {
-                String enDash = matchFromPosition(enDashPattern);
+              }
+            } else if (this.curChar == '<') {
+              if (this.codeLanguageId.equals("rsweave")) {
+                String rsweaveBegin = matchFromPosition(rsweaveBeginPattern);
 
-                if (!enDash.isEmpty()) {
-                  addMarkup(enDash, "\u2013");
+                if (!rsweaveBegin.isEmpty()) {
+                  this.modeStack.push(Mode.RSWEAVE);
+                  addMarkup(rsweaveBegin);
                   break;
                 }
               }
             }
-          }
-          // fall through
-          case '[': {
-            String length = matchFromPosition(lengthInBracketPattern);
 
-            if (!length.isEmpty()) {
-              this.isMathCharTrivial = true;
-              this.preserveDummyLast = true;
-              addMarkup(length);
-              break;
-            }
-          }
-          // fall through
-          case '<': {
-            if (this.codeLanguageId.equals("rsweave")) {
-              String rsweaveBegin = matchFromPosition(rsweaveBeginPattern);
-
-              if (!rsweaveBegin.isEmpty()) {
-                this.modeStack.push(Mode.RSWEAVE);
-                addMarkup(rsweaveBegin);
-                break;
-              }
-            }
-          }
-          // fall through
-          default: {
             if (isTextMode(this.curMode)) {
               addText(this.curString);
               if (isPunctuation(this.curChar)) this.lastPunctuation = this.curString;
