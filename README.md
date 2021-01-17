@@ -12,7 +12,7 @@ LT<sub>E</sub>X LS implements a language server according to the [Language Serve
 
 Simply put, you start the language server (either locally or remotely), you send the language server your L<sup>A</sup>T<sub>E</sub>X or Markdown document, and it will respond with a list of the grammar and spelling errors in it (if there are any). To communicate with a language server, you have to implement a language client according to the Language Server Protocol.
 
-The reference client of LT<sub>E</sub>X LS is the [LT<sub>E</sub>X extension for Visual Studio Code (vscode-ltex)](https://github.com/valentjn/vscode-ltex), whose development LT<sub>E</sub>X LS follows closely.
+The reference client of LT<sub>E</sub>X LS is the [LT<sub>E</sub>X extension for Visual Studio Code (vscode-ltex)](https://valentjn.github.io/vscode-ltex), whose development LT<sub>E</sub>X LS follows closely.
 
 Find more information about LT<sub>E</sub>X at the [website of vscode-ltex](https://valentjn.github.io/vscode-ltex).
 
