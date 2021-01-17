@@ -111,7 +111,7 @@ public class Settings {
     return list;
   }
 
-  private static Map<String, String> convertJsonObjectToMap(JsonObject object) {
+  private static Map<String, String> convertJsonObjectToMapOfStrings(JsonObject object) {
     Map<String, String> map = new HashMap<>();
 
     for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
@@ -267,13 +267,9 @@ public class Settings {
     }
 
     this.latexCommands = new HashMap<>();
-    this.latexEnvironments = new HashMap<>();
-    this.markdownNodes = new HashMap<>();
 
     // fixes false-positive argument.type.incompatible warnings
     Map<String, String> latexCommands = this.latexCommands;
-    Map<String, String> latexEnvironments = this.latexEnvironments;
-    Map<String, String> markdownNodes = this.markdownNodes;
 
     // ltex.commands.ignore is deprecated since 8.0.0
     try {
@@ -294,11 +290,16 @@ public class Settings {
     }
 
     try {
-      latexCommands.putAll(convertJsonObjectToMap(
+      latexCommands.putAll(convertJsonObjectToMapOfStrings(
           getSettingFromJson(jsonSettings, "latex.commands").getAsJsonObject()));
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       // setting not set
     }
+
+    this.latexEnvironments = new HashMap<>();
+
+    // fixes false-positive argument.type.incompatible warnings
+    Map<String, String> latexEnvironments = this.latexEnvironments;
 
     // ltex.environments.ignore is deprecated since 8.0.0
     try {
@@ -310,11 +311,16 @@ public class Settings {
     }
 
     try {
-      latexEnvironments.putAll(convertJsonObjectToMap(
+      latexEnvironments.putAll(convertJsonObjectToMapOfStrings(
           getSettingFromJson(jsonSettings, "latex.environments").getAsJsonObject()));
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       // setting not set
     }
+
+    this.markdownNodes = new HashMap<>();
+
+    // fixes false-positive argument.type.incompatible warnings
+    Map<String, String> markdownNodes = this.markdownNodes;
 
     // ltex.markdown.ignore is deprecated since 8.0.0
     try {
@@ -335,7 +341,7 @@ public class Settings {
     }
 
     try {
-      markdownNodes.putAll(convertJsonObjectToMap(
+      markdownNodes.putAll(convertJsonObjectToMapOfStrings(
           getSettingFromJson(jsonSettings, "markdown.nodes").getAsJsonObject()));
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       // setting not set
