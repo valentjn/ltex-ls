@@ -23,7 +23,6 @@ import org.bsplines.ltexls.parsing.RegexCodeFragmentizer;
 import org.bsplines.ltexls.settings.Settings;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.eclipse.xtext.xbase.lib.Pair;
 
 public class LatexFragmentizer extends CodeFragmentizer {
   private static final Pattern commentPattern = Pattern.compile(
@@ -267,13 +266,13 @@ public class LatexFragmentizer extends CodeFragmentizer {
         String packageName = match.getArgumentContents(1);
         if (!packageName.equals("babel")) continue;
 
-        List<Pair<String, String>> packageOptions = LatexPackageOptionsParser.parse(
+        List<LatexPackageOption> packageOptions = LatexPackageOptionsParser.parse(
             match.getArgumentContents(0));
         @Nullable String babelLanguage = null;
 
-        for (Pair<String, String> packageOption : packageOptions) {
-          String key = packageOption.getKey();
-          if (babelLanguageMap.containsKey(key)) babelLanguage = key;
+        for (LatexPackageOption packageOption : packageOptions) {
+          String keyAsPlainText = packageOption.getKeyAsPlainText();
+          if (babelLanguageMap.containsKey(keyAsPlainText)) babelLanguage = keyAsPlainText;
         }
 
         if (babelLanguage == null) continue;
