@@ -26,11 +26,21 @@ public class LatexCommandSignatureMatcher {
   private @Nullable Set<String> ignoreCommandPrototypes;
 
   public LatexCommandSignatureMatcher(LatexCommandSignature commandSignature) {
-    this(Collections.singletonList(commandSignature));
+    this(commandSignature, true);
+  }
+
+  public LatexCommandSignatureMatcher(LatexCommandSignature commandSignature,
+        boolean escapeCommandName) {
+    this(Collections.singletonList(commandSignature), escapeCommandName);
   }
 
   public LatexCommandSignatureMatcher(
         Collection<? extends LatexCommandSignature> commandSignatures) {
+    this(commandSignatures, true);
+  }
+
+  public LatexCommandSignatureMatcher(
+        Collection<? extends LatexCommandSignature> commandSignatures, boolean escapeCommandNames) {
     this.commandSignatures = new ArrayList<>(commandSignatures);
 
     Set<String> commandNames = new HashSet<>();
@@ -45,7 +55,8 @@ public class LatexCommandSignatureMatcher {
         commandPatternStringBuilder.append("|");
       }
 
-      commandPatternStringBuilder.append(Pattern.quote(commandName));
+      commandPatternStringBuilder.append(
+          escapeCommandNames ? Pattern.quote(commandName) : commandName);
     }
 
     this.commandPattern = Pattern.compile(commandPatternStringBuilder.toString());

@@ -44,22 +44,20 @@ public class LatexCommandSignature {
   private Pattern commandPattern;
 
   public LatexCommandSignature(String commandPrototype) {
-    this(commandPrototype, Action.IGNORE, DummyGenerator.getDefault());
+    this(commandPrototype, Action.IGNORE);
   }
 
   public LatexCommandSignature(String commandPrototype, Action action) {
     this(commandPrototype, action, DummyGenerator.getDefault());
   }
 
-  /**
-   * Constructor.
-   *
-   * @param commandPrototype prototype of the command including backslash and empty arguments
-   * @param action action to perform when the command is matched
-   * @param dummyGenerator dummy generator, can be used to generate plural dummies
-   */
   public LatexCommandSignature(String commandPrototype, Action action,
         DummyGenerator dummyGenerator) {
+    this(commandPrototype, action, dummyGenerator, true);
+  }
+
+  public LatexCommandSignature(String commandPrototype, Action action,
+        DummyGenerator dummyGenerator, boolean escapeCommandName) {
     this.dummyGenerator = dummyGenerator;
     this.commandPrototype = commandPrototype;
     Matcher commandMatcher = genericCommandPattern.matcher(commandPrototype);
@@ -97,7 +95,8 @@ public class LatexCommandSignature {
     }
 
     this.action = action;
-    this.commandPattern = Pattern.compile("^" + Pattern.quote(this.name));
+    this.commandPattern = Pattern.compile(
+        "^" + (escapeCommandName ? Pattern.quote(this.name) : this.name));
   }
 
   private static String matchPatternFromPosition(String code, int fromPos, Pattern pattern) {
