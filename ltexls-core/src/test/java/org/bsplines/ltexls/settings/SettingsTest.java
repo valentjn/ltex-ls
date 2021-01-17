@@ -105,6 +105,11 @@ public class SettingsTest {
         settings.getEnabledRules());
     settings2 = compareSettings(settings, settings2, true);
 
+    settings = settings.withBibtexFields(Collections.singletonMap("bibtexField", false));
+    Assertions.assertEquals(Collections.singletonMap("bibtexField", false),
+        settings.getBibtexFields());
+    settings2 = compareSettings(settings, settings2, false);
+
     settings = settings.withLatexCommands(Collections.singletonMap("latexCommand", "ignore"));
     Assertions.assertEquals(Collections.singletonMap("latexCommand", "ignore"),
         settings.getLatexCommands());

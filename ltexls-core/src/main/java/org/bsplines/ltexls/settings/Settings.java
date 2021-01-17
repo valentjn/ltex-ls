@@ -32,6 +32,7 @@ public class Settings {
   private @Nullable Map<String, Set<String>> disabledRules = null;
   private @Nullable Map<String, Set<String>> enabledRules = null;
   private @Nullable Map<String, Set<HiddenFalsePositive>> hiddenFalsePositives = null;
+  private @Nullable Map<String, Boolean> bibtexFields = null;
   private @Nullable Map<String, String> latexCommands = null;
   private @Nullable Map<String, String> latexEnvironments = null;
   private @Nullable Map<String, String> markdownNodes = null;
@@ -61,6 +62,8 @@ public class Settings {
     this.dictionary = ((obj.dictionary == null) ? null : copyMapOfSets(obj.dictionary));
     this.disabledRules = ((obj.disabledRules == null) ? null : copyMapOfSets(obj.disabledRules));
     this.enabledRules = ((obj.enabledRules == null) ? null : copyMapOfSets(obj.enabledRules));
+    this.bibtexFields = ((obj.bibtexFields == null) ? null
+        : new HashMap<>(obj.bibtexFields));
     this.latexCommands = ((obj.latexCommands == null) ? null
         : new HashMap<>(obj.latexCommands));
     this.latexEnvironments = ((obj.latexEnvironments == null) ? null
@@ -116,6 +119,16 @@ public class Settings {
 
     for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
       map.put(entry.getKey(), entry.getValue().getAsString());
+    }
+
+    return map;
+  }
+
+  private static Map<String, Boolean> convertJsonObjectToMapOfBooleans(JsonObject object) {
+    Map<String, Boolean> map = new HashMap<>();
+
+    for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+      map.put(entry.getKey(), entry.getValue().getAsBoolean());
     }
 
     return map;
@@ -262,6 +275,18 @@ public class Settings {
               HiddenFalsePositive.fromJsonString(hiddenFalsePositiveJsonString));
         }
       }
+    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
+      // setting not set
+    }
+
+    this.bibtexFields = new HashMap<>();
+
+    // fixes false-positive argument.type.incompatible warnings
+    Map<String, Boolean> bibtexFields = this.bibtexFields;
+
+    try {
+      bibtexFields.putAll(convertJsonObjectToMapOfBooleans(
+          getSettingFromJson(jsonSettings, "bibtex.fields").getAsJsonObject()));
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       // setting not set
     }
@@ -478,6 +503,11 @@ public class Settings {
       return false;
     }
 
+    if ((this.bibtexFields == null) ? (other.bibtexFields != null) :
+          ((other.bibtexFields == null) || !this.bibtexFields.equals(other.bibtexFields))) {
+      return false;
+    }
+
     if ((this.latexCommands == null) ? (other.latexCommands != null) :
           ((other.latexCommands == null) || !this.latexCommands.equals(other.latexCommands))) {
       return false;
@@ -626,6 +656,7 @@ public class Settings {
     hash = 53 * hash + mapOfSetsHashCode(this.disabledRules, this.languageShortCode);
     hash = 53 * hash + mapOfSetsHashCode(this.enabledRules, this.languageShortCode);
     hash = 53 * hash + mapOfSetsHashCode(this.hiddenFalsePositives, this.languageShortCode);
+    hash = 53 * hash + ((this.bibtexFields != null) ? this.bibtexFields.hashCode() : 0);
     hash = 53 * hash + ((this.latexCommands != null) ? this.latexCommands.hashCode() : 0);
     hash = 53 * hash + ((this.latexEnvironments != null) ? this.latexEnvironments.hashCode() : 0);
     hash = 53 * hash + ((this.markdownNodes != null) ? this.markdownNodes.hashCode() : 0);
@@ -686,6 +717,11 @@ public class Settings {
   public Set<HiddenFalsePositive> getHiddenFalsePositives() {
     return Collections.unmodifiableSet(getDefault(
         this.hiddenFalsePositives, getLanguageShortCode(), Collections.emptySet()));
+  }
+
+  public Map<String, Boolean> getBibtexFields() {
+    return Collections.unmodifiableMap(
+        getDefault(this.bibtexFields, Collections.emptyMap()));
   }
 
   public Map<String, String> getLatexCommands() {
@@ -788,6 +824,12 @@ public class Settings {
     Settings obj = new Settings(this);
     if (obj.hiddenFalsePositives == null) obj.hiddenFalsePositives = new HashMap<>();
     obj.hiddenFalsePositives.put(getLanguageShortCode(), new HashSet<>(hiddenFalsePositives));
+    return obj;
+  }
+
+  public Settings withBibtexFields(Map<String, Boolean> bibtexFields) {
+    Settings obj = new Settings(this);
+    obj.bibtexFields = new HashMap<>(bibtexFields);
     return obj;
   }
 
