@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 public class HiddenFalsePositiveTest {
   @Test
-  public void doTest() {
+  public void test() {
     HiddenFalsePositive pair = new HiddenFalsePositive("a", "b");
     Assertions.assertEquals(pair, new HiddenFalsePositive(pair));
     Assertions.assertEquals(pair, HiddenFalsePositive.fromJsonString(

@@ -97,7 +97,7 @@ public class LtexLanguageServerLauncherTest {
   }
 
   @Test
-  public void doTest() throws IOException, InterruptedException {
+  public void test() throws IOException, InterruptedException {
     @Nullable String log = Tools.readFile(
         Paths.get("src", "test", "resources", "LtexLanguageServerTestLog.txt"));
     Assertions.assertNotNull(NullnessUtil.castNonNull(log));

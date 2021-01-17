@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 public class LtexWorkspaceServiceTest {
   @Test
-  public void doTest() {
+  public void test() {
     LtexLanguageServer server = new LtexLanguageServer();
     LtexWorkspaceService service = new LtexWorkspaceService(server);
     Assertions.assertDoesNotThrow(() -> service.symbol(new WorkspaceSymbolParams()));

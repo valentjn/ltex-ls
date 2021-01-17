@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 
 public class LtexTextDocumentServiceTest {
   @Test
-  public void doTest() {
+  public void test() {
     LtexLanguageServer server = new LtexLanguageServer();
     LtexTextDocumentService service = new LtexTextDocumentService(server);
 
