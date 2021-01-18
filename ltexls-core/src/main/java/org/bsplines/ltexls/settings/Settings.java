@@ -24,7 +24,7 @@ import org.eclipse.lsp4j.DiagnosticSeverity;
 
 public class Settings {
   private static final Set<String> defaultEnabled =
-      new HashSet<>(Arrays.asList("markdown", "latex", "rsweave"));
+      new HashSet<>(Arrays.asList("bibtex", "latex", "markdown", "rsweave"));
 
   private @Nullable Set<String> enabled = null;
   private @Nullable String languageShortCode = null;

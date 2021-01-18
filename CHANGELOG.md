@@ -10,6 +10,7 @@
 
 ## 9.1.0 (upcoming)
 
+- Add support for BibT<sub>E</sub>X files (language code `bibtex`, fixes [vscode-ltex#211](https://github.com/valentjn/vscode-ltex/issues/211))
 - Add setting [`ltex.bibtex.fields`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexbibtexfields) to control which BibT<sub>E</sub>X fields should be checked
 - Add support for [GitLab Flavored Markdown](https://gitlab.com/gitlab-org/gitlab/blob/master/doc/user/markdown.md), especially inline math (e.g., ``$`E = mc^2`$``)
 - Add support for Markdown tables as in [GitHub Flavored Markdown](https://github.github.com/gfm/#tables-extension-)

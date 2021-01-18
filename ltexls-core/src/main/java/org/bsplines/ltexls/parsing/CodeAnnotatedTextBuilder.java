@@ -23,6 +23,8 @@ public abstract class CodeAnnotatedTextBuilder extends AnnotatedTextBuilder {
       new HashMap<>();
 
   static {
+    constructorMap.put("bibtex", (String codeLanguageId) ->
+        new LatexAnnotatedTextBuilder(codeLanguageId));
     constructorMap.put("latex", (String codeLanguageId) ->
         new LatexAnnotatedTextBuilder(codeLanguageId));
     constructorMap.put("markdown", (String codeLanguageId) ->

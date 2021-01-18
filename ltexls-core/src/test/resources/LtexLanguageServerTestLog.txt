@@ -294,8 +294,9 @@ Params: {
     "settings": {
         "ltex": {
             "enabled": [
-                "markdown",
+                "bibtex",
                 "latex",
+                "markdown",
                 "rsweave"
             ],
             "language": "en-US",
@@ -402,8 +403,9 @@ Params: {
 Result: [
     {
         "enabled": [
-            "markdown",
+            "bibtex",
             "latex",
+            "markdown",
             "rsweave"
         ],
         "language": "en-US",
@@ -549,8 +551,9 @@ Params: {
 Result: [
     {
         "enabled": [
-            "markdown",
+            "bibtex",
             "latex",
+            "markdown",
             "rsweave"
         ],
         "language": "en-US",
@@ -1204,8 +1207,9 @@ Params: {
 Result: [
     {
         "enabled": [
-            "markdown",
+            "bibtex",
             "latex",
+            "markdown",
             "rsweave"
         ],
         "language": "en-US",
