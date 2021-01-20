@@ -353,7 +353,22 @@ class LatexAnnotatedTextBuilderDefaults {
         LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\GenericWarning{}{}"));
     list.add(new LatexCommandSignature("\\geometry{}"));
+    list.add(new LatexCommandSignature("\\gls{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\Gls{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\glsaddstoragekey{}{}{}"));
+    list.add(new LatexCommandSignature("\\glsentryfull{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\glsentrylong{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\glsentryshort{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\glsentrytext{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\glsfmtshort{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\glspl{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\Glspl{}", LatexCommandSignature.Action.DUMMY,
+        DummyGenerator.getDefault(true)));
+    list.add(new LatexCommandSignature("\\glssymbol{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\GlsXtrLoadResources[]"));
+    list.add(new LatexCommandSignature("\\glsxtrnewsymbol{}{}"));
+    list.add(new LatexCommandSignature("\\glsxtrnewsymbol[]{}{}"));
     list.add(new LatexCommandSignature("\\graphicspath{}"));
     list.add(new LatexCommandSignature("\\href{}{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\hyperref[]"));
@@ -415,11 +430,17 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\lettrine{}{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\lettrine[]{}{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\linespread{}"));
+    list.add(new LatexCommandSignature("\\loadglsentries{}"));
+    list.add(new LatexCommandSignature("\\longnewglossaryentry{}{}"));
     list.add(new LatexCommandSignature("\\luadirect{}"));
     list.add(new LatexCommandSignature("\\luaexec{}"));
     list.add(new LatexCommandSignature("\\mdfdefinestyle{}{}"));
     list.add(new LatexCommandSignature("\\multicolumn{}{}"));
     list.add(new LatexCommandSignature("\\multirow{}{}"));
+    list.add(new LatexCommandSignature("\\newabbreviation{}{}"));
+    list.add(new LatexCommandSignature("\\newabbreviation[]{}{}"));
+    list.add(new LatexCommandSignature("\\newacronym{}{}"));
+    list.add(new LatexCommandSignature("\\newacronym[]{}{}"));
     list.add(new LatexCommandSignature("\\newboolean{}"));
     list.add(new LatexCommandSignature("\\newcolumntype{}{}"));
     list.add(new LatexCommandSignature("\\newcommand{}{}"));
@@ -436,6 +457,9 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\newfloat{}{}{}"));
     list.add(new LatexCommandSignature("\\newfloat{}{}{}[]"));
     list.add(new LatexCommandSignature("\\newgeometry{}"));
+    list.add(new LatexCommandSignature("\\newglossary{}{}{}"));
+    list.add(new LatexCommandSignature("\\newglossary[]{}{}{}"));
+    list.add(new LatexCommandSignature("\\newglossary*{}"));
     list.add(new LatexCommandSignature("\\newglossaryentry{}{}"));
     list.add(new LatexCommandSignature("\\newglossarystyle{}{}"));
     list.add(new LatexCommandSignature("\\newrefcontext[]"));
@@ -466,12 +490,11 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\pgfdeclaredecoration{}{}{}"));
     list.add(new LatexCommandSignature("\\pgfmathsetmacro{}{}"));
     list.add(new LatexCommandSignature("\\pgfmathsetseed{}"));
-    list.add(new LatexCommandSignature("\\printacronyms"));
     list.add(new LatexCommandSignature("\\printacronyms[]"));
-    list.add(new LatexCommandSignature("\\printbibliography"));
     list.add(new LatexCommandSignature("\\printbibliography[]"));
-    list.add(new LatexCommandSignature("\\printglossary"));
     list.add(new LatexCommandSignature("\\printglossary[]"));
+    list.add(new LatexCommandSignature("\\printnoidxglossary[]"));
+    list.add(new LatexCommandSignature("\\printunsrtglossary[]"));
     list.add(new LatexCommandSignature("\\providecommand{}{}"));
     list.add(new LatexCommandSignature("\\providecommand{}[]{}"));
     list.add(new LatexCommandSignature("\\providecommand*{}{}"));
@@ -499,6 +522,9 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\RequirePackage{}"));
     list.add(new LatexCommandSignature("\\scalebox{}"));
     list.add(new LatexCommandSignature("\\selectlanguage{}"));
+    list.add(new LatexCommandSignature("\\setabbreviationstyle{}"));
+    list.add(new LatexCommandSignature("\\setabbreviationstyle[]{}"));
+    list.add(new LatexCommandSignature("\\setacronymstyle{}"));
     list.add(new LatexCommandSignature("\\setboolean{}"));
     list.add(new LatexCommandSignature("\\setcopyright{}"));
     list.add(new LatexCommandSignature("\\setcounter{}{}"));

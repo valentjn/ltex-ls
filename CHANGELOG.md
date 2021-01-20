@@ -14,6 +14,7 @@
 - Add setting [`ltex.bibtex.fields`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexbibtexfields) to control which BibT<sub>E</sub>X fields should be checked
 - Add support for [GitLab Flavored Markdown](https://gitlab.com/gitlab-org/gitlab/blob/master/doc/user/markdown.md), especially inline math (e.g., ``$`E = mc^2`$``, see [vscode-ltex#210](https://github.com/valentjn/vscode-ltex/issues/210))
 - Add support for Markdown tables as in [GitHub Flavored Markdown](https://github.github.com/gfm/#tables-extension-) (fixes [vscode-ltex#218](https://github.com/valentjn/vscode-ltex/issues/218))
+- Add support for more commands of the `glossaries` L<sup>A</sup>T<sub>E</sub>X package
 - Enable `Add to dictionary` quick fix for Slovak rule IDs `MUZSKY_ROD_NEZIV_A`, `ZENSKY_ROD_A`, and `STREDNY_ROD_A` (fixes [vscode-ltex#221](https://github.com/valentjn/vscode-ltex/issues/221))
 - Remove superfluous spaces in messages of diagnostics
 - Fix handling of `\r\n` (Windows) line terminators in Markdown
