@@ -8,7 +8,7 @@
 
 # Changelog
 
-## 9.1.0 (upcoming)
+## 9.1.0 (January 24, 2021)
 
 - Add support for BibT<sub>E</sub>X files (language code `bibtex`, fixes [vscode-ltex#211](https://github.com/valentjn/vscode-ltex/issues/211))
 - Add setting [`ltex.bibtex.fields`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexbibtexfields) to control which BibT<sub>E</sub>X fields should be checked
