@@ -13,6 +13,7 @@
 - Fix false positives for words added by `Add to dictionary` for Slovak rule IDs `MUZSKY_ROD_NEZIV_A`, `ZENSKY_ROD_A`, and `STREDNY_ROD_A` (fixes [vscode-ltex#221](https://github.com/valentjn/vscode-ltex/issues/221))
 - Fix BibT<sub>E</sub>X field `seealso` not ignored, ignore `category` and `parent` (see [vscode-ltex#211](https://github.com/valentjn/vscode-ltex/issues/211))
 - Disable `UPPERCASE_SENTENCE_START` in BibT<sub>E</sub>X files (see [vscode-ltex#211](https://github.com/valentjn/vscode-ltex/issues/211))
+- Move rule ID to the end of diagnostic messages as VS Code truncates the messages if the Problems panel is narrow (fixes [vscode-ltex#233](https://github.com/valentjn/vscode-ltex/issues/233))
 
 ## 9.1.0 (January 24, 2021)
 

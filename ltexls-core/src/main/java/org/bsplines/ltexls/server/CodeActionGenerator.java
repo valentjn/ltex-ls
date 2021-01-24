@@ -64,8 +64,9 @@ public class CodeActionGenerator {
     ret.setRange(new Range(document.convertPosition(match.getFromPos()),
         document.convertPosition(match.getToPos())));
     ret.setSeverity(this.settingsManager.getSettings().getDiagnosticSeverity());
-    ret.setSource("LTeX - " + match.getRuleId());
-    ret.setMessage(match.getMessage().replaceAll("<suggestion>(.*?)</suggestion>", "'$1'"));
+    ret.setSource("LTeX");
+    ret.setMessage(match.getMessage().replaceAll("<suggestion>(.*?)</suggestion>", "'$1'")
+        + " \u2013 " + match.getRuleId());
     return ret;
   }
 
