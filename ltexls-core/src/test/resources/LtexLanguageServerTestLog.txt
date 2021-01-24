@@ -657,8 +657,8 @@ Params: {
                 }
             },
             "severity": 3,
-            "source": "LTeX - EN_A_VS_AN",
-            "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
+            "source": "LTeX",
+            "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'. – EN_A_VS_AN"
         },
         {
             "range": {
@@ -672,8 +672,8 @@ Params: {
                 }
             },
             "severity": 3,
-            "source": "LTeX - DE_AGREEMENT",
-            "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+            "source": "LTeX",
+            "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad'). – DE_AGREEMENT"
         }
     ]
 }
@@ -707,9 +707,9 @@ Params: {
                         "character": 10
                     }
                 },
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'.",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'. – EN_A_VS_AN",
                 "severity": 3,
-                "source": "LTeX - EN_A_VS_AN"
+                "source": "LTeX"
             }
         ],
         "only": [
@@ -737,8 +737,8 @@ Result: [
                     }
                 },
                 "severity": 3,
-                "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
+                "source": "LTeX",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'. – EN_A_VS_AN"
             }
         ],
         "command": {
@@ -772,8 +772,8 @@ Result: [
                     }
                 },
                 "severity": 3,
-                "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
+                "source": "LTeX",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'. – EN_A_VS_AN"
             }
         ],
         "command": {
@@ -807,8 +807,8 @@ Result: [
                     }
                 },
                 "severity": 3,
-                "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
+                "source": "LTeX",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'. – EN_A_VS_AN"
             }
         ],
         "edit": {
@@ -868,9 +868,9 @@ Params: {
                         "character": 10
                     }
                 },
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'.",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'. – EN_A_VS_AN",
                 "severity": 3,
-                "source": "LTeX - EN_A_VS_AN"
+                "source": "LTeX"
             }
         ]
     }
@@ -895,8 +895,8 @@ Result: [
                     }
                 },
                 "severity": 3,
-                "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
+                "source": "LTeX",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'. – EN_A_VS_AN"
             }
         ],
         "command": {
@@ -930,8 +930,8 @@ Result: [
                     }
                 },
                 "severity": 3,
-                "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
+                "source": "LTeX",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'. – EN_A_VS_AN"
             }
         ],
         "command": {
@@ -965,8 +965,8 @@ Result: [
                     }
                 },
                 "severity": 3,
-                "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
+                "source": "LTeX",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'. – EN_A_VS_AN"
             }
         ],
         "edit": {
@@ -1026,9 +1026,9 @@ Params: {
                         "character": 10
                     }
                 },
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'.",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'. – EN_A_VS_AN",
                 "severity": 3,
-                "source": "LTeX - EN_A_VS_AN"
+                "source": "LTeX"
             }
         ]
     }
@@ -1053,8 +1053,8 @@ Result: [
                     }
                 },
                 "severity": 3,
-                "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
+                "source": "LTeX",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'. – EN_A_VS_AN"
             }
         ],
         "command": {
@@ -1088,8 +1088,8 @@ Result: [
                     }
                 },
                 "severity": 3,
-                "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
+                "source": "LTeX",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'. – EN_A_VS_AN"
             }
         ],
         "command": {
@@ -1123,8 +1123,8 @@ Result: [
                     }
                 },
                 "severity": 3,
-                "source": "LTeX - EN_A_VS_AN",
-                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
+                "source": "LTeX",
+                "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'. – EN_A_VS_AN"
             }
         ],
         "edit": {
@@ -1313,8 +1313,8 @@ Params: {
                 }
             },
             "severity": 3,
-            "source": "LTeX - DE_AGREEMENT",
-            "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
+            "source": "LTeX",
+            "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad'). – DE_AGREEMENT"
         }
     ]
 }
