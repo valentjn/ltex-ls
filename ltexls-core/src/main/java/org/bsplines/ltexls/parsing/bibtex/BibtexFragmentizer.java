@@ -57,6 +57,12 @@ public class BibtexFragmentizer extends CodeFragmentizer {
     for (CodeFragment oldFragment : fragments) {
       String oldFragmentCode = oldFragment.getCode();
       Settings oldFragmentSettings = oldFragment.getSettings();
+
+      Set<String> newFragmentDisabledRules = new HashSet<>(oldFragmentSettings.getDisabledRules());
+      newFragmentDisabledRules.add("UPPERCASE_SENTENCE_START");
+      Settings newFragmentSettings = oldFragmentSettings.withDisabledRules(
+          newFragmentDisabledRules);
+
       bibtexEntryCommandSignatureMatcher.startMatching(oldFragmentCode, Collections.emptySet());
       @Nullable LatexCommandSignatureMatch match = null;
       @Nullable Map<String, Boolean> bibtexFields = null;
@@ -82,7 +88,7 @@ public class BibtexFragmentizer extends CodeFragmentizer {
 
           newFragments.add(new CodeFragment("latex", keyValuePair.getValue(),
               oldFragment.getFromPos() + argumentContentsFromPos + keyValuePair.getValueFromPos(),
-              oldFragmentSettings));
+              newFragmentSettings));
         }
       }
     }
