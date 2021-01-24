@@ -54,9 +54,6 @@ jobs:
         with:
           java-version: "11.0.9"
 
-      - name: "Install Python 2 pip (Workaround github/codeql-action#316)"
-        run: "curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py && python2 get-pip.py"
-
       - name: "Initialize CodeQL"
         uses: "github/codeql-action/init@v1"
 
