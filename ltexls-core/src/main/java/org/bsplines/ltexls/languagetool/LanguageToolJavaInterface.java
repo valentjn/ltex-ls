@@ -39,6 +39,7 @@ import org.languagetool.rules.patterns.AbstractPatternRule;
 import org.xml.sax.SAXException;
 
 public class LanguageToolJavaInterface extends LanguageToolInterface {
+  private Set<String> dictionary;
   private @MonotonicNonNull ResultCache resultCache;
   private @MonotonicNonNull JLanguageTool languageTool;
 
@@ -54,6 +55,8 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
    */
   public LanguageToolJavaInterface(String languageShortCode, String motherTongueShortCode,
         int sentenceCacheSize, Set<String> dictionary) {
+    this.dictionary = dictionary;
+
     if (!Languages.isLanguageSupported(languageShortCode)) {
       Tools.logger.severe(Tools.i18n("notARecognizedLanguage", languageShortCode));
       return;
@@ -157,10 +160,20 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
       return Collections.emptyList();
     }
 
+    String code = annotatedTextFragment.getCodeFragment().getCode();
     List<LanguageToolRuleMatch> result = new ArrayList<>();
 
     for (RuleMatch match : matches) {
-      result.add(new LanguageToolRuleMatch(match, annotatedTextFragment));
+      LanguageToolRuleMatch languageToolRuleMatch =
+          new LanguageToolRuleMatch(match, annotatedTextFragment);
+
+      if (languageToolRuleMatch.isUnknownWordRule()
+            && this.dictionary.contains(code.substring(languageToolRuleMatch.getFromPos(),
+              languageToolRuleMatch.getToPos()))) {
+        continue;
+      }
+
+      result.add(languageToolRuleMatch);
     }
 
     return result;

@@ -235,6 +235,15 @@ public class DocumentCheckerTest {
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
         checkDocument(document, settings);
     Assertions.assertEquals(1, checkingResult.getKey().size());
+
+    document = createDocument("latex", "S pekn\u00e9 inteligentn\u00fdmi dubmi.\n");
+    settings = settings.withLanguageShortCode("sk-SK");
+    checkingResult = checkDocument(document, settings);
+    Assertions.assertEquals(1, checkingResult.getKey().size());
+
+    settings = settings.withDictionary(Collections.singleton("pekn\u00e9"));
+    checkingResult = checkDocument(document, settings);
+    Assertions.assertEquals(0, checkingResult.getKey().size());
   }
 
   @Test
