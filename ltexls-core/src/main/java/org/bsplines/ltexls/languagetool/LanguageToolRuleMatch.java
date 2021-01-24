@@ -51,7 +51,7 @@ public class LanguageToolRuleMatch {
       this.message = "'" + unknownWord + "': " + this.message;
     }
 
-    this.message = twoOrMoreSpacesPattern.matcher(message).replaceAll(" ").trim();
+    this.message = twoOrMoreSpacesPattern.matcher(this.message).replaceAll(" ").trim();
   }
 
   public @Nullable String getRuleId() {
