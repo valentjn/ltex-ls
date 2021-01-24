@@ -17,8 +17,33 @@ class BibtexFragmentizerDefaults {
   private static Map<String, Boolean> createDefaultBibtexFields() {
     Map<String, Boolean> bibtexFields = new HashMap<>();
 
+    bibtexFields.put("author", false);
+    bibtexFields.put("date", false);
+    bibtexFields.put("doi", false);
+    bibtexFields.put("edition", false);
+    bibtexFields.put("editor", false);
+    bibtexFields.put("eid", false);
+    bibtexFields.put("file", false);
+    bibtexFields.put("isbn", false);
+    bibtexFields.put("keywords", false);
+    bibtexFields.put("month", false);
+    bibtexFields.put("note", false);
+    bibtexFields.put("number", false);
+    bibtexFields.put("options", false);
+    bibtexFields.put("origlanguage", false);
+    bibtexFields.put("owner", false);
+    bibtexFields.put("pages", false);
+    bibtexFields.put("publisher", false);
+    bibtexFields.put("pubstate", false);
     bibtexFields.put("see", false);
     bibtexFields.put("see-also", false);
+    bibtexFields.put("shorthand", false);
+    bibtexFields.put("timestamp", false);
+    bibtexFields.put("translator", false);
+    bibtexFields.put("url", false);
+    bibtexFields.put("version", false);
+    bibtexFields.put("volume", false);
+    bibtexFields.put("year", false);
 
     return bibtexFields;
   }
