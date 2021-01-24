@@ -18,6 +18,7 @@ class BibtexFragmentizerDefaults {
     Map<String, Boolean> bibtexFields = new HashMap<>();
 
     bibtexFields.put("author", false);
+    bibtexFields.put("category", false);
     bibtexFields.put("date", false);
     bibtexFields.put("doi", false);
     bibtexFields.put("edition", false);
@@ -33,10 +34,11 @@ class BibtexFragmentizerDefaults {
     bibtexFields.put("origlanguage", false);
     bibtexFields.put("owner", false);
     bibtexFields.put("pages", false);
+    bibtexFields.put("parent", false);
     bibtexFields.put("publisher", false);
     bibtexFields.put("pubstate", false);
     bibtexFields.put("see", false);
-    bibtexFields.put("see-also", false);
+    bibtexFields.put("seealso", false);
     bibtexFields.put("shorthand", false);
     bibtexFields.put("timestamp", false);
     bibtexFields.put("translator", false);

@@ -11,6 +11,7 @@
 ## 9.1.1 (upcoming)
 
 - Fix false positives for words added by `Add to dictionary` for Slovak rule IDs `MUZSKY_ROD_NEZIV_A`, `ZENSKY_ROD_A`, and `STREDNY_ROD_A` (fixes [vscode-ltex#221](https://github.com/valentjn/vscode-ltex/issues/221))
+- Fix BibT<sub>E</sub>X field `seealso` not ignored, ignore `category` and `parent` (see [vscode-ltex#211](https://github.com/valentjn/vscode-ltex/issues/211))
 
 ## 9.1.0 (January 24, 2021)
 
