@@ -507,7 +507,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
               addMarkup(command);
 
               String argument = matchFromPosition(argumentPattern);
-              String environmentName = argument.substring(1, argument.length() - 1);
+              String environmentName = ((argument.length() >= 2)
+                  ? argument.substring(1, argument.length() - 1) : "");
               String interpretAs = "";
 
               if (mathEnvironments.contains(environmentName)) {
