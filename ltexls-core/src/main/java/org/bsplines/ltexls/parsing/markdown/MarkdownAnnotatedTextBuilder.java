@@ -34,7 +34,8 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
       Arrays.asList(
         GitLabExtension.create(),
         TablesExtension.create(),
-        YamlFrontMatterExtension.create()
+        YamlFrontMatterExtension.create(),
+        LtexMarkdownExtension.create()
       ));
 
   private Parser parser = Parser.builder(parserOptions).build();

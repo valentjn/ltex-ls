@@ -56,6 +56,21 @@ public class MarkdownAnnotatedTextBuilderTest {
         "This is a test: $`E = mc^2`$.\n\n```math\na^2 + b^2 = c^2\n```\n\nThis is another test.\n",
         "This is a test: Dummy0.\n\n\n\n\n\nThis is another test.\n");
     assertPlainText(
+        "This is a test: $E = mc^2\n"
+        + "$.\n"
+        + "The book is $3, not $5.\n"
+        + "\n"
+        + "Interesting: $1 \\$2 3$.\n"
+        + "\n"
+        + "$$\n"
+        + "a^2 + b^2 = c^2\n"
+        + "\n"
+        + "$$\n"
+        + "\n"
+        + "This is another test.\n",
+        "This is a test: Dummy0. The book is $3, not $5.\n\nInteresting: Dummy1.\n\n\n\n\n\n\n"
+        + "This is another test.\n");
+    assertPlainText(
         "This is a test.\n"
         + "\n"
         + "| First Column | Second Column |\n"
