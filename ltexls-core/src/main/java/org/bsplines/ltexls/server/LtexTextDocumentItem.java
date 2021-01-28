@@ -8,6 +8,7 @@
 package org.bsplines.ltexls.server;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,7 +39,6 @@ public class LtexTextDocumentItem extends TextDocumentItem {
   private List<Integer> lineStartPosList;
   private @Nullable Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult;
   private @Nullable List<Diagnostic> diagnostics;
-  private ProgressTokenGenerator progressTokenGenerator;
   private @Nullable Position caretPosition;
   private Instant lastCaretChangeInstant;
 
@@ -49,7 +49,6 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     this.lineStartPosList = new ArrayList<>();
     this.checkingResult = null;
     this.diagnostics = null;
-    this.progressTokenGenerator = new ProgressTokenGenerator();
     this.caretPosition = null;
     this.lastCaretChangeInstant = Instant.now();
     reinitializeLineStartPosList(text, this.lineStartPosList);
@@ -406,8 +405,11 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     }
 
     String uri = getUri();
-    Either<String, Number> progressToken =
-        this.progressTokenGenerator.generate(uri, "checkDocument");
+    JsonObject progressJsonToken = new JsonObject();
+    progressJsonToken.addProperty("uri", uri);
+    progressJsonToken.addProperty("operation", "checkDocument");
+    progressJsonToken.addProperty("uuid", Tools.getRandomUuid());
+    Either<String, Number> progressToken = Either.forLeft(progressJsonToken.toString());
 
     final CompletableFuture<@Nullable Either<String, Number>> workDoneProgressCreateFuture =
         ((this.languageServer.isClientSupportingWorkDoneProgress())

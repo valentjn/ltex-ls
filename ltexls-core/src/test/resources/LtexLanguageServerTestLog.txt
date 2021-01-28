@@ -368,7 +368,7 @@ Params: {
 
 [Trace - 12:45:12 PM] Received request 'window/workDoneProgress/create - (1)'.
 Params: {
-    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":0}"
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"uuid\":\"ba419d35-0dfe-8af7-aee7-bbe10c45c028\"}"
 }
 
 
@@ -378,7 +378,7 @@ Result:
 
 [Trace - 12:45:12 PM] Received notification '$/progress'.
 Params: {
-    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":0}",
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"uuid\":\"ba419d35-0dfe-8af7-aee7-bbe10c45c028\"}",
     "value": {
         "kind": "begin",
         "title": "Checking document",
@@ -486,7 +486,7 @@ Result: [
 
 [Trace - 12:45:13 PM] Received notification '$/progress'.
 Params: {
-    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":0}",
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"uuid\":\"ba419d35-0dfe-8af7-aee7-bbe10c45c028\"}",
     "value": {
         "kind": "end"
     }
@@ -516,7 +516,7 @@ Params: {
 
 [Trace - 12:45:22 PM] Received request 'window/workDoneProgress/create - (4)'.
 Params: {
-    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":1}"
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"uuid\":\"4f083ce3-f12b-bb4b-46ee-9d82b52c856d\"}"
 }
 
 
@@ -526,7 +526,7 @@ Result:
 
 [Trace - 12:45:22 PM] Received notification '$/progress'.
 Params: {
-    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":1}",
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"uuid\":\"4f083ce3-f12b-bb4b-46ee-9d82b52c856d\"}",
     "value": {
         "kind": "begin",
         "title": "Checking document",
@@ -634,7 +634,7 @@ Result: [
 
 [Trace - 12:46:06 PM] Received notification '$/progress'.
 Params: {
-    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":1}",
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"uuid\":\"4f083ce3-f12b-bb4b-46ee-9d82b52c856d\"}",
     "value": {
         "kind": "end"
     }
@@ -1172,7 +1172,7 @@ Params: {
 
 [Trace - 12:46:30 PM] Received request 'window/workDoneProgress/create - (7)'.
 Params: {
-    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":2}"
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"uuid\":\"aa616abe-1761-0c9a-e743-67bd738597dc\"}"
 }
 
 
@@ -1182,7 +1182,7 @@ Result:
 
 [Trace - 12:46:30 PM] Received notification '$/progress'.
 Params: {
-    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":2}",
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"uuid\":\"aa616abe-1761-0c9a-e743-67bd738597dc\"}",
     "value": {
         "kind": "begin",
         "title": "Checking document",
@@ -1290,7 +1290,7 @@ Result: [
 
 [Trace - 12:46:30 PM] Received notification '$/progress'.
 Params: {
-    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"counter\":2}",
+    "token": "{\"uri\":\"untitled:Untitled-1\",\"operation\":\"checkDocument\",\"uuid\":\"aa616abe-1761-0c9a-e743-67bd738597dc\"}",
     "value": {
         "kind": "end"
     }

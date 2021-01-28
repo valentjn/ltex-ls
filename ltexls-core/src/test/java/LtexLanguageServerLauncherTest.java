@@ -48,6 +48,7 @@ public class LtexLanguageServerLauncherTest {
     @Override
     public void run() {
       try {
+        Tools.randomNumberGenerator.setSeed(42);
         LtexLanguageServerLauncher.launch(this.in, this.out);
       } catch (InterruptedException e) {
         // occurs when JUnit tears down class

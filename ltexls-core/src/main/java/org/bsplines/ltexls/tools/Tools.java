@@ -16,7 +16,9 @@ import java.nio.file.StandardOpenOption;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.UUID;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,9 +31,10 @@ import org.eclipse.lsp4j.Range;
 
 public class Tools {
   private static @MonotonicNonNull ResourceBundle messages = null;
-  private static ConsoleHandler loggerConsoleHandler = new ConsoleHandler();
+  private static final ConsoleHandler loggerConsoleHandler = new ConsoleHandler();
   public static final Logger logger = Logger.getLogger("org.bsplines.ltexls");
   private static final Pattern tildePathPattern = Pattern.compile("^~($|/|\\\\)");
+  public static final Random randomNumberGenerator = new Random();
 
   static {
     setDefaultLocale();
@@ -174,5 +177,10 @@ public class Tools {
     } catch (IOException e) {
       Tools.logger.warning(Tools.i18n("couldNotWriteFile", e, filePath.toString()));
     }
+  }
+
+  public static String getRandomUuid() {
+    return (new UUID(randomNumberGenerator.nextLong(),
+        randomNumberGenerator.nextLong())).toString();
   }
 }
