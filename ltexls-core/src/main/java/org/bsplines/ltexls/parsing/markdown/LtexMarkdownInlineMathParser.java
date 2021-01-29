@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class LtexMarkdownInlineMathParser implements InlineParserExtension {
   private static final Pattern MATH_PATTERN = Pattern.compile(
-      "\\$([^ ](?:.|\n)*?[^ ])(?<!\\\\)\\$(?![0-9])");
+      "\\$([^ ](?:.|\n)*?[^ ]|[^ ])(?<!\\\\)\\$(?![0-9])");
 
   public LtexMarkdownInlineMathParser(LightInlineParser inlineParser) {
   }
