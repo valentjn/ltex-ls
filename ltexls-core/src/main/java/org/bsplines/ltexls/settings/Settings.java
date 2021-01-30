@@ -174,7 +174,7 @@ public class Settings {
     return (((map != null) && (key != null) && map.containsKey(key)) ? map.get(key).hashCode() : 0);
   }
 
-  private void setSettings(@UnknownInitialization(Object.class) Settings this,
+  private void setSettings(@UnknownInitialization Settings this,
         JsonElement jsonSettings, @Nullable JsonElement jsonWorkspaceSpecificSettings) {
     if (jsonWorkspaceSpecificSettings == null) jsonWorkspaceSpecificSettings = jsonSettings;
 

@@ -91,8 +91,7 @@ public class LanguageToolRuleMatch {
         document.convertPosition(this.toPos)), range);
   }
 
-  public boolean isUnknownWordRule(
-        @UnknownInitialization(Object.class) LanguageToolRuleMatch this) {
+  public boolean isUnknownWordRule(@UnknownInitialization LanguageToolRuleMatch this) {
     return ((this.ruleId != null) && (
         this.ruleId.startsWith("MORFOLOGIK_")
         || this.ruleId.startsWith("HUNSPELL_")
