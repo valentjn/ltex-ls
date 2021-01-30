@@ -65,9 +65,6 @@ jobs:
 
   upload_coverage:
     name: "CI - Upload Coverage Job"
-    needs:
-      - "build"
-      - "analyze_codeql"
     if: "${{ github.event_name != 'pull_request' }}"
     runs-on: "ubuntu-20.04"
 
