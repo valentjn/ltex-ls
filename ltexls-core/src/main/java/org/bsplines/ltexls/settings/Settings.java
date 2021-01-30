@@ -10,10 +10,12 @@ package org.bsplines.ltexls.settings;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -103,10 +105,16 @@ public class Settings {
     return jsonSettings;
   }
 
-  private static Set<String> convertJsonArrayToSet(JsonArray array) {
-    Set<String> list = new HashSet<>();
+  private static List<String> convertJsonArrayToList(JsonArray array) {
+    List<String> list = new ArrayList<>();
     for (JsonElement element : array) list.add(element.getAsString());
     return list;
+  }
+
+  private static Set<String> convertJsonArrayToSet(JsonArray array) {
+    Set<String> set = new HashSet<>();
+    for (JsonElement element : array) set.add(element.getAsString());
+    return set;
   }
 
   private static Map<String, String> convertJsonObjectToMapOfStrings(JsonObject object) {
@@ -129,22 +137,23 @@ public class Settings {
     return map;
   }
 
-  private static Map<String, Set<String>> convertJsonObjectToMapOfSets(JsonObject object) {
-    Map<String, Set<String>> map = new HashMap<>();
+  private static Map<String, List<String>> convertJsonObjectToMapOfLists(JsonObject object) {
+    Map<String, List<String>> map = new HashMap<>();
 
     for (String key : object.keySet()) {
-      map.put(key, convertJsonArrayToSet(object.get(key).getAsJsonArray()));
+      map.put(key, convertJsonArrayToList(object.get(key).getAsJsonArray()));
     }
 
     return map;
   }
 
-  private static void mergeMapOfSets(Map<String, Set<String>> map1, Map<String, Set<String>> map2) {
-    for (Map.Entry<String, Set<String>> entry2 : map2.entrySet()) {
+  private static void mergeMapOfListsIntoMapOfSets(Map<String, Set<String>> map1,
+        Map<String, List<String>> map2) {
+    for (Map.Entry<String, List<String>> entry2 : map2.entrySet()) {
       String key = entry2.getKey();
       if (!map1.containsKey(key)) map1.put(key, new HashSet<>());
       Set<String> set1 = map1.get(key);
-      Set<String> set2 = entry2.getValue();
+      List<String> set2 = entry2.getValue();
 
       for (String string : set2) {
         if (string.startsWith("-")) {
@@ -208,21 +217,21 @@ public class Settings {
     Map<String, Set<HiddenFalsePositive>> hiddenFalsePositives = this.hiddenFalsePositives;
 
     try {
-      mergeMapOfSets(dictionary, convertJsonObjectToMapOfSets(
+      mergeMapOfListsIntoMapOfSets(dictionary, convertJsonObjectToMapOfLists(
           getSettingFromJson(jsonWorkspaceSpecificSettings, "dictionary").getAsJsonObject()));
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       // setting not set
     }
 
     try {
-      mergeMapOfSets(disabledRules, convertJsonObjectToMapOfSets(
+      mergeMapOfListsIntoMapOfSets(disabledRules, convertJsonObjectToMapOfLists(
           getSettingFromJson(jsonWorkspaceSpecificSettings, "disabledRules").getAsJsonObject()));
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       // setting not set
     }
 
     try {
-      mergeMapOfSets(enabledRules, convertJsonObjectToMapOfSets(
+      mergeMapOfListsIntoMapOfSets(enabledRules, convertJsonObjectToMapOfLists(
           getSettingFromJson(jsonWorkspaceSpecificSettings, "enabledRules").getAsJsonObject()));
     } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
       // setting not set
@@ -230,7 +239,7 @@ public class Settings {
 
     try {
       Map<String, Set<String>> hiddenFalsePositiveJsonStrings = new HashMap<>();
-      mergeMapOfSets(hiddenFalsePositiveJsonStrings, convertJsonObjectToMapOfSets(
+      mergeMapOfListsIntoMapOfSets(hiddenFalsePositiveJsonStrings, convertJsonObjectToMapOfLists(
           getSettingFromJson(jsonWorkspaceSpecificSettings,
           "hiddenFalsePositives").getAsJsonObject()));
 
