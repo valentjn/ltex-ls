@@ -8,6 +8,10 @@
 
 # Changelog
 
+## 10.0.0 (upcoming)
+
+- Remove support for settings that are deprecated since 8.0.0: `ltex.ignoreInRuleSentence`, `ltex.commands.ignore`, `ltex.commands.dummy`, `ltex.environments.ignore`, `ltex.markdown.ignore`, and `ltex.markdown.dummy`
+
 ## 9.2.0 (January 29, 2021)
 
 - Add support for Pandoc-style inline math (`$...$`) and display math (`$$...$$` with `$$` being at the beginning/end of a Markdown block) to Markdown parser (fixes [vscode-ltex#210](https://github.com/valentjn/vscode-ltex/issues/210))

@@ -233,27 +233,6 @@ public class Settings {
       // setting not set
     }
 
-    // ltex.ignoreRuleInSentence is deprecated since 8.0.0
-    try {
-      String curLanguage = ((this.languageShortCode != null) ? this.languageShortCode : "en-US");
-      @Nullable Set<HiddenFalsePositive> curHiddenFalsePositives =
-          hiddenFalsePositives.get(curLanguage);
-
-      if (curHiddenFalsePositives == null) {
-        curHiddenFalsePositives = new HashSet<>();
-        hiddenFalsePositives.put(curLanguage, curHiddenFalsePositives);
-      }
-
-      for (JsonElement element :
-            getSettingFromJson(jsonSettings, "ignoreRuleInSentence").getAsJsonArray()) {
-        JsonObject elementObject = element.getAsJsonObject();
-        curHiddenFalsePositives.add(new HiddenFalsePositive(
-            elementObject.get("rule").getAsString(), elementObject.get("sentence").getAsString()));
-      }
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      // setting not set
-    }
-
     try {
       Map<String, Set<String>> hiddenFalsePositiveJsonStrings = new HashMap<>();
       mergeMapOfSets(hiddenFalsePositiveJsonStrings, convertJsonObjectToMapOfSets(
@@ -296,24 +275,6 @@ public class Settings {
     // fixes false-positive argument.type.incompatible warnings
     Map<String, String> latexCommands = this.latexCommands;
 
-    // ltex.commands.ignore is deprecated since 8.0.0
-    try {
-      Set<String> ignoreCommands = convertJsonArrayToSet(
-          getSettingFromJson(jsonSettings, "commands.ignore").getAsJsonArray());
-      for (String command : ignoreCommands) latexCommands.put(command, "ignore");
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      // setting not set
-    }
-
-    // ltex.commands.dummy is deprecated since 8.0.0
-    try {
-      Set<String> dummyCommands = convertJsonArrayToSet(
-          getSettingFromJson(jsonSettings, "commands.dummy").getAsJsonArray());
-      for (String command : dummyCommands) latexCommands.put(command, "dummy");
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      // setting not set
-    }
-
     try {
       latexCommands.putAll(convertJsonObjectToMapOfStrings(
           getSettingFromJson(jsonSettings, "latex.commands").getAsJsonObject()));
@@ -326,15 +287,6 @@ public class Settings {
     // fixes false-positive argument.type.incompatible warnings
     Map<String, String> latexEnvironments = this.latexEnvironments;
 
-    // ltex.environments.ignore is deprecated since 8.0.0
-    try {
-      Set<String> ignoreEnvironments = convertJsonArrayToSet(
-          getSettingFromJson(jsonSettings, "environments.ignore").getAsJsonArray());
-      for (String environment : ignoreEnvironments) latexEnvironments.put(environment, "ignore");
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      // setting not set
-    }
-
     try {
       latexEnvironments.putAll(convertJsonObjectToMapOfStrings(
           getSettingFromJson(jsonSettings, "latex.environments").getAsJsonObject()));
@@ -346,24 +298,6 @@ public class Settings {
 
     // fixes false-positive argument.type.incompatible warnings
     Map<String, String> markdownNodes = this.markdownNodes;
-
-    // ltex.markdown.ignore is deprecated since 8.0.0
-    try {
-      Set<String> ignoreNodes = convertJsonArrayToSet(
-          getSettingFromJson(jsonSettings, "markdown.ignore").getAsJsonArray());
-      for (String command : ignoreNodes) markdownNodes.put(command, "ignore");
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      // setting not set
-    }
-
-    // ltex.markdown.dummy is deprecated since 8.0.0
-    try {
-      Set<String> dummyNodes = convertJsonArrayToSet(
-          getSettingFromJson(jsonSettings, "markdown.dummy").getAsJsonArray());
-      for (String command : dummyNodes) markdownNodes.put(command, "dummy");
-    } catch (NullPointerException | UnsupportedOperationException | IllegalStateException e) {
-      // setting not set
-    }
 
     try {
       markdownNodes.putAll(convertJsonObjectToMapOfStrings(

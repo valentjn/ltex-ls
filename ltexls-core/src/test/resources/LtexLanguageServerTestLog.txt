@@ -341,15 +341,7 @@ Params: {
             "statusBarItem": false,
             "trace": {
                 "server": "verbose"
-            },
-            "workspaceDictionary": {},
-            "workspaceFolderDictionary": {},
-            "workspaceDisabledRules": {},
-            "workspaceFolderDisabledRules": {},
-            "workspaceEnabledRules": {},
-            "workspaceFolderEnabledRules": {},
-            "commands": {},
-            "environments": {}
+            }
         }
     }
 }
@@ -450,15 +442,7 @@ Result: [
         "statusBarItem": false,
         "trace": {
             "server": "verbose"
-        },
-        "workspaceDictionary": {},
-        "workspaceFolderDictionary": {},
-        "workspaceDisabledRules": {},
-        "workspaceFolderDisabledRules": {},
-        "workspaceEnabledRules": {},
-        "workspaceFolderEnabledRules": {},
-        "commands": {},
-        "environments": {}
+        }
     }
 ]
 
@@ -598,15 +582,7 @@ Result: [
         "statusBarItem": false,
         "trace": {
             "server": "verbose"
-        },
-        "workspaceDictionary": {},
-        "workspaceFolderDictionary": {},
-        "workspaceDisabledRules": {},
-        "workspaceFolderDisabledRules": {},
-        "workspaceEnabledRules": {},
-        "workspaceFolderEnabledRules": {},
-        "commands": {},
-        "environments": {}
+        }
     }
 ]
 
@@ -1254,15 +1230,7 @@ Result: [
         "statusBarItem": false,
         "trace": {
             "server": "verbose"
-        },
-        "workspaceDictionary": {},
-        "workspaceFolderDictionary": {},
-        "workspaceDisabledRules": {},
-        "workspaceFolderDisabledRules": {},
-        "workspaceEnabledRules": {},
-        "workspaceFolderEnabledRules": {},
-        "commands": {},
-        "environments": {}
+        }
     }
 ]
 
