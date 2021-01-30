@@ -51,11 +51,6 @@ public class Settings {
   public Settings() {
   }
 
-  /**
-   * Copy constructor.
-   *
-   * @param obj object to copy
-   */
   public Settings(Settings obj) {
     this.enabled = obj.enabled;
     this.languageShortCode = obj.languageShortCode;

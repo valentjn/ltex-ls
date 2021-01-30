@@ -58,9 +58,6 @@ public class LtexLanguageServerLauncherTest {
     }
   }
 
-  /**
-   * Set up test class.
-   */
   @BeforeAll
   public void setUp() throws InterruptedException, IOException {
     this.pipedOutputStream.connect(this.in);
@@ -74,9 +71,6 @@ public class LtexLanguageServerLauncherTest {
     Thread.sleep(5000);
   }
 
-  /**
-   * Tear down test class.
-   */
   @AfterAll
   public void tearDown() throws IOException {
     if (this.launcherThread != null) this.launcherThread.interrupt();

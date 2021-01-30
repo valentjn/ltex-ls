@@ -215,11 +215,6 @@ public class LatexFragmentizer extends CodeFragmentizer {
     return babelEnvironmentCommandSignatureMap;
   }
 
-  /**
-   * Constructor.
-   *
-   * @param codeLanguageId ID of the code language
-   */
   public LatexFragmentizer(String codeLanguageId) {
     super(codeLanguageId);
     this.commentFragmentizer = new RegexCodeFragmentizer(codeLanguageId, commentPattern);

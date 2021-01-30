@@ -24,9 +24,6 @@ public class LanguageToolHttpInterfaceTest {
   private @MonotonicNonNull Thread serverThread;
   private Settings defaultSettings = new Settings();
 
-  /**
-   * Set up test class.
-   */
   @BeforeAll
   public void setUp() throws InterruptedException {
     this.serverThread = new Thread(() -> {
@@ -41,9 +38,6 @@ public class LanguageToolHttpInterfaceTest {
         "http://localhost:8081");
   }
 
-  /**
-   * Tear down test class.
-   */
   @AfterAll
   public void tearDown() {
     if (this.serverThread != null) this.serverThread.interrupt();

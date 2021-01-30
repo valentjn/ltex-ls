@@ -48,10 +48,6 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   private boolean clientSupportsWorkspaceSpecificConfiguration;
   private Instant startupInstant;
 
-  /**
-   * Constructor.
-   * Note: The object cannot be used before @c connect() has been called.
-   */
   public LtexLanguageServer() {
     this.settingsManager = new SettingsManager();
     this.documentChecker = new DocumentChecker(this.settingsManager);

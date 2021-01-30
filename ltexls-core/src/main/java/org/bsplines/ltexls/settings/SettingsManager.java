@@ -101,11 +101,6 @@ public class SettingsManager {
     setSettings(newSettings);
   }
 
-  /**
-   * Set settings with a @c Settings object. Reinitialize the LanguageTool interface if necessary.
-   *
-   * @param newSettings new settings to use
-   */
   public void setSettings(Settings newSettings) {
     String newLanguage = newSettings.getLanguageShortCode();
 

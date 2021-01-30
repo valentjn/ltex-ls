@@ -38,15 +38,6 @@ public class LspMessage {
       "\\[[^\\]]+\\] (\\S+) (\\S+) '([^' ]+)(?: - \\(([^\\)]+)\\))?'.*\\R(?:Params|Result):");
   private static final Pattern headerPattern = Pattern.compile("(\\S+): (.*)\r\n");
 
-  /**
-   * Constructor.
-   *
-   * @param source source
-   * @param type type
-   * @param id request/response ID (can be null for notifications)
-   * @param method LSP method
-   * @param params parameters for the LSP method
-   */
   public LspMessage(Source source, Type type, @Nullable String id, String method,
         JsonElement params) {
     this.source = source;
@@ -66,12 +57,6 @@ public class LspMessage {
     }
   }
 
-  /**
-   * Create an @c LspMessage from logging output (set "ltex.trace.server" to "verbose").
-   *
-   * @param str string of the logging output
-   * @return LSP message
-   */
   public static LspMessage fromLogString(String str) {
     str = str.trim();
     Matcher matcher = logPattern.matcher(str);
@@ -112,11 +97,6 @@ public class LspMessage {
     return new LspMessage(source, type, id, method, params);
   }
 
-  /**
-   * Send message to a server (which is listening to the other end of the output stream).
-   *
-   * @param outputStream stream the server is listening to
-   */
   public void sendToServer(OutputStream outputStream) throws IOException, InterruptedException {
     String bodyStr = this.body.toString();
     byte[] bodyBytes = bodyStr.getBytes("utf-8");
@@ -163,12 +143,6 @@ public class LspMessage {
     return result;
   }
 
-  /**
-   * Wait for the next message of the server (which is sending from the other side of the
-   * input stream) and check via assertion whether its contents matches with this message.
-   *
-   * @param inputStream stream the server is sending to
-   */
   public void waitForServer(InputStream inputStream) throws IOException {
     int contentLength = -1;
 

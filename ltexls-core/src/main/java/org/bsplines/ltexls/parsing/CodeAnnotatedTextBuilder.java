@@ -35,12 +35,6 @@ public abstract class CodeAnnotatedTextBuilder extends AnnotatedTextBuilder {
         new LatexAnnotatedTextBuilder(codeLanguageId));
   }
 
-  /**
-   * Create a @c CodeAnnotatedTextBuilder according to the given code langugage.
-   *
-   * @param codeLanguageId ID of the code language
-   * @return corresponding @c CodeAnnotatedTextBuilder
-   */
   public static CodeAnnotatedTextBuilder create(String codeLanguageId) {
     @Nullable Function<String, CodeAnnotatedTextBuilder> constructor =
         constructorMap.get(codeLanguageId);

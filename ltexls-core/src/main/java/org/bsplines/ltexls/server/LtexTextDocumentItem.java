@@ -125,12 +125,6 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     return this.languageServer;
   }
 
-  /**
-   * Convert a line/column Position object to an integer position.
-   *
-   * @param position line/column Position object
-   * @return integer position
-   */
   public int convertPosition(Position position) {
     int line = position.getLine();
     int character = position.getCharacter();
@@ -167,12 +161,6 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     }
   }
 
-  /**
-   * Convert an integer position to a line/column Position object.
-   *
-   * @param pos integer position
-   * @return line/column Position object
-   */
   public Position convertPosition(int pos) {
     int line = Collections.binarySearch(this.lineStartPosList, pos);
 
@@ -221,11 +209,6 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     if (this.caretPosition != null) this.lastCaretChangeInstant = Instant.now();
   }
 
-  /**
-   * Apply a list of full or incremental text change events.
-   *
-   * @param textChangeEvents list of text change events to apply
-   */
   public void applyTextChangeEvents(List<TextDocumentContentChangeEvent> textChangeEvents) {
     Instant oldLastCaretChangeInstant = this.lastCaretChangeInstant;
 
@@ -239,11 +222,6 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     }
   }
 
-  /**
-   * Apply a full or incremental text change event.
-   *
-   * @param textChangeEvent text change event to apply
-   */
   public void applyTextChangeEvent(TextDocumentContentChangeEvent textChangeEvent) {
     Range changeRange = textChangeEvent.getRange();
     String changeText = textChangeEvent.getText();

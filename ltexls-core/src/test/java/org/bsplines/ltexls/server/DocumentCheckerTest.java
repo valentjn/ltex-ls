@@ -52,15 +52,6 @@ public class DocumentCheckerTest {
     return new LtexTextDocumentItem(languageServer, "untitled:test.txt", codeLanguageId, 1, code);
   }
 
-  /**
-   * Test matches of a standard document.
-   *
-   * @param matches list of matches as returned by LanguageTool
-   * @param fromPos1 actual from position of the first diagnostic (inclusive)
-   * @param toPos1 actual to position of the first diagnostic (exclusive)
-   * @param fromPos2 actual from position of the second diagnostic (inclusive)
-   * @param toPos2 actual to position of the second diagnostic (exclusive)
-   */
   public static void assertMatches(List<LanguageToolRuleMatch> matches, int fromPos1, int toPos1,
         int fromPos2, int toPos2) {
     Assertions.assertEquals(2, matches.size());

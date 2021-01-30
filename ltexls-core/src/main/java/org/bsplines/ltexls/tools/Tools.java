@@ -49,13 +49,6 @@ public class Tools {
     loggerConsoleHandler.setLevel(logLevel);
   }
 
-  /**
-   * Format an internationalized message.
-   *
-   * @param key key of the internationalized message
-   * @param messageArguments values to insert into the message
-   * @return formatted message
-   */
   public static String i18n(String key, @Nullable Object... messageArguments) {
     String message;
 
@@ -115,9 +108,6 @@ public class Tools {
     return stringWriter.toString();
   }
 
-  /**
-   * Load the internationalized messages according to the default system locale.
-   */
   public static void setDefaultLocale() {
     try {
       setLocale(Locale.getDefault());
@@ -130,14 +120,6 @@ public class Tools {
     Tools.messages = ResourceBundle.getBundle("MessagesBundle", locale);
   }
 
-  /**
-   * Check if two ranges are intersecting. This is false if and only if the second range
-   * is completely before or completely after the first range.
-   *
-   * @param range1 first range
-   * @param range2 second range
-   * @return whether the two ranges are intersecting
-   */
   public static boolean areRangesIntersecting(Range range1, Range range2) {
     return !(positionLower(range2.getEnd(), range1.getStart())
         || positionLower(range1.getEnd(), range2.getStart()));

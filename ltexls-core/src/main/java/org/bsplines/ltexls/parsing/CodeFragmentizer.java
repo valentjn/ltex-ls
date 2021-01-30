@@ -43,12 +43,6 @@ public abstract class CodeFragmentizer {
     this.codeLanguageId = codeLanguageId;
   }
 
-  /**
-   * Create a @c CodeFragmentizer according to the given code langugage.
-   *
-   * @param codeLanguageId ID of the code language
-   * @return corresponding @c CodeFragmentizer
-   */
   public static CodeFragmentizer create(String codeLanguageId) {
     @Nullable Function<String, CodeFragmentizer> constructor = constructorMap.get(codeLanguageId);
 

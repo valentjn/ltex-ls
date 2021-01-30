@@ -131,12 +131,6 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     return DummyGenerator.getDefault().generate(this.language, this.dummyCounter++);
   }
 
-  /**
-   * Add Markdown code to the builder, i.e., parse it and call @c addText and @c addMarkup.
-   *
-   * @param code Markdown code
-   * @return @c this
-   */
   public MarkdownAnnotatedTextBuilder addCode(String code) {
     Document document = this.parser.parse(code);
 
