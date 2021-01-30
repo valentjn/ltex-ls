@@ -7,7 +7,7 @@
 
 package org.bsplines.ltexls.settings;
 
-import com.google.gson.JsonElement;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import java.util.Collections;
 import java.util.logging.Level;
@@ -69,9 +69,96 @@ public class SettingsTest {
 
   @Test
   public void testJsonSettings() {
-    JsonElement jsonSettings = new JsonObject();
-    JsonElement jsonWorkspaceSpecificSettings = new JsonObject();
-    Assertions.assertDoesNotThrow(() -> new Settings(jsonSettings, jsonWorkspaceSpecificSettings));
+    JsonObject bibtexFields = new JsonObject();
+    bibtexFields.addProperty("bibtexField", false);
+
+    JsonObject bibtex = new JsonObject();
+    bibtex.add("fields", bibtexFields);
+
+    JsonObject latexEnvironments = new JsonObject();
+    latexEnvironments.addProperty("latexEnvironment", "ignore");
+
+    JsonObject latexCommands = new JsonObject();
+    latexCommands.addProperty("\\latexCommand{}", "ignore");
+
+    JsonObject latex = new JsonObject();
+    latex.add("commands", latexCommands);
+    latex.add("environments", latexEnvironments);
+
+    JsonObject markdownNodes = new JsonObject();
+    markdownNodes.addProperty("markdownNode", "ignore");
+
+    JsonObject markdown = new JsonObject();
+    markdown.add("nodes", markdownNodes);
+
+    JsonObject additionalRules = new JsonObject();
+    additionalRules.addProperty("enablePickyRules", true);
+
+    JsonObject jsonSettings = new JsonObject();
+    jsonSettings.addProperty("enabled", false);
+    jsonSettings.add("bibtex", bibtex);
+    jsonSettings.add("latex", latex);
+    jsonSettings.add("markdown", markdown);
+    jsonSettings.add("additionalRules", additionalRules);
+
+    JsonArray englishDictionary = new JsonArray();
+    englishDictionary.add("wordone");
+    englishDictionary.add("wordtwo");
+    englishDictionary.add("-wordone");
+    JsonObject dictionary = new JsonObject();
+    dictionary.add("en-US", englishDictionary);
+
+    JsonArray englishHiddenFalsePositives = new JsonArray();
+    englishHiddenFalsePositives.add("{\"rule\": \"rule\", \"sentence\": \"sentence\"}");
+    JsonObject hiddenFalsePositives = new JsonObject();
+    hiddenFalsePositives.add("en-US", englishHiddenFalsePositives);
+
+    JsonObject jsonWorkspaceSpecificSettings = new JsonObject();
+    jsonWorkspaceSpecificSettings.add("dictionary", dictionary);
+    jsonWorkspaceSpecificSettings.add("hiddenFalsePositives", hiddenFalsePositives);
+
+    Settings settings = new Settings(jsonSettings, jsonWorkspaceSpecificSettings);
+    Assertions.assertEquals(Collections.emptySet(), settings.getEnabled());
+    Assertions.assertEquals(Collections.singleton("wordtwo"), settings.getDictionary());
+    Assertions.assertEquals(Collections.singleton(new HiddenFalsePositive("rule", "sentence")),
+        settings.getHiddenFalsePositives());
+    Assertions.assertEquals(Collections.singletonMap("bibtexField", false),
+        settings.getBibtexFields());
+    Assertions.assertEquals(Collections.singletonMap("\\latexCommand{}", "ignore"),
+        settings.getLatexCommands());
+    Assertions.assertEquals(Collections.singletonMap("latexEnvironment", "ignore"),
+        settings.getLatexEnvironments());
+    Assertions.assertEquals(Collections.singletonMap("markdownNode", "ignore"),
+        settings.getMarkdownNodes());
+    Assertions.assertEquals(true, settings.getEnablePickyRules());
+
+    jsonSettings.addProperty("diagnosticSeverity", "error");
+    settings = new Settings(jsonSettings, jsonWorkspaceSpecificSettings);
+    Assertions.assertEquals(DiagnosticSeverity.Error, settings.getDiagnosticSeverity());
+
+    jsonSettings.addProperty("diagnosticSeverity", "warning");
+    settings = new Settings(jsonSettings, jsonWorkspaceSpecificSettings);
+    Assertions.assertEquals(DiagnosticSeverity.Warning, settings.getDiagnosticSeverity());
+
+    jsonSettings.addProperty("diagnosticSeverity", "information");
+    settings = new Settings(jsonSettings, jsonWorkspaceSpecificSettings);
+    Assertions.assertEquals(DiagnosticSeverity.Information, settings.getDiagnosticSeverity());
+
+    jsonSettings.addProperty("diagnosticSeverity", "hint");
+    settings = new Settings(jsonSettings, jsonWorkspaceSpecificSettings);
+    Assertions.assertEquals(DiagnosticSeverity.Hint, settings.getDiagnosticSeverity());
+
+    jsonSettings.addProperty("checkFrequency", "edit");
+    settings = new Settings(jsonSettings, jsonWorkspaceSpecificSettings);
+    Assertions.assertEquals(CheckFrequency.EDIT, settings.getCheckFrequency());
+
+    jsonSettings.addProperty("checkFrequency", "save");
+    settings = new Settings(jsonSettings, jsonWorkspaceSpecificSettings);
+    Assertions.assertEquals(CheckFrequency.SAVE, settings.getCheckFrequency());
+
+    jsonSettings.addProperty("checkFrequency", "manual");
+    settings = new Settings(jsonSettings, jsonWorkspaceSpecificSettings);
+    Assertions.assertEquals(CheckFrequency.MANUAL, settings.getCheckFrequency());
   }
 
   @Test
