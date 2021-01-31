@@ -50,7 +50,7 @@ public abstract class CodeFragmentizer {
       return constructor.apply(codeLanguageId);
     } else {
       Tools.logger.warning(Tools.i18n("unsupportedCodeLanguageId", codeLanguageId));
-      return new PlaintextFragmentizer(codeLanguageId);
+      return new PlaintextFragmentizer("plaintext");
     }
   }
 

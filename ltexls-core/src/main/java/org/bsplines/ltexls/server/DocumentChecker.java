@@ -81,7 +81,8 @@ public class DocumentChecker {
     if (languageToolInterface == null) {
       Tools.logger.warning(Tools.i18n("skippingTextCheckAsLanguageToolHasNotBeenInitialized"));
       return Collections.emptyList();
-    } else if (!settings.getEnabled().contains(codeFragment.getCodeLanguageId())) {
+    } else if (!settings.getEnabled().contains(codeFragment.getCodeLanguageId())
+          && !codeFragment.getCodeLanguageId().equals("plaintext")) {
       Tools.logger.fine(Tools.i18n("skippingTextCheckAsLtexHasBeenDisabled",
           codeFragment.getCodeLanguageId()));
       return Collections.emptyList();

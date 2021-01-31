@@ -12,6 +12,7 @@
 
 - Remove support for settings that are deprecated since 8.0.0: `ltex.ignoreInRuleSentence`, `ltex.commands.ignore`, `ltex.commands.dummy`, `ltex.environments.ignore`, `ltex.markdown.ignore`, and `ltex.markdown.dummy`
 - Add support for magic comments inside HTML comments in Markdown (`<!-- ltex: SETTINGS -->`)
+- Check documents even if their code language is not supported
 - Fix removing items in settings with a hyphen prefix sometimes not working
 
 ## 9.2.0 (January 29, 2021)
