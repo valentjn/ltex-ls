@@ -15,32 +15,39 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class MarkdownFragmentizerTest {
-  @Test
-  public void test() {
-    CodeFragmentizer fragmentizer = CodeFragmentizer.create("markdown");
-    List<CodeFragment> codeFragments = fragmentizer.fragmentize(
-        "Sentence 1\n"
-        + "\n[comment]: <> \"ltex: language=de-DE\"\n\nSentence 2\n"
-        + "\n[comment]:\t<>\"ltex:\tlanguage=en-US\"\n\nSentence 3\n", new Settings());
+  private static void testFragmentizer(CodeFragmentizer fragmentizer, String code) {
+    List<CodeFragment> codeFragments = fragmentizer.fragmentize(code, new Settings());
     Assertions.assertEquals(3, codeFragments.size());
 
     Assertions.assertEquals("markdown", codeFragments.get(0).getCodeLanguageId());
-    Assertions.assertEquals("Sentence 1\n",
-        codeFragments.get(0).getCode());
     Assertions.assertEquals(0, codeFragments.get(0).getFromPos());
+    Assertions.assertEquals(11, codeFragments.get(0).getCode().length());
     Assertions.assertEquals("en-US", codeFragments.get(0).getSettings().getLanguageShortCode());
 
     Assertions.assertEquals("markdown", codeFragments.get(1).getCodeLanguageId());
-    Assertions.assertEquals("\n[comment]: <> \"ltex: language=de-DE\"\n\nSentence 2\n",
-        codeFragments.get(1).getCode());
     Assertions.assertEquals(11, codeFragments.get(1).getFromPos());
+    Assertions.assertEquals(50, codeFragments.get(1).getCode().length());
     Assertions.assertEquals("de-DE", codeFragments.get(1).getSettings().getLanguageShortCode());
 
     Assertions.assertEquals("markdown", codeFragments.get(2).getCodeLanguageId());
-    Assertions.assertEquals("\n[comment]:\t<>\"ltex:\tlanguage=en-US\"\n\nSentence 3\n",
-        codeFragments.get(2).getCode());
     Assertions.assertEquals(61, codeFragments.get(2).getFromPos());
+    Assertions.assertEquals(49, codeFragments.get(2).getCode().length());
     Assertions.assertEquals("en-US", codeFragments.get(2).getSettings().getLanguageShortCode());
+  }
+
+  @Test
+  public void test() {
+    CodeFragmentizer fragmentizer = CodeFragmentizer.create("markdown");
+
+    testFragmentizer(fragmentizer,
+        "Sentence 1\n"
+        + "\n[comment]: <> \"ltex: language=de-DE\"\n\nSentence 2\n"
+        + "\n[comment]:\t<>\"ltex:\tlanguage=en-US\"\n\nSentence 3\n");
+
+    testFragmentizer(fragmentizer,
+        "Sentence 1\n"
+        + "\n  <!-- ltex: language=de-DE-->      \n\nSentence 2\n"
+        + "\n<!--\t\t\tltex:\t\t\t\tlanguage=en-US\t\t-->\n\nSentence 3\n");
   }
 
   @Test

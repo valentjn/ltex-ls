@@ -41,7 +41,12 @@ public class RegexCodeFragmentizer extends CodeFragmentizer {
       Settings lastSettings = curSettings;
       codeFragments.add(new CodeFragment(codeLanguageId, lastCode, lastFromPos, lastSettings));
 
-      @Nullable String settingsLine = matcher.group("settings");
+      @Nullable String settingsLine = null;
+
+      for (int groupIndex = 1; groupIndex <= matcher.groupCount(); groupIndex++) {
+        settingsLine = matcher.group(groupIndex);
+        if (settingsLine != null) break;
+      }
 
       if (settingsLine == null) {
         Tools.logger.warning(Tools.i18n("couldNotFindSettingsInMatch"));
