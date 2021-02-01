@@ -8,9 +8,6 @@
 package org.bsplines.ltexls.server;
 
 import com.google.gson.JsonObject;
-import com.sun.management.OperatingSystemMXBean;
-import java.lang.management.ManagementFactory;
-import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +27,6 @@ import org.eclipse.lsp4j.InitializeResult;
 import org.eclipse.lsp4j.ServerCapabilities;
 import org.eclipse.lsp4j.TextDocumentSyncKind;
 import org.eclipse.lsp4j.WindowClientCapabilities;
-import org.eclipse.lsp4j.jsonrpc.services.JsonRequest;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.LanguageClientAware;
 import org.eclipse.lsp4j.services.LanguageServer;
@@ -132,31 +128,6 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
     this.languageClient = (LtexLanguageClient)languageClient;
   }
 
-  @JsonRequest("ltex/serverStatus")
-  CompletableFuture<LtexServerStatusResult> ltexServerStatus() {
-    long processId = ProcessHandle.current().pid();
-    double wallClockDuration =
-        Duration.between(this.startupInstant, Instant.now()).toMillis() / 1000.0;
-    @Nullable Double cpuDuration = null;
-    @Nullable Double cpuUsage = null;
-    double totalMemory = Runtime.getRuntime().totalMemory();
-    double usedMemory = totalMemory - Runtime.getRuntime().freeMemory();
-
-    try {
-      OperatingSystemMXBean operatingSystemMxBean =
-          (OperatingSystemMXBean)ManagementFactory.getOperatingSystemMXBean();
-      cpuUsage = operatingSystemMxBean.getProcessCpuLoad();
-      if (cpuUsage == -1) cpuUsage = null;
-      long cpuDurationLong = operatingSystemMxBean.getProcessCpuTime();
-      cpuDuration = ((cpuDurationLong != -1) ? (cpuDurationLong / 1e9) : null);
-    } catch (ClassCastException e) {
-      // do nothing
-    }
-
-    return CompletableFuture.completedFuture(new LtexServerStatusResult(
-        processId, wallClockDuration, cpuUsage, cpuDuration, usedMemory, totalMemory));
-  }
-
   @Override
   public TextDocumentService getTextDocumentService() {
     return this.ltexTextDocumentService;
@@ -193,5 +164,9 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
   public boolean isClientSupportingWorkspaceSpecificConfiguration() {
     return this.clientSupportsWorkspaceSpecificConfiguration;
+  }
+
+  public Instant getStartupInstant() {
+    return this.startupInstant;
   }
 }

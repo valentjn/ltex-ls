@@ -169,6 +169,47 @@ interface CheckDocumentCommandParams {
 type CheckDocumentCommandResult = ServerCommandResult;
 ```
 
+### `ltex.getServerStatus` (Server)
+
+`ltex.getServerStatus` is executed by the server to return information about the current resource consumption of LT<sub>E</sub>X LS. Some information might not be available. Executions of `ltex.getServerStatus` can only be handled if LT<sub>E</sub>X LS is not currently busy (e.g., checking a document).
+
+```typescript
+type GetServerStatusCommandParams = null;
+
+interface GetServerStatusCommandResult extends ServerCommandResult {
+  /**
+   * Process ID of the Java process.
+   */
+  processId: number;
+
+  /**
+   * Wall-clock duration in seconds since the start of LTeX LS.
+   */
+  wallClockDuration: number;
+
+  /**
+   * Current CPU usage as a fraction between 0 and 1.
+   */
+  cpuUsage?: number;
+
+  /**
+   * Duration in seconds during which the CPU was occupied.
+   */
+  cpuDuration?: number;
+
+  /**
+   * Memory in bytes of all currently allocated Java objects
+   * (this is a part of `totalMemory`).
+   */
+  usedMemory: number;
+
+  /**
+   * Total memory in bytes currently taken by the JVM.
+   */
+  totalMemory: number;
+}
+```
+
 ## Custom LSP Extensions
 
 LT<sub>E</sub>X LS supports the following custom features that are not specified by the LSP:
@@ -228,44 +269,3 @@ If enabled, LT<sub>E</sub>X LS will not only send a [`workspace/configuration`](
 - [`ltex.hiddenFalsePositives`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexhiddenfalsepositives)
 
 The reason of the existence of `ltex/workspaceSpecificConfiguration` is that some clients like VS Code have different configuration scopes (e.g., user and workspace). When a configuration like [`ltex.dictionary`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdictionary) appears in multiple scopes, the value in the scope with the higher precedence will override the other values (e.g., workspace scope will override user scope). `ltex/workspaceSpecificConfiguration` makes it possible for the client to implement a merging mechanism instead without having to change [`workspace/configuration`](https://microsoft.github.io/language-server-protocol/specification#workspace_configuration).
-
-#### `ltex/serverStatus` (⮌)
-
-`ltex/serverStatus` is a client-to-server request. It has no parameters; its result is given by `LtexServerStatusResult` (see below).
-
-`ltex/serverStatus` returns information about the current resource consumption of LT<sub>E</sub>X LS. Some information might not be available. `ltex/serverStatus` requests can only be handled if LT<sub>E</sub>X LS is not currently busy (e.g., checking a document).
-
-```typescript
-interface LtexServerStatusResult {
-  /**
-   * The process ID of the Java process.
-   */
-  processId: number;
-
-  /**
-   * The wall-clock duration in seconds since the start of LTeX LS.
-   */
-  wallClockDuration: number;
-
-  /**
-   * The current CPU usage as a fraction between 0 and 1.
-   */
-  cpuUsage?: number;
-
-  /**
-   * The duration in seconds during which the CPU was occupied.
-   */
-  cpuDuration?: number;
-
-  /**
-   * The memory in bytes of all currently allocated Java objects
-   * (this is a part of `totalMemory`).
-   */
-  usedMemory: number;
-
-  /**
-   * The total memory in bytes currently taken by the JVM.
-   */
-  totalMemory: number;
-}
-```

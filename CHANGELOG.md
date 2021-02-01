@@ -11,6 +11,7 @@
 ## 10.0.0 (upcoming)
 
 - Remove support for settings that are deprecated since 8.0.0: `ltex.ignoreInRuleSentence`, `ltex.commands.ignore`, `ltex.commands.dummy`, `ltex.environments.ignore`, `ltex.markdown.ignore`, and `ltex.markdown.dummy`
+- Replace `ltex/serverStatus` request with `ltex.getServerStatus` command
 - Add support for magic comments inside HTML comments in Markdown (`<!-- ltex: SETTINGS -->`)
 - Check documents even if their code language is not supported
 - Fix removing items in settings with a hyphen prefix sometimes not working

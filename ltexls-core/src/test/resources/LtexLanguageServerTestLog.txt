@@ -278,7 +278,8 @@ Result: {
         },
         "executeCommandProvider": {
             "commands": [
-                "ltex.checkDocument"
+                "ltex.checkDocument",
+                "ltex.getServerStatus"
             ]
         }
     }
