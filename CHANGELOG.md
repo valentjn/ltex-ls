@@ -14,6 +14,7 @@
 - Add support for magic comments inside HTML comments in Markdown (`<!-- ltex: SETTINGS -->`)
 - Check documents even if their code language is not supported
 - Fix removing items in settings with a hyphen prefix sometimes not working
+- Fix manually checking BibT<sub>E</sub>X documents not working
 
 ## 9.2.0 (January 29, 2021)
 

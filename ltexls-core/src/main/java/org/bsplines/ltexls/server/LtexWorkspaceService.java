@@ -88,10 +88,12 @@ class LtexWorkspaceService implements WorkspaceService {
         String fileNameStr = ((fileName != null) ? fileName.toString() : "");
         codeLanguageId = "plaintext";
 
-        if (fileNameStr.endsWith(".md")) {
-          codeLanguageId = "markdown";
+        if (fileNameStr.endsWith(".bib")) {
+          codeLanguageId = "bibtex";
         } else if (fileNameStr.endsWith(".tex")) {
           codeLanguageId = "latex";
+        } else  if (fileNameStr.endsWith(".md")) {
+          codeLanguageId = "markdown";
         }
       }
     }
