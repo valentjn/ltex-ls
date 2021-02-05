@@ -16,6 +16,7 @@
 - Check documents even if their code language is not supported
 - Fix removing items in settings with a hyphen prefix sometimes not working
 - Fix manually checking BibT<sub>E</sub>X documents not working
+- Fix words in dictionary containing markup not recognized
 
 ## 9.2.0 (January 29, 2021)
 

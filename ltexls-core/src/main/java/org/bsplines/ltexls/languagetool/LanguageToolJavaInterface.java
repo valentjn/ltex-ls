@@ -160,7 +160,6 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
       return Collections.emptyList();
     }
 
-    String code = annotatedTextFragment.getCodeFragment().getCode();
     List<LanguageToolRuleMatch> result = new ArrayList<>();
 
     for (RuleMatch match : matches) {
@@ -168,8 +167,8 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
           new LanguageToolRuleMatch(match, annotatedTextFragment);
 
       if (languageToolRuleMatch.isUnknownWordRule()
-            && this.dictionary.contains(code.substring(languageToolRuleMatch.getFromPos(),
-              languageToolRuleMatch.getToPos()))) {
+            && this.dictionary.contains(annotatedTextFragment.getSubstringOfPlainText(
+              languageToolRuleMatch.getFromPos(), languageToolRuleMatch.getToPos()))) {
         continue;
       }
 

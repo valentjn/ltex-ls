@@ -228,11 +228,20 @@ public class DocumentCheckerTest {
     Assertions.assertEquals(1, checkingResult.getKey().size());
 
     document = createDocument("latex", "S pekn\u00e9 inteligentn\u00fdmi dubmi.\n");
-    settings = settings.withLanguageShortCode("sk-SK");
+    settings = (new Settings()).withLanguageShortCode("sk-SK");
     checkingResult = checkDocument(document, settings);
     Assertions.assertEquals(1, checkingResult.getKey().size());
 
     settings = settings.withDictionary(Collections.singleton("pekn\u00e9"));
+    checkingResult = checkDocument(document, settings);
+    Assertions.assertEquals(0, checkingResult.getKey().size());
+
+    document = createDocument("markdown", "This is LT<sub>E</sub>X LS.\n");
+    settings = new Settings();
+    checkingResult = checkDocument(document, settings);
+    Assertions.assertEquals(1, checkingResult.getKey().size());
+
+    settings = settings.withDictionary(Collections.singleton("LTEX LS"));
     checkingResult = checkDocument(document, settings);
     Assertions.assertEquals(0, checkingResult.getKey().size());
   }
