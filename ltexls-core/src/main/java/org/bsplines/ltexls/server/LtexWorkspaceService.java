@@ -27,6 +27,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.DidChangeConfigurationParams;
 import org.eclipse.lsp4j.DidChangeWatchedFilesParams;
 import org.eclipse.lsp4j.ExecuteCommandParams;
+import org.eclipse.lsp4j.Position;
+import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.SymbolInformation;
 import org.eclipse.lsp4j.WorkspaceSymbolParams;
 import org.eclipse.lsp4j.services.WorkspaceService;
@@ -109,7 +111,19 @@ class LtexWorkspaceService implements WorkspaceService {
     LtexTextDocumentItem document = new LtexTextDocumentItem(
         this.languageServer, uriStr, codeLanguageId, 1, text);
 
-    return document.checkAndPublishDiagnosticsWithoutCache().thenApply((Boolean success) -> {
+    @Nullable Range range = null;
+
+    if (arguments.has("range")) {
+      JsonObject jsonRange = arguments.getAsJsonObject("range");
+      JsonObject jsonStart = jsonRange.getAsJsonObject("start");
+      JsonObject jsonEnd = jsonRange.getAsJsonObject("end");
+
+      range = new Range(
+          new Position(jsonStart.get("line").getAsInt(), jsonStart.get("character").getAsInt()),
+          new Position(jsonEnd.get("line").getAsInt(), jsonEnd.get("character").getAsInt()));
+    }
+
+    return document.checkAndPublishDiagnosticsWithoutCache(range).thenApply((Boolean success) -> {
       JsonObject jsonObject = new JsonObject();
       jsonObject.addProperty("success", success);
       return jsonObject;

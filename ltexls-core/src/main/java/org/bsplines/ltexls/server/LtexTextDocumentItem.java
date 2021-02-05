@@ -299,17 +299,26 @@ public class LtexTextDocumentItem extends TextDocumentItem {
   }
 
   public CompletableFuture<Boolean> checkAndPublishDiagnosticsWithCache() {
-    return checkAndPublishDiagnostics(true);
+    return checkAndPublishDiagnostics(null, true);
+  }
+
+  public CompletableFuture<Boolean> checkAndPublishDiagnosticsWithCache(@Nullable Range range) {
+    return checkAndPublishDiagnostics(range, true);
   }
 
   public CompletableFuture<Boolean> checkAndPublishDiagnosticsWithoutCache() {
-    return checkAndPublishDiagnostics(false);
+    return checkAndPublishDiagnostics(null, false);
   }
 
-  private CompletableFuture<Boolean> checkAndPublishDiagnostics(boolean useCache) {
+  public CompletableFuture<Boolean> checkAndPublishDiagnosticsWithoutCache(@Nullable Range range) {
+    return checkAndPublishDiagnostics(range, false);
+  }
+
+  private CompletableFuture<Boolean> checkAndPublishDiagnostics(
+        @Nullable Range range, boolean useCache) {
     @Nullable LtexLanguageClient languageClient = this.languageServer.getLanguageClient();
 
-    return checkAndGetDiagnostics(useCache).thenApply((List<Diagnostic> diagnostics) -> {
+    return checkAndGetDiagnostics(range, useCache).thenApply((List<Diagnostic> diagnostics) -> {
       if (languageClient == null) return false;
       @Nullable List<Diagnostic> diagnosticsNotAtCaret = extractDiagnosticsNotAtCaret();
       if (diagnosticsNotAtCaret == null) return false;
@@ -326,12 +335,13 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     });
   }
 
-  private CompletableFuture<List<Diagnostic>> checkAndGetDiagnostics(boolean useCache) {
+  private CompletableFuture<List<Diagnostic>> checkAndGetDiagnostics(
+        @Nullable Range range, boolean useCache) {
     if (useCache && (this.diagnostics != null)) {
       return CompletableFuture.completedFuture(this.diagnostics);
     }
 
-    return check(useCache).thenApply(
+    return check(range, useCache).thenApply(
         (Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) -> {
           List<LanguageToolRuleMatch> matches = checkingResult.getKey();
           List<Diagnostic> diagnostics = new ArrayList<>();
@@ -371,16 +381,26 @@ public class LtexTextDocumentItem extends TextDocumentItem {
 
   public CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>>
         checkWithCache() {
-    return check(true);
+    return check(null, true);
+  }
+
+  public CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>>
+        checkWithCache(@Nullable Range range) {
+    return check(range, true);
   }
 
   public CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>>
         checkWithoutCache() {
-    return check(false);
+    return check(null, false);
+  }
+
+  public CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>>
+        checkWithoutCache(@Nullable Range range) {
+    return check(range, false);
   }
 
   private CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>> check(
-        boolean useCache) {
+        @Nullable Range range, boolean useCache) {
     if (useCache && (this.checkingResult != null)) {
       return CompletableFuture.completedFuture(this.checkingResult);
     }
@@ -458,7 +478,7 @@ public class LtexTextDocumentItem extends TextDocumentItem {
                   jsonConfiguration, jsonWorkspaceSpecificConfiguration);
 
               Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
-                  this.languageServer.getDocumentChecker().check(this);
+                  this.languageServer.getDocumentChecker().check(this, range);
               this.checkingResult = checkingResult;
 
               return checkingResult;

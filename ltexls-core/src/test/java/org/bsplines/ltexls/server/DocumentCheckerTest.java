@@ -182,6 +182,25 @@ public class DocumentCheckerTest {
   }
 
   @Test
+  public void testRange() {
+    LtexTextDocumentItem document = createDocument("markdown",
+        "# Test\n\nThis is an **test.**\n\nThis is an **test.**\n");
+    SettingsManager settingsManager =
+        new SettingsManager((new Settings()).withLogLevel(Level.FINEST));
+    DocumentChecker documentChecker = new DocumentChecker(settingsManager);
+    Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
+        documentChecker.check(document, new Range(new Position(4, 0), new Position(4, 20)));
+    List<LanguageToolRuleMatch> matches = checkingResult.getKey();
+
+    Assertions.assertEquals(1, matches.size());
+    Assertions.assertEquals("EN_A_VS_AN", NullnessUtil.castNonNull(matches.get(0).getRuleId()));
+    Assertions.assertEquals("This is an test.",
+        NullnessUtil.castNonNull(matches.get(0).getSentence()).trim());
+    Assertions.assertEquals(38, matches.get(0).getFromPos());
+    Assertions.assertEquals(40, matches.get(0).getToPos());
+  }
+
+  @Test
   public void testCodeActionGenerator() {
     LtexTextDocumentItem document = createDocument("markdown",
         "This is an unknownword.\n");

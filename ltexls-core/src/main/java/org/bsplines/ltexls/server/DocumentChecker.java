@@ -26,6 +26,7 @@ import org.bsplines.ltexls.settings.Settings;
 import org.bsplines.ltexls.settings.SettingsManager;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.eclipse.lsp4j.Range;
 import org.eclipse.xtext.xbase.lib.Pair;
 import org.languagetool.markup.AnnotatedText;
 import org.languagetool.markup.TextPart;
@@ -37,9 +38,17 @@ public class DocumentChecker {
     this.settingsManager = settingsManager;
   }
 
-  private List<CodeFragment> fragmentizeDocument(LtexTextDocumentItem document) {
+  private List<CodeFragment> fragmentizeDocument(
+        LtexTextDocumentItem document, @Nullable Range range) {
     CodeFragmentizer codeFragmentizer = CodeFragmentizer.create(document.getLanguageId());
-    return codeFragmentizer.fragmentize(document.getText(), this.settingsManager.getSettings());
+    String code = document.getText();
+
+    if (range != null) {
+      code = code.substring(document.convertPosition(range.getStart()),
+          document.convertPosition(range.getEnd()));
+    }
+
+    return codeFragmentizer.fragmentize(code, this.settingsManager.getSettings());
   }
 
   private List<AnnotatedTextFragment> buildAnnotatedTextFragments(
@@ -59,18 +68,18 @@ public class DocumentChecker {
   }
 
   private List<LanguageToolRuleMatch> checkAnnotatedTextFragments(
-        List<AnnotatedTextFragment> annotatedTextFragments) {
+        List<AnnotatedTextFragment> annotatedTextFragments, int rangeOffset) {
     List<LanguageToolRuleMatch> matches = new ArrayList<>();
 
     for (AnnotatedTextFragment annotatedTextFragment : annotatedTextFragments) {
-      matches.addAll(checkAnnotatedTextFragment(annotatedTextFragment));
+      matches.addAll(checkAnnotatedTextFragment(annotatedTextFragment, rangeOffset));
     }
 
     return matches;
   }
 
   private List<LanguageToolRuleMatch> checkAnnotatedTextFragment(
-        AnnotatedTextFragment annotatedTextFragment) {
+        AnnotatedTextFragment annotatedTextFragment, int rangeOffset) {
     CodeFragment codeFragment = annotatedTextFragment.getCodeFragment();
     Settings settings = codeFragment.getSettings();
     this.settingsManager.setSettings(settings);
@@ -144,8 +153,10 @@ public class DocumentChecker {
     removeIgnoredMatches(matches);
 
     for (LanguageToolRuleMatch match : matches) {
-      match.setFromPos(match.getFromPos() + annotatedTextFragment.getCodeFragment().getFromPos());
-      match.setToPos(match.getToPos() + annotatedTextFragment.getCodeFragment().getFromPos());
+      match.setFromPos(match.getFromPos() + annotatedTextFragment.getCodeFragment().getFromPos()
+          + rangeOffset);
+      match.setToPos(match.getToPos() + annotatedTextFragment.getCodeFragment().getFromPos()
+          + rangeOffset);
     }
 
     return matches;
@@ -185,13 +196,20 @@ public class DocumentChecker {
 
   public Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> check(
         LtexTextDocumentItem document) {
+    return check(document, null);
+  }
+
+  public Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> check(
+        LtexTextDocumentItem document, @Nullable Range range) {
     Settings originalSettings = this.settingsManager.getSettings();
+    int rangeOffset = ((range == null) ? 0 : document.convertPosition(range.getStart()));
 
     try {
-      List<CodeFragment> codeFragments = fragmentizeDocument(document);
+      List<CodeFragment> codeFragments = fragmentizeDocument(document, range);
       List<AnnotatedTextFragment> annotatedTextFragments =
           buildAnnotatedTextFragments(codeFragments);
-      List<LanguageToolRuleMatch> matches = checkAnnotatedTextFragments(annotatedTextFragments);
+      List<LanguageToolRuleMatch> matches =
+          checkAnnotatedTextFragments(annotatedTextFragments, rangeOffset);
       return new Pair<>(matches, annotatedTextFragments);
     } finally {
       this.settingsManager.setSettings(originalSettings);

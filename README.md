@@ -163,6 +163,12 @@ interface CheckDocumentCommandParams {
    * Text to check. Will be determined as the contents of the file at `uri` if missing.
    */
   text?: string;
+
+  /**
+   * Range inside `text` (or the contents of the file at `uri` if missing) if only a part
+   * of the document should be checked. Will be set to the range spanning all of `text` if missing.
+   */
+  range?: Range;
 }
 
 type CheckDocumentCommandResult = ServerCommandResult;
