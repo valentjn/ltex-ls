@@ -298,11 +298,15 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     return convertPosition(newText.length() - numberOfEqualCharsAtEnd);
   }
 
-  public CompletableFuture<Boolean> checkAndPublishDiagnostics() {
+  public CompletableFuture<Boolean> checkAndPublishDiagnosticsWithCache() {
     return checkAndPublishDiagnostics(true);
   }
 
-  public CompletableFuture<Boolean> checkAndPublishDiagnostics(boolean useCache) {
+  public CompletableFuture<Boolean> checkAndPublishDiagnosticsWithoutCache() {
+    return checkAndPublishDiagnostics(false);
+  }
+
+  private CompletableFuture<Boolean> checkAndPublishDiagnostics(boolean useCache) {
     @Nullable LtexLanguageClient languageClient = this.languageServer.getLanguageClient();
 
     return checkAndGetDiagnostics(useCache).thenApply((List<Diagnostic> diagnostics) -> {
@@ -365,11 +369,17 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     return diagnosticsNotAtCaret;
   }
 
-  public CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>> check() {
+  public CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>>
+        checkWithCache() {
     return check(true);
   }
 
-  public CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>> check(
+  public CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>>
+        checkWithoutCache() {
+    return check(false);
+  }
+
+  private CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>> check(
         boolean useCache) {
     if (useCache && (this.checkingResult != null)) {
       return CompletableFuture.completedFuture(this.checkingResult);

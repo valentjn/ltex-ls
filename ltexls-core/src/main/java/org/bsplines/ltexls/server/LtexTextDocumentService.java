@@ -151,7 +151,7 @@ public class LtexTextDocumentService implements TextDocumentService {
     if ((document != null)
           && (this.languageServer.getSettingsManager().getSettings().getCheckFrequency()
             != CheckFrequency.MANUAL)) {
-      document.checkAndPublishDiagnostics(false);
+      document.checkAndPublishDiagnosticsWithoutCache();
     }
   }
 
@@ -183,7 +183,7 @@ public class LtexTextDocumentService implements TextDocumentService {
 
     if (this.languageServer.getSettingsManager().getSettings().getCheckFrequency()
           == CheckFrequency.SAVE) {
-      document.checkAndPublishDiagnostics(false);
+      document.checkAndPublishDiagnosticsWithoutCache();
     }
   }
 
@@ -202,7 +202,7 @@ public class LtexTextDocumentService implements TextDocumentService {
 
     if (this.languageServer.getSettingsManager().getSettings().getCheckFrequency()
           == CheckFrequency.EDIT) {
-      document.checkAndPublishDiagnostics(false);
+      document.checkAndPublishDiagnosticsWithoutCache();
     }
   }
 
@@ -221,7 +221,7 @@ public class LtexTextDocumentService implements TextDocumentService {
       return CompletableFuture.completedFuture(Collections.emptyList());
     }
 
-    return document.check().thenApply(
+    return document.checkWithCache().thenApply(
         (Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) -> {
           return this.languageServer.getCodeActionGenerator().generate(
               params, document, checkingResult);

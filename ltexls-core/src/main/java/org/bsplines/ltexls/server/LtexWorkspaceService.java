@@ -49,7 +49,7 @@ class LtexWorkspaceService implements WorkspaceService {
   @Override
   public void didChangeConfiguration(DidChangeConfigurationParams params) {
     this.languageServer.getLtexTextDocumentService().executeFunction(
-        (LtexTextDocumentItem document) -> document.checkAndPublishDiagnostics(false));
+        (LtexTextDocumentItem document) -> document.checkAndPublishDiagnosticsWithoutCache());
   }
 
   @Override
@@ -109,7 +109,7 @@ class LtexWorkspaceService implements WorkspaceService {
     LtexTextDocumentItem document = new LtexTextDocumentItem(
         this.languageServer, uriStr, codeLanguageId, 1, text);
 
-    return document.checkAndPublishDiagnostics(false).thenApply((Boolean success) -> {
+    return document.checkAndPublishDiagnosticsWithoutCache().thenApply((Boolean success) -> {
       JsonObject jsonObject = new JsonObject();
       jsonObject.addProperty("success", success);
       return jsonObject;
