@@ -154,14 +154,13 @@ interface CheckDocumentCommandParams {
   uri: string;
 
   /**
-   * Code language ID of the document (e.g., `latex`). Will be determined by
-   * the file extension of `uri` if missing.
+   * Code language ID of the document (e.g., `latex`). Will be determined by the file extension
+   * of `uri` if missing.
    */
   codeLanguageId?: string;
 
   /**
-   * Text to check. Will be determined as the contents of the file at `uri`
-   * if missing.
+   * Text to check. Will be determined as the contents of the file at `uri` if missing.
    */
   text?: string;
 }
@@ -198,8 +197,7 @@ interface GetServerStatusCommandResult extends ServerCommandResult {
   cpuDuration?: number;
 
   /**
-   * Memory in bytes of all currently allocated Java objects
-   * (this is a part of `totalMemory`).
+   * Memory in bytes of all currently allocated Java objects (this is a part of `totalMemory`).
    */
   usedMemory: number;
 
