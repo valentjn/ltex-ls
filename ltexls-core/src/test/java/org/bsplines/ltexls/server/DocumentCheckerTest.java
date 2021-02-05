@@ -25,7 +25,6 @@ import org.eclipse.lsp4j.Command;
 import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.TextDocumentIdentifier;
-import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.xtext.xbase.lib.Pair;
 import org.junit.jupiter.api.Assertions;
@@ -36,12 +35,12 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 @TestInstance(Lifecycle.PER_CLASS)
 public class DocumentCheckerTest {
   private static Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkDocument(
-        TextDocumentItem document) {
+        LtexTextDocumentItem document) {
     return checkDocument(document, new Settings());
   }
 
   private static Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkDocument(
-        TextDocumentItem document, Settings settings) {
+        LtexTextDocumentItem document, Settings settings) {
     SettingsManager settingsManager = new SettingsManager(settings.withLogLevel(Level.FINEST));
     DocumentChecker documentChecker = new DocumentChecker(settingsManager);
     return documentChecker.check(document);

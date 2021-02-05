@@ -26,7 +26,6 @@ import org.bsplines.ltexls.settings.Settings;
 import org.bsplines.ltexls.settings.SettingsManager;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.eclipse.lsp4j.TextDocumentItem;
 import org.eclipse.xtext.xbase.lib.Pair;
 import org.languagetool.markup.AnnotatedText;
 import org.languagetool.markup.TextPart;
@@ -38,7 +37,7 @@ public class DocumentChecker {
     this.settingsManager = settingsManager;
   }
 
-  private List<CodeFragment> fragmentizeDocument(TextDocumentItem document) {
+  private List<CodeFragment> fragmentizeDocument(LtexTextDocumentItem document) {
     CodeFragmentizer codeFragmentizer = CodeFragmentizer.create(document.getLanguageId());
     return codeFragmentizer.fragmentize(document.getText(), this.settingsManager.getSettings());
   }
@@ -185,7 +184,7 @@ public class DocumentChecker {
   }
 
   public Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> check(
-        TextDocumentItem document) {
+        LtexTextDocumentItem document) {
     Settings originalSettings = this.settingsManager.getSettings();
 
     try {
