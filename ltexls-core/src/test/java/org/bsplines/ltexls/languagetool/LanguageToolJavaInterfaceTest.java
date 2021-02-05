@@ -15,7 +15,7 @@ import org.bsplines.ltexls.server.DocumentCheckerTest;
 import org.bsplines.ltexls.server.LtexTextDocumentItem;
 import org.bsplines.ltexls.settings.Settings;
 import org.bsplines.ltexls.settings.SettingsManager;
-import org.checkerframework.checker.nullness.NullnessUtil;
+import org.checkerframework.checker.nullness.util.NullnessUtil;
 import org.eclipse.xtext.xbase.lib.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

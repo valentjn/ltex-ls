@@ -17,7 +17,7 @@ import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 import org.bsplines.ltexls.settings.HiddenFalsePositive;
 import org.bsplines.ltexls.settings.Settings;
 import org.bsplines.ltexls.settings.SettingsManager;
-import org.checkerframework.checker.nullness.NullnessUtil;
+import org.checkerframework.checker.nullness.util.NullnessUtil;
 import org.eclipse.lsp4j.CodeAction;
 import org.eclipse.lsp4j.CodeActionContext;
 import org.eclipse.lsp4j.CodeActionParams;
