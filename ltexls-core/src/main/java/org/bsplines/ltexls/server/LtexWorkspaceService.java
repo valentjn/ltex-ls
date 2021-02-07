@@ -61,7 +61,7 @@ class LtexWorkspaceService implements WorkspaceService {
     if (params.getCommand().equals(checkDocumentCommandName)) {
       return executeCheckDocumentCommand((JsonObject)params.getArguments().get(0));
     } else if (params.getCommand().equals(getServerStatusCommandName)) {
-      return executeGetServerStatusCommand((JsonObject)params.getArguments().get(0));
+      return executeGetServerStatusCommand();
     } else {
       return CompletableFuture.completedFuture(false);
     }
@@ -116,7 +116,7 @@ class LtexWorkspaceService implements WorkspaceService {
     });
   }
 
-  public CompletableFuture<Object> executeGetServerStatusCommand(JsonObject arguments) {
+  public CompletableFuture<Object> executeGetServerStatusCommand() {
     if (this.languageServer == null) {
       return failCommand(Tools.i18n("languageServerNotInitialized"));
     }
