@@ -33,14 +33,18 @@ public class LtexMarkdownDisplayMathParser extends AbstractBlockParser {
   private static final Pattern DISPLAY_MATH_START_PATTERN = Pattern.compile("\\$\\$(\\s*$)");
   private static final Pattern DISPLAY_MATH_END_PATTERN = Pattern.compile("\\$\\$(\\s*$)");
 
-  private LtexMarkdownDisplayMath block = new LtexMarkdownDisplayMath();
-  private @Nullable BlockContent content = new BlockContent();
-  private boolean hadClose = false;
+  private LtexMarkdownDisplayMath block;
+  private @Nullable BlockContent content;
+  private boolean hadClose;
 
-  LtexMarkdownDisplayMathParser(DataHolder options, BasedSequence openMarker,
+  public LtexMarkdownDisplayMathParser(DataHolder options, BasedSequence openMarker,
         BasedSequence openTrailing) {
+    this.block = new LtexMarkdownDisplayMath();
     this.block.setOpeningMarker(openMarker);
     this.block.setOpeningTrailing(openTrailing);
+
+    this.content = new BlockContent();
+    this.hadClose = false;
   }
 
   @Override

@@ -31,10 +31,10 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 @DefaultQualifier(NonNull.class)
 public class LtexLanguageServerLauncherTest {
   private @MonotonicNonNull Thread launcherThread;
-  private PipedInputStream in = new PipedInputStream();
-  private PipedOutputStream out = new PipedOutputStream();
-  private PipedInputStream pipedInputStream = new PipedInputStream();
-  private PipedOutputStream pipedOutputStream = new PipedOutputStream();
+  private PipedInputStream in;
+  private PipedOutputStream out;
+  private PipedInputStream pipedInputStream;
+  private PipedOutputStream pipedOutputStream;
 
   private static class LtexLanguageServerLauncherRunnable implements Runnable {
     private InputStream in;
@@ -56,6 +56,13 @@ public class LtexLanguageServerLauncherTest {
         throw new RuntimeException("ExecutionException thrown", e);
       }
     }
+  }
+
+  public LtexLanguageServerLauncherTest() {
+    this.in = new PipedInputStream();
+    this.out = new PipedOutputStream();
+    this.pipedInputStream = new PipedInputStream();
+    this.pipedOutputStream = new PipedOutputStream();
   }
 
   @BeforeAll

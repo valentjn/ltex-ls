@@ -35,11 +35,10 @@ public class LatexCommandSignature {
   private static final Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\])|(\\(\\)))");
   private static final Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
 
-  private String name = "";
-  private ArrayList<ArgumentType> argumentTypes = new ArrayList<ArgumentType>();
-  private Action action = Action.IGNORE;
+  private String name;
+  private ArrayList<ArgumentType> argumentTypes;
+  private Action action;
   private DummyGenerator dummyGenerator;
-
   private String commandPrototype;
   private Pattern commandPattern;
 
@@ -58,8 +57,12 @@ public class LatexCommandSignature {
 
   public LatexCommandSignature(String commandPrototype, Action action,
         DummyGenerator dummyGenerator, boolean escapeCommandName) {
+    this.name = "";
+    this.argumentTypes = new ArrayList<ArgumentType>();
+    this.action = Action.IGNORE;
     this.dummyGenerator = dummyGenerator;
     this.commandPrototype = commandPrototype;
+
     Matcher commandMatcher = genericCommandPattern.matcher(commandPrototype);
     boolean found = commandMatcher.find();
     @Nullable String name = (found ? commandMatcher.group(1) : null);

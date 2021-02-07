@@ -22,7 +22,11 @@ import org.languagetool.server.HTTPServer;
 @TestInstance(Lifecycle.PER_CLASS)
 public class LanguageToolHttpInterfaceTest {
   private @MonotonicNonNull Thread serverThread;
-  private Settings defaultSettings = new Settings();
+  private Settings defaultSettings;
+
+  public LanguageToolHttpInterfaceTest() {
+    this.defaultSettings = new Settings();
+  }
 
   @BeforeAll
   public void setUp() throws InterruptedException {

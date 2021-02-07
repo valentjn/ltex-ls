@@ -28,29 +28,50 @@ public class Settings {
   private static final Set<String> defaultEnabled =
       new HashSet<>(Arrays.asList("bibtex", "latex", "markdown", "rsweave"));
 
-  private @Nullable Set<String> enabled = null;
-  private @Nullable String languageShortCode = null;
-  private @Nullable Map<String, Set<String>> dictionary = null;
-  private @Nullable Map<String, Set<String>> disabledRules = null;
-  private @Nullable Map<String, Set<String>> enabledRules = null;
-  private @Nullable Map<String, Set<HiddenFalsePositive>> hiddenFalsePositives = null;
-  private @Nullable Map<String, Boolean> bibtexFields = null;
-  private @Nullable Map<String, String> latexCommands = null;
-  private @Nullable Map<String, String> latexEnvironments = null;
-  private @Nullable Map<String, String> markdownNodes = null;
-  private @Nullable Boolean enablePickyRules = null;
-  private @Nullable String motherTongueShortCode = null;
-  private @Nullable String languageModelRulesDirectory = null;
-  private @Nullable String neuralNetworkModelRulesDirectory = null;
-  private @Nullable String word2VecModelRulesDirectory = null;
-  private @Nullable String languageToolHttpServerUri = null;
-  private @Nullable Level logLevel = null;
-  private @Nullable Integer sentenceCacheSize = null;
-  private @Nullable DiagnosticSeverity diagnosticSeverity = null;
-  private @Nullable CheckFrequency checkFrequency = null;
-  private @Nullable Boolean clearDiagnosticsWhenClosingFile = null;
+  private @Nullable Set<String> enabled;
+  private @Nullable String languageShortCode;
+  private @Nullable Map<String, Set<String>> dictionary;
+  private @Nullable Map<String, Set<String>> disabledRules;
+  private @Nullable Map<String, Set<String>> enabledRules;
+  private @Nullable Map<String, Set<HiddenFalsePositive>> hiddenFalsePositives;
+  private @Nullable Map<String, Boolean> bibtexFields;
+  private @Nullable Map<String, String> latexCommands;
+  private @Nullable Map<String, String> latexEnvironments;
+  private @Nullable Map<String, String> markdownNodes;
+  private @Nullable Boolean enablePickyRules;
+  private @Nullable String motherTongueShortCode;
+  private @Nullable String languageModelRulesDirectory;
+  private @Nullable String neuralNetworkModelRulesDirectory;
+  private @Nullable String word2VecModelRulesDirectory;
+  private @Nullable String languageToolHttpServerUri;
+  private @Nullable Level logLevel;
+  private @Nullable Integer sentenceCacheSize;
+  private @Nullable DiagnosticSeverity diagnosticSeverity;
+  private @Nullable CheckFrequency checkFrequency;
+  private @Nullable Boolean clearDiagnosticsWhenClosingFile;
 
   public Settings() {
+    this.enabled = null;
+    this.languageShortCode = null;
+    this.dictionary = null;
+    this.disabledRules = null;
+    this.enabledRules = null;
+    this.hiddenFalsePositives = null;
+    this.bibtexFields = null;
+    this.latexCommands = null;
+    this.latexEnvironments = null;
+    this.markdownNodes = null;
+    this.enablePickyRules = null;
+    this.motherTongueShortCode = null;
+    this.languageModelRulesDirectory = null;
+    this.neuralNetworkModelRulesDirectory = null;
+    this.word2VecModelRulesDirectory = null;
+    this.languageToolHttpServerUri = null;
+    this.logLevel = null;
+    this.sentenceCacheSize = null;
+    this.diagnosticSeverity = null;
+    this.checkFrequency = null;
+    this.clearDiagnosticsWhenClosingFile = null;
   }
 
   public Settings(Settings obj) {

@@ -38,20 +38,26 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
         LtexMarkdownExtension.create()
       ));
 
-  private Parser parser = Parser.builder(parserOptions).build();
+  private Parser parser;
 
   private String code;
   private int pos;
   private int dummyCounter;
   private boolean firstCellInTableRow;
-  private Stack<String> nodeTypeStack = new Stack<>();
+  private Stack<String> nodeTypeStack;
 
-  private String language = "en-US";
-  private List<MarkdownNodeSignature> nodeSignatures =
-      new ArrayList<>(MarkdownAnnotatedTextBuilderDefaults.getDefaultMarkdownNodeSignatures());
+  private String language;
+  private List<MarkdownNodeSignature> nodeSignatures;
 
   public MarkdownAnnotatedTextBuilder() {
+    this.parser = Parser.builder(parserOptions).build();
+
     this.code = "";
+    this.nodeTypeStack = new Stack<>();
+
+    this.language = "en-US";
+    this.nodeSignatures = new ArrayList<>(
+        MarkdownAnnotatedTextBuilderDefaults.getDefaultMarkdownNodeSignatures());
   }
 
   private void visitChildren(final Node node) {
