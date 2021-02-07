@@ -61,7 +61,7 @@ public class LatexAnnotatedTextBuilderTest {
         + "  Inside the frame!\n"
         + "\\end{frame}\n"
         + "Final sentence.\n",
-        "This is a test. TestAnother Test Inside the frame! Final sentence. ");
+        "This is a test. Test Another Test Inside the frame! Final sentence. ");
     assertPlainText("This is good\\dots No, it isn't.\n", "This is good\u2026 No, it isn't. ");
     assertPlainText("This is a test of\\\\line breaks.\n", "This is a test of line breaks. ");
     assertPlainText(

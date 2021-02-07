@@ -638,7 +638,14 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
 
   private void processClosingBrace() {
     String interpretAs = "";
-    if ((this.curMode == Mode.HEADING) && this.lastPunctuation.isEmpty()) interpretAs = ".";
+
+    if ((this.curMode == Mode.HEADING) && this.lastPunctuation.isEmpty()) {
+      interpretAs = ".";
+    } else if (isTextMode(this.curMode) && (this.pos + 1 < this.code.length())
+          && (this.code.charAt(this.pos + 1) == '{')) {
+      interpretAs = " ";
+    }
+
     popMode();
     addMarkup(this.curString, interpretAs);
     this.canInsertSpaceBeforeDummy = true;
