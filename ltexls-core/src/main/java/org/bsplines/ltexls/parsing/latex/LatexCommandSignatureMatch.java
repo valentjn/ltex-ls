@@ -23,7 +23,7 @@ public class LatexCommandSignatureMatch {
     this.code = code;
     this.fromPos = fromPos;
     this.toPos = (argumentPos.isEmpty()
-        ? (fromPos + commandSignature.getName().length())
+        ? (fromPos + commandSignature.getPrefix().length())
         : argumentPos.get(argumentPos.size() - 1).getValue());
     this.argumentPos = argumentPos;
   }

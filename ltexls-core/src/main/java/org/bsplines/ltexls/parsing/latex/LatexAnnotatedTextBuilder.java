@@ -140,9 +140,9 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     Map<String, List<LatexCommandSignature>> map = new HashMap<>();
 
     for (LatexCommandSignature commandSignature : commandSignatures) {
-      String commandName = commandSignature.getName();
-      if (!map.containsKey(commandName)) map.put(commandName, new ArrayList<>());
-      map.get(commandName).add(commandSignature);
+      String commandPrefix = commandSignature.getPrefix();
+      if (!map.containsKey(commandPrefix)) map.put(commandPrefix, new ArrayList<>());
+      map.get(commandPrefix).add(commandSignature);
     }
 
     return map;

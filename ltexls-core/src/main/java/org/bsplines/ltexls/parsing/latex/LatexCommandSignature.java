@@ -31,11 +31,11 @@ public class LatexCommandSignature {
   }
 
   private static final Pattern genericCommandPattern = Pattern.compile(
-      "^([\\\\@].+?)(\\{\\}|\\[\\]|\\(\\))*$");
+      "^(.+?)(\\{\\}|\\[\\]|\\(\\))*$");
   private static final Pattern argumentPattern = Pattern.compile("^((\\{\\})|(\\[\\])|(\\(\\)))");
   private static final Pattern commentPattern = Pattern.compile("^%.*?($|(\n[ \n\r\t]*))");
 
-  private String name;
+  private String prefix;
   private ArrayList<ArgumentType> argumentTypes;
   private Action action;
   private DummyGenerator dummyGenerator;
@@ -56,8 +56,8 @@ public class LatexCommandSignature {
   }
 
   public LatexCommandSignature(String commandPrototype, Action action,
-        DummyGenerator dummyGenerator, boolean escapeCommandName) {
-    this.name = "";
+        DummyGenerator dummyGenerator, boolean escapeCommandPrefix) {
+    this.prefix = "";
     this.argumentTypes = new ArrayList<ArgumentType>();
     this.action = Action.IGNORE;
     this.dummyGenerator = dummyGenerator;
@@ -65,15 +65,15 @@ public class LatexCommandSignature {
 
     Matcher commandMatcher = genericCommandPattern.matcher(commandPrototype);
     boolean found = commandMatcher.find();
-    @Nullable String name = (found ? commandMatcher.group(1) : null);
+    @Nullable String prefix = (found ? commandMatcher.group(1) : null);
 
-    if (name == null) {
+    if (prefix == null) {
       Tools.logger.warning(Tools.i18n("invalidCommandPrototype", commandPrototype));
       this.commandPattern = Pattern.compile(" ^$");
       return;
     }
 
-    this.name = name;
+    this.prefix = prefix;
     int pos = commandMatcher.end(1);
 
     while (true) {
@@ -99,7 +99,7 @@ public class LatexCommandSignature {
 
     this.action = action;
     this.commandPattern = Pattern.compile(
-        "^" + (escapeCommandName ? Pattern.quote(this.name) : this.name));
+        "^" + (escapeCommandPrefix ? Pattern.quote(this.prefix) : this.prefix));
   }
 
   private static String matchPatternFromPosition(String code, int fromPos, Pattern pattern) {
@@ -224,12 +224,8 @@ public class LatexCommandSignature {
     return pos;
   }
 
-  public String getName() {
-    return this.name;
-  }
-
-  public String getCommandPrototype() {
-    return this.commandPrototype;
+  public String getPrefix() {
+    return this.prefix;
   }
 
   public Action getAction() {
@@ -238,5 +234,9 @@ public class LatexCommandSignature {
 
   public DummyGenerator getDummyGenerator() {
     return this.dummyGenerator;
+  }
+
+  public String getCommandPrototype() {
+    return this.commandPrototype;
   }
 }

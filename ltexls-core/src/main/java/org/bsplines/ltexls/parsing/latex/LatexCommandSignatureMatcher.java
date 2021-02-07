@@ -39,24 +39,23 @@ public class LatexCommandSignatureMatcher {
     this(commandSignatures, true);
   }
 
-  public LatexCommandSignatureMatcher(
-        Collection<? extends LatexCommandSignature> commandSignatures, boolean escapeCommandNames) {
+  public LatexCommandSignatureMatcher(Collection<? extends LatexCommandSignature> commandSignatures,
+        boolean escapeCommandPrefixes) {
     this.commandSignatures = new ArrayList<>(commandSignatures);
 
-    Set<String> commandNames = new HashSet<>();
-    this.commandSignatures.forEach((LatexCommandSignature x) -> commandNames.add(x.getName()));
     StringBuilder commandPatternStringBuilder = new StringBuilder("");
     boolean first = true;
 
-    for (String commandName : commandNames) {
+    for (LatexCommandSignature commandSignature : commandSignatures) {
       if (first) {
         first = false;
       } else {
         commandPatternStringBuilder.append("|");
       }
 
+      String commandPrefix = commandSignature.getPrefix();
       commandPatternStringBuilder.append(
-          escapeCommandNames ? Pattern.quote(commandName) : commandName);
+          escapeCommandPrefixes ? Pattern.quote(commandPrefix) : commandPrefix);
     }
 
     this.commandPattern = Pattern.compile(commandPatternStringBuilder.toString());
