@@ -7,55 +7,43 @@
 
 package org.bsplines.ltexls.parsing.latex;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class LatexEnvironmentSignature {
-  public enum Action {
-    DEFAULT,
-    IGNORE,
+public class LatexEnvironmentSignature extends LatexCommandSignature {
+  private static final Pattern prefixPattern = Pattern.compile("^\\\\begin\\{([^\\}]+)\\}");
+
+  private boolean ignoreAllArguments;
+  private String environmentName;
+
+  public LatexEnvironmentSignature(String environmentPrototype) {
+    this(environmentPrototype, Action.IGNORE);
   }
 
-  private String name;
-  private Action action;
+  public LatexEnvironmentSignature(String environmentPrototype, Action action) {
+    super((prefixPattern.matcher(environmentPrototype).find()
+          ? environmentPrototype : "\\begin{" + environmentPrototype + "}"),
+        action);
 
-  public LatexEnvironmentSignature(String name) {
-    this(name, Action.IGNORE);
-  }
+    Matcher prefixMatcher = prefixPattern.matcher(environmentPrototype);
+    boolean matchFound = prefixMatcher.find();
+    @Nullable String environmentName = (matchFound ? prefixMatcher.group(1) : null);
 
-  public LatexEnvironmentSignature(String name, Action action) {
-    this.name = name;
-    this.action = action;
-  }
-
-  @Override
-  public boolean equals(@Nullable Object obj) {
-    if ((obj == null) || !LatexEnvironmentSignature.class.isAssignableFrom(obj.getClass())) {
-      return false;
+    if (environmentName != null) {
+      this.ignoreAllArguments = false;
+      this.environmentName = environmentName;
+    } else {
+      this.ignoreAllArguments = true;
+      this.environmentName = environmentPrototype;
     }
-
-    LatexEnvironmentSignature other = (LatexEnvironmentSignature)obj;
-
-    if (!this.name.equals(other.name)) return false;
-    if (!this.action.equals(other.action)) return false;
-
-    return true;
   }
 
-  @Override
-  public int hashCode() {
-    int hash = 3;
-
-    hash = 53 * hash + this.name.hashCode();
-    hash = 53 * hash + this.action.hashCode();
-
-    return hash;
+  public boolean doesIgnoreAllArguments() {
+    return this.ignoreAllArguments;
   }
 
-  public String getName() {
-    return this.name;
-  }
-
-  public Action getAction() {
-    return this.action;
+  public String getEnvironmentName() {
+    return this.environmentName;
   }
 }

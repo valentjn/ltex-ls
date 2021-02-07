@@ -642,9 +642,14 @@ class LatexAnnotatedTextBuilderDefaults {
   private static List<LatexEnvironmentSignature> createDefaultLatexEnvironmentSignatures() {
     List<LatexEnvironmentSignature> list = new ArrayList<>();
 
+    list.add(new LatexEnvironmentSignature("\\begin{frame}",
+        LatexEnvironmentSignature.Action.DEFAULT));
+
     list.add(new LatexEnvironmentSignature("lstlisting"));
     list.add(new LatexEnvironmentSignature("otherlanguage"));
     list.add(new LatexEnvironmentSignature("otherlanguage*"));
+    list.add(new LatexEnvironmentSignature("textpos"));
+    list.add(new LatexEnvironmentSignature("textpos*"));
     list.add(new LatexEnvironmentSignature("tikzpicture"));
     list.add(new LatexEnvironmentSignature("verbatim"));
 

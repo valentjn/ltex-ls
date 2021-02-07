@@ -55,6 +55,13 @@ public class LatexAnnotatedTextBuilderTest {
         + "  \\item that.\n"
         + "\\end{itemize}\n",
         "We can do this or that. ");
+    assertPlainText(
+        "This is a test.\n"
+        + "\\begin{frame}{Test}{Another Test}\n"
+        + "  Inside the frame!\n"
+        + "\\end{frame}\n"
+        + "Final sentence.\n",
+        "This is a test. TestAnother Test Inside the frame! Final sentence. ");
     assertPlainText("This is good\\dots No, it isn't.\n", "This is good\u2026 No, it isn't. ");
     assertPlainText("This is a test of\\\\line breaks.\n", "This is a test of line breaks. ");
     assertPlainText(

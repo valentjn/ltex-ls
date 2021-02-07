@@ -8,6 +8,7 @@
 package org.bsplines.ltexls.parsing.latex;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
@@ -226,6 +227,10 @@ public class LatexCommandSignature {
 
   public String getPrefix() {
     return this.prefix;
+  }
+
+  public List<ArgumentType> getArgumentTypes() {
+    return Collections.unmodifiableList(this.argumentTypes);
   }
 
   public Action getAction() {
