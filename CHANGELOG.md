@@ -16,6 +16,7 @@
 - Add support for not ignoring arguments of `\begin{environment}`
 - Add `range` argument to `ltex.checkDocument`
 - Check documents even if their code language is not supported
+- Fix comment sign before babel commands not recognized
 - Fix removing items in settings with a hyphen prefix sometimes not working
 - Fix space not added between two arguments of L<sup>A</sup>T<sub>E</sub>X commands
 - Fix manually checking BibT<sub>E</sub>X documents not working

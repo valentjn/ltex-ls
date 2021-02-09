@@ -162,6 +162,18 @@ public class LatexFragmentizerTest {
     Assertions.assertEquals("de-DE", codeFragments.get(1).getSettings().getLanguageShortCode());
 
     codeFragments = fragmentizer.fragmentize(
+        "This is a test.\n"
+        + "  \\usepackage[ngerman]{babel}\n"
+        + "This is another test.", new Settings());
+    Assertions.assertEquals(2, codeFragments.size());
+
+    codeFragments = fragmentizer.fragmentize(
+        "This is a test.\n"
+        + "  % \\usepackage[ngerman]{babel}\n"
+        + "This is another test.", new Settings());
+    Assertions.assertEquals(1, codeFragments.size());
+
+    codeFragments = fragmentizer.fragmentize(
         "This is a \\begin{de-DE}Beispiel\\end{de-DE}.\n", new Settings());
     Assertions.assertEquals(2, codeFragments.size());
 

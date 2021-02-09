@@ -19,6 +19,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.xtext.xbase.lib.Pair;
 
 public class LatexCommandSignatureMatcher {
+  private static final Pattern commentPattern = Pattern.compile("(?<!\\\\)(?:\\\\\\\\)*%");
+
   private List<LatexCommandSignature> commandSignatures;
   private Pattern commandPattern;
   private @Nullable String code;
@@ -80,6 +82,11 @@ public class LatexCommandSignatureMatcher {
 
     while (matcher.find()) {
       int fromPos = matcher.start();
+
+      int lineStartPos = code.lastIndexOf('\n', fromPos) + 1;
+      String precedingPartOfLine = code.substring(lineStartPos, fromPos);
+      if (commentPattern.matcher(precedingPartOfLine).find()) continue;
+
       @Nullable LatexCommandSignatureMatch bestMatch = null;
 
       for (LatexCommandSignature commandSignature : this.commandSignatures) {
