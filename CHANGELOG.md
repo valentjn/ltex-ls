@@ -13,10 +13,10 @@
 - Remove support for settings that are deprecated since 8.0.0: `ltex.ignoreInRuleSentence`, `ltex.commands.ignore`, `ltex.commands.dummy`, `ltex.environments.ignore`, `ltex.markdown.ignore`, and `ltex.markdown.dummy`
 - Replace `ltex/serverStatus` request with `ltex.getServerStatus` command
 - Add support for magic comments inside HTML comments in Markdown (`<!-- ltex: SETTINGS -->`)
-- Add support for not ignoring arguments of `\begin{environment}`
+- Check frame title in argument of L<sup>A</sup>T<sub>E</sub>X Beamer frames (fixes [vscode-ltex#239](https://github.com/valentjn/vscode-ltex/issues/239))
 - Add `range` argument to `ltex.checkDocument`
 - Check documents even if their code language is not supported
-- Fix comment sign before babel commands not recognized
+- Fix comment sign before babel commands not recognized (see [vscode-ltex#245](https://github.com/valentjn/vscode-ltex/discussions/245))
 - Fix removing items in settings with a hyphen prefix sometimes not working
 - Fix space not added between two arguments of L<sup>A</sup>T<sub>E</sub>X commands
 - Fix manually checking BibT<sub>E</sub>X documents not working
