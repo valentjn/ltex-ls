@@ -20,6 +20,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.DummyGenerator;
 import org.bsplines.ltexls.settings.Settings;
+import org.bsplines.ltexls.tools.ExcludeFromGeneratedCoverage;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
@@ -350,16 +351,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
         this.isMathEmpty = false;
       }
 
-      if (this.pos == lastPos) {
-        if (this.isInStrictMode) {
-          throw new RuntimeException(Tools.i18n(
-              "latexAnnotatedTextBuilderInfiniteLoop", getDebugInformation(code)));
-        } else {
-          Tools.logger.warning(Tools.i18n(
-              "latexAnnotatedTextBuilderPreventedInfiniteLoop", getDebugInformation(code)));
-          this.pos++;
-        }
-      }
+      if (this.pos == lastPos) this.onInfiniteLoop();
     }
 
     return this;
@@ -859,9 +851,22 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     this.isMathCharTrivial = true;
   }
 
-  private String getDebugInformation(String code) {
+  @ExcludeFromGeneratedCoverage
+  private void onInfiniteLoop() {
+    if (this.isInStrictMode) {
+      throw new RuntimeException(Tools.i18n(
+          "latexAnnotatedTextBuilderInfiniteLoop", getDebugInformation()));
+    } else {
+      Tools.logger.warning(Tools.i18n(
+          "latexAnnotatedTextBuilderPreventedInfiniteLoop", getDebugInformation()));
+      this.pos++;
+    }
+  }
+
+  @ExcludeFromGeneratedCoverage
+  private String getDebugInformation() {
     String remainingCode = StringEscapeUtils.escapeJava(
-        code.substring(this.pos, Math.min(this.pos + 100, code.length())));
+        this.code.substring(this.pos, Math.min(this.pos + 100, this.code.length())));
     return "Remaining code = \"" + remainingCode
         + "\", pos = " + this.pos
         + ", dummyCounter = " + this.dummyCounter
