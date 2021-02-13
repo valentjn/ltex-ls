@@ -65,7 +65,7 @@ class LtexWorkspaceService implements WorkspaceService {
     } else if (params.getCommand().equals(getServerStatusCommandName)) {
       return executeGetServerStatusCommand();
     } else {
-      return CompletableFuture.completedFuture(false);
+      return failCommand(Tools.i18n("unknownCommand", params.getCommand()));
     }
   }
 
