@@ -70,9 +70,7 @@ class LtexWorkspaceService implements WorkspaceService {
   }
 
   public CompletableFuture<Object> executeCheckDocumentCommand(JsonObject arguments) {
-    if (this.languageServer == null) {
-      return failCommand(Tools.i18n("languageServerNotInitialized"));
-    }
+    if (this.languageServer == null) return failCommand(Tools.i18n("languageServerNotInitialized"));
 
     String uriStr = arguments.get("uri").getAsString();
     @Nullable String codeLanguageId = (arguments.has("codeLanguageId")
@@ -131,9 +129,7 @@ class LtexWorkspaceService implements WorkspaceService {
   }
 
   public CompletableFuture<Object> executeGetServerStatusCommand() {
-    if (this.languageServer == null) {
-      return failCommand(Tools.i18n("languageServerNotInitialized"));
-    }
+    if (this.languageServer == null) return failCommand(Tools.i18n("languageServerNotInitialized"));
 
     final long processId = ProcessHandle.current().pid();
     final double wallClockDuration = Duration.between(
