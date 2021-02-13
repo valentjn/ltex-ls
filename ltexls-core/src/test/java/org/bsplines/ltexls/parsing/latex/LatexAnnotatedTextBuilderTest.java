@@ -145,6 +145,9 @@ public class LatexAnnotatedTextBuilderTest {
         + "This is another test.\n",
         "This is a test. abc This is another test. ");
     assertPlainText(
+        "\\setcounter{a}[b]{c} This is an test.\n",
+        "a[b]c This is an test. ");
+    assertPlainText(
         "This is a test: \\colorbox{abc}{def}.\n",
         "This is a test: def. ");
     assertPlainText(
@@ -152,8 +155,46 @@ public class LatexAnnotatedTextBuilderTest {
         "This is a test: Dummy0def. ",
         (new Settings()).withLatexCommands(Collections.singletonMap("\\colorbox{}", "dummy")));
     assertPlainText(
-        "\\setcounter{a}[b]{c} This is an test.\n",
-        "a[b]c This is an test. ");
+        "This is a test: \\foobar{abc}{def}.\n",
+        "This is a test: abc def. ");
+    assertPlainText(
+        "This is a test: \\foobar{abc}{def}.\n",
+        "This is a test: abc def. ",
+        (new Settings()).withLatexCommands(Collections.singletonMap("\\foobar{}{}", "default")));
+    assertPlainText(
+        "This is a test: \\foobar{abc}{def}.\n",
+        "This is a test: . ",
+        (new Settings()).withLatexCommands(Collections.singletonMap("\\foobar{}{}", "ignore")));
+    assertPlainText(
+        "This is a test: \\foobar{abc}{def}.\n",
+        "This is a test: Dummy0. ",
+        (new Settings()).withLatexCommands(Collections.singletonMap("\\foobar{}{}", "dummy")));
+    assertPlainText(
+        "This is a test: \\foobar{abc}{def}.\n",
+        "This is a test: Dummies. ",
+        (new Settings()).withLatexCommands(Collections.singletonMap(
+          "\\foobar{}{}", "pluralDummy")));
+    assertPlainText(
+        "This is a test: \\begin{foobar}{abc}def\\end{foobar}.\n",
+        "This is a test: def. ");
+    assertPlainText(
+        "This is a test: \\begin{foobar}{abc}def\\end{foobar}.\n",
+        "This is a test: def. ",
+        (new Settings()).withLatexEnvironments(Collections.singletonMap("foobar", "default")));
+    assertPlainText(
+        "This is a test: \\begin{foobar}{abc}def\\end{foobar}.\n",
+        "This is a test: abcdef. ",
+        (new Settings()).withLatexEnvironments(Collections.singletonMap(
+          "\\begin{foobar}", "default")));
+    assertPlainText(
+        "This is a test: \\begin{foobar}{abc}def\\end{foobar}.\n",
+        "This is a test: def. ",
+        (new Settings()).withLatexEnvironments(Collections.singletonMap(
+          "\\begin{foobar}{}", "default")));
+    assertPlainText(
+        "This is a test: \\begin{foobar}{abc}def\\end{foobar}.\n",
+        "This is a test: . ",
+        (new Settings()).withLatexEnvironments(Collections.singletonMap("foobar", "ignore")));
 
     {
       AnnotatedText annotatedText = buildAnnotatedText("\\cite{Kubota}*{Theorem 3.7}\n");
