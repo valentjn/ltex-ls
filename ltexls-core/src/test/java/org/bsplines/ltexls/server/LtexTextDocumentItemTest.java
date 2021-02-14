@@ -38,13 +38,15 @@ public class LtexTextDocumentItemTest {
     LtexTextDocumentItem document;
 
     document = new LtexTextDocumentItem(languageServer, "untitled:test.md", "markdown", 1,
-        "Hello\nEnthusiastic\r\nReader!");
+        "Hello\nEnthusiastic\r\nReader\r!");
     assertPosition(document, 0, new Position(0, 0));
     assertPosition(document, 6, new Position(1, 0));
     assertPosition(document, 7, new Position(1, 1));
     assertPosition(document, 12, new Position(1, 6));
     assertPosition(document, 18, new Position(1, 12));
     assertPosition(document, 20, new Position(2, 0));
+    assertPosition(document, 26, new Position(2, 6));
+    assertPosition(document, 27, new Position(3, 0));
 
     Assertions.assertEquals(0, document.convertPosition(new Position(-1, 0)));
     Assertions.assertEquals(27, document.convertPosition(new Position(3, 0)));
@@ -151,6 +153,16 @@ public class LtexTextDocumentItemTest {
         languageServer,"untitled:text.md", "markdown", 1, "abc");
     Assertions.assertTrue(origDocument.equals(origDocument));
     Assertions.assertDoesNotThrow(() -> origDocument.hashCode());
+    Assertions.assertEquals(languageServer, origDocument.getLanguageServer());
+
+    {
+      LtexTextDocumentItem document = new LtexTextDocumentItem(
+          languageServer, "untitled:text.md", "markdown", 1, "abc");
+      document.setText("foobar");
+      Assertions.assertEquals("foobar", document.getText());
+      Assertions.assertFalse(document.equals(origDocument));
+      Assertions.assertFalse(origDocument.equals(document));
+    }
 
     {
       LtexTextDocumentItem document = new LtexTextDocumentItem(
@@ -161,6 +173,13 @@ public class LtexTextDocumentItemTest {
           NullnessUtil.castNonNull(document.getCaretPosition()));
       Assertions.assertFalse(document.equals(origDocument));
       Assertions.assertFalse(origDocument.equals(document));
+
+      document.setCaretPosition(new Position(13, 42));
+      Assertions.assertEquals(new Position(13, 42),
+          NullnessUtil.castNonNull(document.getCaretPosition()));
+
+      document.setCaretPosition(null);
+      assertNull(document.getCaretPosition());
     }
 
     {
