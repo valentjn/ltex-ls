@@ -13,25 +13,21 @@ import com.vladsch.flexmark.util.sequence.BasedSequence;
 import org.jetbrains.annotations.NotNull;
 
 public class LtexMarkdownInlineMath extends Node implements DelimitedNode {
-  protected BasedSequence openingMarker = BasedSequence.NULL;
-  protected BasedSequence text = BasedSequence.NULL;
-  protected BasedSequence closingMarker = BasedSequence.NULL;
-
-  @Override
-  public @NotNull BasedSequence[] getSegments() {
-    return new BasedSequence[] { this.openingMarker, this.text, this.closingMarker };
-  }
-
-  @Override
-  public void getAstExtra(@NotNull StringBuilder out) {
-    delimitedSegmentSpanChars(out, this.openingMarker, this.text, this.closingMarker, "text");
-  }
+  private BasedSequence openingMarker;
+  private BasedSequence text;
+  private BasedSequence closingMarker;
 
   public LtexMarkdownInlineMath() {
+    this.openingMarker = BasedSequence.NULL;
+    this.text = BasedSequence.NULL;
+    this.closingMarker = BasedSequence.NULL;
   }
 
   public LtexMarkdownInlineMath(BasedSequence chars) {
     super(chars);
+    this.openingMarker = BasedSequence.NULL;
+    this.text = BasedSequence.NULL;
+    this.closingMarker = BasedSequence.NULL;
   }
 
   public LtexMarkdownInlineMath(BasedSequence openingMarker, BasedSequence text,
@@ -41,6 +37,16 @@ public class LtexMarkdownInlineMath extends Node implements DelimitedNode {
     this.openingMarker = openingMarker;
     this.text = text;
     this.closingMarker = closingMarker;
+  }
+
+  @Override
+  public @NotNull BasedSequence[] getSegments() {
+    return new BasedSequence[]{this.openingMarker, this.text, this.closingMarker};
+  }
+
+  @Override
+  public void getAstExtra(@NotNull StringBuilder out) {
+    delimitedSegmentSpanChars(out, this.openingMarker, this.text, this.closingMarker, "text");
   }
 
   public BasedSequence getOpeningMarker() {

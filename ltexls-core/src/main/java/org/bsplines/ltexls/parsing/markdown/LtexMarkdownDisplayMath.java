@@ -16,10 +16,47 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 public class LtexMarkdownDisplayMath extends Block implements ParagraphContainer {
-  private BasedSequence openingMarker = BasedSequence.NULL;
-  private BasedSequence openingTrailing = BasedSequence.NULL;
-  private BasedSequence closingMarker = BasedSequence.NULL;
-  private BasedSequence closingTrailing = BasedSequence.NULL;
+  private BasedSequence openingMarker;
+  private BasedSequence openingTrailing;
+  private BasedSequence closingMarker;
+  private BasedSequence closingTrailing;
+
+  public LtexMarkdownDisplayMath() {
+    this.openingMarker = BasedSequence.NULL;
+    this.openingTrailing = BasedSequence.NULL;
+    this.closingMarker = BasedSequence.NULL;
+    this.closingTrailing = BasedSequence.NULL;
+  }
+
+  public LtexMarkdownDisplayMath(BasedSequence chars) {
+    super(chars);
+    this.openingMarker = BasedSequence.NULL;
+    this.openingTrailing = BasedSequence.NULL;
+    this.closingMarker = BasedSequence.NULL;
+    this.closingTrailing = BasedSequence.NULL;
+  }
+
+  public LtexMarkdownDisplayMath(BasedSequence chars, List<BasedSequence> segments) {
+    super(chars, segments);
+    this.openingMarker = BasedSequence.NULL;
+    this.openingTrailing = BasedSequence.NULL;
+    this.closingMarker = BasedSequence.NULL;
+    this.closingTrailing = BasedSequence.NULL;
+  }
+
+  public LtexMarkdownDisplayMath(BlockContent blockContent) {
+    super(blockContent);
+    this.openingMarker = BasedSequence.NULL;
+    this.openingTrailing = BasedSequence.NULL;
+    this.closingMarker = BasedSequence.NULL;
+    this.closingTrailing = BasedSequence.NULL;
+  }
+
+  @Override
+  public @NotNull BasedSequence[] getSegments() {
+    return new BasedSequence[]{this.openingMarker, this.openingTrailing, this.closingMarker,
+        this.closingTrailing};
+  }
 
   @Override
   public void getAstExtra(@NotNull StringBuilder out) {
@@ -30,16 +67,6 @@ public class LtexMarkdownDisplayMath extends Block implements ParagraphContainer
   }
 
   @Override
-  public @NotNull BasedSequence[] getSegments() {
-    return new BasedSequence[] {
-      this.openingMarker,
-      this.openingTrailing,
-      this.closingMarker,
-      this.closingTrailing
-    };
-  }
-
-  @Override
   public boolean isParagraphEndWrappingDisabled(Paragraph node) {
     return ((node == getLastChild()) || (node.getNext() instanceof LtexMarkdownDisplayMath));
   }
@@ -47,21 +74,6 @@ public class LtexMarkdownDisplayMath extends Block implements ParagraphContainer
   @Override
   public boolean isParagraphStartWrappingDisabled(Paragraph node) {
     return ((node == getFirstChild()) || (node.getPrevious() instanceof LtexMarkdownDisplayMath));
-  }
-
-  public LtexMarkdownDisplayMath() {
-  }
-
-  public LtexMarkdownDisplayMath(BasedSequence chars) {
-    super(chars);
-  }
-
-  public LtexMarkdownDisplayMath(BasedSequence chars, List<BasedSequence> segments) {
-    super(chars, segments);
-  }
-
-  public LtexMarkdownDisplayMath(BlockContent blockContent) {
-    super(blockContent);
   }
 
   public BasedSequence getOpeningMarker() {
