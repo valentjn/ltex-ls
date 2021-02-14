@@ -4,7 +4,7 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-      day: "friday"
+      day: "sunday"
     open-pull-requests-limit: 10
     assignees:
       - "valentjn"
