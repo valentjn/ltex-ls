@@ -149,30 +149,30 @@ public class LtexTextDocumentItemTest {
   public void testProperties() {
     LtexLanguageServer languageServer = new LtexLanguageServer();
 
-    LtexTextDocumentItem origDocument = new LtexTextDocumentItem(
+    LtexTextDocumentItem originalDocument = new LtexTextDocumentItem(
         languageServer,"untitled:text.md", "markdown", 1, "abc");
-    Assertions.assertTrue(origDocument.equals(origDocument));
-    Assertions.assertDoesNotThrow(() -> origDocument.hashCode());
-    Assertions.assertEquals(languageServer, origDocument.getLanguageServer());
+    Assertions.assertTrue(originalDocument.equals(originalDocument));
+    Assertions.assertDoesNotThrow(() -> originalDocument.hashCode());
+    Assertions.assertEquals(languageServer, originalDocument.getLanguageServer());
 
     {
       LtexTextDocumentItem document = new LtexTextDocumentItem(
           languageServer, "untitled:text.md", "markdown", 1, "abc");
       document.setText("foobar");
       Assertions.assertEquals("foobar", document.getText());
-      Assertions.assertFalse(document.equals(origDocument));
-      Assertions.assertFalse(origDocument.equals(document));
+      Assertions.assertFalse(document.equals(originalDocument));
+      Assertions.assertFalse(originalDocument.equals(document));
     }
 
     {
       LtexTextDocumentItem document = new LtexTextDocumentItem(
           languageServer,"untitled:text.md", "markdown", 1, "abc");
-      document.setLastCaretChangeInstant(origDocument.getLastCaretChangeInstant());
+      document.setLastCaretChangeInstant(originalDocument.getLastCaretChangeInstant());
       document.setCaretPosition(new Position(13, 37));
       Assertions.assertEquals(new Position(13, 37),
           NullnessUtil.castNonNull(document.getCaretPosition()));
-      Assertions.assertFalse(document.equals(origDocument));
-      Assertions.assertFalse(origDocument.equals(document));
+      Assertions.assertFalse(document.equals(originalDocument));
+      Assertions.assertFalse(originalDocument.equals(document));
 
       document.setCaretPosition(new Position(13, 42));
       Assertions.assertEquals(new Position(13, 42),
@@ -188,8 +188,8 @@ public class LtexTextDocumentItemTest {
       Instant pastInstant = Instant.now().minus(Duration.ofSeconds(10));
       document.setLastCaretChangeInstant(pastInstant);
       Assertions.assertEquals(pastInstant, document.getLastCaretChangeInstant());
-      Assertions.assertFalse(document.equals(origDocument));
-      Assertions.assertFalse(origDocument.equals(document));
+      Assertions.assertFalse(document.equals(originalDocument));
+      Assertions.assertFalse(originalDocument.equals(document));
     }
   }
 }
