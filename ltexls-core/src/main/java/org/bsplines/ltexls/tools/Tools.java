@@ -12,7 +12,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -155,6 +154,7 @@ public class Tools {
     }
   }
 
+  /*
   public static void writeFile(Path filePath, String string) {
     try {
       Files.write(filePath, string.getBytes("utf-8"), StandardOpenOption.CREATE,
@@ -164,6 +164,7 @@ public class Tools {
       Tools.logger.warning(Tools.i18n("couldNotWriteFile", e, filePath.toString()));
     }
   }
+  */
 
   public static String getRandomUuid() {
     return (new UUID(randomNumberGenerator.nextLong(),
