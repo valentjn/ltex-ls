@@ -10,6 +10,7 @@ package org.bsplines.ltexls.settings;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.util.regex.Pattern;
+import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class HiddenFalsePositive {
@@ -36,20 +37,11 @@ public class HiddenFalsePositive {
 
   @Override
   public boolean equals(@Nullable Object obj) {
-    if ((obj == null) || !HiddenFalsePositive.class.isAssignableFrom(obj.getClass())) {
-      return false;
-    }
-
+    if ((obj == null) || !HiddenFalsePositive.class.isAssignableFrom(obj.getClass())) return false;
     HiddenFalsePositive other = (HiddenFalsePositive)obj;
 
-    if ((this.ruleId == null) ? (other.ruleId != null) : !this.ruleId.equals(other.ruleId)) {
-      return false;
-    }
-
-    if ((this.sentenceString == null) ? (other.sentenceString != null) :
-          !this.sentenceString.equals(other.sentenceString)) {
-      return false;
-    }
+    if (!Tools.equals(this.ruleId, other.ruleId)) return false;
+    if (!Tools.equals(this.sentenceString, other.sentenceString)) return false;
 
     return true;
   }

@@ -131,6 +131,10 @@ public class Tools {
         && (position1.getCharacter() < position2.getCharacter())));
   }
 
+  public static boolean equals(@Nullable Object object1, @Nullable Object object2) {
+    return ((object1 == null) ? (object2 == null) : ((object2 != null) && object1.equals(object2)));
+  }
+
   public static String normalizePath(String path) {
     @Nullable String homeDirPath = System.getProperty("user.home");
 

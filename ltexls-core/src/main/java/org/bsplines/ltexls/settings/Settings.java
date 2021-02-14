@@ -436,14 +436,8 @@ public class Settings {
     if ((obj == null) || !Settings.class.isAssignableFrom(obj.getClass())) return false;
     Settings other = (Settings)obj;
 
-    if ((this.enabled == null) ? (other.enabled != null) : !this.enabled.equals(other.enabled)) {
-      return false;
-    }
-
-    if ((this.languageShortCode == null) ? (other.languageShortCode != null) :
-          !this.languageShortCode.equals(other.languageShortCode)) {
-      return false;
-    }
+    if (!Tools.equals(this.enabled, other.enabled)) return false;
+    if (!Tools.equals(this.languageShortCode, other.languageShortCode)) return false;
 
     if (!mapOfSetsEqual(this.dictionary, other.dictionary, this.languageShortCode)) {
       return false;
@@ -462,81 +456,37 @@ public class Settings {
       return false;
     }
 
-    if ((this.bibtexFields == null) ? (other.bibtexFields != null) :
-          ((other.bibtexFields == null) || !this.bibtexFields.equals(other.bibtexFields))) {
+    if (!Tools.equals(this.bibtexFields, other.bibtexFields)) return false;
+    if (!Tools.equals(this.latexCommands, other.latexCommands)) return false;
+    if (!Tools.equals(this.latexEnvironments, other.latexEnvironments)) return false;
+    if (!Tools.equals(this.markdownNodes, other.markdownNodes)) return false;
+    if (!Tools.equals(this.enablePickyRules, other.enablePickyRules)) return false;
+    if (!Tools.equals(this.motherTongueShortCode, other.motherTongueShortCode)) return false;
+
+    if (!Tools.equals(this.languageModelRulesDirectory, other.languageModelRulesDirectory)) {
       return false;
     }
 
-    if ((this.latexCommands == null) ? (other.latexCommands != null) :
-          ((other.latexCommands == null) || !this.latexCommands.equals(other.latexCommands))) {
+    if (!Tools.equals(this.neuralNetworkModelRulesDirectory,
+          other.neuralNetworkModelRulesDirectory)) {
       return false;
     }
 
-    if ((this.latexEnvironments == null) ? (other.latexEnvironments != null) :
-          ((other.latexEnvironments == null)
-            || !this.latexEnvironments.equals(other.latexEnvironments))) {
+    if (!Tools.equals(this.word2VecModelRulesDirectory, other.word2VecModelRulesDirectory)) {
       return false;
     }
 
-    if ((this.markdownNodes == null) ? (other.markdownNodes != null) :
-          ((other.markdownNodes == null) || !this.markdownNodes.equals(other.markdownNodes))) {
+    if (!Tools.equals(this.languageToolHttpServerUri, other.languageToolHttpServerUri)) {
       return false;
     }
 
-    if ((this.enablePickyRules == null) ? (other.enablePickyRules != null) :
-          !this.enablePickyRules.equals(other.enablePickyRules)) {
-      return false;
-    }
+    if (!Tools.equals(this.logLevel, other.logLevel)) return false;
+    if (!Tools.equals(this.sentenceCacheSize, other.sentenceCacheSize)) return false;
+    if (!Tools.equals(this.diagnosticSeverity, other.diagnosticSeverity)) return false;
+    if (!Tools.equals(this.checkFrequency, other.checkFrequency)) return false;
 
-    if ((this.motherTongueShortCode == null) ? (other.motherTongueShortCode != null) :
-          !this.motherTongueShortCode.equals(other.motherTongueShortCode)) {
-      return false;
-    }
-
-    if ((this.languageModelRulesDirectory == null) ? (other.languageModelRulesDirectory != null) :
-          !this.languageModelRulesDirectory.equals(other.languageModelRulesDirectory)) {
-      return false;
-    }
-
-    if ((this.neuralNetworkModelRulesDirectory == null)
-          ? (other.neuralNetworkModelRulesDirectory != null)
-          : !this.neuralNetworkModelRulesDirectory.equals(other.neuralNetworkModelRulesDirectory)) {
-      return false;
-    }
-
-    if ((this.word2VecModelRulesDirectory == null) ? (other.word2VecModelRulesDirectory != null) :
-          !this.word2VecModelRulesDirectory.equals(other.word2VecModelRulesDirectory)) {
-      return false;
-    }
-
-    if ((this.languageToolHttpServerUri == null) ? (other.languageToolHttpServerUri != null) :
-          !this.languageToolHttpServerUri.equals(other.languageToolHttpServerUri)) {
-      return false;
-    }
-
-    if ((this.logLevel == null) ? (other.logLevel != null) :
-          !this.logLevel.equals(other.logLevel)) {
-      return false;
-    }
-
-    if ((this.sentenceCacheSize == null) ? (other.sentenceCacheSize != null) :
-          !this.sentenceCacheSize.equals(other.sentenceCacheSize)) {
-      return false;
-    }
-
-    if ((this.diagnosticSeverity == null) ? (other.diagnosticSeverity != null) :
-          (this.diagnosticSeverity != other.diagnosticSeverity)) {
-      return false;
-    }
-
-    if ((this.checkFrequency == null) ? (other.checkFrequency != null) :
-          (this.checkFrequency != other.checkFrequency)) {
-      return false;
-    }
-
-    if ((this.clearDiagnosticsWhenClosingFile == null)
-          ? (other.clearDiagnosticsWhenClosingFile != null)
-          : !this.clearDiagnosticsWhenClosingFile.equals(other.clearDiagnosticsWhenClosingFile)) {
+    if (!Tools.equals(this.clearDiagnosticsWhenClosingFile,
+          other.clearDiagnosticsWhenClosingFile)) {
       return false;
     }
 
@@ -565,39 +515,34 @@ public class Settings {
           this.enabledRules, other.enabledRules));
     }
 
-    if ((this.motherTongueShortCode == null) ? (other.motherTongueShortCode != null) :
-          !this.motherTongueShortCode.equals(other.motherTongueShortCode)) {
+
+    if (!Tools.equals(this.motherTongueShortCode, other.motherTongueShortCode)) {
       differences.add(new SettingsDifference("additionalRules.motherTongue",
           this.motherTongueShortCode, other.motherTongueShortCode));
     }
 
-    if ((this.languageModelRulesDirectory == null) ? (other.languageModelRulesDirectory != null) :
-          !this.languageModelRulesDirectory.equals(other.languageModelRulesDirectory)) {
+    if (!Tools.equals(this.languageModelRulesDirectory, other.languageModelRulesDirectory)) {
       differences.add(new SettingsDifference("additionalRules.languageModel",
           this.languageModelRulesDirectory, other.languageModelRulesDirectory));
     }
 
-    if ((this.neuralNetworkModelRulesDirectory == null)
-          ? (other.neuralNetworkModelRulesDirectory != null)
-          : !this.neuralNetworkModelRulesDirectory.equals(other.neuralNetworkModelRulesDirectory)) {
+    if (!Tools.equals(this.neuralNetworkModelRulesDirectory,
+          other.neuralNetworkModelRulesDirectory)) {
       differences.add(new SettingsDifference("additionalRules.neuralNetworkModel",
           this.neuralNetworkModelRulesDirectory, other.neuralNetworkModelRulesDirectory));
     }
 
-    if ((this.word2VecModelRulesDirectory == null) ? (other.word2VecModelRulesDirectory != null) :
-          !this.word2VecModelRulesDirectory.equals(other.word2VecModelRulesDirectory)) {
+    if (!Tools.equals(this.word2VecModelRulesDirectory, other.word2VecModelRulesDirectory)) {
       differences.add(new SettingsDifference("additionalRules.word2VecModel",
           this.word2VecModelRulesDirectory, other.word2VecModelRulesDirectory));
     }
 
-    if ((this.languageToolHttpServerUri == null) ? (other.languageToolHttpServerUri != null) :
-          !this.languageToolHttpServerUri.equals(other.languageToolHttpServerUri)) {
+    if (!Tools.equals(this.languageToolHttpServerUri, other.languageToolHttpServerUri)) {
       differences.add(new SettingsDifference("ltex-ls.languageToolHttpServerUri",
           this.languageToolHttpServerUri, other.languageToolHttpServerUri));
     }
 
-    if ((this.sentenceCacheSize == null) ? (other.sentenceCacheSize != null) :
-          !this.sentenceCacheSize.equals(other.sentenceCacheSize)) {
+    if (!Tools.equals(this.sentenceCacheSize, other.sentenceCacheSize)) {
       differences.add(new SettingsDifference("sentenceCacheSize",
           this.sentenceCacheSize, other.sentenceCacheSize));
     }

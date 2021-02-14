@@ -86,22 +86,9 @@ public class LtexTextDocumentItem extends TextDocumentItem {
 
     if (!super.equals(other)) return false;
     if (!this.lineStartPosList.equals(other.lineStartPosList)) return false;
-
-    if ((this.checkingResult == null) ? (other.checkingResult != null) :
-          ((other.checkingResult == null) || !this.checkingResult.equals(other.checkingResult))) {
-      return false;
-    }
-
-    if ((this.diagnostics == null) ? (other.diagnostics != null) :
-          ((other.diagnostics == null) || !this.diagnostics.equals(other.diagnostics))) {
-      return false;
-    }
-
-    if ((this.caretPosition == null) ? (other.caretPosition != null) :
-          ((other.caretPosition == null) || !this.caretPosition.equals(other.caretPosition))) {
-      return false;
-    }
-
+    if (!Tools.equals(this.checkingResult, other.checkingResult)) return false;
+    if (!Tools.equals(this.diagnostics, other.diagnostics)) return false;
+    if (!Tools.equals(this.caretPosition, other.caretPosition)) return false;
     if (!this.lastCaretChangeInstant.equals(other.lastCaretChangeInstant)) return false;
 
     return true;
