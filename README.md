@@ -70,7 +70,7 @@ All commands are prefixed with `ltex.` during usage. As arguments, all commands 
 
 The result of all commands handled by the client is `null`.
 
-The result of all commands handled by the server implement at least the following interface:
+The result of all commands handled by the server implements at least the following interface:
 
 ```typescript
 interface ServerCommandResult {
