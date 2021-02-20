@@ -12,7 +12,7 @@ import java.util.Set;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 
 public abstract class LanguageToolInterface {
-  public abstract boolean isReady();
+  public abstract boolean isInitialized();
 
   public abstract List<LanguageToolRuleMatch> check(AnnotatedTextFragment annotatedTextFragment);
 

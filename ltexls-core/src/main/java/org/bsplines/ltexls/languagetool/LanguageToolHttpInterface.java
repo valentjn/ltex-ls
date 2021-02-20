@@ -60,13 +60,13 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
 
   @EnsuresNonNullIf(expression = "this.uri", result = true)
   @Override
-  public boolean isReady() {
+  public boolean isInitialized() {
     return (this.uri != null);
   }
 
   @Override
   public List<LanguageToolRuleMatch> check(AnnotatedTextFragment annotatedTextFragment) {
-    if (!isReady()) return Collections.emptyList();
+    if (!isInitialized()) return Collections.emptyList();
 
     JsonArray jsonDataAnnotation = new JsonArray();
     List<TextPart> parts = annotatedTextFragment.getAnnotatedText().getParts();

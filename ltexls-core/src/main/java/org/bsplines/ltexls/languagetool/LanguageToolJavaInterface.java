@@ -78,7 +78,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
   @EnsuresNonNullIf(expression = "this.resultCache", result = true)
   @EnsuresNonNullIf(expression = "this.languageTool", result = true)
   @Override
-  public boolean isReady() {
+  public boolean isInitialized() {
     return (this.resultCache != null) && (this.languageTool != null);
   }
 
@@ -109,7 +109,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
   @Override
   public List<LanguageToolRuleMatch> check(AnnotatedTextFragment annotatedTextFragment) {
-    if (!isReady()) {
+    if (!isInitialized()) {
       Tools.logger.warning(Tools.i18n("skippingTextCheckAsLanguageToolHasNotBeenInitialized"));
       return Collections.emptyList();
     }
@@ -180,7 +180,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
   @Override
   public void activateDefaultFalseFriendRules() {
-    if (!isReady()) return;
+    if (!isInitialized()) return;
 
     // from JLanguageTool.activateDefaultFalseFriendRules (which is private)
     String falseFriendRulePath = JLanguageTool.getDataBroker().getRulesDir() + "/"
@@ -197,7 +197,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
   @Override
   public void activateLanguageModelRules(String languageModelRulesDirectory) {
-    if (!isReady()) return;
+    if (!isInitialized()) return;
 
     try {
       this.languageTool.activateLanguageModelRules(new File(languageModelRulesDirectory));
@@ -208,7 +208,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
   @Override
   public void activateNeuralNetworkRules(String neuralNetworkRulesDirectory) {
-    if (!isReady()) return;
+    if (!isInitialized()) return;
 
     try {
       this.languageTool.activateNeuralNetworkRules(new File(neuralNetworkRulesDirectory));
@@ -220,7 +220,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
   @Override
   public void activateWord2VecModelRules(String word2vecRulesDirectory) {
-    if (!isReady()) return;
+    if (!isInitialized()) return;
 
     try {
       this.languageTool.activateWord2VecModelRules(new File(word2vecRulesDirectory));
@@ -231,7 +231,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
   @Override
   public void enableRules(Set<String> ruleIds) {
-    if (!isReady()) return;
+    if (!isInitialized()) return;
 
     // for strange reasons there is no JLanguageTool.enableRules
     for (String ruleId : ruleIds) {
@@ -241,13 +241,13 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
   @Override
   public void disableRules(Set<String> ruleIds) {
-    if (!isReady()) return;
+    if (!isInitialized()) return;
     this.languageTool.disableRules(new ArrayList<>(ruleIds));
   }
 
   @Override
   public void enableEasterEgg() {
-    if (!isReady()) return;
+    if (!isInitialized()) return;
 
     this.languageTool.addRule(new Rule() {
       public String getId() {

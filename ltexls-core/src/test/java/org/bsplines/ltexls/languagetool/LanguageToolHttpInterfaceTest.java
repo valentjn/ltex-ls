@@ -50,9 +50,9 @@ public class LanguageToolHttpInterfaceTest {
   @Test
   public void testConstructor() {
     Assertions.assertTrue(new LanguageToolHttpInterface(
-        "http://localhost:8081/", "en-US", "").isReady());
+        "http://localhost:8081/", "en-US", "").isInitialized());
     Assertions.assertFalse(new LanguageToolHttpInterface(
-        "http://localhost:80:81/", "en-US", "").isReady());
+        "http://localhost:80:81/", "en-US", "").isInitialized());
   }
 
   @Test

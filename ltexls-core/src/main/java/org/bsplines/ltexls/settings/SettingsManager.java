@@ -56,7 +56,7 @@ public class SettingsManager {
           this.settings.getMotherTongueShortCode());
     }
 
-    if (!this.languageToolInterface.isReady()) {
+    if (!this.languageToolInterface.isInitialized()) {
       this.languageToolInterface = null;
       return;
     }
