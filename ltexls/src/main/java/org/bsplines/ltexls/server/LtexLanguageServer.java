@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.bsplines.ltexls.client.LtexLanguageClient;
 import org.bsplines.ltexls.settings.SettingsManager;
 import org.bsplines.ltexls.tools.Tools;
@@ -36,6 +38,7 @@ import org.eclipse.lsp4j.services.WorkspaceService;
 
 public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   private @MonotonicNonNull LtexLanguageClient languageClient;
+  private ExecutorService singleThreadExecutorService;
   private SettingsManager settingsManager;
   private DocumentChecker documentChecker;
   private CodeActionGenerator codeActionGenerator;
@@ -46,6 +49,7 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   private Instant startupInstant;
 
   public LtexLanguageServer() {
+    this.singleThreadExecutorService = Executors.newSingleThreadScheduledExecutor();
     this.settingsManager = new SettingsManager();
     this.documentChecker = new DocumentChecker(this.settingsManager);
     this.codeActionGenerator = new CodeActionGenerator(this.settingsManager);
@@ -143,6 +147,10 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
 
   public @Nullable LtexLanguageClient getLanguageClient() {
     return this.languageClient;
+  }
+
+  public ExecutorService getSingleThreadExecutorService() {
+    return this.singleThreadExecutorService;
   }
 
   public SettingsManager getSettingsManager() {

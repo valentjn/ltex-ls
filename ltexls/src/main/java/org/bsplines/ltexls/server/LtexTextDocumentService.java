@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
@@ -52,6 +53,8 @@ import org.eclipse.lsp4j.SignatureHelpParams;
 import org.eclipse.lsp4j.SymbolInformation;
 import org.eclipse.lsp4j.TextEdit;
 import org.eclipse.lsp4j.WorkspaceEdit;
+import org.eclipse.lsp4j.jsonrpc.CancelChecker;
+import org.eclipse.lsp4j.jsonrpc.CompletableFutures;
 import org.eclipse.lsp4j.jsonrpc.messages.Either;
 import org.eclipse.lsp4j.services.LanguageClient;
 import org.eclipse.lsp4j.services.TextDocumentService;
@@ -144,66 +147,88 @@ public class LtexTextDocumentService implements TextDocumentService {
 
   @Override
   public void didOpen(DidOpenTextDocumentParams params) {
-    this.documents.put(params.getTextDocument().getUri(),
+    String uri = params.getTextDocument().getUri();
+    this.documents.put(uri,
         new LtexTextDocumentItem(this.languageServer, params.getTextDocument()));
-    @Nullable LtexTextDocumentItem document = getDocument(params.getTextDocument().getUri());
+    @Nullable LtexTextDocumentItem document = getDocument(uri);
+    if (document == null) return;
 
-    if ((document != null)
-          && (this.languageServer.getSettingsManager().getSettings().getCheckFrequency()
+    if ((this.languageServer.getSettingsManager().getSettings().getCheckFrequency()
             != CheckFrequency.MANUAL)) {
-      document.checkAndPublishDiagnosticsWithoutCache();
+      if (document.isBeingChecked()) document.cancelCheck();
+
+      this.languageServer.getSingleThreadExecutorService().execute(() -> {
+        document.checkAndPublishDiagnosticsWithoutCache();
+        document.raiseExceptionIfCanceled();
+      });
     }
   }
 
   @Override
   public void didClose(DidCloseTextDocumentParams params) {
     String uri = params.getTextDocument().getUri();
+    @Nullable LtexTextDocumentItem document = getDocument(uri);
+    if (document == null) return;
+
     this.documents.remove(uri);
 
     if (this.languageServer.getSettingsManager().getSettings()
           .getClearDiagnosticsWhenClosingFile()) {
-      @Nullable LanguageClient languageClient = this.languageServer.getLanguageClient();
+      if (document.isBeingChecked()) document.cancelCheck();
 
-      if (languageClient != null) {
-        languageClient.publishDiagnostics(
-            new PublishDiagnosticsParams(uri, Collections.emptyList()));
-      }
+      this.languageServer.getSingleThreadExecutorService().execute(() -> {
+        @Nullable LanguageClient languageClient = this.languageServer.getLanguageClient();
+
+        if (languageClient != null) {
+          languageClient.publishDiagnostics(
+              new PublishDiagnosticsParams(uri, Collections.emptyList()));
+        }
+      });
     }
   }
 
   @Override
   public void didSave(DidSaveTextDocumentParams params) {
-    String uri = params.getTextDocument().getUri();
-    @Nullable LtexTextDocumentItem document = this.documents.get(uri);
-
-    if (document == null) {
-      Tools.logger.warning(Tools.i18n("couldNotFindDocumentWithUri", uri));
+    if (this.languageServer.getSettingsManager().getSettings().getCheckFrequency()
+          != CheckFrequency.SAVE) {
       return;
     }
 
-    if (this.languageServer.getSettingsManager().getSettings().getCheckFrequency()
-          == CheckFrequency.SAVE) {
+    String uri = params.getTextDocument().getUri();
+    @Nullable LtexTextDocumentItem document = getDocument(uri);
+    if (document == null) return;
+
+    if (document.isBeingChecked()) document.cancelCheck();
+
+    this.languageServer.getSingleThreadExecutorService().execute(() -> {
       document.checkAndPublishDiagnosticsWithoutCache();
-    }
+      document.raiseExceptionIfCanceled();
+    });
   }
 
   @Override
   public void didChange(DidChangeTextDocumentParams params) {
     String uri = params.getTextDocument().getUri();
-    @Nullable LtexTextDocumentItem document = this.documents.get(uri);
+    @Nullable LtexTextDocumentItem document = getDocument(uri);
+    if (document == null) return;
 
-    if (document == null) {
-      Tools.logger.warning(Tools.i18n("couldNotFindDocumentWithUri", uri));
-      return;
-    }
+    if (document.isBeingChecked()) document.cancelCheck();
 
-    document.applyTextChangeEvents(params.getContentChanges());
-    document.setVersion(params.getTextDocument().getVersion());
+    this.languageServer.getSingleThreadExecutorService().execute(() -> {
+      document.applyTextChangeEvents(params.getContentChanges());
+      document.setVersion(params.getTextDocument().getVersion());
 
-    if (this.languageServer.getSettingsManager().getSettings().getCheckFrequency()
-          == CheckFrequency.EDIT) {
-      document.checkAndPublishDiagnosticsWithoutCache();
-    }
+      if (this.languageServer.getSettingsManager().getSettings().getCheckFrequency()
+            == CheckFrequency.EDIT) {
+        try {
+          document.checkAndPublishDiagnosticsWithoutCache().get();
+          document.raiseExceptionIfCanceled();
+        } catch (InterruptedException | ExecutionException e) {
+          Tools.rethrowCancellationException(e);
+          Tools.logger.warning(Tools.i18n(e));
+        }
+      }
+    });
   }
 
   @Override
@@ -221,10 +246,27 @@ public class LtexTextDocumentService implements TextDocumentService {
       return CompletableFuture.completedFuture(Collections.emptyList());
     }
 
-    return document.checkWithCache().thenApply(
-        (Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) -> {
-          return this.languageServer.getCodeActionGenerator().generate(
-              params, document, checkingResult);
+    if (document.isBeingChecked()) document.cancelCheck();
+
+    return CompletableFutures.computeAsync(this.languageServer.getSingleThreadExecutorService(),
+        (CancelChecker lspCancelChecker) -> {
+          document.setLspCancelChecker(lspCancelChecker);
+          CompletableFuture<List<Either<Command, CodeAction>>> future =
+              document.checkWithCache().thenApplyAsync(
+                (Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) -> {
+                  return this.languageServer.getCodeActionGenerator().generate(
+                      params, document, checkingResult);
+                }, Tools.executorService);
+
+          try {
+            List<Either<Command, CodeAction>> codeActions = future.get();
+            document.raiseExceptionIfCanceled();
+            return codeActions;
+          } catch (InterruptedException | ExecutionException e) {
+            Tools.rethrowCancellationException(e);
+            Tools.logger.warning(Tools.i18n(e));
+            return Collections.emptyList();
+          }
         });
   }
 

@@ -7,6 +7,8 @@
 
 package org.bsplines.ltexls.tools;
 
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.ExecutionException;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -29,5 +31,18 @@ public class ToolsTest {
     Assertions.assertTrue(Tools.i18n(new NullPointerException("abc")).matches(
         "(?s)The following exception occurred:[\r\n]+"
         + "java\\.lang\\.NullPointerException: abc[\r\n]+.*"));
+  }
+
+  @Test
+  public void testRethrowCancellationException() {
+    Throwable cancellationException = new CancellationException();
+    Throwable executionException = new ExecutionException("abc", cancellationException);
+    Throwable runtimeException = new RuntimeException();
+
+    Assertions.assertThrows(CancellationException.class,
+        () -> Tools.rethrowCancellationException(cancellationException));
+    Assertions.assertThrows(CancellationException.class,
+        () -> Tools.rethrowCancellationException(executionException));
+    Assertions.assertDoesNotThrow(() -> Tools.rethrowCancellationException(runtimeException));
   }
 }

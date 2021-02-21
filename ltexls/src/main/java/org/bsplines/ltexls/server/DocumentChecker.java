@@ -52,7 +52,7 @@ public class DocumentChecker {
   }
 
   private List<AnnotatedTextFragment> buildAnnotatedTextFragments(
-        List<CodeFragment> codeFragments) {
+        List<CodeFragment> codeFragments, LtexTextDocumentItem document) {
     List<AnnotatedTextFragment> annotatedTextFragments = new ArrayList<>();
 
     for (CodeFragment codeFragment : codeFragments) {
@@ -61,7 +61,8 @@ public class DocumentChecker {
       builder.setSettings(codeFragment.getSettings());
       builder.addCode(codeFragment.getCode());
       AnnotatedText curAnnotatedText = builder.build();
-      annotatedTextFragments.add(new AnnotatedTextFragment(curAnnotatedText, codeFragment));
+      annotatedTextFragments.add(new AnnotatedTextFragment(
+          curAnnotatedText, codeFragment, document));
     }
 
     return annotatedTextFragments;
@@ -139,6 +140,7 @@ public class DocumentChecker {
     try {
       matches = languageToolInterface.check(annotatedTextFragment);
     } catch (RuntimeException e) {
+      Tools.rethrowCancellationException(e);
       Tools.logger.severe(Tools.i18n("languageToolFailed", e));
       return matches;
     }
@@ -207,7 +209,7 @@ public class DocumentChecker {
     try {
       List<CodeFragment> codeFragments = fragmentizeDocument(document, range);
       List<AnnotatedTextFragment> annotatedTextFragments =
-          buildAnnotatedTextFragments(codeFragments);
+          buildAnnotatedTextFragments(codeFragments, document);
       List<LanguageToolRuleMatch> matches =
           checkAnnotatedTextFragments(annotatedTextFragments, rangeOffset);
       return new Pair<>(matches, annotatedTextFragments);

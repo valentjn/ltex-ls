@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.initialization.qual.NotOnlyInitialized;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
@@ -31,6 +32,8 @@ import org.eclipse.lsp4j.Position;
 import org.eclipse.lsp4j.Range;
 import org.eclipse.lsp4j.SymbolInformation;
 import org.eclipse.lsp4j.WorkspaceSymbolParams;
+import org.eclipse.lsp4j.jsonrpc.CancelChecker;
+import org.eclipse.lsp4j.jsonrpc.CompletableFutures;
 import org.eclipse.lsp4j.services.WorkspaceService;
 
 class LtexWorkspaceService implements WorkspaceService {
@@ -51,7 +54,14 @@ class LtexWorkspaceService implements WorkspaceService {
   @Override
   public void didChangeConfiguration(DidChangeConfigurationParams params) {
     this.languageServer.getLtexTextDocumentService().executeFunction(
-        (LtexTextDocumentItem document) -> document.checkAndPublishDiagnosticsWithoutCache());
+        (LtexTextDocumentItem document) -> {
+          if (document.isBeingChecked()) document.cancelCheck();
+
+          this.languageServer.getSingleThreadExecutorService().execute(() -> {
+            document.checkAndPublishDiagnosticsWithoutCache();
+            document.raiseExceptionIfCanceled();
+          });
+        });
   }
 
   @Override
@@ -115,23 +125,42 @@ class LtexWorkspaceService implements WorkspaceService {
     LtexTextDocumentItem document = new LtexTextDocumentItem(
         this.languageServer, uriStr, codeLanguageId, 1, text);
 
-    @Nullable Range range = null;
+    @Nullable Range nonFinalRange = null;
 
     if (arguments.has("range")) {
       JsonObject jsonRange = arguments.getAsJsonObject("range");
       JsonObject jsonStart = jsonRange.getAsJsonObject("start");
       JsonObject jsonEnd = jsonRange.getAsJsonObject("end");
 
-      range = new Range(
+      nonFinalRange = new Range(
           new Position(jsonStart.get("line").getAsInt(), jsonStart.get("character").getAsInt()),
           new Position(jsonEnd.get("line").getAsInt(), jsonEnd.get("character").getAsInt()));
     }
 
-    return document.checkAndPublishDiagnosticsWithoutCache(range).thenApply((Boolean success) -> {
-      JsonObject jsonObject = new JsonObject();
-      jsonObject.addProperty("success", success);
-      return jsonObject;
-    });
+    final @Nullable Range range = nonFinalRange;
+    if (document.isBeingChecked()) document.cancelCheck();
+
+    return CompletableFutures.computeAsync(this.languageServer.getSingleThreadExecutorService(),
+        (CancelChecker lspCancelChecker) -> {
+          document.setLspCancelChecker(lspCancelChecker);
+          CompletableFuture<JsonObject> future =
+              document.checkAndPublishDiagnosticsWithoutCache(range).thenApplyAsync(
+                (Boolean success) -> {
+                  JsonObject jsonObject = new JsonObject();
+                  jsonObject.addProperty("success", success);
+                  return jsonObject;
+                }, Tools.executorService);
+
+          try {
+            JsonObject response = future.get();
+            document.raiseExceptionIfCanceled();
+            return response;
+          } catch (InterruptedException | ExecutionException e) {
+            Tools.rethrowCancellationException(e);
+            Tools.logger.warning(Tools.i18n(e));
+            return Collections.emptyList();
+          }
+        });
   }
 
   public CompletableFuture<Object> executeGetServerStatusCommand() {

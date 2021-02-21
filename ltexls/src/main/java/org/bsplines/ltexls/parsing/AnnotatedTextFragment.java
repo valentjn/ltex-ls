@@ -12,18 +12,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import org.bsplines.ltexls.server.LtexTextDocumentItem;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.languagetool.markup.AnnotatedText;
 
 public class AnnotatedTextFragment {
   private AnnotatedText annotatedText;
   private CodeFragment codeFragment;
+  private LtexTextDocumentItem document;
   private @MonotonicNonNull String plainText;
   private @MonotonicNonNull AnnotatedText inverseAnnotatedText;
 
-  public AnnotatedTextFragment(AnnotatedText annotatedText, CodeFragment codeFragment) {
+  public AnnotatedTextFragment(AnnotatedText annotatedText, CodeFragment codeFragment,
+        LtexTextDocumentItem document) {
     this.annotatedText = annotatedText;
     this.codeFragment = codeFragment;
+    this.document = document;
   }
 
   public AnnotatedText getAnnotatedText() {
@@ -32,6 +36,10 @@ public class AnnotatedTextFragment {
 
   public CodeFragment getCodeFragment() {
     return this.codeFragment;
+  }
+
+  public LtexTextDocumentItem getDocument() {
+    return this.document;
   }
 
   public String getSubstringOfPlainText(int fromPos, int toPos) {

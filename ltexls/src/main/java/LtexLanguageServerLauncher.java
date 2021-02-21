@@ -17,6 +17,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import org.bsplines.ltexls.client.LtexLanguageClient;
 import org.bsplines.ltexls.server.LtexLanguageServer;
@@ -116,9 +118,10 @@ public class LtexLanguageServerLauncher implements Callable<Integer> {
   public static void launch(InputStream inputStream, OutputStream outputStream)
         throws InterruptedException, ExecutionException {
     LtexLanguageServer server = new LtexLanguageServer();
+    ExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     Launcher<LtexLanguageClient> launcher = (new LSPLauncher.Builder<LtexLanguageClient>())
         .setLocalService(server).setRemoteInterface(LtexLanguageClient.class)
-        .setInput(inputStream).setOutput(outputStream).create();
+        .setInput(inputStream).setOutput(outputStream).setExecutorService(executorService).create();
 
     LanguageClient client = launcher.getRemoteProxy();
     server.connect(client);

@@ -45,14 +45,6 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
   private static final int resultCacheExpireAfterMinutes = 60;
 
-  /**
-   * Constructor.
-   *
-   * @param languageShortCode short code of the checking language
-   * @param motherTongueShortCode short code of the mother tongue language
-   * @param sentenceCacheSize size of the sentence cache in sentences
-   * @param dictionary list of words of the user dictionary
-   */
   public LanguageToolJavaInterface(String languageShortCode, String motherTongueShortCode,
         int sentenceCacheSize, Set<String> dictionary) {
     this.dictionary = dictionary;
@@ -136,6 +128,15 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
         annotatedTextFragment.getCodeFragment().getSettings().getEnablePickyRules()
         ? JLanguageTool.Level.PICKY : JLanguageTool.Level.DEFAULT);
 
+    annotatedTextFragment.getDocument().raiseExceptionIfCanceled();
+    this.languageTool.setCheckCancelledCallback(new JLanguageTool.CheckCancelledCallback() {
+          @Override
+          public boolean checkCancelled() {
+            annotatedTextFragment.getDocument().raiseExceptionIfCanceled();
+            return false;
+          }
+        });
+
     List<RuleMatch> matches;
 
     try {
@@ -156,10 +157,12 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
         System.setOut(stdout);
       }
     } catch (RuntimeException | IOException e) {
+      Tools.rethrowCancellationException(e);
       Tools.logger.severe(Tools.i18n("languageToolFailed", e));
       return Collections.emptyList();
     }
 
+    annotatedTextFragment.getDocument().raiseExceptionIfCanceled();
     List<LanguageToolRuleMatch> result = new ArrayList<>();
 
     for (RuleMatch match : matches) {
