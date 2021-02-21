@@ -73,7 +73,6 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
       }
     }
 
-    Tools.logger.warning("clientSupportsWorkDoneProgress = " + this.clientSupportsWorkDoneProgress);
     @Nullable JsonObject initializationOptions = (JsonObject)params.getInitializationOptions();
 
     if (initializationOptions != null) {
