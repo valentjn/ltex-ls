@@ -98,6 +98,7 @@ public class LanguageToolRuleMatch {
         || this.ruleId.startsWith("GERMAN_SPELLER_")
         || this.ruleId.equals("MUZSKY_ROD_NEZIV_A")
         || this.ruleId.equals("ZENSKY_ROD_A")
-        || this.ruleId.equals("STREDNY_ROD_A")));
+        || this.ruleId.equals("STREDNY_ROD_A")
+        || this.ruleId.equals("FR_SPELLING_RULE")));
   }
 }

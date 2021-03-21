@@ -254,6 +254,15 @@ public class DocumentCheckerTest {
     checkingResult = checkDocument(document, settings);
     Assertions.assertEquals(0, checkingResult.getKey().size());
 
+    document = createDocument("latex", "On trouve des mmots inconnus.\n");
+    settings = (new Settings()).withLanguageShortCode("fr");
+    checkingResult = checkDocument(document, settings);
+    Assertions.assertEquals(1, checkingResult.getKey().size());
+
+    settings = settings.withDictionary(Collections.singleton("mmots"));
+    checkingResult = checkDocument(document, settings);
+    Assertions.assertEquals(0, checkingResult.getKey().size());
+
     document = createDocument("markdown", "This is LT<sub>E</sub>X LS.\n");
     settings = new Settings();
     checkingResult = checkDocument(document, settings);
