@@ -404,9 +404,9 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     progressJsonToken.addProperty("uri", uri);
     progressJsonToken.addProperty("operation", "checkDocument");
     progressJsonToken.addProperty("uuid", Tools.getRandomUuid());
-    Either<String, Number> progressToken = Either.forLeft(progressJsonToken.toString());
+    Either<String, Integer> progressToken = Either.forLeft(progressJsonToken.toString());
 
-    final CompletableFuture<@Nullable Either<String, Number>> workDoneProgressCreateFuture =
+    final CompletableFuture<@Nullable Either<String, Integer>> workDoneProgressCreateFuture =
         ((this.languageServer.isClientSupportingWorkDoneProgress())
           ? languageClient.createProgress(new WorkDoneProgressCreateParams(progressToken)).handle(
             (Void voidObject, @Nullable Throwable e) -> {
@@ -416,7 +416,7 @@ public class LtexTextDocumentItem extends TextDocumentItem {
                 workDoneProgressBegin.setMessage(uri);
                 workDoneProgressBegin.setCancellable(false);
                 languageClient.notifyProgress(new ProgressParams(
-                    progressToken, workDoneProgressBegin));
+                    progressToken, Either.forLeft(workDoneProgressBegin)));
                 return progressToken;
               } else {
                 return null;
@@ -431,7 +431,7 @@ public class LtexTextDocumentItem extends TextDocumentItem {
         Collections.singletonList(configurationItem));
 
     CompletableFuture<List<Object>> intermediateResult1 = workDoneProgressCreateFuture.thenCompose(
-        (@Nullable Either<String, Number> curProgressToken) -> {
+        (@Nullable Either<String, Integer> curProgressToken) -> {
         return languageClient.configuration(configurationParams);
       });
 
@@ -470,12 +470,12 @@ public class LtexTextDocumentItem extends TextDocumentItem {
 
               return checkingResult;
             } finally {
-              @Nullable Either<String, Number> curProgressToken =
+              @Nullable Either<String, Integer> curProgressToken =
                   workDoneProgressCreateFuture.join();
 
               if ((languageClient != null) && (curProgressToken != null)) {
                 languageClient.notifyProgress(new ProgressParams(
-                    curProgressToken, new WorkDoneProgressEnd()));
+                    curProgressToken, Either.forLeft(new WorkDoneProgressEnd())));
               }
             }
           });
