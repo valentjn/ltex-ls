@@ -33,6 +33,8 @@ public abstract class CodeAnnotatedTextBuilder extends AnnotatedTextBuilder {
         new PlaintextAnnotatedTextBuilder());
     constructorMap.put("rsweave", (String codeLanguageId) ->
         new LatexAnnotatedTextBuilder(codeLanguageId));
+    constructorMap.put("tex", (String codeLanguageId) ->
+        new LatexAnnotatedTextBuilder(codeLanguageId));
   }
 
   public static CodeAnnotatedTextBuilder create(String codeLanguageId) {
