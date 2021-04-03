@@ -35,7 +35,7 @@
     <dependency>
       <groupId>org.languagetool</groupId>
       <artifactId>language-all</artifactId>
-      <version>5.2</version>
+      <version>5.3</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
