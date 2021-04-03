@@ -7,6 +7,7 @@
 
 package org.bsplines.ltexls.server;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -73,9 +74,12 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
       }
     }
 
-    @Nullable JsonObject initializationOptions = (JsonObject)params.getInitializationOptions();
+    @Nullable JsonElement initializationOptionsElement =
+        (JsonElement)params.getInitializationOptions();
 
-    if (initializationOptions != null) {
+    if ((initializationOptionsElement != null) && initializationOptionsElement.isJsonObject()) {
+      JsonObject initializationOptions = (JsonObject)initializationOptionsElement;
+
       // Until it is specified in the LSP that the locale is automatically sent with
       // the initialization request, we have to do that manually.
       // See https://github.com/microsoft/language-server-protocol/issues/754.
