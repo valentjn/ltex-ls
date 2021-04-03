@@ -8,6 +8,10 @@
 
 # Changelog
 
+## 11.0.0 (upcoming)
+
+- Update LSP4J to 0.12.0
+
 ## 10.0.0 (February 12, 2021)
 
 - Remove support for settings that are deprecated since 8.0.0: `ltex.ignoreInRuleSentence`, `ltex.commands.ignore`, `ltex.commands.dummy`, `ltex.environments.ignore`, `ltex.markdown.ignore`, and `ltex.markdown.dummy`
