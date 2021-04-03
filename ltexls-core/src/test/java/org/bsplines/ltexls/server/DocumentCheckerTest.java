@@ -68,7 +68,7 @@ public class DocumentCheckerTest {
           matches.get(0).getMessage());
     } catch (AssertionError e) {
       Assertions.assertEquals("Use \u201ca\u201d instead of \u2018an\u2019 if the following "
-          + "word doesn\u2019t start with a vowel sound, e.g. "
+          + "word doesn\u2019t start with a vowel sound, e.g.\u00a0"
           + "\u2018a sentence\u2019, \u2018a university\u2019.",
           matches.get(0).getMessage());
     }

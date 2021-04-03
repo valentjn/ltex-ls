@@ -10,6 +10,7 @@
 
 ## 11.0.0 (upcoming)
 
+- Update LanguageTool to 5.3 (see [LT 5.3 release notes](https://github.com/languagetool-org/languagetool/blob/v5.3/languagetool-standalone/CHANGES.md#53-2021-03-29)
 - Update LSP4J to 0.12.0
 
 ## 10.0.0 (February 12, 2021)
