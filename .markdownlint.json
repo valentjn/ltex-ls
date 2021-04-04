@@ -1,4 +1,10 @@
 {
   "MD013": false,
-  "MD033": {"allowed_elements": ["sub", "sup"]}
+  "MD033": {
+    "allowed_elements": [
+      "span",
+      "sub",
+      "sup"
+    ]
+  }
 }
