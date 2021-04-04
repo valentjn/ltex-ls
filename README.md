@@ -22,7 +22,7 @@
 
 LT<sub>E</sub>X LS (LT<sub>E</sub>X Language Server) implements a language server according to the [Language Server Protocol (LSP)](https://microsoft.github.io/language-server-protocol/) and provides grammar and spelling errors in L<sup>A</sup>T<sub>E</sub>X and Markdown documents. The documents are checked with [LanguageTool](https://languagetool.org/).
 
-Simply put, you start the language server (either locally or remotely), you send the language server your L<sup>A</sup>T<sub>E</sub>X or Markdown document, and it will respond with a list of the grammar and spelling errors in it (if there are any). To use LT<sub>E</sub>X LS, you have to use a language client (usually an editor or an extension of the editor) that communicates with LT<sub>E</sub>X LS according to the LSP.
+Simply put, you start the language server (either locally or remotely), you send the language server your L<sup>A</sup>T<sub>E</sub>X or Markdown document, and it will respond with a list of the grammar and spelling errors in it. To use LT<sub>E</sub>X LS, you have to use a language client (usually an editor or an extension of the editor) that communicates with LT<sub>E</sub>X LS according to the LSP.
 
 The reference client of LT<sub>E</sub>X LS is the [LT<sub>E</sub>X extension for Visual Studio Code (vscode-ltex)](https://valentjn.github.io/vscode-ltex), whose development LT<sub>E</sub>X LS follows closely and vice versa.
 
@@ -53,9 +53,11 @@ In order to use LT<sub>E</sub>X LS, you need a language client. For some editors
 It is recommended to use the startup scripts `bin/ltex-ls` (Linux, Mac) and `bin\ltex-ls.bat` (Windows) to start LT<sub>E</sub>X LS. These scripts are only part of the released versions. The startup scripts can be controlled by the following environment variables:
 
 - `JAVA_HOME`: Path to the directory of the JRE or JDK to use (contains `bin`, `lib`, and other subdirectories)
-- `JAVA_OPTS`: Java arguments to be fed to `java`
-- Any command-line arguments supplied to the startup scripts are fed to LT<sub>E</sub>X LS. The following arguments are supported:
-  - `--version`: Print a JSON string with versioning information to the standard output and exit. The format is a JSON object with `"java"` and `"ltex-ls"` keys and string values. A key may be missing if no information about the corresponding version could be retrieved.
+- `JAVA_OPTS`: Java arguments to be fed to `java` (e.g., `-Xmx1024m`)
+
+Any command-line arguments supplied to the startup scripts are processed by LT<sub>E</sub>X LS itself. The following arguments are supported:
+
+- `--version`: Print a JSON string with versioning information to the standard output and exit. The format is a JSON object with `"java"` and `"ltex-ls"` keys and string values. A key may be missing if no information about the corresponding version could be retrieved.
 
 You can also start LT<sub>E</sub>X LS directly without the startup scripts (not recommended). In this case, make sure that when supplying all JAR files in the `lib` directory to Java's class path, `ltexls-languagetool-patch-LTEXLSVERSION.jar` is listed as the first JAR file (where `LTEXLSVERSION` is the version of LT<sub>E</sub>X LS; Java's class path does not support wildcards in the middle of filenames). It does not suffice to supply `lib/*` to the class path, as the order in which the JAR files are included in wildcards is not specified by Java, so this will fail randomly. The startup scripts take care of this peculiarity.
 
