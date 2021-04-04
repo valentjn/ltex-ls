@@ -8,6 +8,13 @@
 
 # Changelog
 
+## 11.0.0 (upcoming)
+
+- Update LanguageTool to 5.3 (see [LT 5.3 release notes](https://github.com/languagetool-org/languagetool/blob/v5.3/languagetool-standalone/CHANGES.md#53-2021-03-29))
+- Update LSP4J to 0.12.0
+- Add `FR_SPELLING_RULE` as a rule for unknown words ([PR #47](https://github.com/valentjn/ltex-ls/pull/47) by [Nicolas Sicard (@biozic)](https://github.com/biozic))
+- Ignore non-object values for `InitializeParams.initializationOptions` (fixes [#65](https://github.com/valentjn/ltex-ls/issues/65))
+
 ## 10.0.0 (February 12, 2021)
 
 - Remove support for settings that are deprecated since 8.0.0: `ltex.ignoreInRuleSentence`, `ltex.commands.ignore`, `ltex.commands.dummy`, `ltex.environments.ignore`, `ltex.markdown.ignore`, and `ltex.markdown.dummy`
