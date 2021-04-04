@@ -91,8 +91,8 @@ public class LatexAnnotatedTextBuilderTest {
         "\u00cb\u00efn T\u00ebxt m\u00eft v\u00ef\u00ebl\u00ebn "
         + "\u00dcml\u00e4\u00fct\u00ebn. ");
     assertPlainText(
-        "\\AA\\L\\O",
-        "\u00c5\u0141\u00d8");
+        "\\AA\\L\\O\\SS",
+        "\u00c5\u0141\u00d8\u1e9e");
     assertPlainText(
         "\\aa\\i\\j\\l\\o\\ss",
         "\u00e5\u0131\u0237\u0142\u00f8\u00df");

@@ -13,7 +13,7 @@
 - Update LanguageTool to 5.3 (see [LT 5.3 release notes](https://github.com/languagetool-org/languagetool/blob/v5.3/languagetool-standalone/CHANGES.md#53-2021-03-29))
 - Update LSP4J to 0.12.0
 - Add support for many L<sup>A</sup>T<sub>E</sub>X accents, enhance coverage of existing accents: double acute (e.g., `\H{O}`, &#x0150;), line below (e.g., `\b{h}`, &#x1e96;), cedilla (e.g., `\c{E}`, &#x0228;), dot below (e.g., `\d{A}`, &#x1ea0;), ogonek (e.g., `\k{A}`, &#x0104;), breve (e.g., `\u{A}`, &#x0102;), and caron (e.g., `\v{C}`, &#x010c;) ([PR #57](https://github.com/valentjn/ltex-ls/pull/57) by [@ed359](https://github.com/ed359), fixes [#56](https://github.com/valentjn/ltex-ls/issues/56))
-- Add support for special L<sup>A</sup>T<sub>E</sub>X characters: `\L` (&#x0141;), `\i` (&#x0131;), `\j` (&#x0237;), `\l` (&#x0142;) ([PR #57](https://github.com/valentjn/ltex-ls/pull/57) by [@ed359](https://github.com/ed359), fixes [#56](https://github.com/valentjn/ltex-ls/issues/56))
+- Add support for special L<sup>A</sup>T<sub>E</sub>X characters: `\L` (&#x0141;), `\SS` (&#x1e9e;), `\i` (&#x0131;), `\j` (&#x0237;), `\l` (&#x0142;) ([PR #57](https://github.com/valentjn/ltex-ls/pull/57) by [@ed359](https://github.com/ed359), fixes [#56](https://github.com/valentjn/ltex-ls/issues/56))
 - Add `FR_SPELLING_RULE` as a rule for unknown words ([PR #47](https://github.com/valentjn/ltex-ls/pull/47) by [Nicolas Sicard (@biozic)](https://github.com/biozic))
 - Ignore non-object values for `InitializeParams.initializationOptions` (fixes [#65](https://github.com/valentjn/ltex-ls/issues/65))
 

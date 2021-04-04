@@ -454,6 +454,9 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     } else if (command.equals("\\O")) {
       // capital O with stroke
       addMarkup(command, (isMathMode(this.curMode) ? "" : "\u00d8"));
+    } else if (command.equals("\\SS")) {
+      // capital sharp S
+      addMarkup(command, (isMathMode(this.curMode) ? "" : "\u1e9e"));
     } else if (command.equals("\\aa")) {
       // small a with ring above
       addMarkup(command, (isMathMode(this.curMode) ? "" : "\u00e5"));
