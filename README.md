@@ -20,13 +20,22 @@
 [![stars](https://badgen.net/github/stars/valentjn/ltex-ls)](https://github.com/valentjn/ltex-ls)&nbsp;
 [![open issues](https://badgen.net/github/open-issues/valentjn/ltex-ls?label=open/closed%20issues&color=blue)](https://github.com/valentjn/ltex-ls/issues)&nbsp;[![closed issues](https://badgen.net/github/closed-issues/valentjn/ltex-ls?label=)](https://github.com/valentjn/ltex-ls/issues)
 
-LT<sub>E</sub>X LS implements a language server according to the [Language Server Protocol (LSP)](https://microsoft.github.io/language-server-protocol/) and provides grammar and spelling errors in L<sup>A</sup>T<sub>E</sub>X and Markdown documents. The documents are checked with [LanguageTool](https://languagetool.org/).
+LT<sub>E</sub>X LS (LT<sub>E</sub>X Language Server) implements a language server according to the [Language Server Protocol (LSP)](https://microsoft.github.io/language-server-protocol/) and provides grammar and spelling errors in L<sup>A</sup>T<sub>E</sub>X and Markdown documents. The documents are checked with [LanguageTool](https://languagetool.org/).
 
-Simply put, you start the language server (either locally or remotely), you send the language server your L<sup>A</sup>T<sub>E</sub>X or Markdown document, and it will respond with a list of the grammar and spelling errors in it (if there are any). To communicate with a language server, you have to implement a language client according to the Language Server Protocol.
+Simply put, you start the language server (either locally or remotely), you send the language server your L<sup>A</sup>T<sub>E</sub>X or Markdown document, and it will respond with a list of the grammar and spelling errors in it (if there are any). To use LT<sub>E</sub>X LS, you have to use a language client (usually an editor or an extension of the editor) that communicates with LT<sub>E</sub>X LS according to the LSP.
 
-The reference client of LT<sub>E</sub>X LS is the [LT<sub>E</sub>X extension for Visual Studio Code (vscode-ltex)](https://valentjn.github.io/vscode-ltex), whose development LT<sub>E</sub>X LS follows closely.
+The reference client of LT<sub>E</sub>X LS is the [LT<sub>E</sub>X extension for Visual Studio Code (vscode-ltex)](https://valentjn.github.io/vscode-ltex), whose development LT<sub>E</sub>X LS follows closely and vice versa.
 
 Find more information about LT<sub>E</sub>X at the [website of vscode-ltex](https://valentjn.github.io/vscode-ltex).
+
+## Current List of Language Clients
+
+In order to use LT<sub>E</sub>X LS, you need a language client. For some editors, language clients are already available, see the following list. If your editor is in the list, read the installation instructions of the language client first; it might download LT<sub>E</sub>X LS automatically or tell you where to store LT<sub>E</sub>X LS. The rest of this document is only relevant if you want to implement your own language client.
+
+- VS Code/reference client: [LT<sub>E</sub>X for VS Code (valentjn/vscode-ltex)](https://valentjn.github.io/vscode-ltex)
+- Emacs using `eglot`: [emacs-languagetool/eglot-ltex](https://github.com/emacs-languagetool/eglot-ltex)
+- Emacs using `lsp-mode`: [emacs-languagetool/lsp-ltex](https://github.com/emacs-languagetool/lsp-ltex)
+- Sublime Text: [LDAP/LSP-ltex-ls](https://github.com/LDAP/LSP-ltex-ls)
 
 ## Requirements
 
