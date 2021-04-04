@@ -11,7 +11,7 @@ import re
 
 
 
-def main():
+def main() -> None:
   testLogFilePath = os.path.abspath(os.path.join(os.path.dirname(__file__), "..",
       "ltexls-core", "src", "test", "resources", "LtexLanguageServerTestLog.txt"))
   with open(testLogFilePath, "r") as f: testLog = f.read()
