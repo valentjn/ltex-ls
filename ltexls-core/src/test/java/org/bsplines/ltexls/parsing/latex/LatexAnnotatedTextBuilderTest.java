@@ -91,25 +91,98 @@ public class LatexAnnotatedTextBuilderTest {
         "\u00cb\u00efn T\u00ebxt m\u00eft v\u00ef\u00ebl\u00ebn "
         + "\u00dcml\u00e4\u00fct\u00ebn. ");
     assertPlainText(
-        "\\AA\\O\\aa\\ss\\o"
-        + "\\`A\\`E\\`I\\`O\\`U\\`a\\`e\\`i\\`\\i\\`o\\`u"
-        + "\\'A\\'E\\'I\\'O\\'U\\'Y\\'a\\'e\\'i\\'\\i\\'o\\'u\\'y"
-        + "\\^A\\^E\\^I\\^O\\^U\\^Y\\^a\\^e\\^i\\^\\i\\^o\\^u\\^y"
-        + "\\~A\\~E\\~I\\~N\\~O\\~U\\~a\\~e\\~i\\~\\i\\~n\\~o\\~u"
-        + "\\\"A\\\"E\\\"I\\\"O\\\"U\\\"Y\\\"a\\\"e\\\"i\\\"\\i\\\"o\\\"u\\\"y"
-        + "\\=A\\=E\\=I\\=O\\=U\\=Y\\=a\\=e\\=i\\=\\i\\=o\\=u\\=y"
-        + "\\.A\\.E\\.I\\.O\\.a\\.e\\.o",
-        "\u00c5\u00d8\u00e5\u00df\u00f8"
-        + "\u00c0\u00c8\u00cc\u00d2\u00d9\u00e0\u00e8\u00ec\u00ec\u00f2\u00f9"
-        + "\u00c1\u00c9\u00cd\u00d3\u00da\u00dd\u00e1\u00e9\u00ed\u00ed\u00f3\u00fa\u00fd"
-        + "\u00c2\u00ca\u00ce\u00d4\u00db\u0176\u00e2\u00ea\u00ee\u00ee\u00f4\u00fb\u0177"
-        + "\u00c3\u1ebc\u0128\u00d1\u00d5\u0168\u00e3\u1ebd\u0129\u0129\u00f1\u00f5\u0169"
-        + "\u00c4\u00cb\u00cf\u00d6\u00dc\u0178\u00e4\u00eb\u00ef\u00ef\u00f6\u00fc\u00ff"
-        + "\u0100\u0112\u012a\u014c\u016a\u0232\u0101\u0113\u012b\u012b\u014d\u016b\u0233"
-        + "\u0226\u0116\u0130\u022e\u0227\u0117\u022f");
+        "\\AA\\L\\O",
+        "\u00c5\u0141\u00d8");
     assertPlainText(
-        "\\c{C}\\c c\\r{A}\\r U\\r a\\r u",
-        "\u00c7\u00e7\u00c5\u016e\u00e5\u016f");
+        "\\aa\\i\\j\\l\\o\\ss",
+        "\u00e5\u0131\u0237\u0142\u00f8\u00df");
+    assertPlainText(
+        "\\`A\\`E\\`I\\`O\\`U",
+        "\u00c0\u00c8\u00cc\u00d2\u00d9");
+    assertPlainText(
+        "\\`a\\`e\\`i\\`\\i\\`o\\`u",
+        "\u00e0\u00e8\u00ec\u00ec\u00f2\u00f9");
+    assertPlainText(
+        "\\'A\\'E\\'I\\'O\\'U\\'Y",
+        "\u00c1\u00c9\u00cd\u00d3\u00da\u00dd");
+    assertPlainText(
+        "\\'a\\'e\\'i\\'\\i\\'o\\'u\\'y",
+        "\u00e1\u00e9\u00ed\u00ed\u00f3\u00fa\u00fd");
+    assertPlainText(
+        "\\^A\\^E\\^I\\^O\\^U\\^Y",
+        "\u00c2\u00ca\u00ce\u00d4\u00db\u0176");
+    assertPlainText(
+        "\\^a\\^e\\^i\\^\\i\\^j\\^\\j\\^o\\^u\\^y",
+        "\u00e2\u00ea\u00ee\u00ee\u0135\u0135\u00f4\u00fb\u0177");
+    assertPlainText(
+        "\\~A\\~E\\~I\\~N\\~O\\~U",
+        "\u00c3\u1ebc\u0128\u00d1\u00d5\u0168");
+    assertPlainText(
+        "\\~a\\~e\\~i\\~\\i\\~n\\~o\\~u",
+        "\u00e3\u1ebd\u0129\u0129\u00f1\u00f5\u0169");
+    assertPlainText(
+        "\\\"A\\\"E\\\"I\\\"O\\\"U\\\"Y",
+        "\u00c4\u00cb\u00cf\u00d6\u00dc\u0178");
+    assertPlainText(
+        "\\\"a\\\"e\\\"i\\\"\\i\\\"o\\\"u\\\"y",
+        "\u00e4\u00eb\u00ef\u00ef\u00f6\u00fc\u00ff");
+    assertPlainText(
+        "\\=A\\=E\\=I\\=O\\=U\\=Y",
+        "\u0100\u0112\u012a\u014c\u016a\u0232");
+    assertPlainText(
+        "\\=a\\=e\\=i\\=\\i\\=o\\=u\\=y",
+        "\u0101\u0113\u012b\u012b\u014d\u016b\u0233");
+    assertPlainText(
+        "\\.A\\.E\\.I\\.O",
+        "\u0226\u0116\u0130\u022e");
+    assertPlainText(
+        "\\.a\\.e\\.o",
+        "\u0227\u0117\u022f");
+    assertPlainText(
+        "\\H{O}\\H{U}\\H{o}\\H{u}",
+        "\u0150\u0170\u0151\u0171");
+    assertPlainText(
+        "\\b{B}\\b{D}\\b{K}\\b{L}\\b{N}\\b{R}\\b{T}\\b{Z}",
+        "\u1e06\u1e0e\u1e34\u1e3a\u1e48\u1e5e\u1e6e\u1e94");
+    assertPlainText(
+        "\\b{b}\\b{d}\\b{h}\\b{k}\\b{l}\\b{n}\\b{r}\\b{t}\\b{z}",
+        "\u1e07\u1e0f\u1e96\u1e35\u1e3b\u1e49\u1e5f\u1e6f\u1e95");
+    assertPlainText(
+        "\\c{C}\\c{D}\\c{E}\\c{G}\\c{H}\\c{K}\\c{L}\\c{N}\\c{R}\\c{S}\\c{T}",
+        "\u00c7\u1e10\u0228\u0122\u1e28\u0136\u013b\u0145\u0156\u015e\u0162");
+    assertPlainText(
+        "\\c{c}\\c{d}\\c{e}\\c{g}\\c{h}\\c{k}\\c{l}\\c{n}\\c{r}\\c{s}\\c{t}",
+        "\u00e7\u1e11\u0229\u0123\u1e29\u0137\u013c\u0146\u0157\u015f\u0163");
+    assertPlainText(
+        "\\d{A}\\d{E}\\d{I}\\d{O}\\d{U}\\d{Y}",
+        "\u1ea0\u1eb8\u1eca\u1ecc\u1ee4\u1ef4");
+    assertPlainText(
+        "\\d{a}\\d{e}\\d{i}\\d{o}\\d{u}\\d{y}",
+        "\u1ea1\u1eb9\u1ecb\u1ecd\u1ee5\u1ef5");
+    assertPlainText(
+        "\\k{A}\\k{E}\\k{I}\\k{O}\\k{U}",
+        "\u0104\u0118\u012e\u01ea\u0172");
+    assertPlainText(
+        "\\k{a}\\k{e}\\k{i}\\k{o}\\k{u}",
+        "\u0105\u0119\u012f\u01eb\u0173");
+    assertPlainText(
+        "\\r{A}\\r{U}",
+        "\u00c5\u016e");
+    assertPlainText(
+        "\\r{a}\\r{u}",
+        "\u00e5\u016f");
+    assertPlainText(
+        "\\u{A}\\u{E}\\u{G}\\u{I}\\u{O}\\u{U}",
+        "\u0102\u0114\u011e\u012c\u014e\u016c");
+    assertPlainText(
+        "\\v{C}\\v{D}\\v{E}\\v{L}\\v{N}\\v{R}\\v{S}\\v{T}\\v{Z}",
+        "\u010c\u010e\u011a\u013d\u0147\u0158\u0160\u0164\u017d");
+    assertPlainText(
+        "\\v{c}\\v{d}\\v{e}\\v{i}\\v{\\i}\\v{j}\\v{\\j}\\v{l}\\v{n}\\v{r}\\v{s}\\v{t}\\v{z}",
+        "\u010d\u010f\u011b\u01d0\u01d0\u01f0\u01f0\u013e\u0148\u0159\u0161\u0165\u017e");
+    assertPlainText(
+        "\\u{a}\\u{e}\\u{g}\\u{i}\\u{\\i}\\u{o}\\u{u}",
+        "\u0103\u0115\u011f\u012d\u012d\u014f\u016d");
     assertPlainText(
         "This is a test: a, b, \\dots, c.\n",
         "This is a test: a, b, \u2026, c. ");
