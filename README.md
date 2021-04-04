@@ -32,9 +32,14 @@ Find more information about LT<sub>E</sub>X at the [website of vscode-ltex](http
 - Java 11 or later
 - Language client supporting LSP 3.15 or later
 
+## Installation
+
+1. Download the [latest release](https://github.com/valentjn/ltex-ls/releases/latest) from GitHub.
+2. Extract the archive to an arbitrary location on your computer.
+
 ## Startup
 
-It is recommended to use the startup scripts `bin/ltex-ls` (Linux, Mac) and `bin\ltex-ls.bat` (Windows) to start LT<sub>E</sub>X LS. The startup scripts can be controlled by the following environment variables:
+It is recommended to use the startup scripts `bin/ltex-ls` (Linux, Mac) and `bin\ltex-ls.bat` (Windows) to start LT<sub>E</sub>X LS. These scripts are only part of the released versions. The startup scripts can be controlled by the following environment variables:
 
 - `JAVA_HOME`: Path to the directory of the JRE or JDK to use (contains `bin`, `lib`, and other subdirectories)
 - `JAVA_OPTS`: Java arguments to be fed to `java`
