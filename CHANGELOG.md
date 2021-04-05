@@ -16,7 +16,7 @@
 - Add support for many accents in L<sup>A</sup>T<sub>E</sub>X: double acute (e.g., `\H{O}`, &#x0150;), line below (e.g., `\b{h}`, &#x1e96;), dot below (e.g., `\d{A}`, &#x1ea0;), ogonek (e.g., `\k{A}`, &#x0104;), breve (e.g., `\u{A}`, &#x0102;), and caron (e.g., `\v{C}`, &#x010c;) ([PR #57](https://github.com/valentjn/ltex-ls/pull/57) by [@ed359](https://github.com/ed359), fixes [#56](https://github.com/valentjn/ltex-ls/issues/56))
 - Add support for special characters in L<sup>A</sup>T<sub>E</sub>X: `\L` (&#x0141;), `\SS` (&#x1e9e;), `\i` (&#x0131;), `\j` (&#x0237;), `\l` (&#x0142;) ([PR #57](https://github.com/valentjn/ltex-ls/pull/57) by [@ed359](https://github.com/ed359), fixes [#56](https://github.com/valentjn/ltex-ls/issues/56))
 - Add `FR_SPELLING_RULE` as a rule for unknown words ([PR #47](https://github.com/valentjn/ltex-ls/pull/47) by [Nicolas Sicard (@biozic)](https://github.com/biozic))
-- Add support for documents with code language ID `tex` ([PR #54](https://github.com/valentjn/ltex-ls/pull/54) by [Lucas Alber (@LDAP)](https://github.com/LDAP), fixes [#53](https://github.com/valentjn/ltex-ls/issues/53))
+- Use L<sup>A</sup>T<sub>E</sub>X parser for documents with code language ID `tex` ([PR #54](https://github.com/valentjn/ltex-ls/pull/54) by [Lucas Alber (@LDAP)](https://github.com/LDAP), fixes [#53](https://github.com/valentjn/ltex-ls/issues/53))
 - Add support for [Markdown Extra definition lists](https://michelf.ca/projects/php-markdown/extra/#def-list) (fixes [vscode-ltex#268](https://github.com/valentjn/vscode-ltex/issues/268))
 - Ignore non-object values for `InitializeParams.initializationOptions` (fixes [#65](https://github.com/valentjn/ltex-ls/issues/65))
 
