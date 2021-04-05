@@ -142,6 +142,11 @@ public class LatexFragmentizerTest {
   }
 
   @Test
+  public void testTex() {
+    testCodeLanguage("tex");
+  }
+
+  @Test
   public void testBabel() {
     CodeFragmentizer fragmentizer = CodeFragmentizer.create("latex");
     List<CodeFragment> codeFragments = fragmentizer.fragmentize(

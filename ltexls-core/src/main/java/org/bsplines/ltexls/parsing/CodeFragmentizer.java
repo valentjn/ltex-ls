@@ -37,6 +37,8 @@ public abstract class CodeFragmentizer {
         new PlaintextFragmentizer(codeLanguageId));
     constructorMap.put("rsweave", (String codeLanguageId) ->
         new LatexFragmentizer(codeLanguageId));
+    constructorMap.put("tex", (String codeLanguageId) ->
+        new LatexFragmentizer(codeLanguageId));
   }
 
   public CodeFragmentizer(String codeLanguageId) {
