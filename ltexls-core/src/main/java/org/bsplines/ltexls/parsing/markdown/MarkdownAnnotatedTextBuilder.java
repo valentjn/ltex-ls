@@ -7,6 +7,7 @@
 
 package org.bsplines.ltexls.parsing.markdown;
 
+import com.vladsch.flexmark.ext.definition.DefinitionExtension;
 import com.vladsch.flexmark.ext.gitlab.GitLabExtension;
 import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.ext.yaml.front.matter.YamlFrontMatterExtension;
@@ -32,6 +33,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private static final DataHolder parserOptions = new MutableDataSet().set(Parser.EXTENSIONS,
       Arrays.asList(
+        DefinitionExtension.create(),
         GitLabExtension.create(),
         TablesExtension.create(),
         YamlFrontMatterExtension.create(),
@@ -183,9 +185,12 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
       addMarkup(node, Escaping.unescapeHtml(node.getChars()));
     } else {
       if (nodeType.equals("Paragraph")) addMarkup(node.getStartOffset());
+
       this.nodeTypeStack.push(nodeType);
       visitChildren(node);
       this.nodeTypeStack.pop();
+
+      if (nodeType.equals("DefinitionTerm")) super.addMarkup("", ".");
     }
   }
 

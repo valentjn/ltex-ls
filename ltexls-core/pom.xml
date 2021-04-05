@@ -59,6 +59,11 @@
     </dependency>
     <dependency>
       <groupId>com.vladsch.flexmark</groupId>
+      <artifactId>flexmark-ext-definition</artifactId>
+      <version>0.62.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.vladsch.flexmark</groupId>
       <artifactId>flexmark-ext-gitlab</artifactId>
       <version>0.62.2</version>
     </dependency>
