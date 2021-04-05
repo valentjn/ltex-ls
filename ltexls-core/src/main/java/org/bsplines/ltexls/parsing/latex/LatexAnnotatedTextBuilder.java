@@ -7,6 +7,7 @@
 
 package org.bsplines.ltexls.parsing.latex;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -908,246 +909,91 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   }
 
   private String convertAccentCommandToUnicode(String accentCommand, String letter) {
-    String unicode = "";
+    String unicode;
+
+    if (letter.equals("\\i")) {
+      unicode = "\u0131";
+    } else if (letter.equals("\\j")) {
+      unicode = "\u0237";
+    } else {
+      unicode = letter;
+    }
+
 
     switch (accentCommand.charAt(1)) {
-      // grave
       case '`': {
-        if (letter.equals("A")) unicode = "\u00c0";
-        else if (letter.equals("E")) unicode = "\u00c8";
-        else if (letter.equals("I")) unicode = "\u00cc";
-        else if (letter.equals("O")) unicode = "\u00d2";
-        else if (letter.equals("U")) unicode = "\u00d9";
-        else if (letter.equals("a")) unicode = "\u00e0";
-        else if (letter.equals("e")) unicode = "\u00e8";
-        else if (letter.equals("i") || letter.equals("\\i")) unicode = "\u00ec";
-        else if (letter.equals("o")) unicode = "\u00f2";
-        else if (letter.equals("u")) unicode = "\u00f9";
+        // grave
+        unicode += "\u0300";
         break;
       }
-      // acute
       case '\'': {
-        if (letter.equals("A")) unicode = "\u00c1";
-        else if (letter.equals("E")) unicode = "\u00c9";
-        else if (letter.equals("I")) unicode = "\u00cd";
-        else if (letter.equals("O")) unicode = "\u00d3";
-        else if (letter.equals("U")) unicode = "\u00da";
-        else if (letter.equals("Y")) unicode = "\u00dd";
-        else if (letter.equals("a")) unicode = "\u00e1";
-        else if (letter.equals("e")) unicode = "\u00e9";
-        else if (letter.equals("i") || letter.equals("\\i")) unicode = "\u00ed";
-        else if (letter.equals("o")) unicode = "\u00f3";
-        else if (letter.equals("u")) unicode = "\u00fa";
-        else if (letter.equals("y")) unicode = "\u00fd";
+        // acute
+        unicode += "\u0301";
         break;
       }
-      // circumflex
       case '^': {
-        if (letter.equals("A")) unicode = "\u00c2";
-        else if (letter.equals("E")) unicode = "\u00ca";
-        else if (letter.equals("I")) unicode = "\u00ce";
-        else if (letter.equals("O")) unicode = "\u00d4";
-        else if (letter.equals("U")) unicode = "\u00db";
-        else if (letter.equals("Y")) unicode = "\u0176";
-        else if (letter.equals("a")) unicode = "\u00e2";
-        else if (letter.equals("e")) unicode = "\u00ea";
-        else if (letter.equals("i") || letter.equals("\\i")) unicode = "\u00ee";
-        else if (letter.equals("j") || letter.equals("\\j")) unicode = "\u0135";
-        else if (letter.equals("o")) unicode = "\u00f4";
-        else if (letter.equals("u")) unicode = "\u00fb";
-        else if (letter.equals("y")) unicode = "\u0177";
+        // circumflex
+        unicode += "\u0302";
         break;
       }
-      // tilde
       case '~': {
-        if (letter.equals("A")) unicode = "\u00c3";
-        else if (letter.equals("E")) unicode = "\u1ebc";
-        else if (letter.equals("I")) unicode = "\u0128";
-        else if (letter.equals("N")) unicode = "\u00d1";
-        else if (letter.equals("O")) unicode = "\u00d5";
-        else if (letter.equals("U")) unicode = "\u0168";
-        else if (letter.equals("a")) unicode = "\u00e3";
-        else if (letter.equals("e")) unicode = "\u1ebd";
-        else if (letter.equals("i") || letter.equals("\\i")) unicode = "\u0129";
-        else if (letter.equals("n")) unicode = "\u00f1";
-        else if (letter.equals("o")) unicode = "\u00f5";
-        else if (letter.equals("u")) unicode = "\u0169";
+        // tilde
+        unicode += "\u0303";
         break;
       }
-      // diaeresis/umlaut
       case '"': {
-        if (letter.equals("A")) unicode = "\u00c4";
-        else if (letter.equals("E")) unicode = "\u00cb";
-        else if (letter.equals("I")) unicode = "\u00cf";
-        else if (letter.equals("O")) unicode = "\u00d6";
-        else if (letter.equals("U")) unicode = "\u00dc";
-        else if (letter.equals("Y")) unicode = "\u0178";
-        else if (letter.equals("a")) unicode = "\u00e4";
-        else if (letter.equals("e")) unicode = "\u00eb";
-        else if (letter.equals("i") || letter.equals("\\i")) unicode = "\u00ef";
-        else if (letter.equals("o")) unicode = "\u00f6";
-        else if (letter.equals("u")) unicode = "\u00fc";
-        else if (letter.equals("y")) unicode = "\u00ff";
+        // diaeresis/umlaut
+        unicode += "\u0308";
         break;
       }
-      // macron
       case '=': {
-        if (letter.equals("A")) unicode = "\u0100";
-        else if (letter.equals("E")) unicode = "\u0112";
-        else if (letter.equals("I")) unicode = "\u012a";
-        else if (letter.equals("O")) unicode = "\u014c";
-        else if (letter.equals("U")) unicode = "\u016a";
-        else if (letter.equals("Y")) unicode = "\u0232";
-        else if (letter.equals("a")) unicode = "\u0101";
-        else if (letter.equals("e")) unicode = "\u0113";
-        else if (letter.equals("i") || letter.equals("\\i")) unicode = "\u012b";
-        else if (letter.equals("o")) unicode = "\u014d";
-        else if (letter.equals("u")) unicode = "\u016b";
-        else if (letter.equals("y")) unicode = "\u0233";
+        // macron
+        unicode += "\u0304";
         break;
       }
-      // dot above
       case '.': {
-        if (letter.equals("A")) unicode = "\u0226";
-        else if (letter.equals("E")) unicode = "\u0116";
-        else if (letter.equals("I")) unicode = "\u0130";
-        else if (letter.equals("O")) unicode = "\u022e";
-        else if (letter.equals("a")) unicode = "\u0227";
-        else if (letter.equals("e")) unicode = "\u0117";
-        else if (letter.equals("o")) unicode = "\u022f";
+        // dot above
+        unicode += "\u0307";
         break;
       }
-      // double acute
       case 'H': {
-        if (letter.equals("O")) unicode = "\u0150";
-        else if (letter.equals("U")) unicode = "\u0170";
-        else if (letter.equals("o")) unicode = "\u0151";
-        else if (letter.equals("u")) unicode = "\u0171";
+        // double acute
+        unicode += "\u030b";
         break;
       }
-      // line below
       case 'b': {
-        if (letter.equals("B")) unicode = "\u1e06";
-        else if (letter.equals("D")) unicode = "\u1e0e";
-        else if (letter.equals("K")) unicode = "\u1e34";
-        else if (letter.equals("L")) unicode = "\u1e3a";
-        else if (letter.equals("N")) unicode = "\u1e48";
-        else if (letter.equals("R")) unicode = "\u1e5e";
-        else if (letter.equals("T")) unicode = "\u1e6e";
-        else if (letter.equals("Z")) unicode = "\u1e94";
-        else if (letter.equals("b")) unicode = "\u1e07";
-        else if (letter.equals("d")) unicode = "\u1e0f";
-        else if (letter.equals("h")) unicode = "\u1e96";
-        else if (letter.equals("k")) unicode = "\u1e35";
-        else if (letter.equals("l")) unicode = "\u1e3b";
-        else if (letter.equals("n")) unicode = "\u1e49";
-        else if (letter.equals("r")) unicode = "\u1e5f";
-        else if (letter.equals("t")) unicode = "\u1e6f";
-        else if (letter.equals("z")) unicode = "\u1e95";
+        // macron below
+        unicode += "\u0331";
         break;
       }
-      // cedilla
       case 'c': {
-        if (letter.equals("C")) unicode = "\u00c7";
-        else if (letter.equals("D")) unicode = "\u1e10";
-        else if (letter.equals("E")) unicode = "\u0228";
-        else if (letter.equals("G")) unicode = "\u0122";
-        else if (letter.equals("H")) unicode = "\u1e28";
-        else if (letter.equals("K")) unicode = "\u0136";
-        else if (letter.equals("L")) unicode = "\u013b";
-        else if (letter.equals("N")) unicode = "\u0145";
-        else if (letter.equals("R")) unicode = "\u0156";
-        else if (letter.equals("S")) unicode = "\u015e";
-        else if (letter.equals("T")) unicode = "\u0162";
-        else if (letter.equals("c")) unicode = "\u00e7";
-        else if (letter.equals("d")) unicode = "\u1e11";
-        else if (letter.equals("e")) unicode = "\u0229";
-        else if (letter.equals("g")) unicode = "\u0123";
-        else if (letter.equals("h")) unicode = "\u1e29";
-        else if (letter.equals("k")) unicode = "\u0137";
-        else if (letter.equals("l")) unicode = "\u013c";
-        else if (letter.equals("n")) unicode = "\u0146";
-        else if (letter.equals("r")) unicode = "\u0157";
-        else if (letter.equals("s")) unicode = "\u015f";
-        else if (letter.equals("t")) unicode = "\u0163";
+        // cedilla
+        unicode += "\u0327";
         break;
       }
-      // dot below
       case 'd': {
-        if (letter.equals("A")) unicode = "\u1ea0";
-        else if (letter.equals("E")) unicode = "\u1eb8";
-        else if (letter.equals("I")) unicode = "\u1eca";
-        else if (letter.equals("O")) unicode = "\u1ecc";
-        else if (letter.equals("U")) unicode = "\u1ee4";
-        else if (letter.equals("Y")) unicode = "\u1ef4";
-        else if (letter.equals("a")) unicode = "\u1ea1";
-        else if (letter.equals("e")) unicode = "\u1eb9";
-        else if (letter.equals("i")) unicode = "\u1ecb";
-        else if (letter.equals("o")) unicode = "\u1ecd";
-        else if (letter.equals("u")) unicode = "\u1ee5";
-        else if (letter.equals("y")) unicode = "\u1ef5";
+        // dot below
+        unicode += "\u0323";
         break;
       }
-      // ogonek
       case 'k': {
-        if (letter.equals("A")) unicode = "\u0104";
-        else if (letter.equals("E")) unicode = "\u0118";
-        else if (letter.equals("I")) unicode = "\u012e";
-        else if (letter.equals("O")) unicode = "\u01ea";
-        else if (letter.equals("U")) unicode = "\u0172";
-        else if (letter.equals("a")) unicode = "\u0105";
-        else if (letter.equals("e")) unicode = "\u0119";
-        else if (letter.equals("i")) unicode = "\u012f";
-        else if (letter.equals("o")) unicode = "\u01eb";
-        else if (letter.equals("u")) unicode = "\u0173";
+        // ogonek
+        unicode += "\u0328";
         break;
       }
-      // ring above
       case 'r': {
-        if (letter.equals("A")) unicode = "\u00c5";
-        else if (letter.equals("U")) unicode = "\u016e";
-        else if (letter.equals("a")) unicode = "\u00e5";
-        else if (letter.equals("u")) unicode = "\u016f";
+        // ring above
+        unicode += "\u030a";
         break;
       }
-      // breve
       case 'u': {
-        if (letter.equals("A")) unicode = "\u0102";
-        else if (letter.equals("E")) unicode = "\u0114";
-        else if (letter.equals("G")) unicode = "\u011e";
-        else if (letter.equals("I")) unicode = "\u012c";
-        else if (letter.equals("O")) unicode = "\u014e";
-        else if (letter.equals("U")) unicode = "\u016c";
-        else if (letter.equals("a")) unicode = "\u0103";
-        else if (letter.equals("e")) unicode = "\u0115";
-        else if (letter.equals("g")) unicode = "\u011f";
-        else if (letter.equals("i") || letter.equals("\\i")) unicode = "\u012d";
-        else if (letter.equals("o")) unicode = "\u014f";
-        else if (letter.equals("u")) unicode = "\u016d";
+        // breve
+        unicode += "\u0306";
         break;
       }
-      // caron
       case 'v': {
-        if (letter.equals("C")) unicode = "\u010c";
-        else if (letter.equals("D")) unicode = "\u010e";
-        else if (letter.equals("E")) unicode = "\u011a";
-        else if (letter.equals("L")) unicode = "\u013d";
-        else if (letter.equals("N")) unicode = "\u0147";
-        else if (letter.equals("R")) unicode = "\u0158";
-        else if (letter.equals("S")) unicode = "\u0160";
-        else if (letter.equals("T")) unicode = "\u0164";
-        else if (letter.equals("Z")) unicode = "\u017d";
-        else if (letter.equals("c")) unicode = "\u010d";
-        else if (letter.equals("d")) unicode = "\u010f";
-        else if (letter.equals("e")) unicode = "\u011b";
-        else if (letter.equals("i") || letter.equals("\\i")) unicode = "\u01d0";
-        else if (letter.equals("j") || letter.equals("\\j")) unicode = "\u01f0";
-        else if (letter.equals("l")) unicode = "\u013e";
-        else if (letter.equals("n")) unicode = "\u0148";
-        else if (letter.equals("r")) unicode = "\u0159";
-        else if (letter.equals("s")) unicode = "\u0161";
-        else if (letter.equals("t")) unicode = "\u0165";
-        else if (letter.equals("z")) unicode = "\u017e";
+        // caron
+        unicode += "\u030c";
         break;
       }
       default: {
@@ -1155,6 +1001,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
       }
     }
 
+    unicode = Normalizer.normalize(unicode, Normalizer.Form.NFC);
     return unicode;
   }
 
