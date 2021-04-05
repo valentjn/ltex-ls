@@ -10,21 +10,32 @@
 
 [![version number](https://badgen.net/github/release/valentjn/ltex-ls/stable)![release date](https://badgen.net/github/last-commit/valentjn/ltex-ls/release?label=)](https://github.com/valentjn/ltex-ls/releases)
 
-[![vscode-ltex](https://badgen.net/github/license/valentjn/vscode-ltex?label=vscode-ltex)](https://github.com/valentjn/vscode-ltex)&nbsp;
+<span style="opacity:0.3;">[![vscode-ltex](https://badgen.net/github/license/valentjn/vscode-ltex?label=vscode-ltex)](https://github.com/valentjn/vscode-ltex)&nbsp;
 [![CI status](https://github.com/valentjn/vscode-ltex/workflows/CI/badge.svg?branch=release)](https://github.com/valentjn/vscode-ltex/actions?query=workflow%3A%22CI%22+branch%3Arelease)&nbsp;
 [![stars](https://badgen.net/github/stars/valentjn/vscode-ltex)](https://github.com/valentjn/vscode-ltex)&nbsp;
-[![open issues](https://badgen.net/github/open-issues/valentjn/vscode-ltex?label=open/closed%20issues&color=blue)](https://github.com/valentjn/vscode-ltex/issues)&nbsp;[![closed issues](https://badgen.net/github/closed-issues/valentjn/vscode-ltex?label=)](https://github.com/valentjn/vscode-ltex/issues)\
+[![open issues](https://badgen.net/github/open-issues/valentjn/vscode-ltex?label=open/closed%20issues&color=blue)](https://github.com/valentjn/vscode-ltex/issues)&nbsp;[![closed issues](https://badgen.net/github/closed-issues/valentjn/vscode-ltex?label=)](https://github.com/valentjn/vscode-ltex/issues)</span>\
 [![ltex-ls](https://badgen.net/github/license/valentjn/ltex-ls?label=ltex-ls)](https://github.com/valentjn/ltex-ls)&nbsp;
 [![CI status](https://github.com/valentjn/ltex-ls/workflows/CI/badge.svg?branch=release)](https://github.com/valentjn/ltex-ls/actions?query=workflow%3A%22CI%22+branch%3Arelease)&nbsp;
-[![coverage](https://badgen.net/coveralls/c/github/valentjn/ltex-ls/release)](https://coveralls.io/github/valentjn/ltex-ls)
+[![coverage](https://badgen.net/coveralls/c/github/valentjn/ltex-ls/release)](https://coveralls.io/github/valentjn/ltex-ls)&nbsp;
+[![stars](https://badgen.net/github/stars/valentjn/ltex-ls)](https://github.com/valentjn/ltex-ls)&nbsp;
+[![open issues](https://badgen.net/github/open-issues/valentjn/ltex-ls?label=open/closed%20issues&color=blue)](https://github.com/valentjn/ltex-ls/issues)&nbsp;[![closed issues](https://badgen.net/github/closed-issues/valentjn/ltex-ls?label=)](https://github.com/valentjn/ltex-ls/issues)
 
-LT<sub>E</sub>X LS implements a language server according to the [Language Server Protocol (LSP)](https://microsoft.github.io/language-server-protocol/) and provides grammar and spelling errors in L<sup>A</sup>T<sub>E</sub>X and Markdown documents. The documents are checked with [LanguageTool](https://languagetool.org/).
+LT<sub>E</sub>X LS (LT<sub>E</sub>X Language Server) implements a language server according to the [Language Server Protocol (LSP)](https://microsoft.github.io/language-server-protocol/) and provides grammar and spelling errors in L<sup>A</sup>T<sub>E</sub>X and Markdown documents. The documents are checked with [LanguageTool](https://languagetool.org/).
 
-Simply put, you start the language server (either locally or remotely), you send the language server your L<sup>A</sup>T<sub>E</sub>X or Markdown document, and it will respond with a list of the grammar and spelling errors in it (if there are any). To communicate with a language server, you have to implement a language client according to the Language Server Protocol.
+Simply put, you start the language server (either locally or remotely), you send the language server your L<sup>A</sup>T<sub>E</sub>X or Markdown document, and it will respond with a list of the grammar and spelling errors in it. To use LT<sub>E</sub>X LS, you have to use a language client (usually an editor or an extension of the editor) that communicates with LT<sub>E</sub>X LS according to the LSP.
 
-The reference client of LT<sub>E</sub>X LS is the [LT<sub>E</sub>X extension for Visual Studio Code (vscode-ltex)](https://valentjn.github.io/vscode-ltex), whose development LT<sub>E</sub>X LS follows closely.
+The reference client of LT<sub>E</sub>X LS is the [LT<sub>E</sub>X extension for Visual Studio Code (vscode-ltex)](https://valentjn.github.io/vscode-ltex), whose development LT<sub>E</sub>X LS follows closely and vice versa.
 
 Find more information about LT<sub>E</sub>X at the [website of vscode-ltex](https://valentjn.github.io/vscode-ltex).
+
+## Current List of Language Clients
+
+In order to use LT<sub>E</sub>X LS, you need a language client. For some editors, language clients are already available, see the following list. If your editor is in the list, read the installation instructions of the language client first; it might download LT<sub>E</sub>X LS automatically or tell you where to store LT<sub>E</sub>X LS. The rest of this document is only relevant if you want to implement your own language client.
+
+- VS Code/reference client: [LT<sub>E</sub>X for VS Code (valentjn/vscode-ltex)](https://valentjn.github.io/vscode-ltex)
+- Emacs using `eglot`: [emacs-languagetool/eglot-ltex](https://github.com/emacs-languagetool/eglot-ltex)
+- Emacs using `lsp-mode`: [emacs-languagetool/lsp-ltex](https://github.com/emacs-languagetool/lsp-ltex)
+- Sublime Text: [LDAP/LSP-ltex-ls](https://github.com/LDAP/LSP-ltex-ls)
 
 ## Requirements
 
@@ -32,14 +43,21 @@ Find more information about LT<sub>E</sub>X at the [website of vscode-ltex](http
 - Java 11 or later
 - Language client supporting LSP 3.15 or later
 
+## Installation
+
+1. Download the [latest release](https://github.com/valentjn/ltex-ls/releases/latest) from GitHub.
+2. Extract the archive to an arbitrary location on your computer.
+
 ## Startup
 
-It is recommended to use the startup scripts `bin/ltex-ls` (Linux, Mac) and `bin\ltex-ls.bat` (Windows) to start LT<sub>E</sub>X LS. The startup scripts can be controlled by the following environment variables:
+It is recommended to use the startup scripts `bin/ltex-ls` (Linux, Mac) and `bin\ltex-ls.bat` (Windows) to start LT<sub>E</sub>X LS. These scripts are only part of the released versions. The startup scripts can be controlled by the following environment variables:
 
 - `JAVA_HOME`: Path to the directory of the JRE or JDK to use (contains `bin`, `lib`, and other subdirectories)
-- `JAVA_OPTS`: Java arguments to be fed to `java`
-- Any command-line arguments supplied to the startup scripts are fed to LT<sub>E</sub>X LS. The following arguments are supported:
-  - `--version`: Print a JSON string with versioning information to the standard output and exit. The format is a JSON object with `"java"` and `"ltex-ls"` keys and string values. A key may be missing if no information about the corresponding version could be retrieved.
+- `JAVA_OPTS`: Java arguments to be fed to `java` (e.g., `-Xmx1024m`)
+
+Any command-line arguments supplied to the startup scripts are processed by LT<sub>E</sub>X LS itself. The following arguments are supported:
+
+- `--version`: Print a JSON string with versioning information to the standard output and exit. The format is a JSON object with `"java"` and `"ltex-ls"` keys and string values. A key may be missing if no information about the corresponding version could be retrieved.
 
 You can also start LT<sub>E</sub>X LS directly without the startup scripts (not recommended). In this case, make sure that when supplying all JAR files in the `lib` directory to Java's class path, `ltexls-languagetool-patch-LTEXLSVERSION.jar` is listed as the first JAR file (where `LTEXLSVERSION` is the version of LT<sub>E</sub>X LS; Java's class path does not support wildcards in the middle of filenames). It does not suffice to supply `lib/*` to the class path, as the order in which the JAR files are included in wildcards is not specified by Java, so this will fail randomly. The startup scripts take care of this peculiarity.
 

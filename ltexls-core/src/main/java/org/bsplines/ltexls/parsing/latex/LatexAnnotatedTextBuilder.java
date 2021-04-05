@@ -59,9 +59,9 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private static final Pattern emDashPattern = Pattern.compile("^---");
   private static final Pattern enDashPattern = Pattern.compile("^--");
   private static final Pattern accentPattern1 = Pattern.compile(
-      "^(\\\\[`'\\^~\"=\\.])(([A-Za-z]|\\\\i)|(\\{([A-Za-z]|\\\\i)\\}))");
+      "^(\\\\[`'\\^~\"=\\.])(([A-Za-z]|\\\\i|\\\\j)|(\\{([A-Za-z]|\\\\i|\\\\j)\\}))");
   private static final Pattern accentPattern2 = Pattern.compile(
-      "^(\\\\[cr])( *([A-Za-z])|\\{([A-Za-z])\\})");
+      "^(\\\\[Hbcdkruv])( *([A-Za-z]|\\\\i|\\\\j)|\\{([A-Za-z]|\\\\i|\\\\j)\\})");
   private static final Pattern displayMathPattern = Pattern.compile("^\\$\\$");
   private static final Pattern verbCommandPattern = Pattern.compile("^\\\\verb\\*?(.).*?\\1");
   private static final Pattern rsweaveBeginPattern = Pattern.compile("^<<.*?>>=");
@@ -446,15 +446,35 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
       popMode();
       addMarkup(command, generateDummy());
     } else if (command.equals("\\AA")) {
+      // capital A with ring above
       addMarkup(command, (isMathMode(this.curMode) ? "" : "\u00c5"));
+    } else if (command.equals("\\L")) {
+      // capital L with stroke
+      addMarkup(command, (isMathMode(this.curMode) ? "" : "\u0141"));
     } else if (command.equals("\\O")) {
+      // capital O with stroke
       addMarkup(command, (isMathMode(this.curMode) ? "" : "\u00d8"));
+    } else if (command.equals("\\SS")) {
+      // capital sharp S
+      addMarkup(command, (isMathMode(this.curMode) ? "" : "\u1e9e"));
     } else if (command.equals("\\aa")) {
+      // small a with ring above
       addMarkup(command, (isMathMode(this.curMode) ? "" : "\u00e5"));
-    } else if (command.equals("\\ss")) {
-      addMarkup(command, (isMathMode(this.curMode) ? "" : "\u00df"));
+    } else if (command.equals("\\i")) {
+      // small i without dot
+      addMarkup(command, (isMathMode(this.curMode) ? "" : "\u0131"));
+    } else if (command.equals("\\j")) {
+      // small j without dot
+      addMarkup(command, (isMathMode(this.curMode) ? "" : "\u0237"));
+    } else if (command.equals("\\l")) {
+      // small l with stroke
+      addMarkup(command, (isMathMode(this.curMode) ? "" : "\u0142"));
     } else if (command.equals("\\o")) {
+      // small o with stroke
       addMarkup(command, (isMathMode(this.curMode) ? "" : "\u00f8"));
+    } else if (command.equals("\\ss")) {
+      // small sharp s
+      addMarkup(command, (isMathMode(this.curMode) ? "" : "\u00df"));
     } else if (command.equals("\\`") || command.equals("\\'") || command.equals("\\^")
           || command.equals("\\~") || command.equals("\\\"") || command.equals("\\=")
           || command.equals("\\.")) {
@@ -470,7 +490,9 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
       } else {
         addMarkup(command);
       }
-    } else if (command.equals("\\c") || command.equals("\\r")) {
+    } else if (command.equals("\\H") || command.equals("\\b") || command.equals("\\c")
+          || command.equals("\\d") || command.equals("\\k") || command.equals("\\r")
+          || command.equals("\\u") || command.equals("\\v")) {
       Matcher matcher = accentPattern2.matcher(this.code.substring(this.pos));
 
       if (!isMathMode(this.curMode) && matcher.find()) {
@@ -889,6 +911,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     String unicode = "";
 
     switch (accentCommand.charAt(1)) {
+      // grave
       case '`': {
         if (letter.equals("A")) unicode = "\u00c0";
         else if (letter.equals("E")) unicode = "\u00c8";
@@ -902,6 +925,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
         else if (letter.equals("u")) unicode = "\u00f9";
         break;
       }
+      // acute
       case '\'': {
         if (letter.equals("A")) unicode = "\u00c1";
         else if (letter.equals("E")) unicode = "\u00c9";
@@ -917,6 +941,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
         else if (letter.equals("y")) unicode = "\u00fd";
         break;
       }
+      // circumflex
       case '^': {
         if (letter.equals("A")) unicode = "\u00c2";
         else if (letter.equals("E")) unicode = "\u00ca";
@@ -927,11 +952,13 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
         else if (letter.equals("a")) unicode = "\u00e2";
         else if (letter.equals("e")) unicode = "\u00ea";
         else if (letter.equals("i") || letter.equals("\\i")) unicode = "\u00ee";
+        else if (letter.equals("j") || letter.equals("\\j")) unicode = "\u0135";
         else if (letter.equals("o")) unicode = "\u00f4";
         else if (letter.equals("u")) unicode = "\u00fb";
         else if (letter.equals("y")) unicode = "\u0177";
         break;
       }
+      // tilde
       case '~': {
         if (letter.equals("A")) unicode = "\u00c3";
         else if (letter.equals("E")) unicode = "\u1ebc";
@@ -947,6 +974,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
         else if (letter.equals("u")) unicode = "\u0169";
         break;
       }
+      // diaeresis/umlaut
       case '"': {
         if (letter.equals("A")) unicode = "\u00c4";
         else if (letter.equals("E")) unicode = "\u00cb";
@@ -962,6 +990,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
         else if (letter.equals("y")) unicode = "\u00ff";
         break;
       }
+      // macron
       case '=': {
         if (letter.equals("A")) unicode = "\u0100";
         else if (letter.equals("E")) unicode = "\u0112";
@@ -977,6 +1006,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
         else if (letter.equals("y")) unicode = "\u0233";
         break;
       }
+      // dot above
       case '.': {
         if (letter.equals("A")) unicode = "\u0226";
         else if (letter.equals("E")) unicode = "\u0116";
@@ -987,16 +1017,137 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
         else if (letter.equals("o")) unicode = "\u022f";
         break;
       }
-      case 'c': {
-        if (letter.equals("C")) unicode = "\u00c7";
-        else if (letter.equals("c")) unicode = "\u00e7";
+      // double acute
+      case 'H': {
+        if (letter.equals("O")) unicode = "\u0150";
+        else if (letter.equals("U")) unicode = "\u0170";
+        else if (letter.equals("o")) unicode = "\u0151";
+        else if (letter.equals("u")) unicode = "\u0171";
         break;
       }
+      // line below
+      case 'b': {
+        if (letter.equals("B")) unicode = "\u1e06";
+        else if (letter.equals("D")) unicode = "\u1e0e";
+        else if (letter.equals("K")) unicode = "\u1e34";
+        else if (letter.equals("L")) unicode = "\u1e3a";
+        else if (letter.equals("N")) unicode = "\u1e48";
+        else if (letter.equals("R")) unicode = "\u1e5e";
+        else if (letter.equals("T")) unicode = "\u1e6e";
+        else if (letter.equals("Z")) unicode = "\u1e94";
+        else if (letter.equals("b")) unicode = "\u1e07";
+        else if (letter.equals("d")) unicode = "\u1e0f";
+        else if (letter.equals("h")) unicode = "\u1e96";
+        else if (letter.equals("k")) unicode = "\u1e35";
+        else if (letter.equals("l")) unicode = "\u1e3b";
+        else if (letter.equals("n")) unicode = "\u1e49";
+        else if (letter.equals("r")) unicode = "\u1e5f";
+        else if (letter.equals("t")) unicode = "\u1e6f";
+        else if (letter.equals("z")) unicode = "\u1e95";
+        break;
+      }
+      // cedilla
+      case 'c': {
+        if (letter.equals("C")) unicode = "\u00c7";
+        else if (letter.equals("D")) unicode = "\u1e10";
+        else if (letter.equals("E")) unicode = "\u0228";
+        else if (letter.equals("G")) unicode = "\u0122";
+        else if (letter.equals("H")) unicode = "\u1e28";
+        else if (letter.equals("K")) unicode = "\u0136";
+        else if (letter.equals("L")) unicode = "\u013b";
+        else if (letter.equals("N")) unicode = "\u0145";
+        else if (letter.equals("R")) unicode = "\u0156";
+        else if (letter.equals("S")) unicode = "\u015e";
+        else if (letter.equals("T")) unicode = "\u0162";
+        else if (letter.equals("c")) unicode = "\u00e7";
+        else if (letter.equals("d")) unicode = "\u1e11";
+        else if (letter.equals("e")) unicode = "\u0229";
+        else if (letter.equals("g")) unicode = "\u0123";
+        else if (letter.equals("h")) unicode = "\u1e29";
+        else if (letter.equals("k")) unicode = "\u0137";
+        else if (letter.equals("l")) unicode = "\u013c";
+        else if (letter.equals("n")) unicode = "\u0146";
+        else if (letter.equals("r")) unicode = "\u0157";
+        else if (letter.equals("s")) unicode = "\u015f";
+        else if (letter.equals("t")) unicode = "\u0163";
+        break;
+      }
+      // dot below
+      case 'd': {
+        if (letter.equals("A")) unicode = "\u1ea0";
+        else if (letter.equals("E")) unicode = "\u1eb8";
+        else if (letter.equals("I")) unicode = "\u1eca";
+        else if (letter.equals("O")) unicode = "\u1ecc";
+        else if (letter.equals("U")) unicode = "\u1ee4";
+        else if (letter.equals("Y")) unicode = "\u1ef4";
+        else if (letter.equals("a")) unicode = "\u1ea1";
+        else if (letter.equals("e")) unicode = "\u1eb9";
+        else if (letter.equals("i")) unicode = "\u1ecb";
+        else if (letter.equals("o")) unicode = "\u1ecd";
+        else if (letter.equals("u")) unicode = "\u1ee5";
+        else if (letter.equals("y")) unicode = "\u1ef5";
+        break;
+      }
+      // ogonek
+      case 'k': {
+        if (letter.equals("A")) unicode = "\u0104";
+        else if (letter.equals("E")) unicode = "\u0118";
+        else if (letter.equals("I")) unicode = "\u012e";
+        else if (letter.equals("O")) unicode = "\u01ea";
+        else if (letter.equals("U")) unicode = "\u0172";
+        else if (letter.equals("a")) unicode = "\u0105";
+        else if (letter.equals("e")) unicode = "\u0119";
+        else if (letter.equals("i")) unicode = "\u012f";
+        else if (letter.equals("o")) unicode = "\u01eb";
+        else if (letter.equals("u")) unicode = "\u0173";
+        break;
+      }
+      // ring above
       case 'r': {
         if (letter.equals("A")) unicode = "\u00c5";
         else if (letter.equals("U")) unicode = "\u016e";
         else if (letter.equals("a")) unicode = "\u00e5";
         else if (letter.equals("u")) unicode = "\u016f";
+        break;
+      }
+      // breve
+      case 'u': {
+        if (letter.equals("A")) unicode = "\u0102";
+        else if (letter.equals("E")) unicode = "\u0114";
+        else if (letter.equals("G")) unicode = "\u011e";
+        else if (letter.equals("I")) unicode = "\u012c";
+        else if (letter.equals("O")) unicode = "\u014e";
+        else if (letter.equals("U")) unicode = "\u016c";
+        else if (letter.equals("a")) unicode = "\u0103";
+        else if (letter.equals("e")) unicode = "\u0115";
+        else if (letter.equals("g")) unicode = "\u011f";
+        else if (letter.equals("i") || letter.equals("\\i")) unicode = "\u012d";
+        else if (letter.equals("o")) unicode = "\u014f";
+        else if (letter.equals("u")) unicode = "\u016d";
+        break;
+      }
+      // caron
+      case 'v': {
+        if (letter.equals("C")) unicode = "\u010c";
+        else if (letter.equals("D")) unicode = "\u010e";
+        else if (letter.equals("E")) unicode = "\u011a";
+        else if (letter.equals("L")) unicode = "\u013d";
+        else if (letter.equals("N")) unicode = "\u0147";
+        else if (letter.equals("R")) unicode = "\u0158";
+        else if (letter.equals("S")) unicode = "\u0160";
+        else if (letter.equals("T")) unicode = "\u0164";
+        else if (letter.equals("Z")) unicode = "\u017d";
+        else if (letter.equals("c")) unicode = "\u010d";
+        else if (letter.equals("d")) unicode = "\u010f";
+        else if (letter.equals("e")) unicode = "\u011b";
+        else if (letter.equals("i") || letter.equals("\\i")) unicode = "\u01d0";
+        else if (letter.equals("j") || letter.equals("\\j")) unicode = "\u01f0";
+        else if (letter.equals("l")) unicode = "\u013e";
+        else if (letter.equals("n")) unicode = "\u0148";
+        else if (letter.equals("r")) unicode = "\u0159";
+        else if (letter.equals("s")) unicode = "\u0161";
+        else if (letter.equals("t")) unicode = "\u0165";
+        else if (letter.equals("z")) unicode = "\u017e";
         break;
       }
       default: {
