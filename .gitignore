@@ -10,6 +10,7 @@
 
 /ltexls-core/.classpath
 /ltexls-core/.project
+/ltexls-core/*.jar
 
 /ltexls-core/.settings/
 /ltexls-core/target/
