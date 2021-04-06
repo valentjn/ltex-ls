@@ -62,10 +62,6 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
         MarkdownAnnotatedTextBuilderDefaults.getDefaultMarkdownNodeSignatures());
   }
 
-  private void visitChildren(final Node node) {
-    node.getChildren().forEach(this::visit);
-  }
-
   private boolean isInNodeType(String nodeType) {
     return this.nodeTypeStack.contains(nodeType);
   }
@@ -147,11 +143,6 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
           + (new AstCollectingVisitor().collectAndGetAstText(document)));
     }
 
-    visit(document);
-    return this;
-  }
-
-  private void visit(Document document) {
     this.code = document.getChars().toString();
     this.pos = 0;
     this.dummyCounter = 0;
@@ -159,6 +150,8 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
     this.nodeTypeStack.clear();
     visitChildren(document);
     if (this.pos < this.code.length()) addMarkup(this.code.length());
+
+    return this;
   }
 
   private void visit(Node node) {
@@ -192,6 +185,10 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
 
       if (nodeType.equals("DefinitionTerm")) super.addMarkup("", ".");
     }
+  }
+
+  private void visitChildren(Node node) {
+    node.getChildren().forEach(this::visit);
   }
 
   @Override
