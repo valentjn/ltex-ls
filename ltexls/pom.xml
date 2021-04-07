@@ -289,7 +289,7 @@
         <version>3.0.0</version>
         <executions>
           <execution>
-            <phase>package</phase>
+            <id>patch-bin-scripts</id>
             <configuration>
               <target>
                 <replace file="target/appassembler/bin/ltex-ls">
@@ -347,6 +347,7 @@ if %ERROR_CODE% EQU 0 set ERROR_CODE=1</replacevalue>
                 </replace>
               </target>
             </configuration>
+            <phase>package</phase>
             <goals>
               <goal>run</goal>
             </goals>
