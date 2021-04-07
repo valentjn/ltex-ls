@@ -305,7 +305,7 @@ Params: {
             "disabledRules": {},
             "enabledRules": {},
             "ltex-ls": {
-                "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
+                "path": "/home/valentjn/repos/ltex-ls/ltexls/target/appassembler",
                 "languageToolHttpServerUri": "",
                 "logLevel": "fine"
             },
@@ -406,7 +406,7 @@ Result: [
         "disabledRules": {},
         "enabledRules": {},
         "ltex-ls": {
-            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
+            "path": "/home/valentjn/repos/ltex-ls/ltexls/target/appassembler",
             "languageToolHttpServerUri": "",
             "logLevel": "fine"
         },
@@ -546,7 +546,7 @@ Result: [
         "disabledRules": {},
         "enabledRules": {},
         "ltex-ls": {
-            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
+            "path": "/home/valentjn/repos/ltex-ls/ltexls/target/appassembler",
             "languageToolHttpServerUri": "",
             "logLevel": "fine"
         },
@@ -1194,7 +1194,7 @@ Result: [
         "disabledRules": {},
         "enabledRules": {},
         "ltex-ls": {
-            "path": "/home/valentjn/repos/ltex-ls/ltexls-core/target/appassembler",
+            "path": "/home/valentjn/repos/ltex-ls/ltexls/target/appassembler",
             "languageToolHttpServerUri": "",
             "logLevel": "fine"
         },

@@ -10,15 +10,13 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bsplines</groupId>
-  <artifactId>ltexls-core</artifactId>
+  <artifactId>ltexls</artifactId>
+  <version>11.0.0</version>
   <properties>
+    <maven.compiler.release>11</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <errorProneJavac>${com.google.errorprone:javac:jar}</errorProneJavac>
   </properties>
-  <parent>
-    <groupId>org.bsplines</groupId>
-    <artifactId>ltexls</artifactId>
-    <version>11.0.0</version>
-  </parent>
   <dependencies>
     <dependency>
       <groupId>org.bsplines</groupId>
@@ -376,6 +374,21 @@ if %ERROR_CODE% EQU 0 set ERROR_CODE=1</replacevalue>
             </goals>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.eluder.coveralls</groupId>
+        <artifactId>coveralls-maven-plugin</artifactId>
+        <version>4.3.0</version>
+        <dependencies>
+          <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <goalPrefix>coveralls</goalPrefix>
+        </configuration>
       </plugin>
     </plugins>
   </build>

@@ -38,8 +38,11 @@ jobs:
         with:
           java-version: "11.0.9"
 
-      - name: "Verify and Build Package with Maven"
-        run: "mvn -B -e verify package"
+      - name: "Build ltexls-languagetool-patch"
+        run: "mvn -B -e -f ltexls-languagetool-patch/pom.xml install"
+
+      - name: "Build ltexls"
+        run: "mvn -B -e -f ltexls/pom.xml verify"
 
   analyze_codeql:
     name: "CI - CodeQL Job"
@@ -77,10 +80,13 @@ jobs:
         with:
           java-version: "11.0.9"
 
+      - name: "Build ltexls-languagetool-patch"
+        run: "mvn -B -e -f ltexls-languagetool-patch/pom.xml install"
+
       - name: "Build and Upload Coverage Report to Coveralls"
         env:
           LTEX_LS_COVERALLS_REPOSITORY_TOKEN: "${{ secrets.LTEX_LS_COVERALLS_REPOSITORY_TOKEN }}"
-        run: "mvn -B -e verify coveralls:report \"-DrepoToken=$LTEX_LS_COVERALLS_REPOSITORY_TOKEN\""
+        run: "mvn -B -e -f ltexls/pom.xml coveralls:report verify \"-DrepoToken=$LTEX_LS_COVERALLS_REPOSITORY_TOKEN\""
 
   deploy:
     name: "CI - Deploy Job"
@@ -108,11 +114,14 @@ jobs:
       - name: "Install Python Dependencies"
         run: "python -m pip install --upgrade pip && pip install semver==2.13.0"
 
-      - name: "Build Package with Maven"
-        run: "mvn -B -e package"
+      - name: "Build ltexls-languagetool-patch"
+        run: "mvn -B -e -f ltexls-languagetool-patch/pom.xml install"
+
+      - name: "Build ltexls"
+        run: "mvn -B -e -f ltexls/pom.xml package"
 
       - name: "Set LTEX_LS_VERSION"
-        run: "ltexls-core/target/appassembler/bin/ltex-ls --version > ltexLsVersion.json && echo \"LTEX_LS_VERSION=$(python -c \"import json; print(json.load(open('ltexLsVersion.json'))['ltex-ls'], end='')\")\" >> $GITHUB_ENV && rm ltexLsVersion.json"
+        run: "ltexls/target/appassembler/bin/ltex-ls --version > ltexLsVersion.json && echo \"LTEX_LS_VERSION=$(python -c \"import json; print(json.load(open('ltexLsVersion.json'))['ltex-ls'], end='')\")\" >> $GITHUB_ENV && rm ltexLsVersion.json"
 
       - name: "Check LTEX_LS_VERSION"
         run: "if [[ -z \"$LTEX_LS_VERSION\" ]]; then echo 'Error: LTEX_LS_VERSION not set!'; (exit 1); fi; echo \"LTEX_LS_VERSION set to '$LTEX_LS_VERSION'\""
@@ -139,5 +148,5 @@ jobs:
         with:
           asset_content_type: "application/gzip"
           asset_name: "ltex-ls-${{ env.LTEX_LS_VERSION }}.tar.gz"
-          asset_path: "ltexls-core/target/ltex-ls-${{ env.LTEX_LS_VERSION }}.tar.gz"
+          asset_path: "ltexls/target/ltex-ls-${{ env.LTEX_LS_VERSION }}.tar.gz"
           upload_url: "${{ steps.create_github_release.outputs.upload_url }}"
