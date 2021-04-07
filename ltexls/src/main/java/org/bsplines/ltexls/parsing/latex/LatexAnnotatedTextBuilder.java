@@ -256,15 +256,12 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   }
 
   public LatexAnnotatedTextBuilder addMarkup(String markup, String interpretAs) {
-    if (interpretAs.isEmpty()) {
-      return addMarkup(markup);
-    } else {
-      super.addMarkup(markup, interpretAs);
-      this.pos += markup.length();
-      this.preserveDummyLast = false;
-      textAdded(interpretAs);
-      return this;
-    }
+    if (interpretAs.isEmpty()) return addMarkup(markup);
+    super.addMarkup(markup, interpretAs);
+    this.pos += markup.length();
+    this.preserveDummyLast = false;
+    textAdded(interpretAs);
+    return this;
   }
 
   public LatexAnnotatedTextBuilder addCode(String code) {
@@ -273,8 +270,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
 
     int lastPos = -1;
 
-    while (this.pos < code.length()) {
-      this.curChar = code.charAt(this.pos);
+    while (this.pos < this.code.length()) {
+      this.curChar = this.code.charAt(this.pos);
       this.curString = String.valueOf(this.curChar);
       this.curMode = this.modeStack.peek();
       this.isMathCharTrivial = false;
