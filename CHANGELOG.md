@@ -8,6 +8,10 @@
 
 # Changelog
 
+## 12.0.0 (upcoming)
+
+- Remove support of single CR characters as line endings
+
 ## 11.0.0 (April 5, 2021)
 
 - Update LanguageTool to 5.3 (see [LT 5.3 release notes](https://github.com/languagetool-org/languagetool/blob/v5.3/languagetool-standalone/CHANGES.md#53-2021-03-29))

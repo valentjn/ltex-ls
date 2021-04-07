@@ -19,9 +19,9 @@ public class LatexPackageOptionsParser {
   }
 
   private static final Pattern whitespacePattern = Pattern.compile(
-      "^[ \n\r\t]+(%.*?($|((\n|\r|\r\n)[ \n\r\t]*)))?");
+      "^[ \n\r\t]+(%.*?($|(\r?\n[ \n\r\t]*)))?");
   private static final Pattern commentPattern = Pattern.compile(
-      "^%.*?($|((\n|\r|\r\n)[ \n\r\t]*))");
+      "^%.*?($|(\r?\n[ \n\r\t]*))");
 
   private LatexPackageOptionsParser() {
   }

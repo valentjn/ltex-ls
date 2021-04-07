@@ -48,9 +48,9 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
       "^\\\\(([^A-Za-z@]|([A-Za-z@]+))\\*?)");
   private static final Pattern argumentPattern = Pattern.compile("^\\{[^\\}]*?\\}");
   private static final Pattern commentPattern = Pattern.compile(
-      "^%.*?($|((\n|\r|\r\n)[ \n\r\t]*))");
+      "^%.*?($|(\r?\n[ \n\r\t]*))");
   private static final Pattern whitespacePattern = Pattern.compile(
-      "^[ \n\r\t]+(%.*?($|((\n|\r|\r\n)[ \n\r\t]*)))?");
+      "^[ \n\r\t]+(%.*?($|(\r?\n[ \n\r\t]*)))?");
   private static final Pattern lengthPattern = Pattern.compile(
       "-?[0-9]*(\\.[0-9]+)?(pt|mm|cm|ex|em|bp|dd|pc|in)");
   private static final Pattern lengthInBracePattern = Pattern.compile(
@@ -179,7 +179,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   }
 
   private static boolean containsTwoEndsOfLine(String text) {
-    return (text.contains("\n\n") || text.contains("\r\r") || text.contains("\r\n\r\n"));
+    return (text.contains("\n\n") || text.contains("\r\n\r\n"));
   }
 
   @Override
