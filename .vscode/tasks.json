@@ -1,0 +1,46 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Incremental Compile",
+      "type": "shell",
+      "command": "python tools/removeOutdatedClassFiles.py && mvn -f ltexls/pom.xml -Dmaven.test.skip=true compile && mvn -f ltexls/pom.xml jar:jar appassembler:assemble antrun:run@patch-bin-scripts",
+      "group": {
+        "kind": "build",
+        "isDefault": true,
+      },
+      "problemMatcher": "$gcc",
+      "presentation": {
+        "reveal": "silent",
+        "clear": true,
+      },
+    },
+    {
+      "label": "Compile and Install ltexls-languagetool-patch",
+      "type": "shell",
+      "command": "mvn -f ltexls-languagetool-patch/pom.xml install",
+      "group": "build",
+      "problemMatcher": "$gcc",
+    },
+    {
+      "label": "Clean and Run Tests",
+      "type": "shell",
+      "command": "mvn -f ltexls-languagetool-patch/pom.xml clean && mvn -f ltexls/pom.xml clean && mvn -f ltexls-languagetool-patch/pom.xml install && mvn -f ltexls/pom.xml verify",
+      "group": {
+        "kind": "test",
+        "isDefault": true,
+      },
+      "problemMatcher": "$gcc",
+    },
+    {
+      "label": "Run Tests",
+      "type": "shell",
+      "command": "mvn -f ltexls-languagetool-patch/pom.xml install && mvn -f ltexls/pom.xml verify",
+      "group": {
+        "kind": "test",
+        "isDefault": true,
+      },
+      "problemMatcher": "$gcc",
+    },
+  ],
+}

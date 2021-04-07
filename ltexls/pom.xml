@@ -175,6 +175,7 @@
           </compilerArguments>
           <showWarnings>true</showWarnings>
           <verbose>true</verbose>
+          <useIncrementalCompilation>false</useIncrementalCompilation>
           <annotationProcessorPaths>
             <path>
               <groupId>org.checkerframework</groupId>
