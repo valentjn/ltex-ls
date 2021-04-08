@@ -76,15 +76,17 @@ Note that some settings listed on the linked page are client-specific and do not
 ## Quickfixes
 
 - `quickfix.ltex.acceptSuggestions`: Replace the text of the diagnostic with the specified suggestion.
-- `quickfix.ltex.addToDictionary`: Trigger the `ltex.addToDictionary` command.
-- `quickfix.ltex.disableRules`: Trigger the `ltex.disableRules` command.
-- `quickfix.ltex.hideFalsePositives`: Trigger the `ltex.hideFalsePositives` command.
+- `quickfix.ltex.addToDictionary`: Trigger the `_ltex.addToDictionary` command.
+- `quickfix.ltex.disableRules`: Trigger the `_ltex.disableRules` command.
+- `quickfix.ltex.hideFalsePositives`: Trigger the `_ltex.hideFalsePositives` command.
 
 ## Commands
 
 Some commands are handled by LT<sub>E</sub>X LS, while others must be handled by the language client. This is in contrast to the [LSP specification](https://microsoft.github.io/language-server-protocol/specification), which recommends that the server handles all commands. However, handling of some commands by the client is necessary as these commands change the client configuration, which the LSP does not allow server-side.
 
-All commands are prefixed with `ltex.` during usage. As arguments, all commands take an array with exactly one element, whose type is specified by the respective `CommandParams` interface.
+All commands are prefixed with `_ltex.` during usage. The purpose of the leading underscore is that in some clients, commands are directly exposed to the user of the client (e.g., for assigning keyboard shortcuts), which is not desirable for internal commands that require arguments. The leading underscore signals that the commands are internal.
+
+As arguments, all commands take an array with exactly one element, whose type is specified by the respective `CommandParams` interface.
 
 The result of all commands handled by the client is `null`.
 
@@ -104,9 +106,9 @@ interface ServerCommandResult {
 }
 ```
 
-### `ltex.addToDictionary` (Client)
+### `_ltex.addToDictionary` (Client)
 
-`ltex.addToDictionary` is executed by the client when it should add words to the dictionary by adding them to [`ltex.dictionary`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdictionary).
+`_ltex.addToDictionary` is executed by the client when it should add words to the dictionary by adding them to [`ltex.dictionary`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdictionary).
 
 ```typescript
 interface AddToDictionaryCommandParams {
@@ -126,9 +128,9 @@ interface AddToDictionaryCommandParams {
 type AddToDictionaryCommandResult = null;
 ```
 
-### `ltex.disableRules` (Client)
+### `_ltex.disableRules` (Client)
 
-`ltex.disableRules` is executed by the client when it should disable rules by adding the rule IDs to [`ltex.disabledRules`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdisabledrules).
+`_ltex.disableRules` is executed by the client when it should disable rules by adding the rule IDs to [`ltex.disabledRules`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdisabledrules).
 
 ```typescript
 interface DisableRulesCommandParams {
@@ -148,9 +150,9 @@ interface DisableRulesCommandParams {
 type DisableRulesCommandResult = null;
 ```
 
-### `ltex.hideFalsePositives` (Client)
+### `_ltex.hideFalsePositives` (Client)
 
-`ltex.hideFalsePositives` is executed by the client when it should hide false positives by adding them to [`ltex.hiddenFalsePositives`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexhiddenfalsepositives).
+`_ltex.hideFalsePositives` is executed by the client when it should hide false positives by adding them to [`ltex.hiddenFalsePositives`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexhiddenfalsepositives).
 
 ```typescript
 interface HideFalsePositivesCommandParams {
@@ -170,9 +172,9 @@ interface HideFalsePositivesCommandParams {
 type HideFalsePositivesCommandResult = null;
 ```
 
-### `ltex.checkDocument` (Server)
+### `_ltex.checkDocument` (Server)
 
-`ltex.checkDocument` is executed by the server to trigger the check of a specific document. The result will be sent to the client with a `textDocument/publishDiagnostics` notification.
+`_ltex.checkDocument` is executed by the server to trigger the check of a specific document. The result will be sent to the client with a `textDocument/publishDiagnostics` notification.
 
 ```typescript
 interface CheckDocumentCommandParams {
@@ -202,9 +204,9 @@ interface CheckDocumentCommandParams {
 type CheckDocumentCommandResult = ServerCommandResult;
 ```
 
-### `ltex.getServerStatus` (Server)
+### `_ltex.getServerStatus` (Server)
 
-`ltex.getServerStatus` is executed by the server to return information about the current resource consumption of LT<sub>E</sub>X LS. Some information might not be available. Executions of `ltex.getServerStatus` can only be handled if LT<sub>E</sub>X LS is not currently busy (e.g., checking a document).
+`_ltex.getServerStatus` is executed by the server to return information about the current resource consumption of LT<sub>E</sub>X LS. Some information might not be available. Executions of `_ltex.getServerStatus` can only be handled if LT<sub>E</sub>X LS is not currently busy (e.g., checking a document).
 
 ```typescript
 type GetServerStatusCommandParams = null;

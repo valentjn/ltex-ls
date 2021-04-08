@@ -278,8 +278,8 @@ Result: {
         },
         "executeCommandProvider": {
             "commands": [
-                "ltex.checkDocument",
-                "ltex.getServerStatus"
+                "_ltex.checkDocument",
+                "_ltex.getServerStatus"
             ]
         }
     }
@@ -720,7 +720,7 @@ Result: [
         ],
         "command": {
             "title": "Hide false positive",
-            "command": "ltex.hideFalsePositives",
+            "command": "_ltex.hideFalsePositives",
             "arguments": [
                 {
                     "uri": "untitled:Untitled-1",
@@ -755,7 +755,7 @@ Result: [
         ],
         "command": {
             "title": "Disable rule",
-            "command": "ltex.disableRules",
+            "command": "_ltex.disableRules",
             "arguments": [
                 {
                     "uri": "untitled:Untitled-1",
@@ -878,7 +878,7 @@ Result: [
         ],
         "command": {
             "title": "Hide false positive",
-            "command": "ltex.hideFalsePositives",
+            "command": "_ltex.hideFalsePositives",
             "arguments": [
                 {
                     "uri": "untitled:Untitled-1",
@@ -913,7 +913,7 @@ Result: [
         ],
         "command": {
             "title": "Disable rule",
-            "command": "ltex.disableRules",
+            "command": "_ltex.disableRules",
             "arguments": [
                 {
                     "uri": "untitled:Untitled-1",
@@ -1036,7 +1036,7 @@ Result: [
         ],
         "command": {
             "title": "Hide false positive",
-            "command": "ltex.hideFalsePositives",
+            "command": "_ltex.hideFalsePositives",
             "arguments": [
                 {
                     "uri": "untitled:Untitled-1",
@@ -1071,7 +1071,7 @@ Result: [
         ],
         "command": {
             "title": "Disable rule",
-            "command": "ltex.disableRules",
+            "command": "_ltex.disableRules",
             "arguments": [
                 {
                     "uri": "untitled:Untitled-1",

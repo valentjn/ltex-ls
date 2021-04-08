@@ -34,8 +34,8 @@ import org.eclipse.lsp4j.WorkspaceSymbolParams;
 import org.eclipse.lsp4j.services.WorkspaceService;
 
 class LtexWorkspaceService implements WorkspaceService {
-  private static final String checkDocumentCommandName = "ltex.checkDocument";
-  private static final String getServerStatusCommandName = "ltex.getServerStatus";
+  private static final String checkDocumentCommandName = "_ltex.checkDocument";
+  private static final String getServerStatusCommandName = "_ltex.getServerStatus";
 
   @NotOnlyInitialized LtexLanguageServer languageServer;
 

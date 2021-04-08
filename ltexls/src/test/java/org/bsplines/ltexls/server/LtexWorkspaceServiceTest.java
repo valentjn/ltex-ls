@@ -43,7 +43,7 @@ public class LtexWorkspaceServiceTest {
     range.add("end", rangeEnd);
     argument.add("range", range);
 
-    ExecuteCommandParams params = new ExecuteCommandParams("ltex.checkDocument",
+    ExecuteCommandParams params = new ExecuteCommandParams("_ltex.checkDocument",
         Collections.singletonList(argument));
 
     JsonObject result = ((JsonElement)service.executeCommand(params).get()).getAsJsonObject();
@@ -66,7 +66,7 @@ public class LtexWorkspaceServiceTest {
     Assertions.assertDoesNotThrow(() -> service.didChangeWatchedFiles(
         new DidChangeWatchedFilesParams()));
 
-    ExecuteCommandParams params = new ExecuteCommandParams("ltex.foobar", Collections.emptyList());
+    ExecuteCommandParams params = new ExecuteCommandParams("_ltex.foobar", Collections.emptyList());
     JsonObject result = ((JsonElement)service.executeCommand(params).get()).getAsJsonObject();
     Assertions.assertFalse(result.get("success").getAsBoolean());
   }
@@ -95,7 +95,7 @@ public class LtexWorkspaceServiceTest {
   public void testGetServerStatus() throws InterruptedException, ExecutionException {
     LtexLanguageServer server = new LtexLanguageServer();
     LtexWorkspaceService service = new LtexWorkspaceService(server);
-    ExecuteCommandParams params = new ExecuteCommandParams("ltex.getServerStatus",
+    ExecuteCommandParams params = new ExecuteCommandParams("_ltex.getServerStatus",
         Collections.emptyList());
     JsonObject result = ((JsonElement)service.executeCommand(params).get()).getAsJsonObject();
 

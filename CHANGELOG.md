@@ -10,6 +10,12 @@
 
 ## 12.0.0 (upcoming)
 
+- Prefix all command names with an underscore to mark them as internal (for hiding them from the user in some clients):
+  - `ltex.addToDictionary` → `_ltex.addToDictionary`
+  - `ltex.disableRules` → `_ltex.disableRules`
+  - `ltex.hideFalsePositives` → `_ltex.hideFalsePositives`
+  - `ltex.checkDocument` → `_ltex.checkDocument`
+  - `ltex.getServerStatus` → `_ltex.getServerStatus`
 - Remove support of single CR characters as line endings
 
 ## 11.0.0 (April 5, 2021)

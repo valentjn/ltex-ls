@@ -49,9 +49,9 @@ public class CodeActionGenerator {
       CodeActionKind.QuickFix + ".ltex.disableRules";
   private static final String hideFalsePositivesCodeActionKind =
       CodeActionKind.QuickFix + ".ltex.hideFalsePositives";
-  private static final String addToDictionaryCommandName = "ltex.addToDictionary";
-  private static final String disableRulesCommandName = "ltex.disableRules";
-  private static final String hideFalsePositivesCommandName = "ltex.hideFalsePositives";
+  private static final String addToDictionaryCommandName = "_ltex.addToDictionary";
+  private static final String disableRulesCommandName = "_ltex.disableRules";
+  private static final String hideFalsePositivesCommandName = "_ltex.hideFalsePositives";
   private static final String dummyPatternStr = "(?:Dummy|Ina|Jimmy-)[0-9]+";
   private static final Pattern dummyPattern = Pattern.compile(dummyPatternStr);
 
