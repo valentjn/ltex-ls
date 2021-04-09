@@ -5,24 +5,17 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import org.bsplines.ltexls.tools.Tools;
-import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.Callable;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.checker.nullness.util.NullnessUtil;
 import org.checkerframework.framework.qual.DefaultQualifier;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -30,94 +23,45 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 @TestInstance(Lifecycle.PER_CLASS)
 @DefaultQualifier(NonNull.class)
 public class LtexLanguageServerLauncherTest {
-  private @MonotonicNonNull Thread launcherThread;
-  private PipedInputStream in;
-  private PipedOutputStream out;
-  private PipedInputStream pipedInputStream;
-  private PipedOutputStream pipedOutputStream;
+  private static String captureStdout(Callable<Integer> callable) throws Exception {
+    PrintStream stdout = System.out;
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    Charset charset = StandardCharsets.UTF_8;
 
-  private static class LtexLanguageServerLauncherRunnable implements Runnable {
-    private InputStream in;
-    private OutputStream out;
-
-    public LtexLanguageServerLauncherRunnable(InputStream in, OutputStream out) {
-      this.in = in;
-      this.out = out;
-    }
-
-    @Override
-    public void run() {
+    try (PrintStream printStream = new PrintStream(outputStream, true, charset.name())) {
       try {
-        Tools.randomNumberGenerator.setSeed(42);
-        LtexLanguageServerLauncher.launch(this.in, this.out);
-      } catch (InterruptedException e) {
-        // occurs when JUnit tears down class
-      } catch (ExecutionException e) {
-        throw new RuntimeException("ExecutionException thrown", e);
+        System.setOut(printStream);
+        callable.call();
+      } finally {
+        System.setOut(stdout);
       }
     }
-  }
 
-  public LtexLanguageServerLauncherTest() {
-    this.in = new PipedInputStream();
-    this.out = new PipedOutputStream();
-    this.pipedInputStream = new PipedInputStream();
-    this.pipedOutputStream = new PipedOutputStream();
-  }
-
-  @BeforeAll
-  public void setUp() throws InterruptedException, IOException {
-    this.pipedOutputStream.connect(this.in);
-    this.pipedInputStream.connect(this.out);
-
-    this.launcherThread = new Thread(
-        new LtexLanguageServerLauncherRunnable(this.in, this.out));
-    this.launcherThread.start();
-
-    // wait until LtexLanguageServer has initialized itself
-    Thread.sleep(5000);
-  }
-
-  @AfterAll
-  public void tearDown() throws IOException {
-    if (this.launcherThread != null) this.launcherThread.interrupt();
-    this.pipedInputStream.close();
-    this.pipedOutputStream.close();
-    this.in.close();
-    this.out.close();
-  }
-
-  private static List<LspMessage> convertLogToMessages(String log) {
-    List<LspMessage> messages = new ArrayList<>();
-    log = log.trim();
-
-    for (String logMessage : log.split("\r\n\r\n|\n\n")) {
-      messages.add(LspMessage.fromLogString(logMessage));
-    }
-
-    return messages;
+    return new String(outputStream.toByteArray(), charset);
   }
 
   @Test
-  public void test() throws IOException, InterruptedException {
-    @Nullable String log = Tools.readFile(
-        Paths.get("src", "test", "resources", "LtexLanguageServerTestLog.txt"));
-    Assertions.assertNotNull(NullnessUtil.castNonNull(log));
-    List<LspMessage> messages = convertLogToMessages(log);
-
-    for (LspMessage message : messages) {
-      LspMessage.Source source = message.getSource();
-
-      if (source == LspMessage.Source.Client) {
-        message.sendToServer(this.pipedOutputStream);
-      } else if (source == LspMessage.Source.Server) {
-        message.waitForServer(this.pipedInputStream);
-      }
-    }
+  public void testHelp() throws Exception {
+    String output = captureStdout(() -> LtexLanguageServerLauncher.mainWithoutExit(
+        new String[]{"--help"}));
+    Assertions.assertTrue(output.contains("Usage: ltex-ls"));
+    Assertions.assertTrue(output.contains("LTeX LS - LTeX Language Server"));
+    Assertions.assertTrue(output.contains("--help"));
+    Assertions.assertTrue(output.contains("Show this help message and exit."));
   }
 
   @Test
-  public void testVersion() {
-    Assertions.assertDoesNotThrow(() -> LtexLanguageServerLauncher.main(new String[]{"--version"}));
+  public void testVersion() throws Exception {
+    String output = captureStdout(() -> LtexLanguageServerLauncher.mainWithoutExit(
+        new String[]{"--version"}));
+
+    JsonElement rootJsonElement = JsonParser.parseString(output);
+    Assertions.assertTrue(rootJsonElement.isJsonObject());
+
+    JsonObject rootJsonObject = rootJsonElement.getAsJsonObject();
+    Assertions.assertTrue(rootJsonObject.has("java"));
+
+    JsonElement javaJsonElement = rootJsonObject.get("java");
+    Assertions.assertTrue(javaJsonElement.isJsonPrimitive());
   }
 }

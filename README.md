@@ -55,17 +55,28 @@ It is recommended to use the startup scripts `bin/ltex-ls` (Linux, Mac) and `bin
 - `JAVA_HOME`: Path to the directory of the JRE or JDK to use (contains `bin`, `lib`, and other subdirectories)
 - `JAVA_OPTS`: Java arguments to be fed to `java` (e.g., `-Xmx1024m`)
 
-Any command-line arguments supplied to the startup scripts are processed by LT<sub>E</sub>X LS itself. The following arguments are supported:
-
-- `--version`: Print a JSON string with versioning information to the standard output and exit. The format is a JSON object with `"java"` and `"ltex-ls"` keys and string values. A key may be missing if no information about the corresponding version could be retrieved.
-
 You can also start LT<sub>E</sub>X LS directly without the startup scripts (not recommended). In this case, make sure that when supplying all JAR files in the `lib` directory to Java's class path, `ltexls-languagetool-patch-LTEXLSVERSION.jar` is listed as the first JAR file (where `LTEXLSVERSION` is the version of LT<sub>E</sub>X LS; Java's class path does not support wildcards in the middle of filenames). It does not suffice to supply `lib/*` to the class path, as the order in which the JAR files are included in wildcards is not specified by Java, so this will fail randomly. The startup scripts take care of this peculiarity.
+
+### Command-Line Options
+
+Any command-line arguments supplied to the startup scripts are processed by LT<sub>E</sub>X LS itself. The options are as follows:
+
+- `--[no-]endless`: Keep the server alive when the client terminates the connection to allow reuse by the next client.
+- `-h`, `--help`: Show help message and exit.
+- `--host=<host>`: Listen for TCP connections on host `<host>` (IP address or hostname; default is `localhost`). Only relevant if server type is `tcpSocket`.
+- `--port=<port>`: Listen for TCP connections on port `<port>`. Only relevant if server type is `tcpSocket`. A value of `0` (default) will have the system automatically determine a free port (the actual port number will be printed to the log).
+- `--server-type=<serverType>`: Run the server as type `<serverType>`. Valid values are:
+  - `standardStream` (default): Communicate with clients over standard input and standard output.
+  - `tcpSocket`: Communicate with clients over a TCP socket.
+- `-V`, `--version`: Print version information as JSON to the standard output and exit. The format is a JSON object with `"java"` and `"ltex-ls"` keys and string values. A key may be missing if no information about the corresponding version could be retrieved.
+
+Instead of using the equals sign `=` to separate option names and values, it is also possible to use one or more spaces.
 
 ## Checking Documents with the LSP
 
 Once started, the language server may be used according to the [Language Server Protocol (LSP)](https://microsoft.github.io/language-server-protocol/) to check documents.
 
-Communicate with the server via standard input and standard output. Logging messages are printed to the standard error output.
+Communication with the server is by default via standard input and standard output (except when the server type is `tcpSocket`). Logging messages are always printed to the standard error output.
 
 ## Settings
 

@@ -11,10 +11,16 @@ import com.google.gson.JsonParser;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.checkerframework.checker.nullness.util.NullnessUtil;
 import org.checkerframework.framework.qual.DefaultQualifier;
 import org.junit.jupiter.api.Assertions;
 
@@ -57,6 +63,24 @@ public class LspMessage {
     }
   }
 
+  public static List<LspMessage> fromLogFile() {
+    return fromLogFile(Paths.get("src", "test", "resources", "LtexLanguageServerTestLog.txt"));
+  }
+
+  public static List<LspMessage> fromLogFile(Path logFilePath) {
+    @Nullable String log = Tools.readFile(logFilePath);
+    Assertions.assertNotNull(NullnessUtil.castNonNull(log));
+    log = log.trim();
+
+    List<LspMessage> messages = new ArrayList<>();
+
+    for (String logMessage : log.split("\r\n\r\n|\n\n")) {
+      messages.add(LspMessage.fromLogString(logMessage));
+    }
+
+    return messages;
+  }
+
   public static LspMessage fromLogString(String str) {
     str = str.trim();
     Matcher matcher = logPattern.matcher(str);
@@ -95,6 +119,25 @@ public class LspMessage {
     JsonElement params = JsonParser.parseString(paramsStr);
 
     return new LspMessage(source, type, id, method, params);
+  }
+
+  public static void communicateWithList(List<LspMessage> messages, InputStream inputStream,
+        OutputStream outputStream) throws IOException, InterruptedException {
+    for (LspMessage message : messages) {
+      switch (message.getSource()) {
+        case Client: {
+          message.sendToServer(outputStream);
+          break;
+        }
+        case Server: {
+          message.waitForServer(inputStream);
+          break;
+        }
+        default: {
+          // do nothing
+        }
+      }
+    }
   }
 
   public void sendToServer(OutputStream outputStream) throws IOException, InterruptedException {
