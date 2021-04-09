@@ -16,6 +16,7 @@
   - `ltex.hideFalsePositives` → `_ltex.hideFalsePositives`
   - `ltex.checkDocument` → `_ltex.checkDocument`
   - `ltex.getServerStatus` → `_ltex.getServerStatus`
+- Add basic support for reStructuredText; use the code language ID `restructuredtext` (fixes [vscode-ltex#32](https://github.com/valentjn/vscode-ltex/issues/32))
 - Add `--server-type=tcpSocket` option to communicate over a TCP socket
 - Add `--host` and `--port` options to control host and port of the TCP socket
 - Add `--[no-]endless` option to keep the server alive when the client terminates the connection

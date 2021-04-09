@@ -13,6 +13,7 @@ import java.util.function.Function;
 import org.bsplines.ltexls.parsing.latex.LatexAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.markdown.MarkdownAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.plaintext.PlaintextAnnotatedTextBuilder;
+import org.bsplines.ltexls.parsing.restructuredtext.RestructuredtextAnnotatedTextBuilder;
 import org.bsplines.ltexls.settings.Settings;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -31,6 +32,8 @@ public abstract class CodeAnnotatedTextBuilder extends AnnotatedTextBuilder {
         new MarkdownAnnotatedTextBuilder());
     constructorMap.put("plaintext", (String codeLanguageId) ->
         new PlaintextAnnotatedTextBuilder());
+    constructorMap.put("restructuredtext", (String codeLanguageId) ->
+        new RestructuredtextAnnotatedTextBuilder(codeLanguageId));
     constructorMap.put("rsweave", (String codeLanguageId) ->
         new LatexAnnotatedTextBuilder(codeLanguageId));
     constructorMap.put("tex", (String codeLanguageId) ->

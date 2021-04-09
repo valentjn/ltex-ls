@@ -16,6 +16,7 @@ import org.bsplines.ltexls.parsing.bibtex.BibtexFragmentizer;
 import org.bsplines.ltexls.parsing.latex.LatexFragmentizer;
 import org.bsplines.ltexls.parsing.markdown.MarkdownFragmentizer;
 import org.bsplines.ltexls.parsing.plaintext.PlaintextFragmentizer;
+import org.bsplines.ltexls.parsing.restructuredtext.RestructuredtextFragmentizer;
 import org.bsplines.ltexls.settings.Settings;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -35,6 +36,8 @@ public abstract class CodeFragmentizer {
         new MarkdownFragmentizer(codeLanguageId));
     constructorMap.put("plaintext", (String codeLanguageId) ->
         new PlaintextFragmentizer(codeLanguageId));
+    constructorMap.put("restructuredtext", (String codeLanguageId) ->
+        new RestructuredtextFragmentizer(codeLanguageId));
     constructorMap.put("rsweave", (String codeLanguageId) ->
         new LatexFragmentizer(codeLanguageId));
     constructorMap.put("tex", (String codeLanguageId) ->
