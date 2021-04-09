@@ -184,6 +184,7 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
 
   @Override
   public void setSettings(Settings settings) {
+    super.setSettings(settings);
     this.language = settings.getLanguageShortCode();
 
     for (Map.Entry<String, String> entry : settings.getLatexCommands().entrySet()) {
