@@ -82,13 +82,14 @@ public class Tools {
 
     MessageFormat formatter = new MessageFormat("");
     formatter.applyPattern(message.replaceAll("'", "''"));
-    Object[] args = new Object[messageArguments.length];
+    String[] stringArguments = new String[messageArguments.length];
 
     for (int i = 0; i < messageArguments.length; i++) {
-      args[i] = ((messageArguments[i] != null) ? messageArguments[i] : "null");
+      stringArguments[i] = ((messageArguments[i] != null)
+          ? messageArguments[i].toString() : "null");
     }
 
-    return formatter.format(args);
+    return formatter.format(stringArguments);
   }
 
   public static String i18n(String key, Exception e, @Nullable Object... messageArguments) {
