@@ -251,7 +251,7 @@ LT<sub>E</sub>X LS supports the following custom features that are not specified
 - Custom initialization options
 - Custom requests and notifications
 
-To use custom LSP extensions, the client has to pass a `CustomInitializationOptions` object to the `InitializeParams.initializationOptions` field when sending the [`initialize`](https://microsoft.github.io/language-server-protocol/specification#initialize) request. If no such object is passed, LT<sub>E</sub>X LS will fallback to an LSP-compliant mode and not use any custom LSP extensions.
+To use custom LSP extensions, the client has to pass a `CustomInitializationOptions` object to the `InitializeParams.initializationOptions` field when sending the [`initialize`](https://microsoft.github.io/language-server-protocol/specification#initialize) request. If no such object is passed, LT<sub>E</sub>X LS will fall back to an LSP-compliant mode and not use any custom LSP extensions.
 
 ### Custom Initialization Options
 
