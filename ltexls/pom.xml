@@ -225,8 +225,8 @@
           <execution>
             <id>check</id>
             <goals>
-              <goal>check</goal>
               <goal>report</goal>
+              <goal>check</goal>
             </goals>
             <configuration>
               <rules>
