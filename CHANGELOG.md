@@ -23,6 +23,7 @@
 - Add `-h` and `--help` options to show help message
 - Add `-V` option as alias for `--version`
 - Remove support of single CR characters as line endings
+- Fix `.Rnw` not recognized for R Sweave documents when running `_ltex.checkDocument`
 - Use picocli for parsing of command-line arguments
 
 ## 11.0.0 (April 5, 2021)
