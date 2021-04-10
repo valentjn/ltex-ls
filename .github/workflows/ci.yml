@@ -83,10 +83,13 @@ jobs:
       - name: "Build ltexls-languagetool-patch"
         run: "mvn -B -e -f ltexls-languagetool-patch/pom.xml install"
 
-      - name: "Build and Upload Coverage Report to Coveralls"
+      - name: "Build ltexls"
+        run: "mvn -B -e -f ltexls/pom.xml verify"
+
+      - name: "Upload Coverage Report to Coveralls"
         env:
           LTEX_LS_COVERALLS_REPOSITORY_TOKEN: "${{ secrets.LTEX_LS_COVERALLS_REPOSITORY_TOKEN }}"
-        run: "mvn -B -e -f ltexls/pom.xml coveralls:report verify \"-DrepoToken=$LTEX_LS_COVERALLS_REPOSITORY_TOKEN\""
+        run: "mvn -B -e -f ltexls/pom.xml coveralls:report \"-DrepoToken=$LTEX_LS_COVERALLS_REPOSITORY_TOKEN\""
 
   deploy:
     name: "CI - Deploy Job"
