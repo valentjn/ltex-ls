@@ -60,8 +60,11 @@ jobs:
       - name: "Initialize CodeQL"
         uses: "github/codeql-action/init@v1"
 
-      - name: "Autobuild"
-        uses: "github/codeql-action/autobuild@v1"
+      - name: "Build ltexls-languagetool-patch"
+        run: "mvn -B -e -f ltexls-languagetool-patch/pom.xml install"
+
+      - name: "Build ltexls"
+        run: "mvn -B -e -f ltexls/pom.xml package"
 
       - name: "Perform CodeQL Analysis"
         uses: "github/codeql-action/analyze@v1"
