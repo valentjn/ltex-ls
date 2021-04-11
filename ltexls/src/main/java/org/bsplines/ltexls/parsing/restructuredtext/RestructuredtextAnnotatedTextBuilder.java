@@ -85,7 +85,6 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
   private int pos;
   private char curChar;
   private String curString;
-  private char lastChar;
 
   private DummyGenerator dummyGenerator;
   private int dummyCounter;
@@ -123,7 +122,6 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
     this.code = "";
     this.pos = 0;
     this.curString = "";
-    this.lastChar = '\0';
 
     this.dummyGenerator = new DummyGenerator();
     this.dummyCounter = 0;
@@ -181,7 +179,6 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
     this.code = code;
 
     while (this.pos < this.code.length()) {
-      this.lastChar = this.curChar;
       this.curChar = this.code.charAt(this.pos);
       this.curString = String.valueOf(this.curChar);
       boolean isStartOfBlock = false;
@@ -337,11 +334,11 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
 
     @Nullable Matcher matcher = matchFromPosition(pattern);
     if (matcher == null) return null;
-    if (this.pos >= this.code.length() - 1) return matcher;
+    if ((this.pos == 0) || (this.pos >= this.code.length() - 1)) return matcher;
 
     char forbiddenFollowingChar;
 
-    switch (this.lastChar) {
+    switch (this.code.charAt(this.pos - 1)) {
       case '\'': {
         forbiddenFollowingChar = '\'';
         break;
