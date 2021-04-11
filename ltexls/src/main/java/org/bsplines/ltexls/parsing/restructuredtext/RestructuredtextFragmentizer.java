@@ -12,7 +12,7 @@ import org.bsplines.ltexls.parsing.RegexCodeFragmentizer;
 
 public class RestructuredtextFragmentizer extends RegexCodeFragmentizer {
   private static final Pattern pattern = Pattern.compile(
-      "^\\s*\\.\\.\\s*(?i)ltex(?-i):(.*?)\\s*$", Pattern.MULTILINE);
+      "^[ \t]*\\.\\.[ \t]*(?i)ltex(?-i):(.*?)[ \t]*$", Pattern.MULTILINE);
 
   public RestructuredtextFragmentizer(String codeLanguageId) {
     super(codeLanguageId, pattern);

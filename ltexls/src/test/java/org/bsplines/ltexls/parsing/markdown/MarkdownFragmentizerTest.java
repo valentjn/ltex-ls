@@ -21,17 +21,17 @@ public class MarkdownFragmentizerTest {
 
     Assertions.assertEquals("markdown", codeFragments.get(0).getCodeLanguageId());
     Assertions.assertEquals(0, codeFragments.get(0).getFromPos());
-    Assertions.assertEquals(11, codeFragments.get(0).getCode().length());
+    Assertions.assertEquals(12, codeFragments.get(0).getCode().length());
     Assertions.assertEquals("en-US", codeFragments.get(0).getSettings().getLanguageShortCode());
 
     Assertions.assertEquals("markdown", codeFragments.get(1).getCodeLanguageId());
-    Assertions.assertEquals(11, codeFragments.get(1).getFromPos());
+    Assertions.assertEquals(12, codeFragments.get(1).getFromPos());
     Assertions.assertEquals(50, codeFragments.get(1).getCode().length());
     Assertions.assertEquals("de-DE", codeFragments.get(1).getSettings().getLanguageShortCode());
 
     Assertions.assertEquals("markdown", codeFragments.get(2).getCodeLanguageId());
-    Assertions.assertEquals(61, codeFragments.get(2).getFromPos());
-    Assertions.assertEquals(49, codeFragments.get(2).getCode().length());
+    Assertions.assertEquals(62, codeFragments.get(2).getFromPos());
+    Assertions.assertEquals(48, codeFragments.get(2).getCode().length());
     Assertions.assertEquals("en-US", codeFragments.get(2).getSettings().getLanguageShortCode());
   }
 

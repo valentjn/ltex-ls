@@ -24,6 +24,7 @@
 - Add `-V` option as alias for `--version`
 - Remove support of single CR characters as line endings
 - Fix `.Rnw` not recognized for R Sweave documents when running `_ltex.checkDocument`
+- Fix newlines accepted as whitespace in magic comments
 - Use picocli for parsing of command-line arguments
 
 ## 11.0.0 (April 5, 2021)

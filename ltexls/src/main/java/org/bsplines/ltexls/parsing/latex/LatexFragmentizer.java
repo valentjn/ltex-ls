@@ -26,7 +26,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class LatexFragmentizer extends CodeFragmentizer {
   private static final Pattern commentPattern = Pattern.compile(
-      "^\\s*%\\s*(?i)ltex(?-i):(.*?)$", Pattern.MULTILINE);
+      "^[ \t]*%[ \t]*(?i)ltex(?-i):(.*?)$", Pattern.MULTILINE);
 
   private static final LatexCommandSignatureMatcher extraCommandSignatureMatcher =
       new LatexCommandSignatureMatcher(Arrays.asList(
