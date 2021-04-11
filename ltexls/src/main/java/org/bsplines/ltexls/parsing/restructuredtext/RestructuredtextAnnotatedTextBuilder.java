@@ -379,17 +379,6 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
     return matchFromPosition(pattern);
   }
 
-  private boolean isExplicitBlockType() {
-    return ((this.blockType == RestructuredtextBlockSignature.Type.FOOTNOTE)
-        || (this.blockType == RestructuredtextBlockSignature.Type.DIRECTIVE)
-        || (this.blockType == RestructuredtextBlockSignature.Type.COMMENT));
-  }
-
-  private boolean isTableBlockType() {
-    return ((this.blockType == RestructuredtextBlockSignature.Type.GRID_TABLE)
-        || (this.blockType == RestructuredtextBlockSignature.Type.SIMPLE_TABLE));
-  }
-
   private boolean matchExplicitBlock() {
     @Nullable Matcher matcher;
 
@@ -408,6 +397,17 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
     }
 
     return false;
+  }
+
+  private boolean isExplicitBlockType() {
+    return ((this.blockType == RestructuredtextBlockSignature.Type.FOOTNOTE)
+        || (this.blockType == RestructuredtextBlockSignature.Type.DIRECTIVE)
+        || (this.blockType == RestructuredtextBlockSignature.Type.COMMENT));
+  }
+
+  private boolean isTableBlockType() {
+    return ((this.blockType == RestructuredtextBlockSignature.Type.GRID_TABLE)
+        || (this.blockType == RestructuredtextBlockSignature.Type.SIMPLE_TABLE));
   }
 
   private String generateDummy() {
