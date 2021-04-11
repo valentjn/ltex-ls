@@ -52,11 +52,10 @@ public class MarkdownFragmentizerTest {
 
   @Test
   public void testWrongSettings() {
-    MarkdownFragmentizer markdownFragmentizer =
-        new MarkdownFragmentizer("markdown");
-    Assertions.assertDoesNotThrow(() -> markdownFragmentizer.fragmentize(
+    CodeFragmentizer fragmentizer = CodeFragmentizer.create("markdown");
+    Assertions.assertDoesNotThrow(() -> fragmentizer.fragmentize(
         "Sentence 1\n[comment]: <> \"ltex: languagede-DE\"\n\nSentence 2\n", new Settings()));
-    Assertions.assertDoesNotThrow(() -> markdownFragmentizer.fragmentize(
+    Assertions.assertDoesNotThrow(() -> fragmentizer.fragmentize(
         "Sentence 1\n[comment]: <> \"ltex: unknownKey=abc\"\n\nSentence 2\n", new Settings()));
   }
 }

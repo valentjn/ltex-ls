@@ -29,15 +29,21 @@ public abstract class CodeAnnotatedTextBuilder extends AnnotatedTextBuilder {
     constructorMap.put("latex", (String codeLanguageId) ->
         new LatexAnnotatedTextBuilder(codeLanguageId));
     constructorMap.put("markdown", (String codeLanguageId) ->
-        new MarkdownAnnotatedTextBuilder());
+        new MarkdownAnnotatedTextBuilder(codeLanguageId));
     constructorMap.put("plaintext", (String codeLanguageId) ->
-        new PlaintextAnnotatedTextBuilder());
+        new PlaintextAnnotatedTextBuilder(codeLanguageId));
     constructorMap.put("restructuredtext", (String codeLanguageId) ->
         new RestructuredtextAnnotatedTextBuilder(codeLanguageId));
     constructorMap.put("rsweave", (String codeLanguageId) ->
         new LatexAnnotatedTextBuilder(codeLanguageId));
     constructorMap.put("tex", (String codeLanguageId) ->
         new LatexAnnotatedTextBuilder(codeLanguageId));
+  }
+
+  protected String codeLanguageId;
+
+  protected CodeAnnotatedTextBuilder(String codeLanguageId) {
+    this.codeLanguageId = codeLanguageId;
   }
 
   public static CodeAnnotatedTextBuilder create(String codeLanguageId) {
@@ -48,7 +54,7 @@ public abstract class CodeAnnotatedTextBuilder extends AnnotatedTextBuilder {
       return constructor.apply(codeLanguageId);
     } else {
       Tools.logger.warning(Tools.i18n("unsupportedCodeLanguageId", codeLanguageId));
-      return new PlaintextAnnotatedTextBuilder();
+      return new PlaintextAnnotatedTextBuilder("plaintext");
     }
   }
 

@@ -101,6 +101,8 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private boolean isInStrictMode;
 
   public LatexAnnotatedTextBuilder(String codeLanguageId) {
+    super(codeLanguageId);
+
     this.language = "en-US";
     this.codeLanguageId = codeLanguageId;
     this.commandSignatures = new ArrayList<>(

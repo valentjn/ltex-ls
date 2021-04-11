@@ -38,7 +38,6 @@ public class RestructuredtextFragmentizerTest {
   @Test
   public void test() {
     CodeFragmentizer fragmentizer = CodeFragmentizer.create("restructuredtext");
-
     testFragmentizer(fragmentizer,
         "Sentence 1\n"
         + "\n.. ltex: language=de-DE\n\nSentence 2\n"
@@ -47,11 +46,10 @@ public class RestructuredtextFragmentizerTest {
 
   @Test
   public void testWrongSettings() {
-    RestructuredtextFragmentizer restructuredtextFragmentizer =
-        new RestructuredtextFragmentizer("restructuredtext");
-    Assertions.assertDoesNotThrow(() -> restructuredtextFragmentizer.fragmentize(
+    CodeFragmentizer fragmentizer = CodeFragmentizer.create("restructuredtext");
+    Assertions.assertDoesNotThrow(() -> fragmentizer.fragmentize(
         "Sentence 1\n\n.. ltex: languagede-DE\n\nSentence 2\n", new Settings()));
-    Assertions.assertDoesNotThrow(() -> restructuredtextFragmentizer.fragmentize(
+    Assertions.assertDoesNotThrow(() -> fragmentizer.fragmentize(
         "Sentence 1\n\n.. ltex: unknownKey=abc\n\nSentence 2\n", new Settings()));
   }
 }

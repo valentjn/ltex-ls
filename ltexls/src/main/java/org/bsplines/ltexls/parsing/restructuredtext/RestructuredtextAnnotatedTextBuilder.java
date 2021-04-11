@@ -100,6 +100,8 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
       blockSignatureMap;
 
   public RestructuredtextAnnotatedTextBuilder(String codeLanguageId) {
+    super(codeLanguageId);
+
     this.language = "en-US";
     this.blockSignatures = new ArrayList<>();
     this.blockSignatures.add(new RestructuredtextBlockSignature(

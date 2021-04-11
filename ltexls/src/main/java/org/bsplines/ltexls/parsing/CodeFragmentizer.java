@@ -25,8 +25,6 @@ public abstract class CodeFragmentizer {
   private static Map<String, Function<String, CodeFragmentizer>>
       constructorMap = new HashMap<>();
 
-  protected String codeLanguageId;
-
   static {
     constructorMap.put("bibtex", (String codeLanguageId) ->
         new BibtexFragmentizer(codeLanguageId));
@@ -44,7 +42,9 @@ public abstract class CodeFragmentizer {
         new LatexFragmentizer(codeLanguageId));
   }
 
-  public CodeFragmentizer(String codeLanguageId) {
+  protected String codeLanguageId;
+
+  protected CodeFragmentizer(String codeLanguageId) {
     this.codeLanguageId = codeLanguageId;
   }
 

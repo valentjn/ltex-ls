@@ -51,7 +51,9 @@ public class MarkdownAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
   private String language;
   private List<MarkdownNodeSignature> nodeSignatures;
 
-  public MarkdownAnnotatedTextBuilder() {
+  public MarkdownAnnotatedTextBuilder(String codeLanguageId) {
+    super(codeLanguageId);
+
     this.parser = Parser.builder(parserOptions).build();
 
     this.code = "";
