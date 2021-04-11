@@ -28,6 +28,19 @@ The reference client of LT<sub>E</sub>X LS is the [LT<sub>E</sub>X extension for
 
 Find more information about LT<sub>E</sub>X at the [website of vscode-ltex](https://valentjn.github.io/vscode-ltex).
 
+## Features
+
+- **Supported markup languages:** L<sup>A</sup>T<sub>E</sub>X, Markdown, reStructuredText, R Sweave
+- Comes with **everything included,** no need to install Java or LanguageTool
+- **Offline checking:** Does not upload anything to the internet
+- Supports **over 20 languages:** English, French, German, Dutch, Chinese, Russian, etc.
+- **Issue highlighting** with hover description
+- **Replacement suggestions** via quick fixes
+- **User dictionaries**
+- **Multilingual support** with babel commands or magic comments
+- Possibility to use **external LanguageTool servers**
+- **Extensive [documentation](https://valentjn.github.io/vscode-ltex) of reference client**
+
 ## Current List of Language Clients
 
 In order to use LT<sub>E</sub>X LS, you need a language client. For some editors, language clients are already available, see the following list. If your editor is in the list, read the installation instructions of the language client first; it might download LT<sub>E</sub>X LS automatically or tell you where to store LT<sub>E</sub>X LS. The rest of this document is only relevant if you want to implement your own language client.
