@@ -7,10 +7,6 @@
 
 package org.bsplines.ltexls.parsing.restructuredtext;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder;
@@ -21,6 +17,15 @@ import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
+  private enum BlockType {
+    PARAGRAPH,
+    FOOTNOTE,
+    DIRECTIVE,
+    COMMENT,
+    GRID_TABLE,
+    SIMPLE_TABLE,
+  }
+
   private static final Pattern blockSeparatorPattern = Pattern.compile("^([ \t]*\r?\n)+");
   private static final Pattern whitespacePattern = Pattern.compile("^[ \t]*");
 
@@ -88,30 +93,14 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
   private int dummyCounter;
   private int indentation;
   private int lastIndentation;
-  private RestructuredtextBlockSignature.Type blockType;
+  private BlockType blockType;
   private boolean inIgnoredMarkup;
 
   private String language;
-  private List<RestructuredtextBlockSignature> blockSignatures;
-  private Map<RestructuredtextBlockSignature.Type, RestructuredtextBlockSignature>
-      blockSignatureMap;
 
   public RestructuredtextAnnotatedTextBuilder(String codeLanguageId) {
     super(codeLanguageId);
-
     this.language = "en-US";
-    this.blockSignatures = new ArrayList<>();
-    this.blockSignatures.add(new RestructuredtextBlockSignature(
-        RestructuredtextBlockSignature.Type.COMMENT,
-        RestructuredtextBlockSignature.Action.IGNORE));
-    this.blockSignatures.add(new RestructuredtextBlockSignature(
-        RestructuredtextBlockSignature.Type.GRID_TABLE,
-        RestructuredtextBlockSignature.Action.IGNORE));
-    this.blockSignatures.add(new RestructuredtextBlockSignature(
-        RestructuredtextBlockSignature.Type.SIMPLE_TABLE,
-        RestructuredtextBlockSignature.Action.IGNORE));
-    this.blockSignatureMap = createBlockSignatureMap(this.blockSignatures);
-
     reinitialize();
   }
 
@@ -125,20 +114,8 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
     this.dummyCounter = 0;
     this.indentation = -1;
     this.lastIndentation = -1;
-    this.blockType = RestructuredtextBlockSignature.Type.PARAGRAPH;
+    this.blockType = BlockType.PARAGRAPH;
     this.inIgnoredMarkup = false;
-  }
-
-  private static Map<RestructuredtextBlockSignature.Type, RestructuredtextBlockSignature>
-        createBlockSignatureMap(List<RestructuredtextBlockSignature> blockSignatures) {
-    Map<RestructuredtextBlockSignature.Type, RestructuredtextBlockSignature> map =
-        new HashMap<>();
-
-    for (RestructuredtextBlockSignature blockSignature : blockSignatures) {
-      map.put(blockSignature.getType(), blockSignature);
-    }
-
-    return map;
   }
 
   @Override
@@ -205,7 +182,7 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
         if ((isExplicitBlockType()
                 && ((this.indentation == 0) || (this.indentation < this.lastIndentation)))
               || isTableBlockType()) {
-          this.blockType = RestructuredtextBlockSignature.Type.PARAGRAPH;
+          this.blockType = BlockType.PARAGRAPH;
         }
       }
 
@@ -215,11 +192,11 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
         if (matchExplicitBlock()) {
           continue;
         } else if ((matcher = matchFromPosition(gridTableStartPattern)) != null) {
-          this.blockType = RestructuredtextBlockSignature.Type.GRID_TABLE;
+          this.blockType = BlockType.GRID_TABLE;
           addMarkup(matcher.group());
           continue;
         } else if ((matcher = matchFromPosition(simpleTableStartPattern)) != null) {
-          this.blockType = RestructuredtextBlockSignature.Type.SIMPLE_TABLE;
+          this.blockType = BlockType.SIMPLE_TABLE;
           addMarkup(matcher.group());
           continue;
         } else if ((matcher = matchFromPosition(sectionTitleAdronmentPattern)) != null) {
@@ -237,14 +214,8 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
         }
       }
 
-      RestructuredtextBlockSignature.Action action =
-          RestructuredtextBlockSignature.Action.DEFAULT;
-
-      if (this.blockSignatureMap.containsKey(this.blockType)) {
-        action = this.blockSignatureMap.get(this.blockType).getAction();
-      }
-
-      if (action == RestructuredtextBlockSignature.Action.IGNORE) {
+      if ((this.blockType == BlockType.COMMENT) || (this.blockType == BlockType.GRID_TABLE)
+            || (this.blockType == BlockType.SIMPLE_TABLE)) {
         addMarkup(this.curString);
         continue;
       }
@@ -390,15 +361,15 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
     @Nullable Matcher matcher;
 
     if ((matcher = matchFromPosition(footnotePattern)) != null) {
-      this.blockType = RestructuredtextBlockSignature.Type.FOOTNOTE;
+      this.blockType = BlockType.FOOTNOTE;
       addMarkup(matcher.group());
       return true;
     } else if ((matcher = matchFromPosition(directivePattern)) != null) {
-      this.blockType = RestructuredtextBlockSignature.Type.DIRECTIVE;
+      this.blockType = BlockType.DIRECTIVE;
       addMarkup(matcher.group());
       return true;
     } else if ((matcher = matchFromPosition(commentPattern)) != null) {
-      this.blockType = RestructuredtextBlockSignature.Type.COMMENT;
+      this.blockType = BlockType.COMMENT;
       addMarkup(matcher.group());
       return true;
     }
@@ -407,14 +378,14 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
   }
 
   private boolean isExplicitBlockType() {
-    return ((this.blockType == RestructuredtextBlockSignature.Type.FOOTNOTE)
-        || (this.blockType == RestructuredtextBlockSignature.Type.DIRECTIVE)
-        || (this.blockType == RestructuredtextBlockSignature.Type.COMMENT));
+    return ((this.blockType == BlockType.FOOTNOTE)
+        || (this.blockType == BlockType.DIRECTIVE)
+        || (this.blockType == BlockType.COMMENT));
   }
 
   private boolean isTableBlockType() {
-    return ((this.blockType == RestructuredtextBlockSignature.Type.GRID_TABLE)
-        || (this.blockType == RestructuredtextBlockSignature.Type.SIMPLE_TABLE));
+    return ((this.blockType == BlockType.GRID_TABLE)
+        || (this.blockType == BlockType.SIMPLE_TABLE));
   }
 
   private String generateDummy() {
