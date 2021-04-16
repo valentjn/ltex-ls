@@ -50,36 +50,34 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
 
   private static final Pattern inlineStartPrecedingPattern = Pattern.compile(
       "^[ \t\r\n\\-:/'\"<(\\[{]");
+  private static final Pattern inlineStartFollowingPattern = Pattern.compile(
+      "^[^ \t\r\n]");
   private static final Pattern inlineEndPrecedingPattern = Pattern.compile(
       "^[^ \t\r\n]");
-  private static final Pattern strongEmphasisStartPattern = Pattern.compile(
-      "^\\*\\*(?=[^ \t\r\n])");
-  private static final Pattern strongEmphasisEndPattern = Pattern.compile(
-      "^\\*\\*(?=[ \t\r\n-.,:;!?\\\\/'\")\\]}>]|$)");
-  private static final Pattern emphasisStartPattern = Pattern.compile(
-      "^\\*(?=[^ \t\r\n])");
-  private static final Pattern emphasisEndPattern = Pattern.compile(
-      "^\\*(?=[ \t\r\n-.,:;!?\\\\/'\")\\]}>]|$)");
-  private static final Pattern inlineLiteralStartPattern = Pattern.compile(
-      "^``(?=[^ \t\r\n])");
-  private static final Pattern inlineLiteralEndPattern = Pattern.compile(
-      "^``(?=[ \t\r\n-.,:;!?\\\\/'\")\\]}>]|$)");
+  private static final Pattern inlineEndFollowingPattern = Pattern.compile(
+      "^[ \t\r\n-.,:;!?\\\\/'\")\\]}>]|$");
+  private static final Pattern strongEmphasisPattern = Pattern.compile(
+      "^\\*\\*");
+  private static final Pattern emphasisPattern = Pattern.compile(
+      "^\\*");
+  private static final Pattern inlineLiteralPattern = Pattern.compile(
+      "^``");
   private static final Pattern interpretedTextStartPattern = Pattern.compile(
-      "^(:[0-9A-Za-z\\-_.:+]+:)?`(?=[^ \t])");
+      "^(:[0-9A-Za-z\\-_.:+]+:)?`");
   private static final Pattern interpretedTextEndPattern = Pattern.compile(
-      "^`(:[0-9A-Za-z\\-_.:+]+:)?(?=[ \t\r\n-.,:;!?\\\\/'\")\\]}>]|$)");
+      "^`(:[0-9A-Za-z\\-_.:+]+:)?");
   private static final Pattern inlineInternalTargetStartPattern = Pattern.compile(
-      "^_`(?=[^ \t\r\n])");
+      "^_`");
   private static final Pattern inlineInternalTargetEndPattern = Pattern.compile(
-      "^`(?=[ \t\r\n-.,:;!?\\\\/'\")\\]}>]|$)");
+      "^`");
   private static final Pattern footnoteReferenceStartPattern = Pattern.compile(
-      "^\\[(?=[^ \t\r\n])");
+      "^\\[");
   private static final Pattern footnoteReferenceEndPattern = Pattern.compile(
-      "^\\]_(?=[ \t\r\n-.,:;!?\\\\/'\")\\]}>]|$)");
+      "^\\]_");
   private static final Pattern hyperlinkReferenceStartPattern = Pattern.compile(
-      "^`(?=[^ \t\r\n])");
+      "^`");
   private static final Pattern hyperlinkReferenceEndPattern = Pattern.compile(
-      "^`__?(?=[ \t\r\n-.,:;!?\\\\/'\")\\]}>]|$)");
+      "^`__?");
 
   private String code;
   private int pos;
@@ -253,23 +251,23 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
 
       @Nullable Matcher matcher;
 
-      if ((matcher = matchInlineStartFromPosition(strongEmphasisStartPattern)) != null) {
+      if ((matcher = matchInlineStartFromPosition(strongEmphasisPattern)) != null) {
         addMarkup(matcher.group());
         continue;
-      } else if ((matcher = matchInlineEndFromPosition(strongEmphasisEndPattern)) != null) {
+      } else if ((matcher = matchInlineEndFromPosition(strongEmphasisPattern)) != null) {
         addMarkup(matcher.group());
         continue;
-      } else if ((matcher = matchInlineStartFromPosition(emphasisStartPattern)) != null) {
+      } else if ((matcher = matchInlineStartFromPosition(emphasisPattern)) != null) {
         addMarkup(matcher.group());
         continue;
-      } else if ((matcher = matchInlineEndFromPosition(emphasisEndPattern)) != null) {
+      } else if ((matcher = matchInlineEndFromPosition(emphasisPattern)) != null) {
         addMarkup(matcher.group());
         continue;
-      } else if ((matcher = matchInlineStartFromPosition(inlineLiteralStartPattern)) != null) {
+      } else if ((matcher = matchInlineStartFromPosition(inlineLiteralPattern)) != null) {
         addMarkup(matcher.group(), generateDummy());
         this.inIgnoredMarkup = true;
         continue;
-      } else if ((matcher = matchInlineEndFromPosition(inlineLiteralEndPattern)) != null) {
+      } else if ((matcher = matchInlineEndFromPosition(inlineLiteralPattern)) != null) {
         addMarkup(matcher.group());
         this.inIgnoredMarkup = false;
         continue;
@@ -336,6 +334,11 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
     if (matcher == null) return null;
     if ((this.pos == 0) || (this.pos >= this.code.length() - 1)) return matcher;
 
+    if (matchFromPosition(inlineStartFollowingPattern,
+          this.pos + matcher.group().length()) == null) {
+      return null;
+    }
+
     char forbiddenFollowingChar;
 
     switch (this.code.charAt(this.pos - 1)) {
@@ -376,7 +379,11 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
       return null;
     }
 
-    return matchFromPosition(pattern);
+    @Nullable Matcher matcher = matchFromPosition(pattern);
+    if (matcher == null) return null;
+
+    return ((matchFromPosition(inlineEndFollowingPattern,
+        this.pos + matcher.group().length()) != null) ? matcher : null);
   }
 
   private boolean matchExplicitBlock() {
