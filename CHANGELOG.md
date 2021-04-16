@@ -144,7 +144,7 @@
 - Add support for `\ell` as well as `\mathcal`, `\mathfrak`, etc. to vowel detection (fixes [vscode-ltex#131](https://github.com/valentjn/vscode-ltex/issues/131))
 - Add setting [`ltex.ltex-ls.logLevel`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexltex-lsloglevel) to control the verbosity of the server log
 - Fix diagnostics sometimes not lined up with the text with switching back from incremental to full document updates; unfortunately, this disables the delayed publication of diagnostics at the caret position
-- Restructure and simplify internal quickfix and command structure, removing the need for pseudo-telemetry notifications
+- Restructure and simplify internal quick fix and command structure, removing the need for pseudo-telemetry notifications
 
 ## 7.2.0 (September 27, 2020)
 
