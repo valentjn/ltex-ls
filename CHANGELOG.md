@@ -8,7 +8,7 @@
 
 # Changelog
 
-## 12.0.0 (upcoming)
+## 12.0.0 (April 18, 2021)
 
 - Prefix all command names with an underscore to mark them as internal (for hiding them from the user in some clients):
   - `ltex.addToDictionary` → `_ltex.addToDictionary`
