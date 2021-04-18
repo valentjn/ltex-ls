@@ -60,7 +60,7 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
   private static final Pattern inlineEndPrecedingPattern = Pattern.compile(
       "^[^ \t\r\n]");
   private static final Pattern inlineEndFollowingPattern = Pattern.compile(
-      "^[ \t\r\n-.,:;!?\\\\/'\")\\]}>]|$");
+      "^([ \t\r\n-.,:;!?\\\\/'\")\\]}>]|$)");
   private static final Pattern strongEmphasisPattern = Pattern.compile(
       "^\\*\\*");
   private static final Pattern emphasisPattern = Pattern.compile(
