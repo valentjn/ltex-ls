@@ -188,30 +188,36 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
 
       if (isStartOfLine) {
         @Nullable Matcher matcher;
+        boolean blockFound = true;
 
-        if (matchExplicitBlock()) {
-          continue;
+        if ((matcher = matchFromPosition(footnotePattern)) != null) {
+          this.blockType = BlockType.FOOTNOTE;
+          addMarkup(matcher.group());
+        } else if ((matcher = matchFromPosition(directivePattern)) != null) {
+          this.blockType = BlockType.DIRECTIVE;
+          addMarkup(matcher.group());
+        } else if ((matcher = matchFromPosition(commentPattern)) != null) {
+          this.blockType = BlockType.COMMENT;
+          addMarkup(matcher.group());
         } else if ((matcher = matchFromPosition(gridTableStartPattern)) != null) {
           this.blockType = BlockType.GRID_TABLE;
           addMarkup(matcher.group());
-          continue;
         } else if ((matcher = matchFromPosition(simpleTableStartPattern)) != null) {
           this.blockType = BlockType.SIMPLE_TABLE;
           addMarkup(matcher.group());
-          continue;
         } else if ((matcher = matchFromPosition(sectionTitleAdronmentPattern)) != null) {
           addMarkup(matcher.group());
-          continue;
         } else if ((matcher = matchFromPosition(lineBlockPattern)) != null) {
           addMarkup(matcher.group());
-          continue;
         } else if ((matcher = matchFromPosition(bulletListPattern)) != null) {
           addMarkup(matcher.group());
-          continue;
         } else if ((matcher = matchFromPosition(enumeratedListPattern)) != null) {
           addMarkup(matcher.group());
-          continue;
+        } else {
+          blockFound = false;
         }
+
+        if (blockFound) continue;
       }
 
       if ((this.blockType == BlockType.COMMENT) || (this.blockType == BlockType.GRID_TABLE)
@@ -224,60 +230,44 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
 
       if ((matcher = matchInlineStartFromPosition(strongEmphasisPattern)) != null) {
         addMarkup(matcher.group());
-        continue;
       } else if ((matcher = matchInlineEndFromPosition(strongEmphasisPattern)) != null) {
         addMarkup(matcher.group());
-        continue;
       } else if ((matcher = matchInlineStartFromPosition(emphasisPattern)) != null) {
         addMarkup(matcher.group());
-        continue;
       } else if ((matcher = matchInlineEndFromPosition(emphasisPattern)) != null) {
         addMarkup(matcher.group());
-        continue;
       } else if ((matcher = matchInlineStartFromPosition(inlineLiteralPattern)) != null) {
         addMarkup(matcher.group(), generateDummy());
         this.inIgnoredMarkup = true;
-        continue;
       } else if ((matcher = matchInlineEndFromPosition(inlineLiteralPattern)) != null) {
         addMarkup(matcher.group());
         this.inIgnoredMarkup = false;
-        continue;
       } else if ((matcher = matchInlineStartFromPosition(interpretedTextStartPattern)) != null) {
         addMarkup(matcher.group(), generateDummy());
         this.inIgnoredMarkup = true;
-        continue;
       } else if ((matcher = matchInlineEndFromPosition(interpretedTextEndPattern)) != null) {
         addMarkup(matcher.group());
         this.inIgnoredMarkup = false;
-        continue;
       } else if (
             (matcher = matchInlineStartFromPosition(inlineInternalTargetStartPattern)) != null) {
         addMarkup(matcher.group(), generateDummy());
         this.inIgnoredMarkup = true;
-        continue;
       } else if ((matcher = matchInlineEndFromPosition(inlineInternalTargetEndPattern)) != null) {
         addMarkup(matcher.group());
         this.inIgnoredMarkup = false;
-        continue;
       } else if ((matcher = matchInlineStartFromPosition(footnoteReferenceStartPattern)) != null) {
         addMarkup(matcher.group(), generateDummy());
         this.inIgnoredMarkup = true;
-        continue;
       } else if ((matcher = matchInlineEndFromPosition(footnoteReferenceEndPattern)) != null) {
         addMarkup(matcher.group());
         this.inIgnoredMarkup = false;
-        continue;
       } else if ((matcher = matchInlineStartFromPosition(hyperlinkReferenceStartPattern)) != null) {
         addMarkup(matcher.group(), generateDummy());
         this.inIgnoredMarkup = true;
-        continue;
       } else if ((matcher = matchInlineEndFromPosition(hyperlinkReferenceEndPattern)) != null) {
         addMarkup(matcher.group());
         this.inIgnoredMarkup = false;
-        continue;
-      }
-
-      if (this.inIgnoredMarkup) {
+      } else if (this.inIgnoredMarkup) {
         addMarkup(this.curString);
       } else {
         addText(this.curString);
@@ -355,26 +345,6 @@ public class RestructuredtextAnnotatedTextBuilder extends CodeAnnotatedTextBuild
 
     return ((matchFromPosition(inlineEndFollowingPattern,
         this.pos + matcher.group().length()) != null) ? matcher : null);
-  }
-
-  private boolean matchExplicitBlock() {
-    @Nullable Matcher matcher;
-
-    if ((matcher = matchFromPosition(footnotePattern)) != null) {
-      this.blockType = BlockType.FOOTNOTE;
-      addMarkup(matcher.group());
-      return true;
-    } else if ((matcher = matchFromPosition(directivePattern)) != null) {
-      this.blockType = BlockType.DIRECTIVE;
-      addMarkup(matcher.group());
-      return true;
-    } else if ((matcher = matchFromPosition(commentPattern)) != null) {
-      this.blockType = BlockType.COMMENT;
-      addMarkup(matcher.group());
-      return true;
-    }
-
-    return false;
   }
 
   private boolean isExplicitBlockType() {
