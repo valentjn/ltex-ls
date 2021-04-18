@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.function.Function;
 import org.bsplines.ltexls.parsing.latex.LatexAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.markdown.MarkdownAnnotatedTextBuilder;
+import org.bsplines.ltexls.parsing.org.OrgAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.plaintext.PlaintextAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.restructuredtext.RestructuredtextAnnotatedTextBuilder;
 import org.bsplines.ltexls.settings.Settings;
@@ -30,6 +31,8 @@ public abstract class CodeAnnotatedTextBuilder extends AnnotatedTextBuilder {
         new LatexAnnotatedTextBuilder(codeLanguageId));
     constructorMap.put("markdown", (String codeLanguageId) ->
         new MarkdownAnnotatedTextBuilder(codeLanguageId));
+    constructorMap.put("org", (String codeLanguageId) ->
+        new OrgAnnotatedTextBuilder(codeLanguageId));
     constructorMap.put("plaintext", (String codeLanguageId) ->
         new PlaintextAnnotatedTextBuilder(codeLanguageId));
     constructorMap.put("restructuredtext", (String codeLanguageId) ->

@@ -77,7 +77,7 @@ public class LtexWorkspaceServiceTest {
     assertCheckDocumentResult("invalid_uri", false);
     assertCheckDocumentResult("file:///non_existent_path", false);
 
-    for (String extension : Arrays.asList(".bib", ".md", ".Rnw", ".rst", ".tex")) {
+    for (String extension : Arrays.asList(".bib", ".md", ".org", ".Rnw", ".rst", ".tex")) {
       File tmpFile = File.createTempFile("ltex-", extension);
 
       try {

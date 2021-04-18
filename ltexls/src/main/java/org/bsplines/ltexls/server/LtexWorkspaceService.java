@@ -100,6 +100,8 @@ class LtexWorkspaceService implements WorkspaceService {
           codeLanguageId = "bibtex";
         } else if (fileNameStr.endsWith(".md")) {
           codeLanguageId = "markdown";
+        } else if (fileNameStr.endsWith(".org")) {
+          codeLanguageId = "org";
         } else if (fileNameStr.endsWith(".Rnw") || fileNameStr.endsWith(".rnw")) {
           codeLanguageId = "rsweave";
         } else if (fileNameStr.endsWith(".rst")) {

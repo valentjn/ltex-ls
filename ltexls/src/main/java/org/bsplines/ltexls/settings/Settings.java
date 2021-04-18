@@ -25,8 +25,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.DiagnosticSeverity;
 
 public class Settings {
-  private static final Set<String> defaultEnabled =
-      new HashSet<>(Arrays.asList("bibtex", "latex", "markdown", "restructuredtext", "rsweave"));
+  private static final Set<String> defaultEnabled = new HashSet<>(Arrays.asList(
+      "bibtex", "latex", "markdown", "org", "restructuredtext", "rsweave"));
 
   private @Nullable Set<String> enabled;
   private @Nullable String languageShortCode;
