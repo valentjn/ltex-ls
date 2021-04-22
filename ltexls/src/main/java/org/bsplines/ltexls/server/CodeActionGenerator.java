@@ -114,19 +114,19 @@ public class CodeActionGenerator {
         new ArrayList<Either<Command, CodeAction>>();
 
     List<LanguageToolRuleMatch> addToDictionaryMatches = new ArrayList<>();
-    List<LanguageToolRuleMatch> hideFalsePositiveMatches = new ArrayList<>();
-    List<LanguageToolRuleMatch> disableRuleMatches = new ArrayList<>();
-    Map<String, List<LanguageToolRuleMatch>> useWordMatchesMap = new LinkedHashMap<>();
+    List<LanguageToolRuleMatch> hideFalsePositivesMatches = new ArrayList<>();
+    List<LanguageToolRuleMatch> disableRulesMatches = new ArrayList<>();
+    Map<String, List<LanguageToolRuleMatch>> acceptSuggestionsMatchesMap = new LinkedHashMap<>();
 
     for (LanguageToolRuleMatch match : checkingResult.getKey()) {
       if (match.isIntersectingWithRange(params.getRange(), document)) {
         if (match.isUnknownWordRule()) addToDictionaryMatches.add(match);
-        if (match.getSentence() != null) hideFalsePositiveMatches.add(match);
-        disableRuleMatches.add(match);
+        if (match.getSentence() != null) hideFalsePositivesMatches.add(match);
+        disableRulesMatches.add(match);
 
         for (String newWord : match.getSuggestedReplacements()) {
-          useWordMatchesMap.putIfAbsent(newWord, new ArrayList<>());
-          useWordMatchesMap.get(newWord).add(match);
+          acceptSuggestionsMatchesMap.putIfAbsent(newWord, new ArrayList<>());
+          acceptSuggestionsMatchesMap.get(newWord).add(match);
         }
       }
     }
@@ -137,18 +137,20 @@ public class CodeActionGenerator {
           addToDictionaryMatches, annotatedTextFragments)));
     }
 
-    if (!hideFalsePositiveMatches.isEmpty()) {
-      result.add(Either.forRight(getHideFalsePositiveCodeAction(document,
-          hideFalsePositiveMatches, annotatedTextFragments)));
+    if (!hideFalsePositivesMatches.isEmpty()) {
+      result.add(Either.forRight(getHideFalsePositivesCodeAction(document,
+          hideFalsePositivesMatches, annotatedTextFragments)));
     }
 
-    if (!disableRuleMatches.isEmpty()) {
-      result.add(Either.forRight(getDisableRuleCodeAction(document,
-          disableRuleMatches, annotatedTextFragments)));
+    if (!disableRulesMatches.isEmpty()) {
+      result.add(Either.forRight(getDisableRulesCodeAction(document,
+          disableRulesMatches, annotatedTextFragments)));
     }
 
-    for (Map.Entry<String, List<LanguageToolRuleMatch>> entry : useWordMatchesMap.entrySet()) {
-      result.add(Either.forRight(getUseWordCodeAction(document, entry.getKey(), entry.getValue())));
+    for (Map.Entry<String, List<LanguageToolRuleMatch>> entry
+          : acceptSuggestionsMatchesMap.entrySet()) {
+      result.add(Either.forRight(getAcceptSuggestionsCodeAction(
+          document, entry.getKey(), entry.getValue())));
     }
 
     return result;
@@ -201,16 +203,16 @@ public class CodeActionGenerator {
     return codeAction;
   }
 
-  private CodeAction getHideFalsePositiveCodeAction(
+  private CodeAction getHideFalsePositivesCodeAction(
         LtexTextDocumentItem document,
-        List<LanguageToolRuleMatch> hideFalsePositiveMatches,
+        List<LanguageToolRuleMatch> hideFalsePositivesMatches,
         List<AnnotatedTextFragment> annotatedTextFragments) {
     List<Pair<String, String>> ruleIdSentencePairs = new ArrayList<>();
     Map<String, List<String>> hiddenFalsePositivesMap = new HashMap<>();
     JsonObject falsePositivesJsonObject = new JsonObject();
     List<Diagnostic> diagnostics = new ArrayList<>();
 
-    for (LanguageToolRuleMatch match : hideFalsePositiveMatches) {
+    for (LanguageToolRuleMatch match : hideFalsePositivesMatches) {
       @Nullable String ruleId = match.getRuleId();
       @Nullable String sentence = match.getSentence();
       if ((ruleId == null) || (sentence == null)) continue;
@@ -277,7 +279,7 @@ public class CodeActionGenerator {
     return codeAction;
   }
 
-  private CodeAction getDisableRuleCodeAction(
+  private CodeAction getDisableRulesCodeAction(
         LtexTextDocumentItem document,
         List<LanguageToolRuleMatch> disableRuleMatches,
         List<AnnotatedTextFragment> annotatedTextFragments) {
@@ -324,14 +326,14 @@ public class CodeActionGenerator {
     return codeAction;
   }
 
-  private CodeAction getUseWordCodeAction(
-        LtexTextDocumentItem document, String newWord, List<LanguageToolRuleMatch> useWordMatches) {
+  private CodeAction getAcceptSuggestionsCodeAction(LtexTextDocumentItem document, String newWord,
+        List<LanguageToolRuleMatch> acceptSuggestionsMatches) {
     VersionedTextDocumentIdentifier textDocument = new VersionedTextDocumentIdentifier(
         document.getUri(), document.getVersion());
     List<Diagnostic> diagnostics = new ArrayList<>();
     List<Either<TextDocumentEdit, ResourceOperation>> documentChanges = new ArrayList<>();
 
-    for (LanguageToolRuleMatch match : useWordMatches) {
+    for (LanguageToolRuleMatch match : acceptSuggestionsMatches) {
       Diagnostic diagnostic = createDiagnostic(match, document);
       Range range = diagnostic.getRange();
 
@@ -340,7 +342,7 @@ public class CodeActionGenerator {
           Collections.singletonList(new TextEdit(range, newWord)))));
     }
 
-    CodeAction codeAction = new CodeAction((useWordMatches.size() == 1)
+    CodeAction codeAction = new CodeAction((acceptSuggestionsMatches.size() == 1)
         ? Tools.i18n("useWord", newWord) : Tools.i18n("useWordAllSelectedMatches", newWord));
     codeAction.setKind(acceptSuggestionsCodeActionKind);
     codeAction.setDiagnostics(diagnostics);
