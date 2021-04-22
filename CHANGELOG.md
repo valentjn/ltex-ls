@@ -10,6 +10,7 @@
 
 ## 12.1.0 (upcoming)
 
+- Show `Use ...` quick fixes before other quick fixes (fixes [vscode-ltex#297](https://github.com/valentjn/vscode-ltex/issues/297))
 - Limit number of `Use ...` quick fixes to 5 (see [vscode-ltex#297](https://github.com/valentjn/vscode-ltex/issues/297))
 
 ## 12.0.0 (April 18, 2021)

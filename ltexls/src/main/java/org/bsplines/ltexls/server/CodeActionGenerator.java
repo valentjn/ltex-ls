@@ -115,17 +115,13 @@ public class CodeActionGenerator {
     List<Either<Command, CodeAction>> result =
         new ArrayList<Either<Command, CodeAction>>();
 
+    Map<String, List<LanguageToolRuleMatch>> acceptSuggestionsMatchesMap = new LinkedHashMap<>();
     List<LanguageToolRuleMatch> addToDictionaryMatches = new ArrayList<>();
     List<LanguageToolRuleMatch> hideFalsePositivesMatches = new ArrayList<>();
     List<LanguageToolRuleMatch> disableRulesMatches = new ArrayList<>();
-    Map<String, List<LanguageToolRuleMatch>> acceptSuggestionsMatchesMap = new LinkedHashMap<>();
 
     for (LanguageToolRuleMatch match : checkingResult.getKey()) {
       if (match.isIntersectingWithRange(params.getRange(), document)) {
-        if (match.isUnknownWordRule()) addToDictionaryMatches.add(match);
-        if (match.getSentence() != null) hideFalsePositivesMatches.add(match);
-        disableRulesMatches.add(match);
-
         for (String newWord : match.getSuggestedReplacements()) {
           if (!acceptSuggestionsMatchesMap.containsKey(newWord)) {
             if (acceptSuggestionsMatchesMap.size() >= maximumNumberOfAcceptSuggestionsCodeActions) {
@@ -137,7 +133,17 @@ public class CodeActionGenerator {
 
           acceptSuggestionsMatchesMap.get(newWord).add(match);
         }
+
+        if (match.isUnknownWordRule()) addToDictionaryMatches.add(match);
+        if (match.getSentence() != null) hideFalsePositivesMatches.add(match);
+        disableRulesMatches.add(match);
       }
+    }
+
+    for (Map.Entry<String, List<LanguageToolRuleMatch>> entry
+          : acceptSuggestionsMatchesMap.entrySet()) {
+      result.add(Either.forRight(getAcceptSuggestionsCodeAction(
+          document, entry.getKey(), entry.getValue())));
     }
 
     if (!addToDictionaryMatches.isEmpty()
@@ -156,13 +162,32 @@ public class CodeActionGenerator {
           disableRulesMatches, annotatedTextFragments)));
     }
 
-    for (Map.Entry<String, List<LanguageToolRuleMatch>> entry
-          : acceptSuggestionsMatchesMap.entrySet()) {
-      result.add(Either.forRight(getAcceptSuggestionsCodeAction(
-          document, entry.getKey(), entry.getValue())));
+    return result;
+  }
+
+  private CodeAction getAcceptSuggestionsCodeAction(LtexTextDocumentItem document, String newWord,
+        List<LanguageToolRuleMatch> acceptSuggestionsMatches) {
+    VersionedTextDocumentIdentifier textDocument = new VersionedTextDocumentIdentifier(
+        document.getUri(), document.getVersion());
+    List<Diagnostic> diagnostics = new ArrayList<>();
+    List<Either<TextDocumentEdit, ResourceOperation>> documentChanges = new ArrayList<>();
+
+    for (LanguageToolRuleMatch match : acceptSuggestionsMatches) {
+      Diagnostic diagnostic = createDiagnostic(match, document);
+      Range range = diagnostic.getRange();
+
+      diagnostics.add(diagnostic);
+      documentChanges.add(Either.forLeft(new TextDocumentEdit(textDocument,
+          Collections.singletonList(new TextEdit(range, newWord)))));
     }
 
-    return result;
+    CodeAction codeAction = new CodeAction((acceptSuggestionsMatches.size() == 1)
+        ? Tools.i18n("useWord", newWord) : Tools.i18n("useWordAllSelectedMatches", newWord));
+    codeAction.setKind(acceptSuggestionsCodeActionKind);
+    codeAction.setDiagnostics(diagnostics);
+    codeAction.setEdit(new WorkspaceEdit(documentChanges));
+
+    return codeAction;
   }
 
   private CodeAction getAddWordToDictionaryCodeAction(
@@ -331,31 +356,6 @@ public class CodeActionGenerator {
     codeAction.setKind(disableRulesCodeActionKind);
     codeAction.setDiagnostics(diagnostics);
     codeAction.setCommand(command);
-
-    return codeAction;
-  }
-
-  private CodeAction getAcceptSuggestionsCodeAction(LtexTextDocumentItem document, String newWord,
-        List<LanguageToolRuleMatch> acceptSuggestionsMatches) {
-    VersionedTextDocumentIdentifier textDocument = new VersionedTextDocumentIdentifier(
-        document.getUri(), document.getVersion());
-    List<Diagnostic> diagnostics = new ArrayList<>();
-    List<Either<TextDocumentEdit, ResourceOperation>> documentChanges = new ArrayList<>();
-
-    for (LanguageToolRuleMatch match : acceptSuggestionsMatches) {
-      Diagnostic diagnostic = createDiagnostic(match, document);
-      Range range = diagnostic.getRange();
-
-      diagnostics.add(diagnostic);
-      documentChanges.add(Either.forLeft(new TextDocumentEdit(textDocument,
-          Collections.singletonList(new TextEdit(range, newWord)))));
-    }
-
-    CodeAction codeAction = new CodeAction((acceptSuggestionsMatches.size() == 1)
-        ? Tools.i18n("useWord", newWord) : Tools.i18n("useWordAllSelectedMatches", newWord));
-    codeAction.setKind(acceptSuggestionsCodeActionKind);
-    codeAction.setDiagnostics(diagnostics);
-    codeAction.setEdit(new WorkspaceEdit(documentChanges));
 
     return codeAction;
   }
