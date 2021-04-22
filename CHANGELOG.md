@@ -8,6 +8,10 @@
 
 # Changelog
 
+## 12.1.0 (upcoming)
+
+- Limit number of `Use ...` quick fixes to 5 (see [vscode-ltex#297](https://github.com/valentjn/vscode-ltex/issues/297))
+
 ## 12.0.0 (April 18, 2021)
 
 - Prefix all command names with an underscore to mark them as internal (for hiding them from the user in some clients):

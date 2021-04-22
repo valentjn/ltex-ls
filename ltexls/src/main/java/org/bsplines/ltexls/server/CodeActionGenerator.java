@@ -55,6 +55,8 @@ public class CodeActionGenerator {
   private static final String dummyPatternStr = "(?:Dummy|Ina|Jimmy-)[0-9]+";
   private static final Pattern dummyPattern = Pattern.compile(dummyPatternStr);
 
+  private static final int maximumNumberOfAcceptSuggestionsCodeActions = 5;
+
   public CodeActionGenerator(SettingsManager settingsManager) {
     this.settingsManager = settingsManager;
   }
@@ -125,7 +127,14 @@ public class CodeActionGenerator {
         disableRulesMatches.add(match);
 
         for (String newWord : match.getSuggestedReplacements()) {
-          acceptSuggestionsMatchesMap.putIfAbsent(newWord, new ArrayList<>());
+          if (!acceptSuggestionsMatchesMap.containsKey(newWord)) {
+            if (acceptSuggestionsMatchesMap.size() >= maximumNumberOfAcceptSuggestionsCodeActions) {
+              continue;
+            }
+
+            acceptSuggestionsMatchesMap.put(newWord, new ArrayList<>());
+          }
+
           acceptSuggestionsMatchesMap.get(newWord).add(match);
         }
       }
