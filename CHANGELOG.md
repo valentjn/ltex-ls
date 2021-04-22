@@ -129,7 +129,7 @@
 - Add [`LTeX: Show status information`](https://valentjn.github.io/vscode-ltex/docs/commands.html#ltex-show-status-information) command to show information about the status of LT<sub>E</sub>X
 - Add support for `\usepackage[LANGUAGE]{babel}` if in the same file as the text to be checked (fixes [vscode-ltex#140](https://github.com/valentjn/vscode-ltex/issues/140))
 - Add support for more BibL<sup>A</sup>T<sub>E</sub>X commands such as `\autocite`, `\citeauthor`, etc. (fixes [vscode-ltex#143](https://github.com/valentjn/vscode-ltex/issues/143))
-- Add support for overriding hard-coded command signatures (fixes [valentjn/ltex-ls#27](https://github.com/valentjn/ltex-ls/issues/27))
+- Add support for overriding hard-coded command signatures (fixes [#27](https://github.com/valentjn/ltex-ls/issues/27))
 - Move handling of external setting files from ltex-ls to vscode-ltex
 - Increase duration before sentences expire in the result cache to 60 minutes
 - Fix many settings changes cleared sentence cache, which led to performance issues, e.g., changing the [`ltex.enabled`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexenabled) setting via magic comments (see [vscode-ltex#134](https://github.com/valentjn/vscode-ltex/issues/134))
