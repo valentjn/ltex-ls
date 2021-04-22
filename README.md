@@ -48,6 +48,7 @@ In order to use LT<sub>E</sub>X LS, you need a language client. For some editors
 - VS Code/reference client: [LT<sub>E</sub>X for VS Code (valentjn/vscode-ltex)](https://valentjn.github.io/vscode-ltex)
 - Emacs using `eglot`: [emacs-languagetool/eglot-ltex](https://github.com/emacs-languagetool/eglot-ltex)
 - Emacs using `lsp-mode`: [emacs-languagetool/lsp-ltex](https://github.com/emacs-languagetool/lsp-ltex)
+- Neovim using `nvim-lspconfig`: [lbiaggi/ltex.lua](https://gist.github.com/lbiaggi/a3eb761ac2fdbff774b29c88844355b8)
 - Sublime Text: [LDAP/LSP-ltex-ls](https://github.com/LDAP/LSP-ltex-ls)
 
 ## Requirements
