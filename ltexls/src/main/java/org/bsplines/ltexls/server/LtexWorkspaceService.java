@@ -37,7 +37,7 @@ class LtexWorkspaceService implements WorkspaceService {
   private static final String checkDocumentCommandName = "_ltex.checkDocument";
   private static final String getServerStatusCommandName = "_ltex.getServerStatus";
 
-  @NotOnlyInitialized LtexLanguageServer languageServer;
+  private @NotOnlyInitialized LtexLanguageServer languageServer;
 
   public LtexWorkspaceService(@UnknownInitialization LtexLanguageServer languageServer) {
     this.languageServer = languageServer;

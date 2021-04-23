@@ -58,8 +58,8 @@ import org.eclipse.lsp4j.services.TextDocumentService;
 import org.eclipse.xtext.xbase.lib.Pair;
 
 public class LtexTextDocumentService implements TextDocumentService {
-  @NotOnlyInitialized LtexLanguageServer languageServer;
-  Map<String, LtexTextDocumentItem> documents;
+  private @NotOnlyInitialized LtexLanguageServer languageServer;
+  private Map<String, LtexTextDocumentItem> documents;
 
   public LtexTextDocumentService(@UnknownInitialization LtexLanguageServer languageServer) {
     this.languageServer = languageServer;

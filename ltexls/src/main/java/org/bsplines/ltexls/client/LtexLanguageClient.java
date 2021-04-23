@@ -16,6 +16,6 @@ import org.eclipse.lsp4j.services.LanguageClient;
 
 public interface LtexLanguageClient extends LanguageClient {
   @JsonRequest("ltex/workspaceSpecificConfiguration")
-  CompletableFuture<List<@Nullable Object>> ltexWorkspaceSpecificConfiguration(
+  public CompletableFuture<List<@Nullable Object>> ltexWorkspaceSpecificConfiguration(
       ConfigurationParams params);
 }
