@@ -58,8 +58,13 @@ class LtexWorkspaceService implements WorkspaceService {
           if (document.isBeingChecked()) document.cancelCheck();
 
           this.languageServer.getSingleThreadExecutorService().execute(() -> {
-            document.checkAndPublishDiagnosticsWithoutCache();
-            document.raiseExceptionIfCanceled();
+            try {
+              document.checkAndPublishDiagnosticsWithoutCache();
+              document.raiseExceptionIfCanceled();
+            } catch (InterruptedException | ExecutionException e) {
+              Tools.rethrowCancellationException(e);
+              Tools.logger.warning(Tools.i18n(e));
+            }
           });
         });
   }
@@ -143,18 +148,13 @@ class LtexWorkspaceService implements WorkspaceService {
     return CompletableFutures.computeAsync(this.languageServer.getSingleThreadExecutorService(),
         (CancelChecker lspCancelChecker) -> {
           document.setLspCancelChecker(lspCancelChecker);
-          CompletableFuture<JsonObject> future =
-              document.checkAndPublishDiagnosticsWithoutCache(range).thenApplyAsync(
-                (Boolean success) -> {
-                  JsonObject jsonObject = new JsonObject();
-                  jsonObject.addProperty("success", success);
-                  return jsonObject;
-                }, Tools.executorService);
 
           try {
-            JsonObject response = future.get();
+            boolean success = document.checkAndPublishDiagnosticsWithoutCache(range);
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("success", success);
             document.raiseExceptionIfCanceled();
-            return response;
+            return jsonObject;
           } catch (InterruptedException | ExecutionException e) {
             Tools.rethrowCancellationException(e);
             Tools.logger.warning(Tools.i18n(e));

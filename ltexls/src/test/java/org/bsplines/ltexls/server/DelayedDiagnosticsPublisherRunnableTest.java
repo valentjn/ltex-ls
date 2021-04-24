@@ -7,6 +7,7 @@
 
 package org.bsplines.ltexls.server;
 
+import java.util.concurrent.ExecutionException;
 import org.bsplines.ltexls.client.MockLtexLanguageClient;
 import org.eclipse.lsp4j.PublishDiagnosticsParams;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 public class DelayedDiagnosticsPublisherRunnableTest {
   @Test
-  public void testRun() {
+  public void testRun() throws InterruptedException, ExecutionException {
     LtexLanguageServer languageServer = new LtexLanguageServer();
     MockLtexLanguageClient languageClient = new MockLtexLanguageClient();
     languageServer.connect(languageClient);

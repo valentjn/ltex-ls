@@ -158,8 +158,13 @@ public class LtexTextDocumentService implements TextDocumentService {
       if (document.isBeingChecked()) document.cancelCheck();
 
       this.languageServer.getSingleThreadExecutorService().execute(() -> {
-        document.checkAndPublishDiagnosticsWithoutCache();
-        document.raiseExceptionIfCanceled();
+        try {
+          document.checkAndPublishDiagnosticsWithoutCache();
+          document.raiseExceptionIfCanceled();
+        } catch (InterruptedException | ExecutionException e) {
+          Tools.rethrowCancellationException(e);
+          Tools.logger.warning(Tools.i18n(e));
+        }
       });
     }
   }
@@ -201,8 +206,13 @@ public class LtexTextDocumentService implements TextDocumentService {
     if (document.isBeingChecked()) document.cancelCheck();
 
     this.languageServer.getSingleThreadExecutorService().execute(() -> {
-      document.checkAndPublishDiagnosticsWithoutCache();
-      document.raiseExceptionIfCanceled();
+      try {
+        document.checkAndPublishDiagnosticsWithoutCache();
+        document.raiseExceptionIfCanceled();
+      } catch (InterruptedException | ExecutionException e) {
+        Tools.rethrowCancellationException(e);
+        Tools.logger.warning(Tools.i18n(e));
+      }
     });
   }
 
@@ -221,7 +231,7 @@ public class LtexTextDocumentService implements TextDocumentService {
       if (this.languageServer.getSettingsManager().getSettings().getCheckFrequency()
             == CheckFrequency.EDIT) {
         try {
-          document.checkAndPublishDiagnosticsWithoutCache().get();
+          document.checkAndPublishDiagnosticsWithoutCache();
           document.raiseExceptionIfCanceled();
         } catch (InterruptedException | ExecutionException e) {
           Tools.rethrowCancellationException(e);
@@ -251,15 +261,13 @@ public class LtexTextDocumentService implements TextDocumentService {
     return CompletableFutures.computeAsync(this.languageServer.getSingleThreadExecutorService(),
         (CancelChecker lspCancelChecker) -> {
           document.setLspCancelChecker(lspCancelChecker);
-          CompletableFuture<List<Either<Command, CodeAction>>> future =
-              document.checkWithCache().thenApplyAsync(
-                (Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) -> {
-                  return this.languageServer.getCodeActionGenerator().generate(
-                      params, document, checkingResult);
-                }, Tools.executorService);
 
           try {
-            List<Either<Command, CodeAction>> codeActions = future.get();
+            Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
+                document.checkWithCache();
+            List<Either<Command, CodeAction>> codeActions =
+                this.languageServer.getCodeActionGenerator().generate(
+                params, document, checkingResult);
             document.raiseExceptionIfCanceled();
             return codeActions;
           } catch (InterruptedException | ExecutionException e) {

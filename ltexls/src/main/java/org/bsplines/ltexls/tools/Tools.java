@@ -21,8 +21,6 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +37,6 @@ public class Tools {
   public static final Logger logger = Logger.getLogger("org.bsplines.ltexls");
   private static final Pattern tildePathPattern = Pattern.compile("^~($|/|\\\\)");
   public static final Random randomNumberGenerator = new Random();
-  public static final ExecutorService executorService = Executors.newFixedThreadPool(8);
 
   static {
     setDefaultLocale();

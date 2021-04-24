@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CancellationException;
-import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import org.bsplines.ltexls.client.LtexLanguageClient;
 import org.bsplines.ltexls.languagetool.LanguageToolRuleMatch;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
@@ -293,63 +293,65 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     return convertPosition(newText.length() - numberOfEqualCharsAtEnd);
   }
 
-  public CompletableFuture<Boolean> checkAndPublishDiagnosticsWithCache() {
+  public boolean checkAndPublishDiagnosticsWithCache()
+        throws InterruptedException, ExecutionException {
     return checkAndPublishDiagnostics(null, true);
   }
 
-  public CompletableFuture<Boolean> checkAndPublishDiagnosticsWithCache(@Nullable Range range) {
+  public boolean checkAndPublishDiagnosticsWithCache(@Nullable Range range)
+        throws InterruptedException, ExecutionException {
     return checkAndPublishDiagnostics(range, true);
   }
 
-  public CompletableFuture<Boolean> checkAndPublishDiagnosticsWithoutCache() {
+  public boolean checkAndPublishDiagnosticsWithoutCache()
+        throws InterruptedException, ExecutionException {
     return checkAndPublishDiagnostics(null, false);
   }
 
-  public CompletableFuture<Boolean> checkAndPublishDiagnosticsWithoutCache(@Nullable Range range) {
+  public boolean checkAndPublishDiagnosticsWithoutCache(@Nullable Range range)
+        throws InterruptedException, ExecutionException {
     return checkAndPublishDiagnostics(range, false);
   }
 
-  private CompletableFuture<Boolean> checkAndPublishDiagnostics(
-        @Nullable Range range, boolean useCache) {
+  private boolean checkAndPublishDiagnostics(@Nullable Range range, boolean useCache)
+        throws InterruptedException, ExecutionException {
     @Nullable LtexLanguageClient languageClient = this.languageServer.getLanguageClient();
+    checkAndGetDiagnostics(range, useCache);
 
-    return checkAndGetDiagnostics(range, useCache).thenApplyAsync(
-        (List<Diagnostic> diagnostics) -> {
-          if (languageClient == null) return false;
-          @Nullable List<Diagnostic> diagnosticsNotAtCaret = extractDiagnosticsNotAtCaret();
-          if (diagnosticsNotAtCaret == null) return false;
-          languageClient.publishDiagnostics(new PublishDiagnosticsParams(
-              getUri(), diagnosticsNotAtCaret));
+    if (languageClient == null) return false;
+    @Nullable List<Diagnostic> diagnosticsNotAtCaret = extractDiagnosticsNotAtCaret();
+    if (diagnosticsNotAtCaret == null) return false;
+    languageClient.publishDiagnostics(new PublishDiagnosticsParams(
+        getUri(), diagnosticsNotAtCaret));
 
-          if (diagnosticsNotAtCaret.size() < diagnostics.size()) {
-            Thread thread = new Thread(new DelayedDiagnosticsPublisherRunnable(
-                languageClient, this));
-            thread.start();
-          }
-
-          return true;
-        }, Tools.executorService);
-  }
-
-  private CompletableFuture<List<Diagnostic>> checkAndGetDiagnostics(
-        @Nullable Range range, boolean useCache) {
-    if (useCache && (this.diagnostics != null)) {
-      return CompletableFuture.completedFuture(this.diagnostics);
+    if ((this.diagnostics != null) && (diagnosticsNotAtCaret.size() < this.diagnostics.size())) {
+      Thread thread = new Thread(new DelayedDiagnosticsPublisherRunnable(
+          languageClient, this));
+      thread.start();
     }
 
-    return check(range, useCache).thenApplyAsync(
-        (Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult) -> {
-          List<LanguageToolRuleMatch> matches = checkingResult.getKey();
-          List<Diagnostic> diagnostics = new ArrayList<>();
+    return true;
+  }
 
-          for (LanguageToolRuleMatch match : matches) {
-            diagnostics.add(this.languageServer.getCodeActionGenerator().createDiagnostic(
-                match, this));
-          }
+  private List<Diagnostic> checkAndGetDiagnostics(
+        @Nullable Range range, boolean useCache) throws InterruptedException, ExecutionException {
+    if (useCache && (this.diagnostics != null)) {
+      return Collections.unmodifiableList(this.diagnostics);
+    }
 
-          this.diagnostics = diagnostics;
-          return diagnostics;
-        }, Tools.executorService);
+    Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult = check(
+        range, useCache);
+
+    List<LanguageToolRuleMatch> matches = checkingResult.getKey();
+    List<Diagnostic> diagnostics = new ArrayList<>();
+
+    for (LanguageToolRuleMatch match : matches) {
+      diagnostics.add(this.languageServer.getCodeActionGenerator().createDiagnostic(
+          match, this));
+    }
+
+    this.diagnostics = diagnostics;
+    return diagnostics;
   }
 
   public @Nullable List<Diagnostic> getDiagnosticsCache() {
@@ -375,136 +377,104 @@ public class LtexTextDocumentItem extends TextDocumentItem {
     return diagnosticsNotAtCaret;
   }
 
-  public CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>>
-        checkWithCache() {
+  public Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkWithCache()
+        throws InterruptedException, ExecutionException {
     return check(null, true);
   }
 
-  public CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>>
-        checkWithCache(@Nullable Range range) {
+  public Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkWithCache(
+        @Nullable Range range) throws InterruptedException, ExecutionException {
     return check(range, true);
   }
 
-  public CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>>
-        checkWithoutCache() {
+  public Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkWithoutCache()
+        throws InterruptedException, ExecutionException {
     return check(null, false);
   }
 
-  public CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>>
-        checkWithoutCache(@Nullable Range range) {
+  public Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkWithoutCache(
+        @Nullable Range range) throws InterruptedException, ExecutionException {
     return check(range, false);
   }
 
-  private CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>> check(
-        @Nullable Range range, boolean useCache) {
+  private Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> check(
+        @Nullable Range range, boolean useCache) throws InterruptedException, ExecutionException {
     if (useCache && (this.checkingResult != null)) {
-      return CompletableFuture.completedFuture(this.checkingResult);
+      // for suppressing Checker Framework warning
+      Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
+          this.checkingResult;
+      return Pair.of(Collections.unmodifiableList(checkingResult.getKey()),
+          Collections.unmodifiableList(checkingResult.getValue()));
     }
 
     @Nullable LtexLanguageClient languageClient = this.languageServer.getLanguageClient();
+    if (languageClient == null) return Pair.of(Collections.emptyList(), Collections.emptyList());
+    @Nullable Either<String, Integer> progressToken = null;
 
-    if (languageClient == null) {
-      return CompletableFuture.completedFuture(
-          Pair.of(Collections.emptyList(), Collections.emptyList()));
+    try {
+      this.raiseExceptionIfCanceled();
+      this.beingChecked = true;
+      String uri = getUri();
+
+      if (this.languageServer.isClientSupportingWorkDoneProgress()) {
+        JsonObject progressJsonToken = new JsonObject();
+        progressJsonToken.addProperty("uri", uri);
+        progressJsonToken.addProperty("operation", "checkDocument");
+        progressJsonToken.addProperty("uuid", Tools.getRandomUuid());
+        progressToken = Either.forLeft(progressJsonToken.toString());
+
+        languageClient.createProgress(new WorkDoneProgressCreateParams(progressToken)).get();
+
+        this.raiseExceptionIfCanceled();
+        WorkDoneProgressBegin workDoneProgressBegin = new WorkDoneProgressBegin();
+        workDoneProgressBegin.setTitle(Tools.i18n("checkingDocument"));
+        workDoneProgressBegin.setMessage(uri);
+        workDoneProgressBegin.setCancellable(false);
+        languageClient.notifyProgress(new ProgressParams(
+            progressToken, Either.forLeft(workDoneProgressBegin)));
+      }
+
+      ConfigurationItem configurationItem = new ConfigurationItem();
+      configurationItem.setScopeUri(uri);
+      configurationItem.setSection("ltex");
+      ConfigurationParams configurationParams = new ConfigurationParams(
+          Collections.singletonList(configurationItem));
+
+      this.raiseExceptionIfCanceled();
+      List<Object> configurationResult = languageClient.configuration(configurationParams).get();
+
+      this.raiseExceptionIfCanceled();
+      List<@Nullable Object> workspaceSpecificConfigurationResult =
+          ((this.languageServer.isClientSupportingWorkspaceSpecificConfiguration())
+            ? languageClient.ltexWorkspaceSpecificConfiguration(configurationParams).get()
+            : Collections.singletonList(null));
+
+      this.raiseExceptionIfCanceled();
+      JsonElement jsonConfiguration = (JsonElement)configurationResult.get(0);
+
+      @Nullable Object workspaceSpecificConfiguration = workspaceSpecificConfigurationResult.get(0);
+      @Nullable JsonElement jsonWorkspaceSpecificConfiguration =
+          ((workspaceSpecificConfiguration != null)
+            ? (JsonElement)workspaceSpecificConfiguration : null);
+
+      this.raiseExceptionIfCanceled();
+      this.languageServer.getSettingsManager().setSettings(
+          jsonConfiguration, jsonWorkspaceSpecificConfiguration);
+
+      this.raiseExceptionIfCanceled();
+      Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
+          this.languageServer.getDocumentChecker().check(this, range);
+      this.checkingResult = checkingResult;
+
+      return checkingResult;
+    } finally {
+      if ((languageClient != null) && (progressToken != null)) {
+        languageClient.notifyProgress(new ProgressParams(
+            progressToken, Either.forLeft(new WorkDoneProgressEnd())));
+      }
+
+      this.beingChecked = false;
     }
-
-    this.raiseExceptionIfCanceled();
-    this.beingChecked = true;
-
-    String uri = getUri();
-    JsonObject progressJsonToken = new JsonObject();
-    progressJsonToken.addProperty("uri", uri);
-    progressJsonToken.addProperty("operation", "checkDocument");
-    progressJsonToken.addProperty("uuid", Tools.getRandomUuid());
-    Either<String, Integer> progressToken = Either.forLeft(progressJsonToken.toString());
-
-    final CompletableFuture<@Nullable Either<String, Integer>> workDoneProgressCreateFuture =
-        ((this.languageServer.isClientSupportingWorkDoneProgress())
-          ? languageClient.createProgress(new WorkDoneProgressCreateParams(progressToken))
-            .handleAsync((Void voidObject, @Nullable Throwable e) -> {
-              this.raiseExceptionIfCanceled();
-
-              if (e == null) {
-                WorkDoneProgressBegin workDoneProgressBegin = new WorkDoneProgressBegin();
-                workDoneProgressBegin.setTitle(Tools.i18n("checkingDocument"));
-                workDoneProgressBegin.setMessage(uri);
-                workDoneProgressBegin.setCancellable(false);
-                languageClient.notifyProgress(new ProgressParams(
-                    progressToken, Either.forLeft(workDoneProgressBegin)));
-                return progressToken;
-              } else {
-                return null;
-              }
-            }, Tools.executorService)
-          : CompletableFuture.completedFuture(null));
-
-    ConfigurationItem configurationItem = new ConfigurationItem();
-    configurationItem.setScopeUri(uri);
-    configurationItem.setSection("ltex");
-    ConfigurationParams configurationParams = new ConfigurationParams(
-        Collections.singletonList(configurationItem));
-
-    CompletableFuture<List<Object>> intermediateResult1 = workDoneProgressCreateFuture
-        .thenComposeAsync(
-          (@Nullable Either<String, Integer> curProgressToken) -> {
-            this.raiseExceptionIfCanceled();
-
-            return languageClient.configuration(configurationParams);
-          }, Tools.executorService);
-
-    @SuppressWarnings({"assignment.type.incompatible", "return.type.incompatible"})
-    CompletableFuture<Pair<List<Object>, List<@Nullable Object>>> intermediateResult2 =
-        intermediateResult1.thenComposeAsync(
-          (List<Object> configurationResult) -> {
-            this.raiseExceptionIfCanceled();
-
-            return (this.languageServer.isClientSupportingWorkspaceSpecificConfiguration()
-                ? languageClient.ltexWorkspaceSpecificConfiguration(configurationParams)
-                : CompletableFuture.completedFuture(Collections.singletonList(null))).thenApply(
-                  (List<@Nullable Object> workspaceSpecificConfigurationResult) -> {
-                    return Pair.of(configurationResult, workspaceSpecificConfigurationResult);
-                  });
-          }, Tools.executorService);
-
-    CompletableFuture<Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>>>
-        intermediateResult3 = intermediateResult2.thenApplyAsync(
-          (Pair<List<Object>, List<@Nullable Object>> futureArgument) -> {
-            try {
-              this.raiseExceptionIfCanceled();
-
-              List<Object> configurationResult = futureArgument.getKey();
-              JsonElement jsonConfiguration = (JsonElement)configurationResult.get(0);
-
-              List<@Nullable Object> workspaceSpecificConfigurationResult =
-                  futureArgument.getValue();
-              @Nullable Object workspaceSpecificConfiguration =
-                  workspaceSpecificConfigurationResult.get(0);
-              @Nullable JsonElement jsonWorkspaceSpecificConfiguration =
-                  ((workspaceSpecificConfiguration != null)
-                    ? (JsonElement)workspaceSpecificConfiguration : null);
-
-              this.languageServer.getSettingsManager().setSettings(
-                  jsonConfiguration, jsonWorkspaceSpecificConfiguration);
-
-              Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
-                  this.languageServer.getDocumentChecker().check(this, range);
-              this.checkingResult = checkingResult;
-
-              return checkingResult;
-            } finally {
-              @Nullable Either<String, Integer> curProgressToken =
-                  workDoneProgressCreateFuture.join();
-
-              if ((languageClient != null) && (curProgressToken != null)) {
-                languageClient.notifyProgress(new ProgressParams(
-                    curProgressToken, Either.forLeft(new WorkDoneProgressEnd())));
-              }
-
-              this.beingChecked = false;
-            }
-          }, Tools.executorService);
-
-    return intermediateResult3;
   }
 
   public boolean isBeingChecked() {
