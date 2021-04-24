@@ -21,6 +21,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.initialization.qual.NotOnlyInitialized;
 import org.checkerframework.checker.initialization.qual.UnknownInitialization;
@@ -185,6 +188,24 @@ class LtexWorkspaceService implements WorkspaceService {
       // do nothing
     }
 
+    Future<Boolean> singleThreadTestFuture =
+        this.languageServer.getSingleThreadExecutorService().submit(() -> true);
+    boolean isChecking = true;
+
+    try {
+      if (singleThreadTestFuture.get(10, TimeUnit.MILLISECONDS)) isChecking = false;
+    } catch (InterruptedException | ExecutionException | TimeoutException e) {
+      // do nothing
+    }
+
+    @Nullable String documentUriBeingChecked = null;
+
+    if (isChecking) {
+      @Nullable LtexTextDocumentItem documentBeingChecked =
+          this.languageServer.getDocumentChecker().getLastCheckedDocument();
+      if (documentBeingChecked != null) documentUriBeingChecked = documentBeingChecked.getUri();
+    }
+
     JsonObject jsonObject = new JsonObject();
     jsonObject.addProperty("success", true);
     jsonObject.addProperty("processId", processId);
@@ -193,6 +214,11 @@ class LtexWorkspaceService implements WorkspaceService {
     if (cpuDuration != null) jsonObject.addProperty("cpuDuration", cpuDuration);
     jsonObject.addProperty("usedMemory", usedMemory);
     jsonObject.addProperty("totalMemory", totalMemory);
+    jsonObject.addProperty("isChecking", isChecking);
+
+    if (documentUriBeingChecked != null) {
+      jsonObject.addProperty("documentUriBeingChecked", documentUriBeingChecked);
+    }
 
     return CompletableFuture.completedFuture(jsonObject);
   }

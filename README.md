@@ -231,7 +231,7 @@ type CheckDocumentCommandResult = ServerCommandResult;
 
 ### `_ltex.getServerStatus` (Server)
 
-`_ltex.getServerStatus` is executed by the server to return information about the current resource consumption of LT<sub>E</sub>X LS. Some information might not be available. Executions of `_ltex.getServerStatus` can only be handled if LT<sub>E</sub>X LS is not currently busy (e.g., checking a document).
+`_ltex.getServerStatus` is executed by the server to return information about the current resource consumption of LT<sub>E</sub>X LS. Some information might not be available.
 
 ```typescript
 type GetServerStatusCommandParams = null;
@@ -266,6 +266,17 @@ interface GetServerStatusCommandResult extends ServerCommandResult {
    * Total memory in bytes currently taken by the JVM.
    */
   totalMemory: number;
+
+  /**
+   * Whether LTeX LS is currently busy checking text.
+   */
+  isChecking: boolean;
+
+  /**
+   * URI of the document currently being checked.
+   * This field may still be missing even if `isChecking` is true.
+   */
+  documentUriBeingChecked?: string;
 }
 ```
 

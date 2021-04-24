@@ -33,9 +33,11 @@ import org.languagetool.markup.TextPart;
 
 public class DocumentChecker {
   private SettingsManager settingsManager;
+  private @Nullable LtexTextDocumentItem lastCheckedDocument;
 
   public DocumentChecker(SettingsManager settingsManager) {
     this.settingsManager = settingsManager;
+    this.lastCheckedDocument = null;
   }
 
   private List<CodeFragment> fragmentizeDocument(
@@ -203,6 +205,7 @@ public class DocumentChecker {
 
   public Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> check(
         LtexTextDocumentItem document, @Nullable Range range) {
+    this.lastCheckedDocument = document;
     Settings originalSettings = this.settingsManager.getSettings();
     int rangeOffset = ((range == null) ? 0 : document.convertPosition(range.getStart()));
 
@@ -216,5 +219,9 @@ public class DocumentChecker {
     } finally {
       this.settingsManager.setSettings(originalSettings);
     }
+  }
+
+  public @Nullable LtexTextDocumentItem getLastCheckedDocument() {
+    return this.lastCheckedDocument;
   }
 }
