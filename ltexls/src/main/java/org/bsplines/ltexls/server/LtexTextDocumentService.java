@@ -177,14 +177,12 @@ public class LtexTextDocumentService implements TextDocumentService {
 
     if (this.languageServer.getSettingsManager().getSettings()
           .getClearDiagnosticsWhenClosingFile()) {
-      this.languageServer.getSingleThreadExecutorService().execute(() -> {
-        @Nullable LanguageClient languageClient = this.languageServer.getLanguageClient();
+      @Nullable LanguageClient languageClient = this.languageServer.getLanguageClient();
 
-        if (languageClient != null) {
-          languageClient.publishDiagnostics(
-              new PublishDiagnosticsParams(uri, Collections.emptyList()));
-        }
-      });
+      if (languageClient != null) {
+        languageClient.publishDiagnostics(new PublishDiagnosticsParams(
+            uri, Collections.emptyList()));
+      }
     }
   }
 
