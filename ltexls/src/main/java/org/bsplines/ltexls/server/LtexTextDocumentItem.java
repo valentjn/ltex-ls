@@ -484,8 +484,10 @@ public class LtexTextDocumentItem extends TextDocumentItem {
   public void raiseExceptionIfCanceled() {
     if ((this.lspCancelChecker != null) && this.lspCancelChecker.isCanceled()) {
       this.lspCancelChecker = null;
+      Tools.logger.fine(Tools.i18n("cancelingCheckDueToLspCancelNotification"));
     } else if (this.cancellationCounter > 0) {
       this.cancellationCounter--;
+      Tools.logger.fine(Tools.i18n("cancelingCheckDueToIncomingCheckRequest"));
     } else {
       return;
     }
