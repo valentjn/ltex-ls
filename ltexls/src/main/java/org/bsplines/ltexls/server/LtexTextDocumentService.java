@@ -155,8 +155,6 @@ public class LtexTextDocumentService implements TextDocumentService {
 
     if ((this.languageServer.getSettingsManager().getSettings().getCheckFrequency()
             != CheckFrequency.MANUAL)) {
-      if (document.isBeingChecked()) document.cancelCheck();
-
       this.languageServer.getSingleThreadExecutorService().execute(() -> {
         try {
           document.checkAndPublishDiagnosticsWithoutCache();
@@ -179,8 +177,6 @@ public class LtexTextDocumentService implements TextDocumentService {
 
     if (this.languageServer.getSettingsManager().getSettings()
           .getClearDiagnosticsWhenClosingFile()) {
-      if (document.isBeingChecked()) document.cancelCheck();
-
       this.languageServer.getSingleThreadExecutorService().execute(() -> {
         @Nullable LanguageClient languageClient = this.languageServer.getLanguageClient();
 
@@ -255,8 +251,6 @@ public class LtexTextDocumentService implements TextDocumentService {
       Tools.logger.warning(Tools.i18n("couldNotFindDocumentWithUri", uri));
       return CompletableFuture.completedFuture(Collections.emptyList());
     }
-
-    if (document.isBeingChecked()) document.cancelCheck();
 
     return CompletableFutures.computeAsync(this.languageServer.getSingleThreadExecutorService(),
         (CancelChecker lspCancelChecker) -> {
