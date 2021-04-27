@@ -57,7 +57,8 @@ public class AnnotatedTextFragment {
           Collections.emptyMap(), Collections.emptyMap());
     }
 
-    return this.plainText.substring(this.inverseAnnotatedText.getOriginalTextPositionFor(fromPos),
-      this.inverseAnnotatedText.getOriginalTextPositionFor(toPos));
+    return this.plainText.substring(
+        this.inverseAnnotatedText.getOriginalTextPositionFor(fromPos, true),
+        this.inverseAnnotatedText.getOriginalTextPositionFor(toPos, true));
   }
 }

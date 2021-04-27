@@ -169,6 +169,17 @@ public class DocumentCheckerTest {
         annotatedTextFragments.get(3).getCodeFragment().getCode());
     Assertions.assertEquals("Dies ist ein Qwertyzuiopc. ",
         annotatedTextFragments.get(3).getAnnotatedText().getPlainText());
+
+    document = createDocument("latex", "The \\v{S}ekki\n");
+    checkingResult = checkDocument(document);
+    matches = checkingResult.getKey();
+    annotatedTextFragments = checkingResult.getValue();
+
+    Assertions.assertEquals(1, matches.size());
+    Assertions.assertEquals(1, annotatedTextFragments.size());
+    String word = annotatedTextFragments.get(0).getSubstringOfPlainText(
+        matches.get(0).getFromPos(), matches.get(0).getToPos());
+    Assertions.assertEquals("\u0160ekki", word);
   }
 
   @Test

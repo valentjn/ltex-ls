@@ -197,9 +197,19 @@ public class LatexAnnotatedTextBuilderTest {
 
     {
       AnnotatedText annotatedText = buildAnnotatedText("\\cite{Kubota}*{Theorem 3.7}\n");
-      int start = annotatedText.getOriginalTextPositionFor(5);
-      int end = annotatedText.getOriginalTextPositionFor(8 - 1) + 1;
+      int start = annotatedText.getOriginalTextPositionFor(5, false);
+      int end = annotatedText.getOriginalTextPositionFor(8, true);
       Assertions.assertTrue(start < end, start + " not smaller than " + end);
+    }
+
+    {
+      AnnotatedText annotatedText = buildAnnotatedText("\\v{S}ekki\n");
+      Assertions.assertEquals(0, annotatedText.getOriginalTextPositionFor(0, false));
+      Assertions.assertEquals(5, annotatedText.getOriginalTextPositionFor(0, true));
+      Assertions.assertEquals(5, annotatedText.getOriginalTextPositionFor(1, false));
+      Assertions.assertEquals(6, annotatedText.getOriginalTextPositionFor(2, false));
+      Assertions.assertEquals(7, annotatedText.getOriginalTextPositionFor(3, false));
+      Assertions.assertEquals(8, annotatedText.getOriginalTextPositionFor(4, false));
     }
   }
 
@@ -311,8 +321,8 @@ public class LatexAnnotatedTextBuilderTest {
           + "  \\scalebox{0.92}{$a$}.\n"
           + "\\end{equation}\n"
           + "This is a sentence.\n");
-      int start = annotatedText.getOriginalTextPositionFor(29);
-      int end = annotatedText.getOriginalTextPositionFor(31 - 1) + 1;
+      int start = annotatedText.getOriginalTextPositionFor(29, false);
+      int end = annotatedText.getOriginalTextPositionFor(31, true);
       Assertions.assertTrue(start < end, start + " not smaller than " + end);
     }
 
@@ -322,8 +332,8 @@ public class LatexAnnotatedTextBuilderTest {
           + "\\begin{equation*}\n"
           + "  a \\text{,~and} b.\n"
           + "\\end{equation*}\n");
-      int start = annotatedText.getOriginalTextPositionFor(22);
-      int end = annotatedText.getOriginalTextPositionFor(24 - 1) + 1;
+      int start = annotatedText.getOriginalTextPositionFor(22, false);
+      int end = annotatedText.getOriginalTextPositionFor(24, true);
       Assertions.assertTrue(start < end, start + " not smaller than " + end);
     }
 
@@ -332,8 +342,8 @@ public class LatexAnnotatedTextBuilderTest {
           "abc. Let $$\\footnote{$a$.}$$\n"
           + "\n"
           + "abc\n");
-      int start = annotatedText.getOriginalTextPositionFor(16);
-      int end = annotatedText.getOriginalTextPositionFor(18 - 1) + 1;
+      int start = annotatedText.getOriginalTextPositionFor(16, false);
+      int end = annotatedText.getOriginalTextPositionFor(18, true);
       Assertions.assertTrue(start < end, start + " not smaller than " + end);
     }
   }

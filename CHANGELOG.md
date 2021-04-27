@@ -15,6 +15,7 @@
 - Limit number of `Use ...` quick fixes to 5 (see [vscode-ltex#297](https://github.com/valentjn/vscode-ltex/issues/297))
 - Add `isChecking` and `documentUriBeingChecked` fields to result of `_ltex.getServerStatus`
 - Add support for `\phantom`, `\hphantom`, and `\vphantom` (L<sup>A</sup>T<sub>E</sub>X)
+- Fix wrong underlining of words starting with markup (fixes [#69](https://github.com/valentjn/ltex-ls/issues/69))
 
 ## 12.0.0 (April 18, 2021)
 

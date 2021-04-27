@@ -167,9 +167,10 @@ public class AnnotatedText {
    * Internally used by LanguageTool to adjust error positions to point to the
    * original location with markup, even though markup was ignored during text checking.
    * @param plainTextPosition the position in the plain text (no markup) that was checked
+   * @param isToPos the from/to position needed
    * @return an adjusted position of the same location in the text with markup
    */
-  public int getOriginalTextPositionFor(int plainTextPosition) {
+  public int getOriginalTextPositionFor(int plainTextPosition, boolean isToPos) {
     if (plainTextPosition < 0) {
       throw new IllegalArgumentException("plainTextPosition must be >= 0: " + plainTextPosition);
     } else if (mapping.isEmpty()) {
@@ -184,28 +185,33 @@ public class AnnotatedText {
     if (i <= 0) i = 1;
     if (i >= mapping.size()) i = mapping.size() - 1;
 
+    if (isToPos) {
+      while ((i < mapping.size() - 1) && (mapping.get(i + 1).getKey() <= plainTextPosition)) i++;
+    } else {
+      while ((i > 1) && (mapping.get(i - 1).getKey() >= plainTextPosition)) i--;
+    }
+
     Map.Entry<Integer, Integer> lowerNeighbor = mapping.get(i - 1);
     Map.Entry<Integer, Integer> upperNeighbor = mapping.get(i);
 
-    if (lowerNeighbor.getKey() == plainTextPosition) {
-      return lowerNeighbor.getValue();
+    if (!isToPos) {
+      if (lowerNeighbor.getKey() == plainTextPosition) {
+        return lowerNeighbor.getValue();
+      } else if (upperNeighbor.getKey() == plainTextPosition) {
+        return upperNeighbor.getValue();
+      }
     } else {
-      float t = (float)(plainTextPosition - lowerNeighbor.getKey()) /
-          (float)(upperNeighbor.getKey() - lowerNeighbor.getKey());
-      int result = Math.round((1 - t) * lowerNeighbor.getValue() + t * upperNeighbor.getValue());
-      return result;
+      if (upperNeighbor.getKey() == plainTextPosition) {
+        return upperNeighbor.getValue();
+      } else if (lowerNeighbor.getKey() == plainTextPosition) {
+        return lowerNeighbor.getValue();
+      }
     }
-  }
 
-  /**
-   * Internally used by LanguageTool to adjust error positions to point to the
-   * original location with markup, even though markup was ignored during text checking.
-   * @param plainTextPosition the position in the plain text (no markup) that was checked
-   * @param isToPos the from/to position needed (ignored)
-   * @return an adjusted position of the same location in the text with markup
-   */
-  public int getOriginalTextPositionFor(int plainTextPosition, boolean isToPos) {
-    return getOriginalTextPositionFor(plainTextPosition);
+    float t = (float)(plainTextPosition - lowerNeighbor.getKey()) /
+        (float)(upperNeighbor.getKey() - lowerNeighbor.getKey());
+    int result = Math.round((1 - t) * lowerNeighbor.getValue() + t * upperNeighbor.getValue());
+    return result;
   }
 
   /**
