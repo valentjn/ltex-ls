@@ -98,7 +98,7 @@ See the website of vscode-ltex for a [list of all supported settings](https://va
 
 Note that some settings listed on the linked page are client-specific and do not affect LT<sub>E</sub>X LS.
 
-## Quickfixes
+## Quick fixes
 
 - `quickfix.ltex.acceptSuggestions`: Replace the text of the diagnostic with the specified suggestion.
 - `quickfix.ltex.addToDictionary`: Trigger the `_ltex.addToDictionary` command.
