@@ -370,6 +370,7 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\glsxtrnewsymbol{}{}"));
     list.add(new LatexCommandSignature("\\glsxtrnewsymbol[]{}{}"));
     list.add(new LatexCommandSignature("\\graphicspath{}"));
+    list.add(new LatexCommandSignature("\\hphantom{}"));
     list.add(new LatexCommandSignature("\\href{}{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\hyperref[]"));
     list.add(new LatexCommandSignature("\\hypersetup{}"));
@@ -490,6 +491,7 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\pgfdeclaredecoration{}{}{}"));
     list.add(new LatexCommandSignature("\\pgfmathsetmacro{}{}"));
     list.add(new LatexCommandSignature("\\pgfmathsetseed{}"));
+    list.add(new LatexCommandSignature("\\phantom{}"));
     list.add(new LatexCommandSignature("\\printacronyms[]"));
     list.add(new LatexCommandSignature("\\printbibliography[]"));
     list.add(new LatexCommandSignature("\\printglossary[]"));
@@ -624,6 +626,7 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\usepackage[]{}"));
     list.add(new LatexCommandSignature("\\usetikzlibrary{}"));
     list.add(new LatexCommandSignature("\\value{}"));
+    list.add(new LatexCommandSignature("\\vphantom{}"));
     list.add(new LatexCommandSignature("\\vspace{}"));
     list.add(new LatexCommandSignature("\\vspace*{}"));
     list.add(new LatexCommandSignature("\\WarningFilter{}{}"));
