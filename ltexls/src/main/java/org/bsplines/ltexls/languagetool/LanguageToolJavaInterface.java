@@ -24,6 +24,7 @@ import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.languagetool.AnalyzedSentence;
 import org.languagetool.AnalyzedTokenReadings;
@@ -123,7 +124,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
     }
 
     @SuppressWarnings("assignment.type.incompatible")
-    RuleMatchListener ruleMatchListener = null;
+    @NonNull RuleMatchListener ruleMatchListener = null;
     JLanguageTool.Level ruleLevel = (
         annotatedTextFragment.getCodeFragment().getSettings().getEnablePickyRules()
         ? JLanguageTool.Level.PICKY : JLanguageTool.Level.DEFAULT);
