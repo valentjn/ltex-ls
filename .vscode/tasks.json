@@ -4,7 +4,9 @@
     {
       "label": "Incremental Compile",
       "type": "shell",
-      "command": "python tools/removeOutdatedClassFiles.py && mvn -f ltexls/pom.xml -Dmaven.test.skip=true compile && mvn -f ltexls/pom.xml jar:jar appassembler:assemble antrun:run@patch-bin-scripts",
+      // need quotes around '-Dmaven.test.skip=true' on Windows PowerShell due to
+      // https://stackoverflow.com/a/6351739
+      "command": "python tools/removeOutdatedClassFiles.py && mvn -f ltexls/pom.xml '-Dmaven.test.skip=true' compile && mvn -f ltexls/pom.xml jar:jar appassembler:assemble antrun:run@patch-bin-scripts",
       "group": {
         "kind": "build",
         "isDefault": true,
