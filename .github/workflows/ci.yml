@@ -120,14 +120,8 @@ jobs:
       - name: "Install Python Dependencies"
         run: "python -m pip install --upgrade pip && pip install semver==2.13.0"
 
-      - name: "Build ltexls-languagetool-patch"
-        run: "mvn -B -e -f ltexls-languagetool-patch/pom.xml install"
-
-      - name: "Build ltexls"
-        run: "mvn -B -e -f ltexls/pom.xml package"
-
       - name: "Set LTEX_LS_VERSION"
-        run: "ltexls/target/appassembler/bin/ltex-ls --version > ltexLsVersion.json && echo \"LTEX_LS_VERSION=$(python -c \"import json; print(json.load(open('ltexLsVersion.json'))['ltex-ls'], end='')\")\" >> $GITHUB_ENV && rm ltexLsVersion.json"
+        run: "echo \"LTEX_LS_VERSION=$(python -c \"import re; print(re.search(r'<version>(.*?)</version>', open('ltexls/pom.xml', 'r').read()).group(1), end='')\")\" >> $GITHUB_ENV"
 
       - name: "Check LTEX_LS_VERSION"
         run: "if [[ -z \"$LTEX_LS_VERSION\" ]]; then echo 'Error: LTEX_LS_VERSION not set!'; (exit 1); fi; echo \"LTEX_LS_VERSION set to '$LTEX_LS_VERSION'\""
@@ -138,21 +132,22 @@ jobs:
       - name: "Check LTEX_LS_IS_PRERELEASE"
         run: "if [[ -z \"$LTEX_LS_IS_PRERELEASE\" ]]; then echo 'Error: LTEX_LS_IS_PRERELEASE not set!'; (exit 1); fi; echo \"LTEX_LS_IS_PRERELEASE set to '$LTEX_LS_IS_PRERELEASE'\""
 
+      - name: "Set LTEX_LS_CHANGELOG"
+        run: "if [ \"$LTEX_LS_IS_PRERELEASE\" = \"false\" ]; then echo \"LTEX_LS_CHANGELOG=$(python -c \"import re; print(re.search(r'\n## .*\n\n((?:.|\n)*?)\n\n## ', open('CHANGELOG.md', 'r').read()).group(1), end='')\")\" >> $GITHUB_ENV; else echo \"LTEX_LS_CHANGELOG=This is an unfinished pre-release. Use at your own risk.\" >> $GITHUB_ENV; fi"
+
+      - name: "Build ltexls-languagetool-patch"
+        run: "mvn -B -e -f ltexls-languagetool-patch/pom.xml install"
+
+      - name: "Build ltexls"
+        run: "mvn -B -e -f ltexls/pom.xml package"
+
       - name: "Create GitHub Release"
-        id: "create_github_release"
-        uses: "actions/create-release@v1"
+        uses: "softprops/action-gh-release@v1"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
           tag_name: "${{ github.ref }}"
+          name: "${{ github.ref }}"
           prerelease: "${{ env.LTEX_LS_IS_PRERELEASE }}"
-
-      - name: "Upload Asset to GitHub Release"
-        uses: "actions/upload-release-asset@v1"
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-        with:
-          asset_content_type: "application/gzip"
-          asset_name: "ltex-ls-${{ env.LTEX_LS_VERSION }}.tar.gz"
-          asset_path: "ltexls/target/ltex-ls-${{ env.LTEX_LS_VERSION }}.tar.gz"
-          upload_url: "${{ steps.create_github_release.outputs.upload_url }}"
+          body: "${{ env.LTEX_LS_CHANGELOG }}"
+          files: "ltexls/target/ltex-ls-${{ env.LTEX_LS_VERSION }}.tar.gz"
