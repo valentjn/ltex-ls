@@ -1,0 +1,70 @@
+# Copyright (C) 2020 Julian Valentin, LTeX Development Community
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+name: "Nightly"
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: "Nightly - Deploy Job"
+    runs-on: "ubuntu-20.04"
+
+    steps:
+      - name: "Checkout Repository"
+        uses: "actions/checkout@v2"
+
+      - name: "Set up Java"
+        uses: "actions/setup-java@v1"
+        with:
+          java-version: "11.0.9"
+
+      - name: "Set up Python"
+        uses: "actions/setup-python@v2"
+        with:
+          python-version: "3.9.0"
+
+      - name: "Install Python Dependencies"
+        run: "python -m pip install --upgrade pip && pip install semver==2.13.0"
+
+      - name: "Set LTEX_LS_VERSION"
+        run: "echo \"LTEX_LS_VERSION=$(python -c \"import datetime; import re; print('{}.nightly.{}'.format(re.search(r'<version>(.*?)(?:\\\\.develop)?</version>', open('ltexls/pom.xml', 'r').read()).group(1), datetime.datetime.today().strftime('%Y-%m-%d')), end='')\")\" >> $GITHUB_ENV"
+
+      - name: "Check LTEX_LS_VERSION"
+        run: "if [[ -z \"$LTEX_LS_VERSION\" ]]; then echo 'Error: LTEX_LS_VERSION not set!'; (exit 1); fi; echo \"LTEX_LS_VERSION set to '$LTEX_LS_VERSION'\""
+
+      - name: "Bump Version"
+        run: "python -c \"import re\nfor filePath in ['ltexls/pom.xml', 'ltexls-languagetool-patch/pom.xml']: file = open(filePath, 'r+'); pom = file.read(); file.seek(0); file.truncate(); file.write(re.sub(r'<version>(.*?)</version>', '<version>${{ env.LTEX_LS_VERSION }}</version>', pom, 1))\""
+
+      - name: "Build ltexls-languagetool-patch"
+        run: "mvn -B -e -f ltexls-languagetool-patch/pom.xml install"
+
+      - name: "Build ltexls"
+        run: "mvn -B -e -f ltexls/pom.xml package"
+
+      - name: "Delete Old Nightly Releases"
+        uses: "dev-drprasad/delete-older-releases@v0.2.0"
+        with:
+          keep_latest: 0
+          delete_tag_pattern: "nightly"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: "Update Nightly Tag"
+        run: "git tag -f nightly && git push -f origin nightly"
+
+      - name: "Create GitHub Release"
+        uses: "softprops/action-gh-release@v1"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        with:
+          tag_name: "nightly"
+          name: "${{ env.LTEX_LS_VERSION }}"
+          prerelease:  true
+          body: "This is an unfinished nightly build. Use at your own risk."
+          files: "ltexls/target/ltex-ls-${{ env.LTEX_LS_VERSION }}.tar.gz"
