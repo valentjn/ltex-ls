@@ -146,8 +146,6 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
-          tag_name: "${{ github.ref }}"
-          name: "${{ github.ref }}"
           prerelease: "${{ env.LTEX_LS_IS_PRERELEASE }}"
           body: "${{ env.LTEX_LS_CHANGELOG }}"
           files: "ltexls/target/ltex-ls-${{ env.LTEX_LS_VERSION }}.tar.gz"
