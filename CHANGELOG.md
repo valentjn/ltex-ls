@@ -8,7 +8,7 @@
 
 # Changelog
 
-## 12.1.0 (upcoming)
+## 12.1.0 (May 1, 2021)
 
 - Add support for cancellation of checking requests (fixes [vscode-ltex#253](https://github.com/valentjn/vscode-ltex/issues/253))
 - Show `Use ...` quick fixes before other quick fixes (fixes [vscode-ltex#297](https://github.com/valentjn/vscode-ltex/issues/297))
