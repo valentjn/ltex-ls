@@ -133,7 +133,7 @@ jobs:
         run: "if [[ -z \"$LTEX_LS_IS_PRERELEASE\" ]]; then echo 'Error: LTEX_LS_IS_PRERELEASE not set!'; (exit 1); fi; echo \"LTEX_LS_IS_PRERELEASE set to '$LTEX_LS_IS_PRERELEASE'\""
 
       - name: "Set LTEX_LS_CHANGELOG"
-        run: "if [ \"$LTEX_LS_IS_PRERELEASE\" = \"false\" ]; then echo \"LTEX_LS_CHANGELOG=$(python -c \"import re; print(re.search(r'\n## .*\n\n((?:.|\n)*?)\n\n## ', open('CHANGELOG.md', 'r').read()).group(1), end='')\")\" >> $GITHUB_ENV; else echo \"LTEX_LS_CHANGELOG=This is an unfinished pre-release. Use at your own risk.\" >> $GITHUB_ENV; fi"
+        run: "if [ \"$LTEX_LS_IS_PRERELEASE\" = \"false\" ]; then echo \"LTEX_LS_CHANGELOG<<EOF\" >> $GITHUB_ENV; python -c \"import re; print(re.search(r'\\n## .*\\n\\n((?:.|\\n)*?)\\n\\n## ', open('CHANGELOG.md', 'r').read()).group(1))\" >> $GITHUB_ENV; echo \"EOF\" >> $GITHUB_ENV; else echo \"LTEX_LS_CHANGELOG=This is an unfinished pre-release. Use at your own risk.\" >> $GITHUB_ENV; fi"
 
       - name: "Build ltexls-languagetool-patch"
         run: "mvn -B -e -f ltexls-languagetool-patch/pom.xml install"
