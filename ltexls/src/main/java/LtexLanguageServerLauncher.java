@@ -5,9 +5,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -23,6 +20,7 @@ import java.util.concurrent.Future;
 import org.bsplines.ltexls.client.LtexLanguageClient;
 import org.bsplines.ltexls.server.LtexLanguageServer;
 import org.bsplines.ltexls.tools.Tools;
+import org.bsplines.ltexls.tools.VersionProvider;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.framework.qual.DefaultQualifier;
@@ -35,28 +33,9 @@ import picocli.CommandLine.Option;
 
 @DefaultQualifier(NonNull.class)
 @Command(name = "ltex-ls", mixinStandardHelpOptions = true, showDefaultValues = true,
-    versionProvider = LtexLanguageServerLauncher.VersionProvider.class,
+    versionProvider = VersionProvider.class,
     description = "LTeX LS - LTeX Language Server")
 public class LtexLanguageServerLauncher implements Callable<Integer> {
-  public static class VersionProvider implements CommandLine.IVersionProvider {
-    @Override
-    public String[] getVersion() throws Exception {
-      @Nullable Package ltexLsPackage = LtexLanguageServer.class.getPackage();
-      JsonObject jsonObject = new JsonObject();
-
-      if (ltexLsPackage != null) {
-        @Nullable String ltexLsVersion = ltexLsPackage.getImplementationVersion();
-        if (ltexLsVersion != null) jsonObject.addProperty("ltex-ls", ltexLsVersion);
-      }
-
-      @Nullable String javaVersion = System.getProperty("java.version");
-      if (javaVersion != null) jsonObject.addProperty("java", javaVersion);
-
-      Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
-      return new String[]{gsonBuilder.toJson(jsonObject)};
-    }
-  }
-
   private enum ServerType {
     standardStream,
     tcpSocket,
