@@ -102,6 +102,23 @@
       <version>9+181-r4173-1</version>
     </dependency>
     <dependency>
+      <groupId>org.graalvm.sdk</groupId>
+      <artifactId>graal-sdk</artifactId>
+      <version>21.1.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.graalvm.nativeimage</groupId>
+      <artifactId>svm</artifactId>
+      <version>21.1.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.cloud</groupId>
+      <artifactId>google-cloud-graalvm-support</artifactId>
+      <version>0.4.0</version>
+    </dependency>
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <version>5.7.1</version>
@@ -187,9 +204,15 @@
               <artifactId>checker</artifactId>
               <version>3.4.1</version>
             </path>
+            <path>
+              <groupId>info.picocli</groupId>
+              <artifactId>picocli-codegen</artifactId>
+              <version>4.6.1</version>
+            </path>
           </annotationProcessorPaths>
           <annotationProcessors>
             <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
+            <annotationProcessor>picocli.codegen.aot.graalvm.processor.NativeImageConfigGeneratorProcessor</annotationProcessor>
           </annotationProcessors>
           <compilerArgs>
             <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
@@ -262,6 +285,24 @@
               <mainClass>LtexLanguageServerLauncher</mainClass>
             </manifest>
           </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.graalvm.nativeimage</groupId>
+        <artifactId>native-image-maven-plugin</artifactId>
+        <version>21.1.0</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>native-image</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <imageName>ltex-ls</imageName>
+          <!--<buildArgs>- -initialize-at-build-time=org.slf4j.simple.SimpleLogger,org.slf4j.LoggerFactory -H:+ReportExceptionStackTraces</buildArgs>-->
+          <buildArgs>--no-server -J-Xmx8G -H:+TraceClassInitialization -H:IncludeResources=.*/resources?/.* --initialize-at-build-time=org.slf4j.LoggerFactory --initialize-at-build-time=org.slf4j.helpers.Util --initialize-at-build-time=org.slf4j.impl.StaticLoggerBinder --initialize-at-build-time=org.slf4j.helpers.SubstituteLoggerFactory --initialize-at-build-time=org.slf4j.helpers.NOPLoggerFactory</buildArgs>
         </configuration>
       </plugin>
       <plugin>

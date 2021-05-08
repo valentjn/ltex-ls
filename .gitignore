@@ -9,6 +9,7 @@
 /.vscode/settings.json
 
 /ltexls/.classpath
+/ltexls/.factorypath
 /ltexls/.project
 /ltexls/*.jar
 

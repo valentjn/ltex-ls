@@ -5,6 +5,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import com.oracle.svm.core.annotate.Substitute;
+import com.oracle.svm.core.annotate.TargetClass;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,6 +19,10 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.impl.LogFactoryImpl;
+import org.apache.commons.logging.impl.SimpleLog;
 import org.bsplines.ltexls.client.LtexLanguageClient;
 import org.bsplines.ltexls.server.LtexLanguageServer;
 import org.bsplines.ltexls.tools.Tools;
@@ -30,6 +36,26 @@ import org.eclipse.lsp4j.services.LanguageClient;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
+
+@SuppressWarnings("unused")
+@TargetClass(LogFactory.class)
+final class LogFactorySubstituted {
+    @Substitute
+    protected static LogFactory newFactory(final String factoryClass,
+                                           final ClassLoader classLoader,
+                                           final ClassLoader contextClassLoader) {
+        return new LogFactoryImpl();
+    }
+}
+
+@SuppressWarnings("unused")
+@TargetClass(LogFactoryImpl.class)
+final class LogFactoryImplSubstituted {
+    @Substitute
+    private Log discoverLogImplementation(String logCategory) {
+        return new SimpleLog(logCategory);
+    }
+}
 
 @DefaultQualifier(NonNull.class)
 @Command(name = "ltex-ls", mixinStandardHelpOptions = true, showDefaultValues = true,
