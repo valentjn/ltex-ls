@@ -54,19 +54,20 @@ In order to use LT<sub>E</sub>X LS, you need a language client. For some editors
 ## Requirements
 
 - 64-bit operating system
-- Java 11 or later
 - Language client supporting LSP 3.15 or later
 
 ## Installation
 
 1. Download the [latest release](https://github.com/valentjn/ltex-ls/releases/latest) from GitHub.
+   - It's recommended that you choose the archive corresponding to your platform (these archives are standalone, no Java installation necessary).
+   - If you choose the platform-independent file `ltex-ls-VERSION.tar.gz`, then you need Java 11 or later on your computer.
 2. Extract the archive to an arbitrary location on your computer.
 
 ## Startup
 
 It is recommended to use the startup scripts `bin/ltex-ls` (Linux, Mac) and `bin\ltex-ls.bat` (Windows) to start LT<sub>E</sub>X LS. These scripts are only part of the released versions. The startup scripts can be controlled by the following environment variables:
 
-- `JAVA_HOME`: Path to the directory of the JRE or JDK to use (contains `bin`, `lib`, and other subdirectories)
+- `JAVA_HOME`: Path to the directory of the JRE or JDK to use (contains `bin`, `lib`, and other subdirectories). If set, this overrides the included Java distribution when using a platform-dependent LT<sub>E</sub>X LS archive.
 - `JAVA_OPTS`: Java arguments to be fed to `java` (e.g., `-Xmx1024m`)
 
 You can also start LT<sub>E</sub>X LS directly without the startup scripts (not recommended). In this case, make sure that when supplying all JAR files in the `lib` directory to Java's class path, `ltexls-languagetool-patch-LTEXLSVERSION.jar` is listed as the first JAR file (where `LTEXLSVERSION` is the version of LT<sub>E</sub>X LS; Java's class path does not support wildcards in the middle of filenames). It does not suffice to supply `lib/*` to the class path, as the order in which the JAR files are included in wildcards is not specified by Java, so this will fail randomly. The startup scripts take care of this peculiarity.

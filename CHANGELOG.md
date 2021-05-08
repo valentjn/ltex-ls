@@ -8,6 +8,10 @@
 
 # Changelog
 
+## 12.2.0 (upcoming)
+
+- Bundle Java for platform-dependent, standalone archives (see [#70](https://github.com/valentjn/ltex-ls/issues/70))
+
 ## 12.1.0 (May 1, 2021)
 
 - Add support for cancellation of checking requests (fixes [vscode-ltex#253](https://github.com/valentjn/vscode-ltex/issues/253))

@@ -141,6 +141,9 @@ jobs:
       - name: "Build ltexls"
         run: "mvn -B -e -f ltexls/pom.xml package"
 
+      - name: "Create Binary Archives"
+        run: "python tools/createBinaryArchives.py"
+
       - name: "Create GitHub Release"
         uses: "softprops/action-gh-release@v1"
         env:
@@ -148,4 +151,4 @@ jobs:
         with:
           prerelease: "${{ env.LTEX_LS_IS_PRERELEASE }}"
           body: "${{ env.LTEX_LS_CHANGELOG }}"
-          files: "ltexls/target/ltex-ls-${{ env.LTEX_LS_VERSION }}.tar.gz"
+          files: "ltexls/target/ltex-ls-${{ env.LTEX_LS_VERSION }}.tar.gz\nltexls/target/ltex-ls-${{ env.LTEX_LS_VERSION }}-linux-x64.tar.gz\nltexls/target/ltex-ls-${{ env.LTEX_LS_VERSION }}-mac-x64.tar.gz\nltexls/target/ltex-ls-${{ env.LTEX_LS_VERSION }}-windows-x64.zip"
