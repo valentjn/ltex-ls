@@ -47,6 +47,9 @@ jobs:
       - name: "Build ltexls"
         run: "mvn -B -e -f ltexls/pom.xml package"
 
+      - name: "Create Binary Archives"
+        run: "python tools/createBinaryArchives.py"
+
       - name: "Delete Old Nightly Releases"
         uses: "dev-drprasad/delete-older-releases@v0.2.0"
         with:
