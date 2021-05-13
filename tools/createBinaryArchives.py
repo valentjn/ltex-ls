@@ -27,7 +27,7 @@ def createBinaryArchive(platform: str, arch: str) -> None:
     with tarfile.open(ltexLsArchivePath, "r:gz") as tarFile: tarFile.extractall(path=tmpDirPath)
 
     ltexLsDirPath = tmpDirPath.joinpath(f"ltex-ls-{ltexLsVersion}")
-    javaDirName = downloadJava(ltexLsDirPath, platform, arch)
+    relativeJavaDirPath = downloadJava(ltexLsDirPath, platform, arch)
 
     print("Setting default for JAVA_HOME in startup script...")
 
@@ -43,9 +43,9 @@ def createBinaryArchive(platform: str, arch: str) -> None:
     with open(binScriptPath, "r") as file: binScript = file.read()
 
     if platform == "windows":
-      insertStr = f"\r\nif not defined JAVA_HOME set JAVA_HOME=\"%BASEDIR%\\{javaDirName}\""
+      insertStr = f"\r\nif not defined JAVA_HOME set JAVA_HOME=\"%BASEDIR%\\{relativeJavaDirPath}\""
     else:
-      insertStr = f"\n[ -z \"$JAVA_HOME\" ] && JAVA_HOME=\"$BASEDIR\"/{javaDirName}"
+      insertStr = f"\n[ -z \"$JAVA_HOME\" ] && JAVA_HOME=\"$BASEDIR\"/{relativeJavaDirPath}"
 
     regexMatch = searchPattern.search(binScript)
     assert regexMatch is not None
@@ -82,7 +82,9 @@ def downloadJava(ltexLsDirPath: pathlib.Path, platform: str, arch: str) -> str:
   print("Removing Java archive...")
   javaArchivePath.unlink()
 
-  return f"jdk-{javaVersion}-jre"
+  relativeJavaDirPath = f"jdk-{javaVersion}-jre"
+  if platform == "mac": relativeJavaDirPath = f"{relativeJavaDirPath}/Contents/Home"
+  return relativeJavaDirPath
 
 
 
