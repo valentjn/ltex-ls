@@ -79,6 +79,7 @@ Any command-line arguments supplied to the startup scripts are processed by LT<s
 - `--[no-]endless`: Keep the server alive when the client terminates the connection to allow reuse by the next client.
 - `-h`, `--help`: Show help message and exit.
 - `--host=<host>`: Listen for TCP connections on host `<host>` (IP address or hostname; default is `localhost`). Only relevant if server type is `tcpSocket`.
+- `--log-file=<logFile>`: Tee server/client communication and server log to `<logFile>`. `${PID}` is replaced by the process ID of LT<sub>E</sub>X LS. The parent directory of `<logFile>` must exist. If `<logFile>` is an existing directory, then `ltex-ls-${PID}.log` is used as filename.
 - `--port=<port>`: Listen for TCP connections on port `<port>`. Only relevant if server type is `tcpSocket`. A value of `0` (default) will have the system automatically determine a free port (the actual port number will be printed to the log).
 - `--server-type=<serverType>`: Run the server as type `<serverType>`. Valid values are:
   - `standardStream` (default): Communicate with clients over standard input and standard output.

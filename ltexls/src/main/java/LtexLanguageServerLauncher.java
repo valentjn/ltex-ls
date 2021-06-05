@@ -5,13 +5,17 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -19,6 +23,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import org.bsplines.ltexls.client.LtexLanguageClient;
 import org.bsplines.ltexls.server.LtexLanguageServer;
+import org.bsplines.ltexls.tools.TeeInputStream;
+import org.bsplines.ltexls.tools.TeeOutputStream;
 import org.bsplines.ltexls.tools.Tools;
 import org.bsplines.ltexls.tools.VersionProvider;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -57,6 +63,12 @@ public class LtexLanguageServerLauncher implements Callable<Integer> {
       + "(only relevant if server type is tcpSocket).")
   private Integer port = 0;
 
+  @Option(names = {"--log-file"}, description = "Tee server/client communication and server log "
+      + "to <logFile>. $${PID} is replaced by the process ID of LTeX LS. "
+      + "The parent directory of <logFile> must exist. "
+      + "If <logFile> is an existing directory, then ltex-ls-$${PID}.log is used as filename.")
+  private @Nullable File logFile = null;
+
   @Override
   public Integer call() throws Exception {
     return internalCall();
@@ -65,8 +77,23 @@ public class LtexLanguageServerLauncher implements Callable<Integer> {
   private int internalCall() throws UnknownHostException, IOException, InterruptedException,
         ExecutionException {
     @Nullable ServerSocket serverSocket = null;
+    @Nullable OutputStream logOutputStream = null;
 
     try {
+      if (this.logFile != null) {
+        File logFile = this.logFile;
+
+        if (logFile.exists() && logFile.isDirectory()) {
+          logFile = new File(logFile, "ltex-ls-${PID}.log");
+        }
+
+        String logFileString = logFile.getAbsolutePath().replace(
+            "${PID}", Long.toString(ProcessHandle.current().pid()));
+        logOutputStream = new FileOutputStream(logFileString, true);
+        System.setErr(new PrintStream(
+            new TeeOutputStream(System.err, logOutputStream), true, StandardCharsets.UTF_8));
+      }
+
       if (this.serverType == ServerType.tcpSocket) {
         serverSocket = new ServerSocket(this.port, 50, InetAddress.getByName(this.host));
         this.port = serverSocket.getLocalPort();
@@ -85,10 +112,20 @@ public class LtexLanguageServerLauncher implements Callable<Integer> {
           outputStream = clientSocket.getOutputStream();
         }
 
+        if (logOutputStream != null) {
+          inputStream = new TeeInputStream(inputStream, logOutputStream);
+          outputStream = new TeeOutputStream(outputStream, logOutputStream);
+        }
+
         launch(inputStream, outputStream);
       } while (this.endless);
     } finally {
       if (serverSocket != null) serverSocket.close();
+
+      if (logOutputStream != null) {
+        logOutputStream.flush();
+        logOutputStream.close();
+      }
     }
 
     return 0;
