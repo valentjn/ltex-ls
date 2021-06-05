@@ -119,8 +119,10 @@ public class LtexLanguageServer implements LanguageServer, LanguageClientAware {
   @Override
   public CompletableFuture<Object> shutdown() {
     Tools.logger.info(Tools.i18n("shuttingDownLtexLs"));
+    this.singleThreadExecutorService.shutdown();
 
-    // Per https://github.com/eclipse/lsp4j/issues/18
+    // should return null according to LSP specification, but return empty object instead,
+    // see https://github.com/eclipse/lsp4j/issues/18
     return CompletableFuture.completedFuture(new Object());
   }
 

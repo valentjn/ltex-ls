@@ -106,6 +106,7 @@ public class LtexLanguageServerLauncher implements Callable<Integer> {
     server.connect(client);
 
     Future<Void> listener = launcher.startListening();
+    executorService.shutdown();
     listener.get();
   }
 

@@ -11,6 +11,7 @@
 ## 12.2.0 (upcoming)
 
 - Add support for `\setplength` (L<sup>A</sup>T<sub>E</sub>X)
+- Fix LT<sub>E</sub>X LS not terminating if input stream is end-of-file (fixes [vscode-ltex#325](https://github.com/valentjn/vscode-ltex/issues/325))
 - Bundle Java for platform-dependent, standalone archives (see [#70](https://github.com/valentjn/ltex-ls/issues/70))
 
 ## 12.1.0 (May 1, 2021)
