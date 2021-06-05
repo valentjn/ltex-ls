@@ -8,7 +8,7 @@
 
 # Changelog
 
-## 12.2.0 (upcoming)
+## 12.2.0 (June 5, 2021)
 
 - Add support for `\setplength` (L<sup>A</sup>T<sub>E</sub>X)
 - Add `--log-file` option to tee server/client communication and server log to a file
