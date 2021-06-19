@@ -8,6 +8,10 @@
 
 # Changelog
 
+## 12.2.1 (upcoming)
+
+- Fix name of Portuguese babel language names, add support for Brazilian Portuguese babel language names (fixes [#72](https://github.com/valentjn/ltex-ls/issues/72))
+
 ## 12.2.0 (June 5, 2021)
 
 - Add support for `\setplength` (L<sup>A</sup>T<sub>E</sub>X)

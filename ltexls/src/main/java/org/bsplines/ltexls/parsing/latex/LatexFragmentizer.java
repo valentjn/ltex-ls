@@ -133,6 +133,8 @@ public class LatexFragmentizer extends CodeFragmentizer {
     babelLanguageMap.put("arabic", "ar");
     babelLanguageMap.put("asturian", "ast-ES");
     babelLanguageMap.put("belarusian", "be-BY");
+    babelLanguageMap.put("brazil", "pt-BR");
+    babelLanguageMap.put("brazilian", "pt-BR");
     babelLanguageMap.put("catalan", "ca-ES");
     babelLanguageMap.put("danish", "da-DK");
     babelLanguageMap.put("german", "de-DE");
@@ -154,7 +156,8 @@ public class LatexFragmentizer extends CodeFragmentizer {
     babelLanguageMap.put("khmer", "km-KH");
     babelLanguageMap.put("dutch", "nl");
     babelLanguageMap.put("polish", "pl-PL");
-    babelLanguageMap.put("portugese", "pt");
+    babelLanguageMap.put("portuges", "pt-PT");
+    babelLanguageMap.put("portuguese", "pt-PT");
     babelLanguageMap.put("romanian", "ro-RO");
     babelLanguageMap.put("russian", "ru-RU");
     babelLanguageMap.put("slovak", "sk-SK");
