@@ -104,12 +104,14 @@ public class LatexCommandSignature {
   }
 
   private static String matchPatternFromPosition(String code, int fromPos, Pattern pattern) {
+    if (fromPos >= code.length()) return "";
     Matcher matcher = pattern.matcher(code.substring(fromPos));
     return (matcher.find() ? matcher.group() : "");
   }
 
   public static String matchArgumentFromPosition(
         String code, int fromPos, ArgumentType argumentType) {
+    if (fromPos >= code.length()) return "";
     int pos = fromPos;
     char openChar = '\0';
 
