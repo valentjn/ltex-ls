@@ -251,7 +251,7 @@ public class CodeActionGenerator {
       @Nullable String sentence = match.getSentence();
       if ((ruleId == null) || (sentence == null)) continue;
       sentence = sentence.trim();
-      Pair<String, String> pair = new Pair<>(ruleId, sentence);
+      Pair<String, String> pair = Pair.of(ruleId, sentence);
 
       if (!ruleIdSentencePairs.contains(pair)) {
         int fragmentIndex = findAnnotatedTextFragmentWithMatch(

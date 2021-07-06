@@ -220,7 +220,7 @@ public class LatexCommandSignature {
 
       match = matchArgumentFromPosition(code, pos, argumentType);
       if (match.isEmpty()) return -1;
-      if (arguments != null) arguments.add(new Pair<>(pos, pos + match.length()));
+      if (arguments != null) arguments.add(Pair.of(pos, pos + match.length()));
       pos += match.length();
     }
 

@@ -215,7 +215,7 @@ public class DocumentChecker {
           buildAnnotatedTextFragments(codeFragments, document);
       List<LanguageToolRuleMatch> matches =
           checkAnnotatedTextFragments(annotatedTextFragments, rangeOffset);
-      return new Pair<>(matches, annotatedTextFragments);
+      return Pair.of(matches, annotatedTextFragments);
     } finally {
       this.settingsManager.setSettings(originalSettings);
     }
