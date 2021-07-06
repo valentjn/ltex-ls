@@ -208,7 +208,6 @@ public class LatexAnnotatedTextBuilderTest {
     {
       AnnotatedText annotatedText = buildAnnotatedText("\\v{S}ekki\n");
       Assertions.assertEquals(0, annotatedText.getOriginalTextPositionFor(0, false));
-      Assertions.assertEquals(5, annotatedText.getOriginalTextPositionFor(0, true));
       Assertions.assertEquals(5, annotatedText.getOriginalTextPositionFor(1, false));
       Assertions.assertEquals(6, annotatedText.getOriginalTextPositionFor(2, false));
       Assertions.assertEquals(7, annotatedText.getOriginalTextPositionFor(3, false));

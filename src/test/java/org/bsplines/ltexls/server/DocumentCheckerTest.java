@@ -51,6 +51,23 @@ public class DocumentCheckerTest {
     return new LtexTextDocumentItem(languageServer, "untitled:test.txt", codeLanguageId, 1, code);
   }
 
+  private static void assertOriginalAndPlainTextWords(String codeLanguageId, String code,
+        String expectedOriginalTextWord, String expectedPlainTextWord) {
+    LtexTextDocumentItem document = createDocument(codeLanguageId, code);
+    Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult =
+        checkDocument(document);
+    List<LanguageToolRuleMatch> matches = checkingResult.getKey();
+    List<AnnotatedTextFragment> annotatedTextFragments = checkingResult.getValue();
+
+    Assertions.assertEquals(1, matches.size());
+    Assertions.assertEquals(1, annotatedTextFragments.size());
+    Assertions.assertEquals(expectedOriginalTextWord,
+        code.substring(matches.get(0).getFromPos(), matches.get(0).getToPos()));
+    Assertions.assertEquals(expectedPlainTextWord,
+        annotatedTextFragments.get(0).getSubstringOfPlainText(
+          matches.get(0).getFromPos(), matches.get(0).getToPos()));
+  }
+
   public static void assertMatches(List<LanguageToolRuleMatch> matches, int fromPos1, int toPos1,
         int fromPos2, int toPos2) {
     Assertions.assertEquals(2, matches.size());
@@ -170,16 +187,9 @@ public class DocumentCheckerTest {
     Assertions.assertEquals("Dies ist ein Qwertyzuiopc. ",
         annotatedTextFragments.get(3).getAnnotatedText().getPlainText());
 
-    document = createDocument("latex", "The \\v{S}ekki\n");
-    checkingResult = checkDocument(document);
-    matches = checkingResult.getKey();
-    annotatedTextFragments = checkingResult.getValue();
-
-    Assertions.assertEquals(1, matches.size());
-    Assertions.assertEquals(1, annotatedTextFragments.size());
-    String word = annotatedTextFragments.get(0).getSubstringOfPlainText(
-        matches.get(0).getFromPos(), matches.get(0).getToPos());
-    Assertions.assertEquals("\u0160ekki", word);
+    assertOriginalAndPlainTextWords("latex", "The \\v{S}ekki\n", "\\v{S}ekki", "\u0160ekki");
+    assertOriginalAndPlainTextWords("latex", "The Sekk\\v{S}\n", "Sekk\\v{S}", "Sekk\u0160");
+    assertOriginalAndPlainTextWords("latex", "This is \\textbf{an} test.\n", "an", "an");
   }
 
   @Test
