@@ -10,6 +10,7 @@ package org.bsplines.ltexls.parsing;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import org.bsplines.ltexls.parsing.html.HtmlAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.latex.LatexAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.markdown.MarkdownAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.org.OrgAnnotatedTextBuilder;
@@ -27,6 +28,8 @@ public abstract class CodeAnnotatedTextBuilder extends AnnotatedTextBuilder {
   static {
     constructorMap.put("bibtex", (String codeLanguageId) ->
         new LatexAnnotatedTextBuilder(codeLanguageId));
+    constructorMap.put("html", (String codeLanguageId) ->
+        new HtmlAnnotatedTextBuilder(codeLanguageId));
     constructorMap.put("latex", (String codeLanguageId) ->
         new LatexAnnotatedTextBuilder(codeLanguageId));
     constructorMap.put("markdown", (String codeLanguageId) ->

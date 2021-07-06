@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import org.bsplines.ltexls.parsing.bibtex.BibtexFragmentizer;
+import org.bsplines.ltexls.parsing.html.HtmlFragmentizer;
 import org.bsplines.ltexls.parsing.latex.LatexFragmentizer;
 import org.bsplines.ltexls.parsing.markdown.MarkdownFragmentizer;
 import org.bsplines.ltexls.parsing.org.OrgFragmentizer;
@@ -29,6 +30,8 @@ public abstract class CodeFragmentizer {
   static {
     constructorMap.put("bibtex", (String codeLanguageId) ->
         new BibtexFragmentizer(codeLanguageId));
+    constructorMap.put("html", (String codeLanguageId) ->
+        new HtmlFragmentizer(codeLanguageId));
     constructorMap.put("latex", (String codeLanguageId) ->
         new LatexFragmentizer(codeLanguageId));
     constructorMap.put("markdown", (String codeLanguageId) ->

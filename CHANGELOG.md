@@ -8,8 +8,9 @@
 
 # Changelog
 
-## 12.2.1 (upcoming)
+## 12.3.0 (upcoming)
 
+- Add support for XHTML (fixes [vscode-ltex#342](https://github.com/valentjn/vscode-ltex/issues/342))
 - Fix error when checking L<sup>A</sup>T<sub>E</sub>X documents ending with specific commands (fixes [vscode-ltex#341](https://github.com/valentjn/vscode-ltex/issues/341))
 - Fix name of Portuguese babel language names, add support for Brazilian Portuguese babel language names (fixes [#72](https://github.com/valentjn/ltex-ls/issues/72))
 

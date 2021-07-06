@@ -30,11 +30,10 @@ Find more information about LT<sub>E</sub>X at the [website of vscode-ltex](http
 
 ## Features
 
-- **Supported markup languages:** BibT<sub>E</sub>X, L<sup>A</sup>T<sub>E</sub>X, Markdown, Org, reStructuredText, R Sweave
+- **Supported markup languages:** BibT<sub>E</sub>X, L<sup>A</sup>T<sub>E</sub>X, Markdown, Org, reStructuredText, R Sweave, XHTML
 - Comes with **everything included,** no need to install Java or LanguageTool
 - **Offline checking:** Does not upload anything to the internet
 - Supports **over 20 languages:** English, French, German, Dutch, Chinese, Russian, etc.
-- **Issue highlighting** with hover description
 - **Replacement suggestions** via quick fixes
 - **User dictionaries**
 - **Multilingual support** with babel commands or magic comments

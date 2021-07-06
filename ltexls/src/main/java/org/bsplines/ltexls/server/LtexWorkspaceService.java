@@ -116,16 +116,19 @@ class LtexWorkspaceService implements WorkspaceService {
 
         if (fileNameStr.endsWith(".bib")) {
           codeLanguageId = "bibtex";
+        } else if (fileNameStr.endsWith(".tex")) {
+          codeLanguageId = "latex";
+        } else if (fileNameStr.endsWith(".htm") || fileNameStr.endsWith(".html")
+              || fileNameStr.endsWith(".xht") || fileNameStr.endsWith(".xhtml")) {
+          codeLanguageId = "html";
         } else if (fileNameStr.endsWith(".md")) {
           codeLanguageId = "markdown";
         } else if (fileNameStr.endsWith(".org")) {
           codeLanguageId = "org";
-        } else if (fileNameStr.endsWith(".Rnw") || fileNameStr.endsWith(".rnw")) {
-          codeLanguageId = "rsweave";
         } else if (fileNameStr.endsWith(".rst")) {
           codeLanguageId = "restructuredtext";
-        } else if (fileNameStr.endsWith(".tex")) {
-          codeLanguageId = "latex";
+        } else if (fileNameStr.endsWith(".Rnw") || fileNameStr.endsWith(".rnw")) {
+          codeLanguageId = "rsweave";
         }
       }
     }
