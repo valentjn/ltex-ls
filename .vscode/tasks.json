@@ -6,7 +6,7 @@
       "type": "shell",
       // need quotes around '-Dmaven.test.skip=true' on Windows PowerShell due to
       // https://stackoverflow.com/a/6351739
-      "command": "python tools/removeOutdatedClassFiles.py && mvn -f ltexls/pom.xml '-Dmaven.test.skip=true' compile && mvn -f ltexls/pom.xml jar:jar appassembler:assemble antrun:run@patch-bin-scripts",
+      "command": "python tools/removeOutdatedClassFiles.py && mvn '-Dmaven.test.skip=true' compile && mvn jar:jar appassembler:assemble antrun:run@patch-bin-scripts",
       "group": {
         "kind": "build",
         "isDefault": true,
@@ -18,16 +18,9 @@
       },
     },
     {
-      "label": "Compile and Install ltexls-languagetool-patch",
-      "type": "shell",
-      "command": "mvn -f ltexls-languagetool-patch/pom.xml install",
-      "group": "build",
-      "problemMatcher": "$gcc",
-    },
-    {
       "label": "Clean and Run Tests",
       "type": "shell",
-      "command": "mvn -f ltexls-languagetool-patch/pom.xml clean && mvn -f ltexls/pom.xml clean && mvn -f ltexls-languagetool-patch/pom.xml install && mvn -f ltexls/pom.xml verify",
+      "command": "mvn clean && mvn verify",
       "group": {
         "kind": "test",
         "isDefault": true,
@@ -37,7 +30,7 @@
     {
       "label": "Run Tests",
       "type": "shell",
-      "command": "mvn -f ltexls-languagetool-patch/pom.xml install && mvn -f ltexls/pom.xml verify",
+      "command": "mvn verify",
       "group": {
         "kind": "test",
         "isDefault": true,

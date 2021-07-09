@@ -16,7 +16,7 @@ javaVersion = "11.0.11+9"
 def createBinaryArchive(platform: str, arch: str) -> None:
   print(f"Processing platform/arch '{platform}/{arch}'...")
   ltexLsVersion = getLtexLsVersion()
-  targetDirPath = pathlib.Path(__file__).parent.parent.joinpath("ltexls", "target")
+  targetDirPath = pathlib.Path(__file__).parent.parent.joinpath("target")
   ltexLsArchivePath = pathlib.Path(__file__).parent.parent.joinpath(
       targetDirPath, f"ltex-ls-{ltexLsVersion}.tar.gz")
 
@@ -89,7 +89,7 @@ def downloadJava(ltexLsDirPath: pathlib.Path, platform: str, arch: str) -> str:
 
 
 def getLtexLsVersion() -> str:
-  with open("ltexls/pom.xml", "r") as file:
+  with open("pom.xml", "r") as file:
     regexMatch = re.search(r"<version>(.*?)</version>", file.read())
     assert regexMatch is not None
     return regexMatch.group(1)

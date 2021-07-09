@@ -104,10 +104,10 @@ def removeFiles(filePaths: Sequence[pathlib.Path]) -> None:
 
 def main() -> None:
   repoDirPath = pathlib.Path(__file__).parent.parent.resolve()
-  mainSourceDirPath = repoDirPath.joinpath("ltexls", "src", "main", "java")
-  testSourceDirPath = repoDirPath.joinpath("ltexls", "src", "test", "java")
-  mainClassDirPath = repoDirPath.joinpath("ltexls", "target", "classes")
-  testClassDirPath = repoDirPath.joinpath("ltexls", "target", "test-classes")
+  mainSourceDirPath = repoDirPath.joinpath("src", "main", "java")
+  testSourceDirPath = repoDirPath.joinpath("src", "test", "java")
+  mainClassDirPath = repoDirPath.joinpath("target", "classes")
+  testClassDirPath = repoDirPath.joinpath("target", "test-classes")
 
   sourceFiles = processFiles([mainSourceDirPath, testSourceDirPath], ".java", processSourceFile)
   classFiles = processFiles([mainClassDirPath, testClassDirPath], ".class", processClassFile)

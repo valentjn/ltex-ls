@@ -7,16 +7,3 @@
 
 /.vscode/ltex.*.txt
 /.vscode/settings.json
-
-/ltexls/.classpath
-/ltexls/.project
-/ltexls/*.jar
-
-/ltexls/.settings/
-/ltexls/target/
-
-/ltexls-languagetool-patch/.classpath
-/ltexls-languagetool-patch/.project
-
-/ltexls-languagetool-patch/.settings/
-/ltexls-languagetool-patch/target/

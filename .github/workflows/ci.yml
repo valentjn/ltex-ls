@@ -38,11 +38,8 @@ jobs:
         with:
           java-version: "11.0.9"
 
-      - name: "Build ltexls-languagetool-patch"
-        run: "mvn -B -e -f ltexls-languagetool-patch/pom.xml install"
-
-      - name: "Build ltexls"
-        run: "mvn -B -e -f ltexls/pom.xml verify"
+      - name: "Build LTeX LS"
+        run: "mvn -B -e verify"
 
   analyze_codeql:
     name: "CI - CodeQL Job"
@@ -60,11 +57,8 @@ jobs:
       - name: "Initialize CodeQL"
         uses: "github/codeql-action/init@v1"
 
-      - name: "Build ltexls-languagetool-patch"
-        run: "mvn -B -e -f ltexls-languagetool-patch/pom.xml install"
-
-      - name: "Build ltexls"
-        run: "mvn -B -e -f ltexls/pom.xml package"
+      - name: "Build LTeX LS"
+        run: "mvn -B -e package"
 
       - name: "Perform CodeQL Analysis"
         uses: "github/codeql-action/analyze@v1"
@@ -83,16 +77,13 @@ jobs:
         with:
           java-version: "11.0.9"
 
-      - name: "Build ltexls-languagetool-patch"
-        run: "mvn -B -e -f ltexls-languagetool-patch/pom.xml install"
-
-      - name: "Build ltexls"
-        run: "mvn -B -e -f ltexls/pom.xml verify"
+      - name: "Build LTeX LS"
+        run: "mvn -B -e verify"
 
       - name: "Upload Coverage Report to Coveralls"
         env:
           LTEX_LS_COVERALLS_REPOSITORY_TOKEN: "${{ secrets.LTEX_LS_COVERALLS_REPOSITORY_TOKEN }}"
-        run: "mvn -B -e -f ltexls/pom.xml coveralls:report \"-DrepoToken=$LTEX_LS_COVERALLS_REPOSITORY_TOKEN\""
+        run: "mvn -B -e coveralls:report \"-DrepoToken=$LTEX_LS_COVERALLS_REPOSITORY_TOKEN\""
 
   deploy:
     name: "CI - Deploy Job"
@@ -121,7 +112,7 @@ jobs:
         run: "python -m pip install --upgrade pip && pip install semver==2.13.0"
 
       - name: "Set LTEX_LS_VERSION"
-        run: "echo \"LTEX_LS_VERSION=$(python -c \"import re; print(re.search(r'<version>(.*?)</version>', open('ltexls/pom.xml', 'r').read()).group(1), end='')\")\" >> $GITHUB_ENV"
+        run: "echo \"LTEX_LS_VERSION=$(python -c \"import re; print(re.search(r'<version>(.*?)</version>', open('pom.xml', 'r').read()).group(1), end='')\")\" >> $GITHUB_ENV"
 
       - name: "Check LTEX_LS_VERSION"
         run: "if [[ -z \"$LTEX_LS_VERSION\" ]]; then echo 'Error: LTEX_LS_VERSION not set!'; (exit 1); fi; echo \"LTEX_LS_VERSION set to '$LTEX_LS_VERSION'\""
@@ -135,11 +126,8 @@ jobs:
       - name: "Set LTEX_LS_CHANGELOG"
         run: "if [ \"$LTEX_LS_IS_PRERELEASE\" = \"false\" ]; then echo \"LTEX_LS_CHANGELOG<<EOF\" >> $GITHUB_ENV; python -c \"import re; print(re.search(r'\\n## .*\\n\\n((?:.|\\n)*?)\\n\\n## ', open('CHANGELOG.md', 'r').read()).group(1))\" >> $GITHUB_ENV; echo \"EOF\" >> $GITHUB_ENV; else echo \"LTEX_LS_CHANGELOG=This is an unfinished pre-release. Use at your own risk.\" >> $GITHUB_ENV; fi"
 
-      - name: "Build ltexls-languagetool-patch"
-        run: "mvn -B -e -f ltexls-languagetool-patch/pom.xml install"
-
-      - name: "Build ltexls"
-        run: "mvn -B -e -f ltexls/pom.xml package"
+      - name: "Build LTeX LS"
+        run: "mvn -B -e package"
 
       - name: "Create Binary Archives"
         run: "python tools/createBinaryArchives.py"
@@ -151,4 +139,4 @@ jobs:
         with:
           prerelease: "${{ env.LTEX_LS_IS_PRERELEASE }}"
           body: "${{ env.LTEX_LS_CHANGELOG }}"
-          files: "ltexls/target/ltex-ls-${{ env.LTEX_LS_VERSION }}.tar.gz\nltexls/target/ltex-ls-${{ env.LTEX_LS_VERSION }}-linux-x64.tar.gz\nltexls/target/ltex-ls-${{ env.LTEX_LS_VERSION }}-mac-x64.tar.gz\nltexls/target/ltex-ls-${{ env.LTEX_LS_VERSION }}-windows-x64.zip"
+          files: "target/ltex-ls-${{ env.LTEX_LS_VERSION }}.tar.gz\ntarget/ltex-ls-${{ env.LTEX_LS_VERSION }}-linux-x64.tar.gz\ntarget/ltex-ls-${{ env.LTEX_LS_VERSION }}-mac-x64.tar.gz\ntarget/ltex-ls-${{ env.LTEX_LS_VERSION }}-windows-x64.zip"

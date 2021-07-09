@@ -13,7 +13,7 @@ import re
 
 def main() -> None:
   testLogFilePath = os.path.abspath(os.path.join(os.path.dirname(__file__), "..",
-      "ltexls", "src", "test", "resources", "LtexLanguageServerTestLog.txt"))
+      "src", "test", "resources", "LtexLanguageServerTestLog.txt"))
   with open(testLogFilePath, "r") as f: testLog = f.read()
 
   matches = list(re.finditer(r"^\[Trace -.*?'([^ ]+).*?'", testLog, flags=re.MULTILINE))

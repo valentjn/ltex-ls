@@ -19,12 +19,6 @@
   </properties>
   <dependencies>
     <dependency>
-      <groupId>org.bsplines</groupId>
-      <artifactId>ltexls-languagetool-patch</artifactId>
-      <version>${project.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.languagetool</groupId>
       <artifactId>languagetool-core</artifactId>
       <version>5.4</version>
@@ -303,10 +297,6 @@
             <id>patch-bin-scripts</id>
             <configuration>
               <target>
-                <replace file="target/appassembler/bin/ltex-ls">
-                  <replacetoken>"$REPO"/*</replacetoken>
-                  <replacevalue>"$REPO"/ltexls-languagetool-patch-${project.version}.jar:"$REPO"/*</replacevalue>
-                </replace>
                 <chmod file="target/appassembler/bin/ltex-ls" perm="755"/>
                 <replace file="target/appassembler/bin/ltex-ls.bat">
                   <replacetoken>if "%JAVACMD%"=="" set JAVACMD=java</replacetoken>
@@ -342,10 +332,6 @@ echo location of your Java installation.
 goto error
 
 :init]]></replacevalue>
-                </replace>
-                <replace file="target/appassembler/bin/ltex-ls.bat">
-                  <replacetoken>"%REPO%"\*</replacetoken>
-                  <replacevalue>"%REPO%"\ltexls-languagetool-patch-${project.version}.jar;"%REPO%"\*</replacevalue>
                 </replace>
                 <replace file="target/appassembler/bin/ltex-ls.bat">
                   <replacetoken>%JAVACMD% %JAVA_OPTS%  -classpath %CLASSPATH%</replacetoken>
