@@ -48,7 +48,7 @@ public class LanguageToolJavaInterface extends LanguageToolInterface {
 
   public LanguageToolJavaInterface(String languageShortCode, String motherTongueShortCode,
         int sentenceCacheSize, Set<String> dictionary) {
-    this.dictionary = dictionary;
+    this.dictionary = Set.copyOf(dictionary);
 
     if (!Languages.isLanguageSupported(languageShortCode)) {
       Tools.logger.severe(Tools.i18n("notARecognizedLanguage", languageShortCode));

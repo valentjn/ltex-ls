@@ -25,7 +25,7 @@ public class LatexCommandSignatureMatch {
     this.toPos = (argumentPos.isEmpty()
         ? (fromPos + commandSignature.getPrefix().length())
         : argumentPos.get(argumentPos.size() - 1).getValue());
-    this.argumentPos = argumentPos;
+    this.argumentPos = List.copyOf(argumentPos);
   }
 
   public LatexCommandSignature getCommandSignature() {

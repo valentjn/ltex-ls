@@ -8,6 +8,7 @@
 package org.bsplines.ltexls.languagetool;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment;
@@ -75,7 +76,7 @@ public class LanguageToolRuleMatch {
   }
 
   public List<String> getSuggestedReplacements() {
-    return this.suggestedReplacements;
+    return Collections.unmodifiableList(this.suggestedReplacements);
   }
 
   public void setFromPos(int fromPos) {
