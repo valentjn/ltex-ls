@@ -8,7 +8,7 @@
 
 # Changelog
 
-## 12.3.0 (upcoming)
+## 12.3.0 (July 12, 2021)
 
 - Update LanguageTool to 5.4 (see [LT 5.4 release notes](https://github.com/languagetool-org/languagetool/blob/v5.4/languagetool-standalone/CHANGES.md#54-2021-06-25))
 - Add support for XHTML (fixes [vscode-ltex#342](https://github.com/valentjn/vscode-ltex/issues/342))
