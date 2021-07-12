@@ -6,7 +6,6 @@
       "name": "Launch ltexls",
       "request": "launch",
       "mainClass": "LtexLanguageServerLauncher",
-      "projectName": "ltexls",
       "args": "--server-type=tcpSocket --port=52715 --endless",
     },
   ],
