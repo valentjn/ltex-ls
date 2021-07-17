@@ -5,17 +5,21 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+package org.bsplines.ltexls;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
 import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.util.NullnessUtil;
 import org.checkerframework.framework.qual.DefaultQualifier;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -23,49 +27,46 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @DefaultQualifier(NonNull.class)
-public class LtexLanguageServerLauncherStandardStreamTest {
-  private PipedInputStream in;
-  private PipedOutputStream out;
-  private PipedInputStream pipedInputStream;
-  private PipedOutputStream pipedOutputStream;
+public class LtexLanguageServerLauncherTcpSocketTest {
+  private static final String host = "localhost";
+  private static final int port = 52714;
+
+  private @MonotonicNonNull Socket socket;
+  private @MonotonicNonNull InputStream inputStream;
+  private @MonotonicNonNull OutputStream outputStream;
   private @MonotonicNonNull Thread launcherThread;
 
   private static class LtexLanguageServerLauncherRunnable implements Runnable {
-    private InputStream in;
-    private OutputStream out;
-
-    public LtexLanguageServerLauncherRunnable(InputStream in, OutputStream out) {
-      this.in = in;
-      this.out = out;
-    }
-
     @Override
     public void run() {
       try {
         Tools.randomNumberGenerator.setSeed(42);
-        LtexLanguageServerLauncher.launch(this.in, this.out);
+        int exitCode = LtexLanguageServerLauncher.mainWithoutExit(new String[]{
+            "--server-type=tcpSocket", "--host=" + host, "--port=" + port});
+        Assertions.assertEquals(0, exitCode);
       } catch (InterruptedException e) {
         // occurs when JUnit tears down class
       } catch (ExecutionException e) {
         throw new RuntimeException("ExecutionException thrown", e);
+      } catch (UnknownHostException e) {
+        throw new RuntimeException("UnknownHostException thrown", e);
+      } catch (IOException e) {
+        throw new RuntimeException("IOException thrown", e);
       }
     }
   }
 
-  public LtexLanguageServerLauncherStandardStreamTest() {
-    this.in = new PipedInputStream();
-    this.out = new PipedOutputStream();
-    this.pipedInputStream = new PipedInputStream();
-    this.pipedOutputStream = new PipedOutputStream();
-  }
-
   @BeforeAll
   public void setUp() throws InterruptedException, IOException {
-    this.pipedOutputStream.connect(this.in);
-    this.pipedInputStream.connect(this.out);
-
-    this.launcherThread = new Thread(new LtexLanguageServerLauncherRunnable(this.in, this.out));
+    this.launcherThread = new Thread(new LtexLanguageServerLauncherRunnable());
     this.launcherThread.start();
+
+    // wait until server is listening for connections
+    Thread.sleep(2000);
+
+    this.socket = new Socket(host, port);
+    this.inputStream = this.socket.getInputStream();
+    this.outputStream = this.socket.getOutputStream();
 
     // wait until LtexLanguageServer has initialized itself
     Thread.sleep(5000);
@@ -73,16 +74,15 @@ public class LtexLanguageServerLauncherStandardStreamTest {
 
   @AfterAll
   public void tearDown() throws IOException {
+    if (this.socket != null) this.socket.close();
     if (this.launcherThread != null) this.launcherThread.interrupt();
-    this.pipedInputStream.close();
-    this.pipedOutputStream.close();
-    this.in.close();
-    this.out.close();
   }
 
   @Test
   public void test() throws IOException, InterruptedException {
+    Assertions.assertNotNull(NullnessUtil.castNonNull(this.inputStream));
+    Assertions.assertNotNull(NullnessUtil.castNonNull(this.outputStream));
     LspMessage.communicateWithList(LspMessage.fromLogFile(),
-        this.pipedInputStream, this.pipedOutputStream);
+        NullnessUtil.castNonNull(this.inputStream), NullnessUtil.castNonNull(this.outputStream));
   }
 }

@@ -5,45 +5,64 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+package org.bsplines.ltexls;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Callable;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.framework.qual.DefaultQualifier;
+import org.eclipse.xtext.xbase.lib.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-@TestInstance(Lifecycle.PER_CLASS)
-@DefaultQualifier(NonNull.class)
 public class LtexLanguageServerLauncherTest {
-  private static String captureStdout(Callable<Integer> callable) throws Exception {
+  public static Pair<Integer, String> captureStdout(
+        Callable<Integer> callable) throws Exception {
     PrintStream stdout = System.out;
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     Charset charset = StandardCharsets.UTF_8;
+    Integer exitCode;
 
     try (PrintStream printStream = new PrintStream(outputStream, true, charset.name())) {
+      System.setOut(printStream);
+
       try {
-        System.setOut(printStream);
-        callable.call();
+        exitCode = callable.call();
       } finally {
         System.setOut(stdout);
       }
     }
 
-    return new String(outputStream.toByteArray(), charset);
+    return Pair.of(exitCode, new String(outputStream.toByteArray(), charset));
+  }
+
+  public static int mockStdin(String text, Callable<Integer> callable) throws Exception {
+    InputStream stdin = System.in;
+
+    try (ByteArrayInputStream inputStream =
+          new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8))) {
+      System.setIn(inputStream);
+
+      try {
+        return callable.call();
+      } finally {
+        System.setIn(stdin);
+      }
+    }
   }
 
   @Test
   public void testHelp() throws Exception {
-    String output = captureStdout(() -> LtexLanguageServerLauncher.mainWithoutExit(
-        new String[]{"--help"}));
+    Pair<Integer, String> result = captureStdout(
+        () -> LtexLanguageServerLauncher.mainWithoutExit(new String[]{"--help"}));
+    Assertions.assertEquals(0, result.getKey());
+    String output = result.getValue();
     Assertions.assertTrue(output.contains("Usage: ltex-ls"));
     Assertions.assertTrue(output.contains("LTeX LS - LTeX Language Server"));
     Assertions.assertTrue(output.contains("--help"));
@@ -52,8 +71,10 @@ public class LtexLanguageServerLauncherTest {
 
   @Test
   public void testVersion() throws Exception {
-    String output = captureStdout(() -> LtexLanguageServerLauncher.mainWithoutExit(
-        new String[]{"--version"}));
+    Pair<Integer, String> result = captureStdout(
+        () -> LtexLanguageServerLauncher.mainWithoutExit(new String[]{"--version"}));
+    Assertions.assertEquals(0, result.getKey());
+    String output = result.getValue();
 
     JsonElement rootJsonElement = JsonParser.parseString(output);
     Assertions.assertTrue(rootJsonElement.isJsonObject());

@@ -5,7 +5,7 @@
       "type": "java",
       "name": "Launch ltexls",
       "request": "launch",
-      "mainClass": "LtexLanguageServerLauncher",
+      "mainClass": "org.bsplines.ltexls.LtexLanguageServerLauncher",
       "args": "--server-type=tcpSocket --port=52715 --endless",
     },
   ],

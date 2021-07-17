@@ -5,6 +5,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+package org.bsplines.ltexls;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,9 +30,7 @@ import org.bsplines.ltexls.tools.TeeInputStream;
 import org.bsplines.ltexls.tools.TeeOutputStream;
 import org.bsplines.ltexls.tools.Tools;
 import org.bsplines.ltexls.tools.VersionProvider;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.checkerframework.framework.qual.DefaultQualifier;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
@@ -38,7 +38,6 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
-@DefaultQualifier(NonNull.class)
 @Command(name = "ltex-ls", mixinStandardHelpOptions = true, showDefaultValues = true,
     versionProvider = VersionProvider.class,
     description = "LTeX LS - LTeX Language Server")

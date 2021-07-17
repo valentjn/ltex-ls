@@ -278,7 +278,7 @@
           <archive>
             <manifest>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-              <mainClass>LtexLanguageServerLauncher</mainClass>
+              <mainClass>org.bsplines.ltexls.LtexLanguageServerLauncher</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -290,7 +290,7 @@
         <configuration>
           <programs>
             <program>
-              <mainClass>LtexLanguageServerLauncher</mainClass>
+              <mainClass>org.bsplines.ltexls.LtexLanguageServerLauncher</mainClass>
               <id>ltex-ls</id>
             </program>
           </programs>
