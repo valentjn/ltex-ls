@@ -112,8 +112,7 @@ public class CodeActionGenerator {
     if (checkingResult.getValue() == null) return Collections.emptyList();
 
     List<AnnotatedTextFragment> annotatedTextFragments = checkingResult.getValue();
-    List<Either<Command, CodeAction>> result =
-        new ArrayList<Either<Command, CodeAction>>();
+    List<Either<Command, CodeAction>> result = new ArrayList<Either<Command, CodeAction>>();
 
     Map<String, List<LanguageToolRuleMatch>> acceptSuggestionsMatchesMap = new LinkedHashMap<>();
     List<LanguageToolRuleMatch> addToDictionaryMatches = new ArrayList<>();
