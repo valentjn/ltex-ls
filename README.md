@@ -72,9 +72,9 @@ It is recommended to use the startup scripts `bin/ltex-ls` (Linux, Mac) and `bin
 
 It is also possible to start LT<sub>E</sub>X LS directly without the startup scripts (not recommended).
 
-### Command-Line Options
+### Command-Line Arguments
 
-Any command-line arguments supplied to the startup scripts are processed by LT<sub>E</sub>X LS itself. The options are as follows:
+Any command-line arguments supplied to the startup scripts are processed by LT<sub>E</sub>X LS itself. The possible arguments are as follows:
 
 - `--[no-]endless`: Keep the server alive when the client terminates the connection to allow reuse by the next client.
 - `-h`, `--help`: Show help message and exit.
