@@ -188,14 +188,14 @@ public class Settings {
 
   private static <T> boolean mapOfSetsEqual(@Nullable Map<String, Set<T>> map1,
         @Nullable Map<String, Set<T>> map2, @Nullable String key) {
-    if (key == null) return true;
+    if (key == null) key = "en-US";
 
     if ((map1 != null) && (map2 != null)) {
       @Nullable Set<T> set1 = map1.get(key);
       @Nullable Set<T> set2 = map2.get(key);
       return ((set1 != null) ? set1.equals(set2) : (set2 == null));
     } else {
-      return ((map1 != null) ? (map2 != null) : (map2 == null));
+      return ((map1 == null) ? (map2 == null) : false);
     }
   }
 

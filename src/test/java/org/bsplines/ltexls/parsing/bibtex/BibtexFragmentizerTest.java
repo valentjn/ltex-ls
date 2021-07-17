@@ -41,7 +41,6 @@ public class BibtexFragmentizerTest {
 
     for (CodeFragment codeFragment : codeFragments) {
       Assertions.assertEquals("latex", codeFragment.getCodeLanguageId());
-      Assertions.assertEquals(settings, codeFragment.getSettings());
     }
 
     Assertions.assertEquals(" {Some Name}", codeFragments.get(0).getCode());
