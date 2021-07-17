@@ -12,11 +12,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Callable;
+import org.bsplines.ltexls.tools.Tools;
 import org.eclipse.xtext.xbase.lib.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -84,5 +86,25 @@ public class LtexLanguageServerLauncherTest {
 
     JsonElement javaJsonElement = rootJsonObject.get("java");
     Assertions.assertTrue(javaJsonElement.isJsonPrimitive());
+  }
+
+  @Test
+  public void testInputDocuments() throws Exception {
+    File inputDocumentFile = File.createTempFile("ltex-", ".tex");
+    Tools.writeFileWithException(inputDocumentFile.toPath(), "This is \\textbf{an test.}\n");
+
+    try {
+      Pair<Integer, String> result = captureStdout(
+          () -> LtexLanguageServerLauncher.mainWithoutExit(
+            new String[]{"--input-documents", inputDocumentFile.toPath().toString()}));
+      Assertions.assertEquals(0, result.getKey());
+      String output = result.getValue();
+      Assertions.assertTrue(output.contains("Use 'a' instead of 'an'"));
+    } finally {
+      if (!inputDocumentFile.delete()) {
+        Tools.logger.warning(Tools.i18n(
+            "couldNotDeleteTemporaryFile", inputDocumentFile.toPath().toString()));
+      }
+    }
   }
 }

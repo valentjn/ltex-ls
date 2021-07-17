@@ -12,6 +12,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Locale;
@@ -151,24 +152,30 @@ public class Tools {
 
   public static @Nullable String readFile(Path filePath) {
     try {
-      return new String(Files.readAllBytes(filePath), "utf-8");
+      return readFileWithException(filePath);
     } catch (IOException e) {
       Tools.logger.warning(Tools.i18n("couldNotReadFile", e, filePath.toString()));
       return null;
     }
   }
 
-  /*
-  public static void writeFile(Path filePath, String string) {
+  public static String readFileWithException(Path filePath) throws IOException {
+    return new String(Files.readAllBytes(filePath), "utf-8");
+  }
+
+  public static void writeFile(Path filePath, String text) {
     try {
-      Files.write(filePath, string.getBytes("utf-8"), StandardOpenOption.CREATE,
-          StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE,
-          StandardOpenOption.SYNC);
+      writeFileWithException(filePath, text);
     } catch (IOException e) {
       Tools.logger.warning(Tools.i18n("couldNotWriteFile", e, filePath.toString()));
     }
   }
-  */
+
+  public static void writeFileWithException(Path filePath, String text) throws IOException {
+    Files.write(filePath, text.getBytes("utf-8"), StandardOpenOption.CREATE,
+        StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE,
+        StandardOpenOption.SYNC);
+  }
 
   public static String getRandomUuid() {
     return (new UUID(randomNumberGenerator.nextLong(),

@@ -72,7 +72,7 @@ public class CodeActionGenerator {
     return ret;
   }
 
-  private static int findAnnotatedTextFragmentWithMatch(
+  public static int findAnnotatedTextFragmentWithMatch(
         List<AnnotatedTextFragment> annotatedTextFragments, LanguageToolRuleMatch match) {
     for (int i = 0; i < annotatedTextFragments.size(); i++) {
       if (annotatedTextFragments.get(i).getCodeFragment().contains(match)) return i;

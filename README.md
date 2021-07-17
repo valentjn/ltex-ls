@@ -22,9 +22,11 @@
 
 LT<sub>E</sub>X LS (LT<sub>E</sub>X Language Server) implements a language server according to the [Language Server Protocol (LSP)](https://microsoft.github.io/language-server-protocol/) and provides grammar and spelling errors in markup documents (L<sup>A</sup>T<sub>E</sub>X, Markdown, etc.). The documents are checked with [LanguageTool](https://languagetool.org/).
 
-Simply put, you start the language server (either locally or remotely), you send the language server your L<sup>A</sup>T<sub>E</sub>X or Markdown document, and it will respond with a list of the grammar and spelling errors in it. To use LT<sub>E</sub>X LS, you have to use a language client (usually an editor or an extension of the editor) that communicates with LT<sub>E</sub>X LS according to the LSP.
+Typically, you start the language server (either locally or remotely), you send the language server your L<sup>A</sup>T<sub>E</sub>X or Markdown document, and it will respond with a list of the grammar and spelling errors in it. To use LT<sub>E</sub>X LS in this way, you have to use a language client (usually an editor or an extension of the editor) that communicates with LT<sub>E</sub>X LS according to the LSP.
 
-The reference client of LT<sub>E</sub>X LS is the [LT<sub>E</sub>X extension for Visual Studio Code (vscode-ltex)](https://valentjn.github.io/vscode-ltex), whose development LT<sub>E</sub>X LS follows closely and vice versa.
+However, it is also possible to supply LT<sub>E</sub>X LS paths to files and directories to be checked as command-line arguments. In this mode, LT<sub>E</sub>X LS will print the results to standard output, and no language client is necessary.
+
+The reference language client of LT<sub>E</sub>X LS is the [LT<sub>E</sub>X extension for Visual Studio Code (vscode-ltex)](https://valentjn.github.io/vscode-ltex), whose development LT<sub>E</sub>X LS follows closely and vice versa.
 
 Find more information about LT<sub>E</sub>X at the [website of vscode-ltex](https://valentjn.github.io/vscode-ltex).
 
@@ -43,7 +45,7 @@ Find more information about LT<sub>E</sub>X at the [website of vscode-ltex](http
 
 ## Current List of Language Clients
 
-In order to use LT<sub>E</sub>X LS, you need a language client. For some editors, language clients are already available, see the following list. If your editor is in the list, read the installation instructions of the language client first; it might download LT<sub>E</sub>X LS automatically or tell you where to store LT<sub>E</sub>X LS. The rest of this document is only relevant if you want to implement your own language client.
+In order to use LT<sub>E</sub>X LS with an editor, it is recommended to use a language client. For some editors, language clients are already available, see the following list. If your editor is in the list, read the installation instructions of the language client first; it might download LT<sub>E</sub>X LS automatically or tell you where to store LT<sub>E</sub>X LS. The rest of this document is only relevant if you want to implement your own language client, or if you want to use LT<sub>E</sub>X LS standalone as a file-based checker.
 
 - VS Code/reference client: [LT<sub>E</sub>X for VS Code (valentjn/vscode-ltex)](https://valentjn.github.io/vscode-ltex)
 - Emacs using `eglot`: [emacs-languagetool/eglot-ltex](https://github.com/emacs-languagetool/eglot-ltex)
@@ -54,7 +56,7 @@ In order to use LT<sub>E</sub>X LS, you need a language client. For some editors
 ## Requirements
 
 - 64-bit operating system
-- Language client supporting LSP 3.15 or later
+- If you want to use LT<sub>E</sub>X LS with a language client: Language client supporting LSP 3.15 or later
 
 ## Installation
 
@@ -79,14 +81,23 @@ Any command-line arguments supplied to the startup scripts are processed by LT<s
 - `--[no-]endless`: Keep the server alive when the client terminates the connection to allow reuse by the next client.
 - `-h`, `--help`: Show help message and exit.
 - `--host=<host>`: Listen for TCP connections on host `<host>` (IP address or hostname; default is `localhost`). Only relevant if server type is `tcpSocket`.
+- `--input-documents=<path> <path> ...`: Instead of running as server, check the documents at the given paths, print the results to standard output, and exit. Directories are traversed recursively. If `-` is given, standard input will be checked as plain text.
 - `--log-file=<logFile>`: Tee server/client communication and server log to `<logFile>`. `${PID}` is replaced by the process ID of LT<sub>E</sub>X LS. The parent directory of `<logFile>` must exist. If `<logFile>` is an existing directory, then `ltex-ls-${PID}.log` is used as filename.
 - `--port=<port>`: Listen for TCP connections on port `<port>`. Only relevant if server type is `tcpSocket`. A value of `0` (default) will have the system automatically determine a free port (the actual port number will be printed to the log).
 - `--server-type=<serverType>`: Run the server as type `<serverType>`. Valid values are:
   - `standardStream` (default): Communicate with clients over standard input and standard output.
   - `tcpSocket`: Communicate with clients over a TCP socket.
+- `--settings-file=<settingsFile>`: Use the settings stored in the JSON file `<settingsFile>` (format example: `{"language": "en-US"}`). Only relevant when using `--input-documents`.
 - `-V`, `--version`: Print version information as JSON to the standard output and exit. The format is a JSON object with `"java"` and `"ltex-ls"` keys and string values. A key may be missing if no information about the corresponding version could be retrieved.
 
 Instead of using the equals sign `=` to separate option names and values, it is also possible to use one or more spaces.
+
+### Exit Codes
+
+- 0: LT<sub>E</sub>X LS exited successfully. When using `--input-documents`: No grammar/spelling errors were found.
+- 1: An exception was thrown during the execution of LT<sub>E</sub>X LS.
+- 2: An invalid command-line argument has been given to LT<sub>E</sub>X LS.
+- 3: When using `--input-documents`: At least one grammar/spelling error was found.
 
 ## Checking Documents with the LSP
 

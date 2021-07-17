@@ -19,6 +19,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -26,6 +27,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import org.bsplines.ltexls.client.LtexLanguageClient;
 import org.bsplines.ltexls.server.LtexLanguageServer;
+import org.bsplines.ltexls.server.NonServerChecker;
 import org.bsplines.ltexls.tools.TeeInputStream;
 import org.bsplines.ltexls.tools.TeeOutputStream;
 import org.bsplines.ltexls.tools.Tools;
@@ -34,6 +36,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.eclipse.lsp4j.jsonrpc.Launcher;
 import org.eclipse.lsp4j.launch.LSPLauncher;
 import org.eclipse.lsp4j.services.LanguageClient;
+import org.fusesource.jansi.AnsiConsole;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -50,6 +53,18 @@ public class LtexLanguageServerLauncher implements Callable<Integer> {
   @Option(names = {"--endless"}, negatable = true,
       description = "Keep server alive when client terminates.")
   private boolean endless = false;
+
+  @Option(names = {"--input-documents"}, arity = "1..*",
+      description = "Instead of running as server, check the documents at the paths "
+      + "<inputDocuments>, print the results to standard output, and exit. "
+      + "Directories are traversed recursively. "
+      + "If - is given, standard input will be checked as plain text.")
+  private @Nullable List<Path> inputDocuments = null;
+
+  @Option(names = {"--settings-file"}, description = "Use the settings stored in the JSON file "
+      + "<settingsFile> (format example: {\"language\": \"en-US\"}; "
+      + "only relevant when using --input-documents).")
+  private @Nullable Path settingsFile = null;
 
   @Option(names = {"--server-type"},
       description = "Run the server as type <serverType>. Valid values: ${COMPLETION-CANDIDATES}")
@@ -102,6 +117,17 @@ public class LtexLanguageServerLauncher implements Callable<Integer> {
       }
 
       do {
+        if (this.inputDocuments != null) {
+          NonServerChecker nonServerChecker = new NonServerChecker();
+          if (this.settingsFile != null) nonServerChecker.loadSettings(this.settingsFile);
+
+          // to slience Checker Framework warning
+          if (this.inputDocuments != null) {
+            int numberOfMatches = nonServerChecker.check(this.inputDocuments);
+            return ((numberOfMatches == 0) ? 0 : 3);
+          }
+        }
+
         InputStream inputStream = System.in;
         OutputStream outputStream = System.out;
 
@@ -150,6 +176,7 @@ public class LtexLanguageServerLauncher implements Callable<Integer> {
   }
 
   public static void main(String[] arguments) {
+    AnsiConsole.systemInstall();
     CommandLine commandLine = new CommandLine(new LtexLanguageServerLauncher());
     int exitCode = commandLine.execute(arguments);
     if (exitCode != 0) System.exit(exitCode);

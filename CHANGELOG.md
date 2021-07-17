@@ -11,6 +11,7 @@
 ## 12.4.0 (upcoming)
 
 - Add support for checking comments in many popular programming languages (fixes [vscode-ltex#350](https://github.com/valentjn/vscode-ltex/issues/350))
+- Add non-server batch mode via `--input-documents` (fixes [#71](https://github.com/valentjn/ltex-ls/issues/71))
 - Remove support for magic comments in XHTML
 
 ## 12.3.0 (July 12, 2021)
