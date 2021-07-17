@@ -88,14 +88,14 @@ public class DocumentChecker {
     this.settingsManager.setSettings(settings);
     @Nullable LanguageToolInterface languageToolInterface =
         this.settingsManager.getLanguageToolInterface();
+    String codeLanguageId = codeFragment.getCodeLanguageId();
 
     if (languageToolInterface == null) {
       Tools.logger.warning(Tools.i18n("skippingTextCheckAsLanguageToolHasNotBeenInitialized"));
       return Collections.emptyList();
-    } else if (!settings.getEnabled().contains(codeFragment.getCodeLanguageId())
-          && !codeFragment.getCodeLanguageId().equals("plaintext")) {
-      Tools.logger.fine(Tools.i18n("skippingTextCheckAsLtexHasBeenDisabled",
-          codeFragment.getCodeLanguageId()));
+    } else if (!settings.getEnabled().contains(codeLanguageId)
+          && !codeLanguageId.equals("nop") && !codeLanguageId.equals("plaintext")) {
+      Tools.logger.fine(Tools.i18n("skippingTextCheckAsLtexHasBeenDisabled", codeLanguageId));
       return Collections.emptyList();
     } else if (settings.getDictionary().contains("BsPlInEs")) {
       languageToolInterface.enableEasterEgg();

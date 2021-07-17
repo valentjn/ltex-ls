@@ -16,6 +16,7 @@ import org.bsplines.ltexls.parsing.bibtex.BibtexFragmentizer;
 import org.bsplines.ltexls.parsing.html.HtmlFragmentizer;
 import org.bsplines.ltexls.parsing.latex.LatexFragmentizer;
 import org.bsplines.ltexls.parsing.markdown.MarkdownFragmentizer;
+import org.bsplines.ltexls.parsing.nop.NopFragmentizer;
 import org.bsplines.ltexls.parsing.org.OrgFragmentizer;
 import org.bsplines.ltexls.parsing.plaintext.PlaintextFragmentizer;
 import org.bsplines.ltexls.parsing.restructuredtext.RestructuredtextFragmentizer;
@@ -36,6 +37,8 @@ public abstract class CodeFragmentizer {
         new LatexFragmentizer(codeLanguageId));
     constructorMap.put("markdown", (String codeLanguageId) ->
         new MarkdownFragmentizer(codeLanguageId));
+    constructorMap.put("nop", (String codeLanguageId) ->
+        new NopFragmentizer(codeLanguageId));
     constructorMap.put("org", (String codeLanguageId) ->
         new OrgFragmentizer(codeLanguageId));
     constructorMap.put("plaintext", (String codeLanguageId) ->

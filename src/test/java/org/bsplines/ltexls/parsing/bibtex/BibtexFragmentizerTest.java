@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 
 public class BibtexFragmentizerTest {
   @Test
-  public void test() {
+  public void testFragmentizer() {
     Settings settings = new Settings();
     CodeFragmentizer fragmentizer = CodeFragmentizer.create("bibtex");
     List<CodeFragment> codeFragments = fragmentizer.fragmentize(

@@ -136,7 +136,7 @@ public class DocumentCheckerTest {
     List<AnnotatedTextFragment> annotatedTextFragments = checkingResult.getValue();
 
     Assertions.assertEquals(4, matches.size());
-    Assertions.assertEquals(4, annotatedTextFragments.size());
+    Assertions.assertEquals(5, annotatedTextFragments.size());
 
     Assertions.assertEquals("MORFOLOGIK_RULE_EN_US",
         NullnessUtil.castNonNull(matches.get(0).getRuleId()));
@@ -161,7 +161,7 @@ public class DocumentCheckerTest {
 
     Assertions.assertEquals("GERMAN_SPELLER_RULE",
         NullnessUtil.castNonNull(matches.get(3).getRuleId()));
-    Assertions.assertEquals("Dies ist ein Qwertyzuiopc. ",
+    Assertions.assertEquals(" Dies ist ein Qwertyzuiopc. ",
         NullnessUtil.castNonNull(matches.get(3).getSentence()));
     Assertions.assertEquals(100, matches.get(3).getFromPos());
     Assertions.assertEquals(112, matches.get(3).getToPos());
@@ -176,16 +176,21 @@ public class DocumentCheckerTest {
     Assertions.assertEquals("This is a qwertyzuiopa. ",
         annotatedTextFragments.get(1).getAnnotatedText().getPlainText());
 
-    Assertions.assertEquals("Dies ist ein weiteres Qwertyzuiopd.",
+    Assertions.assertEquals("% ltex: language=de-DE",
         annotatedTextFragments.get(2).getCodeFragment().getCode());
-    Assertions.assertEquals("Dies ist ein weiteres Qwertyzuiopd.",
+    Assertions.assertEquals("",
         annotatedTextFragments.get(2).getAnnotatedText().getPlainText());
 
-    Assertions.assertEquals("% ltex: language=de-DE\n"
-        + "Dies ist ein Qwertyzuiopc\\todo[name]{Dies ist ein weiteres Qwertyzuiopd.}.\n",
+    Assertions.assertEquals("Dies ist ein weiteres Qwertyzuiopd.",
         annotatedTextFragments.get(3).getCodeFragment().getCode());
-    Assertions.assertEquals("Dies ist ein Qwertyzuiopc. ",
+    Assertions.assertEquals("Dies ist ein weiteres Qwertyzuiopd.",
         annotatedTextFragments.get(3).getAnnotatedText().getPlainText());
+
+    Assertions.assertEquals("\nDies ist ein Qwertyzuiopc"
+        + "\\todo[name]{Dies ist ein weiteres Qwertyzuiopd.}.\n",
+        annotatedTextFragments.get(4).getCodeFragment().getCode());
+    Assertions.assertEquals(" Dies ist ein Qwertyzuiopc. ",
+        annotatedTextFragments.get(4).getAnnotatedText().getPlainText());
 
     assertOriginalAndPlainTextWords("latex", "The \\v{S}ekki\n", "\\v{S}ekki", "\u0160ekki");
     assertOriginalAndPlainTextWords("latex", "The Sekk\\v{S}\n", "Sekk\\v{S}", "Sekk\u0160");

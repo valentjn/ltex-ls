@@ -15,36 +15,45 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class MarkdownFragmentizerTest {
-  private static void testFragmentizer(CodeFragmentizer fragmentizer, String code) {
+  private static void assertFragmentizer(String codeLanguageId, String code) {
+    CodeFragmentizer fragmentizer = CodeFragmentizer.create(codeLanguageId);
     List<CodeFragment> codeFragments = fragmentizer.fragmentize(code, new Settings());
-    Assertions.assertEquals(3, codeFragments.size());
+    Assertions.assertEquals(5, codeFragments.size());
 
-    Assertions.assertEquals("markdown", codeFragments.get(0).getCodeLanguageId());
+    Assertions.assertEquals(codeLanguageId, codeFragments.get(0).getCodeLanguageId());
     Assertions.assertEquals(0, codeFragments.get(0).getFromPos());
     Assertions.assertEquals(12, codeFragments.get(0).getCode().length());
     Assertions.assertEquals("en-US", codeFragments.get(0).getSettings().getLanguageShortCode());
 
-    Assertions.assertEquals("markdown", codeFragments.get(1).getCodeLanguageId());
+    Assertions.assertEquals("nop", codeFragments.get(1).getCodeLanguageId());
     Assertions.assertEquals(12, codeFragments.get(1).getFromPos());
-    Assertions.assertEquals(50, codeFragments.get(1).getCode().length());
+    Assertions.assertEquals(36, codeFragments.get(1).getCode().length());
     Assertions.assertEquals("de-DE", codeFragments.get(1).getSettings().getLanguageShortCode());
 
-    Assertions.assertEquals("markdown", codeFragments.get(2).getCodeLanguageId());
-    Assertions.assertEquals(62, codeFragments.get(2).getFromPos());
-    Assertions.assertEquals(48, codeFragments.get(2).getCode().length());
-    Assertions.assertEquals("en-US", codeFragments.get(2).getSettings().getLanguageShortCode());
+    Assertions.assertEquals(codeLanguageId, codeFragments.get(2).getCodeLanguageId());
+    Assertions.assertEquals(48, codeFragments.get(2).getFromPos());
+    Assertions.assertEquals(14, codeFragments.get(2).getCode().length());
+    Assertions.assertEquals("de-DE", codeFragments.get(2).getSettings().getLanguageShortCode());
+
+    Assertions.assertEquals("nop", codeFragments.get(3).getCodeLanguageId());
+    Assertions.assertEquals(62, codeFragments.get(3).getFromPos());
+    Assertions.assertEquals(35, codeFragments.get(3).getCode().length());
+    Assertions.assertEquals("en-US", codeFragments.get(3).getSettings().getLanguageShortCode());
+
+    Assertions.assertEquals(codeLanguageId, codeFragments.get(4).getCodeLanguageId());
+    Assertions.assertEquals(97, codeFragments.get(4).getFromPos());
+    Assertions.assertEquals(13, codeFragments.get(4).getCode().length());
+    Assertions.assertEquals("en-US", codeFragments.get(4).getSettings().getLanguageShortCode());
   }
 
   @Test
-  public void test() {
-    CodeFragmentizer fragmentizer = CodeFragmentizer.create("markdown");
-
-    testFragmentizer(fragmentizer,
+  public void testFragmentizer() {
+    assertFragmentizer("markdown",
         "Sentence 1\n"
         + "\n[comment]: <> \"ltex: language=de-DE\"\n\nSentence 2\n"
         + "\n[comment]:\t<>\"ltex:\tlanguage=en-US\"\n\nSentence 3\n");
 
-    testFragmentizer(fragmentizer,
+    assertFragmentizer("markdown",
         "Sentence 1\n"
         + "\n  <!-- ltex: language=de-DE-->      \n\nSentence 2\n"
         + "\n<!--\t\t\tltex:\t\t\t\tlanguage=en-US\t\t-->\n\nSentence 3\n");

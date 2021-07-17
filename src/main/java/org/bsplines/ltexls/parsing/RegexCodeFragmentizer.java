@@ -32,14 +32,14 @@ public class RegexCodeFragmentizer extends CodeFragmentizer {
     List<CodeFragment> codeFragments = new ArrayList<>();
     Matcher matcher = this.pattern.matcher(code);
     Settings curSettings = originalSettings;
-    int curFromPos = 0;
+    int curPos = 0;
 
     while (matcher.find()) {
-      int lastFromPos = curFromPos;
-      curFromPos = matcher.start();
-      String lastCode = code.substring(lastFromPos, curFromPos);
+      int lastPos = curPos;
+      curPos = matcher.start();
+      String lastCode = code.substring(lastPos, curPos);
       Settings lastSettings = curSettings;
-      codeFragments.add(new CodeFragment(codeLanguageId, lastCode, lastFromPos, lastSettings));
+      codeFragments.add(new CodeFragment(codeLanguageId, lastCode, lastPos, lastSettings));
 
       @Nullable String settingsLine = null;
 
@@ -67,10 +67,16 @@ public class RegexCodeFragmentizer extends CodeFragmentizer {
               setting.getKey(), setting.getValue()));
         }
       }
+
+      lastPos = curPos;
+      curPos = matcher.end();
+      lastCode = code.substring(lastPos, curPos);
+      lastSettings = curSettings;
+      codeFragments.add(new CodeFragment("nop", lastCode, lastPos, lastSettings));
     }
 
     codeFragments.add(new CodeFragment(
-        codeLanguageId, code.substring(curFromPos), curFromPos, curSettings));
+        codeLanguageId, code.substring(curPos), curPos, curSettings));
 
     return codeFragments;
   }

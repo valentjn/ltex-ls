@@ -16,13 +16,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class LatexFragmentizerTest {
-  private static void testCodeLanguage(String codeLanguageId) {
+  private static void assertFragmentizer(String codeLanguageId) {
     CodeFragmentizer fragmentizer = CodeFragmentizer.create(codeLanguageId);
     List<CodeFragment> codeFragments = fragmentizer.fragmentize(
         "Sentence\\footnote[abc]{Footnote} 1\n"
         + "\t\t  %\t ltex: language=de-DE\nSentence 2\\todo{Todo note}\n"
         + "%ltex:\tlanguage=en-US\n\nSentence 3\n", new Settings());
-    Assertions.assertEquals(5, codeFragments.size());
+    Assertions.assertEquals(7, codeFragments.size());
 
     for (CodeFragment codeFragment : codeFragments) {
       Assertions.assertEquals(codeLanguageId, codeFragment.getCodeLanguageId());
@@ -37,19 +37,28 @@ public class LatexFragmentizerTest {
     Assertions.assertEquals(0, codeFragments.get(1).getFromPos());
     Assertions.assertEquals("en-US", codeFragments.get(1).getSettings().getLanguageShortCode());
 
-    Assertions.assertEquals("Todo note", codeFragments.get(2).getCode());
-    Assertions.assertEquals(79, codeFragments.get(2).getFromPos());
+    Assertions.assertEquals("\t\t  %\t ltex: language=de-DE", codeFragments.get(2).getCode());
+    Assertions.assertEquals(35, codeFragments.get(2).getFromPos());
     Assertions.assertEquals("de-DE", codeFragments.get(2).getSettings().getLanguageShortCode());
 
-    Assertions.assertEquals("\t\t  %\t ltex: language=de-DE\nSentence 2\\todo{Todo note}\n",
-        codeFragments.get(3).getCode());
-    Assertions.assertEquals(35, codeFragments.get(3).getFromPos());
+    Assertions.assertEquals("Todo note", codeFragments.get(3).getCode());
+    Assertions.assertEquals(79, codeFragments.get(3).getFromPos());
     Assertions.assertEquals("de-DE", codeFragments.get(3).getSettings().getLanguageShortCode());
 
-    Assertions.assertEquals("%ltex:\tlanguage=en-US\n\nSentence 3\n",
+    Assertions.assertEquals("\nSentence 2\\todo{Todo note}\n",
         codeFragments.get(4).getCode());
-    Assertions.assertEquals(90, codeFragments.get(4).getFromPos());
-    Assertions.assertEquals("en-US", codeFragments.get(4).getSettings().getLanguageShortCode());
+    Assertions.assertEquals(62, codeFragments.get(4).getFromPos());
+    Assertions.assertEquals("de-DE", codeFragments.get(4).getSettings().getLanguageShortCode());
+
+    Assertions.assertEquals("%ltex:\tlanguage=en-US",
+        codeFragments.get(5).getCode());
+    Assertions.assertEquals(90, codeFragments.get(5).getFromPos());
+    Assertions.assertEquals("en-US", codeFragments.get(5).getSettings().getLanguageShortCode());
+
+    Assertions.assertEquals("\n\nSentence 3\n",
+        codeFragments.get(6).getCode());
+    Assertions.assertEquals(111, codeFragments.get(6).getFromPos());
+    Assertions.assertEquals("en-US", codeFragments.get(6).getSettings().getLanguageShortCode());
 
     codeFragments = fragmentizer.fragmentize(
         "This is a \\foreignlanguage{ngerman}{Beispiel}.\n"
@@ -122,7 +131,7 @@ public class LatexFragmentizerTest {
 
   @Test
   public void testLatex() {
-    testCodeLanguage("latex");
+    assertFragmentizer("latex");
 
     {
       Settings settings = (new Settings()).withLatexCommands(
@@ -132,18 +141,18 @@ public class LatexFragmentizerTest {
           "Sentence\\footnote[abc]{Footnote} 1\n"
           + "\t\t  %\t ltex: language=de-DE\nSentence 2\\todo{Todo note}\n"
           + "%ltex:\tlanguage=en-US\n\nSentence 3\n", settings);
-      Assertions.assertEquals(4, codeFragments.size());
+      Assertions.assertEquals(6, codeFragments.size());
     }
   }
 
   @Test
   public void testRsweave() {
-    testCodeLanguage("rsweave");
+    assertFragmentizer("rsweave");
   }
 
   @Test
   public void testTex() {
-    testCodeLanguage("tex");
+    assertFragmentizer("tex");
   }
 
   @Test
