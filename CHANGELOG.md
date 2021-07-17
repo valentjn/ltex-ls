@@ -8,6 +8,10 @@
 
 # Changelog
 
+## 12.4.0 (upcoming)
+
+- Remove support for magic comments in XHTML
+
 ## 12.3.0 (July 12, 2021)
 
 - Update LanguageTool to 5.4 (see [LT 5.4 release notes](https://github.com/languagetool-org/languagetool/blob/v5.4/languagetool-standalone/CHANGES.md#54-2021-06-25))

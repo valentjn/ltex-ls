@@ -7,15 +7,19 @@
 
 package org.bsplines.ltexls.parsing.html;
 
-import java.util.regex.Pattern;
-import org.bsplines.ltexls.parsing.RegexCodeFragmentizer;
+import java.util.Collections;
+import java.util.List;
+import org.bsplines.ltexls.parsing.CodeFragment;
+import org.bsplines.ltexls.parsing.CodeFragmentizer;
+import org.bsplines.ltexls.settings.Settings;
 
-public class HtmlFragmentizer extends RegexCodeFragmentizer {
-  private static final Pattern pattern = Pattern.compile(
-      "^[ \t]*<!--[ \t]*(?i)ltex(?-i):(.*?)[ \t]*-->[ \t]*$",
-      Pattern.MULTILINE);
-
+public class HtmlFragmentizer extends CodeFragmentizer {
   public HtmlFragmentizer(String codeLanguageId) {
-    super(codeLanguageId, pattern);
+    super(codeLanguageId);
+  }
+
+  @Override
+  public List<CodeFragment> fragmentize(String code, Settings originalSettings) {
+    return Collections.singletonList(new CodeFragment(codeLanguageId, code, 0, originalSettings));
   }
 }
