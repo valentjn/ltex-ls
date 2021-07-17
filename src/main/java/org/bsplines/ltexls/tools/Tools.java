@@ -198,4 +198,112 @@ public class Tools {
       throw (CancellationException)rootCause;
     }
   }
+
+  public static @Nullable String getCodeLanguageIdFromPath(Path path) {
+    Path fileName = path.getFileName();
+    String fileNameString = ((fileName != null) ? fileName.toString() : "");
+    @Nullable String codeLanguageId = null;
+
+    if (fileNameString.endsWith(".bib")) {
+      codeLanguageId = "bibtex";
+    } else if (fileNameString.endsWith(".c")
+          || fileNameString.endsWith(".h")) {
+      codeLanguageId = "c";
+    } else if (fileNameString.endsWith(".clj")) {
+      codeLanguageId = "clojure";
+    } else if (fileNameString.endsWith(".coffee")) {
+      codeLanguageId = "coffeescript";
+    } else if (fileNameString.endsWith(".cc")
+          || fileNameString.endsWith(".cpp")
+          || fileNameString.endsWith(".cxx")
+          || fileNameString.endsWith(".hh")
+          || fileNameString.endsWith(".hpp")
+          || fileNameString.endsWith(".inl")) {
+      codeLanguageId = "cpp";
+    } else if (fileNameString.endsWith(".cs")) {
+      codeLanguageId = "csharp";
+    } else if (fileNameString.endsWith(".dart")) {
+      codeLanguageId = "dart";
+    } else if (fileNameString.endsWith(".ex")) {
+      codeLanguageId = "elixir";
+    } else if (fileNameString.endsWith(".elm")) {
+      codeLanguageId = "elm";
+    } else if (fileNameString.endsWith(".erl")) {
+      codeLanguageId = "erlang";
+    } else if (fileNameString.endsWith(".f90")) {
+      codeLanguageId = "fortran-modern";
+    } else if (fileNameString.endsWith(".fs")) {
+      codeLanguageId = "fsharp";
+    } else if (fileNameString.endsWith(".go")) {
+      codeLanguageId = "go";
+    } else if (fileNameString.endsWith(".groovy")) {
+      codeLanguageId = "groovy";
+    } else if (fileNameString.endsWith(".hs")) {
+      codeLanguageId = "haskell";
+    } else if (fileNameString.endsWith(".htm")
+          || fileNameString.endsWith(".html")
+          || fileNameString.endsWith(".xht")
+          || fileNameString.endsWith(".xhtml")) {
+      codeLanguageId = "html";
+    } else if (fileNameString.endsWith(".java")) {
+      codeLanguageId = "java";
+    } else if (fileNameString.endsWith(".js")) {
+      codeLanguageId = "javascript";
+    } else if (fileNameString.endsWith(".jl")) {
+      codeLanguageId = "julia";
+    } else if (fileNameString.endsWith(".kt")) {
+      codeLanguageId = "kotlin";
+    } else if (fileNameString.endsWith(".tex")) {
+      codeLanguageId = "latex";
+    } else if (fileNameString.endsWith(".lisp")) {
+      codeLanguageId = "lisp";
+    } else if (fileNameString.endsWith(".lua")) {
+      codeLanguageId = "lua";
+    } else if (fileNameString.endsWith(".md")) {
+      codeLanguageId = "markdown";
+    } else if (fileNameString.endsWith(".m")) {
+      codeLanguageId = "matlab";
+    } else if (fileNameString.endsWith(".org")) {
+      codeLanguageId = "org";
+    } else if (fileNameString.endsWith(".pl")) {
+      codeLanguageId = "perl";
+    } else if (fileNameString.endsWith(".php")) {
+      codeLanguageId = "php";
+    } else if (fileNameString.endsWith(".txt")) {
+      codeLanguageId = "plaintext";
+    } else if (fileNameString.endsWith(".ps1")) {
+      codeLanguageId = "powershell";
+    } else if (fileNameString.endsWith(".pp")) {
+      codeLanguageId = "puppet";
+    } else if (fileNameString.endsWith(".py")) {
+      codeLanguageId = "python";
+    } else if (fileNameString.endsWith(".r")) {
+      codeLanguageId = "r";
+    } else if (fileNameString.endsWith(".rst")) {
+      codeLanguageId = "restructuredtext";
+    } else if (fileNameString.endsWith(".Rnw")
+          || fileNameString.endsWith(".rnw")) {
+      codeLanguageId = "rsweave";
+    } else if (fileNameString.endsWith(".rb")) {
+      codeLanguageId = "ruby";
+    } else if (fileNameString.endsWith(".rs")) {
+      codeLanguageId = "rust";
+    } else if (fileNameString.endsWith(".scala")) {
+      codeLanguageId = "scala";
+    } else if (fileNameString.endsWith(".sh")) {
+      codeLanguageId = "shellscript";
+    } else if (fileNameString.endsWith(".sql")) {
+      codeLanguageId = "sql";
+    } else if (fileNameString.endsWith(".swift")) {
+      codeLanguageId = "swift";
+    } else if (fileNameString.endsWith(".ts")) {
+      codeLanguageId = "typescript";
+    } else if (fileNameString.endsWith(".vb")) {
+      codeLanguageId = "vb";
+    } else if (fileNameString.endsWith(".v")) {
+      codeLanguageId = "verilog";
+    }
+
+    return codeLanguageId;
+  }
 }
