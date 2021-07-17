@@ -280,7 +280,7 @@
 
 ## 4.9.3 (May 7, 2020)
 
-- Revert back to Java 8
+- Revert to Java 8
 - Remove support for external LanguageTool HTTP servers
 
 ## 4.9.2 (May 6, 2020)
@@ -307,7 +307,7 @@
 
 ## 4.7.9 (February 29, 2020)
 
-- Update the Markdown parser flexmark-java to 0.60.2; this increases the speed of parsing Markdown
+- Update Markdown parser Flexmark to 0.60.2; this increases the speed of parsing Markdown
 - Add possibility to ignore Markdown elements or replace them by dummy words via `ltex.markdown.ignore` and `ltex.markdown.dummy` (fixes [vscode-ltex#26](https://github.com/valentjn/vscode-ltex/issues/26))
 - Ignore Markdown code blocks by default
 - Replace auto-links and inline Markdown code with dummy words by default
