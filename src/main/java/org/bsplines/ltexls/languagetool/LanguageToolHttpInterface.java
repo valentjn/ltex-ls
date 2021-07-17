@@ -34,6 +34,7 @@ import org.bsplines.ltexls.tools.Tools;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.languagetool.markup.TextPart;
+import org.languagetool.rules.RuleMatch;
 
 public class LanguageToolHttpInterface extends LanguageToolInterface {
   private String languageShortCode;
@@ -174,7 +175,7 @@ public class LanguageToolHttpInterface extends LanguageToolInterface {
       }
 
       result.add(new LanguageToolRuleMatch(ruleId, sentence, fromPos, toPos, message,
-          suggestedReplacements, annotatedTextFragment));
+          suggestedReplacements, RuleMatch.Type.Hint, annotatedTextFragment));
     }
 
     return result;

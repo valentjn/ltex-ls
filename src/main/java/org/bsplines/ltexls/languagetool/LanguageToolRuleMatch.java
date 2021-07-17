@@ -29,23 +29,25 @@ public class LanguageToolRuleMatch {
   private int toPos;
   private String message;
   private List<String> suggestedReplacements;
+  private RuleMatch.Type type;
 
   public LanguageToolRuleMatch(RuleMatch match, AnnotatedTextFragment annotatedTextFragment) {
     this(((match.getRule() != null) ? match.getRule().getId() : null),
         ((match.getSentence() != null) ? match.getSentence().getText() : null),
         match.getFromPos(), match.getToPos(), match.getMessage(), match.getSuggestedReplacements(),
-        annotatedTextFragment);
+        match.getType(), annotatedTextFragment);
   }
 
   public LanguageToolRuleMatch(@Nullable String ruleId, @Nullable String sentence,
         int fromPos, int toPos, String message, List<String> suggestedReplacements,
-        AnnotatedTextFragment annotatedTextFragment) {
+        RuleMatch.Type type, AnnotatedTextFragment annotatedTextFragment) {
     if (ruleId != null) this.ruleId = ruleId;
     if (sentence != null) this.sentence = sentence;
     this.fromPos = fromPos;
     this.toPos = toPos;
     this.message = message;
     this.suggestedReplacements = new ArrayList<>(suggestedReplacements);
+    this.type = type;
 
     if (this.isUnknownWordRule()) {
       String unknownWord = annotatedTextFragment.getSubstringOfPlainText(fromPos, toPos);
@@ -77,6 +79,10 @@ public class LanguageToolRuleMatch {
 
   public List<String> getSuggestedReplacements() {
     return Collections.unmodifiableList(this.suggestedReplacements);
+  }
+
+  public RuleMatch.Type getType() {
+    return this.type;
   }
 
   public void setFromPos(int fromPos) {
