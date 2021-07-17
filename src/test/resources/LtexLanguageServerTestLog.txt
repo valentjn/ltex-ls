@@ -493,7 +493,7 @@ Params: {
     },
     "contentChanges": [
         {
-            "text": "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n"
+            "text": "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test.}\n"
         }
     ]
 }
@@ -1141,7 +1141,7 @@ Params: {
     },
     "contentChanges": [
         {
-            "text": "This is a \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n"
+            "text": "This is a \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test.}\n"
         }
     ]
 }

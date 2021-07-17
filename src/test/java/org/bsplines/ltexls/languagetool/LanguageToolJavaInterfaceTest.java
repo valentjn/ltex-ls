@@ -43,7 +43,7 @@ public class LanguageToolJavaInterfaceTest {
 
   public static void assertMatches(Settings settings, boolean checkMotherTongue) {
     List<LanguageToolRuleMatch> matches = checkDocument(settings,
-        "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n");
+        "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test.}\n");
     DocumentCheckerTest.assertMatches(matches, 8, 10, 58, 75);
 
     assertMatchesCompare(settings, settings.withDisabledRules(

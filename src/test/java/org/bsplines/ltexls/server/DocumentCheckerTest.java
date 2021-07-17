@@ -123,7 +123,7 @@ public class DocumentCheckerTest {
     Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> checkingResult;
 
     document = createDocument("latex",
-        "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test}.\n");
+        "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test.}\n");
     checkingResult = checkDocument(document);
     assertMatches(checkingResult.getKey(), 8, 10, 58, 75);
 
