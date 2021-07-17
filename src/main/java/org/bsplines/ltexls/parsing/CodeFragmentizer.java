@@ -19,6 +19,8 @@ import org.bsplines.ltexls.parsing.markdown.MarkdownFragmentizer;
 import org.bsplines.ltexls.parsing.nop.NopFragmentizer;
 import org.bsplines.ltexls.parsing.org.OrgFragmentizer;
 import org.bsplines.ltexls.parsing.plaintext.PlaintextFragmentizer;
+import org.bsplines.ltexls.parsing.program.ProgramCommentPatterns;
+import org.bsplines.ltexls.parsing.program.ProgramFragmentizer;
 import org.bsplines.ltexls.parsing.restructuredtext.RestructuredtextFragmentizer;
 import org.bsplines.ltexls.settings.Settings;
 import org.bsplines.ltexls.tools.Tools;
@@ -62,6 +64,8 @@ public abstract class CodeFragmentizer {
 
     if (constructor != null) {
       return constructor.apply(codeLanguageId);
+    } else if (ProgramCommentPatterns.isSupportedCodeLanguageId(codeLanguageId)) {
+      return new ProgramFragmentizer(codeLanguageId);
     } else {
       Tools.logger.warning(Tools.i18n("unsupportedCodeLanguageId", codeLanguageId));
       return new PlaintextFragmentizer("plaintext");

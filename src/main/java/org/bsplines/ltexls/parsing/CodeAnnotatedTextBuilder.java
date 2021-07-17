@@ -16,6 +16,8 @@ import org.bsplines.ltexls.parsing.markdown.MarkdownAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.nop.NopAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.org.OrgAnnotatedTextBuilder;
 import org.bsplines.ltexls.parsing.plaintext.PlaintextAnnotatedTextBuilder;
+import org.bsplines.ltexls.parsing.program.ProgramAnnotatedTextBuilder;
+import org.bsplines.ltexls.parsing.program.ProgramCommentPatterns;
 import org.bsplines.ltexls.parsing.restructuredtext.RestructuredtextAnnotatedTextBuilder;
 import org.bsplines.ltexls.settings.Settings;
 import org.bsplines.ltexls.tools.Tools;
@@ -61,6 +63,8 @@ public abstract class CodeAnnotatedTextBuilder extends AnnotatedTextBuilder {
 
     if (constructor != null) {
       return constructor.apply(codeLanguageId);
+    } else if (ProgramCommentPatterns.isSupportedCodeLanguageId(codeLanguageId)) {
+      return new ProgramAnnotatedTextBuilder(codeLanguageId);
     } else {
       Tools.logger.warning(Tools.i18n("unsupportedCodeLanguageId", codeLanguageId));
       return new PlaintextAnnotatedTextBuilder("plaintext");

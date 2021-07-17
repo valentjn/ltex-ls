@@ -49,6 +49,12 @@ public class CodeFragment {
     return obj;
   }
 
+  public CodeFragment withSettings(Settings settings) {
+    CodeFragment obj = new CodeFragment(this);
+    obj.settings = settings;
+    return obj;
+  }
+
   public boolean contains(LanguageToolRuleMatch match) {
     return ((match.getFromPos() >= this.fromPos)
         && (match.getToPos() <= this.fromPos + this.code.length()));
