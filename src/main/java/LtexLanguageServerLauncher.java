@@ -16,6 +16,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -60,14 +61,16 @@ public class LtexLanguageServerLauncher implements Callable<Integer> {
   private String host = "localhost";
 
   @Option(names = {"--port"}, description = "Listen for TCP connections on port <port> "
-      + "(only relevant if server type is tcpSocket).")
+      + "(only relevant if server type is tcpSocket). "
+      + "A value of 0 will have the system automatically determine a free port "
+      + "(the actual port number will be printed to the log).")
   private Integer port = 0;
 
   @Option(names = {"--log-file"}, description = "Tee server/client communication and server log "
       + "to <logFile>. $${PID} is replaced by the process ID of LTeX LS. "
       + "The parent directory of <logFile> must exist. "
       + "If <logFile> is an existing directory, then ltex-ls-$${PID}.log is used as filename.")
-  private @Nullable File logFile = null;
+  private @Nullable Path logFile = null;
 
   @Override
   public Integer call() throws Exception {
@@ -81,7 +84,7 @@ public class LtexLanguageServerLauncher implements Callable<Integer> {
 
     try {
       if (this.logFile != null) {
-        File logFile = this.logFile;
+        File logFile = this.logFile.toFile();
 
         if (logFile.exists() && logFile.isDirectory()) {
           logFile = new File(logFile, "ltex-ls-${PID}.log");
