@@ -291,6 +291,10 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\color[]{}"));
     list.add(new LatexCommandSignature("\\colorbox{}"));
     list.add(new LatexCommandSignature("\\colorlet{}{}"));
+    list.add(new LatexCommandSignature("\\counterwithin{}{}"));
+    list.add(new LatexCommandSignature("\\counterwithin*{}{}"));
+    list.add(new LatexCommandSignature("\\counterwithout{}{}"));
+    list.add(new LatexCommandSignature("\\counterwithout*{}{}"));
     list.add(new LatexCommandSignature("\\cref{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\Cref{}", LatexCommandSignature.Action.DUMMY));
     list.add(new LatexCommandSignature("\\crefname{}{}{}"));
@@ -471,6 +475,7 @@ class LatexAnnotatedTextBuilderDefaults {
     list.add(new LatexCommandSignature("\\newtheorem*{}{}"));
     list.add(new LatexCommandSignature("\\newtoggle{}"));
     list.add(new LatexCommandSignature("\\nolinkurl{}", LatexCommandSignature.Action.DUMMY));
+    list.add(new LatexCommandSignature("\\numberwithin{}{}"));
     list.add(new LatexCommandSignature("\\PackageWarning{}{}"));
     list.add(new LatexCommandSignature("\\pagecolor{}"));
     list.add(new LatexCommandSignature("\\pagenumbering{}"));
