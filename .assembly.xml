@@ -22,7 +22,7 @@
       <directory>${basedir}</directory>
       <includes>
         <include>ACKNOWLEDGMENTS.md</include>
-        <include>CHANGELOG.md</include>
+        <include>changelog.xml</include>
         <include>LICENSE.md</include>
         <include>README.md</include>
       </includes>
