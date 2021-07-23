@@ -41,6 +41,31 @@ jobs:
       - name: "Build LTeX LS"
         run: "mvn -B -e verify"
 
+  validate:
+    name: "CI - Validate Job"
+    runs-on: "ubuntu-20.04"
+
+    steps:
+      - name: "Checkout Repository"
+        uses: "actions/checkout@v2"
+
+      - name: "Set up Python"
+        uses: "actions/setup-python@v2"
+        with:
+          python-version: "3.9.0"
+
+      - name: "Install Python Dependencies"
+        run: "python -m pip install --upgrade pip && pip install xmlschema==1.6.4"
+
+      - name: "Validate .assembly.xml"
+        run: "python -c 'import xmlschema; xmlschema.XMLSchema(\"https://maven.apache.org/xsd/assembly-2.1.0.xsd\").validate(\".assembly.xml\")'"
+
+      - name: "Validate changelog.xml"
+        run: "python -c 'import xmlschema; xmlschema.XMLSchema(\"https://maven.apache.org/xsd/changes-1.0.0.xsd\").validate(\"changelog.xml\")'"
+
+      - name: "Validate pom.xml"
+        run: "python -c 'import xmlschema; xmlschema.XMLSchema(\"https://maven.apache.org/xsd/maven-4.0.0.xsd\").validate(\"pom.xml\")'"
+
   analyze_codeql:
     name: "CI - CodeQL Job"
     runs-on: "ubuntu-20.04"
@@ -89,6 +114,7 @@ jobs:
     name: "CI - Deploy Job"
     needs:
       - "build"
+      - "validate"
       - "analyze_codeql"
       - "upload_coverage"
     if: "${{ startsWith(github.ref, 'refs/tags/') }}"
