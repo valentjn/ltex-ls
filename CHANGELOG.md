@@ -40,12 +40,12 @@
 
 ## 12.0.0 (April 18, 2021)
 
-- Prefix all command names with an underscore to mark them as internal (for hiding them from the user in some clients):
-  - `ltex.addToDictionary` → `_ltex.addToDictionary`
-  - `ltex.disableRules` → `_ltex.disableRules`
-  - `ltex.hideFalsePositives` → `_ltex.hideFalsePositives`
-  - `ltex.checkDocument` → `_ltex.checkDocument`
-  - `ltex.getServerStatus` → `_ltex.getServerStatus`
+- Prefix all command names with an underscore to mark them as internal (for hiding them from the user in some clients)
+- Rename `ltex.addToDictionary` → `_ltex.addToDictionary`
+- Rename `ltex.disableRules` → `_ltex.disableRules`
+- Rename `ltex.hideFalsePositives` → `_ltex.hideFalsePositives`
+- Rename `ltex.checkDocument` → `_ltex.checkDocument`
+- Rename `ltex.getServerStatus` → `_ltex.getServerStatus`
 - Add support for Org; use the code language ID `org` (fixes [vscode-ltex#277](https://github.com/valentjn/vscode-ltex/issues/277))
 - Add basic support for reStructuredText; use the code language ID `restructuredtext` (fixes [vscode-ltex#32](https://github.com/valentjn/vscode-ltex/issues/32))
 - Add `--server-type=tcpSocket` option to communicate over a TCP socket
@@ -140,19 +140,17 @@
 
 - Upgrade from Java 8 to Java 11 (see [announcement](https://valentjn.github.io/vscode-ltex/docs/deprecation-of-java-8.html), fixes [vscode-ltex#39](https://github.com/valentjn/vscode-ltex/issues/39))
 - Add workaround to eliminate the need for workspace-specific setting names; [`ltex.dictionary`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdictionary), [`ltex.disabledRules`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdisabledrules), and [`ltex.enabledRules`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexenabledrules) can now be used in multiple setting scopes (user settings, workspace settings, and workspace folder settings) at the same time without overriding each other; instead, the settings of the different scopes will be properly merged (see [documentation](https://valentjn.github.io/vscode-ltex/docs/advanced-usage.html#multi-scope-settings))
-- Rename settings:
-  - `ltex.workspaceDictionary`, `ltex.workspaceFolderDictionary` → [`ltex.dictionary`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdictionary)
-  - `ltex.workspaceDisabledRules`, `ltex.workspaceFolderDisabledRules` → [`ltex.disabledRules`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdisabledrules)
-  - `ltex.workspaceEnabledRules`, `ltex.workspaceFolderEnabledRules` → [`ltex.enabledRules`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexenabledrules)
-  - `ltex.ignoreInRuleSentence` → [`ltex.hiddenFalsePositives`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexhiddenfalsepositives)
-  - `ltex.commands.ignore`, `ltex.commands.dummy` → [`ltex.latex.commands`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexlatexcommands)
-  - `ltex.environments.ignore` → [`ltex.latex.environments`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexlatexenvironments)
-  - `ltex.markdown.ignore`, `ltex.markdown.dummy` → [`ltex.markdown.nodes`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexmarkdownnodes)
+- Rename `ltex.workspaceDictionary`, `ltex.workspaceFolderDictionary` → [`ltex.dictionary`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdictionary)
+- Rename `ltex.workspaceDisabledRules`, `ltex.workspaceFolderDisabledRules` → [`ltex.disabledRules`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdisabledrules)
+- Rename `ltex.workspaceEnabledRules`, `ltex.workspaceFolderEnabledRules` → [`ltex.enabledRules`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexenabledrules)
+- Rename `ltex.ignoreInRuleSentence` → [`ltex.hiddenFalsePositives`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexhiddenfalsepositives)
+- Rename `ltex.commands.ignore`, `ltex.commands.dummy` → [`ltex.latex.commands`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexlatexcommands)
+- Rename `ltex.environments.ignore` → [`ltex.latex.environments`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexlatexenvironments)
+- Rename `ltex.markdown.ignore`, `ltex.markdown.dummy` → [`ltex.markdown.nodes`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexmarkdownnodes)
 - Change format of [`ltex.latex.commands`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexlatexcommands), [`ltex.latex.environments`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexlatexenvironments), [`ltex.markdown.nodes`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexmarkdownnodes) to be objects (with key = command and value = action, e.g., `"ignore"`, `"dummy"`, etc.) instead of arrays
-- Rename object keys of [`ltex.configurationTarget`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexconfigurationtarget):
-  - `addToDictionary` → `dictionary`
-  - `disableRule` → `disabledRules`
-  - `ignoreRuleInSentence` → `hiddenFalsePositives`
+- Rename `addToDictionary` → `dictionary` in [`ltex.configurationTarget`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexconfigurationtarget)
+- Rename `disableRule` → `disabledRules` in [`ltex.configurationTarget`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexconfigurationtarget)
+- Rename `ignoreRuleInSentence` → `hiddenFalsePositives` in [`ltex.configurationTarget`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexconfigurationtarget)
 - Add `userExternalFile`, `workspaceExternalFile`, and `workspaceFolderExternalFile` enumeration values to [`ltex.configurationTarget`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexconfigurationtarget), which enables saving settings to external files (see [documentation](https://valentjn.github.io/vscode-ltex/docs/advanced-usage.html#external-setting-files), fixes [vscode-ltex#144](https://github.com/valentjn/vscode-ltex/issues/144) and [vscode-ltex#145](https://github.com/valentjn/vscode-ltex/issues/145))
 - Change default of [`ltex.configurationTarget`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexconfigurationtarget) for `dictionary`, `disabledRules`, and `hiddenFalsePositives` to `workspaceFolderExternalFile`
 - Add [`ltex.checkFrequency`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexcheckfrequency) to control when LT<sub>E</sub>X checks documents (fixes [vscode-ltex#142](https://github.com/valentjn/vscode-ltex/issues/142))
@@ -209,7 +207,7 @@
 - Change scope of [`ltex.dictionary`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdictionary), [`ltex.disabledRules`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdisabledrules), and [`ltex.enabledRules`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexenabledrules) to `application`; these are now user-specific settings that can only be configured in user settings
 - Add settings `ltex.workspaceDictionary`, `ltex.workspaceDisabledRules`, and `ltex.workspaceEnabledRules` with `window` scope to amend the corresponding user-specific settings; these are workspace-specific settings that should be configured in workspace settings
 - Add settings `ltex.workspaceFolderDictionary`, `ltex.workspaceFolderDisabledRules`, and `ltex.workspaceFolderEnabledRules` with `resource` scope to amend the corresponding user-specific and workspace-specific settings; these are workspace-folder-specific settings that should be configured in workspace folder settings
-- Rename `"global"` value for [`ltex.configurationTarget`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexconfigurationtarget) to `"user"` (`"global"` is still supported, but deprecated)
+- Rename `global` → `user` in [`ltex.configurationTarget`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexconfigurationtarget)
 - Remove deprecated settings `ltex.javaHome`, `ltex.performance.initialJavaHeapSize`, `ltex.performance.maximumJavaHeapSize`, `ltex.performance.sentenceCacheSize`, `ltex.*.dictionary`, `ltex.*.enabledRules`, and `ltex.*.disabledRules` (deprecation since 5.0.0)
 - Update LanguageTool to 5.0.2 (see [LT 5.0.2 release notes](https://github.com/languagetool-org/languagetool/blob/v5.0.2/languagetool-standalone/CHANGES.md#502-2020-08-28))
 - Fix skipping of YAML front matter (fixes [vscode-ltex#104](https://github.com/valentjn/vscode-ltex/issues/104))
@@ -262,14 +260,13 @@
 
 - Include all languages in LT<sub>E</sub>X LS; this removes the need for language support extensions (fixes [vscode-ltex#6](https://github.com/valentjn/vscode-ltex/issues/6))
 - Adhere to [semantic versioning](https://semver.org/). This means that the version of LT<sub>E</sub>X LS is not tied to the version of LanguageTool anymore, as the version of LanguageTool is not a semantic version. LT<sub>E</sub>X LS 5.0.0 uses LanguageTool 4.9.
-- Rename settings:
-  - `ltex.<LANGUAGE>.dictionary` to [`ltex.dictionary`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdictionary) (object with `<LANGUAGE>` keys)
-  - `ltex.<LANGUAGE>.disabledRules` to [`ltex.disabledRules`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdisabledrules) (object with `<LANGUAGE>` keys)
-  - `ltex.<LANGUAGE>.enabledRules` to [`ltex.enabledRules`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexenabledrules) (object with `<LANGUAGE>` keys)
-  - `ltex.javaHome` to [`ltex.java.path`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexjavapath)
-  - `ltex.performance.initialJavaHeapSize` to [`ltex.java.initialHeapSize`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexjavainitialheapsize)
-  - `ltex.performance.maximumJavaHeapSize` to [`ltex.java.maximumHeapSize`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexjavamaximumheapsize)
-  - `ltex.performance.sentenceCacheSize` to [`ltex.sentenceCacheSize`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexsentencecachesize)
+- Rename `ltex.<LANGUAGE>.dictionary` → [`ltex.dictionary`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdictionary) (object with `<LANGUAGE>` keys)
+- Rename `ltex.<LANGUAGE>.disabledRules` → [`ltex.disabledRules`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdisabledrules) (object with `<LANGUAGE>` keys)
+- Rename `ltex.<LANGUAGE>.enabledRules` → [`ltex.enabledRules`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexenabledrules) (object with `<LANGUAGE>` keys)
+- Rename `ltex.javaHome` → [`ltex.java.path`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexjavapath)
+- Rename `ltex.performance.initialJavaHeapSize` → [`ltex.java.initialHeapSize`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexjavainitialheapsize)
+- Rename `ltex.performance.maximumJavaHeapSize` → [`ltex.java.maximumHeapSize`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexjavamaximumheapsize)
+- Rename `ltex.performance.sentenceCacheSize` → [`ltex.sentenceCacheSize`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexsentencecachesize)
 - Add support for external LanguageTool HTTP servers (fixes [vscode-ltex#36](https://github.com/valentjn/vscode-ltex/issues/36))
 - Add support for magic comments, enables changing the language in the middle of documents (fixes [vscode-ltex#21](https://github.com/valentjn/vscode-ltex/issues/21))
 - Check `\footnote` and `\todo` contents separately, preventing “double period” warnings (fixes [vscode-ltex#42](https://github.com/valentjn/vscode-ltex/issues/42))
