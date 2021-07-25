@@ -626,9 +626,20 @@ public class LatexAnnotatedTextBuilder extends CodeAnnotatedTextBuilder {
           if (command.equals("\\mathbb") || command.equals("\\mathbf")
                 || command.equals("\\mathcal") || command.equals("\\mathfrak")
                 || command.equals("\\mathit") || command.equals("\\mathnormal")
-                || command.equals("\\mathsf") || command.equals("\\mathtt")) {
+                || command.equals("\\mathsf") || command.equals("\\mathtt")
+                || command.equals("\\mathop") || command.equals("\\operatorname")
+                || command.equals("\\overline") || command.equals("\\underline")
+                || command.equals("\\underbrace") || command.equals("\\overbrace")
+                || command.equals("\\overrightarrow") || command.equals("\\overleftarrow")
+                || command.equals("\\overleftrightarrow") || command.equals("\\vec")
+                || command.equals("\\tilde") || command.equals("\\widetilde")
+                || command.equals("\\hat") || command.equals("\\widehat")
+                || command.equals("\\bm") || command.equals("\\boldsymbol")) {
             // leave this.mathVowelState as MathVowelState.UNDECIDED
-          } else if (command.equals("\\ell")) {
+          } else if (command.equals("\\ell") || command.equals("\\eta")
+                || command.equals("\\epsilon") || command.equals("\\varepsilon")
+                || command.equals("\\omega") || command.equals("\\Omega")
+                || command.equals("\\iota") || command.equals("\\alpha")) {
             this.mathVowelState = MathVowelState.STARTS_WITH_VOWEL;
           } else {
             this.mathVowelState = MathVowelState.STARTS_WITH_CONSONANT;
