@@ -1,8 +1,10 @@
 /.classpath
 /.project
 /CHANGELOG.md
+/ltexls.iml
 
 /.gradle/
+/.idea/
 /.settings/
 /target/
 

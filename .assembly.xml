@@ -6,9 +6,7 @@
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at https://mozilla.org/MPL/2.0/.
    -->
-<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.0 http://maven.apache.org/xsd/assembly-2.1.0.xsd">
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.0 https://maven.apache.org/xsd/assembly-2.1.0.xsd">
   <id>distribution</id>
   <formats>
     <format>tar.gz</format>
@@ -16,7 +14,7 @@
   <fileSets>
     <fileSet>
       <directory>${basedir}/target/appassembler</directory>
-      <outputDirectory></outputDirectory>
+      <outputDirectory/>
     </fileSet>
     <fileSet>
       <directory>${basedir}</directory>
@@ -26,7 +24,7 @@
         <include>LICENSE.md</include>
         <include>README.md</include>
       </includes>
-      <outputDirectory></outputDirectory>
+      <outputDirectory/>
     </fileSet>
   </fileSets>
 </assembly>

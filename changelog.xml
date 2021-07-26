@@ -12,7 +12,10 @@
     <author>Julian Valentin, LTeX Development Community</author>
   </properties>
   <body>
-    <release version="12.4.0" date="upcoming">
+    <release version="13.0.0" date="upcoming">
+      <action type="update">
+        Migrate from Java to Kotlin
+      </action>
       <action type="add" issue="vscode-ltex#350">
         Add support for checking comments in many popular programming languages
       </action>

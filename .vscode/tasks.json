@@ -2,11 +2,22 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Incremental Compile",
+      "label": "Compile and Check",
+      "type": "shell",
+      "command": "mvn compile antrun:run@ktlint detekt:check",
+      "group": "build",
+      "problemMatcher": "$gcc",
+      "presentation": {
+        "reveal": "silent",
+        "clear": true,
+      },
+    },
+    {
+      "label": "Compile and Assemble",
       "type": "shell",
       // need quotes around '-Dmaven.test.skip=true' on Windows PowerShell due to
       // https://stackoverflow.com/a/6351739
-      "command": "python tools/removeOutdatedClassFiles.py && mvn '-Dmaven.test.skip=true' compile && mvn jar:jar appassembler:assemble antrun:run@patch-bin-scripts",
+      "command": "mvn '-Dmaven.test.skip=true' compile && mvn jar:jar appassembler:assemble antrun:run@patch-bin-scripts",
       "group": {
         "kind": "build",
         "isDefault": true,

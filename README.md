@@ -87,7 +87,7 @@ Any command-line arguments supplied to the startup scripts are processed by LT<s
 - `--server-type=<serverType>`: Run the server as type `<serverType>`. Valid values are:
   - `standardStream` (default): Communicate with clients over standard input and standard output.
   - `tcpSocket`: Communicate with clients over a TCP socket.
-- `--settings-file=<settingsFile>`: Use the settings stored in the JSON file `<settingsFile>` (format example: `{"language": "en-US"}`). Only relevant when using `--input-documents`.
+- `--settings-file=<settingsFile>`: Use the settings stored in the JSON file `<settingsFile>`. Only relevant when using `--input-documents`. The format is either nested JSON objects (`{"latex": {"commands": ...}}`) or a flattened JSON object (`{"latex.commands": ...}`). Setting names may be prefixed by a top level named `ltex` (e.g., `{"ltex.latex.commands": ...}` is accepted as well).
 - `-V`, `--version`: Print version information as JSON to the standard output and exit. The format is a JSON object with `"java"` and `"ltex-ls"` keys and string values. A key may be missing if no information about the corresponding version could be retrieved.
 
 Instead of using the equals sign `=` to separate option names and values, it is also possible to use one or more spaces.

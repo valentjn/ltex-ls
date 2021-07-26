@@ -2,9 +2,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "java",
+      "type": "kotlin",
       "name": "Launch ltexls",
       "request": "launch",
+      "projectRoot": "${workspaceFolder}",
       "mainClass": "org.bsplines.ltexls.LtexLanguageServerLauncher",
       "args": "--server-type=tcpSocket --port=52715 --endless",
     },

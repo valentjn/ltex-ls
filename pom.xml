@@ -10,7 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bsplines</groupId>
   <artifactId>ltexls</artifactId>
-  <version>12.4.0-alpha.1.develop</version>
+  <version>13.0.0-alpha.1.develop</version>
   <name>${project.groupId}:${project.artifactId}</name>
   <description>LTeX Language Server (LTeX LS): LSP language server for LanguageTool with support for LaTeX, Markdown, and others</description>
   <url>https://github.com/valentjn/ltex-ls</url>
@@ -32,11 +32,20 @@
     </license>
   </licenses>
   <properties>
-    <maven.compiler.release>11</maven.compiler.release>
+    <java.version>11</java.version>
+    <kotlin.version>1.5.21</kotlin.version>
+    <kotlin.compiler.jvmTarget>${java.version}</kotlin.compiler.jvmTarget>
+    <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+    <main.class>org.bsplines.ltexls.LtexLanguageServerLauncher</main.class>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <errorProneJavac>${com.google.errorprone:javac:jar}</errorProneJavac>
+    <junit.jupiter.version>5.7.0</junit.jupiter.version>
   </properties>
   <dependencies>
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-stdlib-jdk8</artifactId>
+      <version>${kotlin.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.languagetool</groupId>
       <artifactId>languagetool-core</artifactId>
@@ -109,25 +118,21 @@
       <version>4.6.1</version>
     </dependency>
     <dependency>
-      <groupId>org.checkerframework</groupId>
-      <artifactId>checker-qual</artifactId>
-      <version>3.16.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.checkerframework</groupId>
-      <artifactId>checker-util</artifactId>
-      <version>3.16.0</version>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-test-junit5</artifactId>
+      <version>${kotlin.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>com.google.errorprone</groupId>
-      <artifactId>javac</artifactId>
-      <version>9+181-r4173-1</version>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-commons</artifactId>
+      <version>1.8.0-M1</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>5.7.2</version>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-suite</artifactId>
+      <version>1.8.0-M1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -142,38 +147,28 @@
       </exclusions>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.7.2</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
   <build>
+    <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+    <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.1.2</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>8.45</version>
-          </dependency>
-        </dependencies>
-        <configuration>
-          <configLocation>.checkstyle.xml</configLocation>
-          <consoleOutput>true</consoleOutput>
-          <encoding>UTF-8</encoding>
-          <failsOnError>true</failsOnError>
-          <includeTestSourceDirectory>true</includeTestSourceDirectory>
-        </configuration>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-maven-plugin</artifactId>
+        <version>${kotlin.version}</version>
         <executions>
           <execution>
-            <phase>verify</phase>
+            <?m2e execute onConfiguration?>
+            <id>compile</id>
             <goals>
-              <goal>check</goal>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+          <execution>
+            <?m2e execute onConfiguration?>
+            <id>test-compile</id>
+            <goals>
+              <goal>test-compile</goal>
             </goals>
           </execution>
         </executions>
@@ -192,44 +187,16 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
+        <groupId>com.github.ozsie</groupId>
+        <artifactId>detekt-maven-plugin</artifactId>
+        <version>1.17.1</version>
         <configuration>
-          <fork>true</fork>
-          <release>11</release>
-          <compilerArguments>
-            <Xmaxerrs>10000</Xmaxerrs>
-            <Xmaxwarns>10000</Xmaxwarns>
-          </compilerArguments>
-          <showWarnings>true</showWarnings>
-          <verbose>true</verbose>
-          <useIncrementalCompilation>false</useIncrementalCompilation>
-          <annotationProcessorPaths>
-            <path>
-              <groupId>org.checkerframework</groupId>
-              <artifactId>checker</artifactId>
-              <version>3.4.1</version>
-            </path>
-          </annotationProcessorPaths>
-          <annotationProcessors>
-            <annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
-          </annotationProcessors>
-          <compilerArgs>
-            <arg>-J--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED</arg>
-          </compilerArgs>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>com.github.spotbugs</groupId>
-        <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>4.3.0</version>
-        <configuration>
-          <excludeFilterFile>.spotbugs-exclude.xml</excludeFilterFile>
-          <includeTests>true</includeTests>
+          <buildUponDefaultConfig>true</buildUponDefaultConfig>
+          <config>${project.basedir}/.detekt.yml</config>
         </configuration>
         <executions>
           <execution>
+            <phase>verify</phase>
             <goals>
               <goal>check</goal>
             </goals>
@@ -283,7 +250,7 @@
           <archive>
             <manifest>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-              <mainClass>org.bsplines.ltexls.LtexLanguageServerLauncher</mainClass>
+              <mainClass>${main.class}</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -295,7 +262,7 @@
         <configuration>
           <programs>
             <program>
-              <mainClass>org.bsplines.ltexls.LtexLanguageServerLauncher</mainClass>
+              <mainClass>${main.class}</mainClass>
               <id>ltex-ls</id>
             </program>
           </programs>
@@ -318,6 +285,24 @@
         <artifactId>maven-antrun-plugin</artifactId>
         <version>3.0.0</version>
         <executions>
+          <execution>
+            <id>ktlint</id>
+            <phase>verify</phase>
+            <configuration>
+            <target name="ktlint">
+              <java taskname="ktlint" dir="${project.basedir}" fork="true" failonerror="true"
+                  classpathref="maven.plugin.classpath" classname="com.pinterest.ktlint.Main">
+                <arg value="--disabled_rules=chain-wrapping,indent,range-spacing"/>
+                <arg value="--reporter=plain"/>
+                <arg value="--verbose"/>
+                <arg value="src/**/*.kt"/>
+              </java>
+            </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
           <execution>
             <id>patch-bin-scripts</id>
             <configuration>
@@ -375,6 +360,13 @@ if %ERROR_CODE% EQU 0 set ERROR_CODE=1</replacevalue>
             </goals>
           </execution>
         </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.pinterest</groupId>
+            <artifactId>ktlint</artifactId>
+            <version>0.41.0</version>
+          </dependency>
+        </dependencies>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -408,9 +400,6 @@ if %ERROR_CODE% EQU 0 set ERROR_CODE=1</replacevalue>
             <version>2.3.1</version>
           </dependency>
         </dependencies>
-        <configuration>
-          <goalPrefix>coveralls</goalPrefix>
-        </configuration>
       </plugin>
     </plugins>
   </build>
