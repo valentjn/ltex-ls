@@ -19,6 +19,9 @@
       <action type="add" issue="#71">
         Add non-server batch mode via `--input-documents`
       </action>
+      <action type="add" issue="#92" due-to="Shuhao Cao (@scaomath)">
+        Add support for more LaTeX commands (`\mathop`, `\overline`, `\tilde`, `\alpha`, etc.) for automatic vowel detection in formulas in LaTeX
+      </action>
       <action type="add" issue="#87" due-to="Alexander Zeilmann (@AlexanderZeilmann)">
         Add support for `\counterwithin`, `\counterwithout`, and `\numberwithin` in LaTeX
       </action>
