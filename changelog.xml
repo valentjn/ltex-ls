@@ -19,6 +19,9 @@
       <action type="add" issue="#71">
         Add non-server batch mode via `--input-documents`
       </action>
+      <action type="add" issue="#87" due-to="Alexander Zeilmann (@AlexanderZeilmann)">
+        Add support for `\counterwithin`, `\counterwithout`, and `\numberwithin` in LaTeX
+      </action>
       <action type="remove">
         Remove support for magic comments in XHTML
       </action>
