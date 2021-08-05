@@ -481,12 +481,12 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
       var match = ""
       var matchingCommandSignature: LatexCommandSignature? = null
 
-      for (latexCommandSignature in possibleCommandSignatures) {
-        val curMatch: String = latexCommandSignature.matchFromPosition(this.code, this.pos)
+      for (commandSignature: LatexCommandSignature in possibleCommandSignatures) {
+        val curMatch: String = commandSignature.matchFromPosition(this.code, this.pos)
 
         if (curMatch.isNotEmpty() && (curMatch.length >= match.length)) {
           match = curMatch
-          matchingCommandSignature = latexCommandSignature
+          matchingCommandSignature = commandSignature
         }
       }
 
@@ -981,7 +981,7 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
     ): Map<String, List<T>> {
       val map = HashMap<String, ArrayList<T>>()
 
-      for (commandSignature in commandSignatures) {
+      for (commandSignature: T in commandSignatures) {
         val commandPrefix: String = commandSignature.prefix
         val list: MutableList<T> = map[commandPrefix] ?: run {
           val list = ArrayList<T>()
