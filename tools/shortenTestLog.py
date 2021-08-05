@@ -6,14 +6,14 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-import os
+import pathlib
 import re
 
 
 
 def main() -> None:
-  testLogFilePath = os.path.abspath(os.path.join(os.path.dirname(__file__), "..",
-      "src", "test", "resources", "LtexLanguageServerTestLog.txt"))
+  testLogFilePath = pathlib.Path(__file__).parent.parent.joinpath(
+      "src", "test", "resources", "LtexLanguageServerTestLog.txt")
   with open(testLogFilePath, "r") as f: testLog = f.read()
 
   matches = list(re.finditer(r"^\[Trace -.*?'([^ ]+).*?'", testLog, flags=re.MULTILINE))
