@@ -28,6 +28,9 @@
       <action type="add" issue="#87" due-to="Alexander Zeilmann (@AlexanderZeilmann)">
         Add support for `\counterwithin`, `\counterwithout`, and `\numberwithin` in LaTeX
       </action>
+      <action type="fix" issue="vscode-ltex#373">
+        Don't ignore second argument of `\setkomavar` in LaTeX
+      </action>
       <action type="remove">
         Remove support for magic comments in XHTML
       </action>
