@@ -290,16 +290,17 @@ data class Settings(
     private fun getAllHiddenFalsePositivesFromJson(
       jsonWorkspaceSpecificSettings: JsonElement,
     ): Map<String, Set<HiddenFalsePositive>>? {
-      val hiddenFalsePositiveJsonStrings: Map<String, Set<String>>? =
-      mergeMapOfListsIntoMapOfSets(convertJsonObjectToMapOfLists(
-        getSettingFromJsonAsJsonObject(jsonWorkspaceSpecificSettings, "hiddenFalsePositives")))
+      val hiddenFalsePositiveJsonStringMap: Map<String, Set<String>>? =
+          mergeMapOfListsIntoMapOfSets(convertJsonObjectToMapOfLists(
+            getSettingFromJsonAsJsonObject(jsonWorkspaceSpecificSettings, "hiddenFalsePositives")))
 
-      return if (hiddenFalsePositiveJsonStrings != null) {
+      return if (hiddenFalsePositiveJsonStringMap != null) {
         val allHiddenFalsePositives = HashMap<String, HashSet<HiddenFalsePositive>>()
 
-        for (entry: Map.Entry<String, Set<String>> in hiddenFalsePositiveJsonStrings.entries) {
-          val curLanguage: String = entry.key
-
+        for (
+          (curLanguage: String, hiddenFalsePositiveJsonStrings: Set<String>)
+          in hiddenFalsePositiveJsonStringMap
+        ) {
           val curHiddenFalsePositives: HashSet<HiddenFalsePositive> =
               allHiddenFalsePositives[curLanguage] ?: run {
             val set = HashSet<HiddenFalsePositive>()
@@ -307,7 +308,7 @@ data class Settings(
             set
           }
 
-          for (hiddenFalsePositiveJsonString: String in entry.value) {
+          for (hiddenFalsePositiveJsonString: String in hiddenFalsePositiveJsonStrings) {
             curHiddenFalsePositives.add(
                 HiddenFalsePositive.fromJsonString(hiddenFalsePositiveJsonString))
           }
@@ -511,11 +512,8 @@ data class Settings(
       if (mapOfLists == null) return null
       val mapOfSets = HashMap<String, HashSet<String>>()
 
-      for (entry2: Map.Entry<String, List<String>> in mapOfLists.entries) {
-        val key: String = entry2.key
+      for ((key: String, set2: List<String>) in mapOfLists) {
         val set1 = HashSet<String>()
-
-        val set2: List<String> = entry2.value
 
         for (string: String in set2) {
           if (string.startsWith("-")) {

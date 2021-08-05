@@ -137,12 +137,12 @@ class LanguageToolHttpInterface(
 
     val builder = StringBuilder()
 
-    for (requestEntry: Map.Entry<String, String> in requestEntries.entries) {
+    for ((requestKey: String, requestValue: String) in requestEntries) {
       if (builder.isNotEmpty()) builder.append("&")
 
       try {
-        builder.append(URLEncoder.encode(requestEntry.key, "utf-8"))
-            .append("=").append(URLEncoder.encode(requestEntry.value, "utf-8"))
+        builder.append(URLEncoder.encode(requestKey, "utf-8"))
+            .append("=").append(URLEncoder.encode(requestValue, "utf-8"))
       } catch (e: UnsupportedEncodingException) {
         Logging.logger.severe(I18n.format(e))
         return null

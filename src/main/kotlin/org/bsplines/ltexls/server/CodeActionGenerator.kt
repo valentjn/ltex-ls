@@ -81,10 +81,12 @@ class CodeActionGenerator(
       disableRulesMatches.add(match)
     }
 
-    for (entry: Map.Entry<String, List<LanguageToolRuleMatch>>
-          in acceptSuggestionsMatchesMap.entries) {
+    for (
+      (newWord: String, acceptSuggestionsMatches: List<LanguageToolRuleMatch>)
+      in acceptSuggestionsMatchesMap
+    ) {
       result.add(Either.forRight(getAcceptSuggestionsCodeAction(
-          document, entry.key, entry.value)))
+          document, newWord, acceptSuggestionsMatches)))
     }
 
     if (addToDictionaryMatches.isNotEmpty()

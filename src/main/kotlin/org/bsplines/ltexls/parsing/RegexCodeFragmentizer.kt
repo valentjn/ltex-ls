@@ -43,18 +43,18 @@ open class RegexCodeFragmentizer(
 
       val settingsMap: Map<String, String> = parseSettings(settingsLine)
 
-      for (setting: Map.Entry<String, String> in settingsMap.entries) {
+      for ((settingKey: String, settingValue: String) in settingsMap) {
         when {
-          setting.key.equals("enabled", ignoreCase = true) -> {
+          settingKey.equals("enabled", ignoreCase = true) -> {
             curSettings = curSettings.copy(_enabled =
-            (if (setting.value == "true") Settings.DEFAULT_ENABLED else emptySet()))
+            (if (settingValue == "true") Settings.DEFAULT_ENABLED else emptySet()))
           }
-          setting.key.equals("language", ignoreCase = true) -> {
-            curSettings = curSettings.copy(_languageShortCode = setting.value)
+          settingKey.equals("language", ignoreCase = true) -> {
+            curSettings = curSettings.copy(_languageShortCode = settingValue)
           }
           else -> {
             Logging.logger.warning(I18n.format("ignoringUnknownInlineSetting",
-                setting.key, setting.value))
+                settingKey, settingValue))
           }
         }
       }

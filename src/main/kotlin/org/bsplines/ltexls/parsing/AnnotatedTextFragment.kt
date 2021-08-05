@@ -80,10 +80,8 @@ class AnnotatedTextFragment(
     @Suppress("UNCHECKED_CAST")
     val mapping: Map<Int, *> = annotatedTextMappingField.get(annotatedText) as Map<Int, *>
 
-    for (entry in mapping.entries) {
-      if (entry.key == plainTextPosition) {
-        return mappingValueGetTotalPositionMethod.invoke(entry.value) as Int
-      }
+    for ((key: Int, value: Any?) in mapping) {
+      if (key == plainTextPosition) return mappingValueGetTotalPositionMethod.invoke(value) as Int
     }
 
     return annotatedText.getOriginalTextPositionFor(plainTextPosition, isToPos)

@@ -280,11 +280,11 @@ class LanguageToolJavaInterface(
       if (map == null) return "null"
       val builder = StringBuilder("{")
 
-      for (entry: Map.Entry<*, *> in map.entries) {
+      for ((key: Any?, value: Any?) in map) {
         if (builder.length > 1) builder.append(", ")
-        appendObjectToBuilder(entry.key, builder)
+        appendObjectToBuilder(key, builder)
         builder.append(": ")
-        appendObjectToBuilder(entry.value, builder)
+        appendObjectToBuilder(value, builder)
       }
 
       builder.append("}")

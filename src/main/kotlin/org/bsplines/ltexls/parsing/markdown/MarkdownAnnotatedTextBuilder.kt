@@ -171,8 +171,7 @@ class MarkdownAnnotatedTextBuilder(
   override fun setSettings(settings: Settings) {
     this.language = settings.languageShortCode
 
-    for (entry: Map.Entry<String, String> in settings.markdownNodes.entries) {
-      val actionString = entry.value
+    for ((nodeName: String, actionString: String) in settings.markdownNodes) {
       var action: MarkdownNodeSignature.Action
       var dummyGenerator: DummyGenerator = DummyGenerator.getInstance()
 
@@ -189,7 +188,7 @@ class MarkdownAnnotatedTextBuilder(
         continue
       }
 
-      this.nodeSignatures.add(MarkdownNodeSignature(entry.key, action, dummyGenerator))
+      this.nodeSignatures.add(MarkdownNodeSignature(nodeName, action, dummyGenerator))
     }
   }
 
