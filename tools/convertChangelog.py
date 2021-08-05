@@ -8,23 +8,15 @@
 
 import argparse
 import datetime
+import pathlib
 import re
-import subprocess
+import sys
 from typing import Optional, Tuple
 import xml.etree.ElementTree as et
 import xml.dom.minidom
 
-
-
-def getGitHubOrganizationRepository() -> Tuple[str, str]:
-  output = subprocess.run(["git", "remote", "get-url", "origin"],
-      stdout=subprocess.PIPE).stdout.decode()
-  regexMatch = re.search(r"github.com[:/](.*?)/(.*?)(?:\.git)?$", output)
-  assert regexMatch is not None, output
-  organization, repository = regexMatch.group(1), regexMatch.group(2)
-  return organization, repository
-
-organization, repository = getGitHubOrganizationRepository()
+sys.path.append(str(pathlib.Path(__file__).parent))
+import common
 
 
 
@@ -32,12 +24,12 @@ def parseIssue(issue: str) -> Tuple[str, str, int, str]:
   issueMatch = re.search(r"(?:(.*?)/)?(.*?)?#([0-9]+)", issue)
   assert issueMatch is not None, issue
   issueOrganization = (issueMatch.group(1) if issueMatch.group(1) is not None else
-      organization)
-  issueRepository = (issueMatch.group(2) if issueMatch.group(2) != "" else repository)
+      common.organization)
+  issueRepository = (issueMatch.group(2) if issueMatch.group(2) != "" else common.repository)
   issueNumber = int(issueMatch.group(3))
 
-  if issueOrganization == organization:
-    if issueRepository == repository:
+  if issueOrganization == common.organization:
+    if issueRepository == common.repository:
       normalizedIssue = f"#{issueNumber}"
     else:
       normalizedIssue = f"{issueRepository}#{issueNumber}"
@@ -53,7 +45,8 @@ def replaceUnicodeWithXmlEntities(string: str) -> str:
 
 
 
-def convertChangelogFromXmlToMarkdown(xmlFilePath: str, version: Optional[str] = None) -> str:
+def convertChangelogFromXmlToMarkdown(xmlFilePath: pathlib.Path,
+      version: Optional[str] = None) -> str:
   document = et.parse(xmlFilePath).getroot()
 
   if version is None:
@@ -180,7 +173,7 @@ def convertReleaseFromMarkdownToXml(body: et.Element, version: str, name: str, d
 
     change = change.replace("T<sub>E</sub>X", "TeX").replace("L<sup>A</sup>", "La")
 
-    assert f"github.com/{organization}" not in change, change
+    assert f"github.com/{common.organization}" not in change, change
     assert "  -" not in change, change
 
     action = et.SubElement(release, "action", attributes)
@@ -190,7 +183,8 @@ def convertReleaseFromMarkdownToXml(body: et.Element, version: str, name: str, d
 
 
 
-def convertChangelogFromMarkdownToXml(markdownFilePath: str, version: Optional[str] = None) -> str:
+def convertChangelogFromMarkdownToXml(markdownFilePath: pathlib.Path,
+      version: Optional[str] = None) -> str:
   with open(markdownFilePath, "r") as f: changelog = f.read()
 
   document = et.Element("document", {
@@ -250,9 +244,10 @@ def main() -> None:
   arguments = parser.parse_args()
 
   if arguments.xml_file is not None:
-    output = convertChangelogFromXmlToMarkdown(arguments.xml_file, arguments.version)
+    output = convertChangelogFromXmlToMarkdown(pathlib.Path(arguments.xml_file), arguments.version)
   elif arguments.markdown_file is not None:
-    output = convertChangelogFromMarkdownToXml(arguments.markdown_file, arguments.version)
+    output = convertChangelogFromMarkdownToXml(
+        pathlib.Path(arguments.markdown_file), arguments.version)
   else:
     raise argparse.ArgumentError(xmlFileArgument,
         "One of --xml-file or --markdown-file is required")
