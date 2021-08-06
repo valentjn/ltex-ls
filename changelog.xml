@@ -22,6 +22,9 @@
       <action type="add" issue="#71">
         Add non-server batch mode via `--input-documents`
       </action>
+      <action type="add" issue="vscode-ltex#366">
+        Add support for vowel dummies in LaTeX (`"vowelDummy"` in [`ltex.latex.commands`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexlatexcommands)) and Markdown (`"vowelDummy"` in [`ltex.markdown.nodes`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexmarkdownnodes))
+      </action>
       <action type="add" issue="#92" due-to="Shuhao Cao (@scaomath)">
         Add support for more LaTeX commands (`\mathop`, `\overline`, `\tilde`, `\alpha`, etc.) for automatic vowel detection in formulas in LaTeX
       </action>

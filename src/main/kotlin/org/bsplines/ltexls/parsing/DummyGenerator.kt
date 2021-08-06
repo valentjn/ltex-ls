@@ -9,12 +9,13 @@ package org.bsplines.ltexls.parsing
 
 class DummyGenerator(
   val plural: Boolean = false,
+  val vowel: Boolean = false,
 ) {
-  fun generate(language: String, number: Int, startsWithVowel: Boolean = false): String {
+  fun generate(language: String, number: Int, vowel: Boolean = false): String {
     return when {
       language.equals("fr", ignoreCase = true) -> "Jimmy-$number"
       this.plural -> "Dummies"
-      startsWithVowel -> "Ina$number"
+      vowel || this.vowel -> "Ina$number"
       else -> "Dummy$number"
     }
   }
@@ -22,9 +23,16 @@ class DummyGenerator(
   companion object {
     private val instance = DummyGenerator()
     private val instancePlural = DummyGenerator(plural = true)
+    private val instanceVowel = DummyGenerator(vowel = true)
+    private val instancePluralVowel = DummyGenerator(plural = true, vowel = true)
 
-    fun getInstance(plural: Boolean = false): DummyGenerator {
-      return if (plural) instancePlural else instance
+    fun getInstance(plural: Boolean = false, vowel: Boolean = false): DummyGenerator {
+      return when {
+        plural && !vowel -> instancePlural
+        !plural && vowel -> instanceVowel
+        plural && vowel -> instancePluralVowel
+        else -> instance
+      }
     }
   }
 }

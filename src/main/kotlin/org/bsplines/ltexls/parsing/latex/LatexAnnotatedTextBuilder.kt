@@ -79,20 +79,18 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
     this.commandSignatures.addAll(LatexAnnotatedTextBuilderDefaults.defaultLatexCommandSignatures)
 
     for ((key: String, actionString: String) in settings.latexCommands) {
-      var action: LatexCommandSignature.Action
       var dummyGenerator: DummyGenerator = DummyGenerator.getInstance()
 
-      if (actionString == "default") {
-        action = LatexCommandSignature.Action.Default
-      } else if (actionString == "ignore") {
-        action = LatexCommandSignature.Action.Ignore
-      } else if (actionString == "dummy") {
-        action = LatexCommandSignature.Action.Dummy
-      } else if (actionString == "pluralDummy") {
-        action = LatexCommandSignature.Action.Dummy
-        dummyGenerator = DummyGenerator.getInstance(plural = true)
-      } else {
-        continue
+      val action: LatexCommandSignature.Action = when (actionString) {
+        "default" -> LatexCommandSignature.Action.Default
+        "ignore" -> LatexCommandSignature.Action.Ignore
+        "dummy", "pluralDummy", "vowelDummy" -> {
+          val plural: Boolean = (actionString == "pluralDummy")
+          val vowel: Boolean = (actionString == "vowelDummy")
+          dummyGenerator = DummyGenerator.getInstance(plural = plural, vowel = vowel)
+          LatexCommandSignature.Action.Dummy
+        }
+        else -> continue
       }
 
       this.commandSignatures.add(LatexCommandSignature(key, action, dummyGenerator))

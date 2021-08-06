@@ -172,20 +172,18 @@ class MarkdownAnnotatedTextBuilder(
     this.language = settings.languageShortCode
 
     for ((nodeName: String, actionString: String) in settings.markdownNodes) {
-      var action: MarkdownNodeSignature.Action
       var dummyGenerator: DummyGenerator = DummyGenerator.getInstance()
 
-      if ((actionString == "default")) {
-        action = MarkdownNodeSignature.Action.Default
-      } else if ((actionString == "ignore")) {
-        action = MarkdownNodeSignature.Action.Ignore
-      } else if ((actionString == "dummy")) {
-        action = MarkdownNodeSignature.Action.Dummy
-      } else if ((actionString == "pluralDummy")) {
-        action = MarkdownNodeSignature.Action.Dummy
-        dummyGenerator = DummyGenerator.getInstance(plural = true)
-      } else {
-        continue
+      val action: MarkdownNodeSignature.Action = when (actionString) {
+        "default" -> MarkdownNodeSignature.Action.Default
+        "ignore" -> MarkdownNodeSignature.Action.Ignore
+        "dummy", "pluralDummy", "vowelDummy" -> {
+          val plural: Boolean = (actionString == "pluralDummy")
+          val vowel: Boolean = (actionString == "vowelDummy")
+          dummyGenerator = DummyGenerator.getInstance(plural = plural, vowel = vowel)
+          MarkdownNodeSignature.Action.Dummy
+        }
+        else -> continue
       }
 
       this.nodeSignatures.add(MarkdownNodeSignature(nodeName, action, dummyGenerator))

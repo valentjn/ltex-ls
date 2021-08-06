@@ -206,6 +206,11 @@ class LatexAnnotatedTextBuilderTest {
       Settings(_latexCommands = mapOf(Pair("\\foobar{}{}", "pluralDummy")))
     )
     assertPlainText(
+      "This is a test: \\foobar{abc}{def}.\n",
+      "This is a test: Ina0. ",
+      Settings(_latexCommands = mapOf(Pair("\\foobar{}{}", "vowelDummy")))
+    )
+    assertPlainText(
       "This is a test: \\begin{foobar}{abc}def\\end{foobar}.\n",
       "This is a test: def. "
     )
