@@ -115,6 +115,8 @@ class NonServerChecker {
   }
 
   companion object {
+    private val TRAILING_WHITESPACE_REGEX = Regex("[ \t\r\n]+$")
+
     private const val MAX_NUMBER_OF_SUGGESTIONS = 5
     private const val STANDARD_INPUT_BUFFER_SIZE = 1024
     private const val TAB_SIZE = 8
@@ -162,7 +164,7 @@ class NonServerChecker {
 
       println(Ansi.ansi().a(line.substring(0, fromPos - lineStartPos)).bold().fg(color)
           .a(line.substring(fromPos - lineStartPos, toPos - lineStartPos)).reset()
-          .a(line.substring(toPos - lineStartPos).replaceFirst("[ \t\r\n]+$", "")))
+          .a(line.substring(toPos - lineStartPos).replaceFirst(TRAILING_WHITESPACE_REGEX, "")))
 
       var indentationSize = guessIndentationSize(text, lineStartPos, fromPos, terminalWidth)
       val suggestedReplacements = ArrayList<String>()

@@ -78,7 +78,7 @@ open class RegexCodeFragmentizer(
     private fun parseSettings(settingsLine: String): Map<String, String> {
       val settingsMap = HashMap<String, String>()
 
-      for (settingsChange: String in SPLIT_SETTINGS_REGEX.split(settingsLine.trim())) {
+      for (settingsChange: String in settingsLine.trim().split(SPLIT_SETTINGS_REGEX)) {
         val settingKeyLength: Int = settingsChange.indexOf('=')
 
         if (settingKeyLength == -1) {

@@ -68,7 +68,7 @@ data class LanguageToolRuleMatch(
       }
 
       messageBuilder.append(languageToolMessage)
-      val message = TWO_OR_MORE_SPACES_REGEX.replace(messageBuilder.toString(), " ").trim()
+      val message = messageBuilder.toString().replace(TWO_OR_MORE_SPACES_REGEX, " ").trim()
 
       return LanguageToolRuleMatch(ruleId, sentence, fromPos, toPos, message,
           suggestedReplacements, type)

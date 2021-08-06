@@ -119,6 +119,7 @@ class LspMessage(
   }
 
   companion object {
+    private val EMPTY_LINE_REGEX = Regex("\r\n\r\n|\n\n")
     private val LOG_REGEX = Regex(
       "\\[[^]]+] (\\S+) (\\S+) '([^' ]+)(?: - \\(([^)]+)\\))?'.*\\R(?:Params|Result):"
     )
@@ -138,7 +139,7 @@ class LspMessage(
       log = log.trim { it <= ' ' }
       val messages: MutableList<LspMessage> = ArrayList()
 
-      for (logMessage: String in Regex("\r\n\r\n|\n\n").split(log)) {
+      for (logMessage: String in log.split(EMPTY_LINE_REGEX)) {
         messages.add(fromLogString(logMessage))
       }
 

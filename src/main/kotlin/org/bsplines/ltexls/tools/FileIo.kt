@@ -20,7 +20,7 @@ object FileIo {
     val homeDirPath: String? = System.getProperty("user.home")
 
     return if (homeDirPath != null) {
-      TILDE_PATH_REGEX.replaceFirst(path, Regex.escapeReplacement(homeDirPath) + "$1")
+      path.replaceFirst(TILDE_PATH_REGEX, Regex.escapeReplacement(homeDirPath) + "$1")
     } else {
       path
     }

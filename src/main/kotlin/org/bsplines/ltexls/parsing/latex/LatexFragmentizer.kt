@@ -525,7 +525,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
     }
 
     fun convertBabelLanguageToLanguageTag(language: String): String {
-      return LANGUAGE_TAG_REPLACEMENT_REGEX.replace(language, "")
+      return language.replace(LANGUAGE_TAG_REPLACEMENT_REGEX, "")
     }
   }
 }

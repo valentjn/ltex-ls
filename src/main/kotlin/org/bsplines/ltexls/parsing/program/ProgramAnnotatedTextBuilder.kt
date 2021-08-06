@@ -77,7 +77,7 @@ class ProgramAnnotatedTextBuilder(
   private fun getCommonFirstCharacterInComment(comment: String): String {
     var commonFirstCharacter = ""
 
-    for (line: String in LINE_SEPARATOR_REGEX.split(comment)) {
+    for (line: String in comment.split(LINE_SEPARATOR_REGEX)) {
       val firstCharacterMatchResult: MatchResult = FIRST_CHARACTER_REGEX.find(line) ?: continue
 
       if (firstCharacterMatchResult.groups[1] == null) {

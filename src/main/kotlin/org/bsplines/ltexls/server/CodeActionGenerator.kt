@@ -38,7 +38,7 @@ class CodeActionGenerator(
         document.convertPosition(match.toPos))
     diagnostic.severity = this.settingsManager.settings.diagnosticSeverity
     diagnostic.source = "LTeX"
-    diagnostic.message = SUGGESTION_REGEX.replace(match.message, "'$1'") + " \u2013 " + match.ruleId
+    diagnostic.message = match.message.replace(SUGGESTION_REGEX, "'$1'") + " \u2013 " + match.ruleId
     return diagnostic
   }
 
