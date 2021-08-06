@@ -96,7 +96,7 @@ Instead of using the equals sign `=` to separate option names and values, it is 
 
 - 0: LT<sub>E</sub>X LS exited successfully. When using `--input-documents`: No grammar/spelling errors were found.
 - 1: An exception was thrown during the execution of LT<sub>E</sub>X LS.
-- 2: An invalid command-line argument has been given to LT<sub>E</sub>X LS.
+- 2: An invalid command-line argument was supplied to LT<sub>E</sub>X LS.
 - 3: When using `--input-documents`: At least one grammar/spelling error was found.
 
 ## Checking Documents with the LSP
