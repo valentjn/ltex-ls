@@ -9,6 +9,7 @@ package org.bsplines.ltexls.parsing.program
 
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder
 import org.bsplines.ltexls.parsing.markdown.MarkdownAnnotatedTextBuilder
+import org.bsplines.ltexls.parsing.restructuredtext.RestructuredtextAnnotatedTextBuilder
 import org.bsplines.ltexls.tools.I18n
 import org.bsplines.ltexls.tools.Logging
 import org.languagetool.markup.AnnotatedText
@@ -16,7 +17,11 @@ import org.languagetool.markup.AnnotatedText
 class ProgramAnnotatedTextBuilder(
   codeLanguageId: String
 ) : CodeAnnotatedTextBuilder(codeLanguageId) {
-  private val markdownAnnotatedTextBuilder = MarkdownAnnotatedTextBuilder("markdown")
+  private val annotatedTextBuilder = when (codeLanguageId) {
+    "python" -> RestructuredtextAnnotatedTextBuilder("restructuredtext")
+    else -> MarkdownAnnotatedTextBuilder("markdown")
+  }
+
   private val commentRegexs = ProgramCommentRegexs.fromCodeLanguageId(codeLanguageId)
   private val commentBlockRegex: Regex = commentRegexs.getCommentBlockRegex()
   private val lineCommentPatternString: String? = commentRegexs.lineCommentRegexString
@@ -38,14 +43,14 @@ class ProgramAnnotatedTextBuilder(
       }
 
       curPos = commentGroup.range.first
-      markdownAnnotatedTextBuilder.addMarkup(code.substring(lastPos, curPos), "\n\n")
+      annotatedTextBuilder.addMarkup(code.substring(lastPos, curPos), "\n\n")
 
       val comment: String = commentGroup.value
       addComment(comment, isLineComment)
       curPos = commentGroup.range.last + 1
     }
 
-    if (curPos < code.length) markdownAnnotatedTextBuilder.addMarkup(code.substring(curPos))
+    if (curPos < code.length) annotatedTextBuilder.addMarkup(code.substring(curPos))
     return this
   }
 
@@ -63,14 +68,14 @@ class ProgramAnnotatedTextBuilder(
 
       var lastPos = curPos
       curPos = matchGroup.range.first
-      markdownAnnotatedTextBuilder.addMarkup(comment.substring(lastPos, curPos), "\n")
+      annotatedTextBuilder.addMarkup(comment.substring(lastPos, curPos), "\n")
 
       lastPos = curPos
       curPos = matchGroup.range.last + 1
-      markdownAnnotatedTextBuilder.addCode(comment.substring(lastPos, curPos))
+      annotatedTextBuilder.addCode(comment.substring(lastPos, curPos))
     }
 
-    if (curPos < comment.length) markdownAnnotatedTextBuilder.addMarkup(comment.substring(curPos))
+    if (curPos < comment.length) annotatedTextBuilder.addMarkup(comment.substring(curPos))
     return this
   }
 
@@ -97,7 +102,7 @@ class ProgramAnnotatedTextBuilder(
   }
 
   override fun build(): AnnotatedText {
-    return markdownAnnotatedTextBuilder.build()
+    return annotatedTextBuilder.build()
   }
 
   companion object {
