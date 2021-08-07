@@ -45,7 +45,8 @@ class LtexWorkspaceService(
   }
 
   override fun didChangeConfiguration(params: DidChangeConfigurationParams) {
-    this.languageServer.ltexTextDocumentService.executeFunctionForEachDocument { document: LtexTextDocumentItem ->
+    this.languageServer.ltexTextDocumentService.executeFunctionForEachDocument {
+      document: LtexTextDocumentItem ->
       if (document.beingChecked) document.cancelCheck()
 
       this.languageServer.singleThreadExecutorService.execute {

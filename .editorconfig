@@ -5,4 +5,6 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 [*.{kt,kts}]
-indent_size=2
+indent_size = 2
+insert_final_newline = true
+max_line_length = 100

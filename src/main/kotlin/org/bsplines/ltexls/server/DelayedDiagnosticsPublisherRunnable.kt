@@ -29,7 +29,10 @@ class DelayedDiagnosticsPublisherRunnable(
       return
     }
 
-    if (Duration.between(this.document.lastCaretChangeInstant, Instant.now()) > showCaretDiagnosticsDuration) {
+    if (
+      Duration.between(this.document.lastCaretChangeInstant, Instant.now())
+      > showCaretDiagnosticsDuration
+    ) {
       val diagnostics: List<Diagnostic>? = this.document.diagnosticsCache
 
       if (diagnostics != null) {

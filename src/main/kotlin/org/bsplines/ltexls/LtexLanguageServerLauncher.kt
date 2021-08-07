@@ -188,7 +188,8 @@ class LtexLanguageServerLauncher : Callable<Int> {
     @Suppress("SpreadOperator")
     fun main(arguments: Array<String>) {
       AnsiConsole.systemInstall()
-      val commandLine = CommandLine(LtexLanguageServerLauncher()).setCaseInsensitiveEnumValuesAllowed(true)
+      val commandLine =
+          CommandLine(LtexLanguageServerLauncher()).setCaseInsensitiveEnumValuesAllowed(true)
       val exitCode: Int = commandLine.execute(*arguments)
       if (exitCode != 0) exitProcess(exitCode)
     }

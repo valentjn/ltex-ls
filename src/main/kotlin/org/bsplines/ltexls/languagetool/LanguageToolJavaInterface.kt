@@ -39,7 +39,8 @@ class LanguageToolJavaInterface(
   dictionary: Set<String>,
 ) : LanguageToolInterface {
   private val dictionary: Set<String> = dictionary.toSet()
-  private val resultCache = ResultCache(sentenceCacheSize, RESULT_CACHE_EXPIRE_AFTER_MINUTES, TimeUnit.MINUTES)
+  private val resultCache =
+      ResultCache(sentenceCacheSize, RESULT_CACHE_EXPIRE_AFTER_MINUTES, TimeUnit.MINUTES)
   private val languageTool: JLanguageTool?
 
   init {
@@ -169,7 +170,9 @@ class LanguageToolJavaInterface(
     try {
       languageTool.activateLanguageModelRules(File(languageModelRulesDirectory))
     } catch (e: IOException) {
-      Logging.logger.warning(I18n.format("couldNotLoadLanguageModel", e, languageModelRulesDirectory))
+      Logging.logger.warning(
+        I18n.format("couldNotLoadLanguageModel", e, languageModelRulesDirectory)
+      )
     }
   }
 
