@@ -31,58 +31,25 @@ abstract class CodeAnnotatedTextBuilder(
   }
 
   companion object {
-    private val constructorMap:
-          MutableMap<String, (codeLanguageId: String) -> CodeAnnotatedTextBuilder> = run {
-      val constructorMap = HashMap<String, (codeLanguageId: String) -> CodeAnnotatedTextBuilder>()
-
-      constructorMap["bibtex"] = {
-          codeLanguageId: String -> LatexAnnotatedTextBuilder(codeLanguageId)
-      }
-      constructorMap["html"] = {
-        codeLanguageId: String -> HtmlAnnotatedTextBuilder(codeLanguageId)
-      }
-      constructorMap["latex"] = {
-          codeLanguageId: String -> LatexAnnotatedTextBuilder(codeLanguageId)
-      }
-      constructorMap["markdown"] = {
-        codeLanguageId: String -> MarkdownAnnotatedTextBuilder(codeLanguageId)
-      }
-      constructorMap["nop"] = {
-        codeLanguageId: String -> NopAnnotatedTextBuilder(codeLanguageId)
-      }
-      constructorMap["org"] = {
-        codeLanguageId: String -> OrgAnnotatedTextBuilder(codeLanguageId)
-      }
-      constructorMap["plaintext"] = {
-        codeLanguageId: String -> PlaintextAnnotatedTextBuilder(codeLanguageId)
-      }
-      constructorMap["restructuredtext"] = {
-        codeLanguageId: String -> RestructuredtextAnnotatedTextBuilder(codeLanguageId)
-      }
-      constructorMap["rsweave"] = {
-          codeLanguageId: String -> LatexAnnotatedTextBuilder(codeLanguageId)
-      }
-      constructorMap["tex"] = {
-          codeLanguageId: String -> LatexAnnotatedTextBuilder(codeLanguageId)
-      }
-
-      constructorMap
-    }
-
     fun create(codeLanguageId: String): CodeAnnotatedTextBuilder {
-      val constructor: ((codeLanguageId: String) -> CodeAnnotatedTextBuilder)? =
-          constructorMap[codeLanguageId]
-
-      return when {
-        constructor != null -> {
-          constructor(codeLanguageId)
-        }
-        ProgramCommentRegexs.isSupportedCodeLanguageId(codeLanguageId) -> {
-          ProgramAnnotatedTextBuilder(codeLanguageId)
-        }
+      return when (codeLanguageId) {
+        "bibtex" -> LatexAnnotatedTextBuilder(codeLanguageId)
+        "html" -> HtmlAnnotatedTextBuilder(codeLanguageId)
+        "latex" -> LatexAnnotatedTextBuilder(codeLanguageId)
+        "markdown" -> MarkdownAnnotatedTextBuilder(codeLanguageId)
+        "nop" -> NopAnnotatedTextBuilder(codeLanguageId)
+        "org" -> OrgAnnotatedTextBuilder(codeLanguageId)
+        "plaintext" -> PlaintextAnnotatedTextBuilder(codeLanguageId)
+        "restructuredtext" -> RestructuredtextAnnotatedTextBuilder(codeLanguageId)
+        "rsweave" -> LatexAnnotatedTextBuilder(codeLanguageId)
+        "tex" -> LatexAnnotatedTextBuilder(codeLanguageId)
         else -> {
-          Logging.logger.warning(I18n.format("unsupportedCodeLanguageId", codeLanguageId))
-          PlaintextAnnotatedTextBuilder("plaintext")
+          if (ProgramCommentRegexs.isSupportedCodeLanguageId(codeLanguageId)) {
+            ProgramAnnotatedTextBuilder(codeLanguageId)
+          } else {
+            Logging.logger.warning(I18n.format("unsupportedCodeLanguageId", codeLanguageId))
+            PlaintextAnnotatedTextBuilder("plaintext")
+          }
         }
       }
     }

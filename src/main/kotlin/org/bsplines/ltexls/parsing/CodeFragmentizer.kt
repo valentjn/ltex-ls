@@ -42,34 +42,25 @@ abstract class CodeFragmentizer(
   }
 
   companion object {
-    private val constructorMap:
-          MutableMap<String, (codeLanguageId: String) -> CodeFragmentizer> = run {
-      val constructorMap = HashMap<String, (codeLanguageId: String) -> CodeFragmentizer>()
-
-      constructorMap["bibtex"] = { codeLanguageId: String -> BibtexFragmentizer(codeLanguageId) }
-      constructorMap["html"] = { codeLanguageId: String -> HtmlFragmentizer(codeLanguageId) }
-      constructorMap["latex"] = { codeLanguageId: String -> LatexFragmentizer(codeLanguageId) }
-      constructorMap["markdown"] = { codeLanguageId: String -> MarkdownFragmentizer(codeLanguageId) }
-      constructorMap["nop"] = { codeLanguageId: String -> NopFragmentizer(codeLanguageId) }
-      constructorMap["org"] = { codeLanguageId: String -> OrgFragmentizer(codeLanguageId) }
-      constructorMap["plaintext"] = { codeLanguageId: String -> PlaintextFragmentizer(codeLanguageId) }
-      constructorMap["restructuredtext"] = { codeLanguageId: String -> RestructuredtextFragmentizer(codeLanguageId) }
-      constructorMap["rsweave"] = { codeLanguageId: String -> LatexFragmentizer(codeLanguageId) }
-      constructorMap["tex"] = { codeLanguageId: String -> LatexFragmentizer(codeLanguageId) }
-
-      constructorMap
-    }
-
     fun create(codeLanguageId: String): CodeFragmentizer {
-      val constructor: ((codeLanguageId: String) -> CodeFragmentizer)? =
-          constructorMap[codeLanguageId]
-
-      return when {
-        constructor != null -> constructor(codeLanguageId)
-        ProgramCommentRegexs.isSupportedCodeLanguageId(codeLanguageId) -> ProgramFragmentizer(codeLanguageId)
+      return when (codeLanguageId) {
+        "bibtex" -> BibtexFragmentizer(codeLanguageId)
+        "html" -> HtmlFragmentizer(codeLanguageId)
+        "latex" -> LatexFragmentizer(codeLanguageId)
+        "markdown" -> MarkdownFragmentizer(codeLanguageId)
+        "nop" -> NopFragmentizer(codeLanguageId)
+        "org" -> OrgFragmentizer(codeLanguageId)
+        "plaintext" -> PlaintextFragmentizer(codeLanguageId)
+        "restructuredtext" -> RestructuredtextFragmentizer(codeLanguageId)
+        "rsweave" -> LatexFragmentizer(codeLanguageId)
+        "tex" -> LatexFragmentizer(codeLanguageId)
         else -> {
-          Logging.logger.warning(I18n.format("unsupportedCodeLanguageId", codeLanguageId))
-          PlaintextFragmentizer("plaintext")
+          if (ProgramCommentRegexs.isSupportedCodeLanguageId(codeLanguageId)) {
+            ProgramFragmentizer(codeLanguageId)
+          } else {
+            Logging.logger.warning(I18n.format("unsupportedCodeLanguageId", codeLanguageId))
+            PlaintextFragmentizer("plaintext")
+          }
         }
       }
     }
