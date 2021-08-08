@@ -41,6 +41,42 @@ jobs:
       - name: "Build LTeX LS"
         run: "mvn -B -e verify"
 
+  inspect:
+    name: "CI - Inspect Job"
+    runs-on: "ubuntu-20.04"
+
+    steps:
+      - name: "Checkout Repository"
+        uses: "actions/checkout@v2"
+
+      - name: "Set up Java"
+        uses: "actions/setup-java@v1"
+        with:
+          java-version: "11.0.9"
+
+      - name: "Set up Python"
+        uses: "actions/setup-python@v2"
+        with:
+          python-version: "3.9.0"
+
+      - name: "Build LTeX LS"
+        run: "mvn -B -e verify"
+
+      - name: "Set LTEX_LS_IDEA_ARCHIVE_NAME and LTEX_LS_IDEA_DIRECTORY_NAME"
+        run: "echo -e \"LTEX_LS_IDEA_ARCHIVE_NAME=ideaIC-2021.2.tar.gz\nLTEX_LS_IDEA_DIRECTORY_NAME=idea-IC-212.4746.92\" >> $GITHUB_ENV"
+
+      - name: "Load IntelliJ IDEA from Cache"
+        uses: "actions/cache@v2"
+        with:
+          path: "${{ env.LTEX_LS_IDEA_DIRECTORY_NAME }}"
+          key: "${{ env.LTEX_LS_IDEA_DIRECTORY_NAME }}-${{ runner.os }}-v1"
+
+      - name: "Download and Extract IntelliJ IDEA If Necessary"
+        run: "[[ -d ${{ env.LTEX_LS_IDEA_DIRECTORY_NAME }} ]] || { wget https://download.jetbrains.com/idea/${{ env.LTEX_LS_IDEA_ARCHIVE_NAME }} && tar -xzf ${{ env.LTEX_LS_IDEA_ARCHIVE_NAME }}; }"
+
+      - name: "Inspect Code with IntelliJ IDEA"
+        run: "python tools/inspectWithIntellijIdea.py --idea-path ${{ env.LTEX_LS_IDEA_DIRECTORY_NAME }}"
+
   validate:
     name: "CI - Validate Job"
     runs-on: "ubuntu-20.04"
@@ -92,6 +128,7 @@ jobs:
     name: "CI - Deploy Job"
     needs:
       - "build"
+      - "inspect"
       - "validate"
       - "upload_coverage"
     if: "${{ startsWith(github.ref, 'refs/tags/') }}"

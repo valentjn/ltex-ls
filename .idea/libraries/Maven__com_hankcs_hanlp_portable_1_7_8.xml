@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.hankcs:hanlp:portable-1.7.8">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/hankcs/hanlp/portable-1.7.8/hanlp-portable-1.7.8.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/hankcs/hanlp/portable-1.7.8/hanlp-portable-1.7.8-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/hankcs/hanlp/portable-1.7.8/hanlp-portable-1.7.8-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
