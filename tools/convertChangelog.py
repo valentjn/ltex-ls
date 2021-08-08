@@ -235,24 +235,25 @@ def convertChangelogFromMarkdownToXml(markdownFilePath: pathlib.Path,
 def main() -> None:
   parser = argparse.ArgumentParser(
       description="Convert changelog from XML to Markdown and vice-versa.")
-  xmlFileArgument = parser.add_argument("--xml-file", help="XML file to convert to Markdown")
-  parser.add_argument("--markdown-file", help="Markdown file to convert to XML")
-  parser.add_argument("--output-file", default="-",
+  xmlFileArgument = parser.add_argument("--xml-file", type=pathlib.Path, metavar="PATH",
+      help="XML file to convert to Markdown")
+  parser.add_argument("--markdown-file", type=pathlib.Path, metavar="PATH",
+      help="Markdown file to convert to XML")
+  parser.add_argument("--output-file", type=pathlib.Path, default=pathlib.Path("-"), metavar="PATH",
       help="Output file; '-' is standard output (default)")
   parser.add_argument("--version",
       help="Version to convert; 'latest' is permitted; all versions are converted if omitted")
   arguments = parser.parse_args()
 
   if arguments.xml_file is not None:
-    output = convertChangelogFromXmlToMarkdown(pathlib.Path(arguments.xml_file), arguments.version)
+    output = convertChangelogFromXmlToMarkdown(arguments.xml_file, arguments.version)
   elif arguments.markdown_file is not None:
-    output = convertChangelogFromMarkdownToXml(
-        pathlib.Path(arguments.markdown_file), arguments.version)
+    output = convertChangelogFromMarkdownToXml(arguments.markdown_file, arguments.version)
   else:
     raise argparse.ArgumentError(xmlFileArgument,
         "One of --xml-file or --markdown-file is required")
 
-  if arguments.output_file == "-":
+  if str(arguments.output_file) == "-":
     print(output, end="")
   else:
     with open(arguments.output_file, "w") as f: f.write(output)
