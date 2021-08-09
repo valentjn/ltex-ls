@@ -64,20 +64,16 @@ class LtexLanguageServer : LanguageServer, LanguageClientAware {
       }
     }
 
-    val initializationOptions: JsonElement? =
-        params.initializationOptions as JsonElement?
+    var localeLanguage: String? = params.locale
+    val initializationOptions: JsonElement? = params.initializationOptions as JsonElement?
 
     if ((initializationOptions != null) && initializationOptions.isJsonObject) {
       val initializationOptionsObject: JsonObject = initializationOptions.asJsonObject
 
-      // LSP 3.16 has built-in locale support
-      // (see https://github.com/microsoft/language-server-protocol/issues/754)
-      // but currently we only require LSP 3.15.
+      // make it possible to set locale when using LSP 3.15 (that's what we currently require
+      // as minimum version; InitializeParams.locale was added in LSP 3.16)
       if (initializationOptionsObject.has("locale")) {
-        val localeLanguage: String = initializationOptionsObject.get("locale").asString
-        val locale: Locale = Locale.forLanguageTag(localeLanguage)
-        Logging.logger.info(I18n.format("settingLocale", locale.language))
-        I18n.setLocale(locale)
+        localeLanguage = initializationOptionsObject.get("locale").asString
       }
 
       if (initializationOptionsObject.has("customCapabilities")) {
@@ -90,6 +86,8 @@ class LtexLanguageServer : LanguageServer, LanguageClientAware {
         }
       }
     }
+
+    if (localeLanguage != null) I18n.setLocale(Locale.forLanguageTag(localeLanguage))
 
     val serverCapabilities = ServerCapabilities()
     serverCapabilities.setTextDocumentSync(TextDocumentSyncKind.Full)

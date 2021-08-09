@@ -24,13 +24,14 @@ object I18n {
   @Suppress("SwallowedException")
   fun setDefaultLocale() {
     try {
-      setLocale(Locale.getDefault())
+      setLocale(Locale.getDefault(), false)
     } catch (e: MissingResourceException) {
-      setLocale(Locale.ENGLISH)
+      setLocale(Locale.ENGLISH, false)
     }
   }
 
-  fun setLocale(locale: Locale) {
+  fun setLocale(locale: Locale, log: Boolean = true) {
+    if (log) Logging.logger.info(format("settingLocale", locale.language))
     messages = ResourceBundle.getBundle("MessagesBundle", locale)
   }
 

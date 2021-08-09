@@ -309,14 +309,9 @@ Custom initialization options are directly specified in the fields of a `CustomI
 ```typescript
 interface CustomInitializationOptions {
   /**
-   * Locale of UI messages (strings that are sent to the client and that are meant to be
-   * displayed in the user interface of the client), specified as an IETF BCP 47 language tag.
-   *
-   * Logging messages are always in English. Diagnostic messages are always in the language of
-   * the checked text they belong to.
-   *
-   * If not specified, the default locale of the JVM will be used. If the specified locale
-   * cannot be resolved to a supported i18n language of LTeX LS, then English will be used.
+   * Possibility to supply the locale of the client, if LSP 3.15 is used.
+   * For LSP 3.16 and later, use `InitializeParams.locale` instead.
+   * @deprecated This will be removed once LTeX LS requires LSP 3.16.
    */
   locale?: string;
 

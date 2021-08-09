@@ -34,6 +34,9 @@
       <action type="fix" issue="vscode-ltex#373">
         Don't ignore second argument of `\setkomavar` in LaTeX
       </action>
+      <action type="add">
+        Add support for [`InitializeParams.locale`](https://microsoft.github.io/language-server-protocol/specifications/specification-3-17/#initializeParams) when using LSP 3.16 or later, deprecate `CustomInitializationOptions.locale`
+      </action>
       <action type="remove">
         Remove support for magic comments in XHTML
       </action>
