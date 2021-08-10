@@ -34,7 +34,7 @@ data class Settings(
   private val _languageToolHttpServerUri: String? = null,
   private val _logLevel: Level? = null,
   private val _sentenceCacheSize: Long? = null,
-  private val _diagnosticSeverity: DiagnosticSeverity? = null,
+  private val _diagnosticSeverity: Map<String, DiagnosticSeverity>? = null,
   private val _checkFrequency: CheckFrequency? = null,
   private val _clearDiagnosticsWhenClosingFile: Boolean? = null,
 ) {
@@ -74,8 +74,8 @@ data class Settings(
     get() = (this._logLevel ?: Level.FINE)
   val sentenceCacheSize: Long
     get() = (this._sentenceCacheSize ?: DEFAULT_SENTENCE_CACHE_SIZE)
-  val diagnosticSeverity: DiagnosticSeverity
-    get() = (this._diagnosticSeverity ?: DiagnosticSeverity.Information)
+  val diagnosticSeverity: Map<String, DiagnosticSeverity>
+    get() = (this._diagnosticSeverity ?: DEFAULT_DIAGNOSTIC_SEVERITY)
   val checkFrequency: CheckFrequency
     get() = (this._checkFrequency ?: CheckFrequency.Edit)
   val clearDiagnosticsWhenClosingFile: Boolean
@@ -174,6 +174,8 @@ data class Settings(
     val DEFAULT_ENABLED = setOf(
         "bibtex", "latex", "html", "markdown", "org", "restructuredtext", "rsweave")
     private const val DEFAULT_SENTENCE_CACHE_SIZE = 2000L
+    private val DEFAULT_DIAGNOSTIC_SEVERITY: Map<String, DiagnosticSeverity> =
+        mapOf(Pair("default", DiagnosticSeverity.Information))
 
     @Suppress("LongMethod")
     fun fromJson(
@@ -229,11 +231,8 @@ data class Settings(
         ),
       )
       val sentenceCacheSize: Long? = getSettingFromJsonAsLong(jsonSettings, "sentenceCacheSize")
-      val diagnosticSeverity: DiagnosticSeverity? = getSettingFromJsonAsEnum(
-        jsonSettings,
-        "diagnosticSeverity",
-        DiagnosticSeverity::class.java.enumConstants,
-      )
+      val diagnosticSeverity: Map<String, DiagnosticSeverity>? =
+          getDiagnosticSeverityFromJson(jsonSettings)
       val checkFrequency: CheckFrequency? = getSettingFromJsonAsEnum(
         jsonSettings,
         "checkFrequency",
@@ -320,18 +319,43 @@ data class Settings(
       }
     }
 
+    private fun getDiagnosticSeverityFromJson(
+      jsonSettings: JsonElement,
+    ): Map<String, DiagnosticSeverity>? {
+      val jsonElement: JsonElement? =
+          getSettingFromJsonAsJsonElement(jsonSettings, "diagnosticSeverity")
+
+      return if (jsonElement == null) {
+        null
+      } else if (jsonElement.isJsonObject) {
+        convertJsonObjectToMapOfEnums(
+          jsonElement.asJsonObject,
+          DiagnosticSeverity::class.java.enumConstants,
+        )
+      } else if (jsonElement.isJsonPrimitive) {
+        val jsonPrimitive: JsonPrimitive = jsonElement.asJsonPrimitive
+
+        if (jsonPrimitive.isString) {
+          val enumValue: DiagnosticSeverity? = convertStringToEnum(
+            jsonPrimitive.asString,
+            DiagnosticSeverity::class.java.enumConstants,
+          )
+          if (enumValue != null) mapOf(Pair("default", enumValue)) else null
+        } else {
+          null
+        }
+      } else {
+        null
+      }
+    }
+
     private fun <T> getSettingFromJsonAsEnum(
       jsonSettings: JsonElement,
       name: String,
       enumValues: Array<T>,
     ): T? {
       val enumString: String = getSettingFromJsonAsString(jsonSettings, name) ?: return null
-
-      for (enumValue: T in enumValues) {
-        if (enumValue.toString().equals(enumString, ignoreCase = true)) return enumValue
-      }
-
-      return null
+      return convertStringToEnum(enumString, enumValues)
     }
 
     private fun getSettingFromJsonAsJsonElement(
@@ -504,6 +528,43 @@ data class Settings(
       }
 
       return map
+    }
+
+    private fun <T> convertJsonObjectToMapOfEnums(
+      obj: JsonObject?,
+      enumValues: Array<T>,
+    ): Map<String, T>? {
+      if (obj == null) return null
+      val map = HashMap<String, T>()
+
+      for (entry: Map.Entry<String, JsonElement> in obj.entrySet()) {
+        val enumValue: T? = convertJsonElementToEnum(entry.value, enumValues)
+        if (enumValue != null) map[entry.key] = enumValue
+      }
+
+      return map
+    }
+
+    private fun <T> convertJsonElementToEnum(jsonElement: JsonElement, enumValues: Array<T>): T? {
+      return if (jsonElement.isJsonPrimitive) {
+        val jsonPrimitive: JsonPrimitive = jsonElement.asJsonPrimitive
+
+        if (jsonPrimitive.isString) {
+          convertStringToEnum(jsonPrimitive.asString, enumValues)
+        } else {
+          null
+        }
+      } else {
+        null
+      }
+    }
+
+    private fun <T> convertStringToEnum(enumString: String, enumValues: Array<T>): T? {
+      for (enumValue: T in enumValues) {
+        if (enumValue.toString().equals(enumString, ignoreCase = true)) return enumValue
+      }
+
+      return null
     }
 
     private fun mergeMapOfListsIntoMapOfSets(

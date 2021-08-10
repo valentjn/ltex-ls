@@ -21,6 +21,7 @@ import org.eclipse.lsp4j.CodeActionKind
 import org.eclipse.lsp4j.CodeActionParams
 import org.eclipse.lsp4j.Command
 import org.eclipse.lsp4j.Diagnostic
+import org.eclipse.lsp4j.DiagnosticSeverity
 import org.eclipse.lsp4j.Range
 import org.eclipse.lsp4j.ResourceOperation
 import org.eclipse.lsp4j.TextDocumentEdit
@@ -36,7 +37,14 @@ class CodeActionGenerator(
     val diagnostic = Diagnostic()
     diagnostic.range = Range(document.convertPosition(match.fromPos),
         document.convertPosition(match.toPos))
-    diagnostic.severity = this.settingsManager.settings.diagnosticSeverity
+
+    val diagnosticSeverityMap: Map<String, DiagnosticSeverity> =
+        this.settingsManager.settings.diagnosticSeverity
+    var diagnosticSeverity: DiagnosticSeverity? = diagnosticSeverityMap[match.ruleId]
+    if (diagnosticSeverity == null) diagnosticSeverity = diagnosticSeverityMap["default"]
+    if (diagnosticSeverity == null) diagnosticSeverity = DiagnosticSeverity.Information
+    diagnostic.severity = diagnosticSeverity
+
     diagnostic.source = "LTeX"
     diagnostic.message = match.message.replace(SUGGESTION_REGEX, "'$1'") + " \u2013 " + match.ruleId
     return diagnostic

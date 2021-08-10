@@ -22,6 +22,9 @@
       <action type="add" issue="#71">
         Add non-server batch mode via `--input-documents`
       </action>
+      <action type="add" issue="#95">
+        Add support for rule-dependent diagnostic severities in [`ltex.diagnosticSeverity`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdiagnosticseverity)
+      </action>
       <action type="add" issue="vscode-ltex#366">
         Add support for vowel dummies in LaTeX (`"vowelDummy"` in [`ltex.latex.commands`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexlatexcommands)) and Markdown (`"vowelDummy"` in [`ltex.markdown.nodes`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexmarkdownnodes))
       </action>

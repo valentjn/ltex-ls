@@ -115,8 +115,8 @@ class SettingsTest {
     assertEquals(1337, settings.sentenceCacheSize)
     settings2 = compareSettings(settings, settings2, true)
 
-    settings = settings.copy(_diagnosticSeverity = DiagnosticSeverity.Error)
-    assertEquals(DiagnosticSeverity.Error, settings.diagnosticSeverity)
+    settings = settings.copy(_diagnosticSeverity = mapOf(Pair("ruleId", DiagnosticSeverity.Error)))
+    assertEquals(mapOf(Pair("ruleId", DiagnosticSeverity.Error)), settings.diagnosticSeverity)
     settings2 = compareSettings(settings, settings2, false)
 
     settings = settings.copy(_checkFrequency = Settings.CheckFrequency.Manual)
@@ -270,19 +270,33 @@ class SettingsTest {
 
     jsonSettings.addProperty("diagnosticSeverity", "error")
     settings = Settings.fromJson(jsonSettings, jsonWorkspaceSpecificSettings)
-    assertEquals(DiagnosticSeverity.Error, settings.diagnosticSeverity)
+    assertEquals(mapOf(Pair("default", DiagnosticSeverity.Error)), settings.diagnosticSeverity)
 
     jsonSettings.addProperty("diagnosticSeverity", "warning")
     settings = Settings.fromJson(jsonSettings, jsonWorkspaceSpecificSettings)
-    assertEquals(DiagnosticSeverity.Warning, settings.diagnosticSeverity)
+    assertEquals(mapOf(Pair("default", DiagnosticSeverity.Warning)), settings.diagnosticSeverity)
 
     jsonSettings.addProperty("diagnosticSeverity", "information")
     settings = Settings.fromJson(jsonSettings, jsonWorkspaceSpecificSettings)
-    assertEquals(DiagnosticSeverity.Information, settings.diagnosticSeverity)
+    assertEquals(
+      mapOf(Pair("default", DiagnosticSeverity.Information)),
+      settings.diagnosticSeverity,
+    )
 
     jsonSettings.addProperty("diagnosticSeverity", "hint")
     settings = Settings.fromJson(jsonSettings, jsonWorkspaceSpecificSettings)
-    assertEquals(DiagnosticSeverity.Hint, settings.diagnosticSeverity)
+    assertEquals(mapOf(Pair("default", DiagnosticSeverity.Hint)), settings.diagnosticSeverity)
+
+    val diagnosticSeverity = JsonObject()
+    diagnosticSeverity.addProperty("ruleId", "warning")
+    diagnosticSeverity.addProperty("default", "error")
+
+    jsonSettings.add("diagnosticSeverity", diagnosticSeverity)
+    settings = Settings.fromJson(jsonSettings, jsonWorkspaceSpecificSettings)
+    assertEquals(
+      mapOf(Pair("ruleId", DiagnosticSeverity.Warning), Pair("default", DiagnosticSeverity.Error)),
+      settings.diagnosticSeverity,
+    )
 
     jsonSettings.addProperty("checkFrequency", "edit")
     settings = Settings.fromJson(jsonSettings, jsonWorkspaceSpecificSettings)
