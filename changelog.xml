@@ -12,7 +12,7 @@
     <author>Julian Valentin, LTeX Development Community</author>
   </properties>
   <body>
-    <release version="13.0.0" date="upcoming">
+    <release version="13.0.0" date="2021-08-11">
       <action type="update">
         Migrate from Java to Kotlin
       </action>
