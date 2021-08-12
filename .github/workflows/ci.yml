@@ -174,9 +174,8 @@ jobs:
 
       - name: "Create GitHub Release"
         uses: "softprops/action-gh-release@v0.1.8"
-        env:
-          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
+          token: "${{ secrets.LTEX_LS_CREATE_GITHUB_RELEASE_TOKEN }}"
           prerelease: "${{ env.LTEX_LS_IS_PRERELEASE }}"
           body: "${{ env.LTEX_LS_CHANGELOG }}"
           files: "target/ltex-ls-${{ env.LTEX_LS_VERSION }}.tar.gz\ntarget/ltex-ls-${{ env.LTEX_LS_VERSION }}-linux-x64.tar.gz\ntarget/ltex-ls-${{ env.LTEX_LS_VERSION }}-mac-x64.tar.gz\ntarget/ltex-ls-${{ env.LTEX_LS_VERSION }}-windows-x64.zip"
