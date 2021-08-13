@@ -94,13 +94,13 @@ jobs:
         run: "python -m pip install --upgrade pip && pip install xmlschema==1.6.4"
 
       - name: "Validate .assembly.xml"
-        run: "python -c 'import xmlschema; xmlschema.XMLSchema(\"https://maven.apache.org/xsd/assembly-2.1.0.xsd\").validate(\".assembly.xml\")'"
+        run: "python -c 'import xmlschema; xmlschema.XMLSchema(\"schemas/assembly-2.1.0.xsd\").validate(\".assembly.xml\")'"
 
       - name: "Validate changelog.xml"
-        run: "python -c 'import xmlschema; xmlschema.XMLSchema(\"https://maven.apache.org/xsd/changes-1.0.0.xsd\").validate(\"changelog.xml\")'"
+        run: "python -c 'import xmlschema; xmlschema.XMLSchema(\"schemas/changes-1.0.0.xsd\").validate(\"changelog.xml\")'"
 
       - name: "Validate pom.xml"
-        run: "python -c 'import xmlschema; xmlschema.XMLSchema(\"https://maven.apache.org/xsd/maven-4.0.0.xsd\").validate(\"pom.xml\")'"
+        run: "python -c 'import xmlschema; xmlschema.XMLSchema(\"schemas/maven-4.0.0.xsd\").validate(\"pom.xml\")'"
 
   upload_coverage:
     name: "CI - Upload Coverage Job"
