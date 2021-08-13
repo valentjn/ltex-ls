@@ -12,6 +12,11 @@
     <author>Julian Valentin, LTeX Development Community</author>
   </properties>
   <body>
+    <release version="13.0.1" date="upcoming">
+      <action type="fix">
+        Fix used i18n keys removed
+      </action>
+    </release>
     <release version="13.0.0" date="2021-08-11">
       <action type="update">
         Migrate from Java to Kotlin
