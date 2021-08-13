@@ -22,7 +22,7 @@ class HtmlAnnotatedTextBuilder(
 
   private var code = ""
   private var pos = 0
-  private val elementNameStack = ArrayDeque<String>()
+  private val elementNameStack: ArrayDeque<String> = ArrayDeque(listOf("html"))
   private var nextText = ""
 
   init {
@@ -38,9 +38,6 @@ class HtmlAnnotatedTextBuilder(
   override fun addCode(code: String): CodeAnnotatedTextBuilder {
     this.code = code
     this.pos = 0
-    this.elementNameStack.clear()
-    this.elementNameStack.addLast("html")
-    this.nextText = ""
 
     try {
       val xmlStreamReader: XMLStreamReader =

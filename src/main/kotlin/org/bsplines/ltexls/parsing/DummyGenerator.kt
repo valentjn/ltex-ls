@@ -7,7 +7,7 @@
 
 package org.bsplines.ltexls.parsing
 
-class DummyGenerator(
+class DummyGenerator private constructor(
   val plural: Boolean = false,
   val vowel: Boolean = false,
 ) {

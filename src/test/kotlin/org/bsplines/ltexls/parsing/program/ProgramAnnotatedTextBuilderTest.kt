@@ -7,19 +7,15 @@
 
 package org.bsplines.ltexls.parsing.program
 
-import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder
-import org.bsplines.ltexls.settings.Settings
+import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilderTest
 import org.junit.platform.suite.api.IncludeEngines
-import org.languagetool.markup.AnnotatedText
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @IncludeEngines("junit-jupiter")
-class ProgramAnnotatedTextBuilderTest {
+class ProgramAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("") {
   @Test
   fun testJava() {
     assertPlainText(
-      "java",
       """
       Sentence 1 - no check // Sentence 2 - no check
       //Sentence 3 - no check
@@ -34,27 +30,27 @@ class ProgramAnnotatedTextBuilderTest {
         * check */
 
       """.trimIndent(),
-      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n"
+      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n",
+      "java",
     )
   }
 
   @Test
   fun testPython() {
     assertPlainText(
-      "python",
       "Sentence 1 - no check # Sentence 2 - no check\n#Sentence 3 - no check\n# Sentence 4 -\n"
       + "# check\n\nSentence 5 - no check \"\"\" Sentence 6 - no check \"\"\"\n"
       + "\"\"\" Sentence 7 - no check \"\"\" Sentence 8 - no check\n"
       + "\"\"\"Sentence 9 - no check \"\"\"\n\"\"\" Sentence 10 - check \"\"\"\n"
       + "\"\"\" Sentence 11 -\ncheck \"\"\"\n",
-      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n"
+      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n",
+      "python",
     )
   }
 
   @Test
   fun testPowerShell() {
     assertPlainText(
-      "powershell",
       """
       Sentence 1 - no check # Sentence 2 - no check
       #Sentence 3 - no check
@@ -69,14 +65,14 @@ class ProgramAnnotatedTextBuilderTest {
        # check #>
 
       """.trimIndent(),
-      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n"
+      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n",
+      "powershell",
     )
   }
 
   @Test
   fun testJulia() {
     assertPlainText(
-      "julia",
       """
       Sentence 1 - no check # Sentence 2 - no check
       #Sentence 3 - no check
@@ -84,14 +80,14 @@ class ProgramAnnotatedTextBuilderTest {
       ## check
 
       """.trimIndent(),
-      "\n\n\nSentence 4 -\ncheck"
+      "\n\n\nSentence 4 -\ncheck",
+      "julia",
     )
   }
 
   @Test
   fun testLua() {
     assertPlainText(
-      "lua",
       """
       Sentence 1 - no check -- Sentence 2 - no check
       --Sentence 3 - no check
@@ -106,14 +102,14 @@ class ProgramAnnotatedTextBuilderTest {
       check ]]
 
       """.trimIndent(),
-      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n"
+      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n",
+      "lua",
     )
   }
 
   @Test
   fun testHaskell() {
     assertPlainText(
-      "haskell",
       """
       Sentence 1 - no check -- Sentence 2 - no check
       --Sentence 3 - no check
@@ -128,14 +124,14 @@ class ProgramAnnotatedTextBuilderTest {
       check -}
 
       """.trimIndent(),
-      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n"
+      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n",
+      "haskell",
     )
   }
 
   @Test
   fun testSql() {
     assertPlainText(
-      "sql",
       """
       Sentence 1 - no check -- Sentence 2 - no check
       --Sentence 3 - no check
@@ -143,14 +139,14 @@ class ProgramAnnotatedTextBuilderTest {
       --- check
 
       """.trimIndent(),
-      "\n\n\nSentence 4 -\ncheck"
+      "\n\n\nSentence 4 -\ncheck",
+      "sql",
     )
   }
 
   @Test
   fun testLisp() {
     assertPlainText(
-      "lisp",
       """
       Sentence 1 - no check ; Sentence 2 - no check
       ;Sentence 3 - no check
@@ -158,14 +154,14 @@ class ProgramAnnotatedTextBuilderTest {
       ;; check
 
       """.trimIndent(),
-      "\n\n\nSentence 4 -\ncheck"
+      "\n\n\nSentence 4 -\ncheck",
+      "lisp",
     )
   }
 
   @Test
   fun testMatlab() {
     assertPlainText(
-      "matlab",
       """
       Sentence 1 - no check % Sentence 2 - no check
       %Sentence 3 - no check
@@ -180,14 +176,14 @@ class ProgramAnnotatedTextBuilderTest {
       check %}
 
       """.trimIndent(),
-      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n"
+      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n",
+      "matlab",
     )
   }
 
   @Test
   fun testErlang() {
     assertPlainText(
-      "erlang",
       """
       Sentence 1 - no check % Sentence 2 - no check
       %Sentence 3 - no check
@@ -195,14 +191,14 @@ class ProgramAnnotatedTextBuilderTest {
       %% check
 
       """.trimIndent(),
-      "\n\n\nSentence 4 -\ncheck"
+      "\n\n\nSentence 4 -\ncheck",
+      "erlang",
     )
   }
 
   @Test
   fun testFortran() {
     assertPlainText(
-      "fortran-modern",
       """
       Sentence 1 - no check c Sentence 2 - no check
       cSentence 3 - no check
@@ -210,14 +206,14 @@ class ProgramAnnotatedTextBuilderTest {
       c check
 
       """.trimIndent(),
-      "\n\n\nSentence 4 -\ncheck"
+      "\n\n\nSentence 4 -\ncheck",
+      "fortran-modern",
     )
   }
 
   @Test
   fun testVisualBasic() {
     assertPlainText(
-      "vb",
       """
       Sentence 1 - no check ' Sentence 2 - no check
       'Sentence 3 - no check
@@ -225,21 +221,8 @@ class ProgramAnnotatedTextBuilderTest {
       '' check
 
       """.trimIndent(),
-      "\n\n\nSentence 4 -\ncheck"
+      "\n\n\nSentence 4 -\ncheck",
+      "vb",
     )
-  }
-
-  companion object {
-    private fun assertPlainText(codeLanguageId: String, code: String, expectedPlainText: String) {
-      val annotatedText: AnnotatedText = buildAnnotatedText(codeLanguageId, code)
-      assertEquals(expectedPlainText, annotatedText.plainText)
-    }
-
-    private fun buildAnnotatedText(codeLanguageId: String, code: String): AnnotatedText {
-      val builder: CodeAnnotatedTextBuilder = CodeAnnotatedTextBuilder.create(codeLanguageId)
-      val settings = Settings()
-      builder.setSettings(settings)
-      return builder.addCode(code).build()
-    }
   }
 }

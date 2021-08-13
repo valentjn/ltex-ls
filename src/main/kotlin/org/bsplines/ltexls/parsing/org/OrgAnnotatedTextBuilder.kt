@@ -7,136 +7,51 @@
 
 package org.bsplines.ltexls.parsing.org
 
-import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder
-import org.bsplines.ltexls.parsing.DummyGenerator
-import org.bsplines.ltexls.settings.Settings
+import org.bsplines.ltexls.parsing.CharacterBasedCodeAnnotatedTextBuilder
 
 @Suppress("TooManyFunctions")
 class OrgAnnotatedTextBuilder(
   codeLanguageId: String,
-) : CodeAnnotatedTextBuilder(codeLanguageId) {
-  private var code = ""
-  private var pos = 0
-  private var curChar = '\u0000'
-  private var curString = ""
-
-  private var dummyGenerator = DummyGenerator.getInstance()
-  private var dummyCounter = 0
+) : CharacterBasedCodeAnnotatedTextBuilder(codeLanguageId) {
   private var indentation = -1
-  private var isStartOfLine = false
   private var appendAtEndOfLine = ""
-  private val elementTypeStack = ArrayDeque<ElementType>()
+  private val elementTypeStack: ArrayDeque<ElementType> = ArrayDeque(listOf(ElementType.Paragraph))
   private var latexEnvironmentName: String? = null
   private val objectTypeStack = ArrayDeque<ObjectType>()
 
-  private var language = "en-US"
-
-  init {
-    reinitialize()
-  }
-
-  private fun reinitialize() {
-    this.code = ""
-    this.pos = 0
-    this.curString = ""
-
-    this.dummyCounter = 0
-    this.indentation = -1
-    this.isStartOfLine = false
-    this.appendAtEndOfLine = ""
-    this.elementTypeStack.clear()
-    this.elementTypeStack.addLast(ElementType.Paragraph)
-    this.latexEnvironmentName = null
-    this.objectTypeStack.clear()
-  }
-
-  override fun setSettings(settings: Settings) {
-    super.setSettings(settings)
-    this.language = settings.languageShortCode
-  }
-
-  override fun addText(text: String?): OrgAnnotatedTextBuilder {
-    if ((text != null) && text.isNotEmpty()) {
-      super.addText(text)
-      this.pos += text.length
+  override fun processCharacter() {
+    if (this.isStartOfLine) {
+      processWhitespaceAtStartOfLine()
+      if (this.pos >= this.code.length) return
     }
 
-    return this
-  }
-
-  override fun addMarkup(markup: String?): OrgAnnotatedTextBuilder {
-    if ((markup != null) && markup.isNotEmpty()) {
-      super.addMarkup(markup)
-      this.pos += markup.length
-    }
-
-    return this
-  }
-
-  override fun addMarkup(markup: String?, interpretAs: String?): OrgAnnotatedTextBuilder {
-    if ((interpretAs != null) && interpretAs.isNotEmpty()) {
-      super.addMarkup((markup ?: ""), interpretAs)
-      this.pos += (markup?.length ?: 0)
+    if (this.objectTypeStack.contains(ObjectType.Verbatim)) {
+      when (
+        val matchResult: MatchResult? = matchInlineEndFromPosition(TEXT_MARKUP_VERBATIM_END_REGEX)
+      ) {
+        null -> addMarkup(this.curString)
+        else -> {
+          popObjectType()
+          addMarkup(matchResult.value, generateDummy())
+        }
+      }
+    } else if (this.objectTypeStack.contains(ObjectType.Code)) {
+      when (
+        val matchResult: MatchResult? = matchInlineEndFromPosition(TEXT_MARKUP_CODE_END_REGEX)
+      ) {
+        null -> addMarkup(this.curString)
+        else -> {
+          popObjectType()
+          addMarkup(matchResult.value, generateDummy())
+        }
+      }
+    } else if (this.isStartOfLine && processStartOfLine()) {
+      // skip
+    } else if (isInIgnoredElementType()) {
+      addMarkup(this.curString)
     } else {
-      addMarkup(markup)
+      processCharacterInternal()
     }
-
-    return this
-  }
-
-  @Suppress("ComplexMethod", "LoopWithTooManyJumpStatements")
-  override fun addCode(code: String): CodeAnnotatedTextBuilder {
-    reinitialize()
-    this.code = code
-
-    while (this.pos < this.code.length) {
-      this.curChar = this.code[this.pos]
-      this.curString = this.curChar.toString()
-      this.isStartOfLine = ((this.pos == 0) || this.code[this.pos - 1] == '\n')
-
-      if (this.isStartOfLine) {
-        processWhitespaceAtStartOfLine()
-        if (this.pos >= this.code.length) break
-      }
-
-      if (this.objectTypeStack.contains(ObjectType.Verbatim)) {
-        when (
-          val matchResult: MatchResult? = matchInlineEndFromPosition(TEXT_MARKUP_VERBATIM_END_REGEX)
-        ) {
-          null -> addMarkup(this.curString)
-          else -> {
-            popObjectType()
-            addMarkup(matchResult.value, generateDummy())
-          }
-        }
-
-        continue
-      } else if (this.objectTypeStack.contains(ObjectType.Code)) {
-        when (val matchResult: MatchResult? =
-              matchInlineEndFromPosition(TEXT_MARKUP_CODE_END_REGEX)) {
-          null -> addMarkup(this.curString)
-          else -> {
-            popObjectType()
-            addMarkup(matchResult.value, generateDummy())
-          }
-        }
-
-        continue
-      }
-
-      if (this.isStartOfLine && processStartOfLine()) continue
-
-      if (isInIgnoredElementType()) {
-        addMarkup(this.curString)
-        continue
-      }
-
-      processCharacter()
-    }
-
-    addMarkup("", this.appendAtEndOfLine)
-
-    return this
   }
 
   private fun processWhitespaceAtStartOfLine() {
@@ -299,7 +214,7 @@ class OrgAnnotatedTextBuilder(
   }
 
   @Suppress("ComplexMethod", "LongMethod")
-  private fun processCharacter() {
+  private fun processCharacterInternal() {
     var matchResult: MatchResult? = null
 
     if (
@@ -413,34 +328,22 @@ class OrgAnnotatedTextBuilder(
       (matchInlineStartFromPosition(TEXT_MARKUP_MARKER_REGEX)?.also { matchResult = it } != null)
       || (matchInlineEndFromPosition(TEXT_MARKUP_MARKER_REGEX)?.also { matchResult = it } != null)
     ) {
-      when (val textMarkupMarker: String? = matchResult?.value) {
-        "*" -> {
-          toggleObjectType(ObjectType.Bold)
-          addMarkup(textMarkupMarker)
-        }
-        "+" -> {
-          toggleObjectType(ObjectType.Strikethrough)
-          addMarkup(textMarkupMarker)
-        }
-        "/" -> {
-          toggleObjectType(ObjectType.Italic)
-          addMarkup(textMarkupMarker)
-        }
-        "=" -> {
-          toggleObjectType(ObjectType.Verbatim)
-          addMarkup(textMarkupMarker)
-        }
-        "_" -> {
-          toggleObjectType(ObjectType.Underline)
-          addMarkup(textMarkupMarker)
-        }
-        "~" -> {
-          toggleObjectType(ObjectType.Code)
-          addMarkup(textMarkupMarker)
-        }
-        else -> {
-          addText(textMarkupMarker)
-        }
+      val textMarkupMarker: String? = matchResult?.value
+      val objectType: ObjectType? = when (textMarkupMarker) {
+        "*" -> ObjectType.Bold
+        "+" -> ObjectType.Strikethrough
+        "/" -> ObjectType.Italic
+        "=" -> ObjectType.Verbatim
+        "_" -> ObjectType.Underline
+        "~" -> ObjectType.Code
+        else -> null
+      }
+
+      if (objectType != null) {
+        toggleObjectType(objectType)
+        addMarkup(textMarkupMarker)
+      } else {
+        addText(textMarkupMarker)
       }
     } else if (this.curChar == '\n') {
       addMarkup("\n", "\n" + this.appendAtEndOfLine)
@@ -451,37 +354,14 @@ class OrgAnnotatedTextBuilder(
     }
   }
 
-  private fun isInIgnoredElementType(): Boolean {
-    return (
-      this.elementTypeStack.contains(ElementType.CommentBlock)
-        || this.elementTypeStack.contains(ElementType.ExampleBlock)
-        || this.elementTypeStack.contains(ElementType.ExportBlock)
-        || this.elementTypeStack.contains(ElementType.SourceBlock)
-        || this.elementTypeStack.contains(ElementType.PropertyDrawer)
-        || this.elementTypeStack.contains(ElementType.LatexEnvironment)
-      )
-  }
-
-  private fun isInBlockElementType(): Boolean {
-    return (
-      this.elementTypeStack.contains(ElementType.CommentBlock)
-        || this.elementTypeStack.contains(ElementType.ExampleBlock)
-        || this.elementTypeStack.contains(ElementType.ExportBlock)
-        || this.elementTypeStack.contains(ElementType.SourceBlock)
-      )
-  }
-
-  private fun matchFromPosition(regex: Regex, pos: Int = this.pos): MatchResult? {
-    val matchResult: MatchResult? = regex.find(this.code.substring(pos))
-    return if ((matchResult != null) && matchResult.value.isNotEmpty()) matchResult else null
-  }
-
   @Suppress("ComplexCondition")
   private fun matchInlineStartFromPosition(
     @Suppress("SameParameterValue") regex: Regex,
   ): MatchResult? {
-    if ((this.pos > 0)
-          && (matchFromPosition(TEXT_MARKUP_START_PRECEDING_REGEX, this.pos - 1) == null)) {
+    if (
+      (this.pos > 0)
+      && (matchFromPosition(TEXT_MARKUP_START_PRECEDING_REGEX, this.pos - 1) == null)
+    ) {
       return null
     }
 
@@ -491,10 +371,10 @@ class OrgAnnotatedTextBuilder(
       (matchResult == null)
       || (this.pos == 0)
       || (this.pos >= this.code.length - 1)
-      || (matchFromPosition(
-        TEXT_MARKUP_START_FOLLOWING_REGEX,
-        this.pos + matchResult.value.length,
-      ) != null)
+      || (
+        matchFromPosition(TEXT_MARKUP_START_FOLLOWING_REGEX, this.pos + matchResult.value.length)
+        != null
+      )
     ) {
       matchResult
     } else {
@@ -503,8 +383,10 @@ class OrgAnnotatedTextBuilder(
   }
 
   private fun matchInlineEndFromPosition(regex: Regex): MatchResult? {
-    if ((this.pos == 0)
-          || (matchFromPosition(TEXT_MARKUP_END_PRECEDING_REGEX, this.pos - 1) == null)) {
+    if (
+      (this.pos == 0)
+      || (matchFromPosition(TEXT_MARKUP_END_PRECEDING_REGEX, this.pos - 1) == null)
+    ) {
       return null
     }
 
@@ -512,8 +394,10 @@ class OrgAnnotatedTextBuilder(
 
     return if (
       (matchResult == null)
-      || (matchFromPosition(TEXT_MARKUP_END_FOLLOWING_REGEX,
-        this.pos + matchResult.value.length) != null)
+      || (
+        matchFromPosition(TEXT_MARKUP_END_FOLLOWING_REGEX, this.pos + matchResult.value.length)
+        != null
+      )
     ) {
       matchResult
     } else {
@@ -521,8 +405,24 @@ class OrgAnnotatedTextBuilder(
     }
   }
 
-  private fun generateDummy(): String {
-    return this.dummyGenerator.generate(this.language, this.dummyCounter++)
+  private fun isInIgnoredElementType(): Boolean {
+    return (
+      this.elementTypeStack.contains(ElementType.CommentBlock)
+      || this.elementTypeStack.contains(ElementType.ExampleBlock)
+      || this.elementTypeStack.contains(ElementType.ExportBlock)
+      || this.elementTypeStack.contains(ElementType.SourceBlock)
+      || this.elementTypeStack.contains(ElementType.PropertyDrawer)
+      || this.elementTypeStack.contains(ElementType.LatexEnvironment)
+    )
+  }
+
+  private fun isInBlockElementType(): Boolean {
+    return (
+      this.elementTypeStack.contains(ElementType.CommentBlock)
+      || this.elementTypeStack.contains(ElementType.ExampleBlock)
+      || this.elementTypeStack.contains(ElementType.ExportBlock)
+      || this.elementTypeStack.contains(ElementType.SourceBlock)
+    )
   }
 
   private fun popElementType() {

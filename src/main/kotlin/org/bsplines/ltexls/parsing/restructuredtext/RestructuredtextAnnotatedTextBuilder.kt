@@ -7,130 +7,52 @@
 
 package org.bsplines.ltexls.parsing.restructuredtext
 
-import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder
-import org.bsplines.ltexls.parsing.DummyGenerator
-import org.bsplines.ltexls.settings.Settings
+import org.bsplines.ltexls.parsing.CharacterBasedCodeAnnotatedTextBuilder
 
 @Suppress("TooManyFunctions")
 class RestructuredtextAnnotatedTextBuilder(
-  codeLanguageId: String
-) : CodeAnnotatedTextBuilder(codeLanguageId) {
-  private var code = ""
-  private var pos = 0
-  private var curChar = '\u0000'
-  private var curString = ""
-
-  private var dummyGenerator = DummyGenerator.getInstance()
-  private var dummyCounter = 0
-  private var indentation = 0
-  private var lastIndentation = 0
-  private var isStartOfBlock = false
-  private var isStartOfLine = false
+  codeLanguageId: String,
+) : CharacterBasedCodeAnnotatedTextBuilder(codeLanguageId) {
+  private var indentation = -1
+  private var lastIndentation = -1
   private var blockType = BlockType.Paragraph
   private var inIgnoredMarkup = false
 
-  private var language: String = "en-US"
+  override fun processCharacter() {
+    var isStartOfBlock = false
 
-  init {
-    reinitialize()
-  }
-
-  private fun reinitialize() {
-    this.code = ""
-    this.pos = 0
-    this.curString = ""
-    this.dummyGenerator = DummyGenerator()
-    this.dummyCounter = 0
-    this.indentation = -1
-    this.lastIndentation = -1
-    this.isStartOfBlock = false
-    this.isStartOfLine = false
-    this.blockType = BlockType.Paragraph
-    this.inIgnoredMarkup = false
-  }
-
-  override fun setSettings(settings: Settings) {
-    super.setSettings(settings)
-    this.language = settings.languageShortCode
-  }
-
-  override fun addText(text: String?): RestructuredtextAnnotatedTextBuilder {
-    if ((text != null) && text.isNotEmpty()) {
-      super.addText(text)
-      this.pos += text.length
+    if (this.isStartOfLine) {
+      isStartOfBlock = processStartOfBlock()
+      processWhitespaceAtStartOfLine()
+      if (this.pos >= this.code.length) return
     }
 
-    return this
-  }
-
-  override fun addMarkup(markup: String?): RestructuredtextAnnotatedTextBuilder {
-    if ((markup != null) && markup.isNotEmpty()) {
-      super.addMarkup(markup)
-      this.pos += markup.length
+    if (isStartOfBlock) {
+      this.inIgnoredMarkup = false
+      if (isParagraph()) this.blockType = BlockType.Paragraph
     }
 
-    return this
-  }
-
-  override fun addMarkup(
-    markup: String?,
-    interpretAs: String?,
-  ): RestructuredtextAnnotatedTextBuilder {
-    if ((interpretAs != null) && interpretAs.isNotEmpty()) {
-      super.addMarkup((markup ?: ""), interpretAs)
-      this.pos += (markup?.length ?: 0)
+    if (this.isStartOfLine && processStartOfLine()) {
+      // skip
+    } else if (
+      (this.blockType == BlockType.Comment)
+      || (this.blockType == BlockType.GridTable)
+      || (this.blockType == BlockType.SimpleTable)
+    ) {
+      addMarkup(this.curString)
     } else {
-      addMarkup(markup)
-    }
-
-    return this
-  }
-
-  @Suppress("ComplexMethod", "LoopWithTooManyJumpStatements")
-  override fun addCode(code: String): CodeAnnotatedTextBuilder {
-    reinitialize()
-    this.code = code
-
-    while (this.pos < this.code.length) {
-      this.curChar = this.code[this.pos]
-      this.curString = this.curChar.toString()
-      this.isStartOfBlock = false
-      this.isStartOfLine = ((this.pos == 0) || this.code[this.pos - 1] == '\n')
-
-      if (this.isStartOfLine) {
-        processStartOfBlock()
-        processWhitespaceAtStartOfLine()
-        if (this.pos >= this.code.length) break
-      }
-
-      if (this.isStartOfBlock) {
-        this.inIgnoredMarkup = false
-        if (isParagraph()) this.blockType = BlockType.Paragraph
-      }
-
-      if (this.isStartOfLine && processStartOfLine()) continue
-
-      if (
-        (this.blockType == BlockType.Comment)
-        || (this.blockType == BlockType.GridTable)
-        || (this.blockType == BlockType.SimpleTable)
-      ) {
-        addMarkup(this.curString)
-        continue
-      }
-
       processInlineElement()
     }
-
-    return this
   }
 
-  private fun processStartOfBlock() {
+  private fun processStartOfBlock(): Boolean {
     val blockSeparatorMatchResult: MatchResult? = matchFromPosition(BLOCK_SEPARATOR_REGEX)
 
-    if ((this.pos == 0) || (blockSeparatorMatchResult != null)) {
-      this.isStartOfBlock = true
+    return if ((this.pos == 0) || (blockSeparatorMatchResult != null)) {
       if (blockSeparatorMatchResult != null) addMarkup(blockSeparatorMatchResult.value, "\n")
+      true
+    } else {
+      false
     }
   }
 
@@ -283,11 +205,6 @@ class RestructuredtextAnnotatedTextBuilder(
       )
   }
 
-  private fun matchFromPosition(regex: Regex, pos: Int = this.pos): MatchResult? {
-    val matchResult: MatchResult? = regex.find(this.code.substring(pos))
-    return if ((matchResult != null) && matchResult.value.isNotEmpty()) matchResult else null
-  }
-
   @Suppress("ComplexMethod")
   private fun matchInlineStartFromPosition(regex: Regex): MatchResult? {
     if ((this.pos > 0) && (matchFromPosition(INLINE_START_PRECEDING_REGEX, this.pos - 1) == null)) {
@@ -348,10 +265,6 @@ class RestructuredtextAnnotatedTextBuilder(
       (blockType == BlockType.GridTable)
       || (blockType == BlockType.SimpleTable)
     )
-  }
-
-  private fun generateDummy(): String {
-    return this.dummyGenerator.generate(this.language, this.dummyCounter++)
   }
 
   private enum class BlockType {

@@ -15,7 +15,7 @@ import org.bsplines.ltexls.tools.Logging
 import org.languagetool.markup.AnnotatedText
 
 class ProgramAnnotatedTextBuilder(
-  codeLanguageId: String
+  codeLanguageId: String,
 ) : CodeAnnotatedTextBuilder(codeLanguageId) {
   private val annotatedTextBuilder = when (codeLanguageId) {
     "python" -> RestructuredtextAnnotatedTextBuilder("restructuredtext")
@@ -23,7 +23,7 @@ class ProgramAnnotatedTextBuilder(
   }
 
   private val commentRegexs = ProgramCommentRegexs.fromCodeLanguageId(codeLanguageId)
-  private val commentBlockRegex: Regex = commentRegexs.getCommentBlockRegex()
+  private val commentBlockRegex: Regex = commentRegexs.commentBlockRegex
   private val lineCommentPatternString: String? = commentRegexs.lineCommentRegexString
 
   override fun addCode(code: String): CodeAnnotatedTextBuilder {

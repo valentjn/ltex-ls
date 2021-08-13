@@ -120,11 +120,8 @@ class MarkdownAnnotatedTextBuilder(
       )
     }
 
-    this.code = document.chars.toString()
+    this.code = code
     this.pos = 0
-    this.dummyCounter = 0
-    this.firstCellInTableRow = false
-    this.nodeTypeStack.clear()
     visitChildren(document)
     if (this.pos < this.code.length) addMarkup(this.code.length)
 

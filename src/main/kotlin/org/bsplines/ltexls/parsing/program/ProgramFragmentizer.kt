@@ -15,7 +15,7 @@ class ProgramFragmentizer(
   codeLanguageId: String,
 ) : RegexCodeFragmentizer(
   codeLanguageId,
-  ProgramCommentRegexs.fromCodeLanguageId(codeLanguageId).getMagicCommentRegex(),
+  ProgramCommentRegexs.fromCodeLanguageId(codeLanguageId).magicCommentRegex,
 ) {
   override fun fragmentize(code: String, originalSettings: Settings): List<CodeFragment> {
     val oldCodeFragments: List<CodeFragment> = super.fragmentize(code, originalSettings)

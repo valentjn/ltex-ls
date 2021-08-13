@@ -7,15 +7,12 @@
 
 package org.bsplines.ltexls.parsing.restructuredtext
 
-import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder
-import org.bsplines.ltexls.settings.Settings
+import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilderTest
 import org.junit.platform.suite.api.IncludeEngines
-import org.languagetool.markup.AnnotatedText
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @IncludeEngines("junit-jupiter")
-class RestructuredtextAnnotatedTextBuilderTest {
+class RestructuredtextAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("restructuredtext") {
   @Test
   fun testFootnoteBlocks() {
     assertPlainText(
@@ -390,19 +387,5 @@ class RestructuredtextAnnotatedTextBuilderTest {
 
       """.trimIndent()
     )
-  }
-
-  companion object {
-    private fun assertPlainText(code: String, expectedPlainText: String) {
-      val annotatedText: AnnotatedText = buildAnnotatedText(code)
-      assertEquals(expectedPlainText, annotatedText.plainText)
-    }
-
-    private fun buildAnnotatedText(code: String): AnnotatedText {
-      val builder: CodeAnnotatedTextBuilder = CodeAnnotatedTextBuilder.create("restructuredtext")
-      val settings = Settings()
-      builder.setSettings(settings)
-      return builder.addCode(code).build()
-    }
   }
 }

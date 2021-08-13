@@ -7,15 +7,13 @@
 
 package org.bsplines.ltexls.parsing.markdown
 
-import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder
+import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilderTest
 import org.bsplines.ltexls.settings.Settings
 import org.junit.platform.suite.api.IncludeEngines
-import org.languagetool.markup.AnnotatedText
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 @IncludeEngines("junit-jupiter")
-class MarkdownAnnotatedTextBuilderTest {
+class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown") {
   @Test
   fun testBasicMarkdown() {
     assertPlainText(
@@ -49,7 +47,7 @@ class MarkdownAnnotatedTextBuilderTest {
     assertPlainText(
       "This is a test: `inline code`.\n\n```\ncode block\n```\n\nThis is another sentence.\n",
       "This is a test: inline code.\n\n\ncode block\n\n\nThis is another sentence.\n",
-      markdownNodes
+      Settings(_markdownNodes = markdownNodes)
     )
   }
 
@@ -176,26 +174,5 @@ class MarkdownAnnotatedTextBuilderTest {
 
       """.trimIndent()
     )
-  }
-
-  companion object {
-    private fun assertPlainText(
-      code: String,
-      expectedPlainText: String,
-      markdownNodes: Map<String, String> = emptyMap(),
-    ) {
-      val annotatedText: AnnotatedText = buildAnnotatedText(code, markdownNodes)
-      assertEquals(expectedPlainText, annotatedText.plainText)
-    }
-
-    private fun buildAnnotatedText(
-      code: String,
-      markdownNodes: Map<String, String>
-    ): AnnotatedText {
-      val builder = CodeAnnotatedTextBuilder.create("markdown")
-      val settings = Settings(_markdownNodes = markdownNodes)
-      builder.setSettings(settings)
-      return builder.addCode(code).build()
-    }
   }
 }

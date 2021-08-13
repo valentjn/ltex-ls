@@ -12,7 +12,7 @@ data class ProgramCommentRegexs(
   val blockCommentEndRegexString: String?,
   val lineCommentRegexString: String?,
 ) {
-  fun getCommentBlockRegex(): Regex {
+  val commentBlockRegex: Regex = run {
     val builder = StringBuilder()
 
     if ((this.blockCommentStartRegexString != null)
@@ -29,10 +29,10 @@ data class ProgramCommentRegexs(
           + "[ \t](?:.*?)$(?:\r?\n)?)+)")
     }
 
-    return Regex(builder.toString(), RegexOption.MULTILINE)
+    Regex(builder.toString(), RegexOption.MULTILINE)
   }
 
-  fun getMagicCommentRegex(): Regex {
+  val magicCommentRegex: Regex = run {
     val builder = StringBuilder()
 
     if ((this.blockCommentStartRegexString != null)
@@ -49,12 +49,17 @@ data class ProgramCommentRegexs(
           + "[ \t]*(?i)ltex(?-i):(.*?)[ \t]*$")
     }
 
-    return Regex(builder.toString(), RegexOption.MULTILINE)
+    Regex(builder.toString(), RegexOption.MULTILINE)
   }
 
   companion object {
-    @Suppress("LongMethod")
+    private val cacheMap: MutableMap<String, ProgramCommentRegexs> = HashMap()
+
+    @Suppress("ComplexMethod", "LongMethod")
     fun fromCodeLanguageId(codeLanguageId: String): ProgramCommentRegexs {
+      val regexs: ProgramCommentRegexs? = cacheMap[codeLanguageId]
+      if (regexs != null) return regexs
+
       var blockCommentStartRegexString: String? = null
       var blockCommentEndRegexString: String? = null
       val lineCommentRegexString: String?

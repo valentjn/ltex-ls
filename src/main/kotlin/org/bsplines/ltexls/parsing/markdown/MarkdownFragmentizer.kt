@@ -9,9 +9,7 @@ package org.bsplines.ltexls.parsing.markdown
 
 import org.bsplines.ltexls.parsing.RegexCodeFragmentizer
 
-class MarkdownFragmentizer(
-  codeLanguageId: String,
-) : RegexCodeFragmentizer(codeLanguageId, REGEX) {
+class MarkdownFragmentizer(codeLanguageId: String) : RegexCodeFragmentizer(codeLanguageId, REGEX) {
   companion object {
     private val REGEX = Regex(
       "^[ \t]*\\[[^]]+]:[ \t]*<>[ \t]*\"[ \t]*(?i)ltex(?-i):(.*?)\"[ \t]*$|"

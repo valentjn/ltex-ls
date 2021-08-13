@@ -7,16 +7,15 @@
 
 package org.bsplines.ltexls.parsing.latex
 
-import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder
+import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilderTest
 import org.bsplines.ltexls.settings.Settings
 import org.junit.platform.suite.api.IncludeEngines
-import org.languagetool.markup.AnnotatedText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @IncludeEngines("junit-jupiter")
-class LatexAnnotatedTextBuilderTest {
+class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
   @Test
   @Suppress("LongMethod")
   fun testTextMode() {
@@ -391,7 +390,7 @@ class LatexAnnotatedTextBuilderTest {
     assertPlainText(
       "C'est un test: \$E = mc^2$.\n",
       "C'est un test: Jimmy-0. ",
-      "fr"
+      Settings(_languageShortCode = "fr")
     )
     assertPlainText(
       """
@@ -469,7 +468,7 @@ class LatexAnnotatedTextBuilderTest {
 
       """.trimIndent(),
       " This is a first sentence.\n\n\n\nThis is a second sentence. ",
-      Settings(), "rsweave"
+      "rsweave"
     )
     assertPlainText(
       """
@@ -479,7 +478,7 @@ class LatexAnnotatedTextBuilderTest {
 
       """.trimIndent(),
       " ",
-      Settings(), "rsweave"
+      "rsweave"
     )
     assertPlainText(
       """
@@ -490,37 +489,5 @@ class LatexAnnotatedTextBuilderTest {
       """.trimIndent(),
       "<<import-packages>>= library(tidyverse) @ "
     )
-  }
-
-  companion object {
-    private fun assertPlainText(
-      code: String,
-      expectedPlainText: String,
-      language: String = "en-US"
-    ) {
-      assertPlainText(code, expectedPlainText, Settings(_languageShortCode = language))
-    }
-
-    private fun assertPlainText(
-      code: String,
-      expectedPlainText: String,
-      settings: Settings,
-      codeLanguageId: String = "latex"
-    ) {
-      val annotatedText: AnnotatedText = buildAnnotatedText(code, settings, codeLanguageId)
-      assertEquals(expectedPlainText, annotatedText.plainText)
-    }
-
-    private fun buildAnnotatedText(
-      code: String,
-      settings: Settings = Settings(),
-      codeLanguageId: String = "latex"
-    ): AnnotatedText {
-      val builder: LatexAnnotatedTextBuilder =
-          CodeAnnotatedTextBuilder.create(codeLanguageId) as LatexAnnotatedTextBuilder
-      builder.setSettings(settings)
-      builder.isInStrictMode = true
-      return builder.addCode(code).build()
-    }
   }
 }

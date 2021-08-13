@@ -7,20 +7,17 @@
 
 package org.bsplines.ltexls.parsing.latex
 
-import org.apache.commons.text.StringEscapeUtils
-import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder
+import org.bsplines.ltexls.parsing.CharacterBasedCodeAnnotatedTextBuilder
 import org.bsplines.ltexls.parsing.DummyGenerator
 import org.bsplines.ltexls.settings.Settings
-import org.bsplines.ltexls.tools.ExcludeFromGeneratedCoverage
 import org.bsplines.ltexls.tools.I18n
 import org.bsplines.ltexls.tools.Logging
 import java.text.Normalizer
 
 @Suppress("LargeClass", "TooManyFunctions")
-class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuilder(codeLanguageId) {
-  private var code = ""
-  private var pos = 0
-  private var dummyCounter = 0
+class LatexAnnotatedTextBuilder(
+  codeLanguageId: String,
+) : CharacterBasedCodeAnnotatedTextBuilder(codeLanguageId) {
   private var lastSpace = ""
   private var lastPunctuation = ""
   private var dummyLastSpace = ""
@@ -31,12 +28,8 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
   private var canInsertSpaceBeforeDummy = false
   private var isMathCharTrivial = false
   private var ignoreEnvironmentEndRegex: Regex? = null
-  private var modeStack = ArrayDeque(listOf(Mode.ParagraphText))
-  private var curChar = '\u0000'
-  private var curString = ""
+  private var modeStack: ArrayDeque<Mode> = ArrayDeque(listOf(Mode.ParagraphText))
   private var curMode: Mode = Mode.ParagraphText
-
-  private var language = "en-US"
 
   private val commandSignatures: MutableList<LatexCommandSignature> =
       ArrayList(LatexAnnotatedTextBuilderDefaults.defaultLatexCommandSignatures)
@@ -47,29 +40,6 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
       ArrayList(LatexAnnotatedTextBuilderDefaults.defaultLatexEnvironmentSignatures)
   private var environmentSignatureMap: Map<String, List<LatexEnvironmentSignature>> =
       createCommandSignatureMap(environmentSignatures)
-
-  var isInStrictMode = false
-
-  private fun reinitialize() {
-    this.code = ""
-    this.pos = 0
-    this.dummyCounter = 0
-    this.lastSpace = ""
-    this.lastPunctuation = ""
-    this.dummyLastSpace = ""
-    this.dummyLastPunctuation = ""
-    this.isMathEmpty = true
-    this.mathVowelState = MathVowelState.Undecided
-    this.preserveDummyLast = false
-    this.canInsertSpaceBeforeDummy = false
-    this.isMathCharTrivial = false
-    this.ignoreEnvironmentEndRegex = null
-    this.modeStack.clear()
-    this.modeStack.addLast(Mode.ParagraphText)
-    this.curChar = ' '
-    this.curString = ""
-    this.curMode = Mode.ParagraphText
-  }
 
   override fun setSettings(settings: Settings) {
     super.setSettings(settings)
@@ -118,91 +88,78 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
     this.environmentSignatureMap = createCommandSignatureMap(this.environmentSignatures)
   }
 
-  override fun addText(text: String): LatexAnnotatedTextBuilder {
-    if (text.isEmpty()) return this
+  override fun addText(text: String?): LatexAnnotatedTextBuilder {
     super.addText(text)
-    this.pos += text.length
-    textAdded(text)
+    if (text?.isNotEmpty() == true) textAdded(text)
     return this
   }
 
-  override fun addMarkup(markup: String): LatexAnnotatedTextBuilder {
-    if (markup.isEmpty()) return this
+  override fun addMarkup(markup: String?): LatexAnnotatedTextBuilder {
     super.addMarkup(markup)
-    this.pos += markup.length
 
-    if (this.preserveDummyLast) {
-      this.preserveDummyLast = false
-    } else {
-      this.dummyLastSpace = ""
-      this.dummyLastPunctuation = ""
+    if (markup?.isNotEmpty() == true) {
+      if (this.preserveDummyLast) {
+        this.preserveDummyLast = false
+      } else {
+        this.dummyLastSpace = ""
+        this.dummyLastPunctuation = ""
+      }
     }
 
     return this
   }
 
-  override fun addMarkup(markup: String, interpretAs: String): LatexAnnotatedTextBuilder {
-    if (interpretAs.isEmpty()) return addMarkup(markup)
+  override fun addMarkup(markup: String?, interpretAs: String?): LatexAnnotatedTextBuilder {
     super.addMarkup(markup, interpretAs)
-    this.pos += markup.length
-    this.preserveDummyLast = false
-    textAdded(interpretAs)
+
+    if (interpretAs?.isNotEmpty() == true) {
+      this.preserveDummyLast = false
+      textAdded(interpretAs)
+    }
+
     return this
   }
 
   @Suppress("ComplexMethod")
-  override fun addCode(code: String): LatexAnnotatedTextBuilder {
-    reinitialize()
-    this.code = code
-    var lastPos: Int
+  override fun processCharacter() {
+    this.curMode = this.modeStack.last()
+    this.isMathCharTrivial = false
 
-    while (this.pos < this.code.length) {
-      this.curChar = this.code[this.pos]
-      this.curString = this.curChar.toString()
-      this.curMode = this.modeStack.last()
-      this.isMathCharTrivial = false
-      lastPos = this.pos
+    if (isIgnoreEnvironmentMode(this.curMode)) {
+      processIgnoredEnvironmentContents()
+    } else if ((this.codeLanguageId == "rsweave") && isRsweaveMode(this.curMode)) {
+      val rsweaveEnd: String = matchFromPositionAsString(RSWEAVE_END_REGEX)
 
-      if (isIgnoreEnvironmentMode(this.curMode)) {
-        processIgnoredEnvironmentContents()
-      } else if ((this.codeLanguageId == "rsweave") && isRsweaveMode(this.curMode)) {
-        val rsweaveEnd: String = matchFromPosition(RSWEAVE_END_REGEX)
-
-        if (rsweaveEnd.isNotEmpty()) {
-          popMode()
-          addMarkup(rsweaveEnd)
-        } else {
-          addMarkup(this.curString)
-        }
+      if (rsweaveEnd.isNotEmpty()) {
+        popMode()
+        addMarkup(rsweaveEnd)
       } else {
-        when (this.curChar) {
-          '\\' -> processBackslash()
-          '{' -> processOpeningBrace()
-          '}' -> processClosingBrace()
-          '$' -> processDollar()
-          '%' -> processPercentage()
-          ' ', '&', '~', '\n', '\r', '\t' -> processWhitespace()
-          '`', '\'', '"' -> processQuotationMark()
-          else -> processDefaultCharacter()
-        }
+        addMarkup(this.curString)
       }
-
-      if (!this.isMathCharTrivial) {
-        this.canInsertSpaceBeforeDummy = false
-        this.isMathEmpty = false
+    } else {
+      when (this.curChar) {
+        '\\' -> processBackslash()
+        '{' -> processOpeningBrace()
+        '}' -> processClosingBrace()
+        '$' -> processDollar()
+        '%' -> processPercentage()
+        ' ', '&', '~', '\n', '\r', '\t' -> processWhitespace()
+        '`', '\'', '"' -> processQuotationMark()
+        else -> processDefaultCharacter()
       }
-
-      if (this.pos == lastPos) onInfiniteLoop()
     }
 
-    return this
+    if (!this.isMathCharTrivial) {
+      this.canInsertSpaceBeforeDummy = false
+      this.isMathEmpty = false
+    }
   }
 
   private fun processIgnoredEnvironmentContents() {
     val ignoreEnvironmentEndRegex: Regex? = this.ignoreEnvironmentEndRegex
 
     if (ignoreEnvironmentEndRegex != null) {
-      val ignoreEnvironmentEnd: String = matchFromPosition(ignoreEnvironmentEndRegex)
+      val ignoreEnvironmentEnd: String = matchFromPositionAsString(ignoreEnvironmentEndRegex)
 
       if (ignoreEnvironmentEnd.isNotEmpty()) {
         popMode()
@@ -218,11 +175,11 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
 
   @Suppress("ComplexCondition", "ComplexMethod", "LongMethod", "NestedBlockDepth")
   private fun processBackslash() {
-    var command = matchFromPosition(COMMAND_REGEX)
+    var command = matchFromPositionAsString(COMMAND_REGEX)
 
     if ((command == "\\begin") || (command == "\\end")) {
       this.preserveDummyLast = true
-      val argument: String = matchFromPosition(ARGUMENT_REGEX, this.pos + command.length)
+      val argument: String = matchFromPositionAsString(ARGUMENT_REGEX, this.pos + command.length)
       val environmentName: String =
         if (argument.length >= 2) argument.substring(1, argument.length - 1) else ""
       var argumentsProcessed = false
@@ -391,7 +348,7 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
       || (command == "\\newline")
     ) {
       if ((command == "\\hspace") || (command == "\\hspace*")) {
-        val argument: String = matchFromPosition(ARGUMENT_REGEX, this.pos + command.length)
+        val argument: String = matchFromPositionAsString(ARGUMENT_REGEX, this.pos + command.length)
         command += argument
       }
 
@@ -471,7 +428,7 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
       val interpretAs: String = if (isMathMode(this.curMode)) generateDummy() else ""
       addMarkup("$command{", interpretAs)
     } else if (command == "\\verb") {
-      val verbCommand: String = matchFromPosition(VERB_COMMAND_REGEX)
+      val verbCommand: String = matchFromPositionAsString(VERB_COMMAND_REGEX)
       addMarkup(verbCommand, generateDummy())
     } else {
       val possibleCommandSignatures: List<LatexCommandSignature> =
@@ -547,7 +504,7 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
   }
 
   private fun processOpeningBrace() {
-    val length: String = matchFromPosition(LENGTH_IN_BRACE_REGEX)
+    val length: String = matchFromPositionAsString(LENGTH_IN_BRACE_REGEX)
 
     if (length.isNotEmpty()) {
       addMarkup(length)
@@ -585,7 +542,7 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
   }
 
   private fun processDollar() {
-    val displayMath: String = matchFromPosition(DISPLAY_MATH_REGEX)
+    val displayMath: String = matchFromPositionAsString(DISPLAY_MATH_REGEX)
 
     if (displayMath.isNotEmpty()) {
       if (this.curMode == Mode.DisplayMath) {
@@ -607,7 +564,7 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
   }
 
   private fun processPercentage() {
-    val comment: String = matchFromPosition(COMMENT_REGEX)
+    val comment: String = matchFromPositionAsString(COMMENT_REGEX)
     this.preserveDummyLast = true
     this.isMathCharTrivial = true
     addMarkup(comment, (if (containsTwoEndsOfLine(comment)) "\n\n" else ""))
@@ -615,7 +572,7 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
 
   private fun processWhitespace() {
     val whitespace: String = if ((this.curChar != '~') && (this.curChar != '&')) {
-      matchFromPosition(WHITESPACE_REGEX)
+      matchFromPositionAsString(WHITESPACE_REGEX)
     } else {
       this.curString
     }
@@ -673,14 +630,14 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
   private fun processDefaultCharacter() {
     when (this.curChar) {
       '-' -> {
-        val emDash: String = matchFromPosition(EM_DASH_REGEX)
+        val emDash: String = matchFromPositionAsString(EM_DASH_REGEX)
 
         if (isTextMode(this.curMode)) {
           if (emDash.isNotEmpty()) {
             addMarkup(emDash, "\u2014")
             return
           } else {
-            val enDash: String = matchFromPosition(EN_DASH_REGEX)
+            val enDash: String = matchFromPositionAsString(EN_DASH_REGEX)
 
             if (enDash.isNotEmpty()) {
               addMarkup(enDash, "\u2013")
@@ -690,7 +647,7 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
         }
       }
       '[' -> {
-        val length: String = matchFromPosition(LENGTH_IN_BRACKET_REGEX)
+        val length: String = matchFromPositionAsString(LENGTH_IN_BRACKET_REGEX)
 
         if (length.isNotEmpty()) {
           this.isMathCharTrivial = true
@@ -701,7 +658,7 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
       }
       '<' -> {
         if (this.codeLanguageId == "rsweave") {
-          val rsweaveBegin: String = matchFromPosition(RSWEAVE_BEGIN_REGEX)
+          val rsweaveBegin: String = matchFromPositionAsString(RSWEAVE_BEGIN_REGEX)
 
           if (rsweaveBegin.isNotEmpty()) {
             this.modeStack.addLast(Mode.Rsweave)
@@ -729,11 +686,15 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
     }
   }
 
-  private fun matchFromPosition(regex: Regex, pos: Int = this.pos): String {
-    return regex.find(this.code.substring(pos))?.value ?: ""
+  private fun matchFromPositionAsString(regex: Regex, pos: Int = this.pos): String {
+    return matchFromPosition(regex, pos)?.value ?: ""
   }
 
-  private fun generateDummy(dummyGenerator: DummyGenerator = DummyGenerator.getInstance()): String {
+  override fun generateDummy(): String {
+    return generateDummy(this.dummyGenerator)
+  }
+
+  private fun generateDummy(dummyGenerator: DummyGenerator): String {
     val startsWithVowel: Boolean = (this.mathVowelState == MathVowelState.StartsWithVowel)
 
     val dummy: String = if (isTextMode(this.curMode)) {
@@ -790,48 +751,6 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
     this.mathVowelState = MathVowelState.Undecided
     this.canInsertSpaceBeforeDummy = true
     this.isMathCharTrivial = true
-  }
-
-  private fun onInfiniteLoop() {
-    if (this.isInStrictMode) {
-      throw IllegalStateException(
-        I18n.format("latexAnnotatedTextBuilderInfiniteLoop", getDebugInformation())
-      )
-    } else {
-      Logging.logger.warning(
-        I18n.format("latexAnnotatedTextBuilderPreventedInfiniteLoop", getDebugInformation())
-      )
-      this.pos++
-    }
-  }
-
-  @ExcludeFromGeneratedCoverage
-  private fun getDebugInformation(): String {
-    val remainingCode: String = StringEscapeUtils.escapeJava(
-      this.code.substring(
-        this.pos,
-        (this.pos + DEBUG_INFORMATION_REMAINING_CODE_LENGTH).coerceAtMost(this.code.length),
-      )
-    )
-
-    return (
-      "Remaining code = \"" + remainingCode
-      + "\", pos = " + this.pos
-      + ", dummyCounter = " + this.dummyCounter
-      + ", lastSpace = \"" + this.lastSpace
-      + "\", lastPunctuation = \"" + this.lastPunctuation
-      + "\", dummyLastSpace = \"" + this.dummyLastSpace
-      + "\", dummyLastPunctuation = \"" + this.dummyLastPunctuation
-      + "\", isMathEmpty = " + this.isMathEmpty
-      + ", mathVowelState = " + this.mathVowelState
-      + ", preserveDummyLast = " + this.preserveDummyLast
-      + ", canInsertSpaceBeforeDummy = " + this.canInsertSpaceBeforeDummy
-      + ", isMathCharTrivial = " + this.isMathCharTrivial
-      + ", modeStack = " + this.modeStack
-      + ", curChar = \"" + this.curChar
-      + "\", curString = \"" + this.curString
-      + "\", curMode = " + this.curMode
-    )
   }
 
   @Suppress("ComplexMethod")
@@ -971,8 +890,6 @@ class LatexAnnotatedTextBuilder(codeLanguageId: String) : CodeAnnotatedTextBuild
       "multline",
       "multline*",
     )
-
-    private const val DEBUG_INFORMATION_REMAINING_CODE_LENGTH = 100
 
     private fun <T : LatexCommandSignature> createCommandSignatureMap(
       commandSignatures: List<T>
