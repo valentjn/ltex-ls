@@ -19,6 +19,15 @@
       <action type="add" issue="vscode-ltex#391">
         Add support for the `main` option of the babel package (LaTeX)
       </action>
+      <action type="add">
+        Add support for [`ltex.dictionary`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdictionary) when using a LanguageTool HTTP server
+      </action>
+      <action type="update" issue="vscode-ltex#390">
+        Handle disabled rules ourselves to prevent reinitialization of LanguageTool when running the `Disable rule` quick fix
+      </action>
+      <action type="fix" issue="vscode-ltex#390">
+        Fix LanguageTool reinitialized when running the `Add '...' to dictionary` quick fix
+      </action>
       <action type="fix">
         Fix used i18n keys removed
       </action>

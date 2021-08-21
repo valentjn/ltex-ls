@@ -37,8 +37,7 @@ class LanguageToolJavaInterface(
   motherTongueShortCode: String,
   sentenceCacheSize: Long,
   dictionary: Set<String>,
-) : LanguageToolInterface {
-  private val dictionary: Set<String> = dictionary.toSet()
+) : LanguageToolInterface() {
   private val resultCache =
       ResultCache(sentenceCacheSize, RESULT_CACHE_EXPIRE_AFTER_MINUTES, TimeUnit.MINUTES)
   private val languageTool: JLanguageTool?
@@ -61,7 +60,9 @@ class LanguageToolJavaInterface(
   }
 
   @Suppress("INACCESSIBLE_TYPE")
-  override fun check(annotatedTextFragment: AnnotatedTextFragment): List<LanguageToolRuleMatch> {
+  override fun checkInternal(
+    annotatedTextFragment: AnnotatedTextFragment,
+  ): List<LanguageToolRuleMatch> {
     val languageTool: JLanguageTool? = this.languageTool
 
     if (languageTool == null) {
@@ -123,16 +124,7 @@ class LanguageToolJavaInterface(
     val result = ArrayList<LanguageToolRuleMatch>()
 
     for (match: RuleMatch in matches) {
-      val languageToolRuleMatch = LanguageToolRuleMatch.fromLanguageTool(
-          match, annotatedTextFragment)
-
-      if (languageToolRuleMatch.isUnknownWordRule()
-            && this.dictionary.contains(annotatedTextFragment.getSubstringOfPlainText(
-              languageToolRuleMatch.fromPos, languageToolRuleMatch.toPos))) {
-        continue
-      }
-
-      result.add(languageToolRuleMatch)
+      result.add(LanguageToolRuleMatch.fromLanguageTool(match, annotatedTextFragment))
     }
 
     return result
@@ -204,11 +196,6 @@ class LanguageToolJavaInterface(
     for (ruleId: String in ruleIds) {
       languageTool.enableRule(ruleId)
     }
-  }
-
-  override fun disableRules(ruleIds: Set<String>) {
-    val languageTool: JLanguageTool = (this.languageTool ?: return)
-    languageTool.disableRules(ruleIds.toList())
   }
 
   override fun enableEasterEgg() {

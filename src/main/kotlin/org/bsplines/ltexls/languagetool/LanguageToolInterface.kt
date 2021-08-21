@@ -9,14 +9,45 @@ package org.bsplines.ltexls.languagetool
 
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment
 
-interface LanguageToolInterface {
-  fun isInitialized(): Boolean
-  fun check(annotatedTextFragment: AnnotatedTextFragment): List<LanguageToolRuleMatch>
-  fun activateDefaultFalseFriendRules()
-  fun activateLanguageModelRules(languageModelRulesDirectory: String)
-  fun activateNeuralNetworkRules(neuralNetworkRulesDirectory: String)
-  fun activateWord2VecModelRules(word2vecRulesDirectory: String)
-  fun enableRules(ruleIds: Set<String>)
-  fun disableRules(ruleIds: Set<String>)
-  fun enableEasterEgg()
+abstract class LanguageToolInterface {
+  var dictionary: Set<String> = emptySet()
+  var disabledRules: Set<String> = emptySet()
+
+  fun check(annotatedTextFragment: AnnotatedTextFragment): List<LanguageToolRuleMatch> {
+    val matches = ArrayList<LanguageToolRuleMatch>()
+
+    for (match: LanguageToolRuleMatch in checkInternal(annotatedTextFragment)) {
+      if (checkMatchValidity(annotatedTextFragment, match)) matches.add(match)
+    }
+
+    return matches
+  }
+
+  protected fun checkMatchValidity(
+    annotatedTextFragment: AnnotatedTextFragment,
+    match: LanguageToolRuleMatch,
+  ): Boolean {
+    return (
+      (
+        !match.isUnknownWordRule()
+        || !this.dictionary.contains(
+          annotatedTextFragment.getSubstringOfPlainText(match.fromPos, match.toPos)
+        )
+      )
+      && !this.disabledRules.contains(match.ruleId)
+    )
+  }
+
+  abstract fun isInitialized(): Boolean
+
+  protected abstract fun checkInternal(
+    annotatedTextFragment: AnnotatedTextFragment,
+  ): List<LanguageToolRuleMatch>
+
+  abstract fun activateDefaultFalseFriendRules()
+  abstract fun activateLanguageModelRules(languageModelRulesDirectory: String)
+  abstract fun activateNeuralNetworkRules(neuralNetworkRulesDirectory: String)
+  abstract fun activateWord2VecModelRules(word2vecRulesDirectory: String)
+  abstract fun enableRules(ruleIds: Set<String>)
+  abstract fun enableEasterEgg()
 }

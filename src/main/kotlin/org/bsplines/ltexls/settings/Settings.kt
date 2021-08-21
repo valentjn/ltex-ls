@@ -89,14 +89,6 @@ data class Settings(
       return differences
     }
 
-    if (dictionary != other.dictionary) {
-      differences.add(SettingsDifference("dictionary", this.dictionary, other.dictionary))
-    }
-
-    if (disabledRules != other.disabledRules) {
-      differences.add(SettingsDifference("disabledRules", this.disabledRules, other.disabledRules))
-    }
-
     if (enabledRules != other.enabledRules) {
       differences.add(SettingsDifference("enabledRules", this.enabledRules, other.enabledRules))
     }

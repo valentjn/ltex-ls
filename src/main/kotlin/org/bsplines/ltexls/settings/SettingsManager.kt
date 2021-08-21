@@ -33,7 +33,11 @@ class SettingsManager {
           value.getDifferencesRelevantForLanguageTool(oldSettings)
 
       if (settingsDifferencesRelevantForLanguageTool.isEmpty()) {
-        this.languageToolInterface = this.languageToolInterfaceMap[newLanguage]
+        val languageToolInterface: LanguageToolInterface? =
+            this.languageToolInterfaceMap[newLanguage]
+        this.languageToolInterface?.dictionary = value.dictionary
+        this.languageToolInterface?.disabledRules = value.disabledRules
+        this.languageToolInterface = languageToolInterface
       } else {
         if (Logging.logger.isLoggable(Level.FINE)) {
           logDifferentSettings(newLanguage, settingsDifferencesRelevantForLanguageTool)
@@ -100,7 +104,6 @@ class SettingsManager {
     }
 
     languageToolInterface.enableRules(this.settings.enabledRules)
-    languageToolInterface.disableRules(this.settings.disabledRules)
 
     this.languageToolInterface = languageToolInterface
   }

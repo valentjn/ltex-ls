@@ -99,8 +99,7 @@ class CodeActionGenerator(
           document, newWord, acceptSuggestionsMatches)))
     }
 
-    if (addToDictionaryMatches.isNotEmpty()
-          && this.settingsManager.settings.languageToolHttpServerUri.isEmpty()) {
+    if (addToDictionaryMatches.isNotEmpty()) {
       result.add(Either.forRight(getAddWordToDictionaryCodeAction(document,
           addToDictionaryMatches, annotatedTextFragments)))
     }

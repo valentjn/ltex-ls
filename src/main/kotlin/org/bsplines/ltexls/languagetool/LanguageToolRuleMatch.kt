@@ -7,6 +7,8 @@
 
 package org.bsplines.ltexls.languagetool
 
+import com.google.gson.JsonElement
+import com.google.gson.JsonObject
 import org.bsplines.ltexls.parsing.AnnotatedTextFragment
 import org.bsplines.ltexls.server.LtexTextDocumentItem
 import org.bsplines.ltexls.tools.Tools
@@ -34,8 +36,10 @@ data class LanguageToolRuleMatch(
   companion object {
     private val TWO_OR_MORE_SPACES_REGEX = Regex("[ \n]{2,}")
 
-    fun fromLanguageTool(match: RuleMatch, annotatedTextFragment: AnnotatedTextFragment):
-          LanguageToolRuleMatch {
+    fun fromLanguageTool(
+      match: RuleMatch,
+      annotatedTextFragment: AnnotatedTextFragment,
+    ): LanguageToolRuleMatch {
       return fromLanguageTool(
         match.rule?.id,
         match.sentence?.text,
@@ -44,6 +48,29 @@ data class LanguageToolRuleMatch(
         match.message,
         match.suggestedReplacements,
         match.type,
+        annotatedTextFragment,
+      )
+    }
+
+    fun fromLanguageTool(
+      jsonMatch: JsonObject,
+      annotatedTextFragment: AnnotatedTextFragment,
+    ): LanguageToolRuleMatch {
+      val fromPos: Int = jsonMatch.get("offset").asInt
+      val suggestedReplacements = ArrayList<String>()
+
+      for (replacement: JsonElement in jsonMatch.get("replacements").asJsonArray) {
+        suggestedReplacements.add(replacement.asJsonObject.get("value").asString)
+      }
+
+      return fromLanguageTool(
+        jsonMatch.get("rule").asJsonObject.get("id").asString,
+        jsonMatch.get("sentence").asString,
+        fromPos,
+        fromPos + jsonMatch.get("length").asInt,
+        jsonMatch.get("message").asString,
+        suggestedReplacements,
+        RuleMatch.Type.Hint,
         annotatedTextFragment,
       )
     }

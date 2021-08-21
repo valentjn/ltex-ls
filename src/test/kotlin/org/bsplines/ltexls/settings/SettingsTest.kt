@@ -35,13 +35,13 @@ class SettingsTest {
 
     settings = settings.copy(_allDictionaries = settings.getModifiedDictionary(setOf("dictionary")))
     assertEquals(setOf("dictionary"), settings.dictionary)
-    settings2 = compareSettings(settings, settings2, true)
+    settings2 = compareSettings(settings, settings2, false)
 
     settings = settings.copy(
       _allDisabledRules = settings.getModifiedDisabledRules(setOf("disabledRules"))
     )
     assertEquals(setOf("disabledRules"), settings.disabledRules)
-    settings2 = compareSettings(settings, settings2, true)
+    settings2 = compareSettings(settings, settings2, false)
 
     settings = settings.copy(
       _allEnabledRules = settings.getModifiedEnabledRules(setOf("enabledRules"))

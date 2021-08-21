@@ -16,7 +16,6 @@ import org.bsplines.ltexls.tools.I18n
 import org.bsplines.ltexls.tools.Logging
 import org.languagetool.markup.AnnotatedText
 import org.languagetool.markup.TextPart
-import org.languagetool.rules.RuleMatch
 import java.io.IOException
 import java.io.UnsupportedEncodingException
 import java.net.MalformedURLException
@@ -34,9 +33,8 @@ class LanguageToolHttpInterface(
   uriString: String,
   private val languageShortCode: String,
   private val motherTongueShortCode: String,
-) : LanguageToolInterface {
-  private val enabledRuleIds: MutableList<String> = ArrayList()
-  private val disabledRuleIds: MutableList<String> = ArrayList()
+) : LanguageToolInterface() {
+  private val enabledRules: MutableList<String> = ArrayList()
   private val httpClient: HttpClient = HttpClient.newHttpClient()
   private val uri: URI?
 
@@ -61,7 +59,9 @@ class LanguageToolHttpInterface(
     return (this.uri != null)
   }
 
-  override fun check(annotatedTextFragment: AnnotatedTextFragment): List<LanguageToolRuleMatch> {
+  override fun checkInternal(
+    annotatedTextFragment: AnnotatedTextFragment,
+  ): List<LanguageToolRuleMatch> {
     if (!isInitialized()) return emptyList()
 
     val requestBody: String = createRequestBody(annotatedTextFragment) ?: return emptyList()
@@ -92,20 +92,9 @@ class LanguageToolHttpInterface(
     val result = ArrayList<LanguageToolRuleMatch>()
 
     for (jsonElement: JsonElement in jsonMatches) {
-      val jsonMatch: JsonObject = jsonElement.asJsonObject
-      val ruleId: String = jsonMatch.get("rule").asJsonObject.get("id").asString
-      val sentence: String = jsonMatch.get("sentence").asString
-      val fromPos: Int = jsonMatch.get("offset").asInt
-      val toPos: Int = fromPos + jsonMatch.get("length").asInt
-      val message: String = jsonMatch.get("message").asString
-      val suggestedReplacements = ArrayList<String>()
-
-      for (replacement: JsonElement in jsonMatch.get("replacements").asJsonArray) {
-        suggestedReplacements.add(replacement.asJsonObject.get("value").asString)
-      }
-
-      result.add(LanguageToolRuleMatch.fromLanguageTool(ruleId, sentence, fromPos, toPos, message,
-          suggestedReplacements, RuleMatch.Type.Hint, annotatedTextFragment))
+      result.add(
+        LanguageToolRuleMatch.fromLanguageTool(jsonElement.asJsonObject, annotatedTextFragment)
+      )
     }
 
     return result
@@ -127,12 +116,8 @@ class LanguageToolHttpInterface(
       requestEntries["motherTongue"] = this.motherTongueShortCode
     }
 
-    if (this.enabledRuleIds.isNotEmpty()) {
-      requestEntries["enabledRules"] = this.enabledRuleIds.joinToString(",")
-    }
-
-    if (this.disabledRuleIds.isNotEmpty()) {
-      requestEntries["disabledRules"] = this.disabledRuleIds.joinToString(",")
+    if (this.enabledRules.isNotEmpty()) {
+      requestEntries["enabledRules"] = this.enabledRules.joinToString(",")
     }
 
     val builder = StringBuilder()
@@ -169,13 +154,7 @@ class LanguageToolHttpInterface(
   }
 
   override fun enableRules(ruleIds: Set<String>) {
-    this.enabledRuleIds.addAll(ruleIds)
-    this.disabledRuleIds.removeAll(ruleIds)
-  }
-
-  override fun disableRules(ruleIds: Set<String>) {
-    this.enabledRuleIds.removeAll(ruleIds)
-    this.disabledRuleIds.addAll(ruleIds)
+    this.enabledRules.addAll(ruleIds)
   }
 
   override fun enableEasterEgg() {
