@@ -12,7 +12,10 @@
     <author>Julian Valentin, LTeX Development Community</author>
   </properties>
   <body>
-    <release version="13.0.1" date="upcoming">
+    <release version="13.1.0" date="upcoming">
+      <action type="add">
+        Provide ID of LanguageTool rule via diagnostics code, not as part of diagnostics message
+      </action>
       <action type="fix">
         Fix used i18n keys removed
       </action>

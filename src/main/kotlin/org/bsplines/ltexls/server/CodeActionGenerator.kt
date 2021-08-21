@@ -46,7 +46,9 @@ class CodeActionGenerator(
     diagnostic.severity = diagnosticSeverity
 
     diagnostic.source = "LTeX"
-    diagnostic.message = match.message.replace(SUGGESTION_REGEX, "'$1'") + " \u2013 " + match.ruleId
+    diagnostic.message = match.message.replace(SUGGESTION_REGEX, "'$1'")
+    diagnostic.code = Either.forLeft(match.ruleId)
+
     return diagnostic
   }
 
