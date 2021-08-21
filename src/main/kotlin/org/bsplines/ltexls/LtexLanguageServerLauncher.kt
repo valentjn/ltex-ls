@@ -90,7 +90,34 @@ class LtexLanguageServerLauncher : Callable<Int> {
   private var logFile: Path? = null
 
   override fun call(): Int {
-    return internalCall()
+    var serverSocket: ServerSocket? = null
+    var logOutputStream: OutputStream? = null
+
+    try {
+      if (this.logFile != null) logOutputStream = setupLogFileOutput()
+
+      val port: Int = if (this.serverType == ServerType.TcpSocket) {
+        serverSocket = ServerSocket(this.port, SERVER_SOCKET_BACKLOG_SIZE,
+            InetAddress.getByName(this.host))
+        serverSocket.localPort
+      } else {
+        this.port
+      }
+
+      do {
+        val exitCode: Int? = launchServer(serverSocket, logOutputStream, port)
+        if (exitCode != null) return exitCode
+      } while (this.endless)
+    } finally {
+      serverSocket?.close()
+
+      if (logOutputStream != null) {
+        logOutputStream.flush()
+        logOutputStream.close()
+      }
+    }
+
+    return 0
   }
 
   private fun setupLogFileOutput(): OutputStream? {
@@ -144,37 +171,6 @@ class LtexLanguageServerLauncher : Callable<Int> {
     return null
   }
 
-  private fun internalCall(): Int {
-    var serverSocket: ServerSocket? = null
-    var logOutputStream: OutputStream? = null
-
-    try {
-      if (this.logFile != null) logOutputStream = setupLogFileOutput()
-
-      val port: Int = if (this.serverType == ServerType.TcpSocket) {
-        serverSocket = ServerSocket(this.port, SERVER_SOCKET_BACKLOG_SIZE,
-            InetAddress.getByName(this.host))
-        serverSocket.localPort
-      } else {
-        this.port
-      }
-
-      do {
-        val exitCode: Int? = launchServer(serverSocket, logOutputStream, port)
-        if (exitCode != null) return exitCode
-      } while (this.endless)
-    } finally {
-      serverSocket?.close()
-
-      if (logOutputStream != null) {
-        logOutputStream.flush()
-        logOutputStream.close()
-      }
-    }
-
-    return 0
-  }
-
   enum class ServerType {
     StandardStream,
     TcpSocket,
@@ -210,7 +206,7 @@ class LtexLanguageServerLauncher : Callable<Int> {
           commandLine.commandSpec.exitCodeOnVersionHelp()
         }
         else -> {
-          val exitCode: Int = launcher.internalCall()
+          val exitCode: Int = launcher.call()
           commandLine.setExecutionResult(exitCode)
           commandLine.commandSpec.exitCodeOnSuccess()
         }
