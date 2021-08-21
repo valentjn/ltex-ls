@@ -854,7 +854,7 @@
       </action>
     </release>
     <release version="4.6.8" date="2019-09-07">
-      <action type="update">
+      <action type="add">
         Initial release
       </action>
     </release>
