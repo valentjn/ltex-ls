@@ -47,6 +47,7 @@ class LatexFragmentizerTest {
   }
 
   @Test
+  @Suppress("LongMethod")
   fun testBabel() {
     val fragmentizer: CodeFragmentizer = CodeFragmentizer.create("latex")
     var codeFragments: List<CodeFragment> = fragmentizer.fragmentize(
@@ -69,6 +70,24 @@ class LatexFragmentizerTest {
     assertEquals(2, codeFragments.size)
     assertEquals(16, codeFragments[0].code.length)
     assertEquals(113, codeFragments[1].code.length)
+    assertEquals("en-US", codeFragments[0].settings.languageShortCode)
+    assertEquals("de-DE", codeFragments[1].settings.languageShortCode)
+
+    codeFragments = fragmentizer.fragmentize(
+      """
+      This is a test.
+      \usepackage[
+        main=ngerman,  % German
+        american,      % American English
+        dummy={abc,def}
+      ]{babel}
+      Dies ist ein Test.
+
+      """.trimIndent(), Settings()
+    )
+    assertEquals(2, codeFragments.size)
+    assertEquals(16, codeFragments[0].code.length)
+    assertEquals(121, codeFragments[1].code.length)
     assertEquals("en-US", codeFragments[0].settings.languageShortCode)
     assertEquals("de-DE", codeFragments[1].settings.languageShortCode)
 

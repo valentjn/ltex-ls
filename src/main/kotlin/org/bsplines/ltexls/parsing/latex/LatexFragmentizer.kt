@@ -32,7 +32,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
     return fragments
   }
 
-  @Suppress("LoopWithTooManyJumpStatements", "NestedBlockDepth")
+  @Suppress("ComplexMethod", "LongMethod", "LoopWithTooManyJumpStatements", "NestedBlockDepth")
   private fun fragmentizeBabelUsePackageCommands(
     fragments: List<CodeFragment>,
   ): List<CodeFragment> {
@@ -59,8 +59,15 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
         var babelLanguage: String? = null
 
         for (packageOption: LatexPackageOption in packageOptions) {
-          val keyAsPlainText: String = packageOption.keyInfo.plainText
-          if (BABEL_LANGUAGE_MAP.containsKey(keyAsPlainText)) babelLanguage = keyAsPlainText
+          if (BABEL_LANGUAGE_MAP.containsKey(packageOption.keyInfo.plainText)) {
+            babelLanguage = packageOption.keyInfo.plainText
+          } else if (
+            (packageOption.keyInfo.plainText == "main")
+            && BABEL_LANGUAGE_MAP.containsKey(packageOption.valueInfo.plainText)
+          ) {
+            babelLanguage = packageOption.valueInfo.plainText
+            break
+          }
         }
 
         if (babelLanguage == null) continue
