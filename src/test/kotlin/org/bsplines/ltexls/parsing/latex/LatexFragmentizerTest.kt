@@ -28,7 +28,7 @@ class LatexFragmentizerTest {
 		  %	 ltex: language=de-DE
 		  Sentence 2\todo{Todo note}
 		  		  %	 ltex:	language=en-US
-		  
+
 		  Sentence 3
 
 		  """.trimIndent(), settings
@@ -63,7 +63,7 @@ class LatexFragmentizerTest {
         dummy={abc,def}
       ]{babel}
       Dies ist ein Test.
-      
+
       """.trimIndent(), Settings()
     )
     assertEquals(2, codeFragments.size)
@@ -118,9 +118,9 @@ class LatexFragmentizerTest {
         		  %	 ltex: language=de-DE
         Sentence 2\todo{Todo note}
         %ltex:	language=en-US
-        
+
         Sentence 3
-        
+
         """.trimIndent(), Settings()
       )
       assertEquals(7, codeFragments.size)
@@ -182,7 +182,7 @@ class LatexFragmentizerTest {
             phrase
           \end{french}
         \end{american}.
-        
+
         """.trimIndent(), Settings()
       )
 
@@ -242,7 +242,7 @@ class LatexFragmentizerTest {
             phrase
           \end{french}
         \end{american}.
-        
+
         """.trimIndent(), codeFragments[7].code
       )
       assertEquals(106, codeFragments[7].fromPos)

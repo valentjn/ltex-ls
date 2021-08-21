@@ -21,7 +21,7 @@ class LatexPackageOptionsParserTest {
       option2 = \value2 ,% option3 = value3,
       option4 =% value4,
       {This is\} a \textbf{test}, option5 = value5.},
-      
+
       """.trimIndent()
     )
 

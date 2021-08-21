@@ -25,14 +25,14 @@ class ProgramAnnotatedTextBuilderTest {
       //Sentence 3 - no check
       // Sentence 4 -
       // check
-      
+
       Sentence 5 - no check /* Sentence 6 - no check */
       /* Sentence 7 - no check */ Sentence 8 - no check
       /*Sentence 9 - no check */
       /* Sentence 10 - check */
       /** Sentence 11 -
         * check */
-        
+
       """.trimIndent(),
       "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n"
     )
@@ -60,14 +60,14 @@ class ProgramAnnotatedTextBuilderTest {
       #Sentence 3 - no check
       # Sentence 4 -
       # check
-      
+
       Sentence 5 - no check <# Sentence 6 - no check #>
       <# Sentence 7 - no check #> Sentence 8 - no check
       <#Sentence 9 - no check #>
       <# Sentence 10 - check #>
       <# Sentence 11 -
        # check #>
-       
+
       """.trimIndent(),
       "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n"
     )
@@ -82,7 +82,7 @@ class ProgramAnnotatedTextBuilderTest {
       #Sentence 3 - no check
       ## Sentence 4 -
       ## check
-      
+
       """.trimIndent(),
       "\n\n\nSentence 4 -\ncheck"
     )
@@ -97,14 +97,14 @@ class ProgramAnnotatedTextBuilderTest {
       --Sentence 3 - no check
       --- Sentence 4 -
       --- check
-      
+
       Sentence 5 - no check --[[ Sentence 6 - no check ]]
       --[[ Sentence 7 - no check ]] Sentence 8 - no check
       --[[Sentence 9 - no check ]]
       --[[ Sentence 10 - check ]]
       --[[ Sentence 11 -
       check ]]
-      
+
       """.trimIndent(),
       "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n"
     )
@@ -119,14 +119,14 @@ class ProgramAnnotatedTextBuilderTest {
       --Sentence 3 - no check
       --- Sentence 4 -
       --- check
-      
+
       Sentence 5 - no check {- Sentence 6 - no check -}
       {- Sentence 7 - no check -} Sentence 8 - no check
       {-Sentence 9 - no check -}
       {- Sentence 10 - check -}
       {- Sentence 11 -
       check -}
-      
+
       """.trimIndent(),
       "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n"
     )
@@ -141,7 +141,7 @@ class ProgramAnnotatedTextBuilderTest {
       --Sentence 3 - no check
       --- Sentence 4 -
       --- check
-      
+
       """.trimIndent(),
       "\n\n\nSentence 4 -\ncheck"
     )
@@ -156,7 +156,7 @@ class ProgramAnnotatedTextBuilderTest {
       ;Sentence 3 - no check
       ;; Sentence 4 -
       ;; check
-      
+
       """.trimIndent(),
       "\n\n\nSentence 4 -\ncheck"
     )
@@ -171,14 +171,14 @@ class ProgramAnnotatedTextBuilderTest {
       %Sentence 3 - no check
       %% Sentence 4 -
       %% check
-      
+
       Sentence 5 - no check %{ Sentence 6 - no check %}
       %{ Sentence 7 - no check %} Sentence 8 - no check
       %{Sentence 9 - no check %}
       %{ Sentence 10 - check %}
       %{ Sentence 11 -
       check %}
-      
+
       """.trimIndent(),
       "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n"
     )
@@ -193,7 +193,7 @@ class ProgramAnnotatedTextBuilderTest {
       %Sentence 3 - no check
       %% Sentence 4 -
       %% check
-      
+
       """.trimIndent(),
       "\n\n\nSentence 4 -\ncheck"
     )
@@ -208,7 +208,7 @@ class ProgramAnnotatedTextBuilderTest {
       cSentence 3 - no check
       c Sentence 4 -
       c check
-      
+
       """.trimIndent(),
       "\n\n\nSentence 4 -\ncheck"
     )
@@ -223,7 +223,7 @@ class ProgramAnnotatedTextBuilderTest {
       'Sentence 3 - no check
       '' Sentence 4 -
       '' check
-      
+
       """.trimIndent(),
       "\n\n\nSentence 4 -\ncheck"
     )

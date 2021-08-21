@@ -19,12 +19,12 @@ class HtmlFragmentizerTest {
     val fragmentizer: CodeFragmentizer = CodeFragmentizer.create("html")
     val code = """Sentence 1
 
-      <!-- ltex: language=de-DE-->      
-    
+      <!-- ltex: language=de-DE-->
+
     Sentence 2
-    
+
     <!--			ltex:				language=en-US		-->
-    
+
     Sentence 3
     """
     val codeFragments: List<CodeFragment> = fragmentizer.fragmentize(code, Settings())

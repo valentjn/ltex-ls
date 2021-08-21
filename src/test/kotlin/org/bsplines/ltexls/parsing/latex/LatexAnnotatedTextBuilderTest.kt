@@ -27,7 +27,7 @@ class LatexAnnotatedTextBuilderTest {
         \item this or
         \item that.
       \end{itemize}
-      
+
       """.trimIndent(),
       "We can do this or that. "
     )
@@ -38,7 +38,7 @@ class LatexAnnotatedTextBuilderTest {
         Inside the frame!
       \end{frame}
       Final sentence.
-      
+
       """.trimIndent(),
       "This is a test. Test Another Test Inside the frame! Final sentence. "
     )
@@ -47,18 +47,18 @@ class LatexAnnotatedTextBuilderTest {
     assertPlainText(
       """
       This is a sentence.%
-      
+
       This is another sentence.
-      
+
       """.trimIndent(),
       "This is a sentence.\n\nThis is another sentence. "
     )
     assertPlainText(
       """
       This is a sentence.%
-      
+
       This is another sentence.
-      
+
       """.trimIndent(),
       "This is a sentence.\n\nThis is another sentence. "
     )
@@ -84,7 +84,7 @@ class LatexAnnotatedTextBuilderTest {
     assertPlainText(
       """
       \"E\"in T\"ext m\"{i}t v\"i\"{e}l\"en \"{U}ml\"a\"{u}t\"en.
-      
+
       """.trimIndent(),
       "\u00cb\u00efn T\u00ebxt m\u00eft v\u00ef\u00ebl\u00ebn \u00dcml\u00e4\u00fct\u00ebn. "
     )
@@ -130,7 +130,7 @@ class LatexAnnotatedTextBuilderTest {
       This is a test.
       \subsection[abc]{This is another heading.}
       This is another test.
-      
+
       """.trimIndent(),
       "Heading. This is a test. This is another heading. This is another test. "
     )
@@ -139,7 +139,7 @@ class LatexAnnotatedTextBuilderTest {
       This is a test: \cite{test1}, \cite[a]{test2}, \cite[a][b]{test3}.
       \textcites{test1}{test2}{test3} shows that this should be plural.
       \textcites(a)(b)[c][]{test1}[][d]{test2}[e][f]{test3} proves another error.
-      
+
       """.trimIndent(),
       "This is a test: Dummy0, Dummy1, Dummy2. "
       + "Dummies shows that this should be plural. "
@@ -153,7 +153,7 @@ class LatexAnnotatedTextBuilderTest {
       """
       This is a test, \egc an actual test \eg{} test.
       This is a test, \iec an actual test \ie{} test.
-      
+
       """.trimIndent(),
       "This is a test, e.g., an actual test e.g. test. "
       + "This is a test, i.e., an actual test i.e. test. "
@@ -164,7 +164,7 @@ class LatexAnnotatedTextBuilderTest {
       \begin{textblock*}{1mm}[2mm,3mm](4mm,5mm)
         abc\end{textblock*}
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test. abc This is another test. "
     )
@@ -262,7 +262,7 @@ class LatexAnnotatedTextBuilderTest {
         \node[color=mittelblau] at (42mm,0mm) {qwerty};
       \end{tikzpicture}
       This is another sentence.
-      
+
       """.trimIndent(),
       "This is a test. This is another sentence. "
     )
@@ -273,7 +273,7 @@ class LatexAnnotatedTextBuilderTest {
         \node {$\dots$};
         \node {${"$"}a$};
       \end{tikzpicture}
-      
+
       """.trimIndent(),
       "This is a test: "
     )
@@ -292,7 +292,7 @@ class LatexAnnotatedTextBuilderTest {
         \end{cases}
       \end{equation*}
       Now we argue.
-      
+
       """.trimIndent(),
       "Recall that Dummy0 if Dummy1, Dummy2 otherwise. Now we argue. "
     )
@@ -303,7 +303,7 @@ class LatexAnnotatedTextBuilderTest {
       \begin{equation}
           a^2 + b^2 = c^2\hspace*{10mm}.\quad\qed
       \end{equation}
-      
+
       """.trimIndent(),
       "This is the proof: Dummy0. "
     )
@@ -313,7 +313,7 @@ class LatexAnnotatedTextBuilderTest {
       \begin{equation}
           a^2 + b^2 = c^2.\\[-6.4em]\qquad\notag
       \end{equation}
-      
+
       """.trimIndent(),
       "This is another proof: Dummy0. "
     )
@@ -326,7 +326,7 @@ class LatexAnnotatedTextBuilderTest {
         \end{split}
       \end{equation}
       This is the next sentence.
-      
+
       """.trimIndent(),
       "This equals Dummy0. This is the next sentence. "
     )
@@ -336,7 +336,7 @@ class LatexAnnotatedTextBuilderTest {
       \begin{equation}
           a^2 + b^2 = c^2,\qquad\text{which proves the theorem.}\end{equation}%
       This is a sentence.
-      
+
       """.trimIndent(),
       "This is an equation: Dummy0, which proves the theorem. This is a sentence. "
     )
@@ -346,7 +346,7 @@ class LatexAnnotatedTextBuilderTest {
       \begin{equation*}
         a \text{,~and} b.
       \end{equation*}
-      
+
       """.trimIndent(),
       "This is a test: Dummy0,\u00a0and Dummy1. "
     )
@@ -357,7 +357,7 @@ class LatexAnnotatedTextBuilderTest {
           Gau\ss{}: \O(n^2).
       \end{equation}
       This is another test: ${"$"}Gau\ss{}: \O(n^2)$.
-      
+
       """.trimIndent(),
       "This is a test: Dummy0. This is another test: Dummy1. "
     )
@@ -368,7 +368,7 @@ class LatexAnnotatedTextBuilderTest {
         E = mc^2.
       \]
       And this is another one: \(c^2\).
-      
+
       """.trimIndent(),
       "This is a test: Dummy0. And this is another one: Dummy1. "
     )
@@ -376,7 +376,7 @@ class LatexAnnotatedTextBuilderTest {
       """
       This is a test: ${"$"}a = b \footnote{This is another test: ${"$"}c$.}$.
       This is the next sentence: ${"$"}E = mc^2$.
-      
+
       """.trimIndent(),
       "This is a test: Ina0. This is the next sentence: Ina1. "
     )
@@ -384,7 +384,7 @@ class LatexAnnotatedTextBuilderTest {
       """
       This is a test: ${"$"}a, b, \dots, c$.
       Second sentence: a, b, $\dots$, c.
-      
+
       """.trimIndent(),
       "This is a test: Ina0. Second sentence: a, b, Dummy1, c. "
     )
@@ -398,7 +398,7 @@ class LatexAnnotatedTextBuilderTest {
       This is an ${"$"}A$, ${"$"}e$, ${"$"}F$, ${"$"}h$, ${"$"}I$, ${"$"}l$, ${"$"}M$,
       ${"$"}n$, ${"$"}O$, ${"$"}r$, ${"$"}S$, ${"$"}X$, $\ell$, $\mathcal{r}$.
       This is not a ${"$"}b$, ${"$"}C$, $\ella$, $\test a$, $\mathcal{b}$.
-      
+
       """.trimIndent(),
       "This is an Ina0, Ina1, Ina2, Ina3, Ina4, Ina5, Ina6, "
       + "Ina7, Ina8, Ina9, Ina10, Ina11, Ina12, Ina13. "
@@ -413,7 +413,7 @@ class LatexAnnotatedTextBuilderTest {
           \scalebox{0.92}{${"$"}a$}.
         \end{equation}
         This is a sentence.
-        
+
         """.trimIndent()
       )
       val start = annotatedText.getOriginalTextPositionFor(29, false)
@@ -428,7 +428,7 @@ class LatexAnnotatedTextBuilderTest {
         \begin{equation*}
           a \text{,~and} b.
         \end{equation*}
-        
+
         """.trimIndent()
       )
       val start = annotatedText.getOriginalTextPositionFor(22, false)
@@ -440,9 +440,9 @@ class LatexAnnotatedTextBuilderTest {
       val annotatedText = buildAnnotatedText(
         """
         abc. Let ${"$"}$\footnote{${"$"}a$.}${"$"}$
-        
+
         abc
-        
+
         """.trimIndent()
       )
       val start = annotatedText.getOriginalTextPositionFor(16, false)
@@ -457,16 +457,16 @@ class LatexAnnotatedTextBuilderTest {
       """
       \SweaveOpts{prefix.string=figures}
       This is a first sentence.
-      
+
       <<import-packages, echo=false>>=
       library(tidyverse, quietly = T)
       @
-      
+
       This is a second sentence.
       <<mca-graph, fig=true, echo=false>>=
       plot(1:1000, rnorm(1000))
       @
-      
+
       """.trimIndent(),
       " This is a first sentence.\n\n\n\nThis is a second sentence. ",
       Settings(), "rsweave"
@@ -476,7 +476,7 @@ class LatexAnnotatedTextBuilderTest {
       <<import-packages>>=
       library(tidyverse)
       @
-      
+
       """.trimIndent(),
       " ",
       Settings(), "rsweave"
@@ -486,7 +486,7 @@ class LatexAnnotatedTextBuilderTest {
       <<import-packages>>=
       library(tidyverse)
       @
-      
+
       """.trimIndent(),
       "<<import-packages>>= library(tidyverse) @ "
     )

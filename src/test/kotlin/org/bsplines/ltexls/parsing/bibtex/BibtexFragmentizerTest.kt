@@ -26,19 +26,19 @@ class BibtexFragmentizerTest {
         name = {Some Name},
         description = {This is a test.}
       }
-      
+
       @entry{some-label2,
         name = {Some Other Name},
         description = {This is another
         test.},
       }
-      
+
       @abbreviation{some-label3,
         short =shortform,
         see   = {abc},
         long  = longform,
        }
-       
+
       """.trimIndent(),
       settings
     )

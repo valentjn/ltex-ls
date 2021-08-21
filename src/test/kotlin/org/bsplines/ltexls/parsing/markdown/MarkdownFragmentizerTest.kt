@@ -22,30 +22,30 @@ class MarkdownFragmentizerTest {
       "markdown",
       """
       Sentence 1
-      
+
       [comment]: <> "ltex: language=de-DE"
-      
+
       Sentence 2
-      
+
       [comment]:	<>"ltex:	language=en-US"
-      
+
       Sentence 3
-      
+
       """.trimIndent()
     )
     assertFragmentizer(
       "markdown",
       """
       Sentence 1
-      
-        <!-- ltex: language=de-DE-->      
-      
+
+        <!--       ltex: language=de-DE-->
+
       Sentence 2
-      
+
       <!--			ltex:				language=en-US		-->
-      
+
       Sentence 3
-      
+
       """.trimIndent()
     )
   }

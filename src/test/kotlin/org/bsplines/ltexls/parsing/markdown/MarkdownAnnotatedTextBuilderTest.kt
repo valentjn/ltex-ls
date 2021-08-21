@@ -23,7 +23,7 @@ class MarkdownAnnotatedTextBuilderTest {
       # Heading
       Paragraph with
       multiple lines and [link](example.com)
-      
+
       """.trimIndent(),
       "Heading\nParagraph with multiple lines and link\n"
     )
@@ -35,7 +35,7 @@ class MarkdownAnnotatedTextBuilderTest {
       """
       # This is a &copy; Test
       Another [day &ndash; another](example.com) sentence
-      
+
       """.trimIndent(),
       "This is a \u00a9 Test\nAnother day \u2013 another sentence\n"
     )
@@ -59,26 +59,26 @@ class MarkdownAnnotatedTextBuilderTest {
       """
       Term1
       : Das ist die Definition von *Term1*.
-      
+
       Term2
-      
+
       : Das ist die erste Definition von *Term2*.
       : Das ist die zweite Definition von *Term2*.
-      
+
       : Das ist die dritte Definition von *Term2*.
-      
+
       """.trimIndent(),
       """
       Term1.
       Das ist die Definition von Term1.
-      
+
       Term2.
-      
+
       Das ist die erste Definition von Term2.
       Das ist die zweite Definition von Term2.
-      
+
       Das ist die dritte Definition von Term2.
-      
+
       """.trimIndent()
     )
   }
@@ -96,22 +96,22 @@ class MarkdownAnnotatedTextBuilderTest {
     assertPlainText(
       """
       This is a test.
-      
+
       | First Column | Second Column |
       | ------------ | ------------- |
       | Interesting  | Super         |
-      
+
       This is another sentence.
-      
+
       """.trimIndent(), """
       This is a test.
-      
+
       First Column Second Column
-      
+
       Interesting Super
-      
+
       This is another sentence.
-      
+
       """.trimIndent()
     )
   }
@@ -124,10 +124,10 @@ class MarkdownAnnotatedTextBuilderTest {
       # This is YAML front matter
       - test
       ---
-      
+
       # Heading
       Test sentence
-      
+
       """.trimIndent(),
       "\n\n\n\n\nHeading\nTest sentence\n"
     )
@@ -136,10 +136,10 @@ class MarkdownAnnotatedTextBuilderTest {
       ---
       test: This is a test.
       ---
-      
+
       # Heading
       Test sentence
-      
+
       """.trimIndent(),
       "\n\n\n\nHeading\nTest sentence\n"
     )
@@ -152,28 +152,28 @@ class MarkdownAnnotatedTextBuilderTest {
       This is a test: ${"$"}E = mc^2
       $.
       The book is $3, not $5.
-      
+
       Interesting: $1 \$2 3$.
-      
+
       ${"$"}$
       a^2 + b^2 = c^2
-      
+
       ${"$"}$
-      
+
       This is another test.
-      
+
       """.trimIndent(), """
       This is a test: Dummy0. The book is $3, not $5.
-      
+
       Interesting: Dummy1.
-      
-      
-      
-      
-      
-      
+
+
+
+
+
+
       This is another test.
-      
+
       """.trimIndent()
     )
   }

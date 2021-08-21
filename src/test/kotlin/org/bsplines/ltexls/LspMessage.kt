@@ -55,8 +55,8 @@ class LspMessage(
     val bodyBytes: ByteArray = bodyStr.toByteArray(StandardCharsets.UTF_8)
     val headerStr = """
     Content-Length: ${bodyBytes.size}
-    
-    
+
+
     """.trimIndent()
     val headerBytes: ByteArray = headerStr.toByteArray(StandardCharsets.US_ASCII)
 

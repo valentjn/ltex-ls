@@ -20,15 +20,15 @@ class OrgFragmentizerTest {
       "org",
       """
       Sentence 1
-      
+
        # ltex: language=de-DE
-      
+
       Sentence 2
-      
+
       	#	ltex:	language=en-US
-      
+
       Sentence 3
-      
+
       """.trimIndent()
     )
   }

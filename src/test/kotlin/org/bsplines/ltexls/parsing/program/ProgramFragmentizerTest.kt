@@ -19,15 +19,15 @@ class ProgramFragmentizerTest {
       "java",
       """
             Sentence 1
-            
+
             // ltex: language=de-DE
-            
+
             Sentence 2
-            
+
             //	ltex:	language=en-US
-            
+
             Sentence 3
-            
+
             """.trimIndent()
     )
   }
@@ -38,15 +38,15 @@ class ProgramFragmentizerTest {
       "python",
       """
             Sentence 1
-            
+
             #  ltex: language=de-DE
-            
+
             Sentence 2
-            
+
             #		ltex:	language=en-US
-            
+
             Sentence 3
-            
+
             """.trimIndent()
     )
   }
@@ -57,15 +57,15 @@ class ProgramFragmentizerTest {
       "powershell",
       """
             Sentence 1
-            
+
             #  ltex: language=de-DE
-            
+
             Sentence 2
-            
+
             #		ltex:	language=en-US
-            
+
             Sentence 3
-            
+
             """.trimIndent()
     )
   }
@@ -76,15 +76,15 @@ class ProgramFragmentizerTest {
       "julia",
       """
             Sentence 1
-            
+
             #  ltex: language=de-DE
-            
+
             Sentence 2
-            
+
             #		ltex:	language=en-US
-            
+
             Sentence 3
-            
+
             """.trimIndent()
     )
   }
@@ -95,15 +95,15 @@ class ProgramFragmentizerTest {
       "lua",
       """
             Sentence 1
-            
+
             -- ltex: language=de-DE
-            
+
             Sentence 2
-            
+
             --	ltex:	language=en-US
-            
+
             Sentence 3
-            
+
             """.trimIndent()
     )
   }
@@ -114,15 +114,15 @@ class ProgramFragmentizerTest {
       "haskell",
       """
             Sentence 1
-            
+
             -- ltex: language=de-DE
-            
+
             Sentence 2
-            
+
             --	ltex:	language=en-US
-            
+
             Sentence 3
-            
+
             """.trimIndent()
     )
   }
@@ -133,15 +133,15 @@ class ProgramFragmentizerTest {
       "sql",
       """
             Sentence 1
-            
+
             -- ltex: language=de-DE
-            
+
             Sentence 2
-            
+
             --	ltex:	language=en-US
-            
+
             Sentence 3
-            
+
             """.trimIndent()
     )
   }
@@ -152,15 +152,15 @@ class ProgramFragmentizerTest {
       "lisp",
       """
             Sentence 1
-            
+
             ;  ltex: language=de-DE
-            
+
             Sentence 2
-            
+
             ;		ltex:	language=en-US
-            
+
             Sentence 3
-            
+
             """.trimIndent()
     )
   }
@@ -171,15 +171,15 @@ class ProgramFragmentizerTest {
       "matlab",
       """
             Sentence 1
-            
+
             %  ltex: language=de-DE
-            
+
             Sentence 2
-            
+
             %		ltex:	language=en-US
-            
+
             Sentence 3
-            
+
             """.trimIndent()
     )
   }
@@ -190,15 +190,15 @@ class ProgramFragmentizerTest {
       "erlang",
       """
             Sentence 1
-            
+
             %  ltex: language=de-DE
-            
+
             Sentence 2
-            
+
             %		ltex:	language=en-US
-            
+
             Sentence 3
-            
+
             """.trimIndent()
     )
   }
@@ -209,15 +209,15 @@ class ProgramFragmentizerTest {
       "fortran-modern",
       """
             Sentence 1
-            
+
             c  ltex: language=de-DE
-            
+
             Sentence 2
-            
+
             c		ltex:	language=en-US
-            
+
             Sentence 3
-            
+
             """.trimIndent()
     )
   }
@@ -228,15 +228,15 @@ class ProgramFragmentizerTest {
       "vb",
       """
             Sentence 1
-            
+
             '  ltex: language=de-DE
-            
+
             Sentence 2
-            
+
             '		ltex:	language=en-US
-            
+
             Sentence 3
-            
+
             """.trimIndent()
     )
   }

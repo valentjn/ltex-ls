@@ -47,7 +47,7 @@ class DocumentCheckerTest {
             This is a qwertyzuiopa\footnote{This is another qwertyzuiopb.}.
             % ltex: language=de-DE
             Dies ist ein Qwertyzuiopc\todo[name]{Dies ist ein weiteres Qwertyzuiopd.}.
-            
+
             """.trimIndent()
     )
     checkingResult = checkDocument(document)
@@ -97,9 +97,9 @@ class DocumentCheckerTest {
 
     assertEquals(
       """
-  
+
       Dies ist ein Qwertyzuiopc\todo[name]{Dies ist ein weiteres Qwertyzuiopd.}.
-      
+
       """.trimIndent(),
       annotatedTextFragments[4].codeFragment.code
     )
@@ -117,11 +117,11 @@ class DocumentCheckerTest {
     val document: LtexTextDocumentItem = createDocument("markdown",
       """
       This is an **test.**
-      
+
       [comment]: <> "LTeX: language=de-DE"
-      
+
       Dies ist eine **Test**.
-      
+
       """.trimIndent()
     )
     val checkingResult: Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> =
@@ -176,7 +176,7 @@ class DocumentCheckerTest {
       This is a secondunknownword.
       % ltex: enabled=true
       This is a thirdunknownword.
-      
+
       """.trimIndent()
     )
     val checkingResult: Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> =

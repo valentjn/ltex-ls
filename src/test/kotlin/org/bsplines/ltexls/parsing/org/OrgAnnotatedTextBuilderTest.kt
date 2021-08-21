@@ -19,17 +19,16 @@ class OrgAnnotatedTextBuilderTest {
   @Test
   fun testHeadlinesAndSections() {
     assertPlainText(
+      "* \n\n" +
       """
-      * 
-      
       ** DONE
-      
+
       *** This is a test
-      
+
       **** TODO [#A] COMMENT Another test :tag:a2%:
-      
+
       **** TODO [#A] Final test :tag:a2%:
-      
+
       """.trimIndent(),
       "\n\n\n\n\n\n\n\n\nThis is a test\n\n\n\n\n\n\nFinal test\n\n"
     )
@@ -44,10 +43,10 @@ class OrgAnnotatedTextBuilderTest {
       #+HEADER: test
       #+CAPTION[abc]: def
       Second sentence.
-      
+
         #+ATTR_foo01_bar: BOOM
       Final sentence.
-      
+
       """.trimIndent(),
       "This is a test.\n\n\n\nSecond sentence.\n\n\nFinal sentence.\n"
     )
@@ -62,7 +61,7 @@ class OrgAnnotatedTextBuilderTest {
       Contents.
       #+END_CENTER
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\nContents.\n\nThis is another test.\n"
     )
@@ -77,7 +76,7 @@ class OrgAnnotatedTextBuilderTest {
       Contents.
       #+END_QUOTE
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\nContents.\n\nThis is another test.\n"
     )
@@ -92,7 +91,7 @@ class OrgAnnotatedTextBuilderTest {
       Contents.
       #+END_FOOBAR
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\nContents.\n\nThis is another test.\n"
     )
@@ -107,7 +106,7 @@ class OrgAnnotatedTextBuilderTest {
       Contents.
       #+END_COMMENT
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\nThis is another test.\n"
     )
@@ -122,7 +121,7 @@ class OrgAnnotatedTextBuilderTest {
       Contents.
       #+END_EXAMPLE
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\nThis is another test.\n"
     )
@@ -137,7 +136,7 @@ class OrgAnnotatedTextBuilderTest {
       Contents.
       #+END_EXPORT
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\nThis is another test.\n"
     )
@@ -152,7 +151,7 @@ class OrgAnnotatedTextBuilderTest {
       Contents.
       #+END_SRC
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\nThis is another test.\n"
     )
@@ -167,7 +166,7 @@ class OrgAnnotatedTextBuilderTest {
       Contents.
       #+END_VERSE
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\nContents.\n\nThis is another test.\n"
     )
@@ -182,7 +181,7 @@ class OrgAnnotatedTextBuilderTest {
       Contents.
       :END:
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\nContents.\n\nThis is another test.\n"
     )
@@ -193,7 +192,7 @@ class OrgAnnotatedTextBuilderTest {
       Contents.
       :END:
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\nThis is another test.\n"
     )
@@ -208,7 +207,7 @@ class OrgAnnotatedTextBuilderTest {
       Contents.
       :END:
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\nContents.\n\nThis is another test.\n"
     )
@@ -221,7 +220,7 @@ class OrgAnnotatedTextBuilderTest {
       This is a test.
       [fn:1] Contents.
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\nContents.\nThis is another test.\n"
     )
@@ -234,7 +233,7 @@ class OrgAnnotatedTextBuilderTest {
       1. Test 1.
       2. [X] Test 2.
          - Test tag :: Test 3.
-         
+
       """.trimIndent(),
       "\nTest 1.\n\n\nTest 2.\n\n\nTest 3.\n\n"
     )
@@ -250,41 +249,41 @@ class OrgAnnotatedTextBuilderTest {
       | Test4 | Test5 | Test6 |
       | Test7 | Test8 | Test9 |
       This is another test.
-      
+
       """.trimIndent(), """
       This is a test.
-      
+
       Test1
-      
+
       Test2
-      
+
       Test3
-      
-      
-      
-      
-      
-      
-      
+
+
+
+
+
+
+
       Test4
-      
+
       Test5
-      
+
       Test6
-      
-      
-      
-      
+
+
+
+
       Test7
-      
+
       Test8
-      
+
       Test9
-      
-      
-      
+
+
+
       This is another test.
-      
+
       """.trimIndent()
     )
   }
@@ -296,7 +295,7 @@ class OrgAnnotatedTextBuilderTest {
       This is a test.
       #+CALL: Contents.
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\nThis is another test.\n"
     )
@@ -311,7 +310,7 @@ class OrgAnnotatedTextBuilderTest {
       CLOCK: [1234-05-06 07:08-09:10] => 1:23
       CLOCK: [1234-05-06 07:08]--[1234-05-06 07:08] => 1:23
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\n\n\nThis is another test.\n"
     )
@@ -324,7 +323,7 @@ class OrgAnnotatedTextBuilderTest {
       This is a test.
       %%(Contents.
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\nThis is another test.\n"
     )
@@ -337,7 +336,7 @@ class OrgAnnotatedTextBuilderTest {
       * Test
       DEADLINE: [1234-05-06 Sat 07:08]
       This is a test.
-      
+
       """.trimIndent(),
       "\nTest\n\n\nThis is a test.\n"
     )
@@ -351,7 +350,7 @@ class OrgAnnotatedTextBuilderTest {
         #	Comment
       # Another comment
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\nThis is another test.\n"
     )
@@ -365,7 +364,7 @@ class OrgAnnotatedTextBuilderTest {
         :
       : Contents.
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\nContents.\nThis is another test.\n"
     )
@@ -378,7 +377,7 @@ class OrgAnnotatedTextBuilderTest {
       This is a test.
       -----
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\nThis is another test.\n"
     )
@@ -391,7 +390,7 @@ class OrgAnnotatedTextBuilderTest {
       This is a test.
       #+TAGS: test1 test2
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\nThis is another test.\n"
     )
@@ -410,7 +409,7 @@ class OrgAnnotatedTextBuilderTest {
         Contents 3.
       \end{test}
       This is another test.
-      
+
       """.trimIndent(),
       "This is a test.\n\nThis is another test.\n"
     )
