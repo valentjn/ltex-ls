@@ -151,7 +151,16 @@ class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown"
       $.
       The book is $3, not $5.
 
-      Interesting: $1 \$2 3$.
+      """.trimIndent(),
+      "This is a test: Dummy0. The book is $3, not $5.\n"
+    )
+    assertPlainText(
+      "Interesting: $1 \$2 3$.\n",
+      "Interesting: Dummy0.\n"
+    )
+    assertPlainText(
+      """
+      This is a test.
 
       ${"$"}$
       a^2 + b^2 = c^2
@@ -160,19 +169,8 @@ class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown"
 
       This is another test.
 
-      """.trimIndent(), """
-      This is a test: Dummy0. The book is $3, not $5.
-
-      Interesting: Dummy1.
-
-
-
-
-
-
-      This is another test.
-
-      """.trimIndent()
+      """.trimIndent(),
+      "This is a test.\n\n\n\n\n\n\nThis is another test.\n"
     )
   }
 }
