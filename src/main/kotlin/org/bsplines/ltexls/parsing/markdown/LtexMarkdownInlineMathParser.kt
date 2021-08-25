@@ -71,6 +71,6 @@ class LtexMarkdownInlineMathParser(
   }
 
   companion object {
-    private val MATH_PATTERN = Pattern.compile("\\$([^ ](?:.|\n)*?[^ ]|[^ ])(?<!\\\\)\\$(?![0-9])")
+    private val MATH_PATTERN = Pattern.compile("\\$([^ ]|[^ ](?:.|\n)*?[^ ])(?<!\\\\)\\$(?![0-9])")
   }
 }

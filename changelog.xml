@@ -29,6 +29,9 @@
         Fix LanguageTool reinitialized when running the `Add '...' to dictionary` quick fix
       </action>
       <action type="fix">
+        Fix wrong parsing of inline math formulas in Markdown when using dollar signs as delimiters and containing only one character (e.g., `$a$`)
+      </action>
+      <action type="fix">
         Fix used i18n keys removed
       </action>
     </release>

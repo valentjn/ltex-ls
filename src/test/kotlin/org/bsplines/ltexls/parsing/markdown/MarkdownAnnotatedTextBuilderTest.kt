@@ -146,6 +146,10 @@ class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown"
   @Test
   fun testLtexMarkdownExtension() {
     assertPlainText(
+      "This is ${"$"}a$, and this is ${"$"}b$.\n",
+      "This is Dummy0, and this is Dummy1.\n"
+    )
+    assertPlainText(
       """
       This is a test: ${"$"}E = mc^2
       $.
