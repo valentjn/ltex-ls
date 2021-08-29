@@ -45,10 +45,10 @@
     <orderEntry type="library" name="org.junit.platform:junit-platform-commons:1.8.0-M1" level="project" />
     <orderEntry type="library" name="org.junit.platform:junit-platform-suite:1.8.0-M1" level="project" />
     <orderEntry type="library" name="org.junit.jupiter:junit-jupiter-api:5.7.0" level="project" />
-    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.21" level="project" />
-    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib:1.5.21" level="project" />
-    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-common:1.5.21" level="project" />
-    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.21" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib:1.5.30" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-common:1.5.30" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30" level="project" />
     <orderEntry type="library" name="Maven: org.languagetool:languagetool-core:5.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.11" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-text:1.9" level="project" />
@@ -190,8 +190,8 @@
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.8" level="project" />
     <orderEntry type="library" name="Maven: org.fusesource.jansi:jansi:2.3.4" level="project" />
     <orderEntry type="library" name="Maven: info.picocli:picocli:4.6.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jetbrains.kotlin:kotlin-test-junit5:1.5.21" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.jetbrains.kotlin:kotlin-test:1.5.21" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.jetbrains.kotlin:kotlin-test-junit5:1.5.30" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.jetbrains.kotlin:kotlin-test:1.5.30" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-api:5.6.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.opentest4j:opentest4j:1.2.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.junit.jupiter:junit-jupiter-engine:5.6.0" level="project" />
