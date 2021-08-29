@@ -33,7 +33,7 @@
   </licenses>
   <properties>
     <java.version>11</java.version>
-    <kotlin.version>1.5.21</kotlin.version>
+    <kotlin.version>1.5.30</kotlin.version>
     <kotlin.compiler.jvmTarget>${java.version}</kotlin.compiler.jvmTarget>
     <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
     <main.class>org.bsplines.ltexls.LtexLanguageServerLauncher</main.class>
