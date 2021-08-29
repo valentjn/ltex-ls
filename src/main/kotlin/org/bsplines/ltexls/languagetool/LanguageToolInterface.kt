@@ -13,6 +13,9 @@ abstract class LanguageToolInterface {
   var dictionary: Set<String> = emptySet()
   var disabledRules: Set<String> = emptySet()
 
+  var languageToolOrgUsername = ""
+  var languageToolOrgApiKey = ""
+
   fun check(annotatedTextFragment: AnnotatedTextFragment): List<LanguageToolRuleMatch> {
     val matches = ArrayList<LanguageToolRuleMatch>()
 

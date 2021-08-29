@@ -108,6 +108,14 @@ class LanguageToolHttpInterface(
     requestEntries["language"] = this.languageShortCode
     requestEntries["data"] = jsonData.toString()
 
+    if (this.languageToolOrgUsername.isNotEmpty()) {
+      requestEntries["username"] = this.languageToolOrgUsername
+    }
+
+    if (this.languageToolOrgApiKey.isNotEmpty()) {
+      requestEntries["apiKey"] = this.languageToolOrgApiKey
+    }
+
     if (annotatedTextFragment.codeFragment.settings.enablePickyRules) {
       requestEntries["level"] = "picky"
     }

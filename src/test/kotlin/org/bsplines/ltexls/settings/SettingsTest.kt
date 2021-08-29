@@ -107,6 +107,14 @@ class SettingsTest {
     assertEquals("languageToolHttpServerUri", settings.languageToolHttpServerUri)
     settings2 = compareSettings(settings, settings2, true)
 
+    settings = settings.copy(_languageToolOrgUsername = "languageToolOrgUsername")
+    assertEquals("languageToolOrgUsername", settings.languageToolOrgUsername)
+    settings2 = compareSettings(settings, settings2, false)
+
+    settings = settings.copy(_languageToolOrgApiKey = "languageToolOrgApiKey")
+    assertEquals("languageToolOrgApiKey", settings.languageToolOrgApiKey)
+    settings2 = compareSettings(settings, settings2, false)
+
     settings = settings.copy(_logLevel = Level.FINEST)
     assertEquals(Level.FINEST, settings.logLevel)
     settings2 = compareSettings(settings, settings2, false)

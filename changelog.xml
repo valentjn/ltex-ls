@@ -19,6 +19,12 @@
       <action type="add" issue="vscode-ltex#391">
         Add support for the `main` option of the babel package (LaTeX)
       </action>
+      <action type="add" issue="vscode-ltex#398">
+        Add setting [`ltex.ltex-ls.languageToolOrgUsername`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexltex-lslanguagetoolorgusername) to set username on languagetool.org for Premium API access
+      </action>
+      <action type="add" issue="vscode-ltex#398">
+        Add setting [`ltex.ltex-ls.languageToolOrgApiKey`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexltex-lslanguagetoolorgapikey) to set API key on languagetool.org for Premium API access
+      </action>
       <action type="add">
         Add support for [`ltex.dictionary`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexdictionary) when using a LanguageTool HTTP server
       </action>

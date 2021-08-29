@@ -32,6 +32,8 @@ data class Settings(
   private val _neuralNetworkModelRulesDirectory: String? = null,
   private val _word2VecModelRulesDirectory: String? = null,
   private val _languageToolHttpServerUri: String? = null,
+  private val _languageToolOrgUsername: String? = null,
+  private val _languageToolOrgApiKey: String? = null,
   private val _logLevel: Level? = null,
   private val _sentenceCacheSize: Long? = null,
   private val _diagnosticSeverity: Map<String, DiagnosticSeverity>? = null,
@@ -70,6 +72,10 @@ data class Settings(
     get() = FileIo.normalizePath(this._word2VecModelRulesDirectory ?: "")
   val languageToolHttpServerUri: String
     get() = (this._languageToolHttpServerUri ?: "")
+  val languageToolOrgUsername: String
+    get() = (this._languageToolOrgUsername ?: "")
+  val languageToolOrgApiKey: String
+    get() = (this._languageToolOrgApiKey ?: "")
   val logLevel: Level
     get() = (this._logLevel ?: Level.FINE)
   val sentenceCacheSize: Long
@@ -209,6 +215,10 @@ data class Settings(
           getSettingFromJsonAsString(jsonSettings, "additionalRules.word2VecModel")
       val languageToolHttpServerUri: String? =
           getSettingFromJsonAsString(jsonSettings, "ltex-ls.languageToolHttpServerUri")
+      val languageToolOrgUsername: String? =
+          getSettingFromJsonAsString(jsonSettings, "ltex-ls.languageToolOrgUsername")
+      val languageToolOrgApiKey: String? =
+          getSettingFromJsonAsString(jsonSettings, "ltex-ls.languageToolOrgApiKey")
       val logLevel: Level? = getSettingFromJsonAsEnum(
         jsonSettings,
         "ltex-ls.logLevel",
@@ -250,6 +260,8 @@ data class Settings(
         neuralNetworkModelRulesDirectory,
         word2VecModelRulesDirectory,
         languageToolHttpServerUri,
+        languageToolOrgUsername,
+        languageToolOrgApiKey,
         logLevel,
         sentenceCacheSize,
         diagnosticSeverity,
