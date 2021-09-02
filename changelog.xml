@@ -40,6 +40,12 @@
       <action type="fix">
         Fix used i18n keys removed
       </action>
+      <action type="update">
+        For binary archives, migrate from AdoptOpenJDK JREs to own Java runtime generated from Eclipse Adoptium JDKs
+      </action>
+      <action type="update">
+        Update bundled Java runtime to 11.0.12+7 (see [list of OpenJDK fixes](https://bugs.openjdk.java.net/browse/JDK-8269291?jql=project%20%3D%20JDK%20AND%20fixVersion%20%3D%2011.0.12))
+      </action>
     </release>
     <release version="13.0.0" date="2021-08-11">
       <action type="update">

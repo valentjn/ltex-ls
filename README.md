@@ -55,7 +55,7 @@ In order to use LT<sub>E</sub>X LS with an editor, it is recommended to use a la
 
 ## Requirements
 
-- 64-bit operating system
+- 64-bit Linux, Mac, or Windows operating system
 - If you want to use LT<sub>E</sub>X LS with a language client: Language client supporting LSP 3.15 or later
 
 ## Installation
@@ -69,7 +69,7 @@ In order to use LT<sub>E</sub>X LS with an editor, it is recommended to use a la
 
 It is recommended to use the startup scripts `bin/ltex-ls` (Linux, Mac) and `bin\ltex-ls.bat` (Windows) to start LT<sub>E</sub>X LS. These scripts are only part of the released versions. The startup scripts can be controlled by the following environment variables:
 
-- `JAVA_HOME`: Path to the directory of the JRE or JDK to use (contains `bin`, `lib`, and other subdirectories). If set, this overrides the included Java distribution when using a platform-dependent LT<sub>E</sub>X LS archive.
+- `JAVA_HOME`: Path to the directory of the Java distribution to use (contains `bin`, `lib`, and other subdirectories). If set, this overrides the included Java distribution when using a platform-dependent LT<sub>E</sub>X LS archive.
 - `JAVA_OPTS`: Java arguments to be fed to `java` (e.g., `-Xmx1024m`)
 
 It is also possible to start LT<sub>E</sub>X LS directly without the startup scripts (not recommended).

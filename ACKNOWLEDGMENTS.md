@@ -950,9 +950,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
    limitations under the License.
 ```
 
-## License Notice for Java (AdoptOpenJDK JRE Binaries)
+## License Notice for Java (OpenJDK Binaries)
 
-[AdoptOpenJDK JRE binaries](https://adoptopenjdk.net) are licensed under the GNU General Public License, version 2, with Classpath Exception and OpenJDK Assembly Exception.
+OpenJDK binaries are licensed under the GNU General Public License, version 2, with Classpath Exception and OpenJDK Assembly Exception.
 
 ```plaintext
 The GNU General Public License (GPL)

@@ -9,13 +9,14 @@
 import pathlib
 import re
 import shutil
+import subprocess
 import tarfile
 import tempfile
 import urllib.parse
 import urllib.request
 import zipfile
 
-javaVersion = "11.0.11+9"
+javaVersion = "11.0.12+7"
 
 
 
@@ -33,7 +34,7 @@ def createBinaryArchive(platform: str, arch: str) -> None:
     with tarfile.open(ltexLsArchivePath, "r:gz") as tarFile: tarFile.extractall(path=tmpDirPath)
 
     ltexLsDirPath = tmpDirPath.joinpath(f"ltex-ls-{ltexLsVersion}")
-    relativeJavaDirPath = downloadJava(ltexLsDirPath, platform, arch)
+    relativeJavaDirPath = downloadJava(tmpDirPath, ltexLsDirPath, platform, arch)
 
     print("Setting default for JAVA_HOME in startup script...")
 
@@ -59,38 +60,52 @@ def createBinaryArchive(platform: str, arch: str) -> None:
     with open(binScriptPath, "w") as file: file.write(binScript)
 
     ltexLsBinaryArchiveFormat = ("zip" if platform == "windows" else "gztar")
+    ltexLsBinaryArchiveExtension = (".zip" if platform == "windows" else ".tar.gz")
     ltexLsBinaryArchivePath = targetDirPath.joinpath(
         f"ltex-ls-{ltexLsVersion}-{platform}-{arch}")
-    print(f"Creating binary archive '{ltexLsBinaryArchivePath}.*'...")
+    print(f"Creating binary archive '{ltexLsBinaryArchivePath}{ltexLsBinaryArchiveExtension}'...")
     shutil.make_archive(str(ltexLsBinaryArchivePath), ltexLsBinaryArchiveFormat,
         root_dir=tmpDirPath)
     print("")
 
 
 
-def downloadJava(ltexLsDirPath: pathlib.Path, platform: str, arch: str) -> str:
+def downloadJava(tmpDirPath: pathlib.Path, ltexLsDirPath: pathlib.Path,
+      platform: str, arch: str) -> str:
   javaArchiveExtension = (".zip" if platform == "windows" else ".tar.gz")
-  javaArchiveName = (f"OpenJDK11U-jre_{arch}_{platform}_hotspot_"
+  javaArchiveName = (f"OpenJDK11U-jdk_{arch}_{platform}_hotspot_"
       f"{javaVersion.replace('+', '_')}{javaArchiveExtension}")
 
-  javaUrl = ("https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/"
+  javaUrl = ("https://github.com/adoptium/temurin11-binaries/releases/download/"
       f"jdk-{urllib.parse.quote_plus(javaVersion)}/{javaArchiveName}")
   javaArchivePath = ltexLsDirPath.joinpath(javaArchiveName)
-  print(f"Downloading Java from '{javaUrl}' to '{javaArchivePath}'...")
+  print(f"Downloading JDK from '{javaUrl}' to '{javaArchivePath}'...")
   urllib.request.urlretrieve(javaUrl, javaArchivePath)
-  print("Extracting Java archive...")
+  print("Extracting JDK archive...")
 
   if javaArchiveExtension == ".zip":
-    with zipfile.ZipFile(javaArchivePath, "r") as zipFile: zipFile.extractall(path=ltexLsDirPath)
+    with zipfile.ZipFile(javaArchivePath, "r") as zipFile: zipFile.extractall(path=tmpDirPath)
   else:
-    with tarfile.open(javaArchivePath, "r:gz") as tarFile: tarFile.extractall(path=ltexLsDirPath)
+    with tarfile.open(javaArchivePath, "r:gz") as tarFile: tarFile.extractall(path=tmpDirPath)
 
-  print("Removing Java archive...")
+  print("Removing JDK archive...")
   javaArchivePath.unlink()
 
-  relativeJavaDirPath = f"jdk-{javaVersion}-jre"
-  if platform == "mac": relativeJavaDirPath = f"{relativeJavaDirPath}/Contents/Home"
-  return relativeJavaDirPath
+  relativeJavaDirPathString = f"jdk-{javaVersion}"
+  jdkDirPath = tmpDirPath.joinpath(relativeJavaDirPathString)
+  jmodsDirPath = (jdkDirPath.joinpath("jmods") if platform == "mac" else
+      jdkDirPath.joinpath("Contents", "Home", "jmods"))
+  javaTargetDirPath = ltexLsDirPath.joinpath(relativeJavaDirPathString)
+
+  print("Creating Java distribution...")
+  subprocess.run(["jlink", "--module-path", str(jmodsDirPath), "--add-modules", "java.se",
+      "--strip-debug", "--no-man-pages", "--no-header-files", "--compress=2",
+      "--output", str(javaTargetDirPath)])
+
+  print("Removing JDK directory...")
+  shutil.rmtree(jdkDirPath)
+
+  return relativeJavaDirPathString
 
 
 
