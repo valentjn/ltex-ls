@@ -290,15 +290,15 @@
             <id>ktlint</id>
             <phase>verify</phase>
             <configuration>
-            <target name="ktlint">
-              <java taskname="ktlint" dir="${project.basedir}" fork="true" failonerror="true"
-                  classpathref="maven.plugin.classpath" classname="com.pinterest.ktlint.Main">
-                <arg value="--disabled_rules=chain-wrapping,indent,range-spacing"/>
-                <arg value="--reporter=plain"/>
-                <arg value="--verbose"/>
-                <arg value="src/**/*.kt"/>
-              </java>
-            </target>
+              <target name="ktlint">
+                <java taskname="ktlint" dir="${project.basedir}" fork="true" failonerror="true"
+                    classpathref="maven.plugin.classpath" classname="com.pinterest.ktlint.Main">
+                  <arg value="--disabled_rules=chain-wrapping,indent,range-spacing"/>
+                  <arg value="--reporter=plain"/>
+                  <arg value="--verbose"/>
+                  <arg value="src/**/*.kt"/>
+                </java>
+              </target>
             </configuration>
             <goals>
               <goal>run</goal>
@@ -306,6 +306,10 @@
           </execution>
           <execution>
             <id>patch-bin-scripts</id>
+            <phase>package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
             <configuration>
               <target>
                 <chmod file="target/appassembler/bin/ltex-ls" perm="755"/>
@@ -355,10 +359,6 @@ if %ERROR_CODE% EQU 0 set ERROR_CODE=1</replacevalue>
                 </replace>
               </target>
             </configuration>
-            <phase>package</phase>
-            <goals>
-              <goal>run</goal>
-            </goals>
           </execution>
         </executions>
         <dependencies>
