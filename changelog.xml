@@ -13,6 +13,9 @@
   </properties>
   <body>
     <release version="13.1.0" date="upcoming">
+      <action type="update">
+        Refactor CLI into `ltex-cli`; `--input-documents` and `--setings-file` are deprecated and will be removed in a future release
+      </action>
       <action type="add">
         Provide ID of LanguageTool rule via diagnostics code, not as part of diagnostics message
       </action>

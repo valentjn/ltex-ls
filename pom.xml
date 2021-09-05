@@ -360,6 +360,20 @@ if %ERROR_CODE% EQU 0 set ERROR_CODE=1</replacevalue>
               </target>
             </configuration>
           </execution>
+          <execution>
+            <id>add-ltex-cli</id>
+            <phase>package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <exec executable="python">
+                  <arg value="tools/addLtexCli.py"/>
+                </exec>
+              </target>
+            </configuration>
+          </execution>
         </executions>
         <dependencies>
           <dependency>

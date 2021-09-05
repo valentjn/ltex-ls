@@ -46,7 +46,7 @@ class LtexLanguageServerLauncher : Callable<Int> {
       description = ["Keep server alive when client terminates."])
   private var endless: Boolean = false
 
-  @Option(names = ["--input-documents"], arity = "1..*", description = [
+  @Option(names = ["--input-documents"], hidden = true, arity = "1..*", description = [
     "Instead of running as server, check the documents at the paths "
     + "<inputDocuments>, print the results to standard output, and exit. "
     + "Directories are traversed recursively. "
@@ -54,7 +54,7 @@ class LtexLanguageServerLauncher : Callable<Int> {
   ])
   private var inputDocuments: List<Path>? = null
 
-  @Option(names = ["--settings-file"], description = [
+  @Option(names = ["--settings-file"], hidden = true, description = [
     "Use the settings stored in the JSON file <settingsFile> "
     + "(only relevant when using --input-documents). "
     + "The format is either nested JSON objects ({\"latex\": {\"commands\": ...}}) or "
@@ -143,6 +143,7 @@ class LtexLanguageServerLauncher : Callable<Int> {
     val inputDocuments: List<Path>? = this.inputDocuments
 
     if (inputDocuments != null) {
+      Logging.logger.warning(I18n.format("inputDocumentsAndSettingsFileAreDeprecated"))
       val nonServerChecker = NonServerChecker()
       val settingsFile: Path? = this.settingsFile
       if (settingsFile != null) nonServerChecker.loadSettings(settingsFile)
