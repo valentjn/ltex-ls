@@ -66,5 +66,5 @@ jobs:
           tag_name: "nightly"
           name: "${{ env.LTEX_LS_VERSION }}"
           prerelease:  true
-          body: "This is an unfinished nightly build. Use at your own risk."
+          body: "This is a nightly build. Use at your own risk."
           files: "target/ltex-ls-${{ env.LTEX_LS_VERSION }}.tar.gz"
