@@ -21,6 +21,8 @@ import org.bsplines.ltexls.tools.I18n
 import org.bsplines.ltexls.tools.Logging
 import org.bsplines.ltexls.tools.Tools
 import org.eclipse.lsp4j.Range
+import org.languagetool.Language
+import org.languagetool.language.LanguageIdentifier
 import org.languagetool.markup.AnnotatedText
 import org.languagetool.markup.TextPart
 import java.time.Duration
@@ -32,6 +34,8 @@ class DocumentChecker(
 ) {
   var lastCheckedDocument: LtexTextDocumentItem? = null
     private set
+
+  private val languageIdentifier = LanguageIdentifier()
 
   private fun fragmentizeDocument(
     document: LtexTextDocumentItem,
@@ -86,8 +90,20 @@ class DocumentChecker(
     rangeOffset: Int,
   ): List<LanguageToolRuleMatch> {
     val codeFragment: CodeFragment = annotatedTextFragment.codeFragment
-    val settings: Settings = codeFragment.settings
+    var settings: Settings = codeFragment.settings
+
+    if (settings.languageShortCode == "auto") {
+      val cleanText: String = this.languageIdentifier.cleanAndShortenText(
+        annotatedTextFragment.annotatedText.plainText,
+      )
+      val language: Language? = this.languageIdentifier.detectLanguage(cleanText)
+      settings = settings.copy(
+        _languageShortCode = language?.shortCodeWithCountryAndVariant ?: "en-US",
+      )
+    }
+
     this.settingsManager.settings = settings
+
     val languageToolInterface: LanguageToolInterface =
         this.settingsManager.languageToolInterface ?: run {
           Logging.logger.warning(I18n.format(

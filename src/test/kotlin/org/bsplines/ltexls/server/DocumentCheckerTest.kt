@@ -118,15 +118,28 @@ class DocumentCheckerTest {
       """
       This is an **test.**
 
-      [comment]: <> "LTeX: language=de-DE"
+      <!-- LTeX: language=de-DE -->
 
       Dies ist eine **Test**.
 
       """.trimIndent()
     )
-    val checkingResult: Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> =
-      checkDocument(document)
-    assertMatches(checkingResult.first, 8, 10, 69, 80)
+    assertMatches(checkDocument(document).first, 8, 10, 62, 73)
+  }
+
+  @Test
+  fun testLanguageDetection() {
+    val document: LtexTextDocumentItem = createDocument("markdown",
+      """
+      This is an **test.**
+
+      <!-- LTeX: language=auto -->
+
+      Dies ist eine **Test**.
+
+      """.trimIndent()
+    )
+    assertMatches(checkDocument(document).first, 8, 10, 61, 72)
   }
 
   @Test
