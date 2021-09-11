@@ -93,7 +93,7 @@ def downloadJava(tmpDirPath: pathlib.Path, ltexLsDirPath: pathlib.Path,
 
   relativeJavaDirPathString = f"jdk-{javaVersion}"
   jdkDirPath = tmpDirPath.joinpath(relativeJavaDirPathString)
-  jmodsDirPath = (jdkDirPath.joinpath("jmods") if platform == "mac" else
+  jmodsDirPath = (jdkDirPath.joinpath("jmods") if platform != "mac" else
       jdkDirPath.joinpath("Contents", "Home", "jmods"))
   javaTargetDirPath = ltexLsDirPath.joinpath(relativeJavaDirPathString)
 
