@@ -46,6 +46,9 @@
       <action type="fix">
         Fix used i18n keys removed
       </action>
+      <action type="fix">
+        Fix fallback from German to English i18n
+      </action>
       <action type="update">
         For binary archives, migrate from AdoptOpenJDK JREs to own Java runtime generated from Eclipse Adoptium JDKs
       </action>
