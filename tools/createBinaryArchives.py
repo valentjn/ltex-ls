@@ -6,6 +6,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+import json
 import pathlib
 import re
 import shutil
@@ -40,29 +41,44 @@ def createBinaryArchive(platform: str, arch: str) -> None:
 
     if platform == "windows":
       ltexLsDirPath.joinpath("bin", "ltex-ls").unlink()
-      binScriptPath = ltexLsDirPath.joinpath("bin", "ltex-ls.bat")
-      searchPattern = re.compile("^set REPO=.*$", flags=re.MULTILINE)
+      ltexLsDirPath.joinpath("bin", "ltex-cli").unlink()
+      ltexLsBinScriptPath = ltexLsDirPath.joinpath("bin", "ltex-ls.bat")
+      ltexCliBinScriptPath = ltexLsDirPath.joinpath("bin", "ltex-cli.bat")
+      binScriptJavaHomeSearchPattern = re.compile("^set REPO=.*$", flags=re.MULTILINE)
     else:
       ltexLsDirPath.joinpath("bin", "ltex-ls.bat").unlink()
-      binScriptPath = ltexLsDirPath.joinpath("bin", "ltex-ls")
-      searchPattern = re.compile("^BASEDIR=.*$", flags=re.MULTILINE)
+      ltexLsDirPath.joinpath("bin", "ltex-cli.bat").unlink()
+      ltexLsBinScriptPath = ltexLsDirPath.joinpath("bin", "ltex-ls")
+      ltexCliBinScriptPath = ltexLsDirPath.joinpath("bin", "ltex-cli")
+      binScriptJavaHomeSearchPattern = re.compile("^BASEDIR=.*$", flags=re.MULTILINE)
 
-    with open(binScriptPath, "r") as file: binScript = file.read()
+    binScriptJavaHomeInsertString = (
+        f"\r\nif not defined JAVA_HOME set JAVA_HOME=\"%BASEDIR%\\{relativeJavaDirPath}\""
+        if platform == "windows" else
+        f"\n[ -z \"$JAVA_HOME\" ] && JAVA_HOME=\"$BASEDIR\"/{relativeJavaDirPath}")
 
-    if platform == "windows":
-      insertStr = f"\r\nif not defined JAVA_HOME set JAVA_HOME=\"%BASEDIR%\\{relativeJavaDirPath}\""
-    else:
-      insertStr = f"\n[ -z \"$JAVA_HOME\" ] && JAVA_HOME=\"$BASEDIR\"/{relativeJavaDirPath}"
+    for binScriptPath in [ltexLsBinScriptPath, ltexCliBinScriptPath]:
+      with open(binScriptPath, "r") as file: binScript = file.read()
+      regexMatch = binScriptJavaHomeSearchPattern.search(binScript)
+      assert regexMatch is not None
+      binScript = (binScript[:regexMatch.end()] + binScriptJavaHomeInsertString
+          + binScript[regexMatch.end():])
+      with open(binScriptPath, "w") as file: file.write(binScript)
 
-    regexMatch = searchPattern.search(binScript)
-    assert regexMatch is not None
-    binScript = binScript[:regexMatch.end()] + insertStr + binScript[regexMatch.end():]
-    with open(binScriptPath, "w") as file: file.write(binScript)
+    print("Setting script name in .lsp-cli.json...")
+    lspCliJsonPath = ltexLsDirPath.joinpath("bin", ".lsp-cli.json")
+    with open(lspCliJsonPath, "r") as file: lspCliJson = json.load(file)
+    lspCliJson["defaultValues"]["--server-command-line"] = (
+        "ltex-ls.bat" if platform == "windows" else "./ltex-ls")
+
+    with open(lspCliJsonPath, "w") as file:
+      json.dump(lspCliJson, file, indent=2, ensure_ascii=False)
 
     ltexLsBinaryArchiveFormat = ("zip" if platform == "windows" else "gztar")
     ltexLsBinaryArchiveExtension = (".zip" if platform == "windows" else ".tar.gz")
     ltexLsBinaryArchivePath = targetDirPath.joinpath(
         f"ltex-ls-{ltexLsVersion}-{platform}-{arch}")
+
     print(f"Creating binary archive '{ltexLsBinaryArchivePath}{ltexLsBinaryArchiveExtension}'...")
     shutil.make_archive(str(ltexLsBinaryArchivePath), ltexLsBinaryArchiveFormat,
         root_dir=tmpDirPath)
