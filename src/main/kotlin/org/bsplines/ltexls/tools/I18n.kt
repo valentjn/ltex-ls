@@ -32,7 +32,7 @@ object I18n {
 
   fun setLocale(locale: Locale, log: Boolean = true) {
     if (log) Logging.logger.info(format("settingLocale", locale.language))
-    messages = ResourceBundle.getBundle("MessagesBundle", locale)
+    messages = ResourceBundle.getBundle("LtexLsMessagesBundle", locale)
   }
 
   fun format(key: String, vararg messageArguments: Any?): String {
