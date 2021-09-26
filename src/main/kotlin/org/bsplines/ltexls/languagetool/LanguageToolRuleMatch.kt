@@ -23,6 +23,7 @@ data class LanguageToolRuleMatch(
   val message: String,
   val suggestedReplacements: List<String>,
   val type: RuleMatch.Type,
+  val languageShortCode: String,
 ) {
   fun isIntersectingWithRange(range: Range, document: LtexTextDocumentItem): Boolean {
     return Tools.areRangesIntersecting(Range(
@@ -97,8 +98,16 @@ data class LanguageToolRuleMatch(
       messageBuilder.append(languageToolMessage)
       val message = messageBuilder.toString().replace(TWO_OR_MORE_SPACES_REGEX, " ").trim()
 
-      return LanguageToolRuleMatch(ruleId, sentence, fromPos, toPos, message,
-          suggestedReplacements, type)
+      return LanguageToolRuleMatch(
+        ruleId,
+        sentence,
+        fromPos,
+        toPos,
+        message,
+        suggestedReplacements,
+        type,
+        annotatedTextFragment.codeFragment.settings.languageShortCode,
+      )
     }
 
     fun isUnknownWordRule(ruleId: String?): Boolean {

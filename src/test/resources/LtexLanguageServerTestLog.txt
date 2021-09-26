@@ -635,6 +635,9 @@ Params: {
             },
             "severity": 3,
             "code": "EN_A_VS_AN",
+            "codeDescription": {
+                "href": "https://community.languagetool.org/rule/show/EN_A_VS_AN?lang=en-US"
+            },
             "source": "LTeX",
             "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
         },
@@ -651,6 +654,9 @@ Params: {
             },
             "severity": 3,
             "code": "DE_AGREEMENT",
+            "codeDescription": {
+                "href": "https://community.languagetool.org/rule/show/DE_AGREEMENT?lang=de-DE"
+            },
             "source": "LTeX",
             "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
         }
@@ -689,6 +695,9 @@ Params: {
                 "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'.",
                 "severity": 3,
                 "code": "EN_A_VS_AN",
+                "codeDescription": {
+                    "href": "https://community.languagetool.org/rule/show/EN_A_VS_AN?lang=en-US"
+                },
                 "source": "LTeX"
             }
         ],
@@ -718,6 +727,9 @@ Result: [
                 },
                 "severity": 3,
                 "code": "EN_A_VS_AN",
+                "codeDescription": {
+                    "href": "https://community.languagetool.org/rule/show/EN_A_VS_AN?lang=en-US"
+                },
                 "source": "LTeX",
                 "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
@@ -765,6 +777,9 @@ Result: [
                 },
                 "severity": 3,
                 "code": "EN_A_VS_AN",
+                "codeDescription": {
+                    "href": "https://community.languagetool.org/rule/show/EN_A_VS_AN?lang=en-US"
+                },
                 "source": "LTeX",
                 "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
@@ -801,6 +816,9 @@ Result: [
                 },
                 "severity": 3,
                 "code": "EN_A_VS_AN",
+                "codeDescription": {
+                    "href": "https://community.languagetool.org/rule/show/EN_A_VS_AN?lang=en-US"
+                },
                 "source": "LTeX",
                 "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
@@ -854,6 +872,9 @@ Params: {
                 "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'.",
                 "severity": 3,
                 "code": "EN_A_VS_AN",
+                "codeDescription": {
+                    "href": "https://community.languagetool.org/rule/show/EN_A_VS_AN?lang=en-US"
+                },
                 "source": "LTeX"
             }
         ]
@@ -880,6 +901,9 @@ Result: [
                 },
                 "severity": 3,
                 "code": "EN_A_VS_AN",
+                "codeDescription": {
+                    "href": "https://community.languagetool.org/rule/show/EN_A_VS_AN?lang=en-US"
+                },
                 "source": "LTeX",
                 "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
@@ -927,6 +951,9 @@ Result: [
                 },
                 "severity": 3,
                 "code": "EN_A_VS_AN",
+                "codeDescription": {
+                    "href": "https://community.languagetool.org/rule/show/EN_A_VS_AN?lang=en-US"
+                },
                 "source": "LTeX",
                 "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
@@ -963,6 +990,9 @@ Result: [
                 },
                 "severity": 3,
                 "code": "EN_A_VS_AN",
+                "codeDescription": {
+                    "href": "https://community.languagetool.org/rule/show/EN_A_VS_AN?lang=en-US"
+                },
                 "source": "LTeX",
                 "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
@@ -1016,6 +1046,9 @@ Params: {
                 "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'.",
                 "severity": 3,
                 "code": "EN_A_VS_AN",
+                "codeDescription": {
+                    "href": "https://community.languagetool.org/rule/show/EN_A_VS_AN?lang=en-US"
+                },
                 "source": "LTeX"
             }
         ]
@@ -1042,6 +1075,9 @@ Result: [
                 },
                 "severity": 3,
                 "code": "EN_A_VS_AN",
+                "codeDescription": {
+                    "href": "https://community.languagetool.org/rule/show/EN_A_VS_AN?lang=en-US"
+                },
                 "source": "LTeX",
                 "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
@@ -1089,6 +1125,9 @@ Result: [
                 },
                 "severity": 3,
                 "code": "EN_A_VS_AN",
+                "codeDescription": {
+                    "href": "https://community.languagetool.org/rule/show/EN_A_VS_AN?lang=en-US"
+                },
                 "source": "LTeX",
                 "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
@@ -1125,6 +1164,9 @@ Result: [
                 },
                 "severity": 3,
                 "code": "EN_A_VS_AN",
+                "codeDescription": {
+                    "href": "https://community.languagetool.org/rule/show/EN_A_VS_AN?lang=en-US"
+                },
                 "source": "LTeX",
                 "message": "Use 'a' instead of 'an' if the following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'."
             }
@@ -1297,6 +1339,9 @@ Params: {
             },
             "severity": 3,
             "code": "DE_AGREEMENT",
+            "codeDescription": {
+                "href": "https://community.languagetool.org/rule/show/DE_AGREEMENT?lang=de-DE"
+            },
             "source": "LTeX",
             "message": "Möglicherweise fehlende grammatische Übereinstimmung des Genus (männlich, weiblich, sächlich - Beispiel: 'der Fahrrad' statt 'das Fahrrad')."
         }

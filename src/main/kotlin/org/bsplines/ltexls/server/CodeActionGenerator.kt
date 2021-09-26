@@ -21,6 +21,7 @@ import org.eclipse.lsp4j.CodeActionKind
 import org.eclipse.lsp4j.CodeActionParams
 import org.eclipse.lsp4j.Command
 import org.eclipse.lsp4j.Diagnostic
+import org.eclipse.lsp4j.DiagnosticCodeDescription
 import org.eclipse.lsp4j.DiagnosticSeverity
 import org.eclipse.lsp4j.Range
 import org.eclipse.lsp4j.ResourceOperation
@@ -29,6 +30,7 @@ import org.eclipse.lsp4j.TextEdit
 import org.eclipse.lsp4j.VersionedTextDocumentIdentifier
 import org.eclipse.lsp4j.WorkspaceEdit
 import org.eclipse.lsp4j.jsonrpc.messages.Either
+import java.net.URLEncoder
 
 class CodeActionGenerator(
   val settingsManager: SettingsManager,
@@ -48,6 +50,12 @@ class CodeActionGenerator(
     diagnostic.source = "LTeX"
     diagnostic.message = match.message.replace(SUGGESTION_REGEX, "'$1'")
     diagnostic.code = Either.forLeft(match.ruleId)
+
+    val urlBuilder = StringBuilder("https://community.languagetool.org/rule/show/")
+    urlBuilder.append(URLEncoder.encode(match.ruleId, "utf-8"))
+    urlBuilder.append("?lang=")
+    urlBuilder.append(URLEncoder.encode(match.languageShortCode, "utf-8"))
+    diagnostic.codeDescription = DiagnosticCodeDescription(urlBuilder.toString())
 
     return diagnostic
   }

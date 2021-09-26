@@ -22,6 +22,9 @@
       <action type="add">
         Provide ID of LanguageTool rule via diagnostics code, not as part of diagnostics message
       </action>
+      <action type="add">
+        Link diagnostics to LanguageTool website with more information
+      </action>
       <action type="add" issue="vscode-ltex#391">
         Add support for the `main` option of the babel package (LaTeX)
       </action>
