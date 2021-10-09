@@ -14,6 +14,9 @@
   <body>
     <release version="13.1.0" date="upcoming">
       <action type="update">
+        Update LanguageTool to 5.5 (see [LT 5.5 release notes](https://github.com/languagetool-org/languagetool/blob/v5.5/languagetool-standalone/CHANGES.md#55-2021-10-02))
+      </action>
+      <action type="update">
         Refactor CLI into `ltex-cli`; `--input-documents` and `--setings-file` are deprecated and will be removed in a future release
       </action>
       <action type="add" issue="#103">

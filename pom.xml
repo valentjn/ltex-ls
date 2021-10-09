@@ -50,13 +50,13 @@
     <dependency>
       <groupId>org.languagetool</groupId>
       <artifactId>languagetool-core</artifactId>
-      <version>5.4</version>
+      <version>5.5</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.languagetool</groupId>
       <artifactId>language-all</artifactId>
-      <version>5.4</version>
+      <version>5.5</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -139,7 +139,7 @@
     <dependency>
       <groupId>org.languagetool</groupId>
       <artifactId>languagetool-server</artifactId>
-      <version>5.4</version>
+      <version>5.5</version>
       <exclusions>
         <exclusion>
           <artifactId>logback-classic</artifactId>
