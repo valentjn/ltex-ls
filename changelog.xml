@@ -12,7 +12,7 @@
     <author>Julian Valentin, LTeX Development Community</author>
   </properties>
   <body>
-    <release version="14.0.0" date="upcoming">
+    <release version="14.0.0" date="2021-10-14">
       <action type="update">
         Update LanguageTool to 5.5 (see [LT 5.5 release notes](https://github.com/languagetool-org/languagetool/blob/v5.5/languagetool-standalone/CHANGES.md#55-2021-10-02))
       </action>
