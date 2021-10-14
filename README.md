@@ -38,6 +38,7 @@ Find more information about LT<sub>E</sub>X at the [website of vscode-ltex](http
 - **Offline checking:** Does not upload anything to the internet
 - Supports **over 20 languages:** English, French, German, Dutch, Chinese, Russian, etc.
 - **Replacement suggestions** via quick fixes
+- **Completion support** for English and German
 - **User dictionaries**
 - **Multilingual support** with babel commands or magic comments
 - Possibility to use **external LanguageTool servers**

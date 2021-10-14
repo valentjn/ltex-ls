@@ -45,7 +45,7 @@ jobs:
         run: "mvn -B -e package"
 
       - name: "Create Binary Archives"
-        run: "python tools/createBinaryArchives.py"
+        run: "python -u tools/createBinaryArchives.py"
 
       - name: "Delete Old Nightly Releases"
         uses: "dev-drprasad/delete-older-releases@v0.2.0"

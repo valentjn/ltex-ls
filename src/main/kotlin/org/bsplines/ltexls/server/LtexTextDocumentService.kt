@@ -60,7 +60,18 @@ class LtexTextDocumentService(
 
   override fun completion(params: CompletionParams):
         CompletableFuture<Either<List<CompletionItem>, CompletionList>> {
-    return CompletableFuture.completedFuture(Either.forLeft(emptyList()))
+    val uri: String = params.textDocument?.uri ?:
+        return CompletableFuture.completedFuture(Either.forLeft(emptyList()))
+    val document: LtexTextDocumentItem = getDocument(uri) ?: run {
+      Logging.logger.warning(I18n.format("couldNotFindDocumentWithUri", uri))
+      return CompletableFuture.completedFuture(Either.forLeft(emptyList()))
+    }
+
+    return CompletableFuture.completedFuture(
+      Either.forRight(
+        languageServer.completionListProvider.createCompletionList(document, params.position)
+      )
+    )
   }
 
   override fun resolveCompletionItem(completionItem: CompletionItem):

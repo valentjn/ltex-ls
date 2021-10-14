@@ -38,6 +38,14 @@ jobs:
         with:
           java-version: "11.0.9"
 
+      - name: "Set up Python"
+        uses: "actions/setup-python@v2"
+        with:
+          python-version: "3.9.0"
+
+      - name: "Create Completion Lists"
+        run: "python -u tools/createCompletionLists.py"
+
       - name: "Build LTeX LS"
         run: "mvn -B -e verify"
 
@@ -58,6 +66,9 @@ jobs:
         uses: "actions/setup-python@v2"
         with:
           python-version: "3.9.0"
+
+      - name: "Create Completion Lists"
+        run: "python -u tools/createCompletionLists.py"
 
       - name: "Build LTeX LS"
         run: "mvn -B -e verify"
@@ -116,6 +127,14 @@ jobs:
         with:
           java-version: "11.0.9"
 
+      - name: "Set up Python"
+        uses: "actions/setup-python@v2"
+        with:
+          python-version: "3.9.0"
+
+      - name: "Create Completion Lists"
+        run: "python -u tools/createCompletionLists.py"
+
       - name: "Build LTeX LS"
         run: "mvn -B -e verify"
 
@@ -166,11 +185,14 @@ jobs:
       - name: "Set LTEX_LS_CHANGELOG"
         run: "if [ \"$LTEX_LS_IS_PRERELEASE\" = \"false\" ]; then echo \"LTEX_LS_CHANGELOG<<EOF\" >> $GITHUB_ENV; python -u tools/convertChangelog.py --xml-file changelog.xml --version latest >> $GITHUB_ENV; echo \"EOF\" >> $GITHUB_ENV; else echo \"LTEX_LS_CHANGELOG=This is a pre-release. Use at your own risk.\" >> $GITHUB_ENV; fi"
 
+      - name: "Create Completion Lists"
+        run: "python -u tools/createCompletionLists.py"
+
       - name: "Build LTeX LS"
         run: "mvn -B -e package"
 
       - name: "Create Binary Archives"
-        run: "python tools/createBinaryArchives.py"
+        run: "python -u tools/createBinaryArchives.py"
 
       - name: "Create GitHub Release"
         uses: "softprops/action-gh-release@v0.1.8"

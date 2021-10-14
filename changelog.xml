@@ -12,6 +12,11 @@
     <author>Julian Valentin, LTeX Development Community</author>
   </properties>
   <body>
+    <release version="14.1.0" date="upcoming">
+      <action type="add" issue="vscode-ltex#409">
+        Add support for completion requests for English and German
+      </action>
+    </release>
     <release version="14.0.0" date="2021-10-14">
       <action type="update">
         Update LanguageTool to 5.5 (see [LT 5.5 release notes](https://github.com/languagetool-org/languagetool/blob/v5.5/languagetool-standalone/CHANGES.md#55-2021-10-02))

@@ -271,6 +271,7 @@ Params: {
 Result: {
     "capabilities": {
         "textDocumentSync": 1,
+        "completionProvider": {},
         "codeActionProvider": {
             "codeActionKinds": [
                 "quickfix.ltex.acceptSuggestions"

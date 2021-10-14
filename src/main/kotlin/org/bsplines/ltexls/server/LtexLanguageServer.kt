@@ -15,12 +15,14 @@ import org.bsplines.ltexls.tools.I18n
 import org.bsplines.ltexls.tools.Logging
 import org.eclipse.lsp4j.ClientCapabilities
 import org.eclipse.lsp4j.CodeActionOptions
+import org.eclipse.lsp4j.CompletionOptions
 import org.eclipse.lsp4j.ExecuteCommandOptions
 import org.eclipse.lsp4j.InitializeParams
 import org.eclipse.lsp4j.InitializeResult
 import org.eclipse.lsp4j.ServerCapabilities
 import org.eclipse.lsp4j.TextDocumentSyncKind
 import org.eclipse.lsp4j.WindowClientCapabilities
+import org.eclipse.lsp4j.jsonrpc.messages.Either
 import org.eclipse.lsp4j.services.LanguageClient
 import org.eclipse.lsp4j.services.LanguageClientAware
 import org.eclipse.lsp4j.services.LanguageServer
@@ -39,6 +41,7 @@ class LtexLanguageServer : LanguageServer, LanguageClientAware {
   val settingsManager = SettingsManager()
   val documentChecker = DocumentChecker(this.settingsManager)
   val codeActionProvider = CodeActionProvider(this.settingsManager)
+  val completionListProvider = CompletionListProvider(this.settingsManager)
   val ltexTextDocumentService = LtexTextDocumentService(this)
   val ltexWorkspaceService = LtexWorkspaceService(this)
   val startupInstant: Instant = Instant.now()
@@ -93,6 +96,7 @@ class LtexLanguageServer : LanguageServer, LanguageClientAware {
 
     serverCapabilities.codeActionProvider =
         Either.forRight(CodeActionOptions(CodeActionProvider.getCodeActionKinds()))
+    serverCapabilities.completionProvider = CompletionOptions()
     serverCapabilities.executeCommandProvider =
         ExecuteCommandOptions(LtexWorkspaceService.getCommandNames())
     serverCapabilities.textDocumentSync = Either.forLeft(TextDocumentSyncKind.Full)
