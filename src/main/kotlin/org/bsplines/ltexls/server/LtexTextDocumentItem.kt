@@ -292,7 +292,7 @@ class LtexTextDocumentItem(
     val diagnostics = ArrayList<Diagnostic>()
 
     for (match: LanguageToolRuleMatch in matches) {
-      diagnostics.add(this.languageServer.codeActionGenerator.createDiagnostic(
+      diagnostics.add(this.languageServer.codeActionProvider.createDiagnostic(
           match, this))
     }
 

@@ -38,7 +38,7 @@ class LtexLanguageServer : LanguageServer, LanguageClientAware {
   val singleThreadExecutorService: ExecutorService = Executors.newSingleThreadScheduledExecutor()
   val settingsManager = SettingsManager()
   val documentChecker = DocumentChecker(this.settingsManager)
-  val codeActionGenerator = CodeActionGenerator(this.settingsManager)
+  val codeActionProvider = CodeActionProvider(this.settingsManager)
   val ltexTextDocumentService = LtexTextDocumentService(this)
   val ltexWorkspaceService = LtexWorkspaceService(this)
   val startupInstant: Instant = Instant.now()
@@ -90,13 +90,12 @@ class LtexLanguageServer : LanguageServer, LanguageClientAware {
     if (localeLanguage != null) I18n.setLocale(Locale.forLanguageTag(localeLanguage))
 
     val serverCapabilities = ServerCapabilities()
-    serverCapabilities.setTextDocumentSync(TextDocumentSyncKind.Full)
-    serverCapabilities.setCodeActionProvider(
-        CodeActionOptions(CodeActionGenerator.getCodeActionKinds()))
 
-    val commandNames = ArrayList<String>()
-    commandNames.addAll(LtexWorkspaceService.getCommandNames())
-    serverCapabilities.executeCommandProvider = ExecuteCommandOptions(commandNames)
+    serverCapabilities.codeActionProvider =
+        Either.forRight(CodeActionOptions(CodeActionProvider.getCodeActionKinds()))
+    serverCapabilities.executeCommandProvider =
+        ExecuteCommandOptions(LtexWorkspaceService.getCommandNames())
+    serverCapabilities.textDocumentSync = Either.forLeft(TextDocumentSyncKind.Full)
 
     return CompletableFuture.completedFuture(InitializeResult(serverCapabilities))
   }

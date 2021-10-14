@@ -172,9 +172,9 @@ class DocumentCheckerTest {
       CodeActionContext(emptyList())
     )
     val settingsManager = SettingsManager()
-    val codeActionGenerator = CodeActionGenerator(settingsManager)
+    val codeActionProvider = CodeActionProvider(settingsManager)
     val result: List<Either<Command, CodeAction>> =
-        codeActionGenerator.generate(params, document, checkingResult)
+        codeActionProvider.generate(params, document, checkingResult)
     assertEquals(4, result.size)
   }
 

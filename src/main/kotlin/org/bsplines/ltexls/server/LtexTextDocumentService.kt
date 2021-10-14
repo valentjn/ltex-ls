@@ -241,7 +241,7 @@ class LtexTextDocumentService(
         val checkingResult: Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> =
             document.checkWithCache()
         val codeActions: List<Either<Command, CodeAction>> =
-            this.languageServer.codeActionGenerator.generate(
+            this.languageServer.codeActionProvider.generate(
               params, document, checkingResult)
         document.raiseExceptionIfCanceled()
         codeActions

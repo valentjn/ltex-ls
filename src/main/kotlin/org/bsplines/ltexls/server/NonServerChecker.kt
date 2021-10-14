@@ -131,7 +131,7 @@ class NonServerChecker {
       val fromPos: Int = match.fromPos
       val toPos: Int = match.toPos
       val fromPosition: Position = document.convertPosition(fromPos)
-      val message: String = match.message.replace(CodeActionGenerator.SUGGESTION_REGEX, "'$1'")
+      val message: String = match.message.replace(CodeActionProvider.SUGGESTION_REGEX, "'$1'")
 
       var color: Color = when (match.type) {
         RuleMatch.Type.UnknownWord -> Color.RED

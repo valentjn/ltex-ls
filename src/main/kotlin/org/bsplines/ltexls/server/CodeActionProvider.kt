@@ -32,7 +32,7 @@ import org.eclipse.lsp4j.WorkspaceEdit
 import org.eclipse.lsp4j.jsonrpc.messages.Either
 import java.net.URLEncoder
 
-class CodeActionGenerator(
+class CodeActionProvider(
   val settingsManager: SettingsManager,
 ) {
   fun createDiagnostic(match: LanguageToolRuleMatch, document: LtexTextDocumentItem): Diagnostic {
