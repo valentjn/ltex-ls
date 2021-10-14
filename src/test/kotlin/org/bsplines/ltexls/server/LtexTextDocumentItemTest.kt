@@ -53,7 +53,7 @@ class LtexTextDocumentItemTest {
   fun testApplyIncrementalTextChangeEvents() {
     val languageServer = LtexLanguageServer()
     val document = LtexTextDocumentItem(
-      languageServer, "untitled:text.md", "markdown", 1, "abcdef"
+      languageServer, "untitled:test.md", "markdown", 1, "abcdef"
     )
     val pastInstant: Instant = Instant.now().minus(Duration.ofSeconds(10))
 
@@ -100,7 +100,7 @@ class LtexTextDocumentItemTest {
   @Test
   fun testApplyFullTextChangeEvents() {
     val languageServer = LtexLanguageServer()
-    val document = LtexTextDocumentItem(languageServer, "untitled:text.md", "markdown", 1, "abcdef")
+    val document = LtexTextDocumentItem(languageServer, "untitled:test.md", "markdown", 1, "abcdef")
     val pastInstant: Instant = Instant.now().minus(Duration.ofSeconds(10))
 
     document.lastCaretChangeInstant = pastInstant
@@ -138,7 +138,7 @@ class LtexTextDocumentItemTest {
     val languageServer = LtexLanguageServer()
     val originalDocument = LtexTextDocumentItem(
       languageServer,
-      "untitled:text.md",
+      "untitled:test.md",
       "markdown",
       1,
       "abc",
@@ -148,7 +148,7 @@ class LtexTextDocumentItemTest {
     assertEquals(languageServer, originalDocument.languageServer)
 
     run {
-      val document = LtexTextDocumentItem(languageServer, "untitled:text.md", "markdown", 1, "abc")
+      val document = LtexTextDocumentItem(languageServer, "untitled:test.md", "markdown", 1, "abc")
       document.text = "foobar"
       assertEquals("foobar", document.text)
       assertNotEquals(document, originalDocument)
@@ -156,7 +156,7 @@ class LtexTextDocumentItemTest {
     }
 
     run {
-      val document = LtexTextDocumentItem(languageServer, "untitled:text.md", "markdown", 1, "abc")
+      val document = LtexTextDocumentItem(languageServer, "untitled:test.md", "markdown", 1, "abc")
       document.lastCaretChangeInstant = originalDocument.lastCaretChangeInstant
       document.caretPosition = Position(13, 37)
       assertEquals(Position(13, 37), document.caretPosition)
@@ -169,7 +169,7 @@ class LtexTextDocumentItemTest {
     }
 
     run {
-      val document = LtexTextDocumentItem(languageServer, "untitled:text.md", "markdown", 1, "abc")
+      val document = LtexTextDocumentItem(languageServer, "untitled:test.md", "markdown", 1, "abc")
       val pastInstant: Instant = Instant.now().minus(Duration.ofSeconds(10))
       document.lastCaretChangeInstant = pastInstant
       assertEquals(pastInstant, document.lastCaretChangeInstant)

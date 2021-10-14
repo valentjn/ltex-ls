@@ -21,7 +21,7 @@ class DelayedDiagnosticsPublisherRunnableTest {
 
     val document = LtexTextDocumentItem(
       languageServer,
-      "untitled:text.md",
+      "untitled:test.md",
       "markdown",
       1,
       "This is an test.\n",
@@ -37,7 +37,7 @@ class DelayedDiagnosticsPublisherRunnableTest {
       publishDiagnosticsParams: PublishDiagnosticsParams in
       languageClient.publishDiagnosticsParamsList
     ) {
-      assertEquals("untitled:text.md", publishDiagnosticsParams.uri)
+      assertEquals("untitled:test.md", publishDiagnosticsParams.uri)
       assertEquals(1, publishDiagnosticsParams.diagnostics.size)
     }
   }
