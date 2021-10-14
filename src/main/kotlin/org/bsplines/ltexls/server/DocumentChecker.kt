@@ -97,9 +97,9 @@ class DocumentChecker(
         annotatedTextFragment.annotatedText.plainText,
       )
       val language: Language? = this.languageIdentifier.detectLanguage(cleanText)
-      settings = settings.copy(
-        _languageShortCode = language?.shortCodeWithCountryAndVariant ?: "en-US",
-      )
+      val languageShortCode: String = language?.shortCodeWithCountryAndVariant ?: "en-US"
+      annotatedTextFragment.codeFragment.languageShortCode = languageShortCode
+      settings = settings.copy(_languageShortCode = languageShortCode)
     }
 
     this.settingsManager.settings = settings

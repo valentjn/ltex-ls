@@ -106,7 +106,7 @@ data class LanguageToolRuleMatch(
         message,
         suggestedReplacements,
         type,
-        annotatedTextFragment.codeFragment.settings.languageShortCode,
+        annotatedTextFragment.codeFragment.languageShortCode,
       )
     }
 
