@@ -10,11 +10,9 @@ package org.bsplines.ltexls.parsing.bibtex
 import org.bsplines.ltexls.parsing.CodeFragment
 import org.bsplines.ltexls.parsing.CodeFragmentizer
 import org.bsplines.ltexls.settings.Settings
-import org.junit.platform.suite.api.IncludeEngines
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@IncludeEngines("junit-jupiter")
 class BibtexFragmentizerTest {
   @Test
   fun testFragmentizer() {

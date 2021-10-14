@@ -7,13 +7,11 @@
 
 package org.bsplines.ltexls.tools
 
-import org.junit.platform.suite.api.IncludeEngines
 import java.util.concurrent.CancellationException
 import java.util.concurrent.ExecutionException
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
-@IncludeEngines("junit-jupiter")
 class ToolsTest {
   @Test
   fun testRethrowCancellationException() {

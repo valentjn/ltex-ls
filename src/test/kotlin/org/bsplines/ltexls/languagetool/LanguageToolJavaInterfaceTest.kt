@@ -13,12 +13,10 @@ import org.bsplines.ltexls.server.DocumentCheckerTest
 import org.bsplines.ltexls.server.LtexTextDocumentItem
 import org.bsplines.ltexls.settings.Settings
 import org.bsplines.ltexls.settings.SettingsManager
-import org.junit.platform.suite.api.IncludeEngines
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
-@IncludeEngines("junit-jupiter")
 class LanguageToolJavaInterfaceTest {
   @Test
   fun testCheck() {

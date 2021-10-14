@@ -8,14 +8,12 @@
 package org.bsplines.ltexls.parsing.markdown
 
 import org.bsplines.ltexls.parsing.DummyGenerator
-import org.junit.platform.suite.api.IncludeEngines
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
-@IncludeEngines("junit-jupiter")
 class MarkdownNodeSignatureTest {
   @Test
   fun testProperties() {

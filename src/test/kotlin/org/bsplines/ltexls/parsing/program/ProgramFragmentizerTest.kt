@@ -8,10 +8,8 @@
 package org.bsplines.ltexls.parsing.program
 
 import org.bsplines.ltexls.parsing.restructuredtext.RestructuredtextFragmentizerTest
-import org.junit.platform.suite.api.IncludeEngines
 import kotlin.test.Test
 
-@IncludeEngines("junit-jupiter")
 class ProgramFragmentizerTest {
   @Test
   fun testJava() {

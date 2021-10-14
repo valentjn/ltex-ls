@@ -9,10 +9,8 @@ package org.bsplines.ltexls.parsing.markdown
 
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilderTest
 import org.bsplines.ltexls.settings.Settings
-import org.junit.platform.suite.api.IncludeEngines
 import kotlin.test.Test
 
-@IncludeEngines("junit-jupiter")
 class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown") {
   @Test
   fun testBasicMarkdown() {

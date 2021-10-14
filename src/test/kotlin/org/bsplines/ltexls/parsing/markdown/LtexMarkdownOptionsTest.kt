@@ -8,12 +8,10 @@
 package org.bsplines.ltexls.parsing.markdown
 
 import com.vladsch.flexmark.util.data.MutableDataSet
-import org.junit.platform.suite.api.IncludeEngines
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-@IncludeEngines("junit-jupiter")
 class LtexMarkdownOptionsTest {
   @Test
   fun testConstructor() {

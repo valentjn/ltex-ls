@@ -11,7 +11,6 @@ import org.bsplines.ltexls.tools.Tools
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
-import org.junit.platform.suite.api.IncludeEngines
 import java.io.InputStream
 import java.io.OutputStream
 import java.io.PipedInputStream
@@ -19,7 +18,6 @@ import java.io.PipedOutputStream
 import java.util.concurrent.ExecutionException
 import kotlin.test.Test
 
-@IncludeEngines("junit-jupiter")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LtexLanguageServerLauncherStandardStreamTest {
   @Suppress("UnusedPrivateMember")

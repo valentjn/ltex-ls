@@ -7,12 +7,10 @@
 
 package org.bsplines.ltexls.settings
 
-import org.junit.platform.suite.api.IncludeEngines
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-@IncludeEngines("junit-jupiter")
 class HiddenFalsePositiveTest {
   @Test
   fun test() {

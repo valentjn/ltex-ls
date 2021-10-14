@@ -9,12 +9,10 @@ package org.bsplines.ltexls.parsing.plaintext
 
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder
 import org.bsplines.ltexls.settings.Settings
-import org.junit.platform.suite.api.IncludeEngines
 import org.languagetool.markup.AnnotatedText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@IncludeEngines("junit-jupiter")
 class PlaintextAnnotatedTextBuilderTest {
   @Test
   fun test() {

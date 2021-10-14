@@ -22,13 +22,11 @@ import org.eclipse.lsp4j.Position
 import org.eclipse.lsp4j.Range
 import org.eclipse.lsp4j.TextDocumentIdentifier
 import org.eclipse.lsp4j.jsonrpc.messages.Either
-import org.junit.platform.suite.api.IncludeEngines
 import java.util.logging.Level
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-@IncludeEngines("junit-jupiter")
 class DocumentCheckerTest {
   @Test
   @Suppress("LongMethod")

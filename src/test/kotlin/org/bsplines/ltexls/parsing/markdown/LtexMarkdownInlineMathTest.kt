@@ -8,12 +8,10 @@
 package org.bsplines.ltexls.parsing.markdown
 
 import com.vladsch.flexmark.util.sequence.BasedSequence
-import org.junit.platform.suite.api.IncludeEngines
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-@IncludeEngines("junit-jupiter")
 class LtexMarkdownInlineMathTest {
   @Test
   fun testConstructors() {

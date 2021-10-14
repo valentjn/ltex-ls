@@ -10,7 +10,6 @@ package org.bsplines.ltexls.server
 import org.eclipse.lsp4j.Position
 import org.eclipse.lsp4j.Range
 import org.eclipse.lsp4j.TextDocumentContentChangeEvent
-import org.junit.platform.suite.api.IncludeEngines
 import java.time.Duration
 import java.time.Instant
 import kotlin.test.Test
@@ -19,7 +18,6 @@ import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
-@IncludeEngines("junit-jupiter")
 class LtexTextDocumentItemTest {
   @Test
   fun testConvertPosition() {

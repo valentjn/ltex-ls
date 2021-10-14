@@ -8,11 +8,9 @@
 package org.bsplines.ltexls.parsing
 
 import org.bsplines.ltexls.settings.Settings
-import org.junit.platform.suite.api.IncludeEngines
 import org.languagetool.markup.AnnotatedText
 import kotlin.test.assertEquals
 
-@IncludeEngines("junit-jupiter")
 open class CodeAnnotatedTextBuilderTest(
   val codeLanguageId: String,
 ) {

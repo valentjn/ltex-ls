@@ -10,14 +10,12 @@ package org.bsplines.ltexls.settings
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import org.eclipse.lsp4j.DiagnosticSeverity
-import org.junit.platform.suite.api.IncludeEngines
 import java.util.logging.Level
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
-@IncludeEngines("junit-jupiter")
 class SettingsTest {
   @Test
   @Suppress("LongMethod")

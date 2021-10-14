@@ -15,14 +15,12 @@ import org.eclipse.lsp4j.DidChangeConfigurationParams
 import org.eclipse.lsp4j.DidChangeWatchedFilesParams
 import org.eclipse.lsp4j.ExecuteCommandParams
 import org.eclipse.lsp4j.WorkspaceSymbolParams
-import org.junit.platform.suite.api.IncludeEngines
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-@IncludeEngines("junit-jupiter")
 class LtexWorkspaceServiceTest {
   @Test
   fun testMiscellaneous() {

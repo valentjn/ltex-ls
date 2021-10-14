@@ -10,12 +10,10 @@ package org.bsplines.ltexls.tools
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import org.junit.platform.suite.api.IncludeEngines
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-@IncludeEngines("junit-jupiter")
 class VersionProviderTest {
   @Test
   fun testVersion() {

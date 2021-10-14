@@ -11,7 +11,6 @@ import org.bsplines.ltexls.tools.Tools
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
-import org.junit.platform.suite.api.IncludeEngines
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -21,7 +20,6 @@ import java.util.concurrent.ExecutionException
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@IncludeEngines("junit-jupiter")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LtexLanguageServerLauncherTcpSocketTest {
   private var socket: Socket? = null

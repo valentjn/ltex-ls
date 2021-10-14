@@ -12,14 +12,12 @@ import org.bsplines.ltexls.settings.SettingsManager
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.TestInstance
-import org.junit.platform.suite.api.IncludeEngines
 import org.languagetool.server.HTTPServer
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-@IncludeEngines("junit-jupiter")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LanguageToolHttpInterfaceTest {
   private var serverThread: Thread? = null

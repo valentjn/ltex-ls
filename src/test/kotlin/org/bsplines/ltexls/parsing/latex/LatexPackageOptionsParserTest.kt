@@ -7,11 +7,9 @@
 
 package org.bsplines.ltexls.parsing.latex
 
-import org.junit.platform.suite.api.IncludeEngines
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@IncludeEngines("junit-jupiter")
 class LatexPackageOptionsParserTest {
   @Test
   fun testParse() {

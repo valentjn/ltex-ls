@@ -7,12 +7,10 @@
 
 package org.bsplines.ltexls.tools
 
-import org.junit.platform.suite.api.IncludeEngines
 import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
-@IncludeEngines("junit-jupiter")
 class I18nTest {
   @Test
   fun testFormat() {

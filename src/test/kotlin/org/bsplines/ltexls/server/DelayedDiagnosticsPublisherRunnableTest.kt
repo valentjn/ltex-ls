@@ -9,11 +9,9 @@ package org.bsplines.ltexls.server
 
 import org.bsplines.ltexls.client.MockLtexLanguageClient
 import org.eclipse.lsp4j.PublishDiagnosticsParams
-import org.junit.platform.suite.api.IncludeEngines
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-@IncludeEngines("junit-jupiter")
 class DelayedDiagnosticsPublisherRunnableTest {
   @Test
   fun testRun() {

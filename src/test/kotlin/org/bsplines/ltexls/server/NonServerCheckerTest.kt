@@ -11,7 +11,6 @@ import org.bsplines.ltexls.LtexLanguageServerLauncherTest
 import org.bsplines.ltexls.tools.FileIo
 import org.bsplines.ltexls.tools.I18n
 import org.bsplines.ltexls.tools.Logging
-import org.junit.platform.suite.api.IncludeEngines
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
@@ -19,7 +18,6 @@ import kotlin.test.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
-@IncludeEngines("junit-jupiter")
 class NonServerCheckerTest {
   @Test
   fun testCheck() {

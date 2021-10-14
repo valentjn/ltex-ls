@@ -13,7 +13,6 @@ import com.google.gson.JsonParser
 import org.bsplines.ltexls.tools.FileIo
 import org.bsplines.ltexls.tools.I18n
 import org.bsplines.ltexls.tools.Logging
-import org.junit.platform.suite.api.IncludeEngines
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -25,7 +24,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-@IncludeEngines("junit-jupiter")
 class LtexLanguageServerLauncherTest {
   @Test
   fun testHelp() {

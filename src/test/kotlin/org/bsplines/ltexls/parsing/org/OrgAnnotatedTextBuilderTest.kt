@@ -8,10 +8,8 @@
 package org.bsplines.ltexls.parsing.org
 
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilderTest
-import org.junit.platform.suite.api.IncludeEngines
 import kotlin.test.Test
 
-@IncludeEngines("junit-jupiter")
 class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
   @Test
   fun testHeadlinesAndSections() {

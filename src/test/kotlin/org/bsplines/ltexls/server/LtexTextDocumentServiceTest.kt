@@ -28,10 +28,8 @@ import org.eclipse.lsp4j.SignatureHelpParams
 import org.eclipse.lsp4j.TextDocumentContentChangeEvent
 import org.eclipse.lsp4j.TextDocumentItem
 import org.eclipse.lsp4j.VersionedTextDocumentIdentifier
-import org.junit.platform.suite.api.IncludeEngines
 import kotlin.test.Test
 
-@IncludeEngines("junit-jupiter")
 class LtexTextDocumentServiceTest {
   @Test
   fun test() {
