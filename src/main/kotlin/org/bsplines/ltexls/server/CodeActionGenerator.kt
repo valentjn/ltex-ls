@@ -172,7 +172,7 @@ class CodeActionGenerator(
 
       val annotatedTextFragment: AnnotatedTextFragment = annotatedTextFragments[fragmentIndex]
       val codeFragment: CodeFragment = annotatedTextFragment.codeFragment
-      val language: String = codeFragment.settings.languageShortCode
+      val language: String = codeFragment.languageShortCode
       val offset: Int = codeFragment.fromPos
       val word: String = annotatedTextFragment.getSubstringOfPlainText(
           match.fromPos - offset, match.toPos - offset)
@@ -229,7 +229,7 @@ class CodeActionGenerator(
 
         val annotatedTextFragment: AnnotatedTextFragment = annotatedTextFragments[fragmentIndex]
         val codeFragment: CodeFragment = annotatedTextFragment.codeFragment
-        val language: String = codeFragment.settings.languageShortCode
+        val language: String = codeFragment.languageShortCode
 
         val sentencePatternStringBuilder = StringBuilder()
         var lastEnd = 0
@@ -299,7 +299,7 @@ class CodeActionGenerator(
         }
 
         val annotatedTextFragment: AnnotatedTextFragment = annotatedTextFragments[fragmentIndex]
-        val language: String = annotatedTextFragment.codeFragment.settings.languageShortCode
+        val language: String = annotatedTextFragment.codeFragment.languageShortCode
         addToMap(language, ruleId, ruleIdsMap, ruleIdsJsonObject)
       }
 
