@@ -143,6 +143,7 @@ class LtexLanguageServerLauncher : Callable<Int> {
     val inputDocuments: List<Path>? = this.inputDocuments
 
     if (inputDocuments != null) {
+      // deprecated in 14.0.0
       Logging.logger.warning(I18n.format("inputDocumentsAndSettingsFileAreDeprecated"))
       val nonServerChecker = NonServerChecker()
       val settingsFile: Path? = this.settingsFile
