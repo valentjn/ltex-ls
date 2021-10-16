@@ -127,21 +127,23 @@ class CompletionListProvider(
   }
 
   private fun getFullCompletionList(languageShortCode: String): List<String> {
-    var fullCompletionList: List<String>? = fullCompletionListMap[languageShortCode]
-    if (fullCompletionList != null) return fullCompletionList
+    val fullCompletionList: List<String> = fullCompletionListMap[languageShortCode] ?: run {
+      if (LANGUAGE_SHORT_CODE_REGEX.matches(languageShortCode)) {
+        val completionListText: String =
+          javaClass.getResource("/completionList.$languageShortCode.txt")?.readText()?.trim() ?: ""
 
-    if (!LANGUAGE_SHORT_CODE_REGEX.matches(languageShortCode)) return emptyList()
+        val fullCompletionList: List<String> = if (completionListText.isNotEmpty()) {
+          completionListText.split('\n')
+        } else {
+          emptyList()
+        }
 
-    val completionListText: String =
-        javaClass.getResource("/completionList.$languageShortCode.txt")?.readText()?.trim() ?: ""
-
-    fullCompletionList = if (completionListText.isNotEmpty()) {
-      completionListText.split('\n')
-    } else {
-      emptyList()
+        fullCompletionListMap[languageShortCode] = fullCompletionList
+        fullCompletionList
+      } else {
+        emptyList()
+      }
     }
-
-    fullCompletionListMap[languageShortCode] = fullCompletionList
 
     return fullCompletionList
   }
