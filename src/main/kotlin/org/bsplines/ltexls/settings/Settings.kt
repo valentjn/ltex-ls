@@ -120,7 +120,7 @@ data class Settings(
     }
 
     if (languageToolHttpServerUri != other.languageToolHttpServerUri) {
-      differences.add(SettingsDifference("ltex-ls.languageToolHttpServerUri",
+      differences.add(SettingsDifference("languageToolHttpServerUri",
           this.languageToolHttpServerUri, other.languageToolHttpServerUri))
     }
 
@@ -213,12 +213,43 @@ data class Settings(
           getSettingFromJsonAsString(jsonSettings, "additionalRules.neuralNetworkModel")
       val word2VecModelRulesDirectory: String? =
           getSettingFromJsonAsString(jsonSettings, "additionalRules.word2VecModel")
-      val languageToolHttpServerUri: String? =
+
+      val languageToolHttpServerUri: String? = getSettingFromJsonAsString(
+        jsonSettings,
+        "languageToolHttpServerUri",
+      ).let {
+        if (it?.isNotEmpty() == true) {
+          it
+        } else {
+          // deprecated in 14.1.0
           getSettingFromJsonAsString(jsonSettings, "ltex-ls.languageToolHttpServerUri")
-      val languageToolOrgUsername: String? =
+        }
+      }
+
+      val languageToolOrgUsername: String? = getSettingFromJsonAsString(
+        jsonSettings,
+        "languageToolOrg.username",
+      ).let {
+        if (it?.isNotEmpty() == true) {
+          it
+        } else {
+          // deprecated in 14.1.0
           getSettingFromJsonAsString(jsonSettings, "ltex-ls.languageToolOrgUsername")
-      val languageToolOrgApiKey: String? =
+        }
+      }
+
+      val languageToolOrgApiKey: String? = getSettingFromJsonAsString(
+        jsonSettings,
+        "languageToolOrg.apiKey",
+      ).let {
+        if (it?.isNotEmpty() == true) {
+          it
+        } else {
+          // deprecated in 14.1.0
           getSettingFromJsonAsString(jsonSettings, "ltex-ls.languageToolOrgApiKey")
+        }
+      }
+
       val logLevel: Level? = getSettingFromJsonAsEnum(
         jsonSettings,
         "ltex-ls.logLevel",

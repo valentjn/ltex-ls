@@ -13,6 +13,15 @@
   </properties>
   <body>
     <release version="14.1.0" date="upcoming">
+      <action type="update">
+        Rename `ltex.ltex-ls.languageToolHttpServerUri` &#x2192; [`ltex.languageToolHttpServerUri`](https://valentjn.github.io/ltex/settings.html#ltexlanguagetoolhttpserveruri); the previous name is deprecated
+      </action>
+      <action type="update">
+        Rename `ltex.ltex-ls.languageToolOrgUsername` &#x2192; [`ltex.languageToolOrg.username`](https://valentjn.github.io/ltex/settings.html#ltexlanguagetoolorgusername); the previous name is deprecated
+      </action>
+      <action type="update">
+        Rename `ltex.ltex-ls.languageToolOrgApiKey` &#x2192; [`ltex.languageToolOrg.apiKey`](https://valentjn.github.io/ltex/settings.html#ltexlanguagetoolorgapikey); the previous name is deprecated
+      </action>
       <action type="add" issue="vscode-ltex#409">
         Add support for completion requests for English and German
       </action>
