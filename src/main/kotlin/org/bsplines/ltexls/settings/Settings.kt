@@ -426,10 +426,7 @@ data class Settings(
       }
     }
 
-    private fun getSettingFromJsonAsBoolean(
-      jsonSettings: JsonElement,
-      name: String,
-    ): Boolean? {
+    private fun getSettingFromJsonAsBoolean(jsonSettings: JsonElement, name: String): Boolean? {
       val jsonPrimitive: JsonPrimitive? = getSettingFromJsonAsJsonPrimitive(jsonSettings, name)
 
       return if ((jsonPrimitive != null) && jsonPrimitive.isBoolean) {
@@ -439,10 +436,7 @@ data class Settings(
       }
     }
 
-    private fun getSettingFromJsonAsLong(
-      jsonSettings: JsonElement,
-      name: String,
-    ): Long? {
+    private fun getSettingFromJsonAsLong(jsonSettings: JsonElement, name: String): Long? {
       val jsonPrimitive: JsonPrimitive? = getSettingFromJsonAsJsonPrimitive(jsonSettings, name)
 
       return if ((jsonPrimitive != null) && jsonPrimitive.isNumber) {
@@ -452,10 +446,7 @@ data class Settings(
       }
     }
 
-    private fun getSettingFromJsonAsString(
-      jsonSettings: JsonElement,
-      name: String,
-    ): String? {
+    private fun getSettingFromJsonAsString(jsonSettings: JsonElement, name: String): String? {
       val jsonPrimitive: JsonPrimitive? = getSettingFromJsonAsJsonPrimitive(jsonSettings, name)
 
       return if ((jsonPrimitive != null) && jsonPrimitive.isString) {
