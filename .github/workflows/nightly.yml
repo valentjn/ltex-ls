@@ -41,6 +41,9 @@ jobs:
       - name: "Bump Version"
         run: "python -u -c \"import re\nfile = open('pom.xml', 'r+'); pom = file.read(); file.seek(0); file.truncate(); file.write(re.sub(r'<version>(.*?)</version>', '<version>${{ env.LTEX_LS_VERSION }}</version>', pom, 1))\""
 
+      - name: "Create Completion Lists"
+        run: "python -u tools/createCompletionLists.py"
+
       - name: "Build LTeX LS"
         run: "mvn -B -e package"
 
