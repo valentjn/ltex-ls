@@ -36,7 +36,8 @@ class CompletionListProvider(
         return CompletionList(emptyList())
 
     val prefix: String = getPrefixFromPosition(
-      annotatedTextFragment.codeFragment.code, codeFragmentPositionPair.second
+      annotatedTextFragment.codeFragment.code,
+      codeFragmentPositionPair.second,
     )
     if (prefix.isEmpty()) return CompletionList(emptyList())
 
@@ -92,8 +93,8 @@ class CompletionListProvider(
     document: LtexTextDocumentItem,
     codeFragment: CodeFragment,
   ): AnnotatedTextFragment {
-    val builder: CodeAnnotatedTextBuilder = CodeAnnotatedTextBuilder.create(
-      codeFragment.codeLanguageId)
+    val builder: CodeAnnotatedTextBuilder =
+        CodeAnnotatedTextBuilder.create(codeFragment.codeLanguageId)
     builder.setSettings(codeFragment.settings)
     builder.addCode(codeFragment.code)
     val annotatedText: AnnotatedText = builder.build()
