@@ -185,7 +185,8 @@ def convertReleaseFromMarkdownToXml(body: et.Element, version: str, name: str, d
 
 def convertChangelogFromMarkdownToXml(markdownFilePath: pathlib.Path,
       version: Optional[str] = None) -> str:
-  with open(markdownFilePath, "r") as f: changelog = f.read()
+  with open(markdownFilePath, "r", encoding="utf-8", newline="\n") as f:
+    changelog = f.read()
 
   document = et.Element("document", {
         "xmlns" : "http://maven.apache.org/changes/1.0.0",
@@ -256,7 +257,8 @@ def main() -> None:
   if str(arguments.output_file) == "-":
     print(output, end="")
   else:
-    with open(arguments.output_file, "w") as f: f.write(output)
+    with open(arguments.output_file, "w", encoding="utf-8", newline="\n") as f:
+      f.write(output)
 
 
 
