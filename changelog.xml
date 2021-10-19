@@ -16,6 +16,9 @@
       <action type="add" issue="vscode-ltex#409">
         Add support for completion requests for English and German
       </action>
+      <action type="fix" issue="vscode-ltex#431">
+        Fix `Add '...' to dictionary` quick fix missing for Austrian and Swiss German
+      </action>
       <action type="update">
         Move documentation to &lt;https://valentjn.github.io/ltex&gt;
       </action>

@@ -114,11 +114,11 @@ data class LanguageToolRuleMatch(
       return ((ruleId != null) && (
           ruleId.startsWith("MORFOLOGIK_")
           || ruleId.startsWith("HUNSPELL_")
-          || ruleId.startsWith("GERMAN_SPELLER_")
+          || ruleId.endsWith("_SPELLER_RULE")
+          || ruleId.endsWith("_SPELLING_RULE")
           || (ruleId == "MUZSKY_ROD_NEZIV_A")
           || (ruleId == "ZENSKY_ROD_A")
-          || (ruleId == "STREDNY_ROD_A")
-          || (ruleId == "FR_SPELLING_RULE")))
+          || (ruleId == "STREDNY_ROD_A")))
     }
   }
 }
