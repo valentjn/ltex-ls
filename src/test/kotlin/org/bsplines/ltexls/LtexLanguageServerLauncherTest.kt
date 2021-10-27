@@ -32,7 +32,7 @@ class LtexLanguageServerLauncherTest {
     }
     assertEquals(0, result.first)
     val output: String = result.second
-    assertTrue(output.contains("Usage: ltex-ls"))
+    assertTrue(output.contains("Usage:"))
     assertTrue(output.contains("LTeX LS - LTeX Language Server"))
     assertTrue(output.contains("--help"))
     assertTrue(output.contains("Show this help message and exit."))
