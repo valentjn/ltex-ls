@@ -13,6 +13,9 @@
   </properties>
   <body>
     <release version="14.1.1" date="upcoming">
+      <action type="fix" issue="vscode-ltex#442">
+        Fix `StringIndexOutOfBoundsException` in `AnnotatedTextFragment.getSubstringOfPlainText`
+      </action>
       <action type="fix">
         Fix handling of multiple subsequent whitespace characters in XHTML (e.g., CRLF)
       </action>

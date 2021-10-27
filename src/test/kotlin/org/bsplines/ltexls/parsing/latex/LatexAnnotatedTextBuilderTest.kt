@@ -7,8 +7,10 @@
 
 package org.bsplines.ltexls.parsing.latex
 
+import org.bsplines.ltexls.parsing.AnnotatedTextFragment
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilderTest
 import org.bsplines.ltexls.settings.Settings
+import org.languagetool.markup.AnnotatedText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -402,50 +404,52 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       + "This is not a Dummy14, Dummy15, Dummy16, Dummy17, Dummy18. "
     )
 
-    run {
-      val annotatedText = buildAnnotatedText(
-        """
-        This is a test:
-        \begin{equation}
-          \scalebox{0.92}{${"$"}a$}.
-        \end{equation}
-        This is a sentence.
+    assertOriginalTextPositions(
+      """
+      This is a test:
+      \begin{equation}
+        \scalebox{0.92}{${"$"}a$}.
+      \end{equation}
+      This is a sentence.
 
-        """.trimIndent()
-      )
-      val start = annotatedText.getOriginalTextPositionFor(29, false)
-      val end = annotatedText.getOriginalTextPositionFor(31, true)
-      assertTrue(start < end, "$start not smaller than $end")
-    }
+      """.trimIndent(),
+      29,
+      31,
+    )
+    assertOriginalTextPositions(
+      """
+      This is a test:
+      \begin{equation*}
+        a \text{,~and} b.
+      \end{equation*}
 
-    run {
-      val annotatedText = buildAnnotatedText(
-        """
-        This is a test:
-        \begin{equation*}
-          a \text{,~and} b.
-        \end{equation*}
+      """.trimIndent(),
+      22,
+      24,
+    )
+    assertOriginalTextPositions(
+      """
+      abc. Let ${"$"}$\footnote{${"$"}a$.}${"$"}$
 
-        """.trimIndent()
-      )
-      val start = annotatedText.getOriginalTextPositionFor(22, false)
-      val end = annotatedText.getOriginalTextPositionFor(24, true)
-      assertTrue(start < end, "$start not smaller than $end")
-    }
+      abc
 
-    run {
-      val annotatedText = buildAnnotatedText(
-        """
-        abc. Let ${"$"}$\footnote{${"$"}a$.}${"$"}$
+      """.trimIndent(),
+      16,
+      18,
+    )
+    assertPlainTextPositions(
+      """
+      \begin{equation}
+        X
+      \end{equation}
+      ${"$"}a$ ${"$"}b$ ${"$"}c$ ${"$"}d$ ${"$"}e$ ${"$"}f$ ${"$"}g$
+      \ref{foo} \ref{bar} 5${"$"}\times$5
 
-        abc
-
-        """.trimIndent()
-      )
-      val start = annotatedText.getOriginalTextPositionFor(16, false)
-      val end = annotatedText.getOriginalTextPositionFor(18, true)
-      assertTrue(start < end, "$start not smaller than $end")
-    }
+      """.trimIndent(),
+      84,
+      90,
+      Settings(_languageShortCode = "fr"),
+    )
   }
 
   @Test
@@ -487,5 +491,40 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       """.trimIndent(),
       "<<import-packages>>= library(tidyverse) @ "
     )
+  }
+
+  private fun assertOriginalTextPositions(
+    code: String,
+    plainTextStartPos: Int,
+    plainTextEndPos: Int,
+    settings: Settings = Settings(),
+  ) {
+    val annotatedText: AnnotatedText = buildAnnotatedText(code, settings)
+    val originalTextStartPos: Int =
+        annotatedText.getOriginalTextPositionFor(plainTextStartPos, false)
+    val originalTextEndPos: Int =
+        annotatedText.getOriginalTextPositionFor(plainTextEndPos, true)
+    assertTrue(originalTextStartPos < originalTextEndPos)
+  }
+
+  private fun assertPlainTextPositions(
+    code: String,
+    originalTextStartPos: Int,
+    originalTextEndPos: Int,
+    settings: Settings = Settings(),
+  ) {
+    val invertedAnnotatedText: AnnotatedText =
+        AnnotatedTextFragment.invertAnnotatedText(buildAnnotatedText(code, settings))
+    val plainStartPos: Int = AnnotatedTextFragment.getOriginalTextPosition(
+      invertedAnnotatedText,
+      originalTextStartPos,
+      false,
+    )
+    val plainEndPos: Int = AnnotatedTextFragment.getOriginalTextPosition(
+      invertedAnnotatedText,
+      originalTextEndPos,
+      true,
+    )
+    assertTrue(plainStartPos < plainEndPos)
   }
 }
