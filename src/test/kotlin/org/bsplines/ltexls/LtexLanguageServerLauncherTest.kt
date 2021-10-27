@@ -10,12 +10,8 @@ package org.bsplines.ltexls
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
-import org.bsplines.ltexls.tools.FileIo
-import org.bsplines.ltexls.tools.I18n
-import org.bsplines.ltexls.tools.Logging
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.File
 import java.io.InputStream
 import java.io.PrintStream
 import java.nio.charset.Charset
@@ -54,28 +50,6 @@ class LtexLanguageServerLauncherTest {
 
     val javaJsonElement: JsonElement = rootJsonObject.get("java")
     assertTrue(javaJsonElement.isJsonPrimitive)
-  }
-
-  @Test
-  fun testInputDocuments() {
-    val inputDocumentFile: File = File.createTempFile("ltex-", ".tex")
-    FileIo.writeFileWithException(inputDocumentFile.toPath(), "This is \\textbf{an test.}\n")
-
-    try {
-      val result: Pair<Int, String> = captureStdout {
-        LtexLanguageServerLauncher.mainWithoutExit(
-          arrayOf("--input-documents", inputDocumentFile.toPath().toString())
-        )
-      }
-      assertEquals(0, result.first)
-      val output: String = result.second
-      assertTrue(output.contains("Use 'a' instead of 'an'"))
-    } finally {
-      if (!inputDocumentFile.delete()) {
-        Logging.logger.warning(I18n.format(
-            "couldNotDeleteTemporaryFile", inputDocumentFile.toPath().toString()))
-      }
-    }
   }
 
   companion object {
