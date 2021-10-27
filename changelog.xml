@@ -12,6 +12,11 @@
     <author>Julian Valentin, LTeX Development Community</author>
   </properties>
   <body>
+    <release version="14.1.1" date="upcoming">
+      <action type="fix">
+        Fix handling of multiple subsequent whitespace characters in XHTML (e.g., CRLF)
+      </action>
+    </release>
     <release version="14.1.0" date="2021-10-19">
       <action type="update">
         Rename `ltex.ltex-ls.languageToolHttpServerUri` &#x2192; [`ltex.languageToolHttpServerUri`](https://valentjn.github.io/ltex/settings.html#ltexlanguagetoolhttpserveruri); the previous name is deprecated

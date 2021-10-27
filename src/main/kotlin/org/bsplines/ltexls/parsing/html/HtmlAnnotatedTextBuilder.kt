@@ -24,6 +24,7 @@ class HtmlAnnotatedTextBuilder(
   private var pos = 0
   private val elementNameStack: ArrayDeque<String> = ArrayDeque(listOf("html"))
   private var nextText = ""
+  private var lastSpace = ""
 
   init {
     this.xmlInputFactory.setProperty(WstxInputProperties.P_MIN_TEXT_SEGMENT, 1)
@@ -32,6 +33,26 @@ class HtmlAnnotatedTextBuilder(
     this.xmlInputFactory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false)
     this.xmlInputFactory.setProperty(XMLInputFactory.IS_VALIDATING, false)
     this.xmlInputFactory.setProperty(XMLInputFactory.SUPPORT_DTD, false)
+  }
+
+  override fun addText(text: String?): HtmlAnnotatedTextBuilder {
+    super.addText(text)
+    if (text?.isNotEmpty() == true) textAdded(text)
+    return this
+  }
+
+  override fun addMarkup(markup: String?, interpretAs: String?): HtmlAnnotatedTextBuilder {
+    super.addMarkup(markup, interpretAs)
+    if (interpretAs?.isNotEmpty() == true) textAdded(interpretAs)
+    return this
+  }
+
+  private fun textAdded(text: String) {
+    if (text.isEmpty()) return
+    this.lastSpace = when (text[text.length - 1]) {
+      ' ', '\n', '\r' -> " "
+      else -> ""
+    }
   }
 
   @Suppress("SwallowedException")
@@ -67,8 +88,8 @@ class HtmlAnnotatedTextBuilder(
         + eventType + ", skippedCode = '" + skippedCode + "'")
 
     if (this.nextText.isNotEmpty()) {
-      if (this.nextText == skippedCode) {
-        addTextWithWhitespace(this.nextText)
+      if (this.nextText.replace("\r\n", "\n") == skippedCode.replace("\r\n", "\n")) {
+        addTextWithWhitespace(skippedCode)
       } else {
         addMarkup(skippedCode, this.nextText)
       }
@@ -121,7 +142,7 @@ class HtmlAnnotatedTextBuilder(
 
     for (matchResult: MatchResult in WHITESPACE_REGEX.findAll(text)) {
       if (matchResult.range.first > pos) addText(text.substring(pos, matchResult.range.first))
-      addMarkup(matchResult.value)
+      if (this.lastSpace.isEmpty()) addMarkup(matchResult.value, " ")
       pos = matchResult.range.last + 1
     }
 
@@ -130,6 +151,6 @@ class HtmlAnnotatedTextBuilder(
   }
 
   companion object {
-    private val WHITESPACE_REGEX = Regex(" *\r?\n *")
+    private val WHITESPACE_REGEX = Regex("(?: |\r?\n)+")
   }
 }
