@@ -142,7 +142,8 @@ class HtmlAnnotatedTextBuilder(
 
     for (matchResult: MatchResult in WHITESPACE_REGEX.findAll(text)) {
       if (matchResult.range.first > pos) addText(text.substring(pos, matchResult.range.first))
-      if (this.lastSpace.isEmpty()) addMarkup(matchResult.value, " ")
+      val space: String = (if (this.lastSpace.isEmpty()) " " else "")
+      addMarkup(matchResult.value, space)
       pos = matchResult.range.last + 1
     }
 
