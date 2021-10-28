@@ -122,8 +122,22 @@ class AnnotatedTextFragment(
       plainTextPos: Int,
       isToPos: Boolean,
     ): Int {
-      val comparator: Comparator<Pair<Int, Int>> =
-        compareBy<Pair<Int, Int>> { it.first }.thenBy { it.second }
+      // cannot use compareBy/thenBy, otherwise Jacoco tries to find a file "Comparisons.kt"
+      // (probably due to inlining), which doesn't exist, and uploading to Coveralls fails
+      val comparator = Comparator<Pair<Int, Int>> { a, b ->
+        if (a.first < b.first) {
+          -1
+        } else if (a.first > b.first) {
+          1
+        } else if (a.second < b.second) {
+          -1
+        } else if (a.second > b.second) {
+          1
+        } else {
+          0
+        }
+      }
+
       mappingList.sortWith(comparator)
 
       val pairToFind: Pair<Int, Int> = Pair(plainTextPos, Int.MAX_VALUE)
