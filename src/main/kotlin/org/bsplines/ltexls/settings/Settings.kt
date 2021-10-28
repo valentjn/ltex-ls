@@ -36,6 +36,7 @@ data class Settings(
   private val _languageToolOrgApiKey: String? = null,
   private val _logLevel: Level? = null,
   private val _sentenceCacheSize: Long? = null,
+  private val _completionEnabled: Boolean? = null,
   private val _diagnosticSeverity: Map<String, DiagnosticSeverity>? = null,
   private val _checkFrequency: CheckFrequency? = null,
   private val _clearDiagnosticsWhenClosingFile: Boolean? = null,
@@ -80,6 +81,8 @@ data class Settings(
     get() = (this._logLevel ?: Level.FINE)
   val sentenceCacheSize: Long
     get() = (this._sentenceCacheSize ?: DEFAULT_SENTENCE_CACHE_SIZE)
+  val completionEnabled: Boolean
+    get() = (this._completionEnabled ?: false)
   val diagnosticSeverity: Map<String, DiagnosticSeverity>
     get() = (this._diagnosticSeverity ?: DEFAULT_DIAGNOSTIC_SEVERITY)
   val checkFrequency: CheckFrequency
@@ -264,6 +267,8 @@ data class Settings(
         ),
       )
       val sentenceCacheSize: Long? = getSettingFromJsonAsLong(jsonSettings, "sentenceCacheSize")
+      val completionEnabled: Boolean? =
+          getSettingFromJsonAsBoolean(jsonSettings, "completionEnabled")
       val diagnosticSeverity: Map<String, DiagnosticSeverity>? =
           getDiagnosticSeverityFromJson(jsonSettings)
       val checkFrequency: CheckFrequency? = getSettingFromJsonAsEnum(
@@ -295,6 +300,7 @@ data class Settings(
         languageToolOrgApiKey,
         logLevel,
         sentenceCacheSize,
+        completionEnabled,
         diagnosticSeverity,
         checkFrequency,
         clearDiagnosticsWhenClosingFile,

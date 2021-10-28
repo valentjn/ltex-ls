@@ -10,7 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bsplines</groupId>
   <artifactId>ltexls</artifactId>
-  <version>14.1.1-alpha.1.develop</version>
+  <version>15.0.0-alpha.1.develop</version>
   <name>${project.groupId}:${project.artifactId}</name>
   <description>LTeX Language Server (LTeX LS): LSP language server for LanguageTool with support for LaTeX, Markdown, and others</description>
   <url>https://github.com/valentjn/ltex-ls</url>
