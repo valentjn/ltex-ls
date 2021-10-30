@@ -12,7 +12,7 @@
     <author>Julian Valentin, LTeX Development Community</author>
   </properties>
   <body>
-    <release version="15.0.0" date="upcoming">
+    <release version="15.0.0" date="2021-10-30">
       <action type="update" issue="vscode-ltex#443">
         Add [`ltex.completionEnabled`](https://valentjn.github.io/ltex/settings.html#ltexcompletionenabled) to disable completion by default
       </action>
