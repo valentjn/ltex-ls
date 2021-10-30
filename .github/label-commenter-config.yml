@@ -1,0 +1,32 @@
+# Copyright (C) 2019-2021 Julian Valentin, LTeX Development Community
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+labels:
+  - name: "3-fixed"
+    labeled:
+      issue:
+        body: "This issue is now fixed on `develop`. The fix will be included in the next release of LT<sub>E</sub>X.\n\nIf you don't want to wait, you can [try out the nightly pre-release](https://valentjn.github.io/ltex/ltex-ls/contributing.html#how-to-test-pre-releases) tomorrow. Nightly pre-releases are published every morning at around 4am UTC."
+        action: "close"
+
+  - name: "3-invalid"
+    labeled:
+      issue:
+        body: "Hi! Per the [maintainer guidelines](https://github.com/valentjn/vscode-ltex/blob/develop/MAINTAINING.md#guidelines-about-issues), this issue is automatically closed because it is invalid. The most common reason is that it does not follow the issue template, or it misses vital information from the template. Please see the documentation to learn how to properly report [bugs](https://valentjn.github.io/ltex/ltex-ls/contributing.html#how-to-report-bugs) or [feature requests](https://valentjn.github.io/ltex/ltex-ls/contributing.html#how-to-request-features). Edit the issue description to follow the template or to include the missing information. Thank you!"
+        action: "close"
+    unlabeled:
+      issue:
+        body: "This issue is not invalid anymore. Reopening."
+        action: "open"
+
+  - name: "3-stale"
+    labeled:
+      issue:
+        body: "Hi! Per the [maintainer guidelines](https://github.com/valentjn/vscode-ltex/blob/develop/MAINTAINING.md#guidelines-about-issues), this issue is automatically closed because it has been stale for too long. The most common reason for an issue to become stale is missing information from its submitter (see one of the previous comments). If the missing information is provided, the issue will be reopened again. Thank you!"
+        action: "close"
+    unlabeled:
+      issue:
+        body: "This issue is not stale anymore. Reopening."
+        action: "open"
