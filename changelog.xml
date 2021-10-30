@@ -13,8 +13,8 @@
   </properties>
   <body>
     <release version="15.0.0" date="upcoming">
-      <action type="update" issue="#443">
-        Add [`ltex.completionEnabled`](https://valentjn.github.io/vscode-ltex/docs/settings.html#ltexcompletionenabled) to disable completion by default
+      <action type="update" issue="vscode-ltex#443">
+        Add [`ltex.completionEnabled`](https://valentjn.github.io/ltex/settings.html#ltexcompletionenabled) to disable completion by default
       </action>
       <action type="fix" issue="vscode-ltex#442">
         Fix `StringIndexOutOfBoundsException` in `AnnotatedTextFragment.getSubstringOfPlainText`
