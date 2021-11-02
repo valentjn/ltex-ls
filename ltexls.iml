@@ -36,7 +36,7 @@
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/.github" />
       <excludeFolder url="file://$MODULE_DIR$/tools" />
-      <excludeFolder url="file://$MODULE_DIR$/xsd" />
+      <excludeFolder url="file://$MODULE_DIR$/schemas" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
