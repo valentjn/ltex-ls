@@ -19,6 +19,9 @@
       <action type="fix" issue="#117">
         Fix LTeX LS sometimes not properly terminated when using LTeX CLI
       </action>
+      <action type="fix">
+        Fix error when running `ltex-cli` from a different directory than `bin/`
+      </action>
     </release>
     <release version="15.0.0" date="2021-10-30">
       <action type="update" issue="vscode-ltex#443">
