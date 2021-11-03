@@ -12,7 +12,10 @@
     <author>Julian Valentin, LTeX Development Community</author>
   </properties>
   <body>
-    <release version="15.0.1" date="upcoming">
+    <release version="15.1.0" date="upcoming">
+      <action type="add">
+        Add support for some aliases of LSP language IDs: `bib` for `bibtex`, `plaintex` for `latex`, `xhtml` for `html`
+      </action>
       <action type="fix" issue="#117">
         Fix LTeX LS sometimes not properly terminated when using LTeX CLI
       </action>

@@ -35,12 +35,9 @@ class LatexFragmentizerTest {
   }
 
   @Test
-  fun testRsweave() {
+  fun testOtherLanguages() {
+    assertFragmentizer("plaintex")
     assertFragmentizer("rsweave")
-  }
-
-  @Test
-  fun testTex() {
     assertFragmentizer("tex")
   }
 

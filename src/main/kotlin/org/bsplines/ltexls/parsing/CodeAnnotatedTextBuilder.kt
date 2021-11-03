@@ -31,18 +31,22 @@ abstract class CodeAnnotatedTextBuilder(
   }
 
   companion object {
+    @Suppress("ComplexMethod")
     fun create(codeLanguageId: String): CodeAnnotatedTextBuilder {
       return when (codeLanguageId) {
+        "bib" -> LatexAnnotatedTextBuilder(codeLanguageId)
         "bibtex" -> LatexAnnotatedTextBuilder(codeLanguageId)
         "html" -> HtmlAnnotatedTextBuilder(codeLanguageId)
         "latex" -> LatexAnnotatedTextBuilder(codeLanguageId)
         "markdown" -> MarkdownAnnotatedTextBuilder(codeLanguageId)
         "nop" -> NopAnnotatedTextBuilder(codeLanguageId)
         "org" -> OrgAnnotatedTextBuilder(codeLanguageId)
+        "plaintex" -> LatexAnnotatedTextBuilder(codeLanguageId)
         "plaintext" -> PlaintextAnnotatedTextBuilder(codeLanguageId)
         "restructuredtext" -> RestructuredtextAnnotatedTextBuilder(codeLanguageId)
         "rsweave" -> LatexAnnotatedTextBuilder(codeLanguageId)
         "tex" -> LatexAnnotatedTextBuilder(codeLanguageId)
+        "xhtml" -> HtmlAnnotatedTextBuilder(codeLanguageId)
         else -> {
           if (ProgramCommentRegexs.isSupportedCodeLanguageId(codeLanguageId)) {
             ProgramAnnotatedTextBuilder(codeLanguageId)
