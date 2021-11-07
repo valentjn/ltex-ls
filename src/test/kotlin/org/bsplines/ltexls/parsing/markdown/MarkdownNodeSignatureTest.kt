@@ -54,7 +54,7 @@ class MarkdownNodeSignatureTest {
         "abc",
         MarkdownNodeSignature.Action.Ignore,
         DummyGenerator.getInstance(plural = true),
-      )
+      ),
     )
   }
 }

@@ -34,7 +34,7 @@ abstract class LanguageToolInterface {
       (
         !match.isUnknownWordRule()
         || !this.dictionary.contains(
-          annotatedTextFragment.getSubstringOfPlainText(match.fromPos, match.toPos)
+          annotatedTextFragment.getSubstringOfPlainText(match.fromPos, match.toPos),
         )
       )
       && !this.disabledRules.contains(match.ruleId)

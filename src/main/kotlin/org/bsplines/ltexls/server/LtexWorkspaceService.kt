@@ -111,7 +111,7 @@ class LtexWorkspaceService(
       val jsonEnd: JsonObject = jsonRange.getAsJsonObject("end")
       Range(
         Position(jsonStart.get("line").asInt, jsonStart.get("character").asInt),
-        Position(jsonEnd.get("line").asInt, jsonEnd.get("character").asInt)
+        Position(jsonEnd.get("line").asInt, jsonEnd.get("character").asInt),
       )
     } else {
       null
@@ -145,7 +145,9 @@ class LtexWorkspaceService(
   fun executeGetServerStatusCommand(): CompletableFuture<Any> {
     val processId: Long = ProcessHandle.current().pid()
     val wallClockDuration: Double = Duration.between(
-        this.languageServer.startupInstant, Instant.now()).toMillis() / MILLISECONDS_PER_SECOND
+      this.languageServer.startupInstant,
+      Instant.now(),
+    ).toMillis() / MILLISECONDS_PER_SECOND
     val cpuDuration: Double?
     var cpuUsage: Double?
     val totalMemory: Double = Runtime.getRuntime().totalMemory().toDouble()

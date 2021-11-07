@@ -20,7 +20,7 @@ class LatexPackageOptionsParserTest {
       option4 =% value4,
       {This is\} a \textbf{test}, option5 = value5.},
 
-      """.trimIndent()
+      """.trimIndent(),
     )
 
     assertEquals(4, options.size)

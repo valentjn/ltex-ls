@@ -281,7 +281,7 @@ class RestructuredtextAnnotatedTextBuilder(
     private val WHITESPACE_REGEX = Regex("^[ \t]*")
 
     private val FOOTNOTE_REGEX = Regex(
-      "^\\.\\. \\[([0-9]+|[#*]|#[0-9A-Za-z\\-_.:+]+)]([ \t\r\n]|$)"
+      "^\\.\\. \\[([0-9]+|[#*]|#[0-9A-Za-z\\-_.:+]+)]([ \t\r\n]|$)",
     )
     private val DIRECTIVE_REGEX = Regex("^\\.\\. [0-9A-Za-z\\-_.:+]+::([ \t\r\n]|$)")
     private val COMMENT_REGEX = Regex("^\\.\\.([ \t\r\n]|$)")
@@ -291,14 +291,14 @@ class RestructuredtextAnnotatedTextBuilder(
 
     private val SECTION_TITLE_ADORNMENT_REGEX = Regex(
       "^(={3,}|-{3,}|`{3,}|:{3,}|\\.{3,}|'{3,}|\"{3,}|"
-      + "~{3,}|\\^{3,}|_{3,}|\\*{3,}|\\+{3,}|#{3,})\r?\n"
+      + "~{3,}|\\^{3,}|_{3,}|\\*{3,}|\\+{3,}|#{3,})\r?\n",
     )
     private val LINE_BLOCK_REGEX = Regex("^\\|[ \t]+(?=.*?[^|](\r?\n|$))")
 
     private val BULLET_LIST_REGEX = Regex("^[*+\\-\u2022\u2023\u2043][ \t]+")
     private val ENUMERATED_LIST_REGEX = Regex(
       "^(([0-9]+|[A-Za-z#]|[IVXLCDM]+|[ivxlcdm]+)\\.|"
-      + "\\(?([0-9]+|[A-Za-z#]|[IVXLCDM]+|[ivxlcdm]+)\\))[ \t]+"
+      + "\\(?([0-9]+|[A-Za-z#]|[IVXLCDM]+|[ivxlcdm]+)\\))[ \t]+",
     )
 
     private val INLINE_START_PRECEDING_REGEX = Regex("^[ \t\r\n\\-:/'\"<(\\[{]")

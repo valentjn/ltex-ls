@@ -40,7 +40,7 @@ class BibtexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguage
       newFragmentDisabledRules.add("UPPERCASE_SENTENCE_START")
 
       val newFragmentSettings: Settings = oldFragmentSettings.copy(
-        _allDisabledRules = oldFragmentSettings.getModifiedDisabledRules(newFragmentDisabledRules)
+        _allDisabledRules = oldFragmentSettings.getModifiedDisabledRules(newFragmentDisabledRules),
       )
 
       BIBTEX_ENTRY_COMMAND_SIGNATURE_MATCHER.startMatching(oldFragmentCode, emptySet())
@@ -98,21 +98,26 @@ class BibtexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguage
 
       newFragments.add(
         CodeFragment(
-          "latex", keyValuePair.value,
+          "latex",
+          keyValuePair.value,
           fromPos + argumentContentsFromPos + keyValuePair.valueInfo.fromPos,
-          newFragmentSettings
-        )
+          newFragmentSettings,
+        ),
       )
     }
   }
 
   companion object {
     private val BIBTEX_ENTRY_COMMAND_SIGNATURE = LatexCommandSignature(
-      "@[A-Za-z]+{}", LatexCommandSignature.Action.Ignore, DummyGenerator.getInstance(), false
+      "@[A-Za-z]+{}",
+      LatexCommandSignature.Action.Ignore,
+      DummyGenerator.getInstance(),
+      false,
     )
 
     private val BIBTEX_ENTRY_COMMAND_SIGNATURE_MATCHER = LatexCommandSignatureMatcher(
-      listOf(BIBTEX_ENTRY_COMMAND_SIGNATURE), false
+      listOf(BIBTEX_ENTRY_COMMAND_SIGNATURE),
+      false,
     )
   }
 }

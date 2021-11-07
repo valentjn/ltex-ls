@@ -36,23 +36,25 @@ class SettingsTest {
     settings2 = compareSettings(settings, settings2, false)
 
     settings = settings.copy(
-      _allDisabledRules = settings.getModifiedDisabledRules(setOf("disabledRules"))
+      _allDisabledRules = settings.getModifiedDisabledRules(setOf("disabledRules")),
     )
     assertEquals(setOf("disabledRules"), settings.disabledRules)
     settings2 = compareSettings(settings, settings2, false)
 
     settings = settings.copy(
-      _allEnabledRules = settings.getModifiedEnabledRules(setOf("enabledRules"))
+      _allEnabledRules = settings.getModifiedEnabledRules(setOf("enabledRules")),
     )
     assertEquals(setOf("enabledRules"), settings.enabledRules)
     settings2 = compareSettings(settings, settings2, true)
 
-    settings = settings.copy(_allHiddenFalsePositives = settings.getModifiedHiddenFalsePositives(
-      setOf(HiddenFalsePositive("ruleId", "sentenceString"))
-    ))
+    settings = settings.copy(
+      _allHiddenFalsePositives = settings.getModifiedHiddenFalsePositives(
+        setOf(HiddenFalsePositive("ruleId", "sentenceString")),
+      ),
+    )
     assertEquals(
       setOf(HiddenFalsePositive("ruleId", "sentenceString")),
-      settings.hiddenFalsePositives
+      settings.hiddenFalsePositives,
     )
     settings2 = compareSettings(settings, settings2, false)
 
@@ -83,21 +85,21 @@ class SettingsTest {
     settings = settings.copy(_languageModelRulesDirectory = "languageModelRulesDirectory")
     assertEquals(
       "languageModelRulesDirectory",
-      settings.languageModelRulesDirectory
+      settings.languageModelRulesDirectory,
     )
     settings2 = compareSettings(settings, settings2, true)
 
     settings = settings.copy(_neuralNetworkModelRulesDirectory = "neuralNetworkModelRulesDirectory")
     assertEquals(
       "neuralNetworkModelRulesDirectory",
-      settings.neuralNetworkModelRulesDirectory
+      settings.neuralNetworkModelRulesDirectory,
     )
     settings2 = compareSettings(settings, settings2, true)
 
     settings = settings.copy(_word2VecModelRulesDirectory = "word2VecModelRulesDirectory")
     assertEquals(
       "word2VecModelRulesDirectory",
-      settings.word2VecModelRulesDirectory
+      settings.word2VecModelRulesDirectory,
     )
     settings2 = compareSettings(settings, settings2, true)
 
@@ -149,7 +151,7 @@ class SettingsTest {
     private fun compareSettings(
       settings: Settings,
       otherSettings: Settings,
-      differenceRelevant: Boolean
+      differenceRelevant: Boolean,
     ): Settings {
       val settings2: Settings = settings.copy()
       val otherSettings2: Settings = otherSettings.copy()
@@ -176,35 +178,35 @@ class SettingsTest {
       assertTrue(otherSettings2.getDifferencesRelevantForLanguageTool(otherSettings).isEmpty())
       assertEquals(
         !differenceRelevant,
-        settings.getDifferencesRelevantForLanguageTool(otherSettings).isEmpty()
+        settings.getDifferencesRelevantForLanguageTool(otherSettings).isEmpty(),
       )
       assertEquals(
         !differenceRelevant,
-        otherSettings.getDifferencesRelevantForLanguageTool(settings).isEmpty()
+        otherSettings.getDifferencesRelevantForLanguageTool(settings).isEmpty(),
       )
       assertEquals(
         !differenceRelevant,
-        settings2.getDifferencesRelevantForLanguageTool(otherSettings).isEmpty()
+        settings2.getDifferencesRelevantForLanguageTool(otherSettings).isEmpty(),
       )
       assertEquals(
         !differenceRelevant,
-        otherSettings.getDifferencesRelevantForLanguageTool(settings2).isEmpty()
+        otherSettings.getDifferencesRelevantForLanguageTool(settings2).isEmpty(),
       )
       assertEquals(
         !differenceRelevant,
-        settings.getDifferencesRelevantForLanguageTool(otherSettings2).isEmpty()
+        settings.getDifferencesRelevantForLanguageTool(otherSettings2).isEmpty(),
       )
       assertEquals(
         !differenceRelevant,
-        otherSettings2.getDifferencesRelevantForLanguageTool(settings).isEmpty()
+        otherSettings2.getDifferencesRelevantForLanguageTool(settings).isEmpty(),
       )
       assertEquals(
         !differenceRelevant,
-        settings2.getDifferencesRelevantForLanguageTool(otherSettings2).isEmpty()
+        settings2.getDifferencesRelevantForLanguageTool(otherSettings2).isEmpty(),
       )
       assertEquals(
         !differenceRelevant,
-        otherSettings2.getDifferencesRelevantForLanguageTool(settings2).isEmpty()
+        otherSettings2.getDifferencesRelevantForLanguageTool(settings2).isEmpty(),
       )
 
       return settings2

@@ -37,7 +37,7 @@ class ProgramAnnotatedTextBuilder(
 
       if (commentGroup == null) {
         Logging.logger.warning(
-          I18n.format("couldNotFindExpectedGroupInRegularExpressionMatch", commentGroupName)
+          I18n.format("couldNotFindExpectedGroupInRegularExpressionMatch", commentGroupName),
         )
         continue
       }
@@ -59,7 +59,7 @@ class ProgramAnnotatedTextBuilder(
     val lineContentsRegex = Regex(
       "[ \t]*"
       + (if (isLineComment && (lineCommentPatternString != null)) lineCommentPatternString else "")
-      + "(?:" + Regex.escape(commonFirstCharacter) + ")?[ \t]*(.*?)(?:\r?\n|$)"
+      + "(?:" + Regex.escape(commonFirstCharacter) + ")?[ \t]*(.*?)(?:\r?\n|$)",
     )
     var curPos = 0
 

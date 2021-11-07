@@ -116,8 +116,11 @@ class LtexTextDocumentItem(
       line >= this.lineStartPosList.size -> text.length
       else -> {
         val lineStart: Int = this.lineStartPosList[line]
-        val nextLineStart: Int = (if (line < this.lineStartPosList.size - 1)
-          this.lineStartPosList[line + 1] else text.length)
+        val nextLineStart: Int = if (line < this.lineStartPosList.size - 1) {
+          this.lineStartPosList[line + 1]
+        } else {
+          text.length
+        }
         val lineLength: Int = nextLineStart - lineStart
 
         when {
@@ -186,8 +189,11 @@ class LtexTextDocumentItem(
 
     if (changeRange != null) {
       fromPos = convertPosition(changeRange.start)
-      toPos = (if (changeRange.end != changeRange.start)
-          convertPosition(changeRange.end) else fromPos)
+      toPos = if (changeRange.end != changeRange.start) {
+        convertPosition(changeRange.end)
+      } else {
+        fromPos
+      }
       newText = oldText.substring(0, fromPos) + changeText + oldText.substring(toPos)
     } else {
       fromPos = -1
@@ -201,8 +207,8 @@ class LtexTextDocumentItem(
     this.diagnosticsCache = null
 
     if (changeRange != null) {
-      this.caretPosition = guessCaretPositionInIncrementalUpdate(
-          changeRange, changeText, fromPos, toPos)
+      this.caretPosition =
+          guessCaretPositionInIncrementalUpdate(changeRange, changeText, fromPos, toPos)
     } else {
       this.caretPosition = guessCaretPositionInFullUpdate(oldText)
     }
@@ -292,8 +298,7 @@ class LtexTextDocumentItem(
     val diagnostics = ArrayList<Diagnostic>()
 
     for (match: LanguageToolRuleMatch in matches) {
-      diagnostics.add(this.languageServer.codeActionProvider.createDiagnostic(
-          match, this))
+      diagnostics.add(this.languageServer.codeActionProvider.createDiagnostic(match, this))
     }
 
     this.diagnosticsCache = diagnostics
@@ -305,8 +310,10 @@ class LtexTextDocumentItem(
     val caretPosition: Position = this.caretPosition ?: return diagnosticsCache.toList()
     val diagnosticsNotAtCaret = ArrayList<Diagnostic>()
     val character: Int = caretPosition.character
-    val beforeCaretPosition = Position(caretPosition.line,
-        (if (character >= 1) (character - 1) else 0))
+    val beforeCaretPosition = Position(
+      caretPosition.line,
+      (if (character >= 1) (character - 1) else 0),
+    )
     val caretRange = Range(beforeCaretPosition, this.caretPosition)
 
     for (diagnostic: Diagnostic in diagnosticsCache) {
@@ -368,8 +375,9 @@ class LtexTextDocumentItem(
         workDoneProgressBegin.title = I18n.format("checkingDocument")
         workDoneProgressBegin.message = uri
         workDoneProgressBegin.cancellable = false
-        languageClient.notifyProgress(ProgressParams(
-            progressToken, Either.forLeft(workDoneProgressBegin)))
+        languageClient.notifyProgress(
+          ProgressParams(progressToken, Either.forLeft(workDoneProgressBegin)),
+        )
       }
 
       val configurationItem = ConfigurationItem()
@@ -383,17 +391,18 @@ class LtexTextDocumentItem(
 
       this.raiseExceptionIfCanceled()
       val workspaceSpecificConfigurationResult: List<Any?> =
-          (if (this.languageServer.clientSupportsWorkspaceSpecificConfiguration)
-            languageClient.ltexWorkspaceSpecificConfiguration(configurationParams).get() else
-            listOf(null))
+      if (this.languageServer.clientSupportsWorkspaceSpecificConfiguration) {
+        languageClient.ltexWorkspaceSpecificConfiguration(configurationParams).get()
+      } else {
+        listOf(null)
+      }
 
       this.raiseExceptionIfCanceled()
       val jsonConfiguration: JsonElement = configurationResult[0] as JsonElement
 
       val workspaceSpecificConfiguration: Any? = workspaceSpecificConfigurationResult[0]
       val jsonWorkspaceSpecificConfiguration: JsonElement? =
-          (if (workspaceSpecificConfiguration != null)
-            (workspaceSpecificConfiguration as JsonElement) else null)
+          workspaceSpecificConfiguration as JsonElement?
 
       this.raiseExceptionIfCanceled()
       this.languageServer.settingsManager.settings =
@@ -407,8 +416,9 @@ class LtexTextDocumentItem(
       return checkingResult
     } finally {
       if (progressToken != null) {
-        languageClient.notifyProgress(ProgressParams(
-            progressToken, Either.forLeft(WorkDoneProgressEnd())))
+        languageClient.notifyProgress(
+          ProgressParams(progressToken, Either.forLeft(WorkDoneProgressEnd())),
+        )
       }
 
       this.beingChecked = false

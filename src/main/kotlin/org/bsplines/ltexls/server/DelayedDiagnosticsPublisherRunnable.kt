@@ -19,7 +19,8 @@ class DelayedDiagnosticsPublisherRunnable(
 ) : Runnable {
   override fun run() {
     var sleepDuration: Duration = showCaretDiagnosticsDuration.minus(
-        Duration.between(this.document.lastCaretChangeInstant, Instant.now()))
+      Duration.between(this.document.lastCaretChangeInstant, Instant.now()),
+    )
     if (sleepDuration.isNegative) sleepDuration = Duration.ZERO
     sleepDuration = sleepDuration.plusMillis(SLEEP_DURATION_DELTA_MILLISECONDS)
 
@@ -36,8 +37,9 @@ class DelayedDiagnosticsPublisherRunnable(
       val diagnostics: List<Diagnostic>? = this.document.diagnosticsCache
 
       if (diagnostics != null) {
-        this.languageClient.publishDiagnostics(PublishDiagnosticsParams(
-            this.document.uri, diagnostics))
+        this.languageClient.publishDiagnostics(
+          PublishDiagnosticsParams(this.document.uri, diagnostics),
+        )
       }
     }
   }

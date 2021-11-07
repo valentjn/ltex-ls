@@ -93,7 +93,7 @@ class LanguageToolHttpInterface(
 
     for (jsonElement: JsonElement in jsonMatches) {
       result.add(
-        LanguageToolRuleMatch.fromLanguageTool(jsonElement.asJsonObject, annotatedTextFragment)
+        LanguageToolRuleMatch.fromLanguageTool(jsonElement.asJsonObject, annotatedTextFragment),
       )
     }
 

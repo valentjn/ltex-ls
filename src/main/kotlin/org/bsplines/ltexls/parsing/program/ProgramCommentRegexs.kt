@@ -18,15 +18,18 @@ data class ProgramCommentRegexs(
     if ((this.blockCommentStartRegexString != null)
           && (this.blockCommentEndRegexString != null)) {
       if (builder.isNotEmpty()) builder.append("|")
-      builder.append("^[ \t]*" + this.blockCommentStartRegexString
-          + "(?:[ \t]|$)(?<blockComment>(?:(?!" + this.blockCommentEndRegexString
-          + ").|\r?\n)*?)(?:[ \t]|^)" + this.blockCommentEndRegexString + "[ \t]*$")
+      builder.append(
+        "^[ \t]*" + this.blockCommentStartRegexString
+        + "(?:[ \t]|$)(?<blockComment>(?:(?!" + this.blockCommentEndRegexString
+        + ").|\r?\n)*?)(?:[ \t]|^)" + this.blockCommentEndRegexString + "[ \t]*$",
+      )
     }
 
     if (this.lineCommentRegexString != null) {
       if (builder.isNotEmpty()) builder.append("|")
-      builder.append("(?<lineComment>(?:^[ \t]*" + this.lineCommentRegexString
-          + "[ \t](?:.*?)$(?:\r?\n)?)+)")
+      builder.append(
+        "(?<lineComment>(?:^[ \t]*" + this.lineCommentRegexString + "[ \t](?:.*?)$(?:\r?\n)?)+)",
+      )
     }
 
     Regex(builder.toString(), RegexOption.MULTILINE)
@@ -38,15 +41,17 @@ data class ProgramCommentRegexs(
     if ((this.blockCommentStartRegexString != null)
           && (this.blockCommentEndRegexString != null)) {
       if (builder.isNotEmpty()) builder.append("|")
-      builder.append("^[ \t]*" + this.blockCommentStartRegexString
-          + "[ \t]*(?i)ltex(?-i):(.*?)[ \t]*" + this.blockCommentEndRegexString + "[ \t]*$")
+      builder.append(
+        "^[ \t]*" + this.blockCommentStartRegexString
+        + "[ \t]*(?i)ltex(?-i):(.*?)[ \t]*" + this.blockCommentEndRegexString + "[ \t]*$",
+      )
     }
 
     if (this.lineCommentRegexString != null) {
       if (builder.isNotEmpty()) builder.append("|")
       builder.append(
-          "^[ \t]*" + this.lineCommentRegexString
-          + "[ \t]*(?i)ltex(?-i):(.*?)[ \t]*$")
+        "^[ \t]*" + this.lineCommentRegexString + "[ \t]*(?i)ltex(?-i):(.*?)[ \t]*$",
+      )
     }
 
     Regex(builder.toString(), RegexOption.MULTILINE)
@@ -67,7 +72,8 @@ data class ProgramCommentRegexs(
       when (codeLanguageId) {
         "c", "cpp", "csharp", "dart", "fsharp", "go", "groovy", "java", "javascript",
         "javascriptreact", "kotlin", "php", "rust", "scala", "swift", "typescript",
-        "typescriptreact", "verilog" -> {
+        "typescriptreact", "verilog",
+        -> {
           blockCommentStartRegexString = "/\\*\\*?"
           blockCommentEndRegexString = "\\*\\*?/"
           lineCommentRegexString = "///?"

@@ -103,33 +103,59 @@ data class Settings(
     }
 
     if (motherTongueShortCode != other.motherTongueShortCode) {
-      differences.add(SettingsDifference("additionalRules.motherTongue",
-          this.motherTongueShortCode, other.motherTongueShortCode))
+      differences.add(
+        SettingsDifference(
+          "additionalRules.motherTongue",
+          this.motherTongueShortCode,
+          other.motherTongueShortCode,
+        ),
+      )
     }
 
     if (languageModelRulesDirectory != other.languageModelRulesDirectory) {
-      differences.add(SettingsDifference("additionalRules.languageModel",
-          this.languageModelRulesDirectory, other.languageModelRulesDirectory))
+      differences.add(
+        SettingsDifference(
+          "additionalRules.languageModel",
+          this.languageModelRulesDirectory,
+          other.languageModelRulesDirectory,
+        ),
+      )
     }
 
     if (neuralNetworkModelRulesDirectory != other.neuralNetworkModelRulesDirectory) {
-      differences.add(SettingsDifference("additionalRules.neuralNetworkModel",
-          this.neuralNetworkModelRulesDirectory, other.neuralNetworkModelRulesDirectory))
+      differences.add(
+        SettingsDifference(
+          "additionalRules.neuralNetworkModel",
+          this.neuralNetworkModelRulesDirectory,
+          other.neuralNetworkModelRulesDirectory,
+        ),
+      )
     }
 
     if (word2VecModelRulesDirectory != other.word2VecModelRulesDirectory) {
-      differences.add(SettingsDifference("additionalRules.word2VecModel",
-          this.word2VecModelRulesDirectory, other.word2VecModelRulesDirectory))
+      differences.add(
+        SettingsDifference(
+          "additionalRules.word2VecModel",
+          this.word2VecModelRulesDirectory,
+          other.word2VecModelRulesDirectory,
+        ),
+      )
     }
 
     if (languageToolHttpServerUri != other.languageToolHttpServerUri) {
-      differences.add(SettingsDifference("languageToolHttpServerUri",
-          this.languageToolHttpServerUri, other.languageToolHttpServerUri))
+      differences.add(
+        SettingsDifference(
+          "languageToolHttpServerUri",
+          this.languageToolHttpServerUri,
+          other.languageToolHttpServerUri,
+        ),
+      )
     }
 
     if (sentenceCacheSize != other.sentenceCacheSize) {
-      differences.add(SettingsDifference("sentenceCacheSize",
-          this.sentenceCacheSize, other.sentenceCacheSize))
+      differences.add(
+        SettingsDifference("sentenceCacheSize", this.sentenceCacheSize, other.sentenceCacheSize),
+      )
     }
 
     return differences
@@ -173,7 +199,14 @@ data class Settings(
   @Suppress("TooManyFunctions")
   companion object {
     val DEFAULT_ENABLED = setOf(
-        "bibtex", "latex", "html", "markdown", "org", "restructuredtext", "rsweave")
+      "bibtex",
+      "latex",
+      "html",
+      "markdown",
+      "org",
+      "restructuredtext",
+      "rsweave",
+    )
     private const val DEFAULT_SENTENCE_CACHE_SIZE = 2000L
     private val DEFAULT_DIAGNOSTIC_SEVERITY: Map<String, DiagnosticSeverity> =
         mapOf(Pair("default", DiagnosticSeverity.Information))
@@ -187,25 +220,35 @@ data class Settings(
 
       val enabled: Set<String>? = getEnabledFromJson(jsonSettings)
       val languageShortCode: String? = getSettingFromJsonAsString(jsonSettings, "language")
-      val allDictionaries: Map<String, Set<String>>? =
-          mergeMapOfListsIntoMapOfSets(convertJsonObjectToMapOfLists(
-            getSettingFromJsonAsJsonObject(jsonWorkspaceSpecificSettings2, "dictionary")))
-      val allDisabledRules: Map<String, Set<String>>? =
-          mergeMapOfListsIntoMapOfSets(convertJsonObjectToMapOfLists(
-            getSettingFromJsonAsJsonObject(jsonWorkspaceSpecificSettings2, "disabledRules")))
-      val allEnabledRules: Map<String, Set<String>>? =
-          mergeMapOfListsIntoMapOfSets(convertJsonObjectToMapOfLists(
-            getSettingFromJsonAsJsonObject(jsonWorkspaceSpecificSettings2, "enabledRules")))
+      val allDictionaries: Map<String, Set<String>>? = mergeMapOfListsIntoMapOfSets(
+        convertJsonObjectToMapOfLists(
+          getSettingFromJsonAsJsonObject(jsonWorkspaceSpecificSettings2, "dictionary"),
+        ),
+      )
+      val allDisabledRules: Map<String, Set<String>>? = mergeMapOfListsIntoMapOfSets(
+        convertJsonObjectToMapOfLists(
+          getSettingFromJsonAsJsonObject(jsonWorkspaceSpecificSettings2, "disabledRules"),
+        ),
+      )
+      val allEnabledRules: Map<String, Set<String>>? = mergeMapOfListsIntoMapOfSets(
+        convertJsonObjectToMapOfLists(
+          getSettingFromJsonAsJsonObject(jsonWorkspaceSpecificSettings2, "enabledRules"),
+        ),
+      )
       val allHiddenFalsePositives: Map<String, Set<HiddenFalsePositive>>? =
           getAllHiddenFalsePositivesFromJson(jsonWorkspaceSpecificSettings2)
       val bibtexFields: Map<String, Boolean>? = convertJsonObjectToMapOfBooleans(
-          getSettingFromJsonAsJsonObject(jsonSettings, "bibtex.fields"))
+        getSettingFromJsonAsJsonObject(jsonSettings, "bibtex.fields"),
+      )
       val latexCommands: Map<String, String>? = convertJsonObjectToMapOfStrings(
-          getSettingFromJsonAsJsonObject(jsonSettings, "latex.commands"))
+        getSettingFromJsonAsJsonObject(jsonSettings, "latex.commands"),
+      )
       val latexEnvironments: Map<String, String>? = convertJsonObjectToMapOfStrings(
-          getSettingFromJsonAsJsonObject(jsonSettings, "latex.environments"))
+        getSettingFromJsonAsJsonObject(jsonSettings, "latex.environments"),
+      )
       val markdownNodes: Map<String, String>? = convertJsonObjectToMapOfStrings(
-          getSettingFromJsonAsJsonObject(jsonSettings, "markdown.nodes"))
+        getSettingFromJsonAsJsonObject(jsonSettings, "markdown.nodes"),
+      )
       val enablePickyRules: Boolean? =
           getSettingFromJsonAsBoolean(jsonSettings, "additionalRules.enablePickyRules")
       val motherTongueShortCode: String? =
@@ -331,8 +374,11 @@ data class Settings(
       jsonWorkspaceSpecificSettings: JsonElement,
     ): Map<String, Set<HiddenFalsePositive>>? {
       val hiddenFalsePositiveJsonStringMap: Map<String, Set<String>>? =
-          mergeMapOfListsIntoMapOfSets(convertJsonObjectToMapOfLists(
-            getSettingFromJsonAsJsonObject(jsonWorkspaceSpecificSettings, "hiddenFalsePositives")))
+      mergeMapOfListsIntoMapOfSets(
+        convertJsonObjectToMapOfLists(
+          getSettingFromJsonAsJsonObject(jsonWorkspaceSpecificSettings, "hiddenFalsePositives"),
+        ),
+      )
 
       return if (hiddenFalsePositiveJsonStringMap != null) {
         val allHiddenFalsePositives = HashMap<String, HashSet<HiddenFalsePositive>>()
@@ -350,7 +396,8 @@ data class Settings(
 
           for (hiddenFalsePositiveJsonString: String in hiddenFalsePositiveJsonStrings) {
             curHiddenFalsePositives.add(
-                HiddenFalsePositive.fromJsonString(hiddenFalsePositiveJsonString))
+              HiddenFalsePositive.fromJsonString(hiddenFalsePositiveJsonString),
+            )
           }
         }
 

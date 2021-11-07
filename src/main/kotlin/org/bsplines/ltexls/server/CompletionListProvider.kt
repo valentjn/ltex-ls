@@ -106,7 +106,7 @@ class CompletionListProvider(
   ): String? {
     return if (annotatedTextFragment.codeFragment.settings.languageShortCode == "auto") {
       val cleanText: String = this.languageIdentifier.cleanAndShortenText(
-        annotatedTextFragment.annotatedText.plainText
+        annotatedTextFragment.annotatedText.plainText,
       )
       val language: Language? = this.languageIdentifier.detectLanguage(cleanText)
       language?.shortCodeWithCountryAndVariant

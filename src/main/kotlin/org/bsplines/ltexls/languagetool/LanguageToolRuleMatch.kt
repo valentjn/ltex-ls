@@ -26,8 +26,10 @@ data class LanguageToolRuleMatch(
   val languageShortCode: String,
 ) {
   fun isIntersectingWithRange(range: Range, document: LtexTextDocumentItem): Boolean {
-    return Tools.areRangesIntersecting(Range(
-        document.convertPosition(this.fromPos), document.convertPosition(this.toPos)), range)
+    return Tools.areRangesIntersecting(
+      Range(document.convertPosition(this.fromPos), document.convertPosition(this.toPos)),
+      range,
+    )
   }
 
   fun isUnknownWordRule(): Boolean {

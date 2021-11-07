@@ -29,8 +29,10 @@ class NonServerCheckerTest {
 
     try {
       settingsFile = File.createTempFile("ltex-", ".json")
-      FileIo.writeFileWithException(settingsFile.toPath(),
-          "{\"dictionary\":{\"en-US\":[\"LTeX\"]}}\n")
+      FileIo.writeFileWithException(
+        settingsFile.toPath(),
+        "{\"dictionary\":{\"en-US\":[\"LTeX\"]}}\n",
+      )
       nonServerChecker.loadSettings(settingsFile.toPath())
 
       inputFile = File.createTempFile("ltex-", ".tex")
@@ -40,8 +42,10 @@ class NonServerCheckerTest {
       inputDirectory = Files.createTempDirectory("ltex-")
       val inputDirectory2: Path = inputDirectory
       inputDirectoryChildFile = File.createTempFile("ltex-", ".md", inputDirectory.toFile())
-      FileIo.writeFileWithException(inputDirectoryChildFile.toPath(),
-          "This is [an test.](qwert) This is LTeX.\n")
+      FileIo.writeFileWithException(
+        inputDirectoryChildFile.toPath(),
+        "This is [an test.](qwert) This is LTeX.\n",
+      )
 
       val result: Pair<Int, String> = LtexLanguageServerLauncherTest.captureStdout {
         LtexLanguageServerLauncherTest.mockStdin("This is an test. This is LTeX.\n") {
@@ -56,34 +60,41 @@ class NonServerCheckerTest {
         + "following word doesn't start with a vowel sound, e.g. 'a sentence', 'a university'. "
         + "[EN_A_VS_AN]\u001b[m\\E"
       )
-      assertContains(result.second, Regex(
-        "^\u001b\\[1m.*?:1:17: $message\r?\n"
-        + "This is \\\\textbf\\{\u001b\\[1;33man\u001b\\[m test\\.} This is LTeX\\.\r?\n"
-        + " {16}\u001b\\[32ma\u001b\\[m\r?\n"
-        + ".*?:1:10: $message\r?\n"
-        + "This is \\[\u001b\\[1;33man\u001b\\[m test\\.]\\(qwert\\) This is LTeX\\.\r?\n"
-        + " {9}\u001b\\[32ma\u001b\\[m\r?\n"
-        + ".*?:1:9: $message\r?\n"
-        + "This is \u001b\\[1;33man\u001b\\[m test\\. This is LTeX\\.\r?\n"
-        + " {8}\u001b\\[32ma\u001b\\[m\r?\n$"
-      ))
+      assertContains(
+        result.second,
+        Regex(
+          "^\u001b\\[1m.*?:1:17: $message\r?\n"
+          + "This is \\\\textbf\\{\u001b\\[1;33man\u001b\\[m test\\.} This is LTeX\\.\r?\n"
+          + " {16}\u001b\\[32ma\u001b\\[m\r?\n"
+          + ".*?:1:10: $message\r?\n"
+          + "This is \\[\u001b\\[1;33man\u001b\\[m test\\.]\\(qwert\\) This is LTeX\\.\r?\n"
+          + " {9}\u001b\\[32ma\u001b\\[m\r?\n"
+          + ".*?:1:9: $message\r?\n"
+          + "This is \u001b\\[1;33man\u001b\\[m test\\. This is LTeX\\.\r?\n"
+          + " {8}\u001b\\[32ma\u001b\\[m\r?\n$",
+        ),
+      )
     } finally {
       if ((settingsFile != null) && !settingsFile.delete()) {
-        Logging.logger.warning(I18n.format(
-            "couldNotDeleteTemporaryFile", settingsFile.toPath().toString()))
+        Logging.logger.warning(
+          I18n.format("couldNotDeleteTemporaryFile", settingsFile.toPath().toString()),
+        )
       }
 
       if ((inputFile != null) && !inputFile.delete()) {
-        Logging.logger.warning(I18n.format(
-            "couldNotDeleteTemporaryFile", inputFile.toPath().toString()))
+        Logging.logger.warning(
+          I18n.format("couldNotDeleteTemporaryFile", inputFile.toPath().toString()),
+        )
       }
 
       if ((inputDirectoryChildFile != null) && !inputDirectoryChildFile.delete()) {
-        Logging.logger.warning(I18n.format(
-            "couldNotDeleteTemporaryFile", inputDirectoryChildFile.toPath().toString()))
+        Logging.logger.warning(
+          I18n.format("couldNotDeleteTemporaryFile", inputDirectoryChildFile.toPath().toString()),
+        )
       } else if ((inputDirectory != null) && !inputDirectory.toFile().delete()) {
-        Logging.logger.warning(I18n.format(
-            "couldNotDeleteTemporaryDirectory", inputDirectory.toString()))
+        Logging.logger.warning(
+          I18n.format("couldNotDeleteTemporaryDirectory", inputDirectory.toString()),
+        )
       }
     }
   }

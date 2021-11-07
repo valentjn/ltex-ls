@@ -25,23 +25,23 @@ class HtmlAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("html") {
         </body>
       </html>
       """,
-      " Title \n\nThis is a test. "
+      " Title \n\nThis is a test. ",
     )
     assertPlainText(
       "<html><body>This is a te<script>abc</script>st.</body></html>\n",
-      "\n\nThis is a test. "
+      "\n\nThis is a test. ",
     )
     assertPlainText(
       "<html><body>This is a te<br/>st.</body></html>\n",
-      "\n\nThis is a te\nst. "
+      "\n\nThis is a te\nst. ",
     )
     assertPlainText(
       "<html><body>This is a test &amp; another test.</body></html>\n",
-      "\n\nThis is a test & another test. "
+      "\n\nThis is a test & another test. ",
     )
     assertPlainText(
       "<html>\r\n  <body>\r\n    This is a test.\r\n  </body>\r\n</html>\r\n",
-      " \n\nThis is a test. "
+      " \n\nThis is a test. ",
     )
   }
 }

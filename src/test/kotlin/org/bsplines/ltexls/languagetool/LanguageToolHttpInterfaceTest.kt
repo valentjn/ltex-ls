@@ -32,7 +32,7 @@ class LanguageToolHttpInterfaceTest {
     // wait until LanguageTool has initialized itself
     Thread.sleep(5000)
     this.defaultSettings = defaultSettings.copy(
-      _languageToolHttpServerUri = "http://localhost:8081"
+      _languageToolHttpServerUri = "http://localhost:8081",
     )
   }
 

@@ -30,7 +30,7 @@ class LanguageToolJavaInterfaceTest {
     val documentChecker = DocumentChecker(settingsManager)
     val document: LtexTextDocumentItem = DocumentCheckerTest.createDocument(
       "latex",
-      "Hat functions is for a beginner.\n"
+      "Hat functions is for a beginner.\n",
     )
     val checkingResult: Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> =
         documentChecker.check(document)
@@ -75,7 +75,7 @@ class LanguageToolJavaInterfaceTest {
     fun assertMatches(settings: Settings, checkMotherTongue: Boolean) {
       val matches: List<LanguageToolRuleMatch> = checkDocument(
         settings,
-        "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test.}\n"
+        "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test.}\n",
       )
       DocumentCheckerTest.assertMatches(matches, 8, 10, 58, 75)
 

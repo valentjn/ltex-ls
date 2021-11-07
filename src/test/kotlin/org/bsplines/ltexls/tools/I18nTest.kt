@@ -18,12 +18,15 @@ class I18nTest {
 
     assertEquals(
       "i18n message with key 'abc' not found, message arguments: 'def', '42', 'null'",
-      I18n.format("abc", "def", 42, null)
+      I18n.format("abc", "def", 42, null),
     )
 
-    assertContains(I18n.format(NullPointerException("abc")), Regex(
-      "The following exception occurred:[\r\n]+java\\.lang\\.NullPointerException: abc[\r\n]+.*",
-      RegexOption.DOT_MATCHES_ALL,
-    ))
+    assertContains(
+      I18n.format(NullPointerException("abc")),
+      Regex(
+        "The following exception occurred:[\r\n]+java\\.lang\\.NullPointerException: abc[\r\n]+.*",
+        RegexOption.DOT_MATCHES_ALL,
+      ),
+    )
   }
 }

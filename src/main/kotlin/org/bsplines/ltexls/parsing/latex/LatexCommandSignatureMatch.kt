@@ -13,8 +13,11 @@ class LatexCommandSignatureMatch(
   val fromPos: Int,
   val argumentPos: List<Pair<Int, Int>>,
 ) {
-  val toPos: Int = (if (argumentPos.isEmpty()) fromPos + commandSignature.prefix.length else
-      argumentPos[argumentPos.size - 1].second)
+  val toPos: Int = if (argumentPos.isEmpty()) {
+    fromPos + commandSignature.prefix.length
+  } else {
+    argumentPos[argumentPos.size - 1].second
+  }
 
   fun getArgumentContents(index: Int): String {
     val argument: Pair<Int, Int> = argumentPos[index]

@@ -64,7 +64,7 @@ class LtexMarkdownInlineMathTest {
     node.getAstExtra(stringBuilder)
     assertEquals(
       " textOpen:[0, 1, \"$\"] text:[0, 8, \"E = mc^2\"] textClose:[0, 1, \"$\"]",
-      stringBuilder.toString()
+      stringBuilder.toString(),
     )
   }
 

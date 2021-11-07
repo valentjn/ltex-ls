@@ -29,7 +29,7 @@ class RestructuredtextFragmentizerTest {
 
       Sentence 3
 
-      """.trimIndent()
+      """.trimIndent(),
     )
   }
 

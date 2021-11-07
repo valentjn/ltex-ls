@@ -56,7 +56,7 @@ class LtexTextDocumentServiceTest {
 
     service.didOpen(DidOpenTextDocumentParams(document))
     service.didChange(
-      DidChangeTextDocumentParams(versionedDocument, listOf(TextDocumentContentChangeEvent("abc")))
+      DidChangeTextDocumentParams(versionedDocument, listOf(TextDocumentContentChangeEvent("abc"))),
     )
     service.didSave(DidSaveTextDocumentParams(versionedDocument))
     service.didClose(DidCloseTextDocumentParams(versionedDocument))

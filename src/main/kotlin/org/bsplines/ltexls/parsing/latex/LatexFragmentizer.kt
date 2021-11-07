@@ -87,7 +87,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
             oldFragmentCode.substring(prevFromPos, nextFromPos),
             fromPos + prevFromPos,
             prevSettings,
-          )
+          ),
         )
 
         prevFromPos = nextFromPos
@@ -100,7 +100,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
           oldFragmentCode.substring(prevFromPos),
           fromPos + prevFromPos,
           prevSettings,
-        )
+        ),
       )
     }
 
@@ -114,7 +114,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
     for ((_, oldFragmentCode: String, fromPos: Int, oldFragmentSettings: Settings) in fragments) {
       BABEL_SWITCH_COMMAND_SIGNATURE_MATCHER.startMatching(
         oldFragmentCode,
-        getIgnoreCommandPrototypes(oldFragmentSettings)
+        getIgnoreCommandPrototypes(oldFragmentSettings),
       )
 
       var prevFromPos = 0
@@ -141,7 +141,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
             oldFragmentCode.substring(prevFromPos, nextFromPos),
             fromPos + prevFromPos,
             prevSettings,
-          )
+          ),
         )
 
         prevFromPos = nextFromPos
@@ -154,7 +154,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
           oldFragmentCode.substring(prevFromPos),
           fromPos + prevFromPos,
           prevSettings,
-        )
+        ),
       )
     }
 
@@ -170,7 +170,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
       val oldFragmentSettings: Settings = oldFragment.settings
       BABEL_INLINE_COMMAND_SIGNATURE_MATCHER.startMatching(
         oldFragmentCode,
-        getIgnoreCommandPrototypes(oldFragmentSettings)
+        getIgnoreCommandPrototypes(oldFragmentSettings),
       )
 
       var curSettings: Settings = oldFragmentSettings
@@ -206,7 +206,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
             contents,
             oldFragment.fromPos + contentsFromPos,
             curSettings,
-          )
+          ),
         )
       }
 
@@ -225,7 +225,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
       val oldFragmentSettings: Settings = oldFragment.settings
       BABEL_ENVIRONMENT_COMMAND_SIGNATURE_MATCHER.startMatching(
         oldFragmentCode,
-        getIgnoreCommandPrototypes(oldFragmentSettings)
+        getIgnoreCommandPrototypes(oldFragmentSettings),
       )
 
       val settingsStack = ArrayDeque<Settings>()
@@ -276,7 +276,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
               oldFragmentCode.substring(prevFromPos, match.fromPos),
               oldFragment.fromPos + prevFromPos,
               prevSettings,
-            )
+            ),
           )
         }
       }
@@ -295,7 +295,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
               oldFragmentCode.substring(prevFromPos),
               oldFragment.fromPos + prevFromPos,
               prevSettings,
-            )
+            ),
           )
         }
       }
@@ -314,7 +314,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
       val oldFragmentSettings: Settings = oldFragment.settings
       EXTRA_COMMAND_SIGNATURE_MATCHER.startMatching(
         oldFragmentCode,
-        getIgnoreCommandPrototypes(oldFragmentSettings)
+        getIgnoreCommandPrototypes(oldFragmentSettings),
       )
 
       while (true) {
@@ -329,7 +329,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
             contents,
             oldFragment.fromPos + contentsFromPos,
             oldFragmentSettings,
-          )
+          ),
         )
       }
 
@@ -351,7 +351,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
         LatexCommandSignature("\\footnote[]{}"),
         LatexCommandSignature("\\todo{}"),
         LatexCommandSignature("\\todo[]{}"),
-      )
+      ),
     )
 
     private val LANGUAGE_TAG_REPLACEMENT_REGEX = Regex("[^A-Za-z]+")
@@ -467,12 +467,12 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
 
     private val USE_PACKAGE_COMMAND_SIGNATURE = LatexCommandSignature("\\usepackage[]{}")
     private val USE_PACKAGE_COMMAND_SIGNATURE_MATCHER = LatexCommandSignatureMatcher(
-      listOf(USE_PACKAGE_COMMAND_SIGNATURE)
+      listOf(USE_PACKAGE_COMMAND_SIGNATURE),
     )
 
     private val BABEL_SWITCH_COMMAND_SIGNATURE = LatexCommandSignature("\\selectlanguage{}")
     private val BABEL_SWITCH_COMMAND_SIGNATURE_MATCHER = LatexCommandSignatureMatcher(
-      listOf(BABEL_SWITCH_COMMAND_SIGNATURE)
+      listOf(BABEL_SWITCH_COMMAND_SIGNATURE),
     )
 
     private val BABEL_INLINE_COMMAND_SIGNATURE_MAP = run {
@@ -490,7 +490,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
     }
 
     private val BABEL_INLINE_COMMAND_SIGNATURE_MATCHER = LatexCommandSignatureMatcher(
-      BABEL_INLINE_COMMAND_SIGNATURE_MAP.keys.toList()
+      BABEL_INLINE_COMMAND_SIGNATURE_MAP.keys.toList(),
     )
 
     private val BABEL_ENVIRONMENT_COMMAND_SIGNATURE_MAP: Map<LatexCommandSignature, String> = run {
@@ -518,7 +518,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
     }
 
     private val BABEL_ENVIRONMENT_COMMAND_SIGNATURE_MATCHER = LatexCommandSignatureMatcher(
-      BABEL_ENVIRONMENT_COMMAND_SIGNATURE_MAP.keys.toList()
+      BABEL_ENVIRONMENT_COMMAND_SIGNATURE_MAP.keys.toList(),
     )
 
     private fun getIgnoreCommandPrototypes(settings: Settings): Set<String> {

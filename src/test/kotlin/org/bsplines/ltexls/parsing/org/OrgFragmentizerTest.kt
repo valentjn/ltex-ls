@@ -27,7 +27,7 @@ class OrgFragmentizerTest {
 
       Sentence 3
 
-      """.trimIndent()
+      """.trimIndent(),
     )
   }
 

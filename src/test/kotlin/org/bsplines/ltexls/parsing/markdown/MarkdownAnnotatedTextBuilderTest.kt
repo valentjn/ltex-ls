@@ -21,11 +21,11 @@ class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown"
       multiple lines and [link](example.com)
 
       """.trimIndent(),
-      "Heading\nParagraph with multiple lines and link\n"
+      "Heading\nParagraph with multiple lines and link\n",
     )
     assertPlainText(
       "This is a  \r\ntest.\r\n",
-      "This is a test.\n"
+      "This is a test.\n",
     )
     assertPlainText(
       """
@@ -33,11 +33,11 @@ class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown"
       Another [day &ndash; another](example.com) sentence
 
       """.trimIndent(),
-      "This is a \u00a9 Test\nAnother day \u2013 another sentence\n"
+      "This is a \u00a9 Test\nAnother day \u2013 another sentence\n",
     )
     assertPlainText(
       "This is a test: `inline code`.\n\n```\ncode block\n```\n\nThis is another sentence.\n",
-      "This is a test: Dummy0.\n\n\n\n\n\nThis is another sentence.\n"
+      "This is a test: Dummy0.\n\n\n\n\n\nThis is another sentence.\n",
     )
     val markdownNodes: MutableMap<String, String> = HashMap()
     markdownNodes["Code"] = "default"
@@ -45,7 +45,7 @@ class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown"
     assertPlainText(
       "This is a test: `inline code`.\n\n```\ncode block\n```\n\nThis is another sentence.\n",
       "This is a test: inline code.\n\n\ncode block\n\n\nThis is another sentence.\n",
-      Settings(_markdownNodes = markdownNodes)
+      Settings(_markdownNodes = markdownNodes),
     )
   }
 
@@ -75,7 +75,7 @@ class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown"
 
       Das ist die dritte Definition von Term2.
 
-      """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -83,7 +83,7 @@ class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown"
   fun testGitLabExtension() {
     assertPlainText(
       "This is a test: \$`E = mc^2`\$.\n\n```math\na^2 + b^2 = c^2\n```\n\nThis is another test.\n",
-      "This is a test: Dummy0.\n\n\n\n\n\nThis is another test.\n"
+      "This is a test: Dummy0.\n\n\n\n\n\nThis is another test.\n",
     )
   }
 
@@ -99,7 +99,8 @@ class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown"
 
       This is another sentence.
 
-      """.trimIndent(), """
+      """.trimIndent(),
+      """
       This is a test.
 
       First Column Second Column
@@ -108,7 +109,7 @@ class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown"
 
       This is another sentence.
 
-      """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -125,7 +126,7 @@ class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown"
       Test sentence
 
       """.trimIndent(),
-      "\n\n\n\n\nHeading\nTest sentence\n"
+      "\n\n\n\n\nHeading\nTest sentence\n",
     )
     assertPlainText(
       """
@@ -137,7 +138,7 @@ class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown"
       Test sentence
 
       """.trimIndent(),
-      "\n\n\n\nHeading\nTest sentence\n"
+      "\n\n\n\nHeading\nTest sentence\n",
     )
   }
 
@@ -145,7 +146,7 @@ class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown"
   fun testLtexMarkdownExtension() {
     assertPlainText(
       "This is ${"$"}a$, and this is ${"$"}b$.\n",
-      "This is Dummy0, and this is Dummy1.\n"
+      "This is Dummy0, and this is Dummy1.\n",
     )
     assertPlainText(
       """
@@ -154,11 +155,11 @@ class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown"
       The book is $3, not $5.
 
       """.trimIndent(),
-      "This is a test: Dummy0. The book is $3, not $5.\n"
+      "This is a test: Dummy0. The book is $3, not $5.\n",
     )
     assertPlainText(
       "Interesting: $1 \$2 3$.\n",
-      "Interesting: Dummy0.\n"
+      "Interesting: Dummy0.\n",
     )
     assertPlainText(
       """
@@ -172,7 +173,7 @@ class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown"
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\n\n\n\n\n\nThis is another test.\n"
+      "This is a test.\n\n\n\n\n\n\nThis is another test.\n",
     )
   }
 }

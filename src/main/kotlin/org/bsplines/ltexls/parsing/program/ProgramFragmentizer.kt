@@ -35,10 +35,14 @@ class ProgramFragmentizer(
         }
       }
 
-      result.add(oldCodeFragment.copy(settings = settings.copy(
-        _allDictionaries = settings.getModifiedDictionary(dictionary),
-        _allDisabledRules = settings.getModifiedDisabledRules(disabledRules),
-      )))
+      result.add(
+        oldCodeFragment.copy(
+          settings = settings.copy(
+            _allDictionaries = settings.getModifiedDictionary(dictionary),
+            _allDisabledRules = settings.getModifiedDisabledRules(disabledRules),
+          ),
+        ),
+      )
     }
 
     return result

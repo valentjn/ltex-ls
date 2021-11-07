@@ -46,15 +46,17 @@ open class RegexCodeFragmentizer(
       for ((settingKey: String, settingValue: String) in settingsMap) {
         when {
           settingKey.equals("enabled", ignoreCase = true) -> {
-            curSettings = curSettings.copy(_enabled =
-            (if (settingValue == "true") Settings.DEFAULT_ENABLED else emptySet()))
+            curSettings = curSettings.copy(
+              _enabled = (if (settingValue == "true") Settings.DEFAULT_ENABLED else emptySet()),
+            )
           }
           settingKey.equals("language", ignoreCase = true) -> {
             curSettings = curSettings.copy(_languageShortCode = settingValue)
           }
           else -> {
-            Logging.logger.warning(I18n.format("ignoringUnknownInlineSetting",
-                settingKey, settingValue))
+            Logging.logger.warning(
+              I18n.format("ignoringUnknownInlineSetting", settingKey, settingValue),
+            )
           }
         }
       }
@@ -66,8 +68,9 @@ open class RegexCodeFragmentizer(
       codeFragments.add(CodeFragment("nop", lastCode, lastPos, lastSettings))
     }
 
-    codeFragments.add(CodeFragment(
-        codeLanguageId, code.substring(curPos), curPos, curSettings))
+    codeFragments.add(
+      CodeFragment(codeLanguageId, code.substring(curPos), curPos, curSettings),
+    )
 
     return codeFragments
   }

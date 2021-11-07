@@ -15,7 +15,7 @@ open class LatexCommandSignature(
   val commandPrototype: String,
   val action: Action = Action.Ignore,
   val dummyGenerator: DummyGenerator = DummyGenerator.getInstance(),
-  escapeCommandPrefix: Boolean = true
+  escapeCommandPrefix: Boolean = true,
 ) {
   var prefix = ""
   val argumentTypes: List<ArgumentType>
@@ -47,9 +47,9 @@ open class LatexCommandSignature(
       }
 
       this.argumentTypes = argumentTypes
-      this.commandRegex = Regex(
-        "^" + (if (escapeCommandPrefix) Regex.escape(this.prefix) else this.prefix)
-      )
+      val regexString: String =
+          "^" + (if (escapeCommandPrefix) Regex.escape(this.prefix) else this.prefix)
+      this.commandRegex = Regex(regexString)
     } else {
       Logging.logger.warning(I18n.format("invalidCommandPrototype", commandPrototype))
       this.argumentTypes = ArrayList()

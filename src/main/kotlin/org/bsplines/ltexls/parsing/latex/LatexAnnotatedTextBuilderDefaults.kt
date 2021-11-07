@@ -326,7 +326,7 @@ object LatexAnnotatedTextBuilderDefaults {
       LatexCommandSignature(
         "\\cites()()[][]{}[][]{}[][]{}[][]{}[][]{}",
         LatexCommandSignature.Action.Dummy,
-      DummyGenerator.getInstance(plural = true),
+        DummyGenerator.getInstance(plural = true),
       ),
       LatexCommandSignature(
         "\\Cites{}",

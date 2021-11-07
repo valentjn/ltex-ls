@@ -61,7 +61,7 @@ class LspMessage(
     val headerBytes: ByteArray = headerStr.toByteArray(StandardCharsets.US_ASCII)
 
     org.bsplines.ltexls.tools.Logging.logger.fine(
-      String(headerBytes, StandardCharsets.US_ASCII) + String(bodyBytes, StandardCharsets.UTF_8)
+      String(headerBytes, StandardCharsets.US_ASCII) + String(bodyBytes, StandardCharsets.UTF_8),
     )
 
     Thread.sleep(100)
@@ -100,7 +100,7 @@ class LspMessage(
 
     val bodyBytes: ByteArray = read(inputStream, contentLength)
     org.bsplines.ltexls.tools.Logging.logger.fine(
-      String(headerBytes, StandardCharsets.US_ASCII) + String(bodyBytes, StandardCharsets.UTF_8)
+      String(headerBytes, StandardCharsets.US_ASCII) + String(bodyBytes, StandardCharsets.UTF_8),
     )
 
     val bodyJson: JsonElement = JsonParser.parseString(String(bodyBytes, StandardCharsets.UTF_8))
@@ -121,7 +121,7 @@ class LspMessage(
   companion object {
     private val EMPTY_LINE_REGEX = Regex("\r\n\r\n|\n\n")
     private val LOG_REGEX = Regex(
-      "\\[[^]]+] (\\S+) (\\S+) '([^' ]+)(?: - \\(([^)]+)\\))?'.*\\R(?:Params|Result):"
+      "\\[[^]]+] (\\S+) (\\S+) '([^' ]+)(?: - \\(([^)]+)\\))?'.*\\R(?:Params|Result):",
     )
     private val HEADER_REGEX = Regex("(\\S+): (.*)\r\n")
 

@@ -38,7 +38,7 @@ class BibtexFragmentizerTest {
        }
 
       """.trimIndent(),
-      settings
+      settings,
     )
     assertEquals(6, codeFragments.size)
 

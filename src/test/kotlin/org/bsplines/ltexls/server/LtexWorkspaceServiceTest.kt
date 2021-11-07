@@ -52,7 +52,7 @@ class LtexWorkspaceServiceTest {
       } finally {
         if (!tmpFile.delete()) {
           Logging.logger.warning(
-            I18n.format("couldNotDeleteTemporaryFile", tmpFile.toPath().toString())
+            I18n.format("couldNotDeleteTemporaryFile", tmpFile.toPath().toString()),
           )
         }
       }

@@ -78,11 +78,11 @@ abstract class CharacterBasedCodeAnnotatedTextBuilder(
       if (this.pos <= lastPos) {
         if (this.isPreventingInfiniteLoops) {
           throw IllegalStateException(
-            I18n.format("characterBasedCodeAnnotatedTextBuilderInfiniteLoop")
+            I18n.format("characterBasedCodeAnnotatedTextBuilderInfiniteLoop"),
           )
         } else {
           Logging.logger.warning(
-            I18n.format("characterBasedCodeAnnotatedTextBuilderPreventedInfiniteLoop")
+            I18n.format("characterBasedCodeAnnotatedTextBuilderPreventedInfiniteLoop"),
           )
           this.pos++
         }

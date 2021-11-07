@@ -33,7 +33,7 @@ class DocumentCheckerTest {
   fun testLatex() {
     var document: LtexTextDocumentItem = createDocument(
       "latex",
-      "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test.}\n"
+      "This is an \\textbf{test.}\n% LTeX: language=de-DE\nDies ist eine \\textbf{Test.}\n",
     )
     var checkingResult: Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> =
         checkDocument(document)
@@ -42,11 +42,11 @@ class DocumentCheckerTest {
     document = createDocument(
       "latex",
       """
-            This is a qwertyzuiopa\footnote{This is another qwertyzuiopb.}.
-            % ltex: language=de-DE
-            Dies ist ein Qwertyzuiopc\todo[name]{Dies ist ein weiteres Qwertyzuiopd.}.
+      This is a qwertyzuiopa\footnote{This is another qwertyzuiopb.}.
+      % ltex: language=de-DE
+      Dies ist ein Qwertyzuiopc\todo[name]{Dies ist ein weiteres Qwertyzuiopd.}.
 
-            """.trimIndent()
+      """.trimIndent(),
     )
     checkingResult = checkDocument(document)
 
@@ -80,7 +80,7 @@ class DocumentCheckerTest {
 
     assertEquals(
       "This is a qwertyzuiopa\\footnote{This is another qwertyzuiopb.}.\n",
-      annotatedTextFragments[1].codeFragment.code
+      annotatedTextFragments[1].codeFragment.code,
     )
     assertEquals("This is a qwertyzuiopa. ", annotatedTextFragments[1].annotatedText.plainText)
 
@@ -90,7 +90,7 @@ class DocumentCheckerTest {
     assertEquals("Dies ist ein weiteres Qwertyzuiopd.", annotatedTextFragments[3].codeFragment.code)
     assertEquals(
       "Dies ist ein weiteres Qwertyzuiopd.",
-      annotatedTextFragments[3].annotatedText.plainText
+      annotatedTextFragments[3].annotatedText.plainText,
     )
 
     assertEquals(
@@ -99,11 +99,11 @@ class DocumentCheckerTest {
       Dies ist ein Qwertyzuiopc\todo[name]{Dies ist ein weiteres Qwertyzuiopd.}.
 
       """.trimIndent(),
-      annotatedTextFragments[4].codeFragment.code
+      annotatedTextFragments[4].codeFragment.code,
     )
     assertEquals(
       " Dies ist ein Qwertyzuiopc. ",
-      annotatedTextFragments[4].annotatedText.plainText
+      annotatedTextFragments[4].annotatedText.plainText,
     )
     assertOriginalAndPlainTextWords("latex", "The \\v{S}ekki\n", "\\v{S}ekki", "\u0160ekki")
     assertOriginalAndPlainTextWords("latex", "The Sekk\\v{S}\n", "Sekk\\v{S}", "Sekk\u0160")
@@ -112,7 +112,8 @@ class DocumentCheckerTest {
 
   @Test
   fun testMarkdown() {
-    val document: LtexTextDocumentItem = createDocument("markdown",
+    val document: LtexTextDocumentItem = createDocument(
+      "markdown",
       """
       This is an **test.**
 
@@ -120,14 +121,15 @@ class DocumentCheckerTest {
 
       Dies ist eine **Test**.
 
-      """.trimIndent()
+      """.trimIndent(),
     )
     assertMatches(checkDocument(document).first, 8, 10, 62, 73)
   }
 
   @Test
   fun testLanguageDetection() {
-    val document: LtexTextDocumentItem = createDocument("markdown",
+    val document: LtexTextDocumentItem = createDocument(
+      "markdown",
       """
       This is an **test.**
 
@@ -135,7 +137,7 @@ class DocumentCheckerTest {
 
       Dies ist eine **Test**.
 
-      """.trimIndent()
+      """.trimIndent(),
     )
     assertMatches(checkDocument(document).first, 8, 10, 61, 72)
   }
@@ -144,7 +146,7 @@ class DocumentCheckerTest {
   fun testRange() {
     val document: LtexTextDocumentItem = createDocument(
       "markdown",
-      "# Test\n\nThis is an **test.**\n\nThis is an **test.**\n"
+      "# Test\n\nThis is an **test.**\n\nThis is an **test.**\n",
     )
     val settingsManager = SettingsManager(Settings(_logLevel = Level.FINEST))
     val documentChecker = DocumentChecker(settingsManager)
@@ -162,14 +164,14 @@ class DocumentCheckerTest {
   fun testCodeActionGenerator() {
     val document: LtexTextDocumentItem = createDocument(
       "markdown",
-      "This is an unknownword.\n"
+      "This is an unknownword.\n",
     )
     val checkingResult: Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> =
         checkDocument(document)
     val params = CodeActionParams(
       TextDocumentIdentifier(document.uri),
       Range(Position(0, 0), Position(100, 0)),
-      CodeActionContext(emptyList())
+      CodeActionContext(emptyList()),
     )
     val settingsManager = SettingsManager()
     val codeActionProvider = CodeActionProvider(settingsManager)
@@ -180,7 +182,8 @@ class DocumentCheckerTest {
 
   @Test
   fun testEnabled() {
-    val document: LtexTextDocumentItem = createDocument("latex",
+    val document: LtexTextDocumentItem = createDocument(
+      "latex",
       """
       This is a firstunknownword.
       % ltex: enabled=false
@@ -188,7 +191,7 @@ class DocumentCheckerTest {
       % ltex: enabled=true
       This is a thirdunknownword.
 
-      """.trimIndent()
+      """.trimIndent(),
     )
     val checkingResult: Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> =
         checkDocument(document)
@@ -209,7 +212,7 @@ class DocumentCheckerTest {
 
     var document = createDocument(
       "latex",
-      "This is an unknownword.\n% ltex: language=de-DE\nDies ist ein unbekannteswort.\n"
+      "This is an unknownword.\n% ltex: language=de-DE\nDies ist ein unbekannteswort.\n",
     )
     var settings: Settings = Settings.fromJson(jsonSettings, jsonWorkspaceSpecificSettings)
     var checkingResult: Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> =
@@ -244,9 +247,14 @@ class DocumentCheckerTest {
   @Test
   fun testHiddenFalsePositives() {
     val document: LtexTextDocumentItem = createDocument("markdown", "This is an unknownword.\n")
-    val settings = Settings(_allHiddenFalsePositives = mapOf(Pair("en-US", setOf(
-      HiddenFalsePositive("MORFOLOGIK_RULE_EN_US", "This is an unknownword\\."),
-    ))))
+    val settings = Settings(
+      _allHiddenFalsePositives = mapOf(
+        Pair(
+          "en-US",
+          setOf(HiddenFalsePositive("MORFOLOGIK_RULE_EN_US", "This is an unknownword\\.")),
+        ),
+      ),
+    )
     val checkingResult: Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> =
       checkDocument(document, settings)
     assertTrue(checkingResult.first.isEmpty())
@@ -282,13 +290,11 @@ class DocumentCheckerTest {
       assertEquals(1, annotatedTextFragments.size)
       assertEquals(
         expectedOriginalTextWord,
-        code.substring(matches[0].fromPos, matches[0].toPos)
+        code.substring(matches[0].fromPos, matches[0].toPos),
       )
       assertEquals(
         expectedPlainTextWord,
-        annotatedTextFragments[0].getSubstringOfPlainText(
-          matches[0].fromPos, matches[0].toPos
-        )
+        annotatedTextFragments[0].getSubstringOfPlainText(matches[0].fromPos, matches[0].toPos),
       )
     }
 
@@ -309,16 +315,16 @@ class DocumentCheckerTest {
       try {
         assertEquals(
           "Use <suggestion>a</suggestion> instead of 'an' if the following "
-              + "word doesn't start with a vowel sound, e.g. "
-              + "'a sentence', 'a university'.",
-          matches[0].message
+          + "word doesn't start with a vowel sound, e.g. "
+          + "'a sentence', 'a university'.",
+          matches[0].message,
         )
       } catch (e: AssertionError) {
         assertEquals(
           "Use \u201ca\u201d instead of \u2018an\u2019 if the following "
-              + "word doesn\u2019t start with a vowel sound, e.g.\u00a0"
-              + "\u2018a sentence\u2019, \u2018a university\u2019.",
-          matches[0].message
+          + "word doesn\u2019t start with a vowel sound, e.g.\u00a0"
+          + "\u2018a sentence\u2019, \u2018a university\u2019.",
+          matches[0].message,
         )
       }
 
@@ -332,16 +338,16 @@ class DocumentCheckerTest {
       try {
         assertEquals(
           "M\u00f6glicherweise fehlende grammatische \u00dcbereinstimmung des "
-              + "Genus (m\u00e4nnlich, weiblich, s\u00e4chlich - "
-              + "Beispiel: 'der Fahrrad' statt 'das Fahrrad').",
-          matches[1].message
+          + "Genus (m\u00e4nnlich, weiblich, s\u00e4chlich - "
+          + "Beispiel: 'der Fahrrad' statt 'das Fahrrad').",
+          matches[1].message,
         )
       } catch (e: AssertionError) {
         assertEquals(
           "M\u00f6glicherweise fehlende grammatische \u00dcbereinstimmung des "
-              + "Genus (m\u00e4nnlich, weiblich, s\u00e4chlich - "
-              + "Beispiel: \u201ader Fahrrad\u2018 statt \u201adas Fahrrad\u2018).",
-          matches[1].message
+          + "Genus (m\u00e4nnlich, weiblich, s\u00e4chlich - "
+          + "Beispiel: \u201ader Fahrrad\u2018 statt \u201adas Fahrrad\u2018).",
+          matches[1].message,
         )
       }
 

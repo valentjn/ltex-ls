@@ -29,7 +29,7 @@ class LatexCommandSignatureMatcher(
 
       val commandPrefix: String = commandSignature.prefix
       commandPatternStringBuilder.append(
-        if (escapeCommandPrefixes) Regex.escape(commandPrefix) else commandPrefix
+        if (escapeCommandPrefixes) Regex.escape(commandPrefix) else commandPrefix,
       )
     }
 

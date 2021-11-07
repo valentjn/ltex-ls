@@ -25,7 +25,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       **** TODO [#A] Final test :tag:a2%:
 
       """.trimIndent(),
-      "\n\n\n\n\n\n\n\n\nThis is a test\n\n\n\n\n\n\nFinal test\n\n"
+      "\n\n\n\n\n\n\n\n\nThis is a test\n\n\n\n\n\n\nFinal test\n\n",
     )
   }
 
@@ -43,7 +43,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       Final sentence.
 
       """.trimIndent(),
-      "This is a test.\n\n\n\nSecond sentence.\n\n\nFinal sentence.\n"
+      "This is a test.\n\n\n\nSecond sentence.\n\n\nFinal sentence.\n",
     )
   }
 
@@ -58,7 +58,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nContents.\n\nThis is another test.\n"
+      "This is a test.\n\nContents.\n\nThis is another test.\n",
     )
   }
 
@@ -73,7 +73,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nContents.\n\nThis is another test.\n"
+      "This is a test.\n\nContents.\n\nThis is another test.\n",
     )
   }
 
@@ -88,7 +88,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nContents.\n\nThis is another test.\n"
+      "This is a test.\n\nContents.\n\nThis is another test.\n",
     )
   }
 
@@ -103,7 +103,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nThis is another test.\n"
+      "This is a test.\n\nThis is another test.\n",
     )
   }
 
@@ -118,7 +118,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nThis is another test.\n"
+      "This is a test.\n\nThis is another test.\n",
     )
   }
 
@@ -133,7 +133,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nThis is another test.\n"
+      "This is a test.\n\nThis is another test.\n",
     )
   }
 
@@ -148,7 +148,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nThis is another test.\n"
+      "This is a test.\n\nThis is another test.\n",
     )
   }
 
@@ -163,7 +163,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nContents.\n\nThis is another test.\n"
+      "This is a test.\n\nContents.\n\nThis is another test.\n",
     )
   }
 
@@ -178,7 +178,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nContents.\n\nThis is another test.\n"
+      "This is a test.\n\nContents.\n\nThis is another test.\n",
     )
     assertPlainText(
       """
@@ -189,7 +189,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nThis is another test.\n"
+      "This is a test.\n\nThis is another test.\n",
     )
   }
 
@@ -204,7 +204,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nContents.\n\nThis is another test.\n"
+      "This is a test.\n\nContents.\n\nThis is another test.\n",
     )
   }
 
@@ -217,7 +217,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\nContents.\nThis is another test.\n"
+      "This is a test.\nContents.\nThis is another test.\n",
     )
   }
 
@@ -230,7 +230,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
          - Test tag :: Test 3.
 
       """.trimIndent(),
-      "\nTest 1.\n\n\nTest 2.\n\n\nTest 3.\n\n"
+      "\nTest 1.\n\n\nTest 2.\n\n\nTest 3.\n\n",
     )
   }
 
@@ -245,7 +245,8 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       | Test7 | Test8 | Test9 |
       This is another test.
 
-      """.trimIndent(), """
+      """.trimIndent(),
+      """
       This is a test.
 
       Test1
@@ -279,7 +280,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
 
       This is another test.
 
-      """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -292,7 +293,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nThis is another test.\n"
+      "This is a test.\n\nThis is another test.\n",
     )
   }
 
@@ -307,7 +308,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\n\n\nThis is another test.\n"
+      "This is a test.\n\n\n\nThis is another test.\n",
     )
   }
 
@@ -320,7 +321,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nThis is another test.\n"
+      "This is a test.\n\nThis is another test.\n",
     )
   }
 
@@ -333,7 +334,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is a test.
 
       """.trimIndent(),
-      "\nTest\n\n\nThis is a test.\n"
+      "\nTest\n\n\nThis is a test.\n",
     )
   }
 
@@ -347,7 +348,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\nThis is another test.\n"
+      "This is a test.\nThis is another test.\n",
     )
   }
 
@@ -361,7 +362,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nContents.\nThis is another test.\n"
+      "This is a test.\n\nContents.\nThis is another test.\n",
     )
   }
 
@@ -374,7 +375,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nThis is another test.\n"
+      "This is a test.\n\nThis is another test.\n",
     )
   }
 
@@ -387,7 +388,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nThis is another test.\n"
+      "This is a test.\n\nThis is another test.\n",
     )
   }
 
@@ -406,7 +407,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nThis is another test.\n"
+      "This is a test.\n\nThis is another test.\n",
     )
   }
 
@@ -414,7 +415,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
   fun testEntities() {
     assertPlainText(
       "This is a test: \\entityone, \\entitytwo{}.\n",
-      "This is a test: Dummy0, Dummy1.\n"
+      "This is a test: Dummy0, Dummy1.\n",
     )
   }
 
@@ -422,27 +423,27 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
   fun testLatexFragments() {
     assertPlainText(
       "This is a test: \\test[abc][def]{ghi}.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: \\(E = mc^2\\).\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: \\[E = mc^2\\].\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: $\$E = mc^2$$.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: \$E$.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: \$E = mc^2$.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
   }
 
@@ -450,7 +451,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
   fun testExportSnippets() {
     assertPlainText(
       "This is a test: @@html:<b>@@Test@@html:</b>@@.\n",
-      "This is a test: Test.\n"
+      "This is a test: Test.\n",
     )
   }
 
@@ -458,15 +459,15 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
   fun testFootnoteReferences() {
     assertPlainText(
       "This is a test[fn:1].\n",
-      "This is a test.\n"
+      "This is a test.\n",
     )
     assertPlainText(
       "This is a test[fn:1:contents].\n",
-      "This is a test.\n"
+      "This is a test.\n",
     )
     assertPlainText(
       "This is a test[fn::contents].\n",
-      "This is a test.\n"
+      "This is a test.\n",
     )
   }
 
@@ -474,11 +475,11 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
   fun testInlineBabelCalls() {
     assertPlainText(
       "This is a test: call_test(abc, def).\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: call_test[foo](abc, def)[bar].\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
   }
 
@@ -486,11 +487,11 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
   fun testInlineSourceBlocks() {
     assertPlainText(
       "This is a test: src_abc{def}.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: src_abc[foo]{def}.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
   }
 
@@ -498,27 +499,27 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
   fun testLinks() {
     assertPlainText(
       "This is a test: <<<test>>>.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: <<test>>.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: <https://bsplines.org/>.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: https://bsplines.org/.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: [[https://bsplines.org/]].\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: [[https://bsplines.org/][a *good* test]].\n",
-      "This is a test: a good test.\n"
+      "This is a test: a good test.\n",
     )
   }
 
@@ -526,7 +527,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
   fun testMacros() {
     assertPlainText(
       "This is a test: {{{test(abc, def)}}}.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
   }
 
@@ -534,7 +535,7 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
   fun testStatisticsCookies() {
     assertPlainText(
       "This is a test: [50%], [1/3].\n",
-      "This is a test: Dummy0, Dummy1.\n"
+      "This is a test: Dummy0, Dummy1.\n",
     )
   }
 
@@ -542,43 +543,43 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
   fun testTimestamps() {
     assertPlainText(
       "This is a test: <%%(abv)>.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: <1234-05-06 Sat 07:08>.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: <1234-05-06 Sat 07:08 +1w>.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: <1234-05-06 Sat 07:08 -2d>.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: <1234-05-06 Sat 07:08 +1w -2d>.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: [1234-05-06 Sat 07:08].\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: <1234-05-06 Sat 07:08>--<1234-05-06 Sat 07:08>.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: <1234-05-06 Sat 07:08-09:10>.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: [1234-05-06 Sat 07:08]--[1234-05-06 Sat 07:08].\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: [1234-05-06 Sat 07:08-09:10].\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
   }
 
@@ -586,27 +587,27 @@ class OrgAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("org") {
   fun testTextMarkup() {
     assertPlainText(
       "This is a test: *Test*.\n",
-      "This is a test: Test.\n"
+      "This is a test: Test.\n",
     )
     assertPlainText(
       "This is a test: +Test+.\n",
-      "This is a test: Test.\n"
+      "This is a test: Test.\n",
     )
     assertPlainText(
       "This is a test: /Test/.\n",
-      "This is a test: Test.\n"
+      "This is a test: Test.\n",
     )
     assertPlainText(
       "This is a test: =Test=.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
     assertPlainText(
       "This is a test: _Test_.\n",
-      "This is a test: Test.\n"
+      "This is a test: Test.\n",
     )
     assertPlainText(
       "This is a test: ~Test~.\n",
-      "This is a test: Dummy0.\n"
+      "This is a test: Dummy0.\n",
     )
   }
 }

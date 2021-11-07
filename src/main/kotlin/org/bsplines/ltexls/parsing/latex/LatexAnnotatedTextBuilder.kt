@@ -70,7 +70,7 @@ class LatexAnnotatedTextBuilder(
 
     this.environmentSignatures.clear()
     this.environmentSignatures.addAll(
-      LatexAnnotatedTextBuilderDefaults.defaultLatexEnvironmentSignatures
+      LatexAnnotatedTextBuilderDefaults.defaultLatexEnvironmentSignatures,
     )
 
     for ((key, actionString) in settings.latexEnvironments) {
@@ -417,7 +417,9 @@ class LatexAnnotatedTextBuilder(
       addMarkup(command)
 
       val headingArgument: String = LatexCommandSignature.matchArgumentFromPosition(
-        this.code, this.pos, LatexCommandSignature.ArgumentType.Bracket
+        this.code,
+        this.pos,
+        LatexCommandSignature.ArgumentType.Bracket,
       )
 
       if (headingArgument.isNotEmpty()) addMarkup(headingArgument)
@@ -486,7 +488,8 @@ class LatexAnnotatedTextBuilder(
             "\\underline",
             "\\vec",
             "\\widetilde",
-            "\\widehat" -> this.mathVowelState
+            "\\widehat",
+            -> this.mathVowelState
             "\\alpha",
             "\\ell",
             "\\epsilon",
@@ -494,7 +497,8 @@ class LatexAnnotatedTextBuilder(
             "\\iota",
             "\\Omega",
             "\\omega",
-            "\\varepsilon" -> MathVowelState.StartsWithVowel
+            "\\varepsilon",
+            -> MathVowelState.StartsWithVowel
             else -> MathVowelState.StartsWithConsonant
           }
         }
@@ -603,7 +607,6 @@ class LatexAnnotatedTextBuilder(
 
   private fun processQuotationMark() {
     if (isTextMode(this.curMode)) {
-
       var quote = ""
       var smartQuote = ""
 
@@ -803,7 +806,9 @@ class LatexAnnotatedTextBuilder(
   private fun processEnvironmentArguments() {
     while (this.pos < this.code.length) {
       var environmentArgument: String = LatexCommandSignature.matchArgumentFromPosition(
-        this.code, this.pos, LatexCommandSignature.ArgumentType.Brace
+        this.code,
+        this.pos,
+        LatexCommandSignature.ArgumentType.Brace,
       )
 
       if (environmentArgument.isNotEmpty()) {
@@ -812,7 +817,9 @@ class LatexAnnotatedTextBuilder(
       }
 
       environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
-        this.code, this.pos, LatexCommandSignature.ArgumentType.Bracket
+        this.code,
+        this.pos,
+        LatexCommandSignature.ArgumentType.Bracket,
       )
 
       if (environmentArgument.isNotEmpty()) {
@@ -821,7 +828,9 @@ class LatexAnnotatedTextBuilder(
       }
 
       environmentArgument = LatexCommandSignature.matchArgumentFromPosition(
-        this.code, this.pos, LatexCommandSignature.ArgumentType.Parenthesis
+        this.code,
+        this.pos,
+        LatexCommandSignature.ArgumentType.Parenthesis,
       )
 
       if (environmentArgument.isNotEmpty()) {
@@ -861,11 +870,11 @@ class LatexAnnotatedTextBuilder(
     private val EN_DASH_REGEX = Regex("^--")
     private val ACCENT_REGEX1 = Regex(
       "^(?<accentCommand>\\\\[`'^~\"=.])"
-      + "(?:(?<letter1>[A-Za-z]|\\\\i|\\\\j)|\\{(?<letter2>[A-Za-z]|\\\\i|\\\\j)})"
+      + "(?:(?<letter1>[A-Za-z]|\\\\i|\\\\j)|\\{(?<letter2>[A-Za-z]|\\\\i|\\\\j)})",
     )
     private val ACCENT_REGEX2 = Regex(
       "^(?<accentCommand>\\\\[Hbcdkruv])"
-      + "(?: *(?<letter1>[A-Za-z]|\\\\i|\\\\j)|\\{(?<letter2>[A-Za-z]|\\\\i|\\\\j)})"
+      + "(?: *(?<letter1>[A-Za-z]|\\\\i|\\\\j)|\\{(?<letter2>[A-Za-z]|\\\\i|\\\\j)})",
     )
     private val DISPLAY_MATH_REGEX = Regex("^\\$\\$")
     private val VERB_COMMAND_REGEX = Regex("^\\\\verb\\*?(.).*?\\1")
@@ -892,7 +901,7 @@ class LatexAnnotatedTextBuilder(
     )
 
     private fun <T : LatexCommandSignature> createCommandSignatureMap(
-      commandSignatures: List<T>
+      commandSignatures: List<T>,
     ): Map<String, List<T>> {
       val map = HashMap<String, ArrayList<T>>()
 

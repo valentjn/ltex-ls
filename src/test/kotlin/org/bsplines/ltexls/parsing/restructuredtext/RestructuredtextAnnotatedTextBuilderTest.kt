@@ -51,7 +51,7 @@ class RestructuredtextAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("r
       Footnotes may also use symbols, specified with a "" label.
       Here's a reference to the next footnote: Dummy2.
 
-      """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -67,7 +67,7 @@ class RestructuredtextAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("r
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\n\nThis is another test.\n"
+      "This is a test.\n\n\nThis is another test.\n",
     )
   }
 
@@ -82,7 +82,7 @@ class RestructuredtextAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("r
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\n\nThis is another test.\n"
+      "This is a test.\n\n\nThis is another test.\n",
     )
   }
 
@@ -98,7 +98,7 @@ class RestructuredtextAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("r
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\nimages/title.png\n:target: directives_\n\nThis is another test.\n"
+      "This is a test.\n\nimages/title.png\n:target: directives_\n\nThis is another test.\n",
     )
   }
 
@@ -113,7 +113,7 @@ class RestructuredtextAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("r
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\n\nThis is another test.\n"
+      "This is a test.\n\n\nThis is another test.\n",
     )
   }
 
@@ -132,7 +132,7 @@ class RestructuredtextAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("r
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\n\n\nThis is another test.\n"
+      "This is a test.\n\n\n\nThis is another test.\n",
     )
   }
 
@@ -161,7 +161,7 @@ class RestructuredtextAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("r
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\n\nThis is another test.\n"
+      "This is a test.\n\n\nThis is another test.\n",
     )
   }
 
@@ -185,7 +185,7 @@ class RestructuredtextAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("r
       This is another test.
 
       """.trimIndent(),
-      "This is a test.\n\n\nThis is another test.\n"
+      "This is a test.\n\n\nThis is another test.\n",
     )
   }
 
@@ -223,7 +223,7 @@ class RestructuredtextAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("r
 
       This is another test.
 
-      """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -257,7 +257,7 @@ class RestructuredtextAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("r
       |
       Blank lines are permitted internally, but they must begin with a "|".
 
-      """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -301,7 +301,7 @@ class RestructuredtextAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("r
 
       Nested item 3.
 
-      """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -331,7 +331,7 @@ class RestructuredtextAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("r
 
       upper roman)
 
-      """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -383,7 +383,7 @@ class RestructuredtextAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("r
       and explicit roles for Dummy14 Dummy15
       Dummy16.
 
-      """.trimIndent()
+      """.trimIndent(),
     )
   }
 }

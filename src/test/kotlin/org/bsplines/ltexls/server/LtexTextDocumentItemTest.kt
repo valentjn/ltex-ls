@@ -53,13 +53,17 @@ class LtexTextDocumentItemTest {
   fun testApplyIncrementalTextChangeEvents() {
     val languageServer = LtexLanguageServer()
     val document = LtexTextDocumentItem(
-      languageServer, "untitled:test.md", "markdown", 1, "abcdef"
+      languageServer,
+      "untitled:test.md",
+      "markdown",
+      1,
+      "abcdef",
     )
     val pastInstant: Instant = Instant.now().minus(Duration.ofSeconds(10))
 
     document.lastCaretChangeInstant = pastInstant
     document.applyTextChangeEvent(
-      TextDocumentContentChangeEvent(Range(Position(0, 3), Position(0, 3)), 0, "1")
+      TextDocumentContentChangeEvent(Range(Position(0, 3), Position(0, 3)), 0, "1"),
     )
     assertEquals("abc1def", document.text)
     assertEquals(Position(0, 4), document.caretPosition)
@@ -67,22 +71,20 @@ class LtexTextDocumentItemTest {
 
     document.lastCaretChangeInstant = pastInstant
     document.applyTextChangeEvent(
-      TextDocumentContentChangeEvent(
-        Range(Position(0, 1), Position(0, 2)), 1, ""
-      )
+      TextDocumentContentChangeEvent(Range(Position(0, 1), Position(0, 2)), 1, ""),
     )
     assertEquals("ac1def", document.text)
     assertEquals(Position(0, 1), document.caretPosition)
     assertTrue(Duration.between(document.lastCaretChangeInstant, Instant.now()).toMillis() < 100)
 
     document.applyTextChangeEvent(
-      TextDocumentContentChangeEvent(Range(Position(0, 3), Position(0, 3)), 0, "23")
+      TextDocumentContentChangeEvent(Range(Position(0, 3), Position(0, 3)), 0, "23"),
     )
     assertEquals("ac123def", document.text)
     assertEquals(Position(0, 5), document.caretPosition)
 
     document.applyTextChangeEvents(
-      listOf(TextDocumentContentChangeEvent(Range(Position(0, 5), Position(0, 5)), 0, "4"))
+      listOf(TextDocumentContentChangeEvent(Range(Position(0, 5), Position(0, 5)), 0, "4")),
     )
     assertEquals("ac1234def", document.text)
     assertEquals(Position(0, 6), document.caretPosition)
@@ -91,7 +93,7 @@ class LtexTextDocumentItemTest {
       listOf(
         TextDocumentContentChangeEvent(Range(Position(0, 6), Position(0, 6)), 0, "5"),
         TextDocumentContentChangeEvent(Range(Position(0, 7), Position(0, 7)), 0, "6"),
-      )
+      ),
     )
     assertEquals("ac123456def", document.text)
     assertNull(document.caretPosition)
@@ -127,7 +129,7 @@ class LtexTextDocumentItemTest {
       listOf(
         TextDocumentContentChangeEvent("ac12345def"),
         TextDocumentContentChangeEvent("ac123456def"),
-      )
+      ),
     )
     assertEquals("ac123456def", document.text)
     assertNull(document.caretPosition)

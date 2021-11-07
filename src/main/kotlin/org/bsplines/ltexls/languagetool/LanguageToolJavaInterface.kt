@@ -45,9 +45,13 @@ class LanguageToolJavaInterface(
   init {
     if (Languages.isLanguageSupported(languageShortCode)) {
       val language: Language = Languages.getLanguageForShortCode(languageShortCode)
-      val motherTongue: Language? = (if (motherTongueShortCode.isNotEmpty())
-          Languages.getLanguageForShortCode(motherTongueShortCode) else null)
+      val motherTongue: Language? = if (motherTongueShortCode.isNotEmpty()) {
+        Languages.getLanguageForShortCode(motherTongueShortCode)
+      } else {
+        null
+      }
       val userConfig = UserConfig(dictionary.toList())
+
       this.languageTool = JLanguageTool(language, motherTongue, this.resultCache, userConfig)
     } else {
       Logging.logger.severe(I18n.format("notARecognizedLanguage", languageShortCode))
@@ -70,47 +74,49 @@ class LanguageToolJavaInterface(
       return emptyList()
     }
 
-    if (Logging.logger.isLoggable(Level.FINER)) {
-      Logging.logger.finer("matchesCache.size() = " + this.resultCache.matchesCache.size())
-      Logging.logger.finer("remoteMatchesCache.size() = "
-          + this.resultCache.remoteMatchesCache.size())
-      Logging.logger.finer("sentenceCache.size() = " + this.resultCache.sentenceCache.size())
-
-      if (Logging.logger.isLoggable(Level.FINEST)) {
-        Logging.logger.finest("matchesCache = "
-            + mapToString(this.resultCache.matchesCache.asMap()))
-        Logging.logger.finest("remoteMatchesCache = "
-            + mapToString(this.resultCache.remoteMatchesCache.asMap()))
-        Logging.logger.finest("sentenceCache = "
-            + mapToString(this.resultCache.sentenceCache.asMap()))
-      }
-    }
+    logResultCache()
 
     val ruleMatchListener: RuleMatchListener? = null
-    val ruleLevel: JLanguageTool.Level = (
-        if (annotatedTextFragment.codeFragment.settings.enablePickyRules)
-        JLanguageTool.Level.PICKY else JLanguageTool.Level.DEFAULT)
+    val ruleLevel: JLanguageTool.Level =
+    if (annotatedTextFragment.codeFragment.settings.enablePickyRules) {
+      JLanguageTool.Level.PICKY
+    } else {
+      JLanguageTool.Level.DEFAULT
+    }
 
     annotatedTextFragment.document.raiseExceptionIfCanceled()
-    languageTool.setCheckCancelledCallback(JLanguageTool.CheckCancelledCallback {
-      annotatedTextFragment.document.raiseExceptionIfCanceled()
-      false
-    })
+    languageTool.setCheckCancelledCallback(
+      JLanguageTool.CheckCancelledCallback {
+        annotatedTextFragment.document.raiseExceptionIfCanceled()
+        false
+      },
+    )
 
     val matches: List<RuleMatch> = try {
       // workaround bugs like https://github.com/languagetool-org/languagetool/issues/3181,
       // in which LT prints to stdout instead of stderr (this messes up the LSP communication
       // and results in a deadlock) => temporarily discard output to stdout
       val stdout: PrintStream = System.out
-      System.setOut(PrintStream(object : OutputStream() {
-        override fun write(b: Int) {
-        }
-      }, false, "utf-8"))
+      System.setOut(
+        PrintStream(
+          object : OutputStream() {
+            override fun write(b: Int) {
+            }
+          },
+          false,
+          "utf-8",
+        ),
+      )
 
       try {
-        languageTool.check(annotatedTextFragment.annotatedText, true,
-            JLanguageTool.ParagraphHandling.NORMAL, ruleMatchListener, JLanguageTool.Mode.ALL,
-            ruleLevel)
+        languageTool.check(
+          annotatedTextFragment.annotatedText,
+          true,
+          JLanguageTool.ParagraphHandling.NORMAL,
+          ruleMatchListener,
+          JLanguageTool.Mode.ALL,
+          ruleLevel,
+        )
       } finally {
         System.setOut(stdout)
       }
@@ -130,6 +136,28 @@ class LanguageToolJavaInterface(
     return result
   }
 
+  private fun logResultCache() {
+    if (Logging.logger.isLoggable(Level.FINER)) {
+      Logging.logger.finer("matchesCache.size() = " + this.resultCache.matchesCache.size())
+      Logging.logger.finer(
+        "remoteMatchesCache.size() = " + this.resultCache.remoteMatchesCache.size(),
+      )
+      Logging.logger.finer("sentenceCache.size() = " + this.resultCache.sentenceCache.size())
+
+      if (Logging.logger.isLoggable(Level.FINEST)) {
+        Logging.logger.finest(
+          "matchesCache = " + mapToString(this.resultCache.matchesCache.asMap()),
+        )
+        Logging.logger.finest(
+          "remoteMatchesCache = " + mapToString(this.resultCache.remoteMatchesCache.asMap()),
+        )
+        Logging.logger.finest(
+          "sentenceCache = " + mapToString(this.resultCache.sentenceCache.asMap()),
+        )
+      }
+    }
+  }
+
   override fun activateDefaultFalseFriendRules() {
     val languageTool: JLanguageTool = (this.languageTool ?: return)
 
@@ -139,8 +167,8 @@ class LanguageToolJavaInterface(
     var exception: Exception? = null
 
     try {
-      val falseFriendRules: List<AbstractPatternRule> = languageTool.loadFalseFriendRules(
-          falseFriendRulePath)
+      val falseFriendRules: List<AbstractPatternRule> =
+          languageTool.loadFalseFriendRules(falseFriendRulePath)
       for (rule: Rule in falseFriendRules) languageTool.addRule(rule)
     } catch (e: IOException) {
       exception = e
@@ -151,8 +179,9 @@ class LanguageToolJavaInterface(
     }
 
     if (exception != null) {
-      Logging.logger.warning(I18n.format("couldNotLoadFalseFriendRules", exception,
-          falseFriendRulePath))
+      Logging.logger.warning(
+        I18n.format("couldNotLoadFalseFriendRules", exception, falseFriendRulePath),
+      )
     }
   }
 
@@ -163,7 +192,7 @@ class LanguageToolJavaInterface(
       languageTool.activateLanguageModelRules(File(languageModelRulesDirectory))
     } catch (e: IOException) {
       Logging.logger.warning(
-        I18n.format("couldNotLoadLanguageModel", e, languageModelRulesDirectory)
+        I18n.format("couldNotLoadLanguageModel", e, languageModelRulesDirectory),
       )
     }
   }
@@ -174,8 +203,9 @@ class LanguageToolJavaInterface(
     try {
       languageTool.activateNeuralNetworkRules(File(neuralNetworkRulesDirectory))
     } catch (e: IOException) {
-      Logging.logger.warning(I18n.format("couldNotLoadNeuralNetworkModel", e,
-          neuralNetworkRulesDirectory))
+      Logging.logger.warning(
+        I18n.format("couldNotLoadNeuralNetworkModel", e, neuralNetworkRulesDirectory),
+      )
     }
   }
 
@@ -201,66 +231,75 @@ class LanguageToolJavaInterface(
   override fun enableEasterEgg() {
     val languageTool: JLanguageTool = (this.languageTool ?: return)
 
-    languageTool.addRule(object : Rule() {
-      override fun getId(): String {
-        return "bspline"
-      }
-
-      override fun getDescription(): String {
-        return "Unknown basis function"
-      }
-
-      override fun match(sentence: AnalyzedSentence): Array<RuleMatch> {
-        val matches = ArrayList<RuleMatch>()
-
-        for (token: AnalyzedTokenReadings in sentence.tokens) {
-          if (token.token.equals("hat", ignoreCase = true)) {
-            matches.add(RuleMatch(
-              this,
-              sentence,
-              token.startPos,
-              token.endPos,
-              "Unknown basis function. Did you mean <suggestion>B-spline</suggestion>?",
-            ))
-          }
+    languageTool.addRule(
+      object : Rule() {
+        override fun getId(): String {
+          return "bspline"
         }
 
-        return matches.toTypedArray()
-      }
-    })
-
-    languageTool.addRule(object : Rule() {
-      override fun getId(): String {
-        return "ungendered"
-      }
-
-      override fun getDescription(): String {
-        return "Ungendered variant"
-      }
-
-      override fun match(sentence: AnalyzedSentence): Array<RuleMatch> {
-        val matches = ArrayList<RuleMatch>()
-
-        for (token: AnalyzedTokenReadings in sentence.tokens) {
-          val tokenString: String = token.token
-
-          if (
-            (tokenString.length >= 2)
-            && tokenString.substring(tokenString.length - 2).equals("er", ignoreCase = true)
-          ) {
-            matches.add(RuleMatch(
-              this,
-              sentence,
-              token.startPos,
-              token.endPos,
-              "Ungendered variant detected. Did you mean <suggestion>$tokenString*in</suggestion>?",
-            ))
-          }
+        override fun getDescription(): String {
+          return "Unknown basis function"
         }
 
-        return matches.toTypedArray()
-      }
-    })
+        override fun match(sentence: AnalyzedSentence): Array<RuleMatch> {
+          val matches = ArrayList<RuleMatch>()
+
+          for (token: AnalyzedTokenReadings in sentence.tokens) {
+            if (token.token.equals("hat", ignoreCase = true)) {
+              matches.add(
+                RuleMatch(
+                  this,
+                  sentence,
+                  token.startPos,
+                  token.endPos,
+                  "Unknown basis function. Did you mean <suggestion>B-spline</suggestion>?",
+                ),
+              )
+            }
+          }
+
+          return matches.toTypedArray()
+        }
+      },
+    )
+
+    languageTool.addRule(
+      object : Rule() {
+        override fun getId(): String {
+          return "ungendered"
+        }
+
+        override fun getDescription(): String {
+          return "Ungendered variant"
+        }
+
+        override fun match(sentence: AnalyzedSentence): Array<RuleMatch> {
+          val matches = ArrayList<RuleMatch>()
+
+          for (token: AnalyzedTokenReadings in sentence.tokens) {
+            val tokenString: String = token.token
+
+            if (
+              (tokenString.length >= 2)
+              && tokenString.substring(tokenString.length - 2).equals("er", ignoreCase = true)
+            ) {
+              matches.add(
+                RuleMatch(
+                  this,
+                  sentence,
+                  token.startPos,
+                  token.endPos,
+                  "Ungendered variant detected. "
+                  + "Did you mean <suggestion>$tokenString*in</suggestion>?",
+                ),
+              )
+            }
+          }
+
+          return matches.toTypedArray()
+        }
+      },
+    )
   }
 
   companion object {

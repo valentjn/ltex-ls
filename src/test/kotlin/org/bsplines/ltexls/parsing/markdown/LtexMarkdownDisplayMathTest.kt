@@ -77,7 +77,7 @@ class LtexMarkdownDisplayMathTest {
     assertEquals(
       " open:[0, 2, \"$$\"] openTrail:[0, 3, \"abc\"] "
           + "close:[0, 2, \"$$\"] closeTrail:[0, 3, \"def\"]",
-      stringBuilder.toString()
+      stringBuilder.toString(),
     )
   }
 

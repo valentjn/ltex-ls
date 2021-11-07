@@ -77,8 +77,8 @@ class NonServerChecker {
       codeLanguageId = FileIo.getCodeLanguageIdFromPath(path) ?: "plaintext"
     }
 
-    val document = LtexTextDocumentItem(this.languageServer,
-        path.toUri().toString(), codeLanguageId, 1, text)
+    val document =
+        LtexTextDocumentItem(this.languageServer, path.toUri().toString(), codeLanguageId, 1, text)
 
     val checkingResult: Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> =
         this.languageServer.documentChecker.check(document)
@@ -153,18 +153,22 @@ class NonServerChecker {
 
       val ruleId: String = match.ruleId ?: ""
 
-      println(Ansi.ansi().bold().a(path.toString()).a(":")
-          .a(fromPosition.line + 1).a(":").a(fromPosition.character + 1).a(": ")
-          .fg(color).a(typeString).a(":").reset().bold().a(" ").a(message)
-          .a(" [").a(ruleId).a("]").reset())
+      println(
+        Ansi.ansi().bold().a(path.toString()).a(":")
+        .a(fromPosition.line + 1).a(":").a(fromPosition.character + 1).a(": ")
+        .fg(color).a(typeString).a(":").reset().bold().a(" ").a(message)
+        .a(" [").a(ruleId).a("]").reset(),
+      )
 
       val lineStartPos: Int = document.convertPosition(Position(fromPosition.line, 0))
       val lineEndPos: Int = document.convertPosition(Position(fromPosition.line + 1, 0))
       val line: String = text.substring(lineStartPos, lineEndPos)
 
-      println(Ansi.ansi().a(line.substring(0, fromPos - lineStartPos)).bold().fg(color)
-          .a(line.substring(fromPos - lineStartPos, toPos - lineStartPos)).reset()
-          .a(line.substring(toPos - lineStartPos).replaceFirst(TRAILING_WHITESPACE_REGEX, "")))
+      println(
+        Ansi.ansi().a(line.substring(0, fromPos - lineStartPos)).bold().fg(color)
+        .a(line.substring(fromPos - lineStartPos, toPos - lineStartPos)).reset()
+        .a(line.substring(toPos - lineStartPos).replaceFirst(TRAILING_WHITESPACE_REGEX, "")),
+      )
 
       var indentationSize = guessIndentationSize(text, lineStartPos, fromPos, terminalWidth)
       val suggestedReplacements = ArrayList<String>()
@@ -178,8 +182,7 @@ class NonServerChecker {
       val indentation: String = " ".repeat(indentationSize)
 
       for (suggestedReplacement: String in suggestedReplacements) {
-        println(Ansi.ansi().a(indentation).fg(Color.GREEN)
-            .a(suggestedReplacement).reset())
+        println(Ansi.ansi().a(indentation).fg(Color.GREEN).a(suggestedReplacement).reset())
       }
     }
 

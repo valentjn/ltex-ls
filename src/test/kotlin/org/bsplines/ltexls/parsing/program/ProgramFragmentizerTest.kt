@@ -16,17 +16,17 @@ class ProgramFragmentizerTest {
     RestructuredtextFragmentizerTest.assertFragmentizer(
       "java",
       """
-            Sentence 1
+      Sentence 1
 
-            // ltex: language=de-DE
+      // ltex: language=de-DE
 
-            Sentence 2
+      Sentence 2
 
-            //	ltex:	language=en-US
+      //	ltex:	language=en-US
 
-            Sentence 3
+      Sentence 3
 
-            """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -35,17 +35,17 @@ class ProgramFragmentizerTest {
     RestructuredtextFragmentizerTest.assertFragmentizer(
       "python",
       """
-            Sentence 1
+      Sentence 1
 
-            #  ltex: language=de-DE
+      #  ltex: language=de-DE
 
-            Sentence 2
+      Sentence 2
 
-            #		ltex:	language=en-US
+      #		ltex:	language=en-US
 
-            Sentence 3
+      Sentence 3
 
-            """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -54,17 +54,17 @@ class ProgramFragmentizerTest {
     RestructuredtextFragmentizerTest.assertFragmentizer(
       "powershell",
       """
-            Sentence 1
+      Sentence 1
 
-            #  ltex: language=de-DE
+      #  ltex: language=de-DE
 
-            Sentence 2
+      Sentence 2
 
-            #		ltex:	language=en-US
+      #		ltex:	language=en-US
 
-            Sentence 3
+      Sentence 3
 
-            """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -73,17 +73,17 @@ class ProgramFragmentizerTest {
     RestructuredtextFragmentizerTest.assertFragmentizer(
       "julia",
       """
-            Sentence 1
+      Sentence 1
 
-            #  ltex: language=de-DE
+      #  ltex: language=de-DE
 
-            Sentence 2
+      Sentence 2
 
-            #		ltex:	language=en-US
+      #		ltex:	language=en-US
 
-            Sentence 3
+      Sentence 3
 
-            """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -92,17 +92,17 @@ class ProgramFragmentizerTest {
     RestructuredtextFragmentizerTest.assertFragmentizer(
       "lua",
       """
-            Sentence 1
+      Sentence 1
 
-            -- ltex: language=de-DE
+      -- ltex: language=de-DE
 
-            Sentence 2
+      Sentence 2
 
-            --	ltex:	language=en-US
+      --	ltex:	language=en-US
 
-            Sentence 3
+      Sentence 3
 
-            """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -111,17 +111,17 @@ class ProgramFragmentizerTest {
     RestructuredtextFragmentizerTest.assertFragmentizer(
       "haskell",
       """
-            Sentence 1
+      Sentence 1
 
-            -- ltex: language=de-DE
+      -- ltex: language=de-DE
 
-            Sentence 2
+      Sentence 2
 
-            --	ltex:	language=en-US
+      --	ltex:	language=en-US
 
-            Sentence 3
+      Sentence 3
 
-            """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -130,17 +130,17 @@ class ProgramFragmentizerTest {
     RestructuredtextFragmentizerTest.assertFragmentizer(
       "sql",
       """
-            Sentence 1
+      Sentence 1
 
-            -- ltex: language=de-DE
+      -- ltex: language=de-DE
 
-            Sentence 2
+      Sentence 2
 
-            --	ltex:	language=en-US
+      --	ltex:	language=en-US
 
-            Sentence 3
+      Sentence 3
 
-            """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -149,17 +149,17 @@ class ProgramFragmentizerTest {
     RestructuredtextFragmentizerTest.assertFragmentizer(
       "lisp",
       """
-            Sentence 1
+      Sentence 1
 
-            ;  ltex: language=de-DE
+      ;  ltex: language=de-DE
 
-            Sentence 2
+      Sentence 2
 
-            ;		ltex:	language=en-US
+      ;		ltex:	language=en-US
 
-            Sentence 3
+      Sentence 3
 
-            """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -168,17 +168,17 @@ class ProgramFragmentizerTest {
     RestructuredtextFragmentizerTest.assertFragmentizer(
       "matlab",
       """
-            Sentence 1
+      Sentence 1
 
-            %  ltex: language=de-DE
+      %  ltex: language=de-DE
 
-            Sentence 2
+      Sentence 2
 
-            %		ltex:	language=en-US
+      %		ltex:	language=en-US
 
-            Sentence 3
+      Sentence 3
 
-            """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -187,17 +187,17 @@ class ProgramFragmentizerTest {
     RestructuredtextFragmentizerTest.assertFragmentizer(
       "erlang",
       """
-            Sentence 1
+      Sentence 1
 
-            %  ltex: language=de-DE
+      %  ltex: language=de-DE
 
-            Sentence 2
+      Sentence 2
 
-            %		ltex:	language=en-US
+      %		ltex:	language=en-US
 
-            Sentence 3
+      Sentence 3
 
-            """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -206,17 +206,17 @@ class ProgramFragmentizerTest {
     RestructuredtextFragmentizerTest.assertFragmentizer(
       "fortran-modern",
       """
-            Sentence 1
+      Sentence 1
 
-            c  ltex: language=de-DE
+      c  ltex: language=de-DE
 
-            Sentence 2
+      Sentence 2
 
-            c		ltex:	language=en-US
+      c		ltex:	language=en-US
 
-            Sentence 3
+      Sentence 3
 
-            """.trimIndent()
+      """.trimIndent(),
     )
   }
 
@@ -225,17 +225,17 @@ class ProgramFragmentizerTest {
     RestructuredtextFragmentizerTest.assertFragmentizer(
       "vb",
       """
-            Sentence 1
+      Sentence 1
 
-            '  ltex: language=de-DE
+      '  ltex: language=de-DE
 
-            Sentence 2
+      Sentence 2
 
-            '		ltex:	language=en-US
+      '		ltex:	language=en-US
 
-            Sentence 3
+      Sentence 3
 
-            """.trimIndent()
+      """.trimIndent(),
     )
   }
 }

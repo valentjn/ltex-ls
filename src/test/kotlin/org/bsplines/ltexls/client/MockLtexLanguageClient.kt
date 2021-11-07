@@ -46,7 +46,7 @@ class MockLtexLanguageClient : LtexLanguageClient {
   }
 
   override fun ltexWorkspaceSpecificConfiguration(
-    configurationParams: ConfigurationParams
+    configurationParams: ConfigurationParams,
   ): CompletableFuture<List<Any?>> {
     return CompletableFuture.completedFuture(listOf(JsonObject()))
   }

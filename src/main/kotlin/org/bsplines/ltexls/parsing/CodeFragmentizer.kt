@@ -33,8 +33,7 @@ abstract class CodeFragmentizer(
       val curNewFragments: List<CodeFragment> = fragmentize(oldFragment.code, oldFragment.settings)
 
       for (newFragment: CodeFragment in curNewFragments) {
-        newFragments.add(newFragment.copy(
-            fromPos = newFragment.fromPos + oldFragment.fromPos))
+        newFragments.add(newFragment.copy(fromPos = newFragment.fromPos + oldFragment.fromPos))
       }
     }
 

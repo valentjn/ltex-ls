@@ -23,6 +23,7 @@ import org.eclipse.lsp4j.Command
 import org.eclipse.lsp4j.Diagnostic
 import org.eclipse.lsp4j.DiagnosticCodeDescription
 import org.eclipse.lsp4j.DiagnosticSeverity
+import org.eclipse.lsp4j.Position
 import org.eclipse.lsp4j.Range
 import org.eclipse.lsp4j.ResourceOperation
 import org.eclipse.lsp4j.TextDocumentEdit
@@ -37,8 +38,9 @@ class CodeActionProvider(
 ) {
   fun createDiagnostic(match: LanguageToolRuleMatch, document: LtexTextDocumentItem): Diagnostic {
     val diagnostic = Diagnostic()
-    diagnostic.range = Range(document.convertPosition(match.fromPos),
-        document.convertPosition(match.toPos))
+    val fromPosition: Position = document.convertPosition(match.fromPos)
+    val toPosition: Position = document.convertPosition(match.toPos)
+    diagnostic.range = Range(fromPosition, toPosition)
 
     val diagnosticSeverityMap: Map<String, DiagnosticSeverity> =
         this.settingsManager.settings.diagnosticSeverity
@@ -103,23 +105,43 @@ class CodeActionProvider(
       (newWord: String, acceptSuggestionsMatches: List<LanguageToolRuleMatch>)
       in acceptSuggestionsMatchesMap
     ) {
-      result.add(Either.forRight(getAcceptSuggestionsCodeAction(
-          document, newWord, acceptSuggestionsMatches)))
+      result.add(
+        Either.forRight(
+          getAcceptSuggestionsCodeAction(document, newWord, acceptSuggestionsMatches),
+        ),
+      )
     }
 
     if (addToDictionaryMatches.isNotEmpty()) {
-      result.add(Either.forRight(getAddWordToDictionaryCodeAction(document,
-          addToDictionaryMatches, annotatedTextFragments)))
+      result.add(
+        Either.forRight(
+          getAddWordToDictionaryCodeAction(
+            document,
+            addToDictionaryMatches,
+            annotatedTextFragments,
+          ),
+        ),
+      )
     }
 
     if (hideFalsePositivesMatches.isNotEmpty()) {
-      result.add(Either.forRight(getHideFalsePositivesCodeAction(document,
-          hideFalsePositivesMatches, annotatedTextFragments)))
+      result.add(
+        Either.forRight(
+          getHideFalsePositivesCodeAction(
+            document,
+            hideFalsePositivesMatches,
+            annotatedTextFragments,
+          ),
+        ),
+      )
     }
 
     if (disableRulesMatches.isNotEmpty()) {
-      result.add(Either.forRight(getDisableRulesCodeAction(document,
-          disableRulesMatches, annotatedTextFragments)))
+      result.add(
+        Either.forRight(
+          getDisableRulesCodeAction(document, disableRulesMatches, annotatedTextFragments),
+        ),
+      )
     }
 
     return result
@@ -139,12 +161,18 @@ class CodeActionProvider(
       val range: Range = diagnostic.range
 
       diagnostics.add(diagnostic)
-      documentChanges.add(Either.forLeft(TextDocumentEdit(textDocument,
-          listOf(TextEdit(range, newWord)))))
+      documentChanges.add(
+        Either.forLeft(TextDocumentEdit(textDocument, listOf(TextEdit(range, newWord)))),
+      )
     }
 
-    val codeAction = CodeAction(if (acceptSuggestionsMatches.size == 1)
-        I18n.format("useWord", newWord) else I18n.format("useWordAllSelectedMatches", newWord))
+    val codeAction = CodeAction(
+      if (acceptSuggestionsMatches.size == 1) {
+        I18n.format("useWord", newWord)
+      } else {
+        I18n.format("useWordAllSelectedMatches", newWord)
+      },
+    )
     codeAction.kind = ACCEPT_SUGGESTIONS_CODE_ACTION_KIND
     codeAction.diagnostics = diagnostics
     codeAction.edit = WorkspaceEdit(documentChanges)
@@ -162,8 +190,7 @@ class CodeActionProvider(
     val diagnostics = ArrayList<Diagnostic>()
 
     for (match: LanguageToolRuleMatch in addToDictionaryMatches) {
-      val fragmentIndex: Int = findAnnotatedTextFragmentWithMatch(
-          annotatedTextFragments, match)
+      val fragmentIndex: Int = findAnnotatedTextFragmentWithMatch(annotatedTextFragments, match)
 
       if (fragmentIndex == -1) {
         Logging.logger.warning(I18n.format("couldNotFindFragmentForMatch"))
@@ -175,7 +202,9 @@ class CodeActionProvider(
       val language: String = codeFragment.languageShortCode
       val offset: Int = codeFragment.fromPos
       val word: String = annotatedTextFragment.getSubstringOfPlainText(
-          match.fromPos - offset, match.toPos - offset)
+        match.fromPos - offset,
+        match.toPos - offset,
+      )
 
       addToMap(language, word, unknownWordsMap, unknownWordsJsonObject)
       diagnostics.add(createDiagnostic(match, document))
@@ -186,9 +215,11 @@ class CodeActionProvider(
     arguments.add("words", unknownWordsJsonObject)
 
     val onlyUnknownWord: String? = getOnlyEntry(unknownWordsMap)
-    val commandTitle: String = (if (onlyUnknownWord != null)
-        I18n.format("addWordToDictionary", onlyUnknownWord) else
-        I18n.format("addAllUnknownWordsInSelectionToDictionary"))
+    val commandTitle: String = if (onlyUnknownWord != null) {
+      I18n.format("addWordToDictionary", onlyUnknownWord)
+    } else {
+      I18n.format("addAllUnknownWordsInSelectionToDictionary")
+    }
     val command = Command(commandTitle, ADD_TO_DICTIONARY_COMMAND_NAME)
     command.arguments = listOf(arguments)
 
@@ -219,8 +250,7 @@ class CodeActionProvider(
       val pair: Pair<String, String> = Pair(ruleId, sentence)
 
       if (!ruleIdSentencePairs.contains(pair)) {
-        val fragmentIndex: Int = findAnnotatedTextFragmentWithMatch(
-            annotatedTextFragments, match)
+        val fragmentIndex: Int = findAnnotatedTextFragmentWithMatch(annotatedTextFragments, match)
 
         if (fragmentIndex == -1) {
           Logging.logger.warning(I18n.format("couldNotFindFragmentForMatch"))
@@ -235,8 +265,9 @@ class CodeActionProvider(
         var lastEnd = 0
 
         for (matchResult: MatchResult in DUMMY_REGEX.findAll(sentence)) {
-          sentencePatternStringBuilder.append(Regex.escape(
-              sentence.substring(lastEnd, matchResult.range.first)))
+          sentencePatternStringBuilder.append(
+            Regex.escape(sentence.substring(lastEnd, matchResult.range.first)),
+          )
           sentencePatternStringBuilder.append(DUMMY_REGEX_STRING)
           lastEnd = matchResult.range.last + 1
         }
@@ -252,8 +283,12 @@ class CodeActionProvider(
         val sentencePatternString = "^$sentencePatternStringBuilder$"
         falsePositiveJson.add("sentence", JsonPrimitive(sentencePatternString))
 
-        addToMap(language, falsePositiveJson.toString(), hiddenFalsePositivesMap,
-            falsePositivesJsonObject)
+        addToMap(
+          language,
+          falsePositiveJson.toString(),
+          hiddenFalsePositivesMap,
+          falsePositivesJsonObject,
+        )
       }
 
       diagnostics.add(createDiagnostic(match, document))
@@ -263,10 +298,14 @@ class CodeActionProvider(
     arguments.addProperty("uri", document.uri)
     arguments.add("falsePositives", falsePositivesJsonObject)
 
-    val command = Command((if (ruleIdSentencePairs.size == 1)
-          I18n.format("hideFalsePositive") else
-          I18n.format("hideAllFalsePositivesInTheSelectedSentences")),
-        HIDE_FALSE_POSITIVES_COMMAND_NAME)
+    val command = Command(
+      if (ruleIdSentencePairs.size == 1) {
+        I18n.format("hideFalsePositive")
+      } else {
+        I18n.format("hideAllFalsePositivesInTheSelectedSentences")
+      },
+      HIDE_FALSE_POSITIVES_COMMAND_NAME,
+    )
     command.arguments = listOf(arguments)
 
     val codeAction = CodeAction(command.title)
@@ -290,8 +329,7 @@ class CodeActionProvider(
       val ruleId: String? = match.ruleId
 
       if (ruleId != null) {
-        val fragmentIndex: Int = findAnnotatedTextFragmentWithMatch(
-            annotatedTextFragments, match)
+        val fragmentIndex: Int = findAnnotatedTextFragmentWithMatch(annotatedTextFragments, match)
 
         if (fragmentIndex == -1) {
           Logging.logger.warning(I18n.format("couldNotFindFragmentForMatch"))
@@ -310,9 +348,11 @@ class CodeActionProvider(
     arguments.addProperty("uri", document.uri)
     arguments.add("ruleIds", ruleIdsJsonObject)
 
-    val commandTitle: String = (if (getOnlyEntry(ruleIdsMap) != null)
-        I18n.format("disableRule") else
-        I18n.format("disableAllRulesWithMatchesInSelection"))
+    val commandTitle: String = if (getOnlyEntry(ruleIdsMap) != null) {
+      I18n.format("disableRule")
+    } else {
+      I18n.format("disableAllRulesWithMatchesInSelection")
+    }
     val command = Command(commandTitle, DISABLE_RULES_COMMAND_NAME)
     command.arguments = listOf(arguments)
 

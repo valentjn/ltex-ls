@@ -45,8 +45,10 @@ class DocumentChecker(
     var code: String = document.text
 
     if (range != null) {
-      code = code.substring(document.convertPosition(range.start),
-          document.convertPosition(range.end))
+      code = code.substring(
+        document.convertPosition(range.start),
+        document.convertPosition(range.end),
+      )
     }
 
     return codeFragmentizer.fragmentize(code, this.settingsManager.settings)
@@ -59,13 +61,12 @@ class DocumentChecker(
     val annotatedTextFragments = ArrayList<AnnotatedTextFragment>()
 
     for (codeFragment: CodeFragment in codeFragments) {
-      val builder: CodeAnnotatedTextBuilder = CodeAnnotatedTextBuilder.create(
-          codeFragment.codeLanguageId)
+      val builder: CodeAnnotatedTextBuilder =
+          CodeAnnotatedTextBuilder.create(codeFragment.codeLanguageId)
       builder.setSettings(codeFragment.settings)
       builder.addCode(codeFragment.code)
       val curAnnotatedText: AnnotatedText = builder.build()
-      annotatedTextFragments.add(AnnotatedTextFragment(
-          curAnnotatedText, codeFragment, document))
+      annotatedTextFragments.add(AnnotatedTextFragment(curAnnotatedText, codeFragment, document))
     }
 
     return annotatedTextFragments
@@ -106,8 +107,9 @@ class DocumentChecker(
 
     val languageToolInterface: LanguageToolInterface =
         this.settingsManager.languageToolInterface ?: run {
-          Logging.logger.warning(I18n.format(
-              "skippingTextCheckAsLanguageToolHasNotBeenInitialized"))
+          Logging.logger.warning(
+            I18n.format("skippingTextCheckAsLanguageToolHasNotBeenInitialized"),
+          )
           return emptyList()
         }
 
@@ -133,21 +135,32 @@ class DocumentChecker(
     }
 
     if (Logging.logger.isLoggable(Level.FINER)) {
-      Logging.logger.finer(I18n.format("checkingDone",
-          Duration.between(beforeCheckingInstant, Instant.now()).toMillis()))
+      Logging.logger.finer(
+        I18n.format(
+          "checkingDone",
+          Duration.between(beforeCheckingInstant, Instant.now()).toMillis(),
+        ),
+      )
     }
 
-    Logging.logger.fine(if (matches.size == 1) I18n.format("obtainedRuleMatch") else
-        I18n.format("obtainedRuleMatches", matches.size))
+    Logging.logger.fine(
+      if (matches.size == 1) {
+        I18n.format("obtainedRuleMatch")
+      } else {
+        I18n.format("obtainedRuleMatches", matches.size)
+      },
+    )
     removeIgnoredMatches(matches)
 
     val result = ArrayList<LanguageToolRuleMatch>()
 
     for (match: LanguageToolRuleMatch in matches) {
-      result.add(match.copy(
-        fromPos = match.fromPos + annotatedTextFragment.codeFragment.fromPos + rangeOffset,
-        toPos = match.toPos + annotatedTextFragment.codeFragment.fromPos + rangeOffset,
-      ))
+      result.add(
+        match.copy(
+          fromPos = match.fromPos + annotatedTextFragment.codeFragment.fromPos + rangeOffset,
+          toPos = match.toPos + annotatedTextFragment.codeFragment.fromPos + rangeOffset,
+        ),
+      )
     }
 
     return result
@@ -155,9 +168,14 @@ class DocumentChecker(
 
   private fun logTextToBeChecked(annotatedText: AnnotatedText, settings: Settings) {
     if (Logging.logger.isLoggable(Level.FINER)) {
-      Logging.logger.finer(I18n.format("checkingText", settings.languageShortCode,
+      Logging.logger.finer(
+        I18n.format(
+          "checkingText",
+          settings.languageShortCode,
           StringEscapeUtils.escapeJava(annotatedText.plainText),
-          ""))
+          "",
+        ),
+      )
 
       if (Logging.logger.isLoggable(Level.FINEST)) {
         val builder = StringBuilder()
@@ -182,8 +200,14 @@ class DocumentChecker(
         postfix = I18n.format("truncatedPostfix", MAX_LOG_TEXT_LENGTH)
       }
 
-      Logging.logger.fine(I18n.format("checkingText",
-          settings.languageShortCode, StringEscapeUtils.escapeJava(logText), postfix))
+      Logging.logger.fine(
+        I18n.format(
+          "checkingText",
+          settings.languageShortCode,
+          StringEscapeUtils.escapeJava(logText),
+          postfix,
+        ),
+      )
     }
   }
 
@@ -218,9 +242,13 @@ class DocumentChecker(
     }
 
     if (ignoreMatches.isNotEmpty()) {
-      Logging.logger.fine(if (ignoreMatches.size == 1)
-          I18n.format("hidFalsePositive") else
-          I18n.format("hidFalsePositives", ignoreMatches.size))
+      Logging.logger.fine(
+        if (ignoreMatches.size == 1) {
+          I18n.format("hidFalsePositive")
+        } else {
+          I18n.format("hidFalsePositives", ignoreMatches.size)
+        },
+      )
       for (match: LanguageToolRuleMatch in ignoreMatches) matches.remove(match)
     }
   }

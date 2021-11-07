@@ -16,9 +16,8 @@ class HiddenFalsePositiveTest {
   fun test() {
     val hiddenFalsePositive = HiddenFalsePositive("a", "b")
     assertEquals(
-      hiddenFalsePositive, HiddenFalsePositive.fromJsonString(
-        "{\"rule\":\"a\",\"sentence\":\"b\"}"
-      )
+      hiddenFalsePositive,
+      HiddenFalsePositive.fromJsonString("{\"rule\":\"a\",\"sentence\":\"b\"}"),
     )
     assertNotEquals(hiddenFalsePositive, HiddenFalsePositive("X", "b"))
     assertNotEquals(hiddenFalsePositive, HiddenFalsePositive("a", "X"))

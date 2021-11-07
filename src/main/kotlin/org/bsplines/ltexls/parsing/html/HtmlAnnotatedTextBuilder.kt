@@ -82,10 +82,12 @@ class HtmlAnnotatedTextBuilder(
     var skippedCode: String = this.code.substring(oldPos, this.pos)
     var interpretAs = ""
 
-    Logging.logger.finest("Position " + this.pos + " ("
-        + xmlStreamReader.location.lineNumber
-        + "," + xmlStreamReader.location.columnNumber + "): Event type = "
-        + eventType + ", skippedCode = '" + skippedCode + "'")
+    Logging.logger.finest(
+      "Position " + this.pos + " ("
+      + xmlStreamReader.location.lineNumber
+      + "," + xmlStreamReader.location.columnNumber + "): Event type = "
+      + eventType + ", skippedCode = '" + skippedCode + "'",
+    )
 
     if (this.nextText.isNotEmpty()) {
       if (this.nextText.replace("\r\n", "\n") == skippedCode.replace("\r\n", "\n")) {
@@ -102,8 +104,7 @@ class HtmlAnnotatedTextBuilder(
       XMLStreamReader.START_ELEMENT -> {
         val elementName: String = xmlStreamReader.localName
         this.elementNameStack.addLast(elementName)
-        Logging.logger.finest(
-            "START_ELEMENT: elementName = '" + xmlStreamReader.localName + "'")
+        Logging.logger.finest("START_ELEMENT: elementName = '" + xmlStreamReader.localName + "'")
 
         when (elementName) {
           "body", "div", "h1", "h2", "h3", "h4", "h5", "h6", "p", "table", "tr" -> {

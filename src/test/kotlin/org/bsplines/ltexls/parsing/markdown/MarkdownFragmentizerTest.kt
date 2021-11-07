@@ -29,7 +29,7 @@ class MarkdownFragmentizerTest {
 
       Sentence 3
 
-      """.trimIndent()
+      """.trimIndent(),
     )
     assertFragmentizer(
       "markdown",
@@ -44,7 +44,7 @@ class MarkdownFragmentizerTest {
 
       Sentence 3
 
-      """.trimIndent()
+      """.trimIndent(),
     )
   }
 

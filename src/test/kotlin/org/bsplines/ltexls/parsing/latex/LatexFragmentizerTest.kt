@@ -29,7 +29,8 @@ class LatexFragmentizerTest {
 
 		  Sentence 3
 
-		  """.trimIndent(), settings
+		  """.trimIndent(),
+      settings,
     )
     assertEquals(6, codeFragments.size)
   }
@@ -46,7 +47,8 @@ class LatexFragmentizerTest {
   fun testBabel() {
     val fragmentizer: CodeFragmentizer = CodeFragmentizer.create("latex")
     var codeFragments: List<CodeFragment> = fragmentizer.fragmentize(
-      "This is a \\begin{otherlanguage*}{de-DE}Beispiel\\end{otherlanguage*}.\n", Settings()
+      "This is a \\begin{otherlanguage*}{de-DE}Beispiel\\end{otherlanguage*}.\n",
+      Settings(),
     )
     assertEquals(2, codeFragments.size)
 
@@ -60,7 +62,8 @@ class LatexFragmentizerTest {
       ]{babel}
       Dies ist ein Test.
 
-      """.trimIndent(), Settings()
+      """.trimIndent(),
+      Settings(),
     )
     assertEquals(2, codeFragments.size)
     assertEquals(16, codeFragments[0].code.length)
@@ -78,7 +81,8 @@ class LatexFragmentizerTest {
       ]{babel}
       Dies ist ein Test.
 
-      """.trimIndent(), Settings()
+      """.trimIndent(),
+      Settings(),
     )
     assertEquals(2, codeFragments.size)
     assertEquals(16, codeFragments[0].code.length)
@@ -91,7 +95,8 @@ class LatexFragmentizerTest {
       This is a test.
         \usepackage[ngerman]{babel}
       This is another test.
-      """.trimIndent(), Settings()
+      """.trimIndent(),
+      Settings(),
     )
     assertEquals(2, codeFragments.size)
 
@@ -100,23 +105,27 @@ class LatexFragmentizerTest {
       This is a test.
         % \usepackage[ngerman]{babel}
       This is another test.
-      """.trimIndent(), Settings()
+      """.trimIndent(),
+      Settings(),
     )
     assertEquals(1, codeFragments.size)
 
     codeFragments = fragmentizer.fragmentize(
-      "This is a \\begin{de-DE}Beispiel\\end{de-DE}.\n", Settings()
+      "This is a \\begin{de-DE}Beispiel\\end{de-DE}.\n",
+      Settings(),
     )
     assertEquals(2, codeFragments.size)
 
     codeFragments = fragmentizer.fragmentize(
-      "This is a \\begin{de-DE}Beispiel.\n", Settings()
+      "This is a \\begin{de-DE}Beispiel.\n",
+      Settings(),
     )
     assertEquals(2, codeFragments.size)
     assertEquals(10, codeFragments[0].code.length)
     assertEquals(33, codeFragments[1].code.length)
     codeFragments = fragmentizer.fragmentize(
-      "This is a Beispiel\\end{de-DE}.\n", Settings()
+      "This is a Beispiel\\end{de-DE}.\n",
+      Settings(),
     )
     assertEquals(1, codeFragments.size)
     assertEquals(31, codeFragments[0].code.length)
@@ -135,7 +144,8 @@ class LatexFragmentizerTest {
 
         Sentence 3
 
-        """.trimIndent(), Settings()
+        """.trimIndent(),
+        Settings(),
       )
       assertEquals(7, codeFragments.size)
 
@@ -149,7 +159,7 @@ class LatexFragmentizerTest {
 
       assertEquals(
         "Sentence\\footnote[abc]{Footnote} 1\n",
-        codeFragments[1].code
+        codeFragments[1].code,
       )
       assertEquals(0, codeFragments[1].fromPos)
       assertEquals("en-US", codeFragments[1].settings.languageShortCode)
@@ -164,21 +174,21 @@ class LatexFragmentizerTest {
 
       assertEquals(
         "\nSentence 2\\todo{Todo note}\n",
-        codeFragments[4].code
+        codeFragments[4].code,
       )
       assertEquals(62, codeFragments[4].fromPos)
       assertEquals("de-DE", codeFragments[4].settings.languageShortCode)
 
       assertEquals(
         "%ltex:\tlanguage=en-US",
-        codeFragments[5].code
+        codeFragments[5].code,
       )
       assertEquals(90, codeFragments[5].fromPos)
       assertEquals("en-US", codeFragments[5].settings.languageShortCode)
 
       assertEquals(
         "\n\nSentence 3\n",
-        codeFragments[6].code
+        codeFragments[6].code,
       )
       assertEquals(111, codeFragments[6].fromPos)
       assertEquals("en-US", codeFragments[6].settings.languageShortCode)
@@ -197,7 +207,8 @@ class LatexFragmentizerTest {
           \end{french}
         \end{american}.
 
-        """.trimIndent(), Settings()
+        """.trimIndent(),
+        Settings(),
       )
 
       assertEquals(8, codeFragments.size)
@@ -212,7 +223,7 @@ class LatexFragmentizerTest {
 
       assertEquals(
         "This is a \\foreignlanguage{ngerman}{Beispiel}.\n",
-        codeFragments[1].code
+        codeFragments[1].code,
       )
       assertEquals(0, codeFragments[1].fromPos)
       assertEquals("en-US", codeFragments[1].settings.languageShortCode)
@@ -222,7 +233,7 @@ class LatexFragmentizerTest {
 
       assertEquals(
         "\\selectlanguage{french}\nC'est un autre \\textenUS{example}.\n",
-        codeFragments[3].code
+        codeFragments[3].code,
       )
       assertEquals(47, codeFragments[3].fromPos)
       assertEquals("fr", codeFragments[3].settings.languageShortCode)
@@ -241,7 +252,8 @@ class LatexFragmentizerTest {
   \begin{french}[abc]
     phrase
   \end{french}
-""", codeFragments[6].code
+""",
+        codeFragments[6].code,
       )
       assertEquals(263, codeFragments[6].fromPos)
       assertEquals("en-US", codeFragments[6].settings.languageShortCode)
@@ -257,7 +269,8 @@ class LatexFragmentizerTest {
           \end{french}
         \end{american}.
 
-        """.trimIndent(), codeFragments[7].code
+        """.trimIndent(),
+        codeFragments[7].code,
       )
       assertEquals(106, codeFragments[7].fromPos)
       assertEquals("de-DE", codeFragments[7].settings.languageShortCode)

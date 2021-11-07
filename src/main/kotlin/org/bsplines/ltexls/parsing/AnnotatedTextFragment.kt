@@ -50,7 +50,7 @@ class AnnotatedTextFragment(
           toPos,
           plainTextFromPos,
           plainTextToPos,
-        )
+        ),
       )
       ""
     }
@@ -65,8 +65,8 @@ class AnnotatedTextFragment(
 
     private val mappingValueGetTotalPositionMethod: Method = run {
       val mappingValueClass: Class<*> = Class.forName("org.languagetool.markup.MappingValue")
-      val mappingValueGetTotalPositionMethod: Method = mappingValueClass.getDeclaredMethod(
-          "getTotalPosition")
+      val mappingValueGetTotalPositionMethod: Method =
+          mappingValueClass.getDeclaredMethod("getTotalPosition")
       mappingValueGetTotalPositionMethod.isAccessible = true
       mappingValueGetTotalPositionMethod
     }

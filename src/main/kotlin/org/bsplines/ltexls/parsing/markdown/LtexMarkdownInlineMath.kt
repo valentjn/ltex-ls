@@ -25,7 +25,7 @@ class LtexMarkdownInlineMath : DelimitedNode, Node {
   constructor(
     openingMarker: BasedSequence,
     text: BasedSequence,
-    closingMarker: BasedSequence
+    closingMarker: BasedSequence,
   ) : super(openingMarker.baseSubSequence(openingMarker.startOffset, closingMarker.endOffset)) {
     this.openingMarker = openingMarker
     this.text = text

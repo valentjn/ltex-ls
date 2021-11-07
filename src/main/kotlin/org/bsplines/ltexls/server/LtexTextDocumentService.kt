@@ -62,7 +62,7 @@ class LtexTextDocumentService(
         CompletableFuture<Either<List<CompletionItem>, CompletionList>> {
     return if (this.languageServer.settingsManager.settings.completionEnabled) {
       val uri: String = params.textDocument?.uri ?: return CompletableFuture.completedFuture(
-        Either.forLeft(emptyList())
+        Either.forLeft(emptyList()),
       )
       val document: LtexTextDocumentItem = getDocument(uri) ?: run {
         Logging.logger.warning(I18n.format("couldNotFindDocumentWithUri", uri))
@@ -71,8 +71,11 @@ class LtexTextDocumentService(
 
       CompletableFuture.completedFuture(
         Either.forRight(
-          this.languageServer.completionListProvider.createCompletionList(document, params.position)
-        )
+          this.languageServer.completionListProvider.createCompletionList(
+            document,
+            params.position,
+          ),
+        ),
       )
     } else {
       CompletableFuture.completedFuture(Either.forLeft(emptyList()))
@@ -257,8 +260,7 @@ class LtexTextDocumentService(
         val checkingResult: Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> =
             document.checkWithCache()
         val codeActions: List<Either<Command, CodeAction>> =
-            this.languageServer.codeActionProvider.generate(
-              params, document, checkingResult)
+            this.languageServer.codeActionProvider.generate(params, document, checkingResult)
         document.raiseExceptionIfCanceled()
         codeActions
       } catch (e: ExecutionException) {

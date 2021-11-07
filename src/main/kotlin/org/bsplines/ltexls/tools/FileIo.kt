@@ -48,9 +48,14 @@ object FileIo {
   }
 
   fun writeFileWithException(filePath: Path, text: String) {
-    Files.write(filePath, text.toByteArray(StandardCharsets.UTF_8), StandardOpenOption.CREATE,
-        StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE,
-        StandardOpenOption.SYNC)
+    Files.write(
+      filePath,
+      text.toByteArray(StandardCharsets.UTF_8),
+      StandardOpenOption.CREATE,
+      StandardOpenOption.TRUNCATE_EXISTING,
+      StandardOpenOption.WRITE,
+      StandardOpenOption.SYNC,
+    )
   }
 
   @Suppress("ComplexCondition", "ComplexMethod", "LongMethod")

@@ -21,7 +21,7 @@ class SettingsManager {
   var languageToolInterface: LanguageToolInterface? = null
     private set
   var settings = Settings()
-    set(value) {
+    set(value) { // ktlint-disable experimental:trailing-comma
       val newLanguage: String = value.languageShortCode
       val oldSettings: Settings? = this.settingsMap[newLanguage]
 
@@ -74,13 +74,17 @@ class SettingsManager {
     val languageToolInterface: LanguageToolInterface =
     if (this.settings.languageToolHttpServerUri.isEmpty()) {
       LanguageToolJavaInterface(
-          this.settings.languageShortCode,
-          this.settings.motherTongueShortCode, this.settings.sentenceCacheSize,
-          this.settings.dictionary)
+        this.settings.languageShortCode,
+        this.settings.motherTongueShortCode,
+        this.settings.sentenceCacheSize,
+        this.settings.dictionary,
+      )
     } else {
       LanguageToolHttpInterface(
-          this.settings.languageToolHttpServerUri, this.settings.languageShortCode,
-          this.settings.motherTongueShortCode)
+        this.settings.languageToolHttpServerUri,
+        this.settings.languageShortCode,
+        this.settings.motherTongueShortCode,
+      )
     }
 
     if (!languageToolInterface.isInitialized()) {
@@ -89,8 +93,7 @@ class SettingsManager {
     }
 
     if (this.settings.languageModelRulesDirectory.isNotEmpty()) {
-      languageToolInterface.activateLanguageModelRules(
-          this.settings.languageModelRulesDirectory)
+      languageToolInterface.activateLanguageModelRules(this.settings.languageModelRulesDirectory)
     } else {
       if (this.settings.motherTongueShortCode.isNotEmpty()) {
         languageToolInterface.activateDefaultFalseFriendRules()
@@ -99,12 +102,12 @@ class SettingsManager {
 
     if (this.settings.neuralNetworkModelRulesDirectory.isNotEmpty()) {
       languageToolInterface.activateNeuralNetworkRules(
-          this.settings.neuralNetworkModelRulesDirectory)
+        this.settings.neuralNetworkModelRulesDirectory,
+      )
     }
 
     if (this.settings.word2VecModelRulesDirectory.isNotEmpty()) {
-      languageToolInterface.activateWord2VecModelRules(
-          this.settings.word2VecModelRulesDirectory)
+      languageToolInterface.activateWord2VecModelRules(this.settings.word2VecModelRulesDirectory)
     }
 
     languageToolInterface.enableRules(this.settings.enabledRules)
@@ -131,8 +134,13 @@ class SettingsManager {
         builder.append("'")
       }
 
-      Logging.logger.fine(I18n.format("reinitializingLanguageToolDueToDifferentSettings",
-          newLanguage, builder.toString()))
+      Logging.logger.fine(
+        I18n.format(
+          "reinitializingLanguageToolDueToDifferentSettings",
+          newLanguage,
+          builder.toString(),
+        ),
+      )
     }
   }
 }

@@ -87,7 +87,7 @@ object LatexPackageOptionsParser {
                   valueToPos,
                   valueBuilder.toString().trim { it <= ' ' },
                 ),
-              )
+              ),
             )
 
             mode = Mode.Key
@@ -154,7 +154,7 @@ object LatexPackageOptionsParser {
             valueToPos,
             valueBuilder.toString().trim { it <= ' ' },
           ),
-        )
+        ),
       )
     }
 

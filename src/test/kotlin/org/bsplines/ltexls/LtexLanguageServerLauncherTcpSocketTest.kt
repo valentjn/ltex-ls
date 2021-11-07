@@ -33,7 +33,7 @@ class LtexLanguageServerLauncherTcpSocketTest {
       try {
         Tools.randomNumberGenerator.setSeed(42)
         val exitCode: Int = LtexLanguageServerLauncher.mainWithoutExit(
-          arrayOf("--server-type=tcpSocket", "--host=$HOST", "--port=$PORT")
+          arrayOf("--server-type=tcpSocket", "--host=$HOST", "--port=$PORT"),
         )
 
         assertEquals(0, exitCode)

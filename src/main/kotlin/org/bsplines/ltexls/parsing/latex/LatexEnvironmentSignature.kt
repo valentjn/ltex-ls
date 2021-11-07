@@ -11,10 +11,11 @@ class LatexEnvironmentSignature(
   environmentPrototype: String,
   action: Action = Action.Ignore,
 ) : LatexCommandSignature(
-  (
-    if (PREFIX_REGEX.find(environmentPrototype) != null) environmentPrototype else
+  if (PREFIX_REGEX.find(environmentPrototype) != null) {
+    environmentPrototype
+  } else {
     "\\begin{$environmentPrototype}"
-  ),
+  },
   action,
 ) {
   val ignoreAllArguments: Boolean

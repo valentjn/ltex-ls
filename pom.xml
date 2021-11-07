@@ -291,6 +291,7 @@
                 <java taskname="ktlint" dir="${project.basedir}" fork="true" failonerror="true"
                     classpathref="maven.plugin.classpath" classname="com.pinterest.ktlint.Main">
                   <arg value="--disabled_rules=chain-wrapping,indent,range-spacing"/>
+                  <arg value="--experimental"/>
                   <arg value="--reporter=plain"/>
                   <arg value="--verbose"/>
                   <arg value="src/**/*.kt"/>

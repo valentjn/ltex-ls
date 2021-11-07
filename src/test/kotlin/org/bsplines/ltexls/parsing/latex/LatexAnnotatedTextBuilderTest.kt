@@ -28,7 +28,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       \end{itemize}
 
       """.trimIndent(),
-      "We can do this or that. "
+      "We can do this or that. ",
     )
     assertPlainText(
       """
@@ -39,7 +39,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       Final sentence.
 
       """.trimIndent(),
-      "This is a test. Test Another Test Inside the frame! Final sentence. "
+      "This is a test. Test Another Test Inside the frame! Final sentence. ",
     )
     assertPlainText("This is good\\dots No, it isn't.\n", "This is good\u2026 No, it isn't. ")
     assertPlainText("This is a test of\\\\line breaks.\n", "This is a test of line breaks. ")
@@ -50,7 +50,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       This is another sentence.
 
       """.trimIndent(),
-      "This is a sentence.\n\nThis is another sentence. "
+      "This is a sentence.\n\nThis is another sentence. ",
     )
     assertPlainText(
       """
@@ -59,69 +59,69 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       This is another sentence.
 
       """.trimIndent(),
-      "This is a sentence.\n\nThis is another sentence. "
+      "This is a sentence.\n\nThis is another sentence. ",
     )
     assertPlainText("This is a \\textcolor{mittelblau}{test}.\n", "This is a test. ")
     assertPlainText("This is a \\raisebox{-0.5\\height-0.5mm}{test}.\n", "This is a test. ")
     assertPlainText("This is a &test.\n", "This is a test. ")
     assertPlainText(
       "You can see this in \\hyperref[alg:abc]{Sec.\\ \\ref*{alg:abc}}.\n",
-      "You can see this in Sec. Dummy0. "
+      "You can see this in Sec. Dummy0. ",
     )
     assertPlainText(
       "This is a te\\-st. Another te\"-st. Donau\"=Dampf\"\"schiff\"~Fahrt.\n",
-      "This is a test. Another test. Donau-Dampfschiff-Fahrt. "
+      "This is a test. Another test. Donau-Dampfschiff-Fahrt. ",
     )
     assertPlainText(
       "Ich hei\\ss{}e anders. Das Wasser ist hei\\ss.\n",
-      "Ich hei\u00dfe anders. Das Wasser ist hei\u00df. "
+      "Ich hei\u00dfe anders. Das Wasser ist hei\u00df. ",
     )
     assertPlainText(
       "Das macht dann 10 \\euro. Oder z.\\,B. vielleicht doch 12~\\euro{}?\n",
-      "Das macht dann 10 \u20ac. Oder z.\u202fB. vielleicht doch 12\u00a0\u20ac? "
+      "Das macht dann 10 \u20ac. Oder z.\u202fB. vielleicht doch 12\u00a0\u20ac? ",
     )
     assertPlainText(
       """
       \"E\"in T\"ext m\"{i}t v\"i\"{e}l\"en \"{U}ml\"a\"{u}t\"en.
 
       """.trimIndent(),
-      "\u00cb\u00efn T\u00ebxt m\u00eft v\u00ef\u00ebl\u00ebn \u00dcml\u00e4\u00fct\u00ebn. "
+      "\u00cb\u00efn T\u00ebxt m\u00eft v\u00ef\u00ebl\u00ebn \u00dcml\u00e4\u00fct\u00ebn. ",
     )
     assertPlainText(
       "\\AA\\L\\O\\SS",
-      "\u00c5\u0141\u00d8\u1e9e"
+      "\u00c5\u0141\u00d8\u1e9e",
     )
     assertPlainText(
       "\\aa\\i\\j\\l\\o\\ss",
-      "\u00e5\u0131\u0237\u0142\u00f8\u00df"
+      "\u00e5\u0131\u0237\u0142\u00f8\u00df",
     )
     assertPlainText(
       "\\`A\\'A\\^A\\~A\\\"A\\=A\\.A"
       + "\\H{O}\\b{B}\\c{C}\\d{A}\\k{A}\\r{A}\\u{A}\\v{C}",
       "\u00c0\u00c1\u00c2\u00c3\u00c4\u0100\u0226"
-      + "\u0150\u1e06\u00c7\u1ea0\u0104\u00c5\u0102\u010c"
+      + "\u0150\u1e06\u00c7\u1ea0\u0104\u00c5\u0102\u010c",
     )
     assertPlainText(
       "\\`a\\'a\\^a\\~a\\\"a\\=a\\.a"
           + "\\H{o}\\b{b}\\c{c}\\d{a}\\k{a}\\r{a}\\u{a}\\v{c}",
       "\u00e0\u00e1\u00e2\u00e3\u00e4\u0101\u0227"
-          + "\u0151\u1e07\u00e7\u1ea1\u0105\u00e5\u0103\u010d"
+          + "\u0151\u1e07\u00e7\u1ea1\u0105\u00e5\u0103\u010d",
     )
     assertPlainText(
       "Nih\\'o\u014b\\=go \\u{y}",
-      "Nih\u00f3\u014b\u1e21o y\u0306"
+      "Nih\u00f3\u014b\u1e21o y\u0306",
     )
     assertPlainText(
       "This is a test: a, b, \\dots, c.\n",
-      "This is a test: a, b, \u2026, c. "
+      "This is a test: a, b, \u2026, c. ",
     )
     assertPlainText(
       "This is a test -- this is another test --- this is the final test.\n",
-      "This is a test \u2013 this is another test \u2014 this is the final test. "
+      "This is a test \u2013 this is another test \u2014 this is the final test. ",
     )
     assertPlainText(
       "This ``is'' a \"`test.\"'\n",
-      "This \u201cis\u201d a \u201etest.\u201c "
+      "This \u201cis\u201d a \u201etest.\u201c ",
     )
     assertPlainText(
       """
@@ -131,7 +131,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       This is another test.
 
       """.trimIndent(),
-      "Heading. This is a test. This is another heading. This is another test. "
+      "Heading. This is a test. This is another heading. This is another test. ",
     )
     assertPlainText(
       """
@@ -142,11 +142,11 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       """.trimIndent(),
       "This is a test: Dummy0, Dummy1, Dummy2. "
       + "Dummies shows that this should be plural. "
-      + "Dummies proves another error. "
+      + "Dummies proves another error. ",
     )
     assertPlainText(
       "\\cites{test}",
-      "Dummies"
+      "Dummies",
     )
     assertPlainText(
       """
@@ -155,7 +155,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
 
       """.trimIndent(),
       "This is a test, e.g., an actual test e.g. test. "
-      + "This is a test, i.e., an actual test i.e. test. "
+      + "This is a test, i.e., an actual test i.e. test. ",
     )
     assertPlainText(
       """
@@ -165,73 +165,73 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       This is another test.
 
       """.trimIndent(),
-      "This is a test. abc This is another test. "
+      "This is a test. abc This is another test. ",
     )
     assertPlainText(
       "\\setcounter{a}[b]{c} This is an test.\n",
-      "a[b]c This is an test. "
+      "a[b]c This is an test. ",
     )
     assertPlainText(
       "This is a test: \\colorbox{abc}{def}.\n",
-      "This is a test: def. "
+      "This is a test: def. ",
     )
     assertPlainText(
       "This is a test: \\colorbox{abc}{def}.\n",
       "This is a test: Dummy0def. ",
-      Settings(_latexCommands = mapOf(Pair("\\colorbox{}", "dummy")))
-    )
-    assertPlainText(
-      "This is a test: \\foobar{abc}{def}.\n",
-      "This is a test: abc def. "
+      Settings(_latexCommands = mapOf(Pair("\\colorbox{}", "dummy"))),
     )
     assertPlainText(
       "This is a test: \\foobar{abc}{def}.\n",
       "This is a test: abc def. ",
-      Settings(_latexCommands = mapOf(Pair("\\foobar{}{}", "default")))
+    )
+    assertPlainText(
+      "This is a test: \\foobar{abc}{def}.\n",
+      "This is a test: abc def. ",
+      Settings(_latexCommands = mapOf(Pair("\\foobar{}{}", "default"))),
     )
     assertPlainText(
       "This is a test: \\foobar{abc}{def}.\n",
       "This is a test: . ",
-      Settings(_latexCommands = mapOf(Pair("\\foobar{}{}", "ignore")))
+      Settings(_latexCommands = mapOf(Pair("\\foobar{}{}", "ignore"))),
     )
     assertPlainText(
       "This is a test: \\foobar{abc}{def}.\n",
       "This is a test: Dummy0. ",
-      Settings(_latexCommands = mapOf(Pair("\\foobar{}{}", "dummy")))
+      Settings(_latexCommands = mapOf(Pair("\\foobar{}{}", "dummy"))),
     )
     assertPlainText(
       "This is a test: \\foobar{abc}{def}.\n",
       "This is a test: Dummies. ",
-      Settings(_latexCommands = mapOf(Pair("\\foobar{}{}", "pluralDummy")))
+      Settings(_latexCommands = mapOf(Pair("\\foobar{}{}", "pluralDummy"))),
     )
     assertPlainText(
       "This is a test: \\foobar{abc}{def}.\n",
       "This is a test: Ina0. ",
-      Settings(_latexCommands = mapOf(Pair("\\foobar{}{}", "vowelDummy")))
-    )
-    assertPlainText(
-      "This is a test: \\begin{foobar}{abc}def\\end{foobar}.\n",
-      "This is a test: def. "
+      Settings(_latexCommands = mapOf(Pair("\\foobar{}{}", "vowelDummy"))),
     )
     assertPlainText(
       "This is a test: \\begin{foobar}{abc}def\\end{foobar}.\n",
       "This is a test: def. ",
-      Settings(_latexEnvironments = mapOf(Pair("foobar", "default")))
+    )
+    assertPlainText(
+      "This is a test: \\begin{foobar}{abc}def\\end{foobar}.\n",
+      "This is a test: def. ",
+      Settings(_latexEnvironments = mapOf(Pair("foobar", "default"))),
     )
     assertPlainText(
       "This is a test: \\begin{foobar}{abc}def\\end{foobar}.\n",
       "This is a test: abcdef. ",
-      Settings(_latexEnvironments = mapOf(Pair("\\begin{foobar}", "default")))
+      Settings(_latexEnvironments = mapOf(Pair("\\begin{foobar}", "default"))),
     )
     assertPlainText(
       "This is a test: \\begin{foobar}{abc}def\\end{foobar}.\n",
       "This is a test: def. ",
-      Settings(_latexEnvironments = mapOf(Pair("\\begin{foobar}{}", "default")))
+      Settings(_latexEnvironments = mapOf(Pair("\\begin{foobar}{}", "default"))),
     )
     assertPlainText(
       "This is a test: \\begin{foobar}{abc}def\\end{foobar}.\n",
       "This is a test: . ",
-      Settings(_latexEnvironments = mapOf(Pair("foobar", "ignore")))
+      Settings(_latexEnvironments = mapOf(Pair("foobar", "ignore"))),
     )
 
     run {
@@ -263,7 +263,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       This is another sentence.
 
       """.trimIndent(),
-      "This is a test. This is another sentence. "
+      "This is a test. This is another sentence. ",
     )
     assertPlainText(
       """
@@ -274,7 +274,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       \end{tikzpicture}
 
       """.trimIndent(),
-      "This is a test: "
+      "This is a test: ",
     )
   }
 
@@ -293,7 +293,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       Now we argue.
 
       """.trimIndent(),
-      "Recall that Dummy0 if Dummy1, Dummy2 otherwise. Now we argue. "
+      "Recall that Dummy0 if Dummy1, Dummy2 otherwise. Now we argue. ",
     )
     assertPlainText("This equals \$a^{b}$.\n", "This equals Ina0. ")
     assertPlainText(
@@ -304,7 +304,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       \end{equation}
 
       """.trimIndent(),
-      "This is the proof: Dummy0. "
+      "This is the proof: Dummy0. ",
     )
     assertPlainText(
       """
@@ -314,7 +314,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       \end{equation}
 
       """.trimIndent(),
-      "This is another proof: Dummy0. "
+      "This is another proof: Dummy0. ",
     )
     assertPlainText(
       """
@@ -327,7 +327,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       This is the next sentence.
 
       """.trimIndent(),
-      "This equals Dummy0. This is the next sentence. "
+      "This equals Dummy0. This is the next sentence. ",
     )
     assertPlainText(
       """
@@ -337,7 +337,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       This is a sentence.
 
       """.trimIndent(),
-      "This is an equation: Dummy0, which proves the theorem. This is a sentence. "
+      "This is an equation: Dummy0, which proves the theorem. This is a sentence. ",
     )
     assertPlainText(
       """
@@ -347,7 +347,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       \end{equation*}
 
       """.trimIndent(),
-      "This is a test: Dummy0,\u00a0and Dummy1. "
+      "This is a test: Dummy0,\u00a0and Dummy1. ",
     )
     assertPlainText(
       """
@@ -358,7 +358,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       This is another test: ${"$"}Gau\ss{}: \O(n^2)$.
 
       """.trimIndent(),
-      "This is a test: Dummy0. This is another test: Dummy1. "
+      "This is a test: Dummy0. This is another test: Dummy1. ",
     )
     assertPlainText(
       """
@@ -369,7 +369,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       And this is another one: \(c^2\).
 
       """.trimIndent(),
-      "This is a test: Dummy0. And this is another one: Dummy1. "
+      "This is a test: Dummy0. And this is another one: Dummy1. ",
     )
     assertPlainText(
       """
@@ -377,7 +377,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       This is the next sentence: ${"$"}E = mc^2$.
 
       """.trimIndent(),
-      "This is a test: Ina0. This is the next sentence: Ina1. "
+      "This is a test: Ina0. This is the next sentence: Ina1. ",
     )
     assertPlainText(
       """
@@ -385,12 +385,12 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       Second sentence: a, b, $\dots$, c.
 
       """.trimIndent(),
-      "This is a test: Ina0. Second sentence: a, b, Dummy1, c. "
+      "This is a test: Ina0. Second sentence: a, b, Dummy1, c. ",
     )
     assertPlainText(
       "C'est un test: \$E = mc^2$.\n",
       "C'est un test: Jimmy-0. ",
-      Settings(_languageShortCode = "fr")
+      Settings(_languageShortCode = "fr"),
     )
     assertPlainText(
       """
@@ -401,7 +401,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       """.trimIndent(),
       "This is an Ina0, Ina1, Ina2, Ina3, Ina4, Ina5, Ina6, "
       + "Ina7, Ina8, Ina9, Ina10, Ina11, Ina12, Ina13. "
-      + "This is not a Dummy14, Dummy15, Dummy16, Dummy17, Dummy18. "
+      + "This is not a Dummy14, Dummy15, Dummy16, Dummy17, Dummy18. ",
     )
 
     assertOriginalTextPositions(
@@ -470,7 +470,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
 
       """.trimIndent(),
       " This is a first sentence.\n\n\n\nThis is a second sentence. ",
-      "rsweave"
+      "rsweave",
     )
     assertPlainText(
       """
@@ -480,7 +480,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
 
       """.trimIndent(),
       " ",
-      "rsweave"
+      "rsweave",
     )
     assertPlainText(
       """
@@ -489,7 +489,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       @
 
       """.trimIndent(),
-      "<<import-packages>>= library(tidyverse) @ "
+      "<<import-packages>>= library(tidyverse) @ ",
     )
   }
 

@@ -36,7 +36,7 @@ class MarkdownAnnotatedTextBuilder(
   private val nodeTypeStack = ArrayDeque<String>()
   private var language: String = "en-US"
   private val nodeSignatures: MutableList<MarkdownNodeSignature> = ArrayList(
-    MarkdownAnnotatedTextBuilderDefaults.defaultMarkdownNodeSignatures
+    MarkdownAnnotatedTextBuilderDefaults.defaultMarkdownNodeSignatures,
   )
 
   private fun isInNodeType(nodeType: String): Boolean {
@@ -116,7 +116,7 @@ class MarkdownAnnotatedTextBuilder(
     if (Logging.logger.isLoggable(Level.FINEST)) {
       Logging.logger.finest(
         "flexmarkAst = "
-          + AstCollectingVisitor().collectAndGetAstText(document)
+          + AstCollectingVisitor().collectAndGetAstText(document),
       )
     }
 
@@ -196,7 +196,7 @@ class MarkdownAnnotatedTextBuilder(
         TablesExtension.create(),
         YamlFrontMatterExtension.create(),
         LtexMarkdownExtension.create(),
-      )
+      ),
     )
   }
 }

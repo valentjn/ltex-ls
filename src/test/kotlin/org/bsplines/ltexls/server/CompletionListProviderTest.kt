@@ -18,7 +18,7 @@ class CompletionListProviderTest {
   fun testCreateCompletionList() {
     val languageServer = LtexLanguageServer()
     languageServer.settingsManager.settings = languageServer.settingsManager.settings.copy(
-      _allDictionaries = mapOf(Pair("en-US", setOf("testfoobar")))
+      _allDictionaries = mapOf(Pair("en-US", setOf("testfoobar"))),
     )
 
     val document =
