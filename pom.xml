@@ -283,6 +283,9 @@
           <execution>
             <id>ktlint</id>
             <phase>verify</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
             <configuration>
               <target name="ktlint">
                 <java taskname="ktlint" dir="${project.basedir}" fork="true" failonerror="true"
@@ -294,9 +297,6 @@
                 </java>
               </target>
             </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
           </execution>
           <execution>
             <id>patch-bin-scripts</id>
@@ -373,7 +373,7 @@ if %ERROR_CODE% EQU 0 set ERROR_CODE=1</replacevalue>
           <dependency>
             <groupId>com.pinterest</groupId>
             <artifactId>ktlint</artifactId>
-            <version>0.42.1</version>
+            <version>0.43.0</version>
           </dependency>
         </dependencies>
       </plugin>
