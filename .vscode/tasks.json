@@ -2,9 +2,11 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Compile and Check",
+      "label": "Compile and Assemble",
       "type": "shell",
-      "command": "mvn compile antrun:run@ktlint detekt:check",
+      // need quotes around '-Dmaven.test.skip=true' on Windows PowerShell due to
+      // https://stackoverflow.com/a/6351739
+      "command": "mvn '-Dmaven.test.skip=true' compile && mvn jar:jar appassembler:assemble antrun:run@patch-bin-scripts",
       "group": "build",
       "problemMatcher": "$gcc",
       "presentation": {
@@ -13,16 +15,24 @@
       },
     },
     {
-      "label": "Compile and Assemble",
+      "label": "Check",
       "type": "shell",
-      // need quotes around '-Dmaven.test.skip=true' on Windows PowerShell due to
-      // https://stackoverflow.com/a/6351739
-      "command": "mvn '-Dmaven.test.skip=true' compile && mvn jar:jar appassembler:assemble antrun:run@patch-bin-scripts",
-      "group": {
-        "kind": "build",
-        "isDefault": true,
+      "command": "mvn antrun:run@ktlint detekt:check",
+      "group": "build",
+      "problemMatcher": {
+        "owner": "ktlint",
+        "source": "ktlint",
+        "severity": "warning",
+        "fileLocation": "absolute",
+        "pattern": {
+          "regexp": "^.*\\[ktlint\\] (.*?):([0-9]+):([0-9]+): (.*?) \\((.*?)\\)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4,
+          "code": 5,
+        },
       },
-      "problemMatcher": "$gcc",
       "presentation": {
         "reveal": "silent",
         "clear": true,
