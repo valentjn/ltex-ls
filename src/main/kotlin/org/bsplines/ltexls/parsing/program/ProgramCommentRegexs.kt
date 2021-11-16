@@ -136,7 +136,7 @@ data class ProgramCommentRegexs(
     }
 
     fun isSupportedCodeLanguageId(codeLanguageId: String): Boolean {
-      val regexs = fromCodeLanguageId(codeLanguageId)
+      val regexs: ProgramCommentRegexs = fromCodeLanguageId(codeLanguageId)
       return ((regexs.blockCommentStartRegexString != null)
           || (regexs.blockCommentEndRegexString != null)
           || (regexs.lineCommentRegexString != null))
