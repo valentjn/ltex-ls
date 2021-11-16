@@ -476,7 +476,7 @@
         Add [`ltex.checkFrequency`](https://valentjn.github.io/ltex/settings.html#ltexcheckfrequency) to control when LTeX checks documents
       </action>
       <action type="add">
-        Add [`LTeX: Show status information`](https://valentjn.github.io/ltex/vscode-ltex/commands.html#ltex-show-status-information) command to show information about the status of LTeX
+        Add [`LTeX: Show Status Information`](https://valentjn.github.io/ltex/vscode-ltex/commands.html#ltex-show-status-information) command to show information about the status of LTeX
       </action>
       <action type="add" issue="vscode-ltex#140">
         Add support for `\usepackage[LANGUAGE]{babel}` if in the same file as the text to be checked
@@ -608,7 +608,7 @@
     </release>
     <release version="6.2.0" date="2020-08-07">
       <action type="add" issue="vscode-ltex#84">
-        Add commands [`LTeX: Check current document`](https://valentjn.github.io/ltex/vscode-ltex/commands.html#ltex-check-current-document) and [`LTeX: Check all documents in workspace`](https://valentjn.github.io/ltex/vscode-ltex/commands.html#ltex-check-all-documents-in-workspace)
+        Add commands [`LTeX: Check Current Document`](https://valentjn.github.io/ltex/vscode-ltex/commands.html#ltex-check-current-document) and [`LTeX: Check All Documents in Workspace`](https://valentjn.github.io/ltex/vscode-ltex/commands.html#ltex-check-all-documents-in-workspace)
       </action>
       <action type="add">
         Add setting [`ltex.clearDiagnosticsWhenClosingFile`](https://valentjn.github.io/ltex/settings.html#ltexcleardiagnosticswhenclosingfile)
