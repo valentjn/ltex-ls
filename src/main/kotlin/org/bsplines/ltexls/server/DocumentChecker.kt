@@ -14,6 +14,8 @@ import org.bsplines.ltexls.parsing.AnnotatedTextFragment
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder
 import org.bsplines.ltexls.parsing.CodeFragment
 import org.bsplines.ltexls.parsing.CodeFragmentizer
+import org.bsplines.ltexls.parsing.plaintext.PlaintextAnnotatedTextBuilder
+import org.bsplines.ltexls.parsing.program.ProgramCommentRegexs
 import org.bsplines.ltexls.settings.HiddenFalsePositive
 import org.bsplines.ltexls.settings.Settings
 import org.bsplines.ltexls.settings.SettingsManager
@@ -39,7 +41,7 @@ class DocumentChecker(
 
   private fun fragmentizeDocument(
     document: LtexTextDocumentItem,
-    range: Range?,
+    range: Range? = null,
   ): List<CodeFragment> {
     val codeFragmentizer: CodeFragmentizer = CodeFragmentizer.create(document.languageId)
     var code: String = document.text
@@ -57,12 +59,19 @@ class DocumentChecker(
   private fun buildAnnotatedTextFragments(
     codeFragments: List<CodeFragment>,
     document: LtexTextDocumentItem,
+    hasRange: Boolean = false,
   ): List<AnnotatedTextFragment> {
     val annotatedTextFragments = ArrayList<AnnotatedTextFragment>()
 
     for (codeFragment: CodeFragment in codeFragments) {
-      val builder: CodeAnnotatedTextBuilder =
-          CodeAnnotatedTextBuilder.create(codeFragment.codeLanguageId)
+      val builder: CodeAnnotatedTextBuilder = if (
+        hasRange && ProgramCommentRegexs.isSupportedCodeLanguageId(codeFragment.codeLanguageId)
+      ) {
+        PlaintextAnnotatedTextBuilder(codeFragment.codeLanguageId)
+      } else {
+        CodeAnnotatedTextBuilder.create(codeFragment.codeLanguageId)
+      }
+
       builder.setSettings(codeFragment.settings)
       builder.addCode(codeFragment.code)
       val curAnnotatedText: AnnotatedText = builder.build()
@@ -74,12 +83,12 @@ class DocumentChecker(
 
   private fun checkAnnotatedTextFragments(
     annotatedTextFragments: List<AnnotatedTextFragment>,
-    rangeOffset: Int,
+    rangeStartPos: Int? = null,
   ): List<LanguageToolRuleMatch> {
     val matches = ArrayList<LanguageToolRuleMatch>()
 
     for (annotatedTextFragment: AnnotatedTextFragment in annotatedTextFragments) {
-      matches.addAll(checkAnnotatedTextFragment(annotatedTextFragment, rangeOffset))
+      matches.addAll(checkAnnotatedTextFragment(annotatedTextFragment, rangeStartPos))
     }
 
     return matches
@@ -88,7 +97,7 @@ class DocumentChecker(
   @Suppress("TooGenericExceptionCaught")
   private fun checkAnnotatedTextFragment(
     annotatedTextFragment: AnnotatedTextFragment,
-    rangeOffset: Int,
+    rangeStartPos: Int? = null,
   ): List<LanguageToolRuleMatch> {
     val codeFragment: CodeFragment = annotatedTextFragment.codeFragment
     var settings: Settings = codeFragment.settings
@@ -115,8 +124,7 @@ class DocumentChecker(
 
     val codeLanguageId: String = codeFragment.codeLanguageId
 
-    if (!settings.enabled.contains(codeLanguageId)
-          && (codeLanguageId != "nop") && (codeLanguageId != "plaintext")) {
+    if (shouldSkipCheck(codeLanguageId, settings, rangeStartPos)) {
       Logging.logger.fine(I18n.format("skippingTextCheckAsLtexHasBeenDisabled", codeLanguageId))
       return emptyList()
     } else if (settings.dictionary.contains("BsPlInEs")) {
@@ -157,8 +165,10 @@ class DocumentChecker(
     for (match: LanguageToolRuleMatch in matches) {
       result.add(
         match.copy(
-          fromPos = match.fromPos + annotatedTextFragment.codeFragment.fromPos + rangeOffset,
-          toPos = match.toPos + annotatedTextFragment.codeFragment.fromPos + rangeOffset,
+          fromPos =
+          match.fromPos + annotatedTextFragment.codeFragment.fromPos + (rangeStartPos ?: 0),
+          toPos =
+          match.toPos + annotatedTextFragment.codeFragment.fromPos + (rangeStartPos ?: 0),
         ),
       )
     }
@@ -259,14 +269,14 @@ class DocumentChecker(
   ): Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> {
     this.lastCheckedDocument = document
     val originalSettings: Settings = this.settingsManager.settings
-    val rangeOffset: Int = (if (range == null) 0 else document.convertPosition(range.start))
+    val rangeStartPos: Int? = if (range != null) document.convertPosition(range.start) else null
 
     try {
       val codeFragments: List<CodeFragment> = fragmentizeDocument(document, range)
       val annotatedTextFragments: List<AnnotatedTextFragment> =
-          buildAnnotatedTextFragments(codeFragments, document)
+          buildAnnotatedTextFragments(codeFragments, document, (range != null))
       val matches: List<LanguageToolRuleMatch> =
-          checkAnnotatedTextFragments(annotatedTextFragments, rangeOffset)
+          checkAnnotatedTextFragments(annotatedTextFragments, rangeStartPos)
       return Pair(matches, annotatedTextFragments)
     } finally {
       this.settingsManager.settings = originalSettings
@@ -275,5 +285,18 @@ class DocumentChecker(
 
   companion object {
     private const val MAX_LOG_TEXT_LENGTH = 100
+
+    private fun shouldSkipCheck(
+      codeLanguageId: String,
+      settings: Settings,
+      rangeStartPos: Int?,
+    ): Boolean {
+      return (
+        (rangeStartPos == null)
+        && !settings.enabled.contains(codeLanguageId)
+        && (codeLanguageId != "nop")
+        && (codeLanguageId != "plaintext")
+      )
+    }
   }
 }

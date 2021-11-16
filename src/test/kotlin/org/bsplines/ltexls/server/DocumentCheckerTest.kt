@@ -144,20 +144,40 @@ class DocumentCheckerTest {
 
   @Test
   fun testRange() {
-    val document: LtexTextDocumentItem = createDocument(
+    var document: LtexTextDocumentItem = createDocument(
       "markdown",
       "# Test\n\nThis is an **test.**\n\nThis is an **test.**\n",
     )
     val settingsManager = SettingsManager(Settings(_logLevel = Level.FINEST))
     val documentChecker = DocumentChecker(settingsManager)
-    val checkingResult: Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> =
+    var checkingResult: Pair<List<LanguageToolRuleMatch>, List<AnnotatedTextFragment>> =
         documentChecker.check(document, Range(Position(4, 0), Position(4, 20)))
-    val matches: List<LanguageToolRuleMatch> = checkingResult.first
+    var matches: List<LanguageToolRuleMatch> = checkingResult.first
     assertEquals(1, matches.size)
     assertEquals("EN_A_VS_AN", matches[0].ruleId)
     assertEquals("This is an test.", matches[0].sentence?.trim())
     assertEquals(38, matches[0].fromPos)
     assertEquals(40, matches[0].toPos)
+
+    document = createDocument(
+      "cpp",
+      """
+      #include <iostream>
+
+      int main() {
+        std::cout << "This is an test." << std::endl;
+        return 0;
+      }
+
+      """.trimIndent(),
+    )
+    checkingResult = documentChecker.check(document, Range(Position(3, 16), Position(3, 32)))
+    matches = checkingResult.first
+    assertEquals(1, matches.size)
+    assertEquals("EN_A_VS_AN", matches[0].ruleId)
+    assertEquals("This is an test.", matches[0].sentence?.trim())
+    assertEquals(58, matches[0].fromPos)
+    assertEquals(60, matches[0].toPos)
   }
 
   @Test
