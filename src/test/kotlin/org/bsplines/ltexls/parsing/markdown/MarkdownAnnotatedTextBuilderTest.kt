@@ -88,6 +88,14 @@ class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown"
   }
 
   @Test
+  fun testStrikethroughExtension() {
+    assertPlainText(
+      "This is a ~~test~~.\n",
+      "This is a test.\n",
+    )
+  }
+
+  @Test
   fun testTablesExtension() {
     assertPlainText(
       """

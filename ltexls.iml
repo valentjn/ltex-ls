@@ -190,6 +190,7 @@
     <orderEntry type="library" name="Maven: com.vladsch.flexmark:flexmark-util:0.62.2" level="project" />
     <orderEntry type="library" name="Maven: com.vladsch.flexmark:flexmark-util-options:0.62.2" level="project" />
     <orderEntry type="library" name="Maven: com.vladsch.flexmark:flexmark-ext-definition:0.62.2" level="project" />
+    <orderEntry type="library" name="Maven: com.vladsch.flexmark:flexmark-ext-gfm-strikethrough:0.62.2" level="project" />
     <orderEntry type="library" name="Maven: com.vladsch.flexmark:flexmark-ext-gitlab:0.62.2" level="project" />
     <orderEntry type="library" name="Maven: com.vladsch.flexmark:flexmark-ext-tables:0.62.2" level="project" />
     <orderEntry type="library" name="Maven: com.vladsch.flexmark:flexmark-test-util:0.62.2" level="project" />

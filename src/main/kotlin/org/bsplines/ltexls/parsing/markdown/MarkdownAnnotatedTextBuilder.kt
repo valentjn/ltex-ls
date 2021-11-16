@@ -8,6 +8,7 @@
 package org.bsplines.ltexls.parsing.markdown
 
 import com.vladsch.flexmark.ext.definition.DefinitionExtension
+import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension
 import com.vladsch.flexmark.ext.gitlab.GitLabExtension
 import com.vladsch.flexmark.ext.tables.TablesExtension
 import com.vladsch.flexmark.ext.yaml.front.matter.YamlFrontMatterExtension
@@ -193,9 +194,10 @@ class MarkdownAnnotatedTextBuilder(
       listOf(
         DefinitionExtension.create(),
         GitLabExtension.create(),
+        LtexMarkdownExtension.create(),
+        StrikethroughExtension.create(),
         TablesExtension.create(),
         YamlFrontMatterExtension.create(),
-        LtexMarkdownExtension.create(),
       ),
     )
   }
