@@ -19,6 +19,9 @@
       <action type="add" issue="vscode-ltex#457">
         Always check selected text when running [`_ltex.checkDocument`](https://valentjn.github.io/ltex/ltex-ls/server-usage.html#_ltexcheckdocument-server), even non-comment parts of programs
       </action>
+      <action type="add" issue="vscode-ltex#463">
+        Add support for the `minted` package (LaTeX)
+      </action>
     </release>
     <release version="15.1.0" date="2021-11-05">
       <action type="add">
