@@ -77,7 +77,8 @@ def convertChangelogFromXmlToMarkdown(xmlFilePath: pathlib.Path,
     description = release.attrib.get("description", "")
     if len(description) > 0: description = f" \u2014 \u201c{description}\u201d"
     dateStr = release.attrib["date"]
-    dateStr = (datetime.datetime.strptime(dateStr, "%Y-%m-%d").strftime("%B %d, %Y")
+    dateStr = (
+        datetime.datetime.strptime(dateStr, "%Y-%m-%d").strftime("%B %d, %Y").replace(" 0", " ")
         if dateStr != "upcoming" else dateStr)
     if version is None: markdown += f"\n## {curVersion}{description} ({dateStr})\n\n"
 
