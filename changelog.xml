@@ -12,7 +12,7 @@
     <author>Julian Valentin, LTeX Development Community</author>
   </properties>
   <body>
-    <release version="15.2.0" date="upcoming">
+    <release version="15.2.0" date="2021-11-28">
       <action type="add" issue="#120">
         Add support for ConTeXt
       </action>
