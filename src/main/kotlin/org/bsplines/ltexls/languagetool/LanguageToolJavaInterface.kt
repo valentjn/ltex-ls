@@ -136,6 +136,7 @@ class LanguageToolJavaInterface(
     return result
   }
 
+  @Suppress("INACCESSIBLE_TYPE")
   private fun logResultCache() {
     if (Logging.logger.isLoggable(Level.FINER)) {
       Logging.logger.finer("matchesCache.size() = " + this.resultCache.matchesCache.size())
