@@ -22,9 +22,12 @@ class LatexEnvironmentSignature(
   val environmentName: String?
 
   init {
-    val environmentName: String? = PREFIX_REGEX.find(environmentPrototype)?.groups?.get(1)?.value
+    val matchResult: MatchResult? = PREFIX_REGEX.find(environmentPrototype)
+    val environmentName: String = matchResult?.groups?.get(1)?.value.orEmpty().ifEmpty {
+      matchResult?.groups?.get(2)?.value.orEmpty()
+    }
 
-    if (environmentName != null) {
+    if (environmentName.isNotEmpty()) {
       this.ignoreAllArguments = false
       this.environmentName = environmentName
     } else {
@@ -34,6 +37,6 @@ class LatexEnvironmentSignature(
   }
 
   companion object {
-    private val PREFIX_REGEX = Regex("^\\\\begin\\{([^}]+)}")
+    private val PREFIX_REGEX = Regex("^(?:\\\\begin\\{([^}]+)}|\\\\start([A-Za-z]+))")
   }
 }

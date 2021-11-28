@@ -44,19 +44,24 @@ abstract class CodeFragmentizer(
     @Suppress("ComplexMethod")
     fun create(codeLanguageId: String): CodeFragmentizer {
       return when (codeLanguageId) {
-        "bib" -> BibtexFragmentizer(codeLanguageId)
-        "bibtex" -> BibtexFragmentizer(codeLanguageId)
-        "html" -> HtmlFragmentizer(codeLanguageId)
-        "latex" -> LatexFragmentizer(codeLanguageId)
+        "bib",
+        "bibtex",
+        -> BibtexFragmentizer(codeLanguageId)
+        "html",
+        "xhtml",
+        -> HtmlFragmentizer(codeLanguageId)
+        "context",
+        "context.tex",
+        "latex",
+        "plaintex",
+        "rsweave",
+        "tex",
+        -> LatexFragmentizer(codeLanguageId)
         "markdown" -> MarkdownFragmentizer(codeLanguageId)
         "nop" -> NopFragmentizer(codeLanguageId)
         "org" -> OrgFragmentizer(codeLanguageId)
-        "plaintex" -> LatexFragmentizer(codeLanguageId)
         "plaintext" -> PlaintextFragmentizer(codeLanguageId)
         "restructuredtext" -> RestructuredtextFragmentizer(codeLanguageId)
-        "rsweave" -> LatexFragmentizer(codeLanguageId)
-        "tex" -> LatexFragmentizer(codeLanguageId)
-        "xhtml" -> HtmlFragmentizer(codeLanguageId)
         else -> {
           if (ProgramCommentRegexs.isSupportedCodeLanguageId(codeLanguageId)) {
             ProgramFragmentizer(codeLanguageId)

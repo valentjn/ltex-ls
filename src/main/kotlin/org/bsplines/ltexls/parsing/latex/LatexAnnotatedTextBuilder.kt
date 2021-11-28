@@ -177,18 +177,35 @@ class LatexAnnotatedTextBuilder(
   private fun processBackslash() {
     var command = matchFromPositionAsString(COMMAND_REGEX)
 
-    if ((command == "\\begin") || (command == "\\end")) {
+    if (
+      (command == "\\begin")
+      || (command == "\\end")
+      || command.startsWith("\\start")
+      || command.startsWith("\\stop")
+    ) {
       this.preserveDummyLast = true
-      val argument: String = matchFromPositionAsString(ARGUMENT_REGEX, this.pos + command.length)
-      val environmentName: String =
-        if (argument.length >= 2) argument.substring(1, argument.length - 1) else ""
+      val isBeginEnvironment: Boolean = ((command == "\\begin") || command.startsWith("\\start"))
+      val argument: String
+      val environmentName: String
+
+      if ((command == "\\begin") || (command == "\\end")) {
+        argument = matchFromPositionAsString(ARGUMENT_REGEX, this.pos + command.length)
+        environmentName =
+            if (argument.length >= 2) argument.substring(1, argument.length - 1) else ""
+      } else {
+        argument = ""
+        environmentName = command.substring(
+          if (isBeginEnvironment) LENGTH_OF_START_PREFIX else LENGTH_OF_STOP_PREFIX,
+        )
+      }
+
       var argumentsProcessed = false
       var interpretAs = ""
 
       if (MATH_ENVIRONMENTS.contains(environmentName)) {
         addMarkup(command)
 
-        if (command == "\\begin") {
+        if (isBeginEnvironment) {
           if (environmentName == "math") {
             enterInlineMath()
           } else {
@@ -198,7 +215,7 @@ class LatexAnnotatedTextBuilder(
           popMode()
           interpretAs = generateDummy()
         }
-      } else if (command == "\\begin") {
+      } else if (isBeginEnvironment) {
         val possibleEnvironmentSignatures: List<LatexEnvironmentSignature> =
             this.environmentSignatureMap[command + argument] ?: emptyList()
 
@@ -220,8 +237,11 @@ class LatexAnnotatedTextBuilder(
         if (matchingEnvironmentSignature != null) {
           if (matchingEnvironmentSignature.action == LatexCommandSignature.Action.Ignore) {
             this.modeStack.add(Mode.IgnoreEnvironment)
-            this.ignoreEnvironmentEndRegex =
-                Regex("^\\\\end\\{" + Regex.escape(environmentName) + "}")
+            this.ignoreEnvironmentEndRegex = if (command == "\\begin") {
+              Regex("^\\\\end\\{" + Regex.escape(environmentName) + "}")
+            } else {
+              Regex("^\\\\stop" + Regex.escape(environmentName) + "(?![A-Za-z])")
+            }
           }
 
           if (matchingEnvironmentSignature.ignoreAllArguments) {
@@ -245,7 +265,7 @@ class LatexAnnotatedTextBuilder(
 
         if (!argumentsProcessed) {
           addMarkup(argument, interpretAs)
-          if (command == "\\begin") processEnvironmentArguments()
+          if (isBeginEnvironment) processEnvironmentArguments()
         }
       }
     } else if ((command == "\\$") || (command == "\\%") || (command == "\\&")) {
@@ -893,12 +913,16 @@ class LatexAnnotatedTextBuilder(
       "equation*",
       "flalign",
       "flalign*",
+      "formula",
       "gather",
       "gather*",
       "math",
       "multline",
       "multline*",
     )
+
+    private const val LENGTH_OF_START_PREFIX = 6
+    private const val LENGTH_OF_STOP_PREFIX = 5
 
     private fun <T : LatexCommandSignature> createCommandSignatureMap(
       commandSignatures: List<T>,

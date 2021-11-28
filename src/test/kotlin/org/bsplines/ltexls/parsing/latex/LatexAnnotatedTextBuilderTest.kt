@@ -453,7 +453,7 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
   }
 
   @Test
-  fun testRsweaveMode() {
+  fun testRsweave() {
     assertPlainText(
       """
       \SweaveOpts{prefix.string=figures}
@@ -490,6 +490,24 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
 
       """.trimIndent(),
       "<<import-packages>>= library(tidyverse) @ ",
+    )
+  }
+
+  @Test
+  fun testContext() {
+    assertPlainText(
+      """
+      This is a first sentence.
+
+      \startformula
+      E = mc^2
+      \stopformula
+
+      This is a second sentence.
+
+      """.trimIndent(),
+      "This is a first sentence.\n\nDummy0 \n\nThis is a second sentence. ",
+      "context",
     )
   }
 
