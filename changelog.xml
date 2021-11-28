@@ -22,6 +22,9 @@
       <action type="add" issue="vscode-ltex#463">
         Add support for the `minted` package (LaTeX)
       </action>
+      <action type="add" issue="vscode-ltex#465">
+        Add support for the Pandoc language variable `lang` in YAML front matter (Markdown)
+      </action>
     </release>
     <release version="15.1.0" date="2021-11-05">
       <action type="add">
