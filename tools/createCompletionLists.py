@@ -49,17 +49,11 @@ def getLanguageToolVersion() -> str:
 
 def downloadLanguageTool(tmpDirPath: pathlib.Path) -> pathlib.Path:
   languageToolVersion = getLanguageToolVersion()
-
-  print("Downloading LanguageTool...")
-
   archiveFileName = f"LanguageTool-{languageToolVersion}.zip"
-  url = f"https://languagetool.org/download/{archiveFileName}"
+  url = ("https://github.com/valentjn/languagetool-mirror/releases/download/"
+      f"{languageToolVersion}/{archiveFileName}")
   archiveFilePath = tmpDirPath.joinpath(archiveFileName)
-
-  opener = urllib.request.build_opener()
-  opener.addheaders = [("User-Agent",
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0")]
-  urllib.request.install_opener(opener)
+  print("Downloading LanguageTool...")
   urllib.request.urlretrieve(url, archiveFilePath)
 
   with zipfile.ZipFile(archiveFilePath, "r") as file: file.extractall(tmpDirPath)
