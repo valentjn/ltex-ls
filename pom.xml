@@ -384,7 +384,7 @@ if %ERROR_CODE% EQU 0 set ERROR_CODE=1</replacevalue>
           <dependency>
             <groupId>com.pinterest</groupId>
             <artifactId>ktlint</artifactId>
-            <version>0.43.0</version>
+            <version>0.43.2</version>
           </dependency>
         </dependencies>
       </plugin>
