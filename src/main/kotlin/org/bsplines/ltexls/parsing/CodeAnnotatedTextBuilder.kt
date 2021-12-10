@@ -7,6 +7,7 @@
 
 package org.bsplines.ltexls.parsing
 
+import org.bsplines.ltexls.parsing.gitcommit.GitCommitAnnotatedTextBuilder
 import org.bsplines.ltexls.parsing.html.HtmlAnnotatedTextBuilder
 import org.bsplines.ltexls.parsing.latex.LatexAnnotatedTextBuilder
 import org.bsplines.ltexls.parsing.markdown.MarkdownAnnotatedTextBuilder
@@ -37,6 +38,9 @@ abstract class CodeAnnotatedTextBuilder(
         "bib",
         "bibtex",
         -> LatexAnnotatedTextBuilder(codeLanguageId)
+        "git-commit",
+        "gitcommit",
+        -> GitCommitAnnotatedTextBuilder(codeLanguageId)
         "html",
         "xhtml",
         -> HtmlAnnotatedTextBuilder(codeLanguageId)

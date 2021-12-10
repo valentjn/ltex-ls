@@ -201,6 +201,7 @@ data class Settings(
     val DEFAULT_ENABLED = setOf(
       "bibtex",
       "latex",
+      "git-commit",
       "html",
       "markdown",
       "org",

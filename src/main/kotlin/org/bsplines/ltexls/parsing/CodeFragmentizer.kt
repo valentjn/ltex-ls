@@ -8,6 +8,7 @@
 package org.bsplines.ltexls.parsing
 
 import org.bsplines.ltexls.parsing.bibtex.BibtexFragmentizer
+import org.bsplines.ltexls.parsing.gitcommit.GitCommitFragmentizer
 import org.bsplines.ltexls.parsing.html.HtmlFragmentizer
 import org.bsplines.ltexls.parsing.latex.LatexFragmentizer
 import org.bsplines.ltexls.parsing.markdown.MarkdownFragmentizer
@@ -47,6 +48,9 @@ abstract class CodeFragmentizer(
         "bib",
         "bibtex",
         -> BibtexFragmentizer(codeLanguageId)
+        "git-commit",
+        "gitcommit",
+        -> GitCommitFragmentizer(codeLanguageId)
         "html",
         "xhtml",
         -> HtmlFragmentizer(codeLanguageId)

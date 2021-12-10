@@ -32,7 +32,7 @@ Find more information (how to install, how to use, etc.) at the [website of LT<s
 
 ## Features
 
-- **Supported markup languages:** BibT<sub>E</sub>X, ConT<sub>E</sub>Xt, L<sup>A</sup>T<sub>E</sub>X, Markdown, Org, reStructuredText, R Sweave, XHTML
+- **Supported markup languages:** BibT<sub>E</sub>X, ConT<sub>E</sub>Xt, Git commit messages, L<sup>A</sup>T<sub>E</sub>X, Markdown, Org, reStructuredText, R Sweave, XHTML
 - Comment checking in **many popular programming languages** (optional, opt-in)
 - Comes with **everything included,** no need to install Java or LanguageTool
 - **Offline checking:** Does not upload anything to the internet
