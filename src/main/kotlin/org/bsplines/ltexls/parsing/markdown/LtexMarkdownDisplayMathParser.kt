@@ -46,7 +46,7 @@ class LtexMarkdownDisplayMathParser(
     val index: Int = state.index
     val line: BasedSequence = state.lineWithEOL
     val matchGroup: MatchGroup? =
-        DISPLAY_MATH_END_REGEX.find(line.subSequence(index))?.groups?.get(1)
+        DISPLAY_MATH_END_REGEX.matchEntire(line.subSequence(index))?.groups?.get(1)
 
     return if (matchGroup != null) {
       val lastChild = this.block.lastChild
@@ -117,7 +117,7 @@ class LtexMarkdownDisplayMathParser(
     override fun tryStart(state: ParserState, matchedBlockParser: MatchedBlockParser): BlockStart? {
       if (!haveDisplayMathParser(state)) {
         val line = state.lineWithEOL
-        val matchGroup: MatchGroup? = DISPLAY_MATH_START_REGEX.find(line)?.groups?.get(1)
+        val matchGroup: MatchGroup? = DISPLAY_MATH_START_REGEX.matchEntire(line)?.groups?.get(1)
 
         if (matchGroup != null) {
           val parser = LtexMarkdownDisplayMathParser(

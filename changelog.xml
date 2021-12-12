@@ -16,6 +16,9 @@
       <action type="add" issue="#132">
         Add support for Git commit messages (LSP language IDs `git-commit` and `gitcommit`)
       </action>
+      <action type="add" issue="#131">
+        Add workaround for Pandoc-style inline display math (Markdown)
+      </action>
     </release>
     <release version="15.2.0" date="2021-11-28">
       <action type="add" issue="#120">

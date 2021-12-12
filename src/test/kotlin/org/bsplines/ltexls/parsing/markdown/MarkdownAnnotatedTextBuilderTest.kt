@@ -183,5 +183,20 @@ class MarkdownAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("markdown"
       """.trimIndent(),
       "This is a test.\n\n\n\n\n\n\nThis is another test.\n",
     )
+    assertPlainText(
+      """
+      This is a test.
+
+      ${'$'}${'$'}a^2 + b^2 = c^2${'$'}${'$'}
+
+      This is another test.
+
+      ${'$'}${'$'}
+      E = mc^2
+      ${'$'}${'$'}
+
+      """.trimIndent(),
+      "This is a test.\n\nDummy0\n\nThis is another test.\n\n\n\n\n",
+    )
   }
 }
