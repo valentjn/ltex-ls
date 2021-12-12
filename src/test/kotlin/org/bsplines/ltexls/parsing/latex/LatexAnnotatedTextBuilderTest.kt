@@ -108,8 +108,8 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
           + "\u0151\u1e07\u00e7\u1ea1\u0105\u00e5\u0103\u010d",
     )
     assertPlainText(
-      "Nih\\'o\u014b\\=go \\u{y}",
-      "Nih\u00f3\u014b\u1e21o y\u0306",
+      "Nih\\'o\u014b\\=go \\u{y} {\\v Z}{\\'a}k",
+      "Nih\u00f3\u014b\u1e21o y\u0306 \u017d\u00e1k",
     )
     assertPlainText(
       "This is a test: a, b, \\dots, c.\n",

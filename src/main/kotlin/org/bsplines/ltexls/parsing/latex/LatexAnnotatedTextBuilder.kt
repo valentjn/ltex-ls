@@ -327,18 +327,12 @@ class LatexAnnotatedTextBuilder(
       || (command == "\\v")
     ) {
       if (!isMathMode(this.curMode)) {
-        val matchResult: MatchResult? = (
-          ACCENT_REGEX1.find(this.code.substring(this.pos))
-          ?: ACCENT_REGEX2.find(this.code.substring(this.pos))
-        )
+        val matchResult: MatchResult? = ACCENT_REGEX.find(this.code.substring(this.pos))
 
         if (matchResult != null) {
           val accentCommand: String? = matchResult.groups["accentCommand"]?.value
-          val letter: String? = if (matchResult.groups["letter1"] != null) {
-            matchResult.groups["letter1"]?.value
-          } else {
-            matchResult.groups["letter2"]?.value
-          }
+          val letter: String? =
+              matchResult.groups["letter1"]?.value ?: matchResult.groups["letter2"]?.value
 
           val interpretAs: String = if ((accentCommand != null) && (letter != null)) {
             convertAccentCommandToUnicode(accentCommand, letter)
@@ -529,9 +523,24 @@ class LatexAnnotatedTextBuilder(
 
   private fun processOpeningBrace() {
     val length: String = matchFromPositionAsString(LENGTH_IN_BRACE_REGEX)
+    var matchResult: MatchResult? = null
 
     if (length.isNotEmpty()) {
       addMarkup(length)
+    } else if (
+      ACCENT_IN_BRACE_REGEX.find(this.code.substring(this.pos))?.also { matchResult = it } != null
+    ) {
+      val accentCommand: String? = matchResult?.groups?.get("accentCommand")?.value
+      val letter: String? =
+          matchResult?.groups?.get("letter1")?.value ?: matchResult?.groups?.get("letter2")?.value
+
+      val interpretAs: String = if ((accentCommand != null) && (letter != null)) {
+        convertAccentCommandToUnicode(accentCommand, letter)
+      } else {
+        ""
+      }
+
+      addMarkup(matchResult?.value, interpretAs)
     } else {
       this.modeStack.addLast(this.curMode)
       addMarkup(this.curString)
@@ -879,23 +888,22 @@ class LatexAnnotatedTextBuilder(
   }
 
   companion object {
+    private const val LENGTH_REGEX_STRING = "-?[0-9]*(\\.[0-9]+)?(pt|mm|cm|ex|em|bp|dd|pc|in)"
+    private const val ACCENT_REGEX_STRING = (
+      "(?<accentCommand>\\\\[`'^~\"=.Hbcdkruv])"
+      + "(?: *(?<letter1>[A-Za-z]|\\\\i|\\\\j)|\\{(?<letter2>[A-Za-z]|\\\\i|\\\\j)})"
+    )
+
     private val COMMAND_REGEX = Regex("^\\\\(([^A-Za-z@]|([A-Za-z@]+))\\*?)")
     private val ARGUMENT_REGEX = Regex("^\\{[^}]*?}")
     private val COMMENT_REGEX = Regex("^%.*?($|(\r?\n[ \n\r\t]*))")
     private val WHITESPACE_REGEX = Regex("^[ \n\r\t]+(%.*?($|(\r?\n[ \n\r\t]*)))?")
-    private val LENGTH_REGEX = Regex("-?[0-9]*(\\.[0-9]+)?(pt|mm|cm|ex|em|bp|dd|pc|in)")
-    private val LENGTH_IN_BRACE_REGEX = Regex("^\\{" + LENGTH_REGEX.pattern + "}")
-    private val LENGTH_IN_BRACKET_REGEX = Regex("^\\[" + LENGTH_REGEX.pattern + "]")
+    private val LENGTH_IN_BRACE_REGEX = Regex("^\\{$LENGTH_REGEX_STRING}")
+    private val LENGTH_IN_BRACKET_REGEX = Regex("^\\[$LENGTH_REGEX_STRING]")
     private val EM_DASH_REGEX = Regex("^---")
     private val EN_DASH_REGEX = Regex("^--")
-    private val ACCENT_REGEX1 = Regex(
-      "^(?<accentCommand>\\\\[`'^~\"=.])"
-      + "(?:(?<letter1>[A-Za-z]|\\\\i|\\\\j)|\\{(?<letter2>[A-Za-z]|\\\\i|\\\\j)})",
-    )
-    private val ACCENT_REGEX2 = Regex(
-      "^(?<accentCommand>\\\\[Hbcdkruv])"
-      + "(?: *(?<letter1>[A-Za-z]|\\\\i|\\\\j)|\\{(?<letter2>[A-Za-z]|\\\\i|\\\\j)})",
-    )
+    private val ACCENT_REGEX = Regex("^$ACCENT_REGEX_STRING")
+    private val ACCENT_IN_BRACE_REGEX = Regex("^\\{$ACCENT_REGEX_STRING}")
     private val DISPLAY_MATH_REGEX = Regex("^\\$\\$")
     private val VERB_COMMAND_REGEX = Regex("^\\\\verb\\*?(.).*?\\1")
     private val RSWEAVE_BEGIN_REGEX = Regex("^<<.*?>>=")
