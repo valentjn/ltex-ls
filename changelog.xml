@@ -25,6 +25,9 @@
       <action type="add" issue="vscode-ltex#490">
         Add support for `\newcaptionname` etc. from KOMA-Script and `\DefineBibliographyStrings` from BibLaTeX (LaTeX)
       </action>
+      <action type="fix" issue="#134">
+        Fix false positives when using siunitx (LaTeX)
+      </action>
     </release>
     <release version="15.2.0" date="2021-11-28">
       <action type="add" issue="#120">
