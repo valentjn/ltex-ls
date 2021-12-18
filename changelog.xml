@@ -22,6 +22,9 @@
       <action type="add" issue="#130">
         Add support for diacritical commands when enclosed in braces (LaTeX)
       </action>
+      <action type="add" issue="vscode-ltex#490">
+        Add support for `\newcaptionname` etc. from KOMA-Script and `\DefineBibliographyStrings` from BibLaTeX (LaTeX)
+      </action>
     </release>
     <release version="15.2.0" date="2021-11-28">
       <action type="add" issue="#120">
