@@ -113,6 +113,9 @@ jobs:
       - name: "Validate pom.xml"
         run: "python -u -c 'import xmlschema; xmlschema.XMLSchema(\"schemas/maven-4.0.0.xsd\").validate(\"pom.xml\")'"
 
+      - name: "Check Source Consistency"
+        run: "python -u tools/checkSourceConsistency.py"
+
   upload_coverage:
     name: "CI - Upload Coverage Job"
     if: "${{ github.event_name != 'pull_request' }}"
