@@ -33,7 +33,7 @@
   </licenses>
   <properties>
     <java.version>11</java.version>
-    <kotlin.version>1.6.0</kotlin.version>
+    <kotlin.version>1.6.10</kotlin.version>
     <kotlin.compiler.languageVersion>1.6</kotlin.compiler.languageVersion>
     <kotlin.compiler.jvmTarget>${java.version}</kotlin.compiler.jvmTarget>
     <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
