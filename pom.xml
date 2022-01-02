@@ -138,7 +138,7 @@
     <dependency>
       <groupId>org.languagetool</groupId>
       <artifactId>languagetool-server</artifactId>
-      <version>5.5</version>
+      <version>5.6</version>
       <exclusions>
         <exclusion>
           <artifactId>logback-classic</artifactId>
