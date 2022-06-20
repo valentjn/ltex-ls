@@ -61,7 +61,9 @@ abstract class CodeFragmentizer(
         "rsweave",
         "tex",
         -> LatexFragmentizer(codeLanguageId)
-        "markdown" -> MarkdownFragmentizer(codeLanguageId)
+        "markdown",
+        "rmd",
+        -> MarkdownFragmentizer(codeLanguageId)
         "nop" -> NopFragmentizer(codeLanguageId)
         "org" -> OrgFragmentizer(codeLanguageId)
         "plaintext" -> PlaintextFragmentizer(codeLanguageId)

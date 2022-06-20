@@ -107,6 +107,25 @@ class MarkdownFragmentizerTest {
   }
 
   @Test
+  fun testOtherLanguages() {
+    assertFragmentizer(
+      "rmd",
+      """
+      Sentence 1
+
+        <!--       ltex: language=de-DE-->
+
+      Sentence 2
+
+      <!--			ltex:				language=en-US		-->
+
+      Sentence 3
+
+      """.trimIndent(),
+    )
+  }
+
+  @Test
   fun testWrongSettings() {
     val fragmentizer: CodeFragmentizer = CodeFragmentizer.create("markdown")
     fragmentizer.fragmentize(
