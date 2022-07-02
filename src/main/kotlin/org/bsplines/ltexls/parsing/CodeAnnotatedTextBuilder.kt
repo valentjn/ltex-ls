@@ -51,8 +51,9 @@ abstract class CodeAnnotatedTextBuilder(
         "rsweave",
         "tex",
         -> LatexAnnotatedTextBuilder(codeLanguageId)
-        "rmd",
         "markdown",
+        "quarto",
+        "rmd",
         -> MarkdownAnnotatedTextBuilder(codeLanguageId)
         "nop" -> NopAnnotatedTextBuilder(codeLanguageId)
         "org" -> OrgAnnotatedTextBuilder(codeLanguageId)
