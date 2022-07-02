@@ -141,11 +141,13 @@ object FileIo {
       "puppet"
     } else if (fileName.endsWith(".py")) {
       "python"
+    } else if (fileName.endsWith(".qmd")) {
+      "quarto"
     } else if (fileName.endsWith(".r")) {
       "r"
     } else if (fileName.endsWith(".Rmd")
           || fileName.endsWith(".rmd")) {
-    "rmd"
+      "rmd"
     } else if (fileName.endsWith(".rst")) {
       "restructuredtext"
     } else if (
