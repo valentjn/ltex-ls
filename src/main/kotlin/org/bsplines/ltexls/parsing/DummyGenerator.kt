@@ -14,6 +14,7 @@ class DummyGenerator private constructor(
   fun generate(language: String, number: Int, vowel: Boolean = false): String {
     return when {
       language.equals("fr", ignoreCase = true) -> "Jimmy-$number"
+      this.plural && language.equals("de", ignoreCase = true) -> "Dummys-$number"
       this.plural -> "Dummies"
       vowel || this.vowel -> "Ina$number"
       else -> "Dummy$number"
