@@ -96,6 +96,11 @@ data class ProgramCommentRegexs(
           blockCommentEndRegexString = "\\]\\]"
           lineCommentRegexString = "---?"
         }
+        "markdown", "md" -> {
+          blockCommentStartRegexString = "<!--"
+          blockCommentEndRegexString = "-->"
+          lineCommentRegexString = null
+        }
         "elm", "haskell" -> {
           blockCommentStartRegexString = "\\{-"
           blockCommentEndRegexString = "-\\}"
