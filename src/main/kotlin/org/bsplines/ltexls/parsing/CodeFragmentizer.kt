@@ -61,6 +61,7 @@ abstract class CodeFragmentizer(
         "rsweave",
         "tex",
         -> LatexFragmentizer(codeLanguageId)
+        "pandoc",
         "markdown" -> MarkdownFragmentizer(codeLanguageId)
         "nop" -> NopFragmentizer(codeLanguageId)
         "org" -> OrgFragmentizer(codeLanguageId)
