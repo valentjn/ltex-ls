@@ -15,7 +15,6 @@ import org.bsplines.ltexls.tools.I18n
 import org.bsplines.ltexls.tools.Logging
 import org.eclipse.lsp4j.ClientCapabilities
 import org.eclipse.lsp4j.CodeActionOptions
-import org.eclipse.lsp4j.CompletionOptions
 import org.eclipse.lsp4j.ExecuteCommandOptions
 import org.eclipse.lsp4j.InitializeParams
 import org.eclipse.lsp4j.InitializeResult
@@ -96,7 +95,6 @@ class LtexLanguageServer : LanguageServer, LanguageClientAware {
 
     serverCapabilities.codeActionProvider =
         Either.forRight(CodeActionOptions(CodeActionProvider.getCodeActionKinds()))
-    serverCapabilities.completionProvider = CompletionOptions()
     serverCapabilities.executeCommandProvider =
         ExecuteCommandOptions(LtexWorkspaceService.getCommandNames())
     serverCapabilities.textDocumentSync = Either.forLeft(TextDocumentSyncKind.Full)
