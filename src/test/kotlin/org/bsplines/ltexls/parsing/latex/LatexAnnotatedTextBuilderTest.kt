@@ -534,6 +534,16 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
     assertEquals(TextPart.Type.FAKE_CONTENT, parts[4].type)
   }
 
+  @Test
+  fun testSimpleWhitespace() {
+    val annotatedText = buildAnnotatedText(
+      "This is a test\nOver multiple\n\nLines.",
+    )
+    val parts = annotatedText.getParts()
+    assertEquals(1, parts.size)
+    assertEquals(TextPart.Type.TEXT, parts[0].type)
+  }
+
   private fun assertOriginalTextPositions(
     code: String,
     plainTextStartPos: Int,

@@ -605,6 +605,7 @@ class LatexAnnotatedTextBuilder(
     addMarkup(comment, (if (containsTwoEndsOfLine(comment)) "\n\n" else ""))
   }
 
+  @Suppress("ComplexMethod")
   private fun processWhitespace() {
     val whitespace: String = if ((this.curChar != '~') && (this.curChar != '&')) {
       matchFromPositionAsString(WHITESPACE_REGEX)
@@ -617,6 +618,14 @@ class LatexAnnotatedTextBuilder(
 
     if (isTextMode(this.curMode)) {
       when {
+        // Prefer text to avoid switching between text and markup too often
+        // TODO What about \r\n?
+        this.lastSpace.isEmpty() && (whitespace == " " || whitespace == "\n") -> {
+          addText(" ")
+        }
+        this.lastSpace.isEmpty() && whitespace == "\n\n" -> {
+          addText("\n\n")
+        }
         containsTwoEndsOfLine(whitespace) -> {
           addMarkup(whitespace, "\n\n")
         }
