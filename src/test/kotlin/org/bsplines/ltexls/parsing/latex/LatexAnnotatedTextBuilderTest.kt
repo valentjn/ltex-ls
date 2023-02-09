@@ -11,6 +11,7 @@ import org.bsplines.ltexls.parsing.AnnotatedTextFragment
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilderTest
 import org.bsplines.ltexls.settings.Settings
 import org.languagetool.markup.AnnotatedText
+import org.languagetool.markup.TextPart
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -517,6 +518,20 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       "This is a first sentence.\n\nDummy0 \n\nThis is a second sentence. ",
       "context",
     )
+  }
+
+  @Test
+  fun testMerging() {
+    val annotatedText = buildAnnotatedText(
+      """\hskip\textbf{SomeBoldText}% followed by a comment""",
+    )
+    val parts = annotatedText.getParts()
+    assertEquals(5, parts.size)
+    assertEquals(TextPart.Type.MARKUP, parts[0].type)
+    assertEquals(TextPart.Type.FAKE_CONTENT, parts[1].type)
+    assertEquals(TextPart.Type.TEXT, parts[2].type)
+    assertEquals(TextPart.Type.MARKUP, parts[3].type)
+    assertEquals(TextPart.Type.FAKE_CONTENT, parts[4].type)
   }
 
   private fun assertOriginalTextPositions(
