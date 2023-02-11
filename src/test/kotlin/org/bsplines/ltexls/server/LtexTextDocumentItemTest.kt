@@ -63,7 +63,7 @@ class LtexTextDocumentItemTest {
 
     document.lastCaretChangeInstant = pastInstant
     document.applyTextChangeEvent(
-      TextDocumentContentChangeEvent(Range(Position(0, 3), Position(0, 3)), 0, "1"),
+      TextDocumentContentChangeEvent(Range(Position(0, 3), Position(0, 3)), "1"),
     )
     assertEquals("abc1def", document.text)
     assertEquals(Position(0, 4), document.caretPosition)
@@ -71,28 +71,28 @@ class LtexTextDocumentItemTest {
 
     document.lastCaretChangeInstant = pastInstant
     document.applyTextChangeEvent(
-      TextDocumentContentChangeEvent(Range(Position(0, 1), Position(0, 2)), 1, ""),
+      TextDocumentContentChangeEvent(Range(Position(0, 1), Position(0, 2)), ""),
     )
     assertEquals("ac1def", document.text)
     assertEquals(Position(0, 1), document.caretPosition)
     assertTrue(Duration.between(document.lastCaretChangeInstant, Instant.now()).toMillis() < 100)
 
     document.applyTextChangeEvent(
-      TextDocumentContentChangeEvent(Range(Position(0, 3), Position(0, 3)), 0, "23"),
+      TextDocumentContentChangeEvent(Range(Position(0, 3), Position(0, 3)), "23"),
     )
     assertEquals("ac123def", document.text)
     assertEquals(Position(0, 5), document.caretPosition)
 
     document.applyTextChangeEvents(
-      listOf(TextDocumentContentChangeEvent(Range(Position(0, 5), Position(0, 5)), 0, "4")),
+      listOf(TextDocumentContentChangeEvent(Range(Position(0, 5), Position(0, 5)), "4")),
     )
     assertEquals("ac1234def", document.text)
     assertEquals(Position(0, 6), document.caretPosition)
 
     document.applyTextChangeEvents(
       listOf(
-        TextDocumentContentChangeEvent(Range(Position(0, 6), Position(0, 6)), 0, "5"),
-        TextDocumentContentChangeEvent(Range(Position(0, 7), Position(0, 7)), 0, "6"),
+        TextDocumentContentChangeEvent(Range(Position(0, 6), Position(0, 6)), "5"),
+        TextDocumentContentChangeEvent(Range(Position(0, 7), Position(0, 7)), "6"),
       ),
     )
     assertEquals("ac123456def", document.text)

@@ -18,8 +18,6 @@ import org.eclipse.lsp4j.DidChangeWatchedFilesParams
 import org.eclipse.lsp4j.ExecuteCommandParams
 import org.eclipse.lsp4j.Position
 import org.eclipse.lsp4j.Range
-import org.eclipse.lsp4j.SymbolInformation
-import org.eclipse.lsp4j.WorkspaceSymbolParams
 import org.eclipse.lsp4j.jsonrpc.CancelChecker
 import org.eclipse.lsp4j.jsonrpc.CompletableFutures
 import org.eclipse.lsp4j.services.WorkspaceService
@@ -40,10 +38,6 @@ import java.util.concurrent.TimeoutException
 class LtexWorkspaceService(
   val languageServer: LtexLanguageServer,
 ) : WorkspaceService {
-  override fun symbol(params: WorkspaceSymbolParams): CompletableFuture<List<SymbolInformation>> {
-    return CompletableFuture.completedFuture(emptyList())
-  }
-
   override fun didChangeConfiguration(params: DidChangeConfigurationParams) {
     this.languageServer.ltexTextDocumentService.executeFunctionForEachDocument {
       document: LtexTextDocumentItem ->

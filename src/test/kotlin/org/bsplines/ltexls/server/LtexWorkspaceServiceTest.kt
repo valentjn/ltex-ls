@@ -26,8 +26,6 @@ class LtexWorkspaceServiceTest {
   fun testMiscellaneous() {
     val server = LtexLanguageServer()
     val service = LtexWorkspaceService(server)
-    service.symbol(WorkspaceSymbolParams())
-
     val settings = JsonObject()
     settings.add("ltex", JsonObject())
     service.didChangeConfiguration(DidChangeConfigurationParams(settings))
