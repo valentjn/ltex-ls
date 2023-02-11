@@ -31,15 +31,16 @@ jobs:
 
     steps:
       - name: "Checkout Repository"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
 
       - name: "Set up Java"
-        uses: "actions/setup-java@v1"
+        uses: "actions/setup-java@v3"
         with:
           java-version: "11.0.9"
+          distribution: "zulu"
 
       - name: "Set up Python"
-        uses: "actions/setup-python@v2"
+        uses: "actions/setup-python@v4"
         with:
           python-version: "3.9.0"
 
@@ -55,15 +56,16 @@ jobs:
 
     steps:
       - name: "Checkout Repository"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
 
       - name: "Set up Java"
-        uses: "actions/setup-java@v1"
+        uses: "actions/setup-java@v3"
         with:
           java-version: "11.0.9"
+          distribution: "zulu"
 
       - name: "Set up Python"
-        uses: "actions/setup-python@v2"
+        uses: "actions/setup-python@v4"
         with:
           python-version: "3.9.0"
 
@@ -77,7 +79,7 @@ jobs:
         run: "echo -e \"LTEX_LS_IDEA_ARCHIVE_NAME=ideaIC-2021.2.tar.gz\nLTEX_LS_IDEA_DIRECTORY_NAME=idea-IC-212.4746.92\" >> $GITHUB_ENV"
 
       - name: "Load IntelliJ IDEA from Cache"
-        uses: "actions/cache@v2"
+        uses: "actions/cache@v3"
         with:
           path: "${{ env.LTEX_LS_IDEA_DIRECTORY_NAME }}"
           key: "${{ env.LTEX_LS_IDEA_DIRECTORY_NAME }}-${{ runner.os }}-v1"
@@ -94,10 +96,10 @@ jobs:
 
     steps:
       - name: "Checkout Repository"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
 
       - name: "Set up Python"
-        uses: "actions/setup-python@v2"
+        uses: "actions/setup-python@v4"
         with:
           python-version: "3.9.0"
 
@@ -123,15 +125,16 @@ jobs:
 
     steps:
       - name: "Checkout Repository"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
 
       - name: "Set up Java"
-        uses: "actions/setup-java@v1"
+        uses: "actions/setup-java@v3"
         with:
           java-version: "11.0.9"
+          distribution: "zulu"
 
       - name: "Set up Python"
-        uses: "actions/setup-python@v2"
+        uses: "actions/setup-python@v4"
         with:
           python-version: "3.9.0"
 
@@ -158,15 +161,16 @@ jobs:
 
     steps:
       - name: "Checkout Repository"
-        uses: "actions/checkout@v2"
+        uses: "actions/checkout@v3"
 
       - name: "Set up Java"
-        uses: "actions/setup-java@v1"
+        uses: "actions/setup-java@v3"
         with:
           java-version: "11.0.9"
+          distribution: "zulu"
 
       - name: "Set up Python"
-        uses: "actions/setup-python@v2"
+        uses: "actions/setup-python@v4"
         with:
           python-version: "3.9.0"
 
