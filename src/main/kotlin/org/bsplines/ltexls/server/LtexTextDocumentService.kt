@@ -15,36 +15,15 @@ import org.bsplines.ltexls.tools.Logging
 import org.bsplines.ltexls.tools.Tools
 import org.eclipse.lsp4j.CodeAction
 import org.eclipse.lsp4j.CodeActionParams
-import org.eclipse.lsp4j.CodeLens
-import org.eclipse.lsp4j.CodeLensParams
 import org.eclipse.lsp4j.Command
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionList
 import org.eclipse.lsp4j.CompletionParams
-import org.eclipse.lsp4j.DefinitionParams
 import org.eclipse.lsp4j.DidChangeTextDocumentParams
 import org.eclipse.lsp4j.DidCloseTextDocumentParams
 import org.eclipse.lsp4j.DidOpenTextDocumentParams
 import org.eclipse.lsp4j.DidSaveTextDocumentParams
-import org.eclipse.lsp4j.DocumentFormattingParams
-import org.eclipse.lsp4j.DocumentHighlight
-import org.eclipse.lsp4j.DocumentHighlightParams
-import org.eclipse.lsp4j.DocumentOnTypeFormattingParams
-import org.eclipse.lsp4j.DocumentRangeFormattingParams
-import org.eclipse.lsp4j.DocumentSymbol
-import org.eclipse.lsp4j.DocumentSymbolParams
-import org.eclipse.lsp4j.Hover
-import org.eclipse.lsp4j.HoverParams
-import org.eclipse.lsp4j.Location
-import org.eclipse.lsp4j.LocationLink
 import org.eclipse.lsp4j.PublishDiagnosticsParams
-import org.eclipse.lsp4j.ReferenceParams
-import org.eclipse.lsp4j.RenameParams
-import org.eclipse.lsp4j.SignatureHelp
-import org.eclipse.lsp4j.SignatureHelpParams
-import org.eclipse.lsp4j.SymbolInformation
-import org.eclipse.lsp4j.TextEdit
-import org.eclipse.lsp4j.WorkspaceEdit
 import org.eclipse.lsp4j.jsonrpc.CancelChecker
 import org.eclipse.lsp4j.jsonrpc.CompletableFutures
 import org.eclipse.lsp4j.jsonrpc.messages.Either
@@ -80,64 +59,6 @@ class LtexTextDocumentService(
     } else {
       CompletableFuture.completedFuture(Either.forLeft(emptyList()))
     }
-  }
-
-  override fun resolveCompletionItem(completionItem: CompletionItem):
-        CompletableFuture<CompletionItem> {
-    return CompletableFuture.completedFuture(CompletionItem())
-  }
-
-  override fun hover(params: HoverParams): CompletableFuture<Hover> {
-    return CompletableFuture.completedFuture(Hover())
-  }
-
-  override fun signatureHelp(params: SignatureHelpParams): CompletableFuture<SignatureHelp> {
-    return CompletableFuture.completedFuture(SignatureHelp())
-  }
-
-  override fun definition(params: DefinitionParams):
-        CompletableFuture<Either<List<Location>, List<LocationLink>>> {
-    return CompletableFuture.completedFuture(Either.forLeft(emptyList()))
-  }
-
-  override fun references(params: ReferenceParams): CompletableFuture<List<Location>> {
-    return CompletableFuture.completedFuture(emptyList())
-  }
-
-  override fun documentHighlight(params: DocumentHighlightParams):
-        CompletableFuture<List<DocumentHighlight>> {
-    return CompletableFuture.completedFuture(emptyList())
-  }
-
-  override fun documentSymbol(params: DocumentSymbolParams):
-        CompletableFuture<List<Either<SymbolInformation, DocumentSymbol>>> {
-    return CompletableFuture.completedFuture(emptyList())
-  }
-
-  override fun codeLens(params: CodeLensParams): CompletableFuture<List<CodeLens>> {
-    return CompletableFuture.completedFuture(emptyList())
-  }
-
-  override fun resolveCodeLens(codeLens: CodeLens): CompletableFuture<CodeLens> {
-    return CompletableFuture.completedFuture(CodeLens())
-  }
-
-  override fun formatting(params: DocumentFormattingParams): CompletableFuture<List<TextEdit>> {
-    return CompletableFuture.completedFuture(emptyList())
-  }
-
-  override fun rangeFormatting(params: DocumentRangeFormattingParams):
-        CompletableFuture<List<TextEdit>> {
-    return CompletableFuture.completedFuture(emptyList())
-  }
-
-  override fun onTypeFormatting(params: DocumentOnTypeFormattingParams):
-        CompletableFuture<List<TextEdit>> {
-    return CompletableFuture.completedFuture(emptyList())
-  }
-
-  override fun rename(params: RenameParams): CompletableFuture<WorkspaceEdit> {
-    return CompletableFuture.completedFuture(WorkspaceEdit())
   }
 
   override fun didOpen(params: DidOpenTextDocumentParams) {

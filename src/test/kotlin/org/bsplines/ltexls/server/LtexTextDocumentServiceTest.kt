@@ -35,21 +35,7 @@ class LtexTextDocumentServiceTest {
   fun test() {
     val server = LtexLanguageServer()
     val service = LtexTextDocumentService(server)
-
-    service.codeLens(CodeLensParams())
     service.completion(CompletionParams())
-    service.definition(DefinitionParams())
-    service.documentHighlight(DocumentHighlightParams())
-    service.documentSymbol(DocumentSymbolParams())
-    service.formatting(DocumentFormattingParams())
-    service.hover(HoverParams())
-    service.onTypeFormatting(DocumentOnTypeFormattingParams())
-    service.references(ReferenceParams())
-    service.rangeFormatting(DocumentRangeFormattingParams())
-    service.rename(RenameParams())
-    service.resolveCodeLens(CodeLens())
-    service.resolveCompletionItem(CompletionItem())
-    service.signatureHelp(SignatureHelpParams())
 
     val document = TextDocumentItem("untitled:test.md", "markdown", 1, "")
     val versionedDocument = VersionedTextDocumentIdentifier(document.uri, 2)
