@@ -43,7 +43,7 @@ class AnnotatedTextFragment(
     return if (plainTextFromPos <= plainTextToPos) {
       plainText.substring(plainTextFromPos, plainTextToPos)
     } else {
-      Logging.logger.warning(
+      Logging.LOGGER.warning(
         I18n.format(
           "couldNotDeterminePlainTextPositions",
           fromPos,
@@ -57,13 +57,13 @@ class AnnotatedTextFragment(
   }
 
   companion object {
-    private val annotatedTextMappingField: Field = run {
+    private val ANNOTATED_TEXT_MAPPING_FIELD: Field = run {
       val annotatedTextMappingField: Field = AnnotatedText::class.java.getDeclaredField("mapping")
       annotatedTextMappingField.isAccessible = true
       annotatedTextMappingField
     }
 
-    private val mappingValueGetTotalPositionMethod: Method = run {
+    private val MAPPING_VALUE_GET_TOTAL_POSITION_METHOD: Method = run {
       val mappingValueClass: Class<*> = Class.forName("org.languagetool.markup.MappingValue")
       val mappingValueGetTotalPositionMethod: Method =
           mappingValueClass.getDeclaredMethod("getTotalPosition")
@@ -77,14 +77,14 @@ class AnnotatedTextFragment(
       isToPos: Boolean,
     ): Int {
       @Suppress("UNCHECKED_CAST")
-      val mapping: Map<Int, *> = annotatedTextMappingField.get(annotatedText) as Map<Int, *>
+      val mapping: Map<Int, *> = ANNOTATED_TEXT_MAPPING_FIELD.get(annotatedText) as Map<Int, *>
 
       val mappingList: MutableList<Pair<Int, Int>> = run {
         val mappingList = ArrayList<Pair<Int, Int>>()
         mappingList.add(Pair(0, 0))
 
         for ((key: Int, value: Any?) in mapping) {
-          val totalPosition: Int = mappingValueGetTotalPositionMethod.invoke(value) as Int
+          val totalPosition: Int = MAPPING_VALUE_GET_TOTAL_POSITION_METHOD.invoke(value) as Int
           if (key == plainTextPos) return totalPosition
           mappingList.add(Pair(key, totalPosition))
         }

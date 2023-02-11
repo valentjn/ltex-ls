@@ -80,9 +80,10 @@ class CodeActionProvider(
       if (!match.isIntersectingWithRange(params.range, document)) continue
 
       for (newWord: String in match.suggestedReplacements) {
-        if ((!acceptSuggestionsMatchesMap.containsKey(newWord))
-              && (acceptSuggestionsMatchesMap.size
-                >= MAX_NUMBER_OF_ACCEPT_SUGGESTIONS_CODE_ACTIONS)) {
+        if (
+          (!acceptSuggestionsMatchesMap.containsKey(newWord))
+          && (acceptSuggestionsMatchesMap.size >= MAX_NUMBER_OF_ACCEPT_SUGGESTIONS_CODE_ACTIONS)
+        ) {
           continue
         }
 
@@ -193,7 +194,7 @@ class CodeActionProvider(
       val fragmentIndex: Int = findAnnotatedTextFragmentWithMatch(annotatedTextFragments, match)
 
       if (fragmentIndex == -1) {
-        Logging.logger.warning(I18n.format("couldNotFindFragmentForMatch"))
+        Logging.LOGGER.warning(I18n.format("couldNotFindFragmentForMatch"))
         continue
       }
 
@@ -253,7 +254,7 @@ class CodeActionProvider(
         val fragmentIndex: Int = findAnnotatedTextFragmentWithMatch(annotatedTextFragments, match)
 
         if (fragmentIndex == -1) {
-          Logging.logger.warning(I18n.format("couldNotFindFragmentForMatch"))
+          Logging.LOGGER.warning(I18n.format("couldNotFindFragmentForMatch"))
           continue
         }
 
@@ -332,7 +333,7 @@ class CodeActionProvider(
         val fragmentIndex: Int = findAnnotatedTextFragmentWithMatch(annotatedTextFragments, match)
 
         if (fragmentIndex == -1) {
-          Logging.logger.warning(I18n.format("couldNotFindFragmentForMatch"))
+          Logging.LOGGER.warning(I18n.format("couldNotFindFragmentForMatch"))
           continue
         }
 

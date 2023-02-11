@@ -16,21 +16,23 @@ import java.util.concurrent.CancellationException
 object Tools {
   private const val MAX_EXCEPTION_DEPTH = 100
 
-  val randomNumberGenerator = Random()
+  val RANDOM_NUMBER_GENERATOR = Random()
 
   fun areRangesIntersecting(range1: Range, range2: Range): Boolean {
-    return !(positionLower(range2.end, range1.start)
-        || positionLower(range1.end, range2.start))
+    return !(
+      positionLower(range2.end, range1.start) || positionLower(range1.end, range2.start)
+    )
   }
 
   fun positionLower(position1: Position, position2: Position): Boolean {
-    return ((position1.line < position2.line)
-        || ((position1.line == position2.line)
-        && (position1.character < position2.character)))
+    return (
+      (position1.line < position2.line)
+      || ((position1.line == position2.line) && (position1.character < position2.character))
+    )
   }
 
   fun getRandomUuid(): String {
-    return UUID(randomNumberGenerator.nextLong(), randomNumberGenerator.nextLong()).toString()
+    return UUID(RANDOM_NUMBER_GENERATOR.nextLong(), RANDOM_NUMBER_GENERATOR.nextLong()).toString()
   }
 
   @Suppress("UnusedPrivateMember")

@@ -12,17 +12,17 @@ import java.util.logging.Level
 import java.util.logging.Logger
 
 object Logging {
-  val logger: Logger = Logger.getLogger("org.bsplines.ltexls")
-  private val loggerConsoleHandler = ConsoleHandler()
+  val LOGGER: Logger = Logger.getLogger("org.bsplines.ltexls")
+  private val LOGGER_CONSOLE_HANDLER = ConsoleHandler()
 
   init {
-    logger.useParentHandlers = false
-    logger.addHandler(loggerConsoleHandler)
+    LOGGER.useParentHandlers = false
+    LOGGER.addHandler(LOGGER_CONSOLE_HANDLER)
     setLogLevel(Level.FINE)
   }
 
   fun setLogLevel(logLevel: Level) {
-    logger.level = logLevel
-    loggerConsoleHandler.level = logLevel
+    LOGGER.level = logLevel
+    LOGGER_CONSOLE_HANDLER.level = logLevel
   }
 }

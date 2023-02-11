@@ -31,7 +31,7 @@ class LtexLanguageServerLauncherTcpSocketTest {
     @Suppress("TooGenericExceptionThrown")
     override fun run() {
       try {
-        Tools.randomNumberGenerator.setSeed(42)
+        Tools.RANDOM_NUMBER_GENERATOR.setSeed(42)
         val exitCode: Int = LtexLanguageServerLauncher.mainWithoutExit(
           arrayOf("--server-type=tcpSocket", "--host=$HOST", "--port=$PORT"),
         )

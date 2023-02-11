@@ -8,7 +8,7 @@
 package org.bsplines.ltexls.parsing.markdown
 
 object MarkdownAnnotatedTextBuilderDefaults {
-  val defaultMarkdownNodeSignatures: List<MarkdownNodeSignature> = listOf(
+  val DEFAULT_MARKDOWN_NODE_SIGNATURES: List<MarkdownNodeSignature> = listOf(
     MarkdownNodeSignature("AutoLink", MarkdownNodeSignature.Action.Dummy),
     MarkdownNodeSignature("Code", MarkdownNodeSignature.Action.Dummy),
     MarkdownNodeSignature("CodeBlock"),

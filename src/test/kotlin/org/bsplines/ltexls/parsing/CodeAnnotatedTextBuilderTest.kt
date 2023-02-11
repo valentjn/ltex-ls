@@ -14,11 +14,7 @@ import kotlin.test.assertEquals
 open class CodeAnnotatedTextBuilderTest(
   val codeLanguageId: String,
 ) {
-  fun assertPlainText(
-    code: String,
-    expectedPlainText: String,
-    settings: Settings = Settings(),
-  ) {
+  fun assertPlainText(code: String, expectedPlainText: String, settings: Settings = Settings()) {
     val annotatedText: AnnotatedText = buildAnnotatedText(code, settings)
     assertEquals(expectedPlainText, annotatedText.plainText)
   }

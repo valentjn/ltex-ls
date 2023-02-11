@@ -57,7 +57,7 @@ class LtexWorkspaceService(
 
         if (exception != null) {
           Tools.rethrowCancellationException(exception)
-          Logging.logger.warning(I18n.format(exception))
+          Logging.LOGGER.warning(I18n.format(exception))
         }
       }
     }
@@ -125,11 +125,11 @@ class LtexWorkspaceService(
         jsonObject
       } catch (e: ExecutionException) {
         Tools.rethrowCancellationException(e)
-        Logging.logger.warning(I18n.format(e))
+        Logging.LOGGER.warning(I18n.format(e))
         emptyList<Any>()
       } catch (e: InterruptedException) {
         Tools.rethrowCancellationException(e)
-        Logging.logger.warning(I18n.format(e))
+        Logging.LOGGER.warning(I18n.format(e))
         emptyList<Any>()
       }
     }
@@ -153,8 +153,7 @@ class LtexWorkspaceService(
       cpuUsage = operatingSystemMxBean.processCpuLoad
       if (cpuUsage == -1.0) cpuUsage = null
       val cpuDurationLong: Long = operatingSystemMxBean.processCpuTime
-      cpuDuration = (
-          if (cpuDurationLong != -1L) (cpuDurationLong / NANOSECONDS_PER_SECOND) else null)
+      cpuDuration = if (cpuDurationLong != -1L) (cpuDurationLong / NANOSECONDS_PER_SECOND) else null
     } else {
       cpuDuration = null
       cpuUsage = null

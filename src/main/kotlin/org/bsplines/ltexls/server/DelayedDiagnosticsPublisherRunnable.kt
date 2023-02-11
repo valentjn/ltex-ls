@@ -18,7 +18,7 @@ class DelayedDiagnosticsPublisherRunnable(
   val document: LtexTextDocumentItem,
 ) : Runnable {
   override fun run() {
-    var sleepDuration: Duration = showCaretDiagnosticsDuration.minus(
+    var sleepDuration: Duration = SHOW_CARET_DIAGNOSTICS_DURATION.minus(
       Duration.between(this.document.lastCaretChangeInstant, Instant.now()),
     )
     if (sleepDuration.isNegative) sleepDuration = Duration.ZERO
@@ -32,7 +32,7 @@ class DelayedDiagnosticsPublisherRunnable(
 
     if (
       Duration.between(this.document.lastCaretChangeInstant, Instant.now())
-      > showCaretDiagnosticsDuration
+      > SHOW_CARET_DIAGNOSTICS_DURATION
     ) {
       val diagnostics: List<Diagnostic>? = this.document.diagnosticsCache
 
@@ -45,7 +45,7 @@ class DelayedDiagnosticsPublisherRunnable(
   }
 
   companion object {
-    private val showCaretDiagnosticsDuration: Duration = Duration.ofSeconds(2)
+    private val SHOW_CARET_DIAGNOSTICS_DURATION: Duration = Duration.ofSeconds(2)
     private const val SLEEP_DURATION_DELTA_MILLISECONDS = 10L
   }
 }

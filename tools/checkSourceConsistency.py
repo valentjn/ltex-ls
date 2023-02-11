@@ -38,7 +38,8 @@ def compareLatexCommandPrototypes(commandPrototype1: str,
 def checkLatexCommandSignatures(filePath: pathlib.Path) -> None:
   print(f"Checking '{filePath}'...")
   with open(filePath, "r") as f: code = f.read()
-  regexMatch = re.search(r"defaultLatexCommandSignatures.*?\r?\n[ \t]*\r?\n", code, flags=re.DOTALL)
+  regexMatch = re.search(r"DEFAULT_LATEX_COMMAND_SIGNATURES.*?\r?\n[ \t]*\r?\n", code,
+      flags=re.DOTALL)
   assert regexMatch is not None
   commandPrototypes = re.findall(r"LatexCommandSignature\([ \t\r\n]*\"(.*?)\"", regexMatch.group())
 

@@ -60,7 +60,7 @@ abstract class CodeAnnotatedTextBuilder(
           if (ProgramCommentRegexs.isSupportedCodeLanguageId(codeLanguageId)) {
             ProgramAnnotatedTextBuilder(codeLanguageId)
           } else {
-            Logging.logger.warning(I18n.format("unsupportedCodeLanguageId", codeLanguageId))
+            Logging.LOGGER.warning(I18n.format("unsupportedCodeLanguageId", codeLanguageId))
             PlaintextAnnotatedTextBuilder("plaintext")
           }
         }

@@ -116,7 +116,7 @@ class DocumentChecker(
 
     val languageToolInterface: LanguageToolInterface =
         this.settingsManager.languageToolInterface ?: run {
-          Logging.logger.warning(
+          Logging.LOGGER.warning(
             I18n.format("skippingTextCheckAsLanguageToolHasNotBeenInitialized"),
           )
           return emptyList()
@@ -125,7 +125,7 @@ class DocumentChecker(
     val codeLanguageId: String = codeFragment.codeLanguageId
 
     if (shouldSkipCheck(codeLanguageId, settings, rangeStartPos)) {
-      Logging.logger.fine(I18n.format("skippingTextCheckAsLtexHasBeenDisabled", codeLanguageId))
+      Logging.LOGGER.fine(I18n.format("skippingTextCheckAsLtexHasBeenDisabled", codeLanguageId))
       return emptyList()
     } else if (settings.dictionary.contains("BsPlInEs")) {
       languageToolInterface.enableEasterEgg()
@@ -138,12 +138,12 @@ class DocumentChecker(
       ArrayList(languageToolInterface.check(annotatedTextFragment))
     } catch (e: RuntimeException) {
       Tools.rethrowCancellationException(e)
-      Logging.logger.severe(I18n.format("languageToolFailed", e))
+      Logging.LOGGER.severe(I18n.format("languageToolFailed", e))
       return emptyList()
     }
 
-    if (Logging.logger.isLoggable(Level.FINER)) {
-      Logging.logger.finer(
+    if (Logging.LOGGER.isLoggable(Level.FINER)) {
+      Logging.LOGGER.finer(
         I18n.format(
           "checkingDone",
           Duration.between(beforeCheckingInstant, Instant.now()).toMillis(),
@@ -151,7 +151,7 @@ class DocumentChecker(
       )
     }
 
-    Logging.logger.fine(
+    Logging.LOGGER.fine(
       if (matches.size == 1) {
         I18n.format("obtainedRuleMatch")
       } else {
@@ -177,8 +177,8 @@ class DocumentChecker(
   }
 
   private fun logTextToBeChecked(annotatedText: AnnotatedText, settings: Settings) {
-    if (Logging.logger.isLoggable(Level.FINER)) {
-      Logging.logger.finer(
+    if (Logging.LOGGER.isLoggable(Level.FINER)) {
+      Logging.LOGGER.finer(
         I18n.format(
           "checkingText",
           settings.languageShortCode,
@@ -187,7 +187,7 @@ class DocumentChecker(
         ),
       )
 
-      if (Logging.logger.isLoggable(Level.FINEST)) {
+      if (Logging.LOGGER.isLoggable(Level.FINEST)) {
         val builder = StringBuilder()
 
         for (textPart: TextPart in annotatedText.parts) {
@@ -199,9 +199,9 @@ class DocumentChecker(
         }
 
         builder.append("]")
-        Logging.logger.finest(builder.toString())
+        Logging.LOGGER.finest(builder.toString())
       }
-    } else if (Logging.logger.isLoggable(Level.FINE)) {
+    } else if (Logging.LOGGER.isLoggable(Level.FINE)) {
       var logText: String = annotatedText.plainText
       var postfix = ""
 
@@ -210,7 +210,7 @@ class DocumentChecker(
         postfix = I18n.format("truncatedPostfix", MAX_LOG_TEXT_LENGTH)
       }
 
-      Logging.logger.fine(
+      Logging.LOGGER.fine(
         I18n.format(
           "checkingText",
           settings.languageShortCode,
@@ -246,13 +246,13 @@ class DocumentChecker(
       if ((ruleId == null) || (sentence == null)) continue
 
       if (searchMatchInHiddenFalsePositives(ruleId, sentence, hiddenFalsePositives)) {
-        Logging.logger.fine(I18n.format("hidingFalsePositive", ruleId, sentence))
+        Logging.LOGGER.fine(I18n.format("hidingFalsePositive", ruleId, sentence))
         ignoreMatches.add(match)
       }
     }
 
     if (ignoreMatches.isNotEmpty()) {
-      Logging.logger.fine(
+      Logging.LOGGER.fine(
         if (ignoreMatches.size == 1) {
           I18n.format("hidFalsePositive")
         } else {

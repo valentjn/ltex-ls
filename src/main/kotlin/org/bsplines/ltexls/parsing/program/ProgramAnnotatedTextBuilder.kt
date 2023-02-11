@@ -36,7 +36,7 @@ class ProgramAnnotatedTextBuilder(
       val commentGroup: MatchGroup? = matchResult.groups[commentGroupName]
 
       if (commentGroup == null) {
-        Logging.logger.warning(
+        Logging.LOGGER.warning(
           I18n.format("couldNotFindExpectedGroupInRegularExpressionMatch", commentGroupName),
         )
         continue

@@ -31,7 +31,7 @@ object I18n {
   }
 
   fun setLocale(locale: Locale, log: Boolean = true) {
-    if (log) Logging.logger.info(format("settingLocale", locale.language))
+    if (log) Logging.LOGGER.info(format("settingLocale", locale.language))
     messages = ResourceBundle.getBundle("LtexLsMessagesBundle", locale)
   }
 

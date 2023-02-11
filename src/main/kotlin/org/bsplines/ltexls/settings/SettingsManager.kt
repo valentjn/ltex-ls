@@ -36,7 +36,7 @@ class SettingsManager {
       if (settingsDifferencesRelevantForLanguageTool.isEmpty()) {
         this.languageToolInterfaceMap[newLanguage]
       } else {
-        if (Logging.logger.isLoggable(Level.FINE)) {
+        if (Logging.LOGGER.isLoggable(Level.FINE)) {
           logDifferentSettings(newLanguage, settingsDifferencesRelevantForLanguageTool)
         }
 
@@ -134,7 +134,7 @@ class SettingsManager {
         builder.append("'")
       }
 
-      Logging.logger.fine(
+      Logging.LOGGER.fine(
         I18n.format(
           "reinitializingLanguageToolDueToDifferentSettings",
           newLanguage,
