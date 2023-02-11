@@ -74,7 +74,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
         val languageShortCode: String? = BABEL_LANGUAGE_MAP[babelLanguage]
 
         if (languageShortCode == null) {
-          Logging.logger.warning(I18n.format("unknownBabelLanguage", babelLanguage))
+          Logging.LOGGER.warning(I18n.format("unknownBabelLanguage", babelLanguage))
           continue
         }
 
@@ -128,7 +128,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
         val languageShortCode: String? = BABEL_LANGUAGE_MAP[babelLanguage]
 
         if (languageShortCode == null) {
-          Logging.logger.warning(I18n.format("unknownBabelLanguage", babelLanguage))
+          Logging.LOGGER.warning(I18n.format("unknownBabelLanguage", babelLanguage))
           continue
         }
 
@@ -184,7 +184,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
 
         if (languageShortCode == null) {
           val commandPrototype = match.commandSignature.commandPrototype
-          Logging.logger.warning(I18n.format("invalidBabelInlineCommand", commandPrototype))
+          Logging.LOGGER.warning(I18n.format("invalidBabelInlineCommand", commandPrototype))
           continue
         } else if (languageShortCode.isEmpty()) {
           babelLanguage = match.getArgumentContents(match.getArgumentsSize() - 2)
@@ -192,7 +192,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
         }
 
         if (languageShortCode == null) {
-          Logging.logger.warning(I18n.format("unknownBabelLanguage", babelLanguage))
+          Logging.LOGGER.warning(I18n.format("unknownBabelLanguage", babelLanguage))
         } else {
           curSettings = curSettings.copy(_languageShortCode = languageShortCode)
         }
@@ -246,7 +246,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
           var babelLanguage = ""
 
           if (languageShortCode == null) {
-            Logging.logger.warning(I18n.format("invalidBabelEnvironment", commandPrototype))
+            Logging.LOGGER.warning(I18n.format("invalidBabelEnvironment", commandPrototype))
             continue
           } else if (languageShortCode.isEmpty()) {
             babelLanguage = match.getArgumentContents(match.getArgumentsSize() - 1)
@@ -256,7 +256,7 @@ class LatexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguageI
           var newSettings: Settings = settingsStack.last()
 
           if (languageShortCode == null) {
-            Logging.logger.warning(I18n.format("unknownBabelLanguage", babelLanguage))
+            Logging.LOGGER.warning(I18n.format("unknownBabelLanguage", babelLanguage))
           } else {
             newSettings = newSettings.copy(_languageShortCode = languageShortCode)
           }

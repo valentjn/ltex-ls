@@ -11,7 +11,7 @@ import org.bsplines.ltexls.parsing.DummyGenerator
 
 @Suppress("LargeClass")
 object LatexAnnotatedTextBuilderDefaults {
-  val defaultLatexCommandSignatures: List<LatexCommandSignature> = run {
+  val DEFAULT_LATEX_COMMAND_SIGNATURES: List<LatexCommandSignature> = run {
     val list: MutableList<LatexCommandSignature> = mutableListOf(
       LatexCommandSignature("\\@addtoreset{}{}"),
       LatexCommandSignature("\\@ifpackageloaded{}"),
@@ -917,7 +917,7 @@ object LatexAnnotatedTextBuilderDefaults {
     list
   }
 
-  val defaultLatexEnvironmentSignatures: List<LatexEnvironmentSignature> = run {
+  val DEFAULT_LATEX_ENVIRONMENT_SIGNATURES: List<LatexEnvironmentSignature> = run {
     val list: MutableList<LatexEnvironmentSignature> = mutableListOf(
       LatexEnvironmentSignature("\\begin{frame}", LatexCommandSignature.Action.Default),
       LatexEnvironmentSignature("lstlisting"),

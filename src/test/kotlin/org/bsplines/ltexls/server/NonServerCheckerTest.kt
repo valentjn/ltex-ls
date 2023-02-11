@@ -76,23 +76,23 @@ class NonServerCheckerTest {
       )
     } finally {
       if ((settingsFile != null) && !settingsFile.delete()) {
-        Logging.logger.warning(
+        Logging.LOGGER.warning(
           I18n.format("couldNotDeleteTemporaryFile", settingsFile.toPath().toString()),
         )
       }
 
       if ((inputFile != null) && !inputFile.delete()) {
-        Logging.logger.warning(
+        Logging.LOGGER.warning(
           I18n.format("couldNotDeleteTemporaryFile", inputFile.toPath().toString()),
         )
       }
 
       if ((inputDirectoryChildFile != null) && !inputDirectoryChildFile.delete()) {
-        Logging.logger.warning(
+        Logging.LOGGER.warning(
           I18n.format("couldNotDeleteTemporaryFile", inputDirectoryChildFile.toPath().toString()),
         )
       } else if ((inputDirectory != null) && !inputDirectory.toFile().delete()) {
-        Logging.logger.warning(
+        Logging.LOGGER.warning(
           I18n.format("couldNotDeleteTemporaryDirectory", inputDirectory.toString()),
         )
       }

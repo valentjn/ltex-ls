@@ -30,7 +30,7 @@ object FileIo {
     return try {
       readFileWithException(filePath)
     } catch (e: IOException) {
-      Logging.logger.warning(I18n.format("couldNotReadFile", e, filePath.toString()))
+      Logging.LOGGER.warning(I18n.format("couldNotReadFile", e, filePath.toString()))
       null
     }
   }
@@ -43,7 +43,7 @@ object FileIo {
     try {
       writeFileWithException(filePath, text)
     } catch (e: IOException) {
-      Logging.logger.warning(I18n.format("couldNotWriteFile", e, filePath.toString()))
+      Logging.LOGGER.warning(I18n.format("couldNotWriteFile", e, filePath.toString()))
     }
   }
 
@@ -64,19 +64,23 @@ object FileIo {
 
     return if (fileName.endsWith(".bib")) {
       "bibtex"
-    } else if (fileName.endsWith(".c")
-          || fileName.endsWith(".h")) {
+    } else if (
+      fileName.endsWith(".c")
+      || fileName.endsWith(".h")
+    ) {
       "c"
     } else if (fileName.endsWith(".clj")) {
       "clojure"
     } else if (fileName.endsWith(".coffee")) {
       "coffeescript"
-    } else if (fileName.endsWith(".cc")
-          || fileName.endsWith(".cpp")
-          || fileName.endsWith(".cxx")
-          || fileName.endsWith(".hh")
-          || fileName.endsWith(".hpp")
-          || fileName.endsWith(".inl")) {
+    } else if (
+      fileName.endsWith(".cc")
+      || fileName.endsWith(".cpp")
+      || fileName.endsWith(".cxx")
+      || fileName.endsWith(".hh")
+      || fileName.endsWith(".hpp")
+      || fileName.endsWith(".inl")
+    ) {
       "cpp"
     } else if (fileName.endsWith(".cs")) {
       "csharp"
@@ -98,10 +102,12 @@ object FileIo {
       "groovy"
     } else if (fileName.endsWith(".hs")) {
       "haskell"
-    } else if (fileName.endsWith(".htm")
-          || fileName.endsWith(".html")
-          || fileName.endsWith(".xht")
-          || fileName.endsWith(".xhtml")) {
+    } else if (
+      fileName.endsWith(".htm")
+      || fileName.endsWith(".html")
+      || fileName.endsWith(".xht")
+      || fileName.endsWith(".xhtml")
+    ) {
       "html"
     } else if (fileName.endsWith(".java")) {
       "java"
@@ -139,8 +145,10 @@ object FileIo {
       "r"
     } else if (fileName.endsWith(".rst")) {
       "restructuredtext"
-    } else if (fileName.endsWith(".Rnw")
-          || fileName.endsWith(".rnw")) {
+    } else if (
+      fileName.endsWith(".Rnw")
+      || fileName.endsWith(".rnw")
+    ) {
       "rsweave"
     } else if (fileName.endsWith(".rb")) {
       "ruby"

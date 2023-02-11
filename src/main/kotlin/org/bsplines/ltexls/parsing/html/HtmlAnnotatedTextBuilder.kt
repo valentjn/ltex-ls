@@ -82,7 +82,7 @@ class HtmlAnnotatedTextBuilder(
     var skippedCode: String = this.code.substring(oldPos, this.pos)
     var interpretAs = ""
 
-    Logging.logger.finest(
+    Logging.LOGGER.finest(
       "Position " + this.pos + " ("
       + xmlStreamReader.location.lineNumber
       + "," + xmlStreamReader.location.columnNumber + "): Event type = "
@@ -104,7 +104,7 @@ class HtmlAnnotatedTextBuilder(
       XMLStreamReader.START_ELEMENT -> {
         val elementName: String = xmlStreamReader.localName
         this.elementNameStack.addLast(elementName)
-        Logging.logger.finest("START_ELEMENT: elementName = '" + xmlStreamReader.localName + "'")
+        Logging.LOGGER.finest("START_ELEMENT: elementName = '" + xmlStreamReader.localName + "'")
 
         when (elementName) {
           "body", "div", "h1", "h2", "h3", "h4", "h5", "h6", "p", "table", "tr" -> {
@@ -116,19 +116,19 @@ class HtmlAnnotatedTextBuilder(
         }
       }
       XMLStreamReader.END_ELEMENT -> {
-        Logging.logger.finest("END_ELEMENT")
+        Logging.LOGGER.finest("END_ELEMENT")
         this.elementNameStack.removeLastOrNull()
       }
       XMLStreamReader.CHARACTERS -> {
-        val elementName: String = (
-            if (this.elementNameStack.isEmpty()) "" else this.elementNameStack.last())
+        val elementName: String =
+            if (this.elementNameStack.isEmpty()) "" else this.elementNameStack.last()
         val text: String = xmlStreamReader.text
-        Logging.logger.finest("CHARACTERS: text = '$text'")
+        Logging.LOGGER.finest("CHARACTERS: text = '$text'")
         if ((elementName != "script") && (elementName != "style")) this.nextText = text
       }
       XMLStreamReader.ENTITY_REFERENCE -> {
         this.nextText = xmlStreamReader.text
-        Logging.logger.finest("ENTITY_REFERENCE: text = '" + this.nextText + "'")
+        Logging.LOGGER.finest("ENTITY_REFERENCE: text = '" + this.nextText + "'")
       }
       else -> {
         // ignore other event types

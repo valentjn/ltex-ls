@@ -81,7 +81,7 @@ abstract class CharacterBasedCodeAnnotatedTextBuilder(
             I18n.format("characterBasedCodeAnnotatedTextBuilderInfiniteLoop"),
           )
         } else {
-          Logging.logger.warning(
+          Logging.LOGGER.warning(
             I18n.format("characterBasedCodeAnnotatedTextBuilderPreventedInfiniteLoop"),
           )
           this.pos++

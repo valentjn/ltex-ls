@@ -15,8 +15,7 @@ data class ProgramCommentRegexs(
   val commentBlockRegex: Regex = run {
     val builder = StringBuilder()
 
-    if ((this.blockCommentStartRegexString != null)
-          && (this.blockCommentEndRegexString != null)) {
+    if ((this.blockCommentStartRegexString != null) && (this.blockCommentEndRegexString != null)) {
       if (builder.isNotEmpty()) builder.append("|")
       builder.append(
         "^[ \t]*" + this.blockCommentStartRegexString
@@ -38,8 +37,7 @@ data class ProgramCommentRegexs(
   val magicCommentRegex: Regex = run {
     val builder = StringBuilder()
 
-    if ((this.blockCommentStartRegexString != null)
-          && (this.blockCommentEndRegexString != null)) {
+    if ((this.blockCommentStartRegexString != null) && (this.blockCommentEndRegexString != null)) {
       if (builder.isNotEmpty()) builder.append("|")
       builder.append(
         "^[ \t]*" + this.blockCommentStartRegexString
@@ -58,11 +56,11 @@ data class ProgramCommentRegexs(
   }
 
   companion object {
-    private val cacheMap: MutableMap<String, ProgramCommentRegexs> = HashMap()
+    private val CACHE_MAP: MutableMap<String, ProgramCommentRegexs> = HashMap()
 
     @Suppress("ComplexMethod", "LongMethod")
     fun fromCodeLanguageId(codeLanguageId: String): ProgramCommentRegexs {
-      val regexs: ProgramCommentRegexs? = cacheMap[codeLanguageId]
+      val regexs: ProgramCommentRegexs? = CACHE_MAP[codeLanguageId]
       if (regexs != null) return regexs
 
       var blockCommentStartRegexString: String? = null
@@ -128,18 +126,22 @@ data class ProgramCommentRegexs(
         }
       }
 
-      return ProgramCommentRegexs(
+      val programCommentRegexs = ProgramCommentRegexs(
         blockCommentStartRegexString,
         blockCommentEndRegexString,
         lineCommentRegexString,
       )
+      CACHE_MAP[codeLanguageId] = programCommentRegexs
+      return programCommentRegexs
     }
 
     fun isSupportedCodeLanguageId(codeLanguageId: String): Boolean {
       val regexs: ProgramCommentRegexs = fromCodeLanguageId(codeLanguageId)
-      return ((regexs.blockCommentStartRegexString != null)
-          || (regexs.blockCommentEndRegexString != null)
-          || (regexs.lineCommentRegexString != null))
+      return (
+        (regexs.blockCommentStartRegexString != null)
+        || (regexs.blockCommentEndRegexString != null)
+        || (regexs.lineCommentRegexString != null)
+      )
     }
   }
 }

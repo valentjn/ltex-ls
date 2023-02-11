@@ -37,7 +37,7 @@ open class RegexCodeFragmentizer(
       }
 
       if (settingsLine == null) {
-        Logging.logger.warning(I18n.format("couldNotFindSettingsInMatch"))
+        Logging.LOGGER.warning(I18n.format("couldNotFindSettingsInMatch"))
         continue
       }
 
@@ -54,7 +54,7 @@ open class RegexCodeFragmentizer(
             curSettings = curSettings.copy(_languageShortCode = settingValue)
           }
           else -> {
-            Logging.logger.warning(
+            Logging.LOGGER.warning(
               I18n.format("ignoringUnknownInlineSetting", settingKey, settingValue),
             )
           }
@@ -85,7 +85,7 @@ open class RegexCodeFragmentizer(
         val settingKeyLength: Int = settingsChange.indexOf('=')
 
         if (settingKeyLength == -1) {
-          Logging.logger.warning(I18n.format("ignoringMalformedInlineSetting", settingsChange))
+          Logging.LOGGER.warning(I18n.format("ignoringMalformedInlineSetting", settingsChange))
           continue
         }
 

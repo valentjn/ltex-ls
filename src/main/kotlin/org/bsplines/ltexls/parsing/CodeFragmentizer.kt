@@ -70,7 +70,7 @@ abstract class CodeFragmentizer(
           if (ProgramCommentRegexs.isSupportedCodeLanguageId(codeLanguageId)) {
             ProgramFragmentizer(codeLanguageId)
           } else {
-            Logging.logger.warning(I18n.format("unsupportedCodeLanguageId", codeLanguageId))
+            Logging.LOGGER.warning(I18n.format("unsupportedCodeLanguageId", codeLanguageId))
             PlaintextFragmentizer("plaintext")
           }
         }

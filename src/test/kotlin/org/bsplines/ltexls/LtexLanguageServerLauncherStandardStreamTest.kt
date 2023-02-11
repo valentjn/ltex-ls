@@ -20,19 +20,18 @@ import kotlin.test.Test
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LtexLanguageServerLauncherStandardStreamTest {
-  @Suppress("UnusedPrivateMember")
-  private val `in` = PipedInputStream()
-  private val out = PipedOutputStream()
+  private val input = PipedInputStream()
+  private val output = PipedOutputStream()
   private val pipedInputStream = PipedInputStream()
   private val pipedOutputStream = PipedOutputStream()
   private var launcherThread: Thread? = null
 
   @BeforeAll
   fun setUp() {
-    this.pipedOutputStream.connect(this.`in`)
-    this.pipedInputStream.connect(this.out)
+    this.pipedOutputStream.connect(this.input)
+    this.pipedInputStream.connect(this.output)
 
-    val launcherThread = Thread(LtexLanguageServerLauncherRunnable(this.`in`, this.out))
+    val launcherThread = Thread(LtexLanguageServerLauncherRunnable(this.input, this.output))
     launcherThread.start()
     this.launcherThread = launcherThread
 
@@ -45,8 +44,8 @@ class LtexLanguageServerLauncherStandardStreamTest {
     this.launcherThread?.interrupt()
     this.pipedInputStream.close()
     this.pipedOutputStream.close()
-    this.`in`.close()
-    this.out.close()
+    this.input.close()
+    this.output.close()
   }
 
   @Test
@@ -59,15 +58,14 @@ class LtexLanguageServerLauncherStandardStreamTest {
   }
 
   private class LtexLanguageServerLauncherRunnable(
-    @Suppress("UnusedPrivateMember")
-    private val `in`: InputStream,
-    private val out: OutputStream,
+    private val input: InputStream,
+    private val output: OutputStream,
   ) : Runnable {
     @Suppress("TooGenericExceptionThrown")
     override fun run() {
       try {
-        Tools.randomNumberGenerator.setSeed(42)
-        LtexLanguageServerLauncher.launch(this.`in`, this.out)
+        Tools.RANDOM_NUMBER_GENERATOR.setSeed(42)
+        LtexLanguageServerLauncher.launch(this.input, this.output)
       } catch (e: InterruptedException) {
         // occurs when JUnit tears down class
       } catch (e: ExecutionException) {

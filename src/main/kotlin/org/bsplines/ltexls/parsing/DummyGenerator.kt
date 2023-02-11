@@ -21,17 +21,17 @@ class DummyGenerator private constructor(
   }
 
   companion object {
-    private val instance = DummyGenerator()
-    private val instancePlural = DummyGenerator(plural = true)
-    private val instanceVowel = DummyGenerator(vowel = true)
-    private val instancePluralVowel = DummyGenerator(plural = true, vowel = true)
+    private val INSTANCE = DummyGenerator()
+    private val INSTANCE_PLURAL = DummyGenerator(plural = true)
+    private val INSTANCE_VOWEL = DummyGenerator(vowel = true)
+    private val INSTANCE_PLURAL_VOWEL = DummyGenerator(plural = true, vowel = true)
 
     fun getInstance(plural: Boolean = false, vowel: Boolean = false): DummyGenerator {
       return when {
-        plural && !vowel -> instancePlural
-        !plural && vowel -> instanceVowel
-        plural && vowel -> instancePluralVowel
-        else -> instance
+        plural && !vowel -> INSTANCE_PLURAL
+        !plural && vowel -> INSTANCE_VOWEL
+        plural && vowel -> INSTANCE_PLURAL_VOWEL
+        else -> INSTANCE
       }
     }
   }

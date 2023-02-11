@@ -7,7 +7,7 @@
 comments:
   AbsentOrWrongFileLicense:
     active: true
-    licenseTemplateFile: ".detekt.license-header.kt"
+    licenseTemplateFile: ".detekt.license-header"
 complexity:
   LongMethod:
     threshold: 75
@@ -18,5 +18,7 @@ naming:
   ConstructorParameterNaming:
     privateParameterPattern: "_?[a-z][A-Za-z0-9]*"
 style:
+  DestructuringDeclarationWithTooManyEntries:
+    maxDestructuringEntries: 5
   ReturnCount:
     max: 6

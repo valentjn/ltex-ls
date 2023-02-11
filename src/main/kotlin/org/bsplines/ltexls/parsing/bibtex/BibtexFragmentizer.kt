@@ -52,7 +52,7 @@ class BibtexFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLanguage
             BIBTEX_ENTRY_COMMAND_SIGNATURE_MATCHER.findNextMatch() ?: break
 
         if (bibtexFields == null) {
-          bibtexFields = HashMap(BibtexFragmentizerDefaults.defaultBibtexFields)
+          bibtexFields = HashMap(BibtexFragmentizerDefaults.DEFAULT_BIBTEX_FIELDS)
           bibtexFields.putAll(oldFragmentSettings.bibtexFields)
         }
 

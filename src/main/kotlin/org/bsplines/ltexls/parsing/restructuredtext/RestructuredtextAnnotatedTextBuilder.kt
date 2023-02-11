@@ -243,8 +243,9 @@ class RestructuredtextAnnotatedTextBuilder(
 
     return if (
       (matchResult == null)
-      || (matchFromPosition(INLINE_END_FOLLOWING_REGEX, this.pos + matchResult.value.length)
-        != null)
+      || (
+        matchFromPosition(INLINE_END_FOLLOWING_REGEX, this.pos + matchResult.value.length) != null
+      )
     ) {
       matchResult
     } else {

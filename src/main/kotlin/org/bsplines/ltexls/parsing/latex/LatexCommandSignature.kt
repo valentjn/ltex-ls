@@ -51,7 +51,7 @@ open class LatexCommandSignature(
           "^" + (if (escapeCommandPrefix) Regex.escape(this.prefix) else this.prefix)
       this.commandRegex = Regex(regexString)
     } else {
-      Logging.logger.warning(I18n.format("invalidCommandPrototype", commandPrototype))
+      Logging.LOGGER.warning(I18n.format("invalidCommandPrototype", commandPrototype))
       this.argumentTypes = ArrayList()
       @Suppress("RegExpUnexpectedAnchor")
       this.commandRegex = Regex(" ^$")

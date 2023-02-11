@@ -229,8 +229,10 @@ class OrgAnnotatedTextBuilder(
       addMarkup(matchResult?.value, "\n\n")
     } else if (
       this.objectTypeStack.contains(ObjectType.RegularLinkDescription)
-      && (matchFromPosition(REGULAR_LINK_DESCRIPTION_END_REGEX)?.also { matchResult = it }
-        != null)
+      && (
+        matchFromPosition(REGULAR_LINK_DESCRIPTION_END_REGEX)?.also { matchResult = it }
+        != null
+      )
     ) {
       popObjectType()
       addMarkup(matchResult?.value)
@@ -472,21 +474,24 @@ class OrgAnnotatedTextBuilder(
 
   companion object {
     private const val REGULAR_LINK_PATH_REGEX_STRING = (
-        "[ \\-/0-9A-Z\\\\a-z]+"
-        + "|[A-Za-z]+:(//)?[^\r\n\\[\\]]+"
-        + "|id:[-0-9A-Fa-f]+"
-        + "|#[^\r\n\\[\\]]+"
-        + "|\\([^\r\n\\[\\]]+\\)"
-        + "|[^\r\n\\[\\]]+")
+      "[ \\-/0-9A-Z\\\\a-z]+"
+      + "|[A-Za-z]+:(//)?[^\r\n\\[\\]]+"
+      + "|id:[-0-9A-Fa-f]+"
+      + "|#[^\r\n\\[\\]]+"
+      + "|\\([^\r\n\\[\\]]+\\)"
+      + "|[^\r\n\\[\\]]+"
+    )
 
     private const val TIMESTAMP_REGEX_STRING = (
-        "[0-9]{4}-[0-9]{2}-[0-9]{2}[ \t]+[^ \t\r\n+\\-0-9>\\]]+"
-        + "([ \t]+[0-9]{1,2}:[0-9]{2})?"
-        + "([ \t]+(\\+|\\+\\+|\\.\\+|-|--)[0-9]+[dhmwy]){0,2}")
+      "[0-9]{4}-[0-9]{2}-[0-9]{2}[ \t]+[^ \t\r\n+\\-0-9>\\]]+"
+      + "([ \t]+[0-9]{1,2}:[0-9]{2})?"
+      + "([ \t]+(\\+|\\+\\+|\\.\\+|-|--)[0-9]+[dhmwy]){0,2}"
+    )
     private const val TIMESTAMP_RANGE_REGEX_STRING = (
-        "[0-9]{4}-[0-9]{2}-[0-9]{2}[ \t]+[^ \t\r\n+\\-0-9>\\]]+"
-        + "[ \t]+[0-9]{1,2}:[0-9]{2}-[0-9]{1,2}:[0-9]{2}"
-        + "([ \t]+(\\+|\\+\\+|\\.\\+|-|--)[0-9]+[dhmwy]){0,2}")
+      "[0-9]{4}-[0-9]{2}-[0-9]{2}[ \t]+[^ \t\r\n+\\-0-9>\\]]+"
+      + "[ \t]+[0-9]{1,2}:[0-9]{2}-[0-9]{1,2}:[0-9]{2}"
+      + "([ \t]+(\\+|\\+\\+|\\.\\+|-|--)[0-9]+[dhmwy]){0,2}"
+    )
 
     private val WHITESPACE_REGEX = Regex("^[ \t]*", RegexOption.IGNORE_CASE)
 

@@ -51,7 +51,7 @@ class LanguageToolHttpInterface(
     }
 
     if (exception != null) {
-      Logging.logger.severe(I18n.format("couldNotParseHttpServerUri", exception, uriString))
+      Logging.LOGGER.severe(I18n.format("couldNotParseHttpServerUri", exception, uriString))
     }
   }
 
@@ -72,17 +72,17 @@ class LanguageToolHttpInterface(
     val httpResponse: HttpResponse<String> = try {
       this.httpClient.send(httpRequest, BodyHandlers.ofString())
     } catch (e: InterruptedException) {
-      Logging.logger.severe(I18n.format("couldNotSendHttpRequestToLanguageTool", e))
+      Logging.LOGGER.severe(I18n.format("couldNotSendHttpRequestToLanguageTool", e))
       return emptyList()
     } catch (e: IOException) {
-      Logging.logger.severe(I18n.format("couldNotSendHttpRequestToLanguageTool", e))
+      Logging.LOGGER.severe(I18n.format("couldNotSendHttpRequestToLanguageTool", e))
       return emptyList()
     }
 
     val statusCode: Int = httpResponse.statusCode()
 
     if (statusCode != STATUS_CODE_SUCCESS) {
-      Logging.logger.severe(I18n.format("languageToolFailedWithStatusCode", statusCode))
+      Logging.LOGGER.severe(I18n.format("languageToolFailedWithStatusCode", statusCode))
       return emptyList()
     }
 
@@ -137,7 +137,7 @@ class LanguageToolHttpInterface(
         builder.append(URLEncoder.encode(requestKey, "utf-8"))
             .append("=").append(URLEncoder.encode(requestValue, "utf-8"))
       } catch (e: UnsupportedEncodingException) {
-        Logging.logger.severe(I18n.format(e))
+        Logging.LOGGER.severe(I18n.format(e))
         return null
       }
     }

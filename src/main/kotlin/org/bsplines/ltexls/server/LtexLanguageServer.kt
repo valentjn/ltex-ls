@@ -54,7 +54,7 @@ class LtexLanguageServer : LanguageServer, LanguageClientAware {
   override fun initialize(params: InitializeParams): CompletableFuture<InitializeResult> {
     val ltexLsPackage: Package? = LtexLanguageServer::class.java.getPackage()
     val ltexLsVersion: String = ltexLsPackage?.implementationVersion ?: "null"
-    Logging.logger.info(I18n.format("initializingLtexLs", ltexLsVersion))
+    Logging.LOGGER.info(I18n.format("initializingLtexLs", ltexLsVersion))
 
     val clientCapabilities: ClientCapabilities? = params.capabilities
     this.clientSupportsWorkDoneProgress = false
@@ -105,7 +105,7 @@ class LtexLanguageServer : LanguageServer, LanguageClientAware {
   }
 
   override fun shutdown(): CompletableFuture<Any> {
-    Logging.logger.info(I18n.format("shuttingDownLtexLs"))
+    Logging.LOGGER.info(I18n.format("shuttingDownLtexLs"))
     this.singleThreadExecutorService.shutdown()
 
     // should return null according to LSP specification, but return empty object instead,
@@ -114,7 +114,7 @@ class LtexLanguageServer : LanguageServer, LanguageClientAware {
   }
 
   override fun exit() {
-    Logging.logger.info(I18n.format("exitingLtexLs"))
+    Logging.LOGGER.info(I18n.format("exitingLtexLs"))
     exitProcess(0)
   }
 

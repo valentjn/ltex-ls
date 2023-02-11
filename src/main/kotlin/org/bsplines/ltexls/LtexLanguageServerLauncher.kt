@@ -43,13 +43,13 @@ import kotlin.system.exitProcess
   mixinStandardHelpOptions = true,
   showDefaultValues = true,
   versionProvider = VersionProvider::class,
-  description = ["LTeX LS - LTeX Language Server"]
+  description = ["LTeX LS - LTeX Language Server"],
 )
 class LtexLanguageServerLauncher : Callable<Int> {
   @Option(
     names = ["--endless"],
     negatable = true,
-    description = ["Keep server alive when client terminates."]
+    description = ["Keep server alive when client terminates."],
   )
   private var endless: Boolean = false
 
@@ -62,7 +62,7 @@ class LtexLanguageServerLauncher : Callable<Int> {
       + "<inputDocuments>, print the results to standard output, and exit. "
       + "Directories are traversed recursively. "
       + "If - is given, standard input will be checked as plain text.",
-    ]
+    ],
   )
   private var inputDocuments: List<Path>? = null
 
@@ -76,13 +76,13 @@ class LtexLanguageServerLauncher : Callable<Int> {
       + "a flattened JSON object ({\"latex.commands\": ...}). "
       + "Setting names may be prefixed by a top level named `ltex` "
       + "(e.g., {\"ltex.latex.commands\": ...} is accepted as well).",
-    ]
+    ],
   )
   private var settingsFile: Path? = null
 
   @Option(
     names = ["--server-type"],
-    description = ["Run the server as type <serverType>. Valid values: \${COMPLETION-CANDIDATES}"]
+    description = ["Run the server as type <serverType>. Valid values: \${COMPLETION-CANDIDATES}"],
   )
   private var serverType: ServerType = ServerType.StandardStream
 
@@ -91,7 +91,7 @@ class LtexLanguageServerLauncher : Callable<Int> {
     description = [
       "Listen for TCP connections on host <host> "
       + "(IP address or hostname; only relevant if server type is tcpSocket).",
-    ]
+    ],
   )
   private var host: String = "localhost"
 
@@ -102,7 +102,7 @@ class LtexLanguageServerLauncher : Callable<Int> {
       + "(only relevant if server type is tcpSocket). "
       + "A value of 0 will have the system automatically determine a free port "
       + "(the actual port number will be printed to the log).",
-    ]
+    ],
   )
   private var port: Int = 0
 
@@ -113,7 +113,7 @@ class LtexLanguageServerLauncher : Callable<Int> {
       + "to <logFile>. $${'$'}{PID} is replaced by the process ID of LTeX LS. "
       + "The parent directory of <logFile> must exist. "
       + "If <logFile> is an existing directory, then ltex-ls-$${'$'}{PID}.log is used as filename.",
-    ]
+    ],
   )
   private var logFile: Path? = null
 
@@ -176,7 +176,7 @@ class LtexLanguageServerLauncher : Callable<Int> {
 
     if (inputDocuments != null) {
       // deprecated in 14.0.0
-      Logging.logger.warning(I18n.format("inputDocumentsAndSettingsFileAreDeprecated"))
+      Logging.LOGGER.warning(I18n.format("inputDocumentsAndSettingsFileAreDeprecated"))
       val nonServerChecker = NonServerChecker()
       val settingsFile: Path? = this.settingsFile
       if (settingsFile != null) nonServerChecker.loadSettings(settingsFile)
@@ -189,9 +189,9 @@ class LtexLanguageServerLauncher : Callable<Int> {
 
     if (this.serverType == ServerType.TcpSocket) {
       if (serverSocket == null) throw NullPointerException("serverSocket")
-      Logging.logger.info(I18n.format("waitingForClientToConnectOnPort", port))
+      Logging.LOGGER.info(I18n.format("waitingForClientToConnectOnPort", port))
       val clientSocket: Socket = serverSocket.accept()
-      Logging.logger.info(I18n.format("connectedToClientOnPort", port))
+      Logging.LOGGER.info(I18n.format("connectedToClientOnPort", port))
       inputStream = clientSocket.getInputStream()
       outputStream = clientSocket.getOutputStream()
     }

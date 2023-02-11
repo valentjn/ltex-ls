@@ -8,7 +8,7 @@
 package org.bsplines.ltexls.parsing.bibtex
 
 object BibtexFragmentizerDefaults {
-  val defaultBibtexFields: Map<String, Boolean> = run {
+  val DEFAULT_BIBTEX_FIELDS: Map<String, Boolean> = run {
     val map = HashMap<String, Boolean>()
 
     map["author"] = false

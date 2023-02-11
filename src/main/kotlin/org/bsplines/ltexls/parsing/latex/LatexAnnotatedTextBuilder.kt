@@ -32,12 +32,12 @@ class LatexAnnotatedTextBuilder(
   private var curMode: Mode = Mode.ParagraphText
 
   private val commandSignatures: MutableList<LatexCommandSignature> =
-      ArrayList(LatexAnnotatedTextBuilderDefaults.defaultLatexCommandSignatures)
+      ArrayList(LatexAnnotatedTextBuilderDefaults.DEFAULT_LATEX_COMMAND_SIGNATURES)
   private var commandSignatureMap: Map<String, List<LatexCommandSignature>> =
       createCommandSignatureMap(commandSignatures)
 
   private val environmentSignatures: MutableList<LatexEnvironmentSignature> =
-      ArrayList(LatexAnnotatedTextBuilderDefaults.defaultLatexEnvironmentSignatures)
+      ArrayList(LatexAnnotatedTextBuilderDefaults.DEFAULT_LATEX_ENVIRONMENT_SIGNATURES)
   private var environmentSignatureMap: Map<String, List<LatexEnvironmentSignature>> =
       createCommandSignatureMap(environmentSignatures)
 
@@ -46,7 +46,9 @@ class LatexAnnotatedTextBuilder(
     this.language = settings.languageShortCode
 
     this.commandSignatures.clear()
-    this.commandSignatures.addAll(LatexAnnotatedTextBuilderDefaults.defaultLatexCommandSignatures)
+    this.commandSignatures.addAll(
+      LatexAnnotatedTextBuilderDefaults.DEFAULT_LATEX_COMMAND_SIGNATURES,
+    )
 
     for ((key: String, actionString: String) in settings.latexCommands) {
       var dummyGenerator: DummyGenerator = DummyGenerator.getInstance()
@@ -70,7 +72,7 @@ class LatexAnnotatedTextBuilder(
 
     this.environmentSignatures.clear()
     this.environmentSignatures.addAll(
-      LatexAnnotatedTextBuilderDefaults.defaultLatexEnvironmentSignatures,
+      LatexAnnotatedTextBuilderDefaults.DEFAULT_LATEX_ENVIRONMENT_SIGNATURES,
     )
 
     for ((key, actionString) in settings.latexEnvironments) {
@@ -168,7 +170,7 @@ class LatexAnnotatedTextBuilder(
         addMarkup(this.curString)
       }
     } else {
-      Logging.logger.warning(I18n.format("ignoreEnvironmentEndPatternNotSet"))
+      Logging.LOGGER.warning(I18n.format("ignoreEnvironmentEndPatternNotSet"))
       popMode()
     }
   }
@@ -745,8 +747,10 @@ class LatexAnnotatedTextBuilder(
         + (if (this.modeStack.lastOrNull() == Mode.InlineText) this.dummyLastSpace else " ")
       )
     } else {
-      (dummyGenerator.generate(language, dummyCounter++, startsWithVowel)
-          + this.dummyLastPunctuation + this.dummyLastSpace)
+      (
+        dummyGenerator.generate(language, dummyCounter++, startsWithVowel)
+        + this.dummyLastPunctuation + this.dummyLastSpace
+      )
     }
 
     this.dummyLastSpace = ""

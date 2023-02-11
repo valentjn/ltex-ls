@@ -14,7 +14,6 @@ import org.bsplines.ltexls.tools.Logging
 import org.eclipse.lsp4j.DidChangeConfigurationParams
 import org.eclipse.lsp4j.DidChangeWatchedFilesParams
 import org.eclipse.lsp4j.ExecuteCommandParams
-import org.eclipse.lsp4j.WorkspaceSymbolParams
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -49,7 +48,7 @@ class LtexWorkspaceServiceTest {
         assertCheckDocumentResult(tmpFile.toURI().toString(), true)
       } finally {
         if (!tmpFile.delete()) {
-          Logging.logger.warning(
+          Logging.LOGGER.warning(
             I18n.format("couldNotDeleteTemporaryFile", tmpFile.toPath().toString()),
           )
         }

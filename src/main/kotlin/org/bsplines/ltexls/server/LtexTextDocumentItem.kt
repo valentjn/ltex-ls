@@ -233,25 +233,32 @@ class LtexTextDocumentItem(
     val newText: String = text
     var numberOfEqualCharsAtStart = 0
 
-    while ((numberOfEqualCharsAtStart < oldText.length)
-          && (numberOfEqualCharsAtStart < newText.length)
-          && (oldText[numberOfEqualCharsAtStart] == newText[numberOfEqualCharsAtStart])) {
+    while (
+      (numberOfEqualCharsAtStart < oldText.length)
+      && (numberOfEqualCharsAtStart < newText.length)
+      && (oldText[numberOfEqualCharsAtStart] == newText[numberOfEqualCharsAtStart])
+    ) {
       numberOfEqualCharsAtStart++
     }
 
     var numberOfEqualCharsAtEnd = 0
 
-    while ((numberOfEqualCharsAtEnd < oldText.length - numberOfEqualCharsAtStart)
-          && (numberOfEqualCharsAtEnd < newText.length - numberOfEqualCharsAtStart)
-          && (oldText[oldText.length - numberOfEqualCharsAtEnd - 1]
-            == newText[newText.length - numberOfEqualCharsAtEnd - 1])) {
+    while (
+      (numberOfEqualCharsAtEnd < oldText.length - numberOfEqualCharsAtStart)
+      && (numberOfEqualCharsAtEnd < newText.length - numberOfEqualCharsAtStart)
+      && (
+        oldText[oldText.length - numberOfEqualCharsAtEnd - 1]
+        == newText[newText.length - numberOfEqualCharsAtEnd - 1]
+      )
+    ) {
       numberOfEqualCharsAtEnd++
     }
 
     val numberOfEqualChars: Int = numberOfEqualCharsAtStart + numberOfEqualCharsAtEnd
 
-    if ((numberOfEqualChars < oldText.length / 2.0)
-          || (numberOfEqualChars < newText.length / 2.0)) {
+    if (
+      (numberOfEqualChars < oldText.length / 2.0) || (numberOfEqualChars < newText.length / 2.0)
+    ) {
       return null
     }
 
@@ -430,10 +437,10 @@ class LtexTextDocumentItem(
 
     if ((lspCancelChecker != null) && lspCancelChecker.isCanceled) {
       this.lspCancelChecker = null
-      Logging.logger.fine(I18n.format("cancelingCheckDueToLspCancelNotification"))
+      Logging.LOGGER.fine(I18n.format("cancelingCheckDueToLspCancelNotification"))
     } else if (this.cancellationCounter > 0) {
       this.cancellationCounter--
-      Logging.logger.fine(I18n.format("cancelingCheckDueToIncomingCheckRequest"))
+      Logging.LOGGER.fine(I18n.format("cancelingCheckDueToIncomingCheckRequest"))
     } else {
       return
     }

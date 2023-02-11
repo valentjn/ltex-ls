@@ -29,7 +29,7 @@ import java.util.logging.Level
 class MarkdownAnnotatedTextBuilder(
   codeLanguageId: String,
 ) : CodeAnnotatedTextBuilder(codeLanguageId) {
-  private val parser: Parser = Parser.builder(parserOptions).build()
+  private val parser: Parser = Parser.builder(PARSER_OPTIONS).build()
   private var code = ""
   private var pos = 0
   private var dummyCounter = 0
@@ -37,7 +37,7 @@ class MarkdownAnnotatedTextBuilder(
   private val nodeTypeStack = ArrayDeque<String>()
   private var language: String = "en-US"
   private val nodeSignatures: MutableList<MarkdownNodeSignature> = ArrayList(
-    MarkdownAnnotatedTextBuilderDefaults.defaultMarkdownNodeSignatures,
+    MarkdownAnnotatedTextBuilderDefaults.DEFAULT_MARKDOWN_NODE_SIGNATURES,
   )
 
   private fun isInNodeType(nodeType: String): Boolean {
@@ -114,8 +114,8 @@ class MarkdownAnnotatedTextBuilder(
   override fun addCode(code: String): MarkdownAnnotatedTextBuilder {
     val document: Document = this.parser.parse(code)
 
-    if (Logging.logger.isLoggable(Level.FINEST)) {
-      Logging.logger.finest(
+    if (Logging.LOGGER.isLoggable(Level.FINEST)) {
+      Logging.LOGGER.finest(
         "flexmarkAst = "
           + AstCollectingVisitor().collectAndGetAstText(document),
       )
@@ -189,7 +189,7 @@ class MarkdownAnnotatedTextBuilder(
   }
 
   companion object {
-    private val parserOptions: DataHolder = MutableDataSet().set(
+    private val PARSER_OPTIONS: DataHolder = MutableDataSet().set(
       Parser.EXTENSIONS,
       listOf(
         DefinitionExtension.create(),

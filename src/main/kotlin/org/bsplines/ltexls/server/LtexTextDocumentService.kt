@@ -37,14 +37,15 @@ class LtexTextDocumentService(
 ) : TextDocumentService {
   val documents: MutableMap<String, LtexTextDocumentItem> = HashMap()
 
-  override fun completion(params: CompletionParams):
-        CompletableFuture<Either<List<CompletionItem>, CompletionList>> {
+  override fun completion(
+    params: CompletionParams,
+  ): CompletableFuture<Either<List<CompletionItem>, CompletionList>> {
     return if (this.languageServer.settingsManager.settings.completionEnabled) {
       val uri: String = params.textDocument?.uri ?: return CompletableFuture.completedFuture(
         Either.forLeft(emptyList()),
       )
       val document: LtexTextDocumentItem = getDocument(uri) ?: run {
-        Logging.logger.warning(I18n.format("couldNotFindDocumentWithUri", uri))
+        Logging.LOGGER.warning(I18n.format("couldNotFindDocumentWithUri", uri))
         return CompletableFuture.completedFuture(Either.forLeft(emptyList()))
       }
 
@@ -83,7 +84,7 @@ class LtexTextDocumentService(
 
         if (exception != null) {
           Tools.rethrowCancellationException(exception)
-          Logging.logger.warning(I18n.format(exception))
+          Logging.LOGGER.warning(I18n.format(exception))
         }
       }
     }
@@ -125,7 +126,7 @@ class LtexTextDocumentService(
 
       if (exception != null) {
         Tools.rethrowCancellationException(exception)
-        Logging.logger.warning(I18n.format(exception))
+        Logging.LOGGER.warning(I18n.format(exception))
       }
     }
   }
@@ -155,21 +156,22 @@ class LtexTextDocumentService(
 
         if (exception != null) {
           Tools.rethrowCancellationException(exception)
-          Logging.logger.warning(I18n.format(exception))
+          Logging.LOGGER.warning(I18n.format(exception))
         }
       }
     }
   }
 
-  override fun codeAction(params: CodeActionParams):
-        CompletableFuture<List<Either<Command, CodeAction>>> {
+  override fun codeAction(
+    params: CodeActionParams,
+  ): CompletableFuture<List<Either<Command, CodeAction>>> {
     if (params.context.diagnostics.isEmpty()) {
       return CompletableFuture.completedFuture(emptyList())
     }
 
     val uri: String = params.textDocument.uri
     val document: LtexTextDocumentItem = getDocument(uri) ?: run {
-      Logging.logger.warning(I18n.format("couldNotFindDocumentWithUri", uri))
+      Logging.LOGGER.warning(I18n.format("couldNotFindDocumentWithUri", uri))
       return CompletableFuture.completedFuture(emptyList())
     }
 
@@ -186,11 +188,11 @@ class LtexTextDocumentService(
         codeActions
       } catch (e: ExecutionException) {
         Tools.rethrowCancellationException(e)
-        Logging.logger.warning(I18n.format(e))
+        Logging.LOGGER.warning(I18n.format(e))
         emptyList()
       } catch (e: InterruptedException) {
         Tools.rethrowCancellationException(e)
-        Logging.logger.warning(I18n.format(e))
+        Logging.LOGGER.warning(I18n.format(e))
         emptyList()
       }
     }
@@ -198,7 +200,7 @@ class LtexTextDocumentService(
 
   private fun getDocument(uri: String): LtexTextDocumentItem? {
     return this.documents[uri] ?: run {
-      Logging.logger.warning(I18n.format("couldNotFindDocumentWithUri", uri))
+      Logging.LOGGER.warning(I18n.format("couldNotFindDocumentWithUri", uri))
       null
     }
   }

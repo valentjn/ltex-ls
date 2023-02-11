@@ -101,9 +101,7 @@ class CompletionListProvider(
     return AnnotatedTextFragment(annotatedText, codeFragment, document)
   }
 
-  private fun getLanguageShortCode(
-    annotatedTextFragment: AnnotatedTextFragment,
-  ): String? {
+  private fun getLanguageShortCode(annotatedTextFragment: AnnotatedTextFragment): String? {
     return if (annotatedTextFragment.codeFragment.settings.languageShortCode == "auto") {
       val cleanText: String = this.languageIdentifier.cleanAndShortenText(
         annotatedTextFragment.annotatedText.plainText,

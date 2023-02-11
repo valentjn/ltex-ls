@@ -54,7 +54,7 @@ class LanguageToolJavaInterface(
 
       this.languageTool = JLanguageTool(language, motherTongue, this.resultCache, userConfig)
     } else {
-      Logging.logger.severe(I18n.format("notARecognizedLanguage", languageShortCode))
+      Logging.LOGGER.severe(I18n.format("notARecognizedLanguage", languageShortCode))
       this.languageTool = null
     }
   }
@@ -70,7 +70,7 @@ class LanguageToolJavaInterface(
     val languageTool: JLanguageTool? = this.languageTool
 
     if (languageTool == null) {
-      Logging.logger.warning(I18n.format("skippingTextCheckAsLanguageToolHasNotBeenInitialized"))
+      Logging.LOGGER.warning(I18n.format("skippingTextCheckAsLanguageToolHasNotBeenInitialized"))
       return emptyList()
     }
 
@@ -122,7 +122,7 @@ class LanguageToolJavaInterface(
       }
     } catch (e: IOException) {
       Tools.rethrowCancellationException(e)
-      Logging.logger.severe(I18n.format("languageToolFailed", e))
+      Logging.LOGGER.severe(I18n.format("languageToolFailed", e))
       return emptyList()
     }
 
@@ -138,21 +138,21 @@ class LanguageToolJavaInterface(
 
   @Suppress("INACCESSIBLE_TYPE")
   private fun logResultCache() {
-    if (Logging.logger.isLoggable(Level.FINER)) {
-      Logging.logger.finer("matchesCache.size() = " + this.resultCache.matchesCache.size())
-      Logging.logger.finer(
+    if (Logging.LOGGER.isLoggable(Level.FINER)) {
+      Logging.LOGGER.finer("matchesCache.size() = " + this.resultCache.matchesCache.size())
+      Logging.LOGGER.finer(
         "remoteMatchesCache.size() = " + this.resultCache.remoteMatchesCache.size(),
       )
-      Logging.logger.finer("sentenceCache.size() = " + this.resultCache.sentenceCache.size())
+      Logging.LOGGER.finer("sentenceCache.size() = " + this.resultCache.sentenceCache.size())
 
-      if (Logging.logger.isLoggable(Level.FINEST)) {
-        Logging.logger.finest(
+      if (Logging.LOGGER.isLoggable(Level.FINEST)) {
+        Logging.LOGGER.finest(
           "matchesCache = " + mapToString(this.resultCache.matchesCache.asMap()),
         )
-        Logging.logger.finest(
+        Logging.LOGGER.finest(
           "remoteMatchesCache = " + mapToString(this.resultCache.remoteMatchesCache.asMap()),
         )
-        Logging.logger.finest(
+        Logging.LOGGER.finest(
           "sentenceCache = " + mapToString(this.resultCache.sentenceCache.asMap()),
         )
       }
@@ -163,8 +163,8 @@ class LanguageToolJavaInterface(
     val languageTool: JLanguageTool = (this.languageTool ?: return)
 
     // from JLanguageTool.activateDefaultFalseFriendRules (which is private)
-    val falseFriendRulePath: String = (JLanguageTool.getDataBroker().rulesDir + "/"
-        + JLanguageTool.FALSE_FRIEND_FILE)
+    val falseFriendRulePath: String =
+        JLanguageTool.getDataBroker().rulesDir + "/" + JLanguageTool.FALSE_FRIEND_FILE
     var exception: Exception? = null
 
     try {
@@ -180,7 +180,7 @@ class LanguageToolJavaInterface(
     }
 
     if (exception != null) {
-      Logging.logger.warning(
+      Logging.LOGGER.warning(
         I18n.format("couldNotLoadFalseFriendRules", exception, falseFriendRulePath),
       )
     }
@@ -192,7 +192,7 @@ class LanguageToolJavaInterface(
     try {
       languageTool.activateLanguageModelRules(File(languageModelRulesDirectory))
     } catch (e: IOException) {
-      Logging.logger.warning(
+      Logging.LOGGER.warning(
         I18n.format("couldNotLoadLanguageModel", e, languageModelRulesDirectory),
       )
     }
@@ -204,7 +204,7 @@ class LanguageToolJavaInterface(
     try {
       languageTool.activateNeuralNetworkRules(File(neuralNetworkRulesDirectory))
     } catch (e: IOException) {
-      Logging.logger.warning(
+      Logging.LOGGER.warning(
         I18n.format("couldNotLoadNeuralNetworkModel", e, neuralNetworkRulesDirectory),
       )
     }
@@ -216,7 +216,7 @@ class LanguageToolJavaInterface(
     try {
       languageTool.activateWord2VecModelRules(File(word2vecRulesDirectory))
     } catch (e: IOException) {
-      Logging.logger.warning(I18n.format("couldNotLoadWord2VecModel", e, word2vecRulesDirectory))
+      Logging.LOGGER.warning(I18n.format("couldNotLoadWord2VecModel", e, word2vecRulesDirectory))
     }
   }
 

@@ -60,7 +60,7 @@ class LspMessage(
     """.trimIndent()
     val headerBytes: ByteArray = headerStr.toByteArray(StandardCharsets.US_ASCII)
 
-    org.bsplines.ltexls.tools.Logging.logger.fine(
+    org.bsplines.ltexls.tools.Logging.LOGGER.fine(
       String(headerBytes, StandardCharsets.US_ASCII) + String(bodyBytes, StandardCharsets.UTF_8),
     )
 
@@ -99,7 +99,7 @@ class LspMessage(
     assertTrue(contentLength >= 0)
 
     val bodyBytes: ByteArray = read(inputStream, contentLength)
-    org.bsplines.ltexls.tools.Logging.logger.fine(
+    org.bsplines.ltexls.tools.Logging.LOGGER.fine(
       String(headerBytes, StandardCharsets.US_ASCII) + String(bodyBytes, StandardCharsets.UTF_8),
     )
 
