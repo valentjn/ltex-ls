@@ -149,6 +149,11 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
       "Dummies",
     )
     assertPlainText(
+      "\\cites{test}",
+      "Dummys",
+      Settings(_languageShortCode = "de-DE"),
+    )
+    assertPlainText(
       """
       This is a test, \egc an actual test \eg{} test.
       This is a test, \iec an actual test \ie{} test.

@@ -31,6 +31,9 @@
       <action type="fix" issue="#134">
         Fix false positives when using siunitx (LaTeX)
       </action>
+      <action type="fix" issue="#178" due-to="Stanley F (@sfo)">
+        Fix plural dummy in German languages
+      </action>
     </release>
     <release version="15.2.0" date="2021-11-28">
       <action type="add" issue="#120">
