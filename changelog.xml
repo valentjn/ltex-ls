@@ -34,6 +34,9 @@
       <action type="fix" issue="#134">
         Fix false positives when using siunitx (LaTeX)
       </action>
+      <action type="fix" issue="#156">
+        Fix unquoted languages in YAML front matter not parsed correctly
+      </action>
       <action type="fix" issue="#178" due-to="Stanley F (@sfo)">
         Fix plural dummy in German languages
       </action>

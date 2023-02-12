@@ -52,8 +52,8 @@ class MarkdownFragmentizer(codeLanguageId: String) : CodeFragmentizer(codeLangua
 
   companion object {
     private val YAML_FRONT_MATTER_REGEX = Regex(
-      "\\A---[ \t]*$.*?^lang:[ \t]+(?:\"(.+)\"|'(.+)'|(.+))$.*?^---[ \t]*$",
-      setOf(RegexOption.MULTILINE, RegexOption.DOT_MATCHES_ALL),
+      "\\A---[ \t]*$(?s).*?(?-s)^lang:[ \t]+(?:\"(.+)\"|'(.+)'|(.+))$(?s).*?(?-s)^---[ \t]*$",
+      RegexOption.MULTILINE,
     )
 
     private val COMMENT_REGEX = Regex(

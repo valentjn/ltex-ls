@@ -47,6 +47,7 @@ class MarkdownFragmentizerTest {
       """
       ---
       lang: 'de-DE'
+      abc: def
       ---
 
       This is a test.
@@ -61,6 +62,7 @@ class MarkdownFragmentizerTest {
       """
       ---
       lang: de-DE
+      abc: def
       ---
 
       This is a test.
