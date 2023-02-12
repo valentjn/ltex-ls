@@ -179,6 +179,7 @@ data class Settings(
       "html",
       "markdown",
       "org",
+      "quarto",
       "rmd",
       "restructuredtext",
       "rsweave",

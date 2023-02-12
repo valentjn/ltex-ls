@@ -19,6 +19,9 @@
       <action type="add" issue="#132">
         Add support for Git commit messages (LSP language IDs `git-commit` and `gitcommit`)
       </action>
+      <action type="add" issue="#170,#172,#180" due-to="Alexandre Sonderegger (@sondalex)">
+        Add support for Quarto and R Markdown (LSP language IDs `quarto` and `rmd`)
+      </action>
       <action type="add" issue="#131">
         Add workaround for Pandoc-style inline display math (Markdown)
       </action>

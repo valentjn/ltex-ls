@@ -145,11 +145,13 @@ object FileIo {
       "quarto"
     } else if (fileName.endsWith(".r")) {
       "r"
-    } else if (fileName.endsWith(".Rmd")
-          || fileName.endsWith(".rmd")) {
-      "rmd"
     } else if (fileName.endsWith(".rst")) {
       "restructuredtext"
+    } else if (
+      fileName.endsWith(".Rmd")
+      || fileName.endsWith(".rmd")
+    ) {
+      "rmd"
     } else if (
       fileName.endsWith(".Rnw")
       || fileName.endsWith(".rnw")
