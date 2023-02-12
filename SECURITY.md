@@ -26,9 +26,9 @@ In this document, the term &ldquo;vulnerability&rdquo; is synonymous to &ldquo;s
 
 **Please do not report security vulnerabilities through public GitHub issues.**
 
-Please report security vulnerabilities via email to valentjn (a) bsplines.org.
+Please report security vulnerabilities via the Security Advisory form under the Security tab in the GitHub repository ([instructions](https://docs.github.com/en/code-security/security-advisories/guidance-on-reporting-and-writing/privately-reporting-a-security-vulnerability)).
 
-You can expect an initial response within 24 hours. If you do not get a response, please send a follow-up email.
+You can expect an initial response within 24 hours. If you do not get a response, please send a follow-up message.
 
 In your report, please include at least the following information (as much as possible):
 
@@ -53,7 +53,7 @@ The steps of the process of handling vulnerabilities is as follows:
 7. Fix is pushed and released; [responsible disclosure](#responsible-disclosure-policy)
 8. [Post-mortem analysis](#post-mortem-analysis)
 
-You will obtain an update via email as soon as the next step has been completed, but no later than 5 days after the last update.
+You will obtain an update as soon as the next step has been completed, but no later than 5 days after the last update.
 
 ## Responsible Disclosure Policy
 
