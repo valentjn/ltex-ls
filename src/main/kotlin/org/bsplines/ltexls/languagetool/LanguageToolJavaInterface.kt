@@ -198,28 +198,6 @@ class LanguageToolJavaInterface(
     }
   }
 
-  override fun activateNeuralNetworkRules(neuralNetworkRulesDirectory: String) {
-    val languageTool: JLanguageTool = (this.languageTool ?: return)
-
-    try {
-      languageTool.activateNeuralNetworkRules(File(neuralNetworkRulesDirectory))
-    } catch (e: IOException) {
-      Logging.LOGGER.warning(
-        I18n.format("couldNotLoadNeuralNetworkModel", e, neuralNetworkRulesDirectory),
-      )
-    }
-  }
-
-  override fun activateWord2VecModelRules(word2vecRulesDirectory: String) {
-    val languageTool: JLanguageTool = (this.languageTool ?: return)
-
-    try {
-      languageTool.activateWord2VecModelRules(File(word2vecRulesDirectory))
-    } catch (e: IOException) {
-      Logging.LOGGER.warning(I18n.format("couldNotLoadWord2VecModel", e, word2vecRulesDirectory))
-    }
-  }
-
   override fun enableRules(ruleIds: Set<String>) {
     val languageTool: JLanguageTool = (this.languageTool ?: return)
 

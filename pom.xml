@@ -10,7 +10,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bsplines</groupId>
   <artifactId>ltexls</artifactId>
-  <version>15.2.1-alpha.1.develop</version>
+  <version>16.0.0-alpha.1.develop</version>
   <name>${project.groupId}:${project.artifactId}</name>
   <description>LTeX Language Server (LTeX LS): LSP language server for LanguageTool with support for LaTeX, Markdown, and others</description>
   <url>https://github.com/valentjn/ltex-ls</url>
@@ -50,13 +50,13 @@
     <dependency>
       <groupId>org.languagetool</groupId>
       <artifactId>languagetool-core</artifactId>
-      <version>5.5</version>
+      <version>6.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.languagetool</groupId>
       <artifactId>language-all</artifactId>
-      <version>5.5</version>
+      <version>6.0</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -138,7 +138,7 @@
     <dependency>
       <groupId>org.languagetool</groupId>
       <artifactId>languagetool-server</artifactId>
-      <version>5.5</version>
+      <version>6.0</version>
       <exclusions>
         <exclusion>
           <artifactId>logback-classic</artifactId>
@@ -146,6 +146,11 @@
         </exclusion>
       </exclusions>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.lsp4j</groupId>
+      <artifactId>org.eclipse.lsp4j.jsonrpc</artifactId>
+      <version>0.19.0</version>
     </dependency>
   </dependencies>
   <build>

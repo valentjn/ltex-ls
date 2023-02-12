@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.google.protobuf:protobuf-java:3.21.7">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/protobuf/protobuf-java/3.21.7/protobuf-java-3.21.7.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/protobuf/protobuf-java/3.21.7/protobuf-java-3.21.7-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/protobuf/protobuf-java/3.21.7/protobuf-java-3.21.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

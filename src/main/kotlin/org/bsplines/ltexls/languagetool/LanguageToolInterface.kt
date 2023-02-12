@@ -49,8 +49,6 @@ abstract class LanguageToolInterface {
 
   abstract fun activateDefaultFalseFriendRules()
   abstract fun activateLanguageModelRules(languageModelRulesDirectory: String)
-  abstract fun activateNeuralNetworkRules(neuralNetworkRulesDirectory: String)
-  abstract fun activateWord2VecModelRules(word2vecRulesDirectory: String)
   abstract fun enableRules(ruleIds: Set<String>)
   abstract fun enableEasterEgg()
 }

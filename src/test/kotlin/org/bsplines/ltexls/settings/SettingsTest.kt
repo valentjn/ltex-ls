@@ -89,20 +89,6 @@ class SettingsTest {
     )
     settings2 = compareSettings(settings, settings2, true)
 
-    settings = settings.copy(_neuralNetworkModelRulesDirectory = "neuralNetworkModelRulesDirectory")
-    assertEquals(
-      "neuralNetworkModelRulesDirectory",
-      settings.neuralNetworkModelRulesDirectory,
-    )
-    settings2 = compareSettings(settings, settings2, true)
-
-    settings = settings.copy(_word2VecModelRulesDirectory = "word2VecModelRulesDirectory")
-    assertEquals(
-      "word2VecModelRulesDirectory",
-      settings.word2VecModelRulesDirectory,
-    )
-    settings2 = compareSettings(settings, settings2, true)
-
     settings = settings.copy(_languageToolHttpServerUri = "languageToolHttpServerUri")
     assertEquals("languageToolHttpServerUri", settings.languageToolHttpServerUri)
     settings2 = compareSettings(settings, settings2, true)

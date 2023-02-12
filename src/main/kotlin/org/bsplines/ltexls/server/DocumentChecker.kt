@@ -23,8 +23,8 @@ import org.bsplines.ltexls.tools.I18n
 import org.bsplines.ltexls.tools.Logging
 import org.bsplines.ltexls.tools.Tools
 import org.eclipse.lsp4j.Range
-import org.languagetool.Language
-import org.languagetool.language.LanguageIdentifier
+import org.languagetool.DetectedLanguage
+import org.languagetool.language.identifier.SimpleLanguageIdentifier
 import org.languagetool.markup.AnnotatedText
 import org.languagetool.markup.TextPart
 import java.time.Duration
@@ -37,7 +37,7 @@ class DocumentChecker(
   var lastCheckedDocument: LtexTextDocumentItem? = null
     private set
 
-  private val languageIdentifier = LanguageIdentifier()
+  private val simpleLanguageIdentifier = SimpleLanguageIdentifier()
 
   private fun fragmentizeDocument(
     document: LtexTextDocumentItem,
@@ -103,11 +103,13 @@ class DocumentChecker(
     var settings: Settings = codeFragment.settings
 
     if (settings.languageShortCode == "auto") {
-      val cleanText: String = this.languageIdentifier.cleanAndShortenText(
+      val cleanText: String = this.simpleLanguageIdentifier.cleanAndShortenText(
         annotatedTextFragment.annotatedText.plainText,
       )
-      val language: Language? = this.languageIdentifier.detectLanguage(cleanText)
-      val languageShortCode: String = language?.shortCodeWithCountryAndVariant ?: "en-US"
+      val detectedLanguage: DetectedLanguage? =
+        this.simpleLanguageIdentifier.detectLanguage(cleanText, emptyList(), emptyList())
+      val languageShortCode: String =
+        detectedLanguage?.detectedLanguage?.shortCodeWithCountryAndVariant ?: "en-US"
       annotatedTextFragment.codeFragment.languageShortCode = languageShortCode
       settings = settings.copy(_languageShortCode = languageShortCode)
     }

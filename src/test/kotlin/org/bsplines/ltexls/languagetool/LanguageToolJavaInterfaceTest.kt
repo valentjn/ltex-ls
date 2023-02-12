@@ -44,8 +44,6 @@ class LanguageToolJavaInterfaceTest {
     assertNotNull(ltInterface)
     ltInterface.activateDefaultFalseFriendRules()
     ltInterface.activateLanguageModelRules("foobar")
-    ltInterface.activateNeuralNetworkRules("foobar")
-    ltInterface.activateWord2VecModelRules("foobar")
     ltInterface.enableEasterEgg()
   }
 
@@ -102,7 +100,7 @@ class LanguageToolJavaInterfaceTest {
         settings.copy(_enablePickyRules = true),
         0,
         1,
-        "Her work will not have been finished by tonight.\n",
+        "Tom isn't saved by Mary.\n",
       )
 
       if (checkMotherTongue) {

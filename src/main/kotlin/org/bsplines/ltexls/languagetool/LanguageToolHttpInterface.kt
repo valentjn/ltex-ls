@@ -153,14 +153,6 @@ class LanguageToolHttpInterface(
     // handled by LanguageTool HTTP server
   }
 
-  override fun activateNeuralNetworkRules(neuralNetworkRulesDirectory: String) {
-    // handled by LanguageTool HTTP server
-  }
-
-  override fun activateWord2VecModelRules(word2vecRulesDirectory: String) {
-    // handled by LanguageTool HTTP server
-  }
-
   override fun enableRules(ruleIds: Set<String>) {
     this.enabledRules.addAll(ruleIds)
   }

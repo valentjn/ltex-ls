@@ -373,8 +373,8 @@ class DocumentCheckerTest {
 
       assertEquals(3, matches[1].suggestedReplacements.size)
       assertEquals("ein Test", matches[1].suggestedReplacements[0])
-      assertEquals("einem Test", matches[1].suggestedReplacements[1])
-      assertEquals("einen Test", matches[1].suggestedReplacements[2])
+      assertEquals("einen Test", matches[1].suggestedReplacements[1])
+      assertEquals("einem Test", matches[1].suggestedReplacements[2])
     }
   }
 }

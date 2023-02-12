@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.gitlab.dumonts:hunspell:2.1.1">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/gitlab/dumonts/hunspell/2.1.1/hunspell-2.1.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/gitlab/dumonts/hunspell/2.1.1/hunspell-2.1.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/gitlab/dumonts/hunspell/2.1.1/hunspell-2.1.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

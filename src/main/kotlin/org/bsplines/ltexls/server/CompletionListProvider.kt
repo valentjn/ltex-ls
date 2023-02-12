@@ -15,15 +15,15 @@ import org.bsplines.ltexls.settings.SettingsManager
 import org.eclipse.lsp4j.CompletionItem
 import org.eclipse.lsp4j.CompletionList
 import org.eclipse.lsp4j.Position
-import org.languagetool.Language
-import org.languagetool.language.LanguageIdentifier
+import org.languagetool.DetectedLanguage
+import org.languagetool.language.identifier.SimpleLanguageIdentifier
 import org.languagetool.markup.AnnotatedText
 
 class CompletionListProvider(
   val settingsManager: SettingsManager,
 ) {
   private val fullCompletionListMap: MutableMap<String, List<String>> = HashMap()
-  private val languageIdentifier = LanguageIdentifier()
+  private val simpleLanguageIdentifier = SimpleLanguageIdentifier()
 
   fun createCompletionList(document: LtexTextDocumentItem, position: Position): CompletionList {
     val codeFragmentPositionPair: Pair<CodeFragment, Int> =
@@ -103,11 +103,12 @@ class CompletionListProvider(
 
   private fun getLanguageShortCode(annotatedTextFragment: AnnotatedTextFragment): String? {
     return if (annotatedTextFragment.codeFragment.settings.languageShortCode == "auto") {
-      val cleanText: String = this.languageIdentifier.cleanAndShortenText(
+      val cleanText: String = this.simpleLanguageIdentifier.cleanAndShortenText(
         annotatedTextFragment.annotatedText.plainText,
       )
-      val language: Language? = this.languageIdentifier.detectLanguage(cleanText)
-      language?.shortCodeWithCountryAndVariant
+      val detectedLanguage: DetectedLanguage? =
+        this.simpleLanguageIdentifier.detectLanguage(cleanText, emptyList(), emptyList())
+      detectedLanguage?.detectedLanguage?.shortCodeWithCountryAndVariant
     } else {
       annotatedTextFragment.codeFragment.settings.languageShortCode
     }

@@ -100,16 +100,6 @@ class SettingsManager {
       }
     }
 
-    if (this.settings.neuralNetworkModelRulesDirectory.isNotEmpty()) {
-      languageToolInterface.activateNeuralNetworkRules(
-        this.settings.neuralNetworkModelRulesDirectory,
-      )
-    }
-
-    if (this.settings.word2VecModelRulesDirectory.isNotEmpty()) {
-      languageToolInterface.activateWord2VecModelRules(this.settings.word2VecModelRulesDirectory)
-    }
-
     languageToolInterface.enableRules(this.settings.enabledRules)
 
     this.languageToolInterface = languageToolInterface

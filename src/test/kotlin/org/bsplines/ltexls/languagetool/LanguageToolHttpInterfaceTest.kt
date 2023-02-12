@@ -59,8 +59,6 @@ class LanguageToolHttpInterfaceTest {
     assertNotNull(ltInterface)
     ltInterface.activateDefaultFalseFriendRules()
     ltInterface.activateLanguageModelRules("foobar")
-    ltInterface.activateNeuralNetworkRules("foobar")
-    ltInterface.activateWord2VecModelRules("foobar")
     ltInterface.enableEasterEgg()
   }
 }

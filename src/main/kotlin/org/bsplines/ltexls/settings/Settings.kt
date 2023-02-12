@@ -29,8 +29,6 @@ data class Settings(
   private val _enablePickyRules: Boolean? = null,
   private val _motherTongueShortCode: String? = null,
   private val _languageModelRulesDirectory: String? = null,
-  private val _neuralNetworkModelRulesDirectory: String? = null,
-  private val _word2VecModelRulesDirectory: String? = null,
   private val _languageToolHttpServerUri: String? = null,
   private val _languageToolOrgUsername: String? = null,
   private val _languageToolOrgApiKey: String? = null,
@@ -67,10 +65,6 @@ data class Settings(
     get() = (this._motherTongueShortCode ?: "")
   val languageModelRulesDirectory: String
     get() = FileIo.normalizePath(this._languageModelRulesDirectory ?: "")
-  val neuralNetworkModelRulesDirectory: String
-    get() = FileIo.normalizePath(this._neuralNetworkModelRulesDirectory ?: "")
-  val word2VecModelRulesDirectory: String
-    get() = FileIo.normalizePath(this._word2VecModelRulesDirectory ?: "")
   val languageToolHttpServerUri: String
     get() = (this._languageToolHttpServerUri ?: "")
   val languageToolOrgUsername: String
@@ -118,26 +112,6 @@ data class Settings(
           "additionalRules.languageModel",
           this.languageModelRulesDirectory,
           other.languageModelRulesDirectory,
-        ),
-      )
-    }
-
-    if (neuralNetworkModelRulesDirectory != other.neuralNetworkModelRulesDirectory) {
-      differences.add(
-        SettingsDifference(
-          "additionalRules.neuralNetworkModel",
-          this.neuralNetworkModelRulesDirectory,
-          other.neuralNetworkModelRulesDirectory,
-        ),
-      )
-    }
-
-    if (word2VecModelRulesDirectory != other.word2VecModelRulesDirectory) {
-      differences.add(
-        SettingsDifference(
-          "additionalRules.word2VecModel",
-          this.word2VecModelRulesDirectory,
-          other.word2VecModelRulesDirectory,
         ),
       )
     }
@@ -256,10 +230,6 @@ data class Settings(
           getSettingFromJsonAsString(jsonSettings, "additionalRules.motherTongue")
       val languageModelRulesDirectory: String? =
           getSettingFromJsonAsString(jsonSettings, "additionalRules.languageModel")
-      val neuralNetworkModelRulesDirectory: String? =
-          getSettingFromJsonAsString(jsonSettings, "additionalRules.neuralNetworkModel")
-      val word2VecModelRulesDirectory: String? =
-          getSettingFromJsonAsString(jsonSettings, "additionalRules.word2VecModel")
 
       val languageToolHttpServerUri: String? = getSettingFromJsonAsString(
         jsonSettings,
@@ -337,8 +307,6 @@ data class Settings(
         enablePickyRules,
         motherTongueShortCode,
         languageModelRulesDirectory,
-        neuralNetworkModelRulesDirectory,
-        word2VecModelRulesDirectory,
         languageToolHttpServerUri,
         languageToolOrgUsername,
         languageToolOrgApiKey,

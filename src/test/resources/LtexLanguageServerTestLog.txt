@@ -332,9 +332,7 @@ Params: {
             },
             "additionalRules": {
                 "motherTongue": "",
-                "languageModel": "",
-                "neuralNetworkModel": "",
-                "word2VecModel": ""
+                "languageModel": ""
             },
             "sentenceCacheSize": 2000,
             "diagnosticSeverity": "information",
@@ -433,9 +431,7 @@ Result: [
         },
         "additionalRules": {
             "motherTongue": "",
-            "languageModel": "",
-            "neuralNetworkModel": "",
-            "word2VecModel": ""
+            "languageModel": ""
         },
         "sentenceCacheSize": 2000,
         "diagnosticSeverity": "information",
@@ -573,9 +569,7 @@ Result: [
         },
         "additionalRules": {
             "motherTongue": "",
-            "languageModel": "",
-            "neuralNetworkModel": "",
-            "word2VecModel": ""
+            "languageModel": ""
         },
         "sentenceCacheSize": 2000,
         "diagnosticSeverity": "information",
@@ -1277,9 +1271,7 @@ Result: [
         },
         "additionalRules": {
             "motherTongue": "",
-            "languageModel": "",
-            "neuralNetworkModel": "",
-            "word2VecModel": ""
+            "languageModel": ""
         },
         "sentenceCacheSize": 2000,
         "diagnosticSeverity": "information",
