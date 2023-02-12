@@ -8,10 +8,9 @@
 package org.bsplines.ltexls.parsing.asciidoc
 
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilderTest
-import org.junit.platform.suite.api.IncludeEngines
+import org.languagetool.markup.AnnotatedText
 import kotlin.test.Test
 
-@IncludeEngines("junit-jupiter")
 class AsciidocAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("asciidoc") {
   @Test
   fun testParagraphs() {
@@ -268,6 +267,10 @@ class AsciidocAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("asciidoc"
       + "This is a combination, and another Dummy1.\n"
     )
     assertPlainText(
+      "This results in a visible line break (e.g., `<br>`) between the lines.\n",
+      "This results in a visible line break (e.g., Dummy0) between the lines.\n"
+    )
+    assertPlainText(
       """
       This is **bo**ld. This is __ita__lic text. This is mono``space``.
       This is a com**__bi__**nation, and other ``**__combination__**``s.
@@ -311,5 +314,267 @@ class AsciidocAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("asciidoc"
       "&amp;, &auml;, &ldquo;, &#8220;, &#x201c;.\n",
       "&, \u00e4, \u201c, \u201c, \u201c.\n"
     )
+  }
+
+  @Test
+  fun test() {
+    val code = """
+// tag::para[]
+This journey begins one late Monday afternoon in Antwerp.
+
+Our team desperately needs coffee, but none of us dare open the office door.
+// end::para[]
+
+// used in qr
+// FIXME this should be in the blocks module
+// tag::b-para[]
+Paragraphs don't require special markup in AsciiDoc.
+A paragraph is defined by one or more consecutive lines of text.
+Newlines within a paragraph are not displayed.
+
+Leave at least one blank line to begin a new paragraph.
+// end::b-para[]
+
+//used in qr
+// tag::hb-all[]
+Roses are red, +
+violets are blue.
+
+[%hardbreaks]
+A ruby is red.
+Java is black.
+// end::hb-all[]
+
+// tag::hb[]
+Roses are red, +
+violets are blue.
+// end::hb[]
+
+// tag::hb-p[]
+[%hardbreaks]
+A ruby is red.
+Java is black.
+// end::hb-p[]
+
+// tag::b-hb[]
+To preserve a line break, end the line in a space followed by a plus sign. +
+This results in a visible line break (e.g., `<br>`) between the lines.
+// end::b-hb[]
+
+// tag::hb-attr[]
+= Line Break Doc Title
+:hardbreaks-option:
+
+Roses are red,
+violets are blue.
+// end::hb-attr[]
+
+// tag::lead[]
+[.lead]
+This is the ultimate paragraph.
+// end::lead[]
+
+// tag::b-lead[]
+[.lead]
+This text will be styled as a lead paragraph (i.e., larger font).
+// end::b-lead[]
+
+// tag::qr-lead[]
+[.lead]
+This text will be styled as a lead paragraph (i.e., larger font).
+
+This paragraph will not be.
+// end::qr-lead[]
+
+// tag::b-i[]
+_To tame_ the wild wolpertingers we needed to build a *charm*.
+But **u**ltimate victory could only be won if we divined the
+*_true name_* of the __war__lock.
+// end::b-i[]
+
+// tag::b-i-n[]
+_To tame_ the wild wolpertingers we needed to build a *charm*.
+But **u**ltimate victory could only be won if we divined the
+*_true name_* of the __war__lock.
+// end::b-i-n[]
+
+// used in qr
+// tag::b-bold-italic-mono[]
+bold *constrained* & **un**constrained
+
+italic _constrained_ & __un__constrained
+
+bold italic *_constrained_* & **__un__**constrained
+
+monospace `constrained` & ``un``constrained
+
+monospace bold `*constrained*` & ``**un**``constrained
+
+monospace italic `_constrained_` & ``__un__``constrained
+
+monospace bold italic `*_constrained_*` & ``**__un__**``constrained
+// end::b-bold-italic-mono[]
+
+// tag::constrained-bold-italic-mono[]
+It has *strong* significance to me.
+
+I _cannot_ stress this enough.
+
+Type `OK` to accept.
+
+That *_really_* has to go.
+
+Can't pick one? Let's use them `*_all_*`.
+// end::constrained-bold-italic-mono[]
+
+// tag::unconstrained-bold-italic-mono[]
+**C**reate, **R**ead, **U**pdate, and **D**elete (CRUD)
+
+That's fan__freakin__tastic!
+
+Don't pass generic ``Object``s to methods that accept ``String``s!
+
+It was Beatle**__mania__**!
+// end::unconstrained-bold-italic-mono[]
+
+// used in qr
+// tag::monospace-vs-codespan[]
+`{cpp}` is valid syntax in the programming language by the same name.
+
+`+WHERE id <= 20 AND value = "{name}"+` is a SQL WHERE clause.
+// end::monospace-vs-codespan[]
+
+// tag::c-quote-co[]
+"`What kind of charm?`" Lazarus asked.
+"`An odoriferous one or a mineral one?`" <.>
+
+Kizmet shrugged.
+"`The note from Olaf's desk says '`wormwood and licorice,`'
+but these could be normal groceries for werewolves.`" <.>
+// end::c-quote-co[]
+
+// tag::c-quote[]
+"`What kind of charm?`" Lazarus asked.
+"`An odoriferous one or a mineral one?`"
+
+Kizmet shrugged.
+"`The note from Olaf's desk says '`wormwood and licorice,`'
+but these could be normal groceries for werewolves.`"
+// end::c-quote[]
+
+// used in qr
+// tag::b-c-quote[]
+"`double curved quotes`"
+
+'`single curved quotes`'
+
+Olaf's desk was a mess.
+
+A ``std::vector```'s size is the number of items it contains.
+
+All of the werewolves`' desks were a mess.
+
+Olaf had been with the company since the `'00s.
+// end::b-c-quote[]
+
+// tag::apos[]
+Olaf had been with the company since the `'00s.
+His desk overflowed with heaps of paper, apple cores and squeaky toys.
+We couldn't find Olaf's keyboard.
+The state of his desk was replicated, in triplicate, across all of
+the werewolves`' desks.
+// end::apos[]
+
+// tag::sub-sup[]
+"`Well the H~2~O formula written on their whiteboard could be part
+of a shopping list, but I don't think the local bodega sells
+E=mc^2^,`" Lazarus replied.
+// end::sub-sup[]
+
+//used in qr
+// tag::b-sub-sup[]
+^super^script phrase
+
+~sub~script phrase
+// end::b-sub-sup[]
+
+// tag::mono[]
+"`Wait!`" Indigo plucked a small vial from her desk's top drawer
+and held it toward us.
+The vial's label read: `E=mc^2^`; the `E` represents _energy_,
+but also pure _genius!_
+// end::mono[]
+
+// tag::literal-mono[]
+You can reference the value of a document attribute using
+the syntax `+{name}+`, where `name` is the attribute name.
+// end::literal-mono[]
+
+// tag::literal-mono-with-plus[]
+`pass:[++]` is the increment operator in C.
+// end::literal-mono-with-plus[]
+
+// used in qr
+// tag::b-mono-code[]
+Reference code like `types` or `methods` inline.
+
+Do not pass arbitrary ``Object``s to methods that accept ``String``s!
+// end::b-mono-code[]
+
+// tag::highlight[]
+Werewolves are #allergic to cinnamon#.
+// end::highlight[]
+
+// tag::highlight-html[]
+<mark>mark element</mark>
+// end::highlight-html[]
+
+// tag::text-span[]
+The text [.underline]#underline me# is underlined.
+// end::text-span[]
+
+// tag::text-span-html[]
+The text <span class="underline">underline me</span> is underlined.
+// end::text-span-html[]
+
+// tag::css-co[]
+Do werewolves believe in [.small]#small print#? <.>
+
+[.big]##O##nce upon an infinite loop.
+// end::css-co[]
+
+// tag::css[]
+Do werewolves believe in [.small]#small print#?
+
+[big]##O##nce upon an infinite loop.
+// end::css[]
+
+// used in qr
+// tag::qr-all[]
+Werewolves are allergic to #cinnamon#.
+
+##Mark##up refers to text that contains formatting ##mark##s.
+
+Where did all the [.underline]#cores# go?
+
+We need [.line-through]#ten# twenty VMs.
+
+A [.myrole]#custom role# must be fulfilled by the theme.
+// end::qr-all[]
+
+// tag::css-custom[]
+Type the word [.userinput]#asciidoctor# into the search bar.
+// end::css-custom[]
+
+// tag::css-custom-html[]
+<span class="userinput">asciidoctor</span>
+// end::css-custom-html[]
+
+////
+phrase styled by CSS class .small#
+////
+"""
+    val annotatedText: AnnotatedText = buildAnnotatedText(code)
+    System.err.println(annotatedText.plainText)
   }
 }
