@@ -920,6 +920,7 @@ object LatexAnnotatedTextBuilderDefaults {
   val DEFAULT_LATEX_ENVIRONMENT_SIGNATURES: List<LatexEnvironmentSignature> = run {
     val list: MutableList<LatexEnvironmentSignature> = mutableListOf(
       LatexEnvironmentSignature("\\begin{frame}", LatexCommandSignature.Action.Default),
+      LatexEnvironmentSignature("\\begin{frame}[]", LatexCommandSignature.Action.Default),
       LatexEnvironmentSignature("lstlisting"),
       LatexEnvironmentSignature("minted"),
       LatexEnvironmentSignature("otherlanguage"),

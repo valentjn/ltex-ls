@@ -33,13 +33,16 @@ class LatexAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("latex") {
     assertPlainText(
       """
       This is a test.
-      \begin{frame}{Test}{Another Test}
-        Inside the frame!
+      \begin{frame}{Test 1}{Test 2}
+        Frame 1.
+      \end{frame}
+      \begin{frame}[noframenumbering]{Test 3}{Test 4}
+        Frame 2.
       \end{frame}
       Final sentence.
 
       """.trimIndent(),
-      "This is a test. Test Another Test Inside the frame! Final sentence. ",
+      "This is a test. Test 1 Test 2 Frame 1. Test 3 Test 4 Frame 2. Final sentence. ",
     )
     assertPlainText("This is good\\dots No, it isn't.\n", "This is good\u2026 No, it isn't. ")
     assertPlainText("This is a test of\\\\line breaks.\n", "This is a test of line breaks. ")
