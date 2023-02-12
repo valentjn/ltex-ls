@@ -35,13 +35,13 @@
         Fix false positives when using siunitx (LaTeX)
       </action>
       <action type="fix" issue="#156">
-        Fix unquoted languages in YAML front matter not parsed correctly
+        Fix unquoted languages in YAML front matter not parsed correctly (Markdown)
       </action>
       <action type="fix" issue="#178" due-to="Stanley F (@sfo)">
         Fix plural dummy in German languages
       </action>
       <action type="fix" issue="#213,#214" due-to="@casenull">
-        Fix Babel languages `austrian`, `naustrian`, `swissgerman`, and `nswissgerman` not recognized
+        Fix Babel languages `austrian`, `naustrian`, `swissgerman`, and `nswissgerman` not recognized (LaTeX)
       </action>
     </release>
     <release version="15.2.0" date="2021-11-28">
