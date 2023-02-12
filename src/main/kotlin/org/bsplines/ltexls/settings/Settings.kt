@@ -173,7 +173,15 @@ data class Settings(
   @Suppress("TooManyFunctions")
   companion object {
     val DEFAULT_ENABLED = setOf(
-        "bibtex", "latex", "html", "markdown", "org", "restructuredtext", "rsweave")
+      "asciidoc",
+      "bibtex",
+      "latex",
+      "html",
+      "markdown",
+      "org",
+      "restructuredtext",
+      "rsweave",
+    )
     private const val DEFAULT_SENTENCE_CACHE_SIZE = 2000L
     private val DEFAULT_DIAGNOSTIC_SEVERITY: Map<String, DiagnosticSeverity> =
         mapOf(Pair("default", DiagnosticSeverity.Information))

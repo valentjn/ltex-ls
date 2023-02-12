@@ -7,6 +7,7 @@
 
 package org.bsplines.ltexls.parsing
 
+import org.bsplines.ltexls.parsing.asciidoc.AsciidocAnnotatedTextBuilder
 import org.bsplines.ltexls.parsing.html.HtmlAnnotatedTextBuilder
 import org.bsplines.ltexls.parsing.latex.LatexAnnotatedTextBuilder
 import org.bsplines.ltexls.parsing.markdown.MarkdownAnnotatedTextBuilder
@@ -34,6 +35,7 @@ abstract class CodeAnnotatedTextBuilder(
     @Suppress("ComplexMethod")
     fun create(codeLanguageId: String): CodeAnnotatedTextBuilder {
       return when (codeLanguageId) {
+        "asciidoc" -> AsciidocAnnotatedTextBuilder(codeLanguageId)
         "bib" -> LatexAnnotatedTextBuilder(codeLanguageId)
         "bibtex" -> LatexAnnotatedTextBuilder(codeLanguageId)
         "html" -> HtmlAnnotatedTextBuilder(codeLanguageId)
