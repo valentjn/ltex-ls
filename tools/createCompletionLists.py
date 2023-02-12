@@ -53,7 +53,7 @@ def downloadLanguageTool(tmpDirPath: pathlib.Path) -> pathlib.Path:
   url = ("https://github.com/valentjn/languagetool-mirror/releases/download/"
       f"{languageToolVersion}/{archiveFileName}")
   archiveFilePath = tmpDirPath.joinpath(archiveFileName)
-  print("Downloading LanguageTool...")
+  print(f"Downloading LanguageTool from {url}...")
   urllib.request.urlretrieve(url, archiveFilePath)
 
   with zipfile.ZipFile(archiveFilePath, "r") as file: file.extractall(tmpDirPath)
