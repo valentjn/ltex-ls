@@ -66,7 +66,7 @@
     <dependency>
       <groupId>org.eclipse.lsp4j</groupId>
       <artifactId>org.eclipse.lsp4j</artifactId>
-      <version>0.19.0</version>
+      <version>0.20.0</version>
     </dependency>
     <dependency>
       <groupId>com.vladsch.flexmark</groupId>
