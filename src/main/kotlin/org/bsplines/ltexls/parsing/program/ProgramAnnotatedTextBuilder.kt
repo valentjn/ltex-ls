@@ -29,9 +29,7 @@ class ProgramAnnotatedTextBuilder(
   override fun addCode(code: String): CodeAnnotatedTextBuilder {
     var curPos = 0
 
-    val all = commentBlockRegex.findAll(code)
-
-    for (matchResult: MatchResult in all) {
+    for (matchResult: MatchResult in commentBlockRegex.findAll(code)) {
       val lastPos: Int = curPos
       val isLineComment: Boolean = (matchResult.groups["lineComment"] != null)
       val commentGroupName: String = (if (isLineComment) "lineComment" else "blockComment")
