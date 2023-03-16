@@ -223,4 +223,36 @@ class ProgramAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("") {
       "vb",
     )
   }
+
+  @Test
+  fun testRust() {
+    assertPlainText(
+      """
+      Sentence 1 - no check # Sentence 2 - no check
+      #Sentence 3 - no check
+      //! hello
+      //! two
+      //! 3333
+      //!
+      //! 444
+
+      test
+
+      /// Sentence 4 -
+      ///
+      /// ```
+      /// let a = 2;
+      ///
+      /// let b = a;
+      /// ```
+      ///
+      /// check
+
+      """.trimIndent(),
+      "\n\n\nhello\ntwo\n3333\n\n444\n\n\nSentence 4 -\n\n\nlet a = 2;\n" +
+        "\nlet b = a;\n" +
+        "\n\ncheck",
+      "rust",
+    )
+  }
 }

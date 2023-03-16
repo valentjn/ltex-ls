@@ -27,7 +27,7 @@ data class ProgramCommentRegexs(
     if (this.lineCommentRegexString != null) {
       if (builder.isNotEmpty()) builder.append("|")
       builder.append(
-        "(?<lineComment>(?:^[ \t]*" + this.lineCommentRegexString + "[ \t](?:.*?)$(?:\r?\n)?)+)",
+        "(?<lineComment>(?:^[ \t]*" + this.lineCommentRegexString + "(?:[ \t].*?)?$(?:\r?\n)?)+)",
       )
     }
 
@@ -68,8 +68,13 @@ data class ProgramCommentRegexs(
       val lineCommentRegexString: String?
 
       when (codeLanguageId) {
+        "rust" -> {
+          blockCommentStartRegexString = "/\\*\\*?"
+          blockCommentEndRegexString = "\\*\\*?/"
+          lineCommentRegexString = "//[/!]?"
+        }
         "c", "cpp", "csharp", "dart", "fsharp", "go", "groovy", "java", "javascript",
-        "javascriptreact", "kotlin", "php", "rust", "scala", "swift", "typescript",
+        "javascriptreact", "kotlin", "php", "scala", "swift", "typescript",
         "typescriptreact", "verilog",
         -> {
           blockCommentStartRegexString = "/\\*\\*?"
