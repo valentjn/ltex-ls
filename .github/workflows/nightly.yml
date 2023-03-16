@@ -37,7 +37,7 @@ jobs:
         run: "echo \"LTEX_LS_VERSION=$(python -u -c \"import datetime; import re; print('{}.nightly.{}'.format(re.search(r'<version>(.*?)(?:\\\\.develop)?</version>', open('pom.xml', 'r').read()).group(1), datetime.datetime.today().strftime('%Y-%m-%d')), end='')\")\" >> $GITHUB_ENV"
 
       - name: "Check LTEX_LS_VERSION"
-        run: "if [[ -z \"$LTEX_LS_VERSION\" ]]; then echo 'Error: LTEX_LS_VERSION not set!'; (exit 1); fi; echo \"LTEX_LS_VERSION set to '$LTEX_LS_VERSION'\""
+        run: 'if [[ -z "$LTEX_LS_VERSION" ]]; then echo ''Error: LTEX_LS_VERSION not set!''; (exit 1); fi; echo "LTEX_LS_VERSION set to ''$LTEX_LS_VERSION''"'
 
       - name: "Bump Version"
         run: "python -u -c \"import re\nfile = open('pom.xml', 'r+'); pom = file.read(); file.seek(0); file.truncate(); file.write(re.sub(r'<version>(.*?)</version>', '<version>${{ env.LTEX_LS_VERSION }}</version>', pom, 1))\""
@@ -81,6 +81,6 @@ jobs:
             "target/ltex-ls-${{ env.LTEX_LS_VERSION }}-mac-x86-32.tar.gz"
             "target/ltex-ls-${{ env.LTEX_LS_VERSION }}-windows-x86-32.zip"
 
-            "target/ltex-ls-${{ env.LTEX_LS_VERSION }}-linux-arm64.tar.gz"
-            "target/ltex-ls-${{ env.LTEX_LS_VERSION }}-mac-arm64.tar.gz"
-            "target/ltex-ls-${{ env.LTEX_LS_VERSION }}-windows-arm64.zip"
+            "target/ltex-ls-${{ env.LTEX_LS_VERSION }}-linux-aarch64.tar.gz"
+            "target/ltex-ls-${{ env.LTEX_LS_VERSION }}-mac-aarch64.tar.gz"
+            "target/ltex-ls-${{ env.LTEX_LS_VERSION }}-windows-aarch64.zip"

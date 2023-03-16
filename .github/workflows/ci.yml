@@ -217,6 +217,6 @@ jobs:
             "target/ltex-ls-${{ env.LTEX_LS_VERSION }}-mac-x86-32.tar.gz"
             "target/ltex-ls-${{ env.LTEX_LS_VERSION }}-windows-x86-32.zip"
 
-            "target/ltex-ls-${{ env.LTEX_LS_VERSION }}-linux-arm64.tar.gz"
-            "target/ltex-ls-${{ env.LTEX_LS_VERSION }}-mac-arm64.tar.gz"
-            "target/ltex-ls-${{ env.LTEX_LS_VERSION }}-windows-arm64.zip"
+            "target/ltex-ls-${{ env.LTEX_LS_VERSION }}-linux-aarch64.tar.gz"
+            "target/ltex-ls-${{ env.LTEX_LS_VERSION }}-mac-aarch64.tar.gz"
+            "target/ltex-ls-${{ env.LTEX_LS_VERSION }}-windows-aarch64.zip"
