@@ -7,6 +7,7 @@
 
 package org.bsplines.ltexls.parsing.markdown
 
+import com.vladsch.flexmark.ast.FencedCodeBlock
 import com.vladsch.flexmark.ext.definition.DefinitionExtension
 import com.vladsch.flexmark.ext.gfm.strikethrough.StrikethroughExtension
 import com.vladsch.flexmark.ext.gitlab.GitLabExtension
@@ -19,7 +20,6 @@ import com.vladsch.flexmark.util.ast.Node
 import com.vladsch.flexmark.util.data.DataHolder
 import com.vladsch.flexmark.util.data.MutableDataSet
 import com.vladsch.flexmark.util.sequence.Escaping
-import com.vladsch.flexmark.ast.FencedCodeBlock
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder
 import org.bsplines.ltexls.parsing.DummyGenerator
 import org.bsplines.ltexls.settings.Settings
@@ -128,8 +128,7 @@ class MarkdownAnnotatedTextBuilder(
 
     if (Logging.LOGGER.isLoggable(Level.FINEST)) {
       Logging.LOGGER.finest(
-        "flexmarkAst = "
-          + AstCollectingVisitor().collectAndGetAstText(document),
+        "flexmarkAst = " + AstCollectingVisitor().collectAndGetAstText(document),
       )
     }
 
@@ -210,7 +209,7 @@ class MarkdownAnnotatedTextBuilder(
   }
 
   private fun removeComment(): Boolean {
-    var removed = false;
+    var removed = false
 
     while (shadowMarkups.isNotEmpty()) {
       val shadowMarkup = shadowMarkups.first()

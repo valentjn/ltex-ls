@@ -26,7 +26,10 @@ abstract class CodeAnnotatedTextBuilder(
   val codeLanguageId: String,
 ) : AnnotatedTextBuilder() {
   abstract fun addCode(code: String): CodeAnnotatedTextBuilder
-  open fun addComment(code: Array<String>, markups: Array<Triple<String, Int, Int>>): CodeAnnotatedTextBuilder {
+  open fun addComment(
+    code: Array<String>,
+    markups: Array<Triple<String, Int, Int>>,
+  ): CodeAnnotatedTextBuilder {
     for ((index, markup) in markups.withIndex()) {
       this.addMarkup(markup.first, "\n")
       this.addCode(code[index])
@@ -46,12 +49,15 @@ abstract class CodeAnnotatedTextBuilder(
         "bib",
         "bibtex",
         -> LatexAnnotatedTextBuilder(codeLanguageId)
+
         "git-commit",
         "gitcommit",
         -> GitCommitAnnotatedTextBuilder(codeLanguageId)
+
         "html",
         "xhtml",
         -> HtmlAnnotatedTextBuilder(codeLanguageId)
+
         "context",
         "context.tex",
         "latex",
@@ -59,10 +65,12 @@ abstract class CodeAnnotatedTextBuilder(
         "rsweave",
         "tex",
         -> LatexAnnotatedTextBuilder(codeLanguageId)
+
         "markdown",
         "quarto",
         "rmd",
         -> MarkdownAnnotatedTextBuilder(codeLanguageId)
+
         "nop" -> NopAnnotatedTextBuilder(codeLanguageId)
         "org" -> OrgAnnotatedTextBuilder(codeLanguageId)
         "plaintext" -> PlaintextAnnotatedTextBuilder(codeLanguageId)
