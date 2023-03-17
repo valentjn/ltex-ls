@@ -19,6 +19,7 @@ import com.vladsch.flexmark.util.ast.Node
 import com.vladsch.flexmark.util.data.DataHolder
 import com.vladsch.flexmark.util.data.MutableDataSet
 import com.vladsch.flexmark.util.sequence.Escaping
+import com.vladsch.flexmark.ast.FencedCodeBlock
 import org.bsplines.ltexls.parsing.CodeAnnotatedTextBuilder
 import org.bsplines.ltexls.parsing.DummyGenerator
 import org.bsplines.ltexls.settings.Settings
@@ -36,6 +37,8 @@ class MarkdownAnnotatedTextBuilder(
   private var firstCellInTableRow = false
   private val nodeTypeStack = ArrayDeque<String>()
   private var language: String = "en-US"
+  private var shadowMarkups = listOf<Triple<String, Int, Int>>()
+  private var shadowOffset = 0
   private val nodeSignatures: MutableList<MarkdownNodeSignature> = ArrayList(
     MarkdownAnnotatedTextBuilderDefaults.DEFAULT_MARKDOWN_NODE_SIGNATURES,
   )
@@ -70,7 +73,9 @@ class MarkdownAnnotatedTextBuilder(
     return result
   }
 
-  private fun addMarkup(newPos: Int) {
+  private fun addMarkup(finalPos: Int) {
+    var newPos = finalPos
+
     val inParagraph: Boolean = isInNodeType("Paragraph")
 
     while ((this.pos < this.code.length) && (this.pos < newPos)) {
@@ -83,19 +88,26 @@ class MarkdownAnnotatedTextBuilder(
       }
 
       if (curPos > this.pos) super.addMarkup(this.code.substring(this.pos, curPos))
-      super.addMarkup(this.code.substring(curPos, curPos + 1), (if (inParagraph) " " else "\n"))
-      this.pos = curPos + 1
+      this.pos = curPos
+      val tmpShadowOffset = shadowOffset
+      if (removeComment()) {
+        newPos += (shadowOffset - tmpShadowOffset)
+      } else {
+        super.addMarkup(this.code.substring(curPos, curPos + 1), (if (inParagraph) " " else "\n"))
+        this.pos += 1
+      }
     }
 
     if (newPos > pos) {
       super.addMarkup(this.code.substring(this.pos, newPos))
       this.pos = newPos
+      removeComment()
     }
   }
 
   private fun addMarkup(node: Node, interpretAs: String) {
-    addMarkup(node.startOffset)
-    val newPos: Int = node.endOffset
+    addMarkup(node.startOffset + shadowOffset)
+    val newPos: Int = node.endOffset + shadowOffset
     super.addMarkup(this.code.substring(this.pos, newPos), interpretAs)
     this.pos = newPos
   }
@@ -129,6 +141,28 @@ class MarkdownAnnotatedTextBuilder(
     return this
   }
 
+  override fun addComment(
+    code: Array<String>,
+    markups: Array<Triple<String, Int, Int>>,
+  ): CodeAnnotatedTextBuilder {
+    var fullCode = ""
+    var clearCode = ""
+
+    for ((index, markup) in markups.withIndex()) {
+      fullCode += markup.first + code[index]
+      clearCode += code[index] + "\n"
+    }
+
+    this.code = fullCode
+    this.pos = 0
+    this.shadowMarkups = markups.toList()
+    this.shadowOffset = 0
+
+    visitChildren(this.parser.parse(clearCode))
+
+    return this
+  }
+
   private fun visit(node: Node) {
     val nodeType: String = node.javaClass.simpleName
 
@@ -143,27 +177,65 @@ class MarkdownAnnotatedTextBuilder(
     }
 
     if (isInIgnoredNodeType()) {
-      addMarkup(node.endOffset)
+      addMarkup(node.endOffset + shadowOffset)
     } else if (isDummyNodeType(nodeType)) {
       addMarkup(node, generateDummy())
     } else if (nodeType == "Text") {
-      addMarkup(node.startOffset)
-      addText(node.endOffset)
+      addMarkup(node.startOffset + shadowOffset)
+      addText(node.endOffset + shadowOffset)
     } else if (nodeType == "HtmlEntity") {
       addMarkup(node, Escaping.unescapeHtml(node.chars))
     } else {
-      if (nodeType == "Paragraph") addMarkup(node.startOffset)
+      if (nodeType == "Paragraph") {
+        addMarkup(node.startOffset + shadowOffset)
+      } else if (nodeType == "FencedCodeBlock") {
+        val block = node as FencedCodeBlock
+        addMarkup(pos + block.openingMarker.count() + block.info.count())
+      }
       this.nodeTypeStack.addLast(nodeType)
       visitChildren(node)
       this.nodeTypeStack.removeLastOrNull()
+      if (nodeType == "FencedCodeBlock") {
+        addMarkup(pos + (node as FencedCodeBlock).closingMarker.count() - 1)
+      }
       if (nodeType == "DefinitionTerm") super.addMarkup("", ".")
     }
   }
 
   private fun visitChildren(node: Node) {
     for (child: Node in node.children) {
+      removeComment()
       visit(child)
     }
+  }
+
+  private fun removeComment(): Boolean {
+    var removed = false;
+
+    while (shadowMarkups.isNotEmpty()) {
+      val shadowMarkup = shadowMarkups.first()
+
+      if (shadowMarkup.second == pos) {
+        removed = true
+
+        super.addMarkup(shadowMarkup.first, "\n")
+
+        val offset = shadowMarkup.third - shadowMarkup.second
+        // we add new line in markdown code
+        shadowOffset += if (shadowMarkup.first.firstOrNull() == '\n') {
+          offset - 1
+        } else {
+          offset
+        }
+
+        pos += offset
+        shadowMarkups = shadowMarkups.drop(1)
+      } else {
+        break
+      }
+    }
+
+    return removed
   }
 
   override fun setSettings(settings: Settings) {
@@ -181,6 +253,7 @@ class MarkdownAnnotatedTextBuilder(
           dummyGenerator = DummyGenerator.getInstance(plural = plural, vowel = vowel)
           MarkdownNodeSignature.Action.Dummy
         }
+
         else -> continue
       }
 

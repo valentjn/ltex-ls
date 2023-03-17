@@ -63,19 +63,27 @@ class ProgramAnnotatedTextBuilder(
     )
     var curPos = 0
 
+    var code = arrayOf<String>()
+    var markups = arrayOf<Triple<String, Int, Int>>()
+
     for (matchResult: MatchResult in lineContentsRegex.findAll(comment)) {
       val matchGroup: MatchGroup = matchResult.groups[1] ?: continue
 
-      var lastPos = curPos
-      curPos = matchGroup.range.first
-      annotatedTextBuilder.addMarkup(comment.substring(lastPos, curPos), "\n")
+      markups += Triple(
+        comment.substring(curPos, matchGroup.range.first),
+        curPos,
+        matchGroup.range.first,
+      )
 
-      lastPos = curPos
       curPos = matchGroup.range.last + 1
-      annotatedTextBuilder.addCode(comment.substring(lastPos, curPos))
+
+      code += comment.substring(matchGroup.range.first, curPos)
     }
 
+    annotatedTextBuilder.addComment(code, markups)
+
     if (curPos < comment.length) annotatedTextBuilder.addMarkup(comment.substring(curPos))
+
     return this
   }
 

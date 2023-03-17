@@ -28,7 +28,7 @@ class ProgramAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("") {
         * check */
 
       """.trimIndent(),
-      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n",
+      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\nSentence 11 -\ncheck",
       "java",
     )
   }
@@ -37,10 +37,10 @@ class ProgramAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("") {
   fun testPython() {
     assertPlainText(
       "Sentence 1 - no check # Sentence 2 - no check\n#Sentence 3 - no check\n# Sentence 4 -\n"
-      + "# check\n\nSentence 5 - no check \"\"\" Sentence 6 - no check \"\"\"\n"
-      + "\"\"\" Sentence 7 - no check \"\"\" Sentence 8 - no check\n"
-      + "\"\"\"Sentence 9 - no check \"\"\"\n\"\"\" Sentence 10 - check \"\"\"\n"
-      + "\"\"\" Sentence 11 -\ncheck \"\"\"\n",
+        + "# check\n\nSentence 5 - no check \"\"\" Sentence 6 - no check \"\"\"\n"
+        + "\"\"\" Sentence 7 - no check \"\"\" Sentence 8 - no check\n"
+        + "\"\"\"Sentence 9 - no check \"\"\"\n\"\"\" Sentence 10 - check \"\"\"\n"
+        + "\"\"\" Sentence 11 -\ncheck \"\"\"\n",
       "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n",
       "python",
     )
@@ -63,7 +63,7 @@ class ProgramAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("") {
        # check #>
 
       """.trimIndent(),
-      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n",
+      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\nSentence 11 -\ncheck",
       "powershell",
     )
   }
@@ -100,7 +100,7 @@ class ProgramAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("") {
       check ]]
 
       """.trimIndent(),
-      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n",
+      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\nSentence 11 -\ncheck",
       "lua",
     )
   }
@@ -122,7 +122,7 @@ class ProgramAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("") {
       check -}
 
       """.trimIndent(),
-      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n",
+      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\nSentence 11 -\ncheck",
       "haskell",
     )
   }
@@ -174,7 +174,7 @@ class ProgramAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("") {
       check %}
 
       """.trimIndent(),
-      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\n\nSentence 11 -\ncheck\n",
+      "\n\n\nSentence 4 -\ncheck\n\n\nSentence 10 - check\n\n\nSentence 11 -\ncheck",
       "matlab",
     )
   }
@@ -231,8 +231,8 @@ class ProgramAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("") {
       Sentence 1 - no check # Sentence 2 - no check
       #Sentence 3 - no check
       //! hello
-      //! two
-      //! 3333
+      //! # two
+      //! 3333, `444`
       //!
       //! 444
 
@@ -246,12 +246,56 @@ class ProgramAnnotatedTextBuilderTest : CodeAnnotatedTextBuilderTest("") {
       /// let b = a;
       /// ```
       ///
+      /// ```rust
+      /// let a = 2;
+      ///
+      /// let b = a;
+      /// ```
+      ///
       /// check
+      ///
+      /// | First Column | Second Column |
+      /// | ------------ | ------------- |
+      /// | Interesting  |    Super      |
+      /// | Foo          |     Bar       |
+      ///
+      /// test
 
       """.trimIndent(),
-      "\n\n\nhello\ntwo\n3333\n\n444\n\n\nSentence 4 -\n\n\nlet a = 2;\n" +
-        "\nlet b = a;\n" +
-        "\n\ncheck",
+      """
+
+
+
+        hello
+        two
+        3333, Dummy0
+
+        444
+
+
+        Sentence 4 -
+
+
+
+
+
+
+
+
+
+
+
+
+
+        check
+
+        First Column Second Column
+
+        Interesting Super
+        Foo Bar
+
+        test
+      """.trimIndent(),
       "rust",
     )
   }
