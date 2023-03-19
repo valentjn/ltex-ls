@@ -404,7 +404,7 @@ if %ERROR_CODE% EQU 0 set ERROR_CODE=1</replacevalue>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.4.2</version>
+        <version>3.5.0</version>
         <configuration>
           <descriptors>
             <descriptor>.assembly.xml</descriptor>
