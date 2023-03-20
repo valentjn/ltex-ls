@@ -196,9 +196,10 @@ def getLtexLsVersion() -> str:
 
 
 def main() -> None:
-  createBinaryArchive("linux", "x64")
-  createBinaryArchive("mac", "x64")
-  createBinaryArchive("windows", "x64")
+  for arch in ["x64", "x86-32", "aarch64"]:
+    createBinaryArchive("linux", arch)
+    createBinaryArchive("mac", arch)
+    createBinaryArchive("windows", arch)
 
 
 if __name__ == "__main__":
