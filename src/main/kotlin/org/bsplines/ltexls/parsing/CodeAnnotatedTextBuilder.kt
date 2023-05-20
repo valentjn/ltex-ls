@@ -20,15 +20,78 @@ import org.bsplines.ltexls.parsing.restructuredtext.RestructuredtextAnnotatedTex
 import org.bsplines.ltexls.settings.Settings
 import org.bsplines.ltexls.tools.I18n
 import org.bsplines.ltexls.tools.Logging
+import org.languagetool.markup.AnnotatedText
 import org.languagetool.markup.AnnotatedTextBuilder
+import org.languagetool.markup.TextPart
 
 abstract class CodeAnnotatedTextBuilder(
   val codeLanguageId: String,
 ) : AnnotatedTextBuilder() {
+  protected var curText = StringBuilder()
+  protected var curMarkup = StringBuilder()
+  protected var curInterpretAs = StringBuilder()
+  protected var curType: TextPart.Type? = null
+
   abstract fun addCode(code: String): CodeAnnotatedTextBuilder
 
   @Suppress("UNUSED_PARAMETER")
   open fun setSettings(settings: Settings) {
+  }
+
+  override fun addText(text: String?): CodeAnnotatedTextBuilder {
+    if (text?.isNotEmpty() == true) {
+      if (curType == TextPart.Type.MARKUP) {
+        finalizeCurrentPart()
+      }
+      curType = TextPart.Type.TEXT
+      curText.append(text)
+    }
+
+    return this
+  }
+
+  override fun addMarkup(markup: String?): CodeAnnotatedTextBuilder {
+    if (markup?.isNotEmpty() == true) {
+      if (curType == TextPart.Type.TEXT) {
+        finalizeCurrentPart()
+      }
+      curType = TextPart.Type.MARKUP
+      curMarkup.append(markup)
+    }
+
+    return this
+  }
+
+  override fun addMarkup(markup: String?, interpretAs: String?): CodeAnnotatedTextBuilder {
+    if (interpretAs?.isNotEmpty() == true) {
+      if (curType == TextPart.Type.TEXT) {
+        finalizeCurrentPart()
+      }
+      curType = TextPart.Type.MARKUP
+      curMarkup.append(markup ?: "")
+      curInterpretAs.append(interpretAs)
+    } else {
+      addMarkup(markup)
+    }
+
+    return this
+  }
+
+  override fun build(): AnnotatedText {
+    finalizeCurrentPart()
+    return super.build()
+  }
+
+  private fun finalizeCurrentPart() {
+    if (curType == TextPart.Type.MARKUP) {
+      super.addMarkup(curMarkup.toString(), curInterpretAs.toString())
+      curMarkup.clear()
+      curInterpretAs.clear()
+    }
+    if (curType == TextPart.Type.TEXT) {
+      super.addText(curText.toString())
+      curText.clear()
+    }
   }
 
   companion object {

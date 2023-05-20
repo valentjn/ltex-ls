@@ -107,6 +107,7 @@ class LanguageToolHttpInterface(
     val requestEntries = HashMap<String, String>()
     requestEntries["language"] = this.languageShortCode
     requestEntries["data"] = jsonData.toString()
+    Logging.LOGGER.finer("requestEntries[\"data\"].length = " + requestEntries["data"]!!.length)
 
     if (this.languageToolOrgUsername.isNotEmpty()) {
       requestEntries["username"] = this.languageToolOrgUsername
