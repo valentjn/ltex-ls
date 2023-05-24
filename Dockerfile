@@ -20,4 +20,4 @@ FROM openjdk:slim
 
 WORKDIR /app/bin
 COPY --from=builder /app /app
-ENTRYPOINT [ "./ltex-cli" ]
+ENTRYPOINT [ "/app/bin/ltex-cli" ]
