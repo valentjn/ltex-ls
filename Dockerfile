@@ -21,4 +21,4 @@ FROM openjdk:slim
 ENV PATH="${PATH}:/app/bin"
 WORKDIR /app/bin
 COPY --from=builder /app /app
-CMD [ "echo", "Usage: 'ltex-ls [PARAMS]' or 'ltex-ls [PARAMS]'. A directory must be mounted to analyse files using ltex-cli." ]
+CMD [ "echo", "Usage: 'ltex-ls [PARAMS]' or 'ltex-cli [PARAMS]'. A directory must be mounted to analyse files using ltex-cli." ]
