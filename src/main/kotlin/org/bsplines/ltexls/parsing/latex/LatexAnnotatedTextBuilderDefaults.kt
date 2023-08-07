@@ -468,6 +468,9 @@ object LatexAnnotatedTextBuilderDefaults {
       LatexCommandSignature("\\citep[]{}", LatexCommandSignature.Action.Dummy),
       LatexCommandSignature("\\citep*{}", LatexCommandSignature.Action.Dummy),
       LatexCommandSignature("\\citep*[]{}", LatexCommandSignature.Action.Dummy),
+      LatexCommandSignature("\\citeA{}", LatexCommandSignature.Action.Dummy),
+      LatexCommandSignature("\\cite<>{}", LatexCommandSignature.Action.Dummy),
+      LatexCommandSignature("\\cite<>[]{}", LatexCommandSignature.Action.Dummy),
       LatexCommandSignature(
         "\\cites{}",
         LatexCommandSignature.Action.Dummy,
