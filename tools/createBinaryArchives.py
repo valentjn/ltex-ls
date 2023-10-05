@@ -198,6 +198,7 @@ def getLtexLsVersion() -> str:
 def main() -> None:
   createBinaryArchive("linux", "x64")
   createBinaryArchive("mac", "x64")
+  createBinaryArchive("mac", "aarch64")
   createBinaryArchive("windows", "x64")
 
 
