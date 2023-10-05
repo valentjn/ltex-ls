@@ -66,7 +66,7 @@ class LanguageToolHttpInterface(
 
     val requestBody: String = createRequestBody(annotatedTextFragment) ?: return emptyList()
     val httpRequest: HttpRequest = HttpRequest.newBuilder(this.uri)
-        .header("Content-Type", "application/json")
+        .header("Content-Type", "application/x-www-form-urlencoded")
         .POST(BodyPublishers.ofString(requestBody))
         .build()
     val httpResponse: HttpResponse<String> = try {
